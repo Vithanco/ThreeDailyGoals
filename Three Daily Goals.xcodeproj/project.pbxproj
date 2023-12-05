@@ -1,0 +1,630 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */; };
+		E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DD2B1F54A6003BE36F /* ContentView.swift */; };
+		E561D6E02B1F54A6003BE36F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* Item.swift */; };
+		E561D6E22B1F54A8003BE36F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
+		E561D6E62B1F54A8003BE36F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E52B1F54A8003BE36F /* Preview Assets.xcassets */; };
+		E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */; };
+		E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */; };
+		E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E561D6ED2B1F54A9003BE36F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E561D6D72B1F54A6003BE36F;
+			remoteInfo = "Three Daily Goals";
+		};
+		E561D6F72B1F54A9003BE36F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E561D6D72B1F54A6003BE36F;
+			remoteInfo = "Three Daily Goals";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Three Daily Goals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsApp.swift; sourceTree = "<group>"; };
+		E561D6DD2B1F54A6003BE36F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E561D6DF2B1F54A6003BE36F /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		E561D6E12B1F54A8003BE36F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E561D6E32B1F54A8003BE36F /* Three_Daily_Goals.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals.entitlements; sourceTree = "<group>"; };
+		E561D6E52B1F54A8003BE36F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		E561D6E72B1F54A8003BE36F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E561D6EC2B1F54A9003BE36F /* Three Daily GoalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Three Daily GoalsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsTests.swift; sourceTree = "<group>"; };
+		E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Three Daily GoalsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITests.swift; sourceTree = "<group>"; };
+		E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E561D6D52B1F54A6003BE36F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6E92B1F54A9003BE36F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6F32B1F54A9003BE36F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E561D6CF2B1F54A6003BE36F = {
+			isa = PBXGroup;
+			children = (
+				E561D6DA2B1F54A6003BE36F /* Three Daily Goals */,
+				E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */,
+				E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */,
+				E561D6D92B1F54A6003BE36F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E561D6D92B1F54A6003BE36F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */,
+				E561D6EC2B1F54A9003BE36F /* Three Daily GoalsTests.xctest */,
+				E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E561D6DA2B1F54A6003BE36F /* Three Daily Goals */ = {
+			isa = PBXGroup;
+			children = (
+				E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */,
+				E561D6DD2B1F54A6003BE36F /* ContentView.swift */,
+				E561D6DF2B1F54A6003BE36F /* Item.swift */,
+				E561D6E12B1F54A8003BE36F /* Assets.xcassets */,
+				E561D6E32B1F54A8003BE36F /* Three_Daily_Goals.entitlements */,
+				E561D6E72B1F54A8003BE36F /* Info.plist */,
+				E561D6E42B1F54A8003BE36F /* Preview Content */,
+			);
+			path = "Three Daily Goals";
+			sourceTree = "<group>";
+		};
+		E561D6E42B1F54A8003BE36F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				E561D6E52B1F54A8003BE36F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
+			isa = PBXGroup;
+			children = (
+				E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */,
+			);
+			path = "Three Daily GoalsTests";
+			sourceTree = "<group>";
+		};
+		E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */,
+				E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */,
+			);
+			path = "Three Daily GoalsUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E561D6D72B1F54A6003BE36F /* Three Daily Goals */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E561D7002B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily Goals" */;
+			buildPhases = (
+				E561D6D42B1F54A6003BE36F /* Sources */,
+				E561D6D52B1F54A6003BE36F /* Frameworks */,
+				E561D6D62B1F54A6003BE36F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Three Daily Goals";
+			productName = "Three Daily Goals";
+			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E561D6EB2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E561D7032B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily GoalsTests" */;
+			buildPhases = (
+				E561D6E82B1F54A9003BE36F /* Sources */,
+				E561D6E92B1F54A9003BE36F /* Frameworks */,
+				E561D6EA2B1F54A9003BE36F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E561D6EE2B1F54A9003BE36F /* PBXTargetDependency */,
+			);
+			name = "Three Daily GoalsTests";
+			productName = "Three Daily GoalsTests";
+			productReference = E561D6EC2B1F54A9003BE36F /* Three Daily GoalsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E561D6F52B1F54A9003BE36F /* Three Daily GoalsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E561D7062B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily GoalsUITests" */;
+			buildPhases = (
+				E561D6F22B1F54A9003BE36F /* Sources */,
+				E561D6F32B1F54A9003BE36F /* Frameworks */,
+				E561D6F42B1F54A9003BE36F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E561D6F82B1F54A9003BE36F /* PBXTargetDependency */,
+			);
+			name = "Three Daily GoalsUITests";
+			productName = "Three Daily GoalsUITests";
+			productReference = E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E561D6D02B1F54A6003BE36F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E561D6D72B1F54A6003BE36F = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					E561D6EB2B1F54A9003BE36F = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = E561D6D72B1F54A6003BE36F;
+					};
+					E561D6F52B1F54A9003BE36F = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = E561D6D72B1F54A6003BE36F;
+					};
+				};
+			};
+			buildConfigurationList = E561D6D32B1F54A6003BE36F /* Build configuration list for PBXProject "Three Daily Goals" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E561D6CF2B1F54A6003BE36F;
+			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E561D6D72B1F54A6003BE36F /* Three Daily Goals */,
+				E561D6EB2B1F54A9003BE36F /* Three Daily GoalsTests */,
+				E561D6F52B1F54A9003BE36F /* Three Daily GoalsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E561D6D62B1F54A6003BE36F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E561D6E62B1F54A8003BE36F /* Preview Assets.xcassets in Resources */,
+				E561D6E22B1F54A8003BE36F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6EA2B1F54A9003BE36F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6F42B1F54A9003BE36F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E561D6D42B1F54A6003BE36F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */,
+				E561D6E02B1F54A6003BE36F /* Item.swift in Sources */,
+				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6E82B1F54A9003BE36F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E561D6F22B1F54A9003BE36F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */,
+				E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E561D6EE2B1F54A9003BE36F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E561D6D72B1F54A6003BE36F /* Three Daily Goals */;
+			targetProxy = E561D6ED2B1F54A9003BE36F /* PBXContainerItemProxy */;
+		};
+		E561D6F82B1F54A9003BE36F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E561D6D72B1F54A6003BE36F /* Three Daily Goals */;
+			targetProxy = E561D6F72B1F54A9003BE36F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E561D6FE2B1F54A9003BE36F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E561D6FF2B1F54A9003BE36F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		E561D7012B1F54A9003BE36F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E561D7022B1F54A9003BE36F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E561D7042B1F54A9003BE36F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Three Daily Goals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Three Daily Goals";
+			};
+			name = Debug;
+		};
+		E561D7052B1F54A9003BE36F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Three Daily Goals.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Three Daily Goals";
+			};
+			name = Release;
+		};
+		E561D7072B1F54A9003BE36F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Three Daily Goals";
+			};
+			name = Debug;
+		};
+		E561D7082B1F54A9003BE36F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Three Daily Goals";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E561D6D32B1F54A6003BE36F /* Build configuration list for PBXProject "Three Daily Goals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E561D6FE2B1F54A9003BE36F /* Debug */,
+				E561D6FF2B1F54A9003BE36F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E561D7002B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily Goals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E561D7012B1F54A9003BE36F /* Debug */,
+				E561D7022B1F54A9003BE36F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E561D7032B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily GoalsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E561D7042B1F54A9003BE36F /* Debug */,
+				E561D7052B1F54A9003BE36F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E561D7062B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily GoalsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E561D7072B1F54A9003BE36F /* Debug */,
+				E561D7082B1F54A9003BE36F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E561D6D02B1F54A6003BE36F /* Project object */;
+}
