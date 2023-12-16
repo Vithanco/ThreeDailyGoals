@@ -9,12 +9,15 @@
 /* Begin PBXBuildFile section */
 		E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */; };
 		E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DD2B1F54A6003BE36F /* ContentView.swift */; };
-		E561D6E02B1F54A6003BE36F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* Item.swift */; };
+		E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* TaskItem.swift */; };
 		E561D6E22B1F54A8003BE36F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
 		E561D6E62B1F54A8003BE36F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E52B1F54A8003BE36F /* Preview Assets.xcassets */; };
 		E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */; };
 		E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */; };
 		E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */; };
+		E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E582D0B72B2E13E30006DD5D /* TaskItemView.swift */; };
+		E590CE182B1FAD9000B16684 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
+		E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +41,7 @@
 		E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Three Daily Goals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsApp.swift; sourceTree = "<group>"; };
 		E561D6DD2B1F54A6003BE36F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		E561D6DF2B1F54A6003BE36F /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		E561D6DF2B1F54A6003BE36F /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
 		E561D6E12B1F54A8003BE36F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E561D6E32B1F54A8003BE36F /* Three_Daily_Goals.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals.entitlements; sourceTree = "<group>"; };
 		E561D6E52B1F54A8003BE36F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -48,6 +51,9 @@
 		E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Three Daily GoalsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITests.swift; sourceTree = "<group>"; };
 		E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E582D0B72B2E13E30006DD5D /* TaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemView.swift; sourceTree = "<group>"; };
+		E590CE172B1FAD9000B16684 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		E5A3718D2B2E2B0E00A310BA /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +106,10 @@
 			children = (
 				E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */,
 				E561D6DD2B1F54A6003BE36F /* ContentView.swift */,
-				E561D6DF2B1F54A6003BE36F /* Item.swift */,
+				E582D0B72B2E13E30006DD5D /* TaskItemView.swift */,
+				E5A3718D2B2E2B0E00A310BA /* StateView.swift */,
+				E561D6DF2B1F54A6003BE36F /* TaskItem.swift */,
+				E590CE172B1FAD9000B16684 /* Comment.swift */,
 				E561D6E12B1F54A8003BE36F /* Assets.xcassets */,
 				E561D6E32B1F54A8003BE36F /* Three_Daily_Goals.entitlements */,
 				E561D6E72B1F54A8003BE36F /* Info.plist */,
@@ -264,9 +273,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
+				E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */,
 				E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */,
-				E561D6E02B1F54A6003BE36F /* Item.swift in Sources */,
+				E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
+				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +443,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -470,6 +484,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
