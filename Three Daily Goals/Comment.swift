@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-final class Comment {
+final class Comment: ObservableObject, Identifiable {
     var created: Date
     var changed: Date
     var text: String
@@ -19,5 +19,9 @@ final class Comment {
         self.created = now
         self.changed = now
         self.text = text
+    }
+    
+    var id: Date {
+        return created
     }
 }

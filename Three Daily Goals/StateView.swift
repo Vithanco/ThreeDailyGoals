@@ -7,13 +7,15 @@
 
 import SwiftUI
 
+let mainColor = Color(red: 234.0/255.0, green: 88.0/255.0, blue: 12.0/255.0, opacity: 1.0)
+
 struct StateView: View {
     @Binding var state: TaskItemState
     var body: some View {
         switch state {
-            case .closed: Label("closed", systemImage: "circle.circle.fill")
-            case .open: Label("open", systemImage: "circle")
-            case .graveyard: Label("open", systemImage: "heart.slash.fill")
+            case .open: Text("\(Image(systemName: "figure.walk.circle.fill")) Open").font(.title).foregroundStyle(mainColor)
+            case .closed: Text("\(Image(systemName: "flag.checkered.2.crossed")) Closed").font(.title).foregroundStyle(mainColor)
+            case .graveyard: Text("\(Image(systemName: "heart.slash.fill")) Graveyard").font(.title).foregroundStyle(mainColor)
         }
     }
 }

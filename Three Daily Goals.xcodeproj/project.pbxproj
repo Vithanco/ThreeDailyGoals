@@ -18,6 +18,8 @@
 		E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E582D0B72B2E13E30006DD5D /* TaskItemView.swift */; };
 		E590CE182B1FAD9000B16684 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
 		E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
+		E5A371902B2EBC6400A310BA /* DatedTaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718F2B2EBC6400A310BA /* DatedTaskList.swift */; };
+		E5A371942B2EDD5E00A310BA /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		E582D0B72B2E13E30006DD5D /* TaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemView.swift; sourceTree = "<group>"; };
 		E590CE172B1FAD9000B16684 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		E5A3718D2B2E2B0E00A310BA /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
+		E5A3718F2B2EBC6400A310BA /* DatedTaskList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatedTaskList.swift; sourceTree = "<group>"; };
+		E5A371932B2EDD5E00A310BA /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +110,9 @@
 			children = (
 				E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */,
 				E561D6DD2B1F54A6003BE36F /* ContentView.swift */,
+				E5A3718F2B2EBC6400A310BA /* DatedTaskList.swift */,
 				E582D0B72B2E13E30006DD5D /* TaskItemView.swift */,
+				E5A371932B2EDD5E00A310BA /* CommentView.swift */,
 				E5A3718D2B2E2B0E00A310BA /* StateView.swift */,
 				E561D6DF2B1F54A6003BE36F /* TaskItem.swift */,
 				E590CE172B1FAD9000B16684 /* Comment.swift */,
@@ -275,8 +281,10 @@
 			files = (
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
 				E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */,
+				E5A371942B2EDD5E00A310BA /* CommentView.swift in Sources */,
 				E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */,
 				E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */,
+				E5A371902B2EBC6400A310BA /* DatedTaskList.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 			);

@@ -16,7 +16,7 @@ enum TaskItemState: Codable {
 }
 
 @Model
-final class TaskItem : ObservableObject {
+final class TaskItem : ObservableObject , Identifiable{
     var created: Date
     var changed: Date
     var closed: Date?
@@ -54,7 +54,18 @@ final class TaskItem : ObservableObject {
         self.title = "I need to ..."
         self.details = "(no details yet)"
         self.state = .open
+        let firstComment = Comment(text: "Created")
+        firstComment.modelContext = self.modelContext
     }
+    
+    var isOpen: Bool {
+        return state == .open
+    }
+    
+    var id: Date {
+        return created
+    }
+    
 }
 
 
