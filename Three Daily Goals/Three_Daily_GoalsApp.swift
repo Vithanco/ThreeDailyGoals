@@ -12,7 +12,7 @@ import SwiftData
 struct Three_Daily_GoalsApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            TaskItem.self,
+            TaskItem.self ,Comment.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

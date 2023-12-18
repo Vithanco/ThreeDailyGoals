@@ -10,15 +10,14 @@ import Foundation
 
 @Model
 final class Comment: ObservableObject, Identifiable {
-    var created: Date
-    var changed: Date
-    var text: String
+    var created: Date  = Date.now
+    var changed: Date  = Date.now
+    var text: String = ""
+    @Relationship(inverse:  \TaskItem.comments) var taskItem: TaskItem? = nil
     
-    init(text: String) {
-        let now = Date.now
-        self.created = now
-        self.changed = now
+    init(text: String, taskItem: TaskItem) {
         self.text = text
+        self.taskItem = taskItem
     }
     
     var id: Date {

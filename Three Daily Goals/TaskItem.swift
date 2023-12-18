@@ -17,20 +17,20 @@ enum TaskItemState: Codable {
 
 @Model
 final class TaskItem : ObservableObject , Identifiable{
-    var created: Date
-    var changed: Date
-    var closed: Date?
-    var title: String {
+    var created: Date = Date.now
+    var changed: Date = Date.now
+    var closed: Date? = nil
+    var title: String = "I need to ..." {
         didSet {
             changed = Date.now
         }
     }
-    var details: String {
+    var details: String = "(no details yet)" {
         didSet {
             changed = Date.now
         }
     }
-    var state: TaskItemState {
+    var state: TaskItemState = TaskItemState.open {
         didSet {
             changed = Date.now
             if state == .closed {
@@ -44,18 +44,9 @@ final class TaskItem : ObservableObject , Identifiable{
             }
         }
     }
-    @Relationship(deleteRule: .cascade) var comments = [Comment]()
+    @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
 
     init() {
-        let now = Date.now
-        self.created = now
-        self.changed = now
-        self.closed = nil
-        self.title = "I need to ..."
-        self.details = "(no details yet)"
-        self.state = .open
-        let firstComment = Comment(text: "Created")
-        firstComment.modelContext = self.modelContext
     }
     
     var isOpen: Bool {
@@ -66,6 +57,17 @@ final class TaskItem : ObservableObject , Identifiable{
         return created
     }
     
+    func addComment(text: String) {
+        if let mc = self.modelContext {
+            let aComment = Comment(text: text, taskItem: self)
+            mc.insert(aComment)
+            if comments == nil {
+                comments = [Comment]()
+            }
+            comments?.append(aComment)
+        }
+        
+    }
 }
 
 

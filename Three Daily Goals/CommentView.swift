@@ -23,5 +23,5 @@ struct CommentView: View {
 
 
 #Preview {
-    CommentView(comment: Comment(text: "Hallo Klaus"))
+    CommentView(comment: Comment(text: "Hallo Klaus", taskItem: TaskItem()))
 }

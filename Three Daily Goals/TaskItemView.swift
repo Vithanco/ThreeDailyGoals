@@ -30,13 +30,16 @@ struct TaskItemView: View {
             }
             LabeledContent{
                 TextField("Details", text: $item.details, axis: .vertical)
-                    .textFieldStyle(.squareBorder).frame(idealHeight: 30)
+#if os(macOS)
+                    .textFieldStyle(.squareBorder)
+#endif
+                    .frame(idealHeight: 30)
             } label: {
                 Text("Details:").bold().foregroundColor(secondaryColor)
             }
-            if item.comments.count > 0 {
+            if let comments = item.comments, comments.count > 0 {
                 LabeledContent{
-                    ForEach(item.comments){comment in
+                    ForEach(comments){comment in
                         CommentView(comment: comment)
                     }
                 } label: {
