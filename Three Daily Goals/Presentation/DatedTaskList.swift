@@ -9,14 +9,9 @@ import SwiftUI
 import SwiftData
 
 
-let secondaryColor = Color(red: 255.0/255.0, green: 128.0/255.0, blue: 0/255.0, opacity: 1.0)
-
-func getDate (daysPrior: Int) -> Date {
-    let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) ?? Date.now
-    return Calendar.current.startOfDay(for: exact)
-}
 
 struct DatedTaskList: View {
+    let section : TaskSection
     let list : [TaskItem]
     let sevenDaysAgo = getDate(daysPrior: 7)
     let thirtyDaysAgo = getDate(daysPrior: 30)
@@ -32,33 +27,38 @@ struct DatedTaskList: View {
     }
     
     var body: some View {
-        Section(header: Text("Last Week").font(.callout).foregroundStyle(secondaryColor)){
-            ForEach(lastWeek) { item in
-                NavigationLink {
-                    TaskItemView(item: item)
-                } label: {
-                    Text(item.title)
-                }
-            }
-        }
-        Section(header: Text("Last Month").font(.callout).foregroundStyle(secondaryColor)){
-            ForEach(lastMonth) { item in
-                NavigationLink {
-                    TaskItemView(item: item)
-                } label: {
-                    Text(item.title)
-                }
-            }
-        }
-        Section(header: Text("Older").font(.callout).foregroundStyle(secondaryColor)){
-            ForEach(older) { item in
-                NavigationLink {
-                    TaskItemView(item: item)
-                } label: {
-                    Text(item.title)
-                }
-            }
-        }
+        LinkToList(sections: [section], items: list)
+        LinkToList(sections: [section, secLastWeek], items: lastWeek)
+        LinkToList(sections: [section, secLastMonth], items: lastMonth)
+        LinkToList(sections: [section, secOlder], items: older)
+        
+//        Section(header: Text("Last Week").font(.callout).foregroundStyle(secondaryColor)){
+//            ForEach(lastWeek) { item in
+//                NavigationLink {
+//                    TaskItemView(item: item)
+//                } label: {
+//                    Text(item.title)
+//                }
+//            }
+//        }
+//        Section(header: Text("Last Month").font(.callout).foregroundStyle(secondaryColor)){
+//            ForEach(lastMonth) { item in
+//                NavigationLink {
+//                    TaskItemView(item: item)
+//                } label: {
+//                    Text(item.title)
+//                }
+//            }
+//        }
+//        Section(header: Text("Older").font(.callout).foregroundStyle(secondaryColor)){
+//            ForEach(older) { item in
+//                NavigationLink {
+//                    TaskItemView(item: item)
+//                } label: {
+//                    Text(item.title)
+//                }
+//            }
+//        }
     }
 }
 
@@ -68,7 +68,7 @@ struct DatedTaskListHelper : View {
     var body: some View {
         NavigationView {
             VStack{
-                DatedTaskList(list: list)
+                DatedTaskList(section: secOpen, list: list)
             }
         }
         

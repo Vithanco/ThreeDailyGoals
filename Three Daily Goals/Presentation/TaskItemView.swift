@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-let stdDateFormat = Date.FormatStyle(date: .numeric, time: .none)
 
 struct TaskItemView: View {
     @Environment(\.modelContext) var modelContext
@@ -21,7 +20,10 @@ struct TaskItemView: View {
     
     var body: some View {
         VStack(alignment: .leading){
-            StateView(state: $item.state)
+            HStack {
+                StateView(state: $item.state)
+                Text("Task").font(.title).foregroundStyle(mainColor)
+            }
             LabeledContent{
                 TextField("Title", text: $item.title)
                     .bold().frame(idealHeight: 13)
@@ -33,7 +35,7 @@ struct TaskItemView: View {
 #if os(macOS)
                     .textFieldStyle(.squareBorder)
 #endif
-                    .frame(idealHeight: 30)
+                    .frame(idealHeight: 30).frame(minHeight: 30)
             } label: {
                 Text("Details:").bold().foregroundColor(secondaryColor)
             }
@@ -46,6 +48,7 @@ struct TaskItemView: View {
                     Text("History:").bold().foregroundColor(secondaryColor)
                 }
             }
+            Spacer()
             HStack{
                 LabeledContent{
                     Text(item.created, format: stdDateFormat)

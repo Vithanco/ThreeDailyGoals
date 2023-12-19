@@ -45,6 +45,7 @@ final class TaskItem : ObservableObject , Identifiable{
         }
     }
     @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
+    @Relationship(inverse: \DailyTasks.priorities) var priorityOn: [DailyTasks]? = [DailyTasks]()
 
     init() {
     }
