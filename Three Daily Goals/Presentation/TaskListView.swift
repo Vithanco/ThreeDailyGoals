@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TaskListView: View {
-    let section: [TaskSection]
-    let items: [TaskItem]
+    var section: [TaskSection]
+    var items: [TaskItem]
     var body: some View {
         List {
             Section (header:
@@ -27,6 +27,16 @@ struct TaskListView: View {
     }
 }
 
-#Preview {
-    TaskListView(section: [secGraveyard], items: [TaskItem(), TaskItem()])
+struct TaskListViewHelper : View {
+    @State var section: [TaskSection]
+    @State var items: [TaskItem]
+    
+    var body: some View {
+        TaskListView(section: section, items: items)
+    }
 }
+
+#Preview {
+    TaskListViewHelper(section: [secGraveyard], items: [TaskItem(), TaskItem()])
+}
+

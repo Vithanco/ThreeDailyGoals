@@ -10,6 +10,8 @@ import SwiftUI
 struct LinkToList: View {
     let sections: [TaskSection]
     let items: [TaskItem]
+//    @Binding var selectedList: [TaskItem]
+//    @Binding var selectedListHeader : [TaskSection]
     var body: some View {
         NavigationLink {
             TaskListView(section: sections, items: items)

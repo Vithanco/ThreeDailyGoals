@@ -13,11 +13,15 @@ struct ContentView: View {
     @Query private var items: [TaskItem]
     @Query private var days: [DailyTasks]
     
-    @State var selectedItem: TaskItem?
-//    @Query(filter: #Predicate<TaskItem> {
-//        item in
-//        item.state == TaskItemState.open
-//    }) var openItems: [TaskItem]
+//    @State private var selectedList: [TaskItem] = []
+    @State private var selectedItem: TaskItem? = nil
+//    @State private var selectedListHeader: [TaskSection] = []
+    
+    @State var showReviewDialog: Bool = false
+    //    @Query(filter: #Predicate<TaskItem> {
+    //        item in
+    //        item.state == TaskItemState.open
+    //    }) var openItems: [TaskItem]
     
     var openItems: [TaskItem] {
         return items.filter({$0.state == .open})
@@ -39,6 +43,7 @@ struct ContentView: View {
         let newItem = DailyTasks()
         modelContext.insert(newItem)
         assert(newItem.day.isToday)
+        
         return newItem
     }
     
@@ -47,6 +52,7 @@ struct ContentView: View {
         
         NavigationSplitView {
             VStack(alignment: .leading){
+                
                 Priorities(priorities: today)
                 List {
                     DatedTaskList(section: secOpen, list: openItems)
@@ -73,7 +79,19 @@ struct ContentView: View {
         } content: {
             List{
                 
-            }
+            }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
+                .toolbar {
+#if os(iOS)
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
+#endif
+                    ToolbarItem {
+                        Button(action: review) {
+                            Label("Review", systemImage: imgMagnifyingGlass)
+                        }
+                    }
+                }
         } detail: {
             if let detail = selectedItem {
                 TaskItemView(item: detail)
@@ -81,6 +99,10 @@ struct ContentView: View {
                 Text("Select an item")
             }
         }.background(.white)
+            .sheet(isPresented: $showReviewDialog) {
+                ReviewDialog(items: openItems)
+            }
+            .environment(today)
     }
     
     private func addItem() {
@@ -88,6 +110,12 @@ struct ContentView: View {
             let newItem = TaskItem()
             modelContext.insert(newItem)
             selectedItem = newItem
+        }
+    }
+    
+    private func review() {
+        withAnimation {
+            showReviewDialog = true
         }
     }
     

@@ -54,6 +54,14 @@ final class TaskItem : ObservableObject , Identifiable{
         return state == .open
     }
     
+    var isClosed: Bool {
+        return state == .closed
+    }
+    
+    var isGraveyarded: Bool {
+        return state == .graveyard
+    }
+    
     var id: Date {
         return created
     }
@@ -67,7 +75,29 @@ final class TaskItem : ObservableObject , Identifiable{
             }
             comments?.append(aComment)
         }
-        
+    }
+    
+    func makePriority(position: Int, day: DailyTasks) {
+        if var priorities = day.priorities {
+            let index = min (priorities.count, position - 1)
+            day.priorities?.insert(self, at: index)
+            addComment(text: "added as priority \(index + 1) to day \(day.day)")
+        }
+    }
+    
+    func closeTask() {
+        state = .closed
+        addComment(text: "closed this task on \(Date.now)")
+    }
+    
+    func reOpenTask() {
+        state = .open
+        addComment(text: "Reopened this on \(Date.now)")
+    }
+    
+    func touch() {
+        state = .open
+        addComment(text: "Touched this task on \(Date.now)")
     }
 }
 

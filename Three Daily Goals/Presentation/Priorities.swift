@@ -19,6 +19,8 @@ struct APriority: View {
             }else {
               Text("(missing)")
             }
+            Spacer()
+            
         }
     }
 }
@@ -28,15 +30,15 @@ struct Priorities: View {
     
     var body: some View {
         List {
-            Section (header: Text("\(Image(systemName: "exclamationmark.square.fill")) Today").font(.title).foregroundStyle(mainColor)){
+            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(mainColor)){
                 if let prios = priorities.priorities {
                     let count = prios.count
-                    APriority(image: "1.square.fill", item: count > 0 ? prios[0] : nil)
-                    APriority(image: "2.square.fill", item: count > 1 ? prios[1] : nil)
-                    APriority(image: "3.square.fill", item: count > 2 ? prios[2] : nil)
+                    APriority(image: imgPriority1, item: count > 0 ? prios[0] : nil)
+                    APriority(image: imgPriority2, item: count > 1 ? prios[1] : nil)
+                    APriority(image: imgPriority3, item: count > 2 ? prios[2] : nil)
                     let others = prios.dropFirst(3)
                     ForEach (others) {priority in
-                        APriority(image: "x.square.fill",item: priority)
+                        APriority(image: imgPriorityX,item: priority)
                     }
                 }
             }
