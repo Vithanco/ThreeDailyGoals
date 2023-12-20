@@ -13,9 +13,9 @@ struct ContentView: View {
     @Query private var items: [TaskItem]
     @Query private var days: [DailyTasks]
     
-//    @State private var selectedList: [TaskItem] = []
+    @State private var selectedList: [TaskItem] = []
     @State private var selectedItem: TaskItem? = nil
-//    @State private var selectedListHeader: [TaskSection] = []
+    @State private var selectedListHeader: [TaskSection] = []
     
     @State var showReviewDialog: Bool = false
     //    @Query(filter: #Predicate<TaskItem> {
@@ -47,17 +47,27 @@ struct ContentView: View {
         return newItem
     }
     
+    func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
+        withAnimation{
+                selectedListHeader = sections
+                selectedList = list
+                if let item = item {
+                    assert(list.contains(item))
+                }
+                selectedItem = item
+        }
+    }
     
     var body: some View {
         
         NavigationSplitView {
             VStack(alignment: .leading){
                 
-                Priorities(priorities: today)
+                Priorities(priorities: today,taskSelector: select)
                 List {
-                    DatedTaskList(section: secOpen, list: openItems)
-                    DatedTaskList(section: secGraveyard, list: deadItems)
-                    DatedTaskList(section: secClosed, list: closedItems)
+                    DatedTaskList(section: secOpen, list: openItems, taskSelector: select)
+                    DatedTaskList(section: secGraveyard, list: deadItems, taskSelector: select)
+                    DatedTaskList(section: secClosed, list: closedItems, taskSelector: select)
                 }.frame(minHeight: 400)
             }.background(.white).frame(maxWidth: .infinity)
 #if os(macOS)
@@ -77,9 +87,21 @@ struct ContentView: View {
                 }.background(.white)
             
         } content: {
-            List{
-                
-            }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
+            List {
+                Section (header:
+                            VStack(alignment: .leading) {
+                                ForEach(selectedListHeader) { sec in
+                                    sec.asText
+                                }
+                            }) {
+                    ForEach(selectedList) { item in
+                        Text(item.title).onTapGesture {
+                            selectedItem = item
+                        }
+                    }
+                }
+            }
+            .navigationSplitViewColumnWidth(min: 250, ideal: 400)
                 .toolbar {
 #if os(iOS)
                     ToolbarItem(placement: .navigationBarTrailing) {

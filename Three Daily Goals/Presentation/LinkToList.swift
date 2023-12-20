@@ -10,21 +10,21 @@ import SwiftUI
 struct LinkToList: View {
     let sections: [TaskSection]
     let items: [TaskItem]
+    var taskSelector : TaskSelector
+    
 //    @Binding var selectedList: [TaskItem]
 //    @Binding var selectedListHeader : [TaskSection]
     var body: some View {
-        NavigationLink {
-            TaskListView(section: sections, items: items)
-        } label: {
             HStack {
                 sections.last!.asText
                 Spacer()
                 Text(items.count.description)
+            }.onTapGesture {
+                taskSelector(sections,items,items.first)
             }
-        }
     }
 }
 
 #Preview {
-    LinkToList(sections: [secClosed,secLastWeek], items: [TaskItem(), TaskItem()])
+    LinkToList(sections: [secClosed,secLastWeek], items: [TaskItem(), TaskItem()], taskSelector: {a,b,c in debugPrint("triggered")})
 }

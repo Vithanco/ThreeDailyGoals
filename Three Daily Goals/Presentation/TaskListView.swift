@@ -10,6 +10,7 @@ import SwiftUI
 struct TaskListView: View {
     var section: [TaskSection]
     var items: [TaskItem]
+    var taskSelector: TaskSelector
     var body: some View {
         List {
             Section (header:
@@ -19,7 +20,9 @@ struct TaskListView: View {
                             }
                         }) {
                 ForEach(items) { item in
-                    LinkToTask(item: item)
+                    Text(item.title).onTapGesture {
+                        taskSelector(section,items,item)
+                    }
                 }
             }
         }
@@ -32,7 +35,7 @@ struct TaskListViewHelper : View {
     @State var items: [TaskItem]
     
     var body: some View {
-        TaskListView(section: section, items: items)
+        TaskListView(section: section, items: items, taskSelector: {a, b, c in debugPrint("triggered")})
     }
 }
 

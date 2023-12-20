@@ -15,6 +15,7 @@ struct DatedTaskList: View {
     let list : [TaskItem]
     let sevenDaysAgo = getDate(daysPrior: 7)
     let thirtyDaysAgo = getDate(daysPrior: 30)
+    var taskSelector: TaskSelector
     
     
     var lastWeek: [TaskItem] {
@@ -28,11 +29,11 @@ struct DatedTaskList: View {
     }
     
     var body: some View {
-        LinkToList(sections: [section], items: list)
-        LinkToList(sections: [section, secLastWeek], items: lastWeek)
-        LinkToList(sections: [section, secLastMonth], items: lastMonth)
+        LinkToList(sections: [section], items: list, taskSelector: taskSelector)
+        LinkToList(sections: [section, secLastWeek], items: lastWeek, taskSelector: taskSelector)
+        LinkToList(sections: [section, secLastMonth], items: lastMonth, taskSelector: taskSelector)
         if section.showOlder {
-            LinkToList(sections: [section, secOlder], items: older)
+            LinkToList(sections: [section, secOlder], items: older, taskSelector: taskSelector)
         }
     }
 }
@@ -43,7 +44,7 @@ struct DatedTaskListHelper : View {
     var body: some View {
         NavigationView {
             VStack{
-                DatedTaskList(section: secOpen, list: list)
+                DatedTaskList(section: secOpen, list: list, taskSelector:{a,b,c in debugPrint("triggered")})
             }
         }
         
