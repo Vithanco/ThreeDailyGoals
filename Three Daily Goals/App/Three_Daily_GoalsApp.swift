@@ -28,5 +28,34 @@ struct Three_Daily_GoalsApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+        .commands {
+                    // Add a CommandMenu for saving tasks
+                    CommandMenu("File") {
+                        Button("Export Tasks") {
+                            
+                            let fetchDescriptor = FetchDescriptor<TaskItem>()
+                            
+                            do {
+                                let items = try sharedModelContainer.mainContext.fetch(fetchDescriptor)
+                                
+                                // Create an instance of JSONEncoder
+                                let encoder = JSONEncoder()
+                                // Convert your array into JSON data
+                                let data = try encoder.encode(items)
+                                // Specify the file path and name
+                                let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
+                                // Write the data to the file
+                                try data.write(to: url)
+                            } catch {
+                                print("Failed to save task items: \(error)")
+                            }
+                            
+                            
+
+                        }
+                        .keyboardShortcut("S", modifiers: [.command])
+                    }
+                }
     }
+    
 }

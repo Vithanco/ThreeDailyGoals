@@ -11,14 +11,15 @@ struct TaskListView: View {
     var section: [TaskSection]
     var items: [TaskItem]
     var taskSelector: TaskSelector
+    
     var body: some View {
         List {
             Section (header:
                         VStack(alignment: .leading) {
-                            ForEach(section) { sec in
-                                sec.asText
-                            }
-                        }) {
+                ForEach(section) { sec in
+                    sec.asText
+                }
+            }) {
                 ForEach(items) { item in
                     Text(item.title).onTapGesture {
                         taskSelector(section,items,item)

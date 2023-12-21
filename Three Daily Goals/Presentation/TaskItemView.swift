@@ -39,16 +39,12 @@ struct TaskItemView: View {
         }
         
         if let comments = item.comments, comments.count > 0 {
-            
-            LabeledContent{
-                VStack {
-                    ForEach(comments){comment in
-                        CommentView(comment: comment)
-                    }
-                }
-            } label: {
+            VStack (alignment: .leading){
                 Text("History:").bold().foregroundColor(secondaryColor)
-            }
+                ForEach(comments){comment in
+                    CommentView(comment: comment).frame(maxWidth: .infinity)
+                }
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
             
         }
         Spacer()
@@ -67,30 +63,9 @@ struct TaskItemView: View {
             .toolbar {
                 ToolbarItem {
                     Button(action: {
-                        item.makePriority(position: 1, day: today)
+                        item.makePriority(position: today.priorities?.count ?? 0, day: today)
                     }) {
-                        Label("", systemImage: imgPriority1)
-                    }
-                }
-                ToolbarItem {
-                    Button(action: {
-                        item.makePriority(position: 2, day: today)
-                    }) {
-                        Label("", systemImage: imgPriority2)
-                    }
-                }
-                ToolbarItem {
-                    Button(action: {
-                        item.makePriority(position: 3, day: today)
-                    }) {
-                        Label("", systemImage: imgPriority3)
-                    }
-                }
-                ToolbarItem {
-                    Button(action: {
-                        item.makePriority(position: 4, day: today)
-                    }) {
-                        Label("", systemImage: imgPriorityX)
+                        Label("Make a Priority", systemImage: imgToday).help("Add to today's priorities")
                     }
                 }
                 if item.isOpen {
@@ -98,7 +73,7 @@ struct TaskItemView: View {
                         Button(action: {
                             item.closeTask()
                         }) {
-                            Label("", systemImage: imgCloseTask)
+                            Label("", systemImage: imgCloseTask).help("Close")
                         }
                     }
                 }
@@ -107,20 +82,18 @@ struct TaskItemView: View {
                         Button(action: {
                             item.reOpenTask()
                         }) {
-                            Label("", systemImage: imgReopenTask)
+                            Label("", systemImage: imgReopenTask).help("Reopen")
                         }
                     }
                 }
-                if item.isGraveyarded {
-                    ToolbarItem {
-                        Button(action: {
-                            item.touch()
-                        }) {
-                            Label("", systemImage: imgTouch)
-                        }
+                ToolbarItem {
+                    Button(action: {
+                        item.touch()
+                    }) {
+                        Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
                     }
                 }
-
+                
             }
         
     }

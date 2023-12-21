@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E51142762B33768300AB6E05 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142752B33768300AB6E05 /* WidgetKit.framework */; };
+		E51142782B33768300AB6E05 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142772B33768300AB6E05 /* SwiftUI.framework */; };
+		E511427B2B33768300AB6E05 /* __Daily_Goals_WidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511427A2B33768300AB6E05 /* __Daily_Goals_WidgetBundle.swift */; };
+		E511427D2B33768300AB6E05 /* __Daily_Goals_Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511427C2B33768300AB6E05 /* __Daily_Goals_Widget.swift */; };
+		E511427F2B33768300AB6E05 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511427E2B33768300AB6E05 /* AppIntent.swift */; };
+		E51142812B33768600AB6E05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E51142802B33768600AB6E05 /* Assets.xcassets */; };
+		E51142862B33768600AB6E05 /* 3 Daily Goals WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E51142732B33768300AB6E05 /* 3 Daily Goals WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511428B2B340FB500AB6E05 /* FilesRelated.swift */; };
 		E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */; };
 		E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DD2B1F54A6003BE36F /* ContentView.swift */; };
 		E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* TaskItem.swift */; };
@@ -27,13 +35,19 @@
 		E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD82B31956300F0EA9C /* TaskSection.swift */; };
 		E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */; };
 		E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
-		E5C9133B2B3084DC001C969A /* LinkToTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C9133A2B3084DC001C969A /* LinkToTask.swift */; };
 		E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F4782B30617A00E83A21 /* DailyTasks.swift */; };
 		E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E51142842B33768600AB6E05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E51142722B33768300AB6E05;
+			remoteInfo = "3 Daily Goals WidgetExtension";
+		};
 		E561D6ED2B1F54A9003BE36F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
@@ -50,7 +64,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		E511428A2B33768600AB6E05 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E51142862B33768600AB6E05 /* 3 Daily Goals WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		E51142732B33768300AB6E05 /* 3 Daily Goals WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "3 Daily Goals WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E51142752B33768300AB6E05 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
+		E51142772B33768300AB6E05 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
+		E511427A2B33768300AB6E05 /* __Daily_Goals_WidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __Daily_Goals_WidgetBundle.swift; sourceTree = "<group>"; };
+		E511427C2B33768300AB6E05 /* __Daily_Goals_Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __Daily_Goals_Widget.swift; sourceTree = "<group>"; };
+		E511427E2B33768300AB6E05 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		E51142802B33768600AB6E05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E51142822B33768600AB6E05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E51142832B33768600AB6E05 /* __Daily_Goals_Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = __Daily_Goals_Widget.entitlements; sourceTree = "<group>"; };
+		E511428B2B340FB500AB6E05 /* FilesRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesRelated.swift; sourceTree = "<group>"; };
 		E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Three Daily Goals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsApp.swift; sourceTree = "<group>"; };
 		E561D6DD2B1F54A6003BE36F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,13 +114,21 @@
 		E5ADEDD82B31956300F0EA9C /* TaskSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSection.swift; sourceTree = "<group>"; };
 		E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDialog.swift; sourceTree = "<group>"; };
 		E5B003112B32382C00A90F8D /* StringRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRelated.swift; sourceTree = "<group>"; };
-		E5C9133A2B3084DC001C969A /* LinkToTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkToTask.swift; sourceTree = "<group>"; };
 		E5E1F4782B30617A00E83A21 /* DailyTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTasks.swift; sourceTree = "<group>"; };
 		E5E1F47B2B30632000E83A21 /* DateRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelated.swift; sourceTree = "<group>"; };
 		E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRelated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E51142702B33768300AB6E05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E51142782B33768300AB6E05 /* SwiftUI.framework in Frameworks */,
+				E51142762B33768300AB6E05 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E561D6D52B1F54A6003BE36F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,12 +153,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E51142742B33768300AB6E05 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E51142752B33768300AB6E05 /* WidgetKit.framework */,
+				E51142772B33768300AB6E05 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E51142792B33768300AB6E05 /* 3 Daily Goals Widget */ = {
+			isa = PBXGroup;
+			children = (
+				E511427A2B33768300AB6E05 /* __Daily_Goals_WidgetBundle.swift */,
+				E511427C2B33768300AB6E05 /* __Daily_Goals_Widget.swift */,
+				E511427E2B33768300AB6E05 /* AppIntent.swift */,
+				E51142802B33768600AB6E05 /* Assets.xcassets */,
+				E51142822B33768600AB6E05 /* Info.plist */,
+				E51142832B33768600AB6E05 /* __Daily_Goals_Widget.entitlements */,
+			);
+			path = "3 Daily Goals Widget";
+			sourceTree = "<group>";
+		};
 		E561D6CF2B1F54A6003BE36F = {
 			isa = PBXGroup;
 			children = (
 				E561D6DA2B1F54A6003BE36F /* Three Daily Goals */,
 				E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */,
 				E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */,
+				E51142792B33768300AB6E05 /* 3 Daily Goals Widget */,
+				E51142742B33768300AB6E05 /* Frameworks */,
 				E561D6D92B1F54A6003BE36F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -123,6 +193,7 @@
 				E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */,
 				E561D6EC2B1F54A9003BE36F /* Three Daily GoalsTests.xctest */,
 				E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */,
+				E51142732B33768300AB6E05 /* 3 Daily Goals WidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,7 +258,6 @@
 				E5A3718D2B2E2B0E00A310BA /* StateView.swift */,
 				E5A371932B2EDD5E00A310BA /* CommentView.swift */,
 				E582D0B72B2E13E30006DD5D /* TaskItemView.swift */,
-				E5C9133A2B3084DC001C969A /* LinkToTask.swift */,
 				E5ADEDD02B30973700F0EA9C /* Priorities.swift */,
 				E5ADEDD22B318B8800F0EA9C /* TaskListView.swift */,
 				E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */,
@@ -210,6 +280,7 @@
 				E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */,
 				E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */,
 				E5B003112B32382C00A90F8D /* StringRelated.swift */,
+				E511428B2B340FB500AB6E05 /* FilesRelated.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -217,6 +288,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E51142722B33768300AB6E05 /* 3 Daily Goals WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E51142872B33768600AB6E05 /* Build configuration list for PBXNativeTarget "3 Daily Goals WidgetExtension" */;
+			buildPhases = (
+				E511426F2B33768300AB6E05 /* Sources */,
+				E51142702B33768300AB6E05 /* Frameworks */,
+				E51142712B33768300AB6E05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "3 Daily Goals WidgetExtension";
+			productName = "3 Daily Goals WidgetExtension";
+			productReference = E51142732B33768300AB6E05 /* 3 Daily Goals WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		E561D6D72B1F54A6003BE36F /* Three Daily Goals */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E561D7002B1F54A9003BE36F /* Build configuration list for PBXNativeTarget "Three Daily Goals" */;
@@ -224,10 +312,12 @@
 				E561D6D42B1F54A6003BE36F /* Sources */,
 				E561D6D52B1F54A6003BE36F /* Frameworks */,
 				E561D6D62B1F54A6003BE36F /* Resources */,
+				E511428A2B33768600AB6E05 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E51142852B33768600AB6E05 /* PBXTargetDependency */,
 			);
 			name = "Three Daily Goals";
 			productName = "Three Daily Goals";
@@ -277,9 +367,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1510;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					E51142722B33768300AB6E05 = {
+						CreatedOnToolsVersion = 15.1;
+					};
 					E561D6D72B1F54A6003BE36F = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
@@ -309,11 +402,20 @@
 				E561D6D72B1F54A6003BE36F /* Three Daily Goals */,
 				E561D6EB2B1F54A9003BE36F /* Three Daily GoalsTests */,
 				E561D6F52B1F54A9003BE36F /* Three Daily GoalsUITests */,
+				E51142722B33768300AB6E05 /* 3 Daily Goals WidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E51142712B33768300AB6E05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E51142812B33768600AB6E05 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E561D6D62B1F54A6003BE36F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -340,11 +442,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E511426F2B33768300AB6E05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E511427D2B33768300AB6E05 /* __Daily_Goals_Widget.swift in Sources */,
+				E511427B2B33768300AB6E05 /* __Daily_Goals_WidgetBundle.swift in Sources */,
+				E511427F2B33768300AB6E05 /* AppIntent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E561D6D42B1F54A6003BE36F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
+				E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */,
 				E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */,
 				E5A371942B2EDD5E00A310BA /* CommentView.swift in Sources */,
 				E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */,
@@ -362,7 +475,6 @@
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 				E5ADEDD12B30973700F0EA9C /* Priorities.swift in Sources */,
-				E5C9133B2B3084DC001C969A /* LinkToTask.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +498,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E51142852B33768600AB6E05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E51142722B33768300AB6E05 /* 3 Daily Goals WidgetExtension */;
+			targetProxy = E51142842B33768600AB6E05 /* PBXContainerItemProxy */;
+		};
 		E561D6EE2B1F54A9003BE36F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E561D6D72B1F54A6003BE36F /* Three Daily Goals */;
@@ -399,6 +516,82 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		E51142882B33768600AB6E05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "3 Daily Goals Widget/__Daily_Goals_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "3 Daily Goals Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "3 Daily Goals Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.--Daily-Goals-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E51142892B33768600AB6E05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "3 Daily Goals Widget/__Daily_Goals_Widget.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "3 Daily Goals Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "3 Daily Goals Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.--Daily-Goals-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		E561D6FE2B1F54A9003BE36F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -516,6 +709,7 @@
 		E561D7012B1F54A9003BE36F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
@@ -557,6 +751,7 @@
 		E561D7022B1F54A9003BE36F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
@@ -688,6 +883,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E51142872B33768600AB6E05 /* Build configuration list for PBXNativeTarget "3 Daily Goals WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E51142882B33768600AB6E05 /* Debug */,
+				E51142892B33768600AB6E05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E561D6D32B1F54A6003BE36F /* Build configuration list for PBXProject "Three Daily Goals" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

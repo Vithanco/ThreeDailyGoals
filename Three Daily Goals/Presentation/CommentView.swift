@@ -12,11 +12,11 @@ struct CommentView: View {
     
     var body: some View {
         LabeledContent{
-            Text(comment.text).background(Color(white: 230.0/255.0)).frame(idealHeight: 30)
+            Text(comment.text).frame(maxWidth: .infinity, alignment: .leading)
         } label: {
-            Text("Added").foregroundColor(secondaryColor)
-            Text(comment.created, format: stdDateFormat).foregroundColor(secondaryColor)
-        }.background(.white)
+                Text("Added").foregroundColor(secondaryColor)
+                Text(comment.created, format: stdDateFormat).foregroundColor(secondaryColor)
+        }.frame(maxWidth: .infinity).background(Color(white: 250.0/255.0)).padding(2)
     }
 }
 

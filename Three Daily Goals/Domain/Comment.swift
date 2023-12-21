@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-final class Comment: ObservableObject, Identifiable {
+final class Comment: ObservableObject, Identifiable, Codable {
     var created: Date  = Date.now
     var changed: Date  = Date.now
     var text: String = ""
@@ -22,5 +22,25 @@ final class Comment: ObservableObject, Identifiable {
     
     var id: Date {
         return created
+    }
+    
+    
+    //MARK: Codable
+    enum CodingKeys: CodingKey {
+        case created, changed, text
+      }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.created = try container.decode(Date.self, forKey: .created)
+        self.changed = try container.decode(Date.self, forKey: .changed)
+        self.text = try container.decode(String.self, forKey: .text)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+      var container = encoder.container(keyedBy: CodingKeys.self)
+      try container.encode(created, forKey: .created)
+      try container.encode(changed, forKey: .changed)
+        try container.encode(text, forKey: .text)
     }
 }

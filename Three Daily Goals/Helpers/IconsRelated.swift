@@ -12,7 +12,6 @@ let imgClosed = "flag.checkered.2.crossed"
 let imgGraveyard = "heart.slash.fill"
 let imgDated = "clock.fill"
 let imgMagnifyingGlass = "magnifyingglass.circle.fill"
-let imgTouch = "hand.point.up.left.fill"
 
 let imgToday = "exclamationmark.square.fill"
 let imgPriority1 = "1.circle.fill"
@@ -22,3 +21,4 @@ let imgPriorityX = "x.circle.fill"
 
 let imgCloseTask = "xmark.circle.fill"
 let imgReopenTask = "arrow.uturn.forward.circle.fill"
+let imgTouch = "dot.circle.and.hand.point.up.left.fill"

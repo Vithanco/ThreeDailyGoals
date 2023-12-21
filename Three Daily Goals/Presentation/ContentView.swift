@@ -8,9 +8,12 @@
 import SwiftUI
 import SwiftData
 
+typealias TaskSelector = ([TaskSection],[TaskItem],TaskItem?) -> Void
+typealias OnSelectItem = (TaskItem) -> Void
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [TaskItem]
+    @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
     @Query private var days: [DailyTasks]
     
     @State private var selectedList: [TaskItem] = []
@@ -24,15 +27,15 @@ struct ContentView: View {
     //    }) var openItems: [TaskItem]
     
     var openItems: [TaskItem] {
-        return items.filter({$0.state == .open})
+        return items.filter({$0.state == .open}).sorted()
     }
     
     var closedItems: [TaskItem]{
-        return items.filter({$0.state == .closed})
+        return items.filter({$0.state == .closed}).sorted()
     }
     
     var deadItems: [TaskItem]{
-        return items.filter({$0.state == .graveyard})
+        return items.filter({$0.state == .graveyard}).sorted()
     }
     
     var today: DailyTasks {
@@ -51,9 +54,9 @@ struct ContentView: View {
         withAnimation{
                 selectedListHeader = sections
                 selectedList = list
-                if let item = item {
-                    assert(list.contains(item))
-                }
+//                if let item = item {
+//                    assert(list.contains(item))
+//                }
                 selectedItem = item
         }
     }
@@ -128,11 +131,9 @@ struct ContentView: View {
     }
     
     private func addItem() {
-        withAnimation {
             let newItem = TaskItem()
             modelContext.insert(newItem)
-            selectedItem = newItem
-        }
+            select(sections: [secOpen], list: openItems, item: newItem)
     }
     
     private func review() {

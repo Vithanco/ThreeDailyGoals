@@ -12,16 +12,14 @@ struct LinkToList: View {
     let items: [TaskItem]
     var taskSelector : TaskSelector
     
-//    @Binding var selectedList: [TaskItem]
-//    @Binding var selectedListHeader : [TaskSection]
     var body: some View {
-            HStack {
-                sections.last!.asText
-                Spacer()
-                Text(items.count.description)
-            }.onTapGesture {
-                taskSelector(sections,items,items.first)
-            }
+        HStack {
+            sections.last!.asText
+            Spacer()
+            Text(items.count.description)
+        }.onTapGesture {
+            taskSelector(sections,items,items.first)
+        }
     }
 }
 

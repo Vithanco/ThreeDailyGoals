@@ -27,13 +27,14 @@ enum SectionStyle {
     }
 }
 
-struct TaskSection{
+struct TaskSection {
     let text : String
     let image: String
     let style: SectionStyle
     var showOlder: Bool
 }
 
+let secToday = TaskSection(text: "Today", image: imgToday, style: .mainSection, showOlder: false)
 let secOpen = TaskSection(text: "Open", image: imgOpen, style: .mainSection, showOlder: false)
 let secClosed = TaskSection(text: "Closed", image: imgClosed, style: .mainSection, showOlder: true )
 let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard, style: .mainSection, showOlder: true)

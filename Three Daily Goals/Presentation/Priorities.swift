@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-typealias TaskSelector = ([TaskSection],[TaskItem],TaskItem?) -> Void
-typealias OnSelectItem = (TaskItem) -> Void
+
 
 struct APriority: View {
     var image: String
@@ -35,12 +34,14 @@ struct Priorities: View {
     var taskSelector : TaskSelector
     
     func select(_ item: TaskItem) {
-        taskSelector([secOpen], priorities.priorities ?? [], item)
+        taskSelector([secToday], priorities.priorities ?? [], item)
     }
     
     var body: some View {
         List {
-            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(mainColor)){
+            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(mainColor).onTapGesture {
+                taskSelector([secToday],priorities.priorities ?? [],priorities.priorities?.first)
+            }){
                 if let prios = priorities.priorities {
                     let count = prios.count
                     APriority(image: imgPriority1, item: count > 0 ? prios[0] : nil, onSelectItem: select)
