@@ -28,6 +28,30 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E561D6F52B1F54A9003BE36F"
+               BuildableName = "Three Daily GoalsUITests.xctest"
+               BlueprintName = "Three Daily GoalsUITests"
+               ReferencedContainer = "container:Three Daily Goals.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E561D6EB2B1F54A9003BE36F"
+               BuildableName = "Three Daily GoalsTests.xctest"
+               BlueprintName = "Three Daily GoalsTests"
+               ReferencedContainer = "container:Three Daily Goals.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

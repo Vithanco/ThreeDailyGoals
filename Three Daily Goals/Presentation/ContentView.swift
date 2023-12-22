@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-typealias TaskSelector = ([TaskSection],[TaskItem],TaskItem?) -> Void
-typealias OnSelectItem = (TaskItem) -> Void
+
+
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
@@ -54,9 +54,6 @@ struct ContentView: View {
         withAnimation{
                 selectedListHeader = sections
                 selectedList = list
-//                if let item = item {
-//                    assert(list.contains(item))
-//                }
                 selectedItem = item
         }
     }
