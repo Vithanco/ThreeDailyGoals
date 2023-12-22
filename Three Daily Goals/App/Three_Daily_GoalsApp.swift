@@ -11,7 +11,6 @@ import SwiftData
 @main
 struct Three_Daily_GoalsApp: App {
     
-
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -19,7 +18,7 @@ struct Three_Daily_GoalsApp: App {
         .modelContainer(sharedModelContainer)
         .commands {
                     // Add a CommandMenu for saving tasks
-                    CommandMenu("File") {
+                    CommandMenu("Export") {
                         Button("Export Tasks") {
                             
                             let fetchDescriptor = FetchDescriptor<TaskItem>()

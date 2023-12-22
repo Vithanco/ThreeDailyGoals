@@ -109,7 +109,7 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     
     func makePriority(position: Int, day: DailyTasks) {
         if let priorities = day.priorities {
-            let index = min (priorities.count, position - 1)
+            let index = min (priorities.count, position)
             day.priorities?.insert(self, at: index)
             addComment(text: "added as priority to day \(day.day)")
         }

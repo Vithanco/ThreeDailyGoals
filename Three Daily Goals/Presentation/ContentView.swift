@@ -15,10 +15,9 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
     @Query private var days: [DailyTasks]
-    
-    @State private var selectedList: [TaskItem] = []
     @State private var selectedItem: TaskItem? = nil
-    @State private var selectedListHeader: [TaskSection] = []
+    
+    
     
     @State var showReviewDialog: Bool = false
     //    @Query(filter: #Predicate<TaskItem> {
@@ -50,25 +49,39 @@ struct ContentView: View {
         return newItem
     }
     
+#if os(macOS)
+    @State private var selectedList: [TaskItem] = []
+    @State private var selectedListHeader: [TaskSection] = []
+    
     func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
         withAnimation{
-                selectedListHeader = sections
-                selectedList = list
-                selectedItem = item
+            selectedListHeader = sections
+            selectedList = list
+            selectedItem = item
         }
     }
+#endif
     
     var body: some View {
         
         NavigationSplitView {
             VStack(alignment: .leading){
-                
+#if os(macOS)
                 Priorities(priorities: today,taskSelector: select)
                 List {
                     DatedTaskList(section: secOpen, list: openItems, taskSelector: select)
                     DatedTaskList(section: secGraveyard, list: deadItems, taskSelector: select)
                     DatedTaskList(section: secClosed, list: closedItems, taskSelector: select)
                 }.frame(minHeight: 400)
+#endif
+#if os(iOS)
+                Priorities(priorities: today)
+                List {
+                    DatedTaskList(section: secOpen, list: openItems)
+                    DatedTaskList(section: secGraveyard, list: deadItems)
+                    DatedTaskList(section: secClosed, list: closedItems)
+                }.frame(minHeight: 400)
+#endif
             }.background(.white).frame(maxWidth: .infinity)
 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 250, ideal: 400)
@@ -87,33 +100,34 @@ struct ContentView: View {
                 }.background(.white)
             
         } content: {
-            List {
+            List{
+#if os(macOS)
                 Section (header:
                             VStack(alignment: .leading) {
-                                ForEach(selectedListHeader) { sec in
-                                    sec.asText
-                                }
-                            }) {
+                    ForEach(selectedListHeader) { sec in
+                        sec.asText
+                    }
+                }) {
                     ForEach(selectedList) { item in
                         Text(item.title).onTapGesture {
                             selectedItem = item
                         }
                     }
                 }
-            }
-            .navigationSplitViewColumnWidth(min: 250, ideal: 400)
-                .toolbar {
-#if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
 #endif
-                    ToolbarItem {
-                        Button(action: review) {
-                            Label("Review", systemImage: imgMagnifyingGlass)
-                        }
+            }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
+            .toolbar {
+#if os(iOS)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+#endif
+                ToolbarItem {
+                    Button(action: review) {
+                        Label("Review", systemImage: imgMagnifyingGlass)
                     }
                 }
+            }
         } detail: {
             if let detail = selectedItem {
                 TaskItemView(item: detail)
@@ -128,9 +142,16 @@ struct ContentView: View {
     }
     
     private func addItem() {
+        withAnimation {
             let newItem = TaskItem()
             modelContext.insert(newItem)
+#if os(macOS)
             select(sections: [secOpen], list: openItems, item: newItem)
+#endif
+#if os(iOS)
+            selectedItem = newItem
+#endif
+        }
     }
     
     private func review() {
