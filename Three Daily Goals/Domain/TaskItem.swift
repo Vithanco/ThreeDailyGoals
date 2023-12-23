@@ -21,17 +21,19 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     public private (set) var changed: Date = Date.now
     public private (set) var closed: Date? = nil
     
+    //ignore for now
+    public var important: Bool = false
+    public var urgent: Bool = false
+    
     var _title: String = "I need to ..."
     var _details: String = "(no details yet)"
     var _state: TaskItemState = TaskItemState.open
  
     @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
-    @Relationship(inverse: \DailyTasks.priorities) var priorityOn: [DailyTasks]? = [DailyTasks]()
+    @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
     
     init() {
     }
-  
-   
     
     @Transient
     var title: String {
@@ -118,6 +120,7 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     func closeTask() {
         state = .closed
         addComment(text: "closed this task on \(Date.now)")
+        priority = nil
     }
     
     func reOpenTask() {
@@ -134,8 +137,6 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     func setChangedDate(_ date: Date) {
         changed = date
     }
-    
-    
     
     //MARK: Codable
     enum CodingKeys: CodingKey {

@@ -8,16 +8,12 @@
 import SwiftUI
 import SwiftData
 
-
-
-
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
     @Query private var days: [DailyTasks]
     @State private var selectedItem: TaskItem? = nil
-    
-    
+    @State private var showItem: Bool = false
     
     @State var showReviewDialog: Bool = false
     //    @Query(filter: #Predicate<TaskItem> {
@@ -38,15 +34,13 @@ struct ContentView: View {
     }
     
     var today: DailyTasks {
-        if let existing = days.first(where: {$0.day.isToday }) {
-            return  existing
+        var result = days.first
+        if let result = result {
+            return result
         }
-        // need to create a new Version
-        let newItem = DailyTasks()
-        modelContext.insert(newItem)
-        assert(newItem.day.isToday)
-        
-        return newItem
+        let new = DailyTasks()
+        modelContext.insert(new)
+        return new
     }
     
 #if os(macOS)
@@ -67,22 +61,27 @@ struct ContentView: View {
         NavigationSplitView {
             VStack(alignment: .leading){
 #if os(macOS)
-                Priorities(priorities: today,taskSelector: select)
-                List {
-                    DatedTaskList(section: secOpen, list: openItems, taskSelector: select)
-                    DatedTaskList(section: secGraveyard, list: deadItems, taskSelector: select)
-                    DatedTaskList(section: secClosed, list: closedItems, taskSelector: select)
-                }.frame(minHeight: 400)
+                    Priorities(priorities: today,taskSelector: select)
+                    List {
+                        DatedTaskList(section: secOpen, list: openItems, taskSelector: select)
+                        DatedTaskList(section: secGraveyard, list: deadItems, taskSelector: select)
+                        DatedTaskList(section: secClosed, list: closedItems, taskSelector: select)
+                    }.frame(minHeight: 400)
 #endif
 #if os(iOS)
-                Priorities(priorities: today)
-                List {
-                    DatedTaskList(section: secOpen, list: openItems)
-                    DatedTaskList(section: secGraveyard, list: deadItems)
-                    DatedTaskList(section: secClosed, list: closedItems)
-                }.frame(minHeight: 400)
+                    Priorities(priorities: today)
+                    List {
+                        DatedTaskList(section: secOpen, list: openItems)
+                        DatedTaskList(section: secGraveyard, list: deadItems)
+                        DatedTaskList(section: secClosed, list: closedItems)
+                    }.frame(minHeight: 400)
 #endif
             }.background(.white).frame(maxWidth: .infinity)
+                .navigationDestination(isPresented: $showItem) {
+                    if let item = selectedItem {
+                        TaskItemView(item: item)
+                    }
+                }
 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 250, ideal: 400)
 #endif
@@ -150,6 +149,7 @@ struct ContentView: View {
 #endif
 #if os(iOS)
             selectedItem = newItem
+            showItem = true
 #endif
         }
     }

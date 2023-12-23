@@ -561,7 +561,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals (Widget)";
+				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -600,7 +600,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals (Widget)";
+				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
