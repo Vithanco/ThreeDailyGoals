@@ -89,6 +89,6 @@ struct DatedTaskListHelper : View {
     let older2 = TaskItem()
     older2.title = "101 days ago"
     older2.setChangedDate(getDate(daysPrior: 101))
-    var list = [lastWeek2,lastMonth2,lastWeek1,older1,older2,lastMonth1]
+    let list = [lastWeek2,lastMonth2,lastWeek1,older1,older2,lastMonth1]
     return DatedTaskListHelper(list: list) 
 }

@@ -22,3 +22,6 @@ let imgPriorityX = "x.circle.fill"
 let imgCloseTask = "xmark.circle.fill"
 let imgReopenTask = "arrow.uturn.forward.circle.fill"
 let imgTouch = "dot.circle.and.hand.point.up.left.fill"
+
+let imgUndo = "arrow.uturn.backward.circle.fill"
+let imgRedo = "arrow.uturn.forward.circle.fill"

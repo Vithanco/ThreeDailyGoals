@@ -43,6 +43,17 @@ struct Three_Daily_GoalsApp: App {
                         }
                         .keyboardShortcut("S", modifiers: [.command])
                     }
+            CommandGroup(replacing: .undoRedo) {
+                            Button("Undo") {
+                                sharedModelContainer.mainContext.undoManager?.undo()
+                            }
+                            .keyboardShortcut("z", modifiers: [.command])
+
+                            Button("Redo") {
+                                sharedModelContainer.mainContext.undoManager?.redo()
+                            }
+                            .keyboardShortcut("Z", modifiers: [.command, .shift])
+                        }
                 }
     }
     

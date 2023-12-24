@@ -28,7 +28,7 @@ struct LinkToList: View {
     var body: some View {
 #if os(iOS)
         NavigationLink {
-            TaskListView(section: sections, items: items)
+            ListView(section: sections, items: items)
         } label: {
             Label(name: sections.last!.asText, count:items.count)
         }

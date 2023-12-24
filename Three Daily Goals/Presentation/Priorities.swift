@@ -17,7 +17,7 @@ struct APriority: View {
             Image(systemName: image)
             if let item = item {
                 HStack {
-                    Text(item.title)
+                    Text(item.title).strikethrough(item.isClosed, color: mainColor)
                 }.onTapGesture {
                     onSelectItem(item)
                 }
@@ -71,7 +71,7 @@ struct APriority: View {
         HStack {
             Image(systemName: image)
             if let item = item {
-                LinkToTask(item: item)
+                LinkToTask(item: item).strikethrough( item.isClosed, color: mainColor)
             }else {
               Text("(missing)")
             }

@@ -7,12 +7,31 @@
 
 import SwiftUI
 
-struct TaskListView: View {
+struct ListView: View {
+    @Environment(\.modelContext) private var modelContext
     var section: [TaskSection]
     var items: [TaskItem]
 #if os(macOS)
     var taskSelector: TaskSelector
 #endif
+    
+    @State private var canUndo = false
+    @State private var canRedo = false
+    
+    private func undo() {
+        modelContext.undoManager?.undo()
+        updateUndoRedoStatus()
+    }
+    
+    private func redo() {
+        modelContext.undoManager?.redo()
+        updateUndoRedoStatus()
+    }
+    
+    private func updateUndoRedoStatus() {
+        canUndo =  modelContext.undoManager?.canUndo ?? false
+        canRedo =  modelContext.undoManager?.canRedo ?? false
+    }
     
     var body: some View {
         List {
@@ -33,8 +52,19 @@ struct TaskListView: View {
                     #endif
                 }
             }
-        }
-        
+        }.toolbar {
+            
+            ToolbarItem{
+                Button(action: undo) {
+                    Label("Undo", systemImage: imgUndo)
+                }.disabled(!canUndo)
+            }
+            ToolbarItem {
+                Button(action: redo) {
+                    Label("Redo", systemImage: imgRedo)
+                }.disabled(!canRedo)
+            }
+        } 
     }
 }
 
@@ -46,7 +76,7 @@ struct TaskListViewHelper : View {
     
     var body: some View {
         
-        TaskListView(section: section, items: items, taskSelector: {a, b, c in debugPrint("triggered")})
+        ListView(section: section, items: items, taskSelector: {a, b, c in debugPrint("triggered")})
     }
 }
 #Preview {
@@ -60,7 +90,7 @@ struct TaskListViewHelper : View {
     @State var items: [TaskItem]
     
     var body: some View {
-        TaskListView(section: section, items: items)
+        ListView(section: section, items: items)
     }
 }
 #Preview {

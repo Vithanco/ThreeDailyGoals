@@ -13,6 +13,24 @@ struct TaskItemView: View {
     @EnvironmentObject var today : DailyTasks
     @Bindable var item: TaskItem
     
+    @State private var canUndo = false
+    @State private var canRedo = false
+    
+    private func undo() {
+        modelContext.undoManager?.undo()
+        updateUndoRedoStatus()
+    }
+    
+    private func redo() {
+        modelContext.undoManager?.redo()
+        updateUndoRedoStatus()
+    }
+    
+    private func updateUndoRedoStatus() {
+        canUndo =  modelContext.undoManager?.canUndo ?? false
+        canRedo =  modelContext.undoManager?.canRedo ?? false
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack {
@@ -61,6 +79,18 @@ struct TaskItemView: View {
             }
         }.background(.white).padding()
             .toolbar {
+#if os(iOS)
+                ToolbarItem {
+                    Button(action: undo) {
+                        Label("Undo", systemImage: imgUndo)
+                    }.disabled(!canUndo)
+                }
+                ToolbarItem {
+                    Button(action: redo) {
+                        Label("Redo", systemImage: imgRedo)
+                    }.disabled(!canRedo)
+                }
+#endif
                 ToolbarItem {
                     Button(action: {
                         item.makePriority(position: today.priorities?.count ?? 0, day: today)
@@ -94,10 +124,9 @@ struct TaskItemView: View {
                     }
                 }
                 
-            }
-        
+               
+            }.onAppear(perform:{updateUndoRedoStatus()})
     }
-    
 }
 
 #Preview {

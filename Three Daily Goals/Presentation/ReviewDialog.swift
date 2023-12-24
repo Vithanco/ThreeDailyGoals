@@ -11,10 +11,12 @@ struct ReviewDialog: View {
     @EnvironmentObject var today : DailyTasks
     var items: [TaskItem]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .toolbar {
-                
-            }
+        VStack {
+            Text("Review your Tasks!").font(.caption).foregroundStyle(mainColor)
+            Text("The previous Tasks were: ")
+            
+        }
+        
     }
 }
 

@@ -7,19 +7,14 @@
 
 import SwiftUI
 import SwiftData
-import os
 
 struct ContentView: View {
-    private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: ContentView.self)
-    )
-    
-    
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
     @State private var selectedItem: TaskItem? = nil
     @State private var showItem: Bool = false
+    @State private var canUndo = false
+    @State private var canRedo = false
     
     @State var showReviewDialog: Bool = false
     //    @Query(filter: #Predicate<TaskItem> {
@@ -40,29 +35,6 @@ struct ContentView: View {
     }
     
     @State var today: DailyTasks? = nil
-    
-    func loadPriorities() -> DailyTasks {
-        let fetchDescriptor = FetchDescriptor<DailyTasks>()
-        
-        do {
-            let days = try modelContext.fetch(fetchDescriptor)
-            if days.count > 1 {
-                logger.error("days has \(days.count) entries! Why?")
-                for d in days {
-                    modelContext.delete(d)
-                }
-            }
-            if let result = days.first {
-                return result
-            }
-        }
-        catch {
-            logger.warning("no data available?")
-        }
-        let new = DailyTasks()
-        modelContext.insert(new)
-        return new
-    }
     
     
 #if os(macOS)
@@ -111,15 +83,31 @@ struct ContentView: View {
 #endif
                 .toolbar {
 #if os(iOS)
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: undo) {
+                            Label("Undo", systemImage: imgUndo)
+                        }.disabled(!canUndo)
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: redo) {
+                            Label("Redo", systemImage: imgRedo)
+                        }.disabled(!canRedo)
+                    }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
 #endif
                     ToolbarItem {
+                        Button(action: review) {
+                            Label("Review", systemImage: imgMagnifyingGlass)
+                        }
+                    }
+                    ToolbarItem {
                         Button(action: addItem) {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
+                    
                 }.background(.white)
             
         } content: {
@@ -144,12 +132,9 @@ struct ContentView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
+                
 #endif
-                    ToolbarItem {
-                        Button(action: review) {
-                            Label("Review", systemImage: imgMagnifyingGlass)
-                        }
-                    }
+                    
                 }
         } detail: {
             if let detail = selectedItem {
@@ -161,7 +146,10 @@ struct ContentView: View {
             .sheet(isPresented: $showReviewDialog) {
                 ReviewDialog(items: openItems)
             }
-            .onAppear(perform: {today = loadPriorities()})
+            .onAppear(perform: {
+                today = loadPriorities(modelContext: modelContext)
+                updateUndoRedoStatus()
+            })
             .environment(today)
     }
     
@@ -176,8 +164,24 @@ struct ContentView: View {
             selectedItem = newItem
             showItem = true
 #endif
+            updateUndoRedoStatus()
         }
     }
+    
+    private func undo() {
+        modelContext.undoManager?.undo()
+        updateUndoRedoStatus()
+    }
+    
+    private func redo() {
+        modelContext.undoManager?.redo()
+        updateUndoRedoStatus()
+      }
+
+      private func updateUndoRedoStatus() {
+          canUndo =  modelContext.undoManager?.canUndo ?? false
+          canRedo =  modelContext.undoManager?.canRedo ?? false
+      }
     
     private func review() {
         withAnimation {

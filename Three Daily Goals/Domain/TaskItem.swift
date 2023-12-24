@@ -89,10 +89,6 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
         return state == .graveyard
     }
     
-    
-    
-    
-    
     var id: Date {
         return created
     }
@@ -120,7 +116,7 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     func closeTask() {
         state = .closed
         addComment(text: "closed this task on \(Date.now)")
-        priority = nil
+//        priority = nil
     }
     
     func reOpenTask() {
