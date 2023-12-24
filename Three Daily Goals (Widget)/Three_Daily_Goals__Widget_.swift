@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import os
 
 struct Provider: AppIntentTimelineProvider {
     
@@ -41,26 +42,47 @@ struct PriorityEntry: TimelineEntry {
 }
 
 struct Three_Daily_Goals__Widget_EntryView : View {
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: Three_Daily_Goals__Widget_EntryView.self)
+    )
     @Environment(\.modelContext) private var modelContext
-    @Query private var days: [DailyTasks]
     
-    var today: DailyTasks {
-        if let existing = days.first(where: {$0.day.isToday }) {
-            return  existing
-        }
-        // need to create a new Version
-        let newItem = DailyTasks()
-        modelContext.insert(newItem)
-        assert(newItem.day.isToday)
+    @State var today: DailyTasks? = nil
+    
+    func loadPriorities() -> DailyTasks {
+        let fetchDescriptor = FetchDescriptor<DailyTasks>()
         
-        return newItem
+        do {
+            let days = try modelContext.fetch(fetchDescriptor)
+            if days.count > 1 {
+                logger.error("days has \(days.count) entries! Why?")
+                for d in days {
+                    modelContext.delete(d)
+                }
+            }
+            if let result = days.first {
+                return result
+            }
+        }
+        catch {
+            logger.warning("no data available?")
+        }
+        let new = DailyTasks()
+        modelContext.insert(new)
+        return new
     }
     
     var entry: PriorityEntry
     
     var body: some View {
-        WPriorities(priorities: today)
-    }
+        if let today = today {
+            WPriorities(priorities: today)
+        } else {
+            Text("Loading...").font(.title).foregroundStyle(mainColor).onAppear(perform: {today = loadPriorities()})
+
+        }
+            }
 }
 
 struct Three_Daily_Goals__Widget_: Widget {

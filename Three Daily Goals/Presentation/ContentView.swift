@@ -7,11 +7,17 @@
 
 import SwiftUI
 import SwiftData
+import os
 
 struct ContentView: View {
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: ContentView.self)
+    )
+    
+    
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
-    @Query private var days: [DailyTasks]
     @State private var selectedItem: TaskItem? = nil
     @State private var showItem: Bool = false
     
@@ -33,15 +39,31 @@ struct ContentView: View {
         return items.filter({$0.state == .graveyard}).sorted()
     }
     
-    var today: DailyTasks {
-        var result = days.first
-        if let result = result {
-            return result
+    @State var today: DailyTasks? = nil
+    
+    func loadPriorities() -> DailyTasks {
+        let fetchDescriptor = FetchDescriptor<DailyTasks>()
+        
+        do {
+            let days = try modelContext.fetch(fetchDescriptor)
+            if days.count > 1 {
+                logger.error("days has \(days.count) entries! Why?")
+                for d in days {
+                    modelContext.delete(d)
+                }
+            }
+            if let result = days.first {
+                return result
+            }
+        }
+        catch {
+            logger.warning("no data available?")
         }
         let new = DailyTasks()
         modelContext.insert(new)
         return new
     }
+    
     
 #if os(macOS)
     @State private var selectedList: [TaskItem] = []
@@ -60,6 +82,7 @@ struct ContentView: View {
         
         NavigationSplitView {
             VStack(alignment: .leading){
+                if let today = today {
 #if os(macOS)
                     Priorities(priorities: today,taskSelector: select)
                     List {
@@ -76,6 +99,7 @@ struct ContentView: View {
                         DatedTaskList(section: secClosed, list: closedItems)
                     }.frame(minHeight: 400)
 #endif
+                }
             }.background(.white).frame(maxWidth: .infinity)
                 .navigationDestination(isPresented: $showItem) {
                     if let item = selectedItem {
@@ -115,18 +139,18 @@ struct ContentView: View {
                 }
 #endif
             }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
-            .toolbar {
+                .toolbar {
 #if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
 #endif
-                ToolbarItem {
-                    Button(action: review) {
-                        Label("Review", systemImage: imgMagnifyingGlass)
+                    ToolbarItem {
+                        Button(action: review) {
+                            Label("Review", systemImage: imgMagnifyingGlass)
+                        }
                     }
                 }
-            }
         } detail: {
             if let detail = selectedItem {
                 TaskItemView(item: detail)
@@ -137,6 +161,7 @@ struct ContentView: View {
             .sheet(isPresented: $showReviewDialog) {
                 ReviewDialog(items: openItems)
             }
+            .onAppear(perform: {today = loadPriorities()})
             .environment(today)
     }
     
