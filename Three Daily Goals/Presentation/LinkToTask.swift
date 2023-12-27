@@ -13,7 +13,7 @@ struct LinkToTask: View {
         NavigationLink {
             TaskItemView(item: item)
         } label: {
-            Text(item.title)
+            TaskAsLine(item: item)
         }
     }
 }

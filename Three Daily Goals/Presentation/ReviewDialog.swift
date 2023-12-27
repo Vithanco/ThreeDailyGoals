@@ -12,8 +12,9 @@ struct ReviewDialog: View {
     var items: [TaskItem]
     var body: some View {
         VStack {
-            Text("Review your Tasks!").font(.caption).foregroundStyle(mainColor)
+            Text("Review your Tasks!").font(.caption).foregroundStyle(Color.mainColor)
             Text("The previous Tasks were: ")
+            
             
         }
         

@@ -16,6 +16,8 @@ func getDate (daysPrior: Int) -> Date {
     return Calendar.current.startOfDay(for: exact)
 }
 
+let sevenDaysAgo = getDate(daysPrior: 7)
+let thirtyDaysAgo = getDate(daysPrior: 30)
 
 
 extension Date {

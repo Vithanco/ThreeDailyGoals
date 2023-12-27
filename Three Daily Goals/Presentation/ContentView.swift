@@ -10,7 +10,13 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
+    @Query( sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
+    
+    @State private var openModel = ListViewModel(sections: [secOpen], list: [])
+    @State private var closedModel = ListViewModel(sections: [secClosed], list: [])
+    @State private var deadModel = ListViewModel(sections: [secGraveyard], list: [])
+
+    
     @State private var selectedItem: TaskItem? = nil
     @State private var showItem: Bool = false
     @State private var canUndo = false
@@ -36,43 +42,46 @@ struct ContentView: View {
     
     @State var today: DailyTasks? = nil
     
+    func updateModels() {
+        openModel.list = openItems
+        closedModel.list = closedItems
+        deadModel.list = deadItems
+    }
     
 #if os(macOS)
-    @State private var selectedList: [TaskItem] = []
-    @State private var selectedListHeader: [TaskSection] = []
-    
+    @State private var listModel = ListViewModel(sections: [], list: [])
     func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
         withAnimation{
-            selectedListHeader = sections
-            selectedList = list
+            listModel.sections = sections
+            listModel.list = list
             selectedItem = item
         }
     }
 #endif
     
     var body: some View {
-        
+        let _ = updateModels()
         NavigationSplitView {
             VStack(alignment: .leading){
                 if let today = today {
 #if os(macOS)
                     Priorities(priorities: today,taskSelector: select)
                     List {
-                        DatedTaskList(section: secOpen, list: openItems, taskSelector: select)
-                        DatedTaskList(section: secGraveyard, list: deadItems, taskSelector: select)
-                        DatedTaskList(section: secClosed, list: closedItems, taskSelector: select)
+                        DatedTaskList(listModel: $openModel, taskSelector: select)
+                        DatedTaskList(listModel: $deadModel, taskSelector: select)
+                        DatedTaskList(listModel: $closedModel, taskSelector: select)
                     }.frame(minHeight: 400)
 #endif
 #if os(iOS)
                     Priorities(priorities: today)
                     List {
-                        DatedTaskList(section: secOpen, list: openItems)
-                        DatedTaskList(section: secGraveyard, list: deadItems)
-                        DatedTaskList(section: secClosed, list: closedItems)
+                        DatedTaskList(listModel: $openModel)
+                        DatedTaskList(listModel: $deadModel)
+                        DatedTaskList(listModel: $closedModel)
                     }.frame(minHeight: 400)
 #endif
                 }
-            }.background(.white).frame(maxWidth: .infinity)
+            }.background(Color.backgroundColor).frame(maxWidth: .infinity)
                 .navigationDestination(isPresented: $showItem) {
                     if let item = selectedItem {
                         TaskItemView(item: item)
@@ -108,23 +117,24 @@ struct ContentView: View {
                         }
                     }
                     
-                }.background(.white)
+                }.background(Color.backgroundColor)
             
         } content: {
             List{
 #if os(macOS)
-                Section (header:
-                            VStack(alignment: .leading) {
-                    ForEach(selectedListHeader) { sec in
-                        sec.asText
-                    }
-                }) {
-                    ForEach(selectedList) { item in
-                        Text(item.title).onTapGesture {
-                            selectedItem = item
-                        }
-                    }
-                }
+                ListView(model: $listModel, taskSelector: select)
+//                Section (header:
+//                            VStack(alignment: .leading) {
+//                    ForEach(selectedListHeader) { sec in
+//                        sec.asText
+//                    }
+//                }) {
+//                    ForEach(selectedList) { item in
+//                        TaskAsLine(item:item).onTapGesture {
+//                            selectedItem = item
+//                        }
+//                    }
+//                }
 #endif
             }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
                 .toolbar {
@@ -142,7 +152,7 @@ struct ContentView: View {
             } else {
                 Text("Select an item")
             }
-        }.background(.white)
+        }.background(Color.backgroundColor)
             .sheet(isPresented: $showReviewDialog) {
                 ReviewDialog(items: openItems)
             }
@@ -157,6 +167,7 @@ struct ContentView: View {
         withAnimation {
             let newItem = TaskItem()
             modelContext.insert(newItem)
+            openModel.list.append(newItem)
 #if os(macOS)
             select(sections: [secOpen], list: openItems, item: newItem)
 #endif

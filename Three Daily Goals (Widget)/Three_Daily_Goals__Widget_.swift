@@ -52,7 +52,7 @@ struct Three_Daily_Goals__Widget_EntryView : View {
         if let today = today {
             WPriorities(priorities: today)
         } else {
-            Text("Loading...").font(.title).foregroundStyle(mainColor).onAppear(perform: {today = loadPriorities(modelContext: modelContext)})
+            Text("Loading...").font(.title).foregroundStyle(Color.mainColor).onAppear(perform: {today = loadPriorities(modelContext: modelContext)})
         }
     }
 }

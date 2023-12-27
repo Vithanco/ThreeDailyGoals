@@ -30,6 +30,7 @@
 		E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142B42B35ABB900AB6E05 /* LinkToTask.swift */; };
 		E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E559203A2B3772EE0002C709 /* CloudKit.framework */; };
 		E559203D2B38376F0002C709 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
+		E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203E2B38E8380002C709 /* TaskAsLine.swift */; };
 		E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */; };
 		E561D6DE2B1F54A6003BE36F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DD2B1F54A6003BE36F /* ContentView.swift */; };
 		E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* TaskItem.swift */; };
@@ -109,6 +110,7 @@
 		E51142B42B35ABB900AB6E05 /* LinkToTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkToTask.swift; sourceTree = "<group>"; };
 		E559203A2B3772EE0002C709 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		E559203C2B38376F0002C709 /* ViewRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRelated.swift; sourceTree = "<group>"; };
+		E559203E2B38E8380002C709 /* TaskAsLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAsLine.swift; sourceTree = "<group>"; };
 		E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Three Daily Goals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsApp.swift; sourceTree = "<group>"; };
 		E561D6DD2B1F54A6003BE36F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				E5ADEDD22B318B8800F0EA9C /* ListView.swift */,
 				E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */,
 				E51142B42B35ABB900AB6E05 /* LinkToTask.swift */,
+				E559203E2B38E8380002C709 /* TaskAsLine.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 				E5ADEDD12B30973700F0EA9C /* Priorities.swift in Sources */,
+				E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,3 +25,6 @@ let imgTouch = "dot.circle.and.hand.point.up.left.fill"
 
 let imgUndo = "arrow.uturn.backward.circle.fill"
 let imgRedo = "arrow.uturn.forward.circle.fill"
+
+let imgCheckedBox = "checkmark.square.fill"
+let imgUncheckedBox = "square"

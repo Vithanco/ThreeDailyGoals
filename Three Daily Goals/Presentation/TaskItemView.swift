@@ -35,7 +35,7 @@ struct TaskItemView: View {
         VStack(alignment: .leading){
             HStack {
                 StateView(state: $item.state)
-                Text("Task").font(.title).foregroundStyle(mainColor)
+                Text("Task").font(.title).foregroundStyle(Color.mainColor)
                 Spacer()
 
             }
@@ -44,8 +44,9 @@ struct TaskItemView: View {
             TextField("Title", text: $item.title)
                 .bold().frame(idealHeight: 13)
         } label: {
-            Text("Title:").bold().foregroundColor(secondaryColor)
-        }
+            Text("Title:").bold().foregroundColor(Color.secondaryColor)
+        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
         LabeledContent{
             TextField("Details", text: $item.details, axis: .vertical)
 #if os(macOS)
@@ -53,13 +54,14 @@ struct TaskItemView: View {
 #endif
                 .frame(idealHeight: 30).frame(minHeight: 30)
         } label: {
-            Text("Details:").bold().foregroundColor(secondaryColor)
-        }
+            Text("Details:").bold().foregroundColor(Color.secondaryColor)
+        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
         
         if let comments = item.comments, comments.count > 0 {
             VStack (alignment: .leading){
-                Text("History:").bold().foregroundColor(secondaryColor)
-                ForEach(comments){comment in
+                Text("History:").bold().foregroundColor(Color.secondaryColor)
+                ForEach(comments.sorted()){comment in
                     CommentView(comment: comment).frame(maxWidth: .infinity)
                 }
             }.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -70,14 +72,14 @@ struct TaskItemView: View {
             LabeledContent{
                 Text(item.created, format: stdDateFormat)
             } label: {
-                Text("Created:").bold().foregroundColor(secondaryColor)
+                Text("Created:").bold().foregroundColor(Color.secondaryColor)
             }
             LabeledContent{
                 Text(item.changed, format: stdDateFormat)
             } label: {
-                Text("Last Changed:").bold().foregroundColor(secondaryColor)
+                Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
             }
-        }.background(.white).padding()
+        }.background(Color.backgroundColor).padding()
             .toolbar {
 #if os(iOS)
                 ToolbarItem {
@@ -103,7 +105,7 @@ struct TaskItemView: View {
                         Button(action: {
                             item.closeTask()
                         }) {
-                            Label("", systemImage: imgCloseTask).help("Close")
+                            Label("Close", systemImage: imgCloseTask).help("Close")
                         }
                     }
                 }
@@ -112,7 +114,7 @@ struct TaskItemView: View {
                         Button(action: {
                             item.reOpenTask()
                         }) {
-                            Label("", systemImage: imgReopenTask).help("Reopen")
+                            Label("Reopen", systemImage: imgReopenTask).help("Reopen")
                         }
                     }
                 }

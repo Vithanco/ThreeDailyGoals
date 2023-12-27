@@ -9,10 +9,18 @@ import Foundation
 import SwiftData
 
 
-enum TaskItemState: Codable {
+enum TaskItemState: Codable, CustomStringConvertible {
     case open
     case closed
     case graveyard
+    
+    var description: String {
+        switch self {
+            case .closed: return "closed"
+            case .graveyard: return "graveyard"
+            case .open: return "open"
+        }
+    }
 }
 
 @Model
@@ -33,6 +41,13 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
     @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
     
     init() {
+        
+    }
+    
+    init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now) {
+        self._title = title
+        self._details = details
+        self.changed = changedDate
     }
     
     @Transient
@@ -63,16 +78,19 @@ final class TaskItem : ObservableObject , Identifiable, Codable{
             return _state
         }
         set {
-            changed = Date.now
-            _state = newValue
-            if newValue == .closed {
-                closed = Date.now
-            }
-            if newValue == .open {
-                closed = nil
-            }
-            if newValue == .graveyard {
-                closed = nil
+            if (newValue != state) {
+                changed = Date.now
+                addComment(text: "Changed state to: \(newValue)")
+                _state = newValue
+                if newValue == .closed {
+                    closed = Date.now
+                }
+                if newValue == .open {
+                    closed = nil
+                }
+                if newValue == .graveyard {
+                    closed = nil
+                }
             }
         }
     }

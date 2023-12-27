@@ -17,7 +17,8 @@ struct APriority: View {
             Image(systemName: image)
             if let item = item {
                 HStack {
-                    Text(item.title).strikethrough(item.isClosed, color: mainColor)
+                    Text(item.title).strikethrough(item.isClosed, color: .mainColor)
+                    
                 }.onTapGesture {
                     onSelectItem(item)
                 }
@@ -38,7 +39,7 @@ struct Priorities: View {
         List {
             Section (header: Text("\(Image(systemName: imgToday)) Today")
                     .font(.title)
-                    .foregroundStyle(mainColor)
+                    .foregroundStyle(Color.mainColor)
                     .onTapGesture {
                         taskSelector([secToday],priorities.priorities ?? [],priorities.priorities?.first)
                     }){
@@ -71,7 +72,7 @@ struct APriority: View {
         HStack {
             Image(systemName: image)
             if let item = item {
-                LinkToTask(item: item).strikethrough( item.isClosed, color: mainColor)
+                LinkToTask(item: item).strikethrough( item.isClosed, color: Color.mainColor)
             }else {
               Text("(missing)")
             }
@@ -80,11 +81,16 @@ struct APriority: View {
 }
 struct Priorities: View {
     let priorities: DailyTasks
+    @State var listModel = ListViewModel(sections:[secToday], list : [])
+    
+    func updateModel() {
+        listModel.list = priorities.priorities ?? []
+    }
     var body: some View {
         List {
-            Section (header: LinkToList(sections: [secToday], items: priorities.priorities ?? [])
+            Section (header: LinkToList(listModel: $listModel)
                 .font(.title)
-                .foregroundStyle(mainColor)){
+                .foregroundStyle(Color.mainColor)){
                 if let prios = priorities.priorities {
                     let count = prios.count
                     let others = prios.dropFirst(3)

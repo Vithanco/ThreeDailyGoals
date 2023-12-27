@@ -14,8 +14,8 @@ enum SectionStyle {
     
     var color: Color {
         switch self {
-            case .mainSection : return mainColor
-            case .subSection: return secondaryColor
+            case .mainSection : return .mainColor
+            case .subSection: return .secondaryColor
         }
     }
     
@@ -27,7 +27,7 @@ enum SectionStyle {
     }
 }
 
-struct TaskSection {
+struct TaskSection : Observable     {
     let text : String
     let image: String
     let style: SectionStyle

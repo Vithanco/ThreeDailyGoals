@@ -20,37 +20,44 @@ private struct Label :View{
 }
 
 struct LinkToList: View {
-    let sections: [TaskSection]
-    let items: [TaskItem]
+    @Binding var listModel: ListViewModel
 #if os(macOS)
     var taskSelector : TaskSelector
 #endif
     var body: some View {
 #if os(iOS)
         NavigationLink {
-            ListView(section: sections, items: items)
+            ListView(model: $listModel)
         } label: {
-            Label(name: sections.last!.asText, count:items.count)
+            Label(name: listModel.sections.last?.asText ?? Text("Missing"), count:listModel.list.count)
         }
 #endif
 #if os(macOS)
-        Label(name: sections.last!.asText, count:items.count)
+        Label(name: listModel.sections.last?.asText ?? Text("Missing"), count:listModel.list.count)
             .onTapGesture {
-                taskSelector(sections,items,items.first)
+                taskSelector(listModel.sections,listModel.list,listModel.list.first)
             }
 #endif
     }
 }
 
 
+
+struct LinkToListHelper : View {
+    @State var model = ListViewModel( sections: [secClosed,secLastWeek], list: [TaskItem(), TaskItem()])
+    
+    var body: some View {
 #if os(macOS)
-#Preview {
-    LinkToList(sections: [secClosed,secLastWeek], items: [TaskItem(), TaskItem()], taskSelector: {a,b,c in debugPrint("triggered")})
-}
+        LinkToList(listModel: $model, taskSelector: {a,b,c in debugPrint("triggered")})
 #endif
 #if os(iOS)
-#Preview {
-    LinkToList(sections: [secClosed,secLastWeek], items: [TaskItem(), TaskItem()])
-}
+        LinkToList(listModel: $model)
 #endif
+    }
+}
+
+#Preview {
+    LinkToListHelper()
+}
+
 

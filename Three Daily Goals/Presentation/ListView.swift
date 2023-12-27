@@ -7,10 +7,19 @@
 
 import SwiftUI
 
+class ListViewModel :ObservableObject {
+    @Published var sections: [TaskSection]
+    @Published var list: [TaskItem]
+    
+    init(sections: [TaskSection], list: [TaskItem]) {
+        self.sections = sections
+        self.list = list
+    }
+}
+
 struct ListView: View {
     @Environment(\.modelContext) private var modelContext
-    var section: [TaskSection]
-    var items: [TaskItem]
+    @Binding var model: ListViewModel
 #if os(macOS)
     var taskSelector: TaskSelector
 #endif
@@ -37,14 +46,14 @@ struct ListView: View {
         List {
             Section (header:
                         VStack(alignment: .leading) {
-                ForEach(section) { sec in
+                ForEach(model.sections) { sec in
                     sec.asText
                 }
             }) {
-                ForEach(items) { item in
+                ForEach(model.list) { item in
                     #if os(macOS)
-                    Text(item.title).onTapGesture {
-                        taskSelector(section,items,item)
+                    TaskAsLine(item: item).onTapGesture {
+                        taskSelector(model.sections,model.list,item)
                     }
                     #endif
                     #if os(iOS)
@@ -52,48 +61,37 @@ struct ListView: View {
                     #endif
                 }
             }
-        }.toolbar {
-            
-            ToolbarItem{
-                Button(action: undo) {
-                    Label("Undo", systemImage: imgUndo)
-                }.disabled(!canUndo)
-            }
-            ToolbarItem {
-                Button(action: redo) {
-                    Label("Redo", systemImage: imgRedo)
-                }.disabled(!canRedo)
-            }
-        } 
-    }
-}
-
-#if os(macOS)
-struct TaskListViewHelper : View {
-    @State var section: [TaskSection]
-    @State var items: [TaskItem]
-    let taskSelector : TaskSelector
-    
-    var body: some View {
-        
-        ListView(section: section, items: items, taskSelector: {a, b, c in debugPrint("triggered")})
-    }
-}
-#Preview {
-    TaskListViewHelper(section: [secGraveyard], items: [TaskItem(), TaskItem()],taskSelector: {a,b,c in debugPrint("triggered")})
-}
-#endif
-
+        }.frame(minHeight: 600)
+            .toolbar {
 #if os(iOS)
+                ToolbarItem{
+                    Button(action: undo) {
+                        Label("Undo", systemImage: imgUndo)
+                    }.disabled(!canUndo)
+                }
+                ToolbarItem {
+                    Button(action: redo) {
+                        Label("Redo", systemImage: imgRedo)
+                    }.disabled(!canRedo)
+                }
+#endif
+            }
+    }
+}
+
+
 struct TaskListViewHelper : View {
-    @State var section: [TaskSection]
-    @State var items: [TaskItem]
+    @State var model = ListViewModel(sections: [secGraveyard], list: [TaskItem(), TaskItem()])
     
     var body: some View {
-        ListView(section: section, items: items)
+#if os(macOS)
+        ListView(model: $model, taskSelector: {a, b, c in debugPrint("triggered")})
+#endif
+#if os(iOS)
+        ListView(model: $model)
+#endif
     }
 }
 #Preview {
-    TaskListViewHelper(section: [secGraveyard], items: [TaskItem(), TaskItem()])
+    TaskListViewHelper()
 }
-#endif

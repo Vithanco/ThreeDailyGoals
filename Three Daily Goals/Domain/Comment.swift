@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-final class Comment: ObservableObject, Identifiable, Codable {
+final class Comment: ObservableObject, Identifiable, Codable{
     var created: Date  = Date.now
     var changed: Date  = Date.now
     var text: String = ""
@@ -42,5 +42,12 @@ final class Comment: ObservableObject, Identifiable, Codable {
         try container.encode(created, forKey: .created)
         try container.encode(changed, forKey: .changed)
         try container.encode(text, forKey: .text)
+    }
+}
+
+
+extension Comment : Comparable {
+    static func < (lhs: Comment, rhs: Comment) -> Bool {
+        return lhs.changed < rhs.changed
     }
 }

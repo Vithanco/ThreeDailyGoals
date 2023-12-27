@@ -32,7 +32,7 @@ struct WPriorities: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(mainColor)){
+            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(Color.mainColor)){
                 if let prios = priorities.priorities {
                     let count = prios.count
                     AWPriority(image: imgPriority1, item: count > 0 ? prios[0] : nil)
