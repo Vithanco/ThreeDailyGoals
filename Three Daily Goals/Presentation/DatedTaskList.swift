@@ -76,26 +76,26 @@ struct DatedTaskList: View {
 #endif
 }
 
-
-
-struct DatedTaskListHelper : View {
-    @State var listModel = ListViewModel(sections: [secOpen], list: agedList)
-    var body: some View {
-        NavigationView {
-            VStack{
-#if os(macOS)
-                DatedTaskList(listModel: $listModel, taskSelector:{a,b,c in debugPrint("triggered")})
-#endif
-#if os(iOS)
-                DatedTaskList(listModel: $listModel)
-#endif
-            }
-        }
-        
-    }
-}
-
-
-#Preview {
-    return DatedTaskListHelper()
-}
+//
+//
+//struct DatedTaskListHelper : View {
+//    @State var listModel = ListViewModel(sections: [secOpen], list: agedList)
+//    var body: some View {
+//        NavigationView {
+//            VStack{
+//#if os(macOS)
+//                DatedTaskList(listModel: $listModel, taskSelector:{a,b,c in debugPrint("triggered")})
+//#endif
+//#if os(iOS)
+//                DatedTaskList(listModel: $listModel)
+//#endif
+//            }
+//        }
+//        
+//    }
+//}
+//
+//
+//#Preview {
+//    return DatedTaskListHelper()
+//}

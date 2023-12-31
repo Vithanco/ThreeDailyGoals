@@ -9,47 +9,38 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @State var model : TaskManagerViewModel
+     
     
-    
-    @Environment(\.modelContext) private var modelContext
-   
-    
-#if os(macOS)
-    @State private var listModel = ListViewModel(sections: [], list: [])
-    func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
-        withAnimation{
-            listModel.sections = sections
-            listModel.list = list
-            selectedItem = item
-        }
+    init(modelContext: ModelContext){
+        model = TaskManagerViewModel(modelContext: modelContext)
     }
-#endif
-    
+
     var body: some View {
-        let _ = updateModels()
+        let _ = model.updateModels()
         NavigationSplitView {
             VStack(alignment: .leading){
-                if let today = today {
+                if let today = model.today {
 #if os(macOS)
                     Priorities(priorities: today,taskSelector: select)
                     List {
-                        DatedTaskList(listModel: $openModel, taskSelector: select)
-                        DatedTaskList(listModel: $deadModel, taskSelector: select)
-                        DatedTaskList(listModel: $closedModel, taskSelector: select)
+                        LinkToList(listModel: $openModel, taskSelector: select)
+                        LinkToList(listModel: $deadModel, taskSelector: select)
+                        LinkToList(listModel: $closedModel, taskSelector: select)
                     }.frame(minHeight: 400)
 #endif
 #if os(iOS)
                     Priorities(priorities: today)
                     List {
-                        DatedTaskList(listModel: $openModel)
-                        DatedTaskList(listModel: $deadModel)
-                        DatedTaskList(listModel: $closedModel)
+                        LinkToList(listModel: $model.openModel)
+                        LinkToList(listModel: $model.deadModel)
+                        LinkToList(listModel: $model.closedModel)
                     }.frame(minHeight: 400)
 #endif
                 }
             }.background(Color.backgroundColor).frame(maxWidth: .infinity)
-                .navigationDestination(isPresented: $showItem) {
-                    if let item = selectedItem {
+                .navigationDestination(isPresented: $model.showItem) {
+                    if let item = model.selectedItem {
                         TaskItemView(item: item)
                     }
                 }
@@ -57,21 +48,19 @@ struct ContentView: View {
                 .navigationSplitViewColumnWidth(min: 250, ideal: 400)
 #endif
                 .toolbar {
-#if os(iOS)
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: undo) {
                             Label("Undo", systemImage: imgUndo)
-                        }.disabled(!canUndo)
+                        }.disabled(!model.canUndo)
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: redo) {
                             Label("Redo", systemImage: imgRedo)
-                        }.disabled(!canRedo)
+                        }.disabled(!model.canRedo)
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
                     }
-#endif
                     ToolbarItem {
                         Button(action: review) {
                             Label("Review", systemImage: imgMagnifyingGlass)
@@ -113,56 +102,45 @@ struct ContentView: View {
                     
                 }
         } detail: {
-            if let detail = selectedItem {
+            if let detail = model.selectedItem {
                 TaskItemView(item: detail)
             } else {
                 Text("Select an item")
             }
         }.background(Color.backgroundColor)
-            .sheet(isPresented: $showReviewDialog) {
-                ReviewDialog(items: openItems)
+            .sheet(isPresented: $model.showReviewDialog) {
+                ReviewDialog(items: model.openItems)
             }
             .onAppear(perform: {
-                today = loadPriorities(modelContext: modelContext)
-                updateUndoRedoStatus()
+                model.loadToday()
             })
-            .environment(today)
+            .environment(model.today)
     }
     
+  
     private func addItem() {
         withAnimation {
-            let newItem = TaskItem()
-            modelContext.insert(newItem)
-            openModel.list.append(newItem)
-#if os(macOS)
-            select(sections: [secOpen], list: openItems, item: newItem)
-#endif
-#if os(iOS)
-            selectedItem = newItem
-            showItem = true
-#endif
-            updateUndoRedoStatus()
+            model.addItem()
         }
     }
     
     private func undo() {
-        modelContext.undoManager?.undo()
-        updateUndoRedoStatus()
+        withAnimation {
+            model.undo()
+        }
     }
     
     private func redo() {
-        modelContext.undoManager?.redo()
-        updateUndoRedoStatus()
+        withAnimation {
+            model.redo()
+        }
       }
 
-      private func updateUndoRedoStatus() {
-          canUndo =  modelContext.undoManager?.canUndo ?? false
-          canRedo =  modelContext.undoManager?.canRedo ?? false
-      }
+
     
     private func review() {
         withAnimation {
-            showReviewDialog = true
+            model.showReviewDialog = true
         }
     }
     
@@ -176,6 +154,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(for: TaskItem.self, inMemory: true)
+    ContentView(modelContext: sharedModelContainer(inMemory: true).mainContext)
+
 }

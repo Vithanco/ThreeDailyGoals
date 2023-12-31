@@ -8,19 +8,48 @@
 import Foundation
 import SwiftData
 
+
+class ListViewModel :ObservableObject {
+    @Published var sections: [TaskSection]
+    @Published var list: [TaskItem]
+    
+    init(sections: [TaskSection], list: [TaskItem]) {
+        self.sections = sections
+        self.list = list
+    }
+}
+
+
 @Observable
 final class TaskManagerViewModel {
     private let modelContext: ModelContext
     private(set) var items = [TaskItem]()
     
+    func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
+        listModel.sections = sections
+        listModel.list = list
+        selectedItem = item
+    }
+    
+    ///used in Content view of NavigationSplitView
+    var listModel = ListViewModel(sections: [], list: [])
+    
+    /// all open items
     var openModel : ListViewModel = ListViewModel(sections: [secOpen], list: [])
+    
+    /// all closed items
     var closedModel = ListViewModel(sections: [secClosed], list: [])
+    
+    /// all dead items
     var deadModel = ListViewModel(sections: [secGraveyard], list: [])
     
+    /// used in Detail View of NavigationSplitView
     var selectedItem: TaskItem? = nil
-    private var showItem: Bool = false
-    private var canUndo = false
-    private var canRedo = false
+    
+    
+    var showItem: Bool = false
+    var canUndo = false
+    var canRedo = false
     
     var showReviewDialog: Bool = false
     
@@ -42,6 +71,7 @@ final class TaskManagerViewModel {
         openModel.list = openItems
         closedModel.list = closedItems
         deadModel.list = deadItems
+        updateUndoRedoStatus()
     }
     
     init(modelContext: ModelContext) {
@@ -72,7 +102,7 @@ final class TaskManagerViewModel {
         try? modelContext.save()
         fetchData()
     }
-
+    
     func fetchData() {
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .reverse)])
@@ -81,5 +111,39 @@ final class TaskManagerViewModel {
         } catch {
             print("Fetch failed")
         }
+    }
+    
+    func addItem() {
+        let newItem = TaskItem()
+        modelContext.insert(newItem)
+        openModel.list.append(newItem)
+#if os(macOS)
+        select(sections: [secOpen], list: openItems, item: newItem)
+#endif
+#if os(iOS)
+        selectedItem = newItem
+        showItem = true
+#endif
+        updateUndoRedoStatus()
+    }
+    
+    func undo() {
+        modelContext.undoManager?.undo()
+        updateUndoRedoStatus()
+    }
+    
+    func redo() {
+        modelContext.undoManager?.redo()
+        updateUndoRedoStatus()
+    }
+    
+    func updateUndoRedoStatus() {
+        canUndo =  modelContext.undoManager?.canUndo ?? false
+        canRedo =  modelContext.undoManager?.canRedo ?? false
+    }
+    
+    func loadToday() {
+        today = loadPriorities(modelContext: modelContext)
+        updateModels()
     }
 }

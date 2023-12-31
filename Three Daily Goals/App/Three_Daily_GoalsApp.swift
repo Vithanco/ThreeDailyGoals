@@ -22,7 +22,7 @@ struct Three_Daily_GoalsApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(modelContext: sharedModelContainer(inMemory: false).mainContext)
         }
         .modelContainer(sharedModelContainer(inMemory: inMemory))
         .commands {

@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-class ListViewModel :ObservableObject {
-    @Published var sections: [TaskSection]
-    @Published var list: [TaskItem]
-    
-    init(sections: [TaskSection], list: [TaskItem]) {
-        self.sections = sections
-        self.list = list
-    }
-}
 
 struct ListView: View {
     @Environment(\.modelContext) private var modelContext
