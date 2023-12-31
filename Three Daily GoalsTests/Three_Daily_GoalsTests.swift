@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import Three_Daily_Goals
 
 final class Three_Daily_GoalsTests: XCTestCase {
 
@@ -17,8 +18,12 @@ final class Three_Daily_GoalsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testData() throws {
+    func testAppStartsEmpty() throws {
+        let container = sharedModelContainer(inMemory: true)
 
+        let sut = ContentView.ViewModel(modelContext: container.mainContext)
+
+        XCTAssertEqual(sut.movies.count, 0, "There should be 0 movies when the app is first launched.")
     }
 
     func testPerformanceExample() throws {

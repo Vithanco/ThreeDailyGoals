@@ -46,6 +46,12 @@ final class Comment: ObservableObject, Identifiable, Codable{
 }
 
 
+extension Comment {
+    func deleteComment() {
+        modelContext?.delete(self)
+    }
+}
+
 extension Comment : Comparable {
     static func < (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.changed < rhs.changed

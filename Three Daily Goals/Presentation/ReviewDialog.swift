@@ -8,16 +8,61 @@
 import SwiftUI
 
 struct ReviewDialog: View {
+    enum DialogState {
+        case inform
+        case review
+    }
+    
     @EnvironmentObject var today : DailyTasks
-    var items: [TaskItem]
-    var body: some View {
-        VStack {
-            Text("Review your Tasks!").font(.caption).foregroundStyle(Color.mainColor)
-            Text("The previous Tasks were: ")
-            
-            
-        }
+    @State var state: DialogState = .inform
+    //    @State var listModel = ListViewModel(sections: [secToday], list: [])
+    //
+    //    func updateModel() {
+    //        listModel.list = today.priorities ?? []
+    //    }
+    
+    func startReview(){
         
+    }
+    
+    func cancelReview(){
+        
+    }
+    
+    func endReview(){
+        
+    }
+    
+    var items: [TaskItem]
+    
+    var body: some View {
+        switch state {
+            case .inform:
+                //                let _ = updateModel()
+                VStack {
+                    
+                    Text("Review your Tasks!").font(.caption).foregroundStyle(Color.mainColor)
+                    Text("The previous Tasks were: ")
+                    Priorities(priorities: today)
+                    HStack{
+                        Button(action: cancelReview){
+                            Text("Cancel")
+                        }
+                        Spacer()
+                        Button(action: startReview){
+                            Text("Review now")
+                        }
+                    }
+                    
+                }
+            case .review:
+                Text("soon to come")
+                Button(action: endReview){
+                    Text("Done")
+                }
+                
+                
+        }
     }
 }
 

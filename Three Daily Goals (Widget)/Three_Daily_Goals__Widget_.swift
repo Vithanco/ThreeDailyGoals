@@ -65,7 +65,7 @@ struct Three_Daily_Goals__Widget_: Widget {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
             Three_Daily_Goals__Widget_EntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
-                .modelContainer(sharedModelContainer)
+                .modelContainer(sharedModelContainer(inMemory: false))
         }
     }
 }

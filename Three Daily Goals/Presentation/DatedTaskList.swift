@@ -77,16 +77,7 @@ struct DatedTaskList: View {
 }
 
 
-var agedList: [TaskItem] {
-    let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
-    let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
-    let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
-    let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
-    let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
-    let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
-    let list = [lastWeek2,lastMonth2,lastWeek1,older1,older2,lastMonth1]
-    return list
-}
+
 struct DatedTaskListHelper : View {
     @State var listModel = ListViewModel(sections: [secOpen], list: agedList)
     var body: some View {

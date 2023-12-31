@@ -10,12 +10,21 @@ import SwiftData
 
 @main
 struct Three_Daily_GoalsApp: App {
+    var inMemory = false
+    
+    init() {
+           #if DEBUG
+           if CommandLine.arguments.contains("enable-testing") {
+               inMemory = true
+           }
+           #endif
+       }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(sharedModelContainer(inMemory: inMemory))
         .commands {
                     // Add a CommandMenu for saving tasks
                     CommandMenu("Export") {
@@ -24,7 +33,7 @@ struct Three_Daily_GoalsApp: App {
                             let fetchDescriptor = FetchDescriptor<TaskItem>()
                             
                             do {
-                                let items = try sharedModelContainer.mainContext.fetch(fetchDescriptor)
+                                let items = try sharedModelContainer(inMemory: inMemory).mainContext.fetch(fetchDescriptor)
                                 
                                 // Create an instance of JSONEncoder
                                 let encoder = JSONEncoder()
@@ -45,12 +54,12 @@ struct Three_Daily_GoalsApp: App {
                     }
             CommandGroup(replacing: .undoRedo) {
                             Button("Undo") {
-                                sharedModelContainer.mainContext.undoManager?.undo()
+                                sharedModelContainer(inMemory: inMemory).mainContext.undoManager?.undo()
                             }
                             .keyboardShortcut("z", modifiers: [.command])
 
                             Button("Redo") {
-                                sharedModelContainer.mainContext.undoManager?.redo()
+                                sharedModelContainer(inMemory: inMemory).mainContext.undoManager?.redo()
                             }
                             .keyboardShortcut("Z", modifiers: [.command, .shift])
                         }

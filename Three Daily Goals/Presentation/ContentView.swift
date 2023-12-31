@@ -9,44 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    
+    
     @Environment(\.modelContext) private var modelContext
-    @Query( sort: \TaskItem.changed, order: .reverse) private var items: [TaskItem]
-    
-    @State private var openModel = ListViewModel(sections: [secOpen], list: [])
-    @State private var closedModel = ListViewModel(sections: [secClosed], list: [])
-    @State private var deadModel = ListViewModel(sections: [secGraveyard], list: [])
-
-    
-    @State private var selectedItem: TaskItem? = nil
-    @State private var showItem: Bool = false
-    @State private var canUndo = false
-    @State private var canRedo = false
-    
-    @State var showReviewDialog: Bool = false
-    //    @Query(filter: #Predicate<TaskItem> {
-    //        item in
-    //        item.state == TaskItemState.open
-    //    }) var openItems: [TaskItem]
-    
-    var openItems: [TaskItem] {
-        return items.filter({$0.state == .open}).sorted()
-    }
-    
-    var closedItems: [TaskItem]{
-        return items.filter({$0.state == .closed}).sorted()
-    }
-    
-    var deadItems: [TaskItem]{
-        return items.filter({$0.state == .graveyard}).sorted()
-    }
-    
-    @State var today: DailyTasks? = nil
-    
-    func updateModels() {
-        openModel.list = openItems
-        closedModel.list = closedItems
-        deadModel.list = deadItems
-    }
+   
     
 #if os(macOS)
     @State private var listModel = ListViewModel(sections: [], list: [])
