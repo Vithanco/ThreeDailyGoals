@@ -153,6 +153,13 @@ extension TaskItem {
         }
     }
     
+    func removePriority() {
+        if priority != nil {
+            priority = nil
+            addComment(text: "removed as priority for \(priority!.day)")
+        }
+    }
+    
     func deleteTask(){
         priority = nil
         modelContext?.delete(self)

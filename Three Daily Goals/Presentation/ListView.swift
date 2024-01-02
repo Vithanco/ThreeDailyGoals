@@ -35,12 +35,12 @@ struct ListView: View {
 #endif
                 }
             }
-        }.frame(minHeight: 600)
+        }
             .toolbar {
 #if os(iOS)
                 ToolbarItem{
                     Button(action: model.undo) {
-                        Label("Undo", systemImage: imgUndo)
+                        Label("Undo" , systemImage: imgUndo)
                     }.disabled(!model.canUndo)
                 }
                 ToolbarItem {

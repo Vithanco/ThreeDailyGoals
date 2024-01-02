@@ -95,9 +95,13 @@ struct TaskItemView: View {
 #endif
                 ToolbarItem {
                     Button(action: {
-                        item.makePriority(position: today.priorities?.count ?? 0, day: today)
+                        if item.priority == nil {
+                            item.makePriority(position: today.priorities?.count ?? 0, day: today)
+                        } else {
+                            item.removePriority()
+                        }
                     }) {
-                        Label("Make a Priority", systemImage: imgToday).help("Add to today's priorities")
+                        Label("Make a Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
                     }
                 }
                 if item.isOpen {

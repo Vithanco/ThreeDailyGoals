@@ -45,7 +45,13 @@ struct ContentView: View {
 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 300, ideal: 400)
 #endif
+
                 .toolbar {
+#if os(iOS)
+                    ToolbarItem {
+                        EditButton()
+                    }
+#endif
                     ToolbarItem {
                         Button(action: undo) {
                             Label("Undo", systemImage: imgUndo)
@@ -56,11 +62,7 @@ struct ContentView: View {
                             Label("Redo", systemImage: imgRedo)
                         }.disabled(!model.canRedo)
                     }
-#if os(iOS)
-                    ToolbarItem {
-                        EditButton()
-                    }
-#endif
+
                     ToolbarItem {
                         Button(action: review) {
                             Label("Review", systemImage: imgMagnifyingGlass)
