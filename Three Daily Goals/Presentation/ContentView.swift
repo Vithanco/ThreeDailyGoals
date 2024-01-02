@@ -8,36 +8,34 @@
 import SwiftUI
 import SwiftData
 
+
+struct SingleView<Content: View>: View {
+    
+    @ViewBuilder let content: () -> Content
+    
+    var body: some View {
+        content()
+    }
+}
+
 struct ContentView: View {
     @State var model : TaskManagerViewModel
-     
+    
     
     init(modelContext: ModelContext){
         model = TaskManagerViewModel(modelContext: modelContext)
     }
-
+    
     var body: some View {
         let _ = model.updateModels()
         NavigationSplitView {
             VStack(alignment: .leading){
-                if let today = model.today {
-#if os(macOS)
-                    Priorities(priorities: today,taskSelector: select)
-                    List {
-                        LinkToList(listModel: $openModel, taskSelector: select)
-                        LinkToList(listModel: $deadModel, taskSelector: select)
-                        LinkToList(listModel: $closedModel, taskSelector: select)
-                    }.frame(minHeight: 400)
-#endif
-#if os(iOS)
-                    Priorities(priorities: today)
-                    List {
-                        LinkToList(listModel: $model.openModel)
-                        LinkToList(listModel: $model.deadModel)
-                        LinkToList(listModel: $model.closedModel)
-                    }.frame(minHeight: 400)
-#endif
-                }
+                ListView(whichList: .priorities, model: model)
+                List {
+                    LinkToList(whichList: .openItems, model: model)
+                    LinkToList(whichList: .closedItems, model: model)
+                    LinkToList(whichList: .deadItems, model: model)
+                }.frame(minHeight: 400)
             }.background(Color.backgroundColor).frame(maxWidth: .infinity)
                 .navigationDestination(isPresented: $model.showItem) {
                     if let item = model.selectedItem {
@@ -45,22 +43,24 @@ struct ContentView: View {
                     }
                 }
 #if os(macOS)
-                .navigationSplitViewColumnWidth(min: 250, ideal: 400)
+                .navigationSplitViewColumnWidth(min: 300, ideal: 400)
 #endif
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
+                    ToolbarItem {
                         Button(action: undo) {
                             Label("Undo", systemImage: imgUndo)
                         }.disabled(!model.canUndo)
                     }
-                    ToolbarItem(placement: .navigationBarLeading) {
+                    ToolbarItem {
                         Button(action: redo) {
                             Label("Redo", systemImage: imgRedo)
                         }.disabled(!model.canRedo)
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
+#if os(iOS)
+                    ToolbarItem {
                         EditButton()
                     }
+#endif
                     ToolbarItem {
                         Button(action: review) {
                             Label("Review", systemImage: imgMagnifyingGlass)
@@ -75,41 +75,33 @@ struct ContentView: View {
                 }.background(Color.backgroundColor)
             
         } content: {
-            List{
+            SingleView{
 #if os(macOS)
-                ListView(model: $listModel, taskSelector: select)
-//                Section (header:
-//                            VStack(alignment: .leading) {
-//                    ForEach(selectedListHeader) { sec in
-//                        sec.asText
-//                    }
-//                }) {
-//                    ForEach(selectedList) { item in
-//                        TaskAsLine(item:item).onTapGesture {
-//                            selectedItem = item
-//                        }
-//                    }
-//                }
+                ListView( model: model)
 #endif
-            }.navigationSplitViewColumnWidth(min: 250, ideal: 400)
-                .toolbar {
 #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                
+                Text("Placeholder")
 #endif
-                    
-                }
-        } detail: {
-            if let detail = model.selectedItem {
-                TaskItemView(item: detail)
-            } else {
-                Text("Select an item")
             }
-        }.background(Color.backgroundColor)
+            
+            .navigationSplitViewColumnWidth(min: 250, ideal: 400)
+            .toolbar {
+#if os(iOS)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+#endif
+            }
+        }
+    detail: {
+        if let detail = model.selectedItem {
+            TaskItemView(item: detail)
+        } else {
+            Text("Select an item")
+        }
+    }.background(Color.backgroundColor)
             .sheet(isPresented: $model.showReviewDialog) {
-                ReviewDialog(items: model.openItems)
+                ReviewDialog(model: model)
             }
             .onAppear(perform: {
                 model.loadToday()
@@ -117,7 +109,7 @@ struct ContentView: View {
             .environment(model.today)
     }
     
-  
+    
     private func addItem() {
         withAnimation {
             model.addItem()
@@ -134,9 +126,9 @@ struct ContentView: View {
         withAnimation {
             model.redo()
         }
-      }
-
-
+    }
+    
+    
     
     private func review() {
         withAnimation {
@@ -155,5 +147,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView(modelContext: sharedModelContainer(inMemory: true).mainContext)
-
+    
 }

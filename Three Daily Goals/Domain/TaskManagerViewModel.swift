@@ -7,15 +7,35 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
-
-class ListViewModel :ObservableObject {
-    @Published var sections: [TaskSection]
-    @Published var list: [TaskItem]
+@Observable
+class ListViewModel {
+    var sections: [TaskSection]
+    var list: [TaskItem]
     
     init(sections: [TaskSection], list: [TaskItem]) {
         self.sections = sections
         self.list = list
+    }
+}
+
+enum ListChooser{
+    case openItems
+    case closedItems
+    case deadItems
+    case priorities
+}
+
+
+extension ListChooser {
+    var sections: [TaskSection] {
+        switch self {
+            case .openItems : return [secOpen]
+            case .closedItems: return [secClosed]
+            case .deadItems: return [secGraveyard]
+            case .priorities: return [secToday]
+        }
     }
 }
 
@@ -25,23 +45,13 @@ final class TaskManagerViewModel {
     private let modelContext: ModelContext
     private(set) var items = [TaskItem]()
     
-    func select(sections: [TaskSection], list: [TaskItem], item: TaskItem?) {
-        listModel.sections = sections
-        listModel.list = list
+    func select(which: ListChooser, item: TaskItem?) {
+        whichList = which
         selectedItem = item
     }
     
     ///used in Content view of NavigationSplitView
-    var listModel = ListViewModel(sections: [], list: [])
-    
-    /// all open items
-    var openModel : ListViewModel = ListViewModel(sections: [secOpen], list: [])
-    
-    /// all closed items
-    var closedModel = ListViewModel(sections: [secClosed], list: [])
-    
-    /// all dead items
-    var deadModel = ListViewModel(sections: [secGraveyard], list: [])
+    var whichList = ListChooser.openItems
     
     /// used in Detail View of NavigationSplitView
     var selectedItem: TaskItem? = nil
@@ -68,9 +78,7 @@ final class TaskManagerViewModel {
     var today: DailyTasks? = nil
     
     func updateModels() {
-        openModel.list = openItems
-        closedModel.list = closedItems
-        deadModel.list = deadItems
+        
         updateUndoRedoStatus()
     }
     
@@ -79,13 +87,14 @@ final class TaskManagerViewModel {
         fetchData()
     }
     
-    func addSamples() {
+    func addSamples() -> Self {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
         let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
         let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
         let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
         let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
         let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
+        today?.priorities?.append(lastWeek1)
         modelContext.insert(lastWeek1)
         modelContext.insert(lastWeek2)
         modelContext.insert(lastMonth1)
@@ -95,6 +104,7 @@ final class TaskManagerViewModel {
         
         try? modelContext.save()
         fetchData()
+        return self
     }
     
     func clear() {
@@ -116,12 +126,8 @@ final class TaskManagerViewModel {
     func addItem() {
         let newItem = TaskItem()
         modelContext.insert(newItem)
-        openModel.list.append(newItem)
-#if os(macOS)
-        select(sections: [secOpen], list: openItems, item: newItem)
-#endif
+        select(which: .openItems, item: newItem)
 #if os(iOS)
-        selectedItem = newItem
         showItem = true
 #endif
         updateUndoRedoStatus()
@@ -145,5 +151,24 @@ final class TaskManagerViewModel {
     func loadToday() {
         today = loadPriorities(modelContext: modelContext)
         updateModels()
+    }
+    
+    func priority (which: Int) -> TaskItem? {
+        return today?.priorities?[which]
+    }
+}
+
+extension TaskManagerViewModel {
+    func list(which: ListChooser) -> [TaskItem] {
+        switch which {
+            case .openItems: return openItems
+            case .closedItems: return closedItems
+            case .deadItems: return deadItems
+            case .priorities: return today?.priorities ?? []
+        }
+    }
+    
+    var currentList: [TaskItem] {
+        return list(which: whichList)
     }
 }

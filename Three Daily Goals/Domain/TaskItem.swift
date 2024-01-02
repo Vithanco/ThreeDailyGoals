@@ -9,19 +9,7 @@ import Foundation
 import SwiftData
 
 
-enum TaskItemState: Codable, CustomStringConvertible {
-    case open
-    case closed
-    case graveyard
-    
-    var description: String {
-        switch self {
-            case .closed: return "closed"
-            case .graveyard: return "graveyard"
-            case .open: return "open"
-        }
-    }
-}
+
 
 @Model
 final class TaskItem : ObservableObject, Codable{
@@ -118,7 +106,7 @@ extension TaskItem {
         set {
             if (newValue != state) {
                 changed = Date.now
-                addComment(text: "Changed state to: \(newValue)")
+//                addComment(text: "Changed state to: \(newValue)")
                 _state = newValue
                 if newValue == .closed {
                     closed = Date.now

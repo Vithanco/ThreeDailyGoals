@@ -8,62 +8,45 @@
 import SwiftUI
 
 
+
 struct ListView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Binding var model: ListViewModel
-#if os(macOS)
-    var taskSelector: TaskSelector
-#endif
+    @State var whichList: ListChooser?
+    @Bindable var model: TaskManagerViewModel
     
-    @State private var canUndo = false
-    @State private var canRedo = false
-    
-    private func undo() {
-        modelContext.undoManager?.undo()
-        updateUndoRedoStatus()
-    }
-    
-    private func redo() {
-        modelContext.undoManager?.redo()
-        updateUndoRedoStatus()
-    }
-    
-    private func updateUndoRedoStatus() {
-        canUndo =  modelContext.undoManager?.canUndo ?? false
-        canRedo =  modelContext.undoManager?.canRedo ?? false
+    var list: ListChooser {
+        return whichList ?? model.whichList
     }
     
     var body: some View {
-        List {
-            Section (header:
-                        VStack(alignment: .leading) {
-                ForEach(model.sections) { sec in
+        List{
+            Section (header: VStack(alignment: .leading) {
+                ForEach(list.sections) { sec in
                     sec.asText
                 }
             }) {
-                ForEach(model.list) { item in
-                    #if os(macOS)
+                ForEach(model.list(which: list)) { item in
+#if os(macOS)
                     TaskAsLine(item: item).onTapGesture {
-                        taskSelector(model.sections,model.list,item)
+                        model.select(which: list, item: item)
                     }
-                    #endif
-                    #if os(iOS)
-                        LinkToTask(item: item)
-                    #endif
+#endif
+#if os(iOS)
+                    LinkToTask(item: item)
+#endif
                 }
             }
         }.frame(minHeight: 600)
             .toolbar {
 #if os(iOS)
                 ToolbarItem{
-                    Button(action: undo) {
+                    Button(action: model.undo) {
                         Label("Undo", systemImage: imgUndo)
-                    }.disabled(!canUndo)
+                    }.disabled(!model.canUndo)
                 }
                 ToolbarItem {
-                    Button(action: redo) {
+                    Button(action: model.redo) {
                         Label("Redo", systemImage: imgRedo)
-                    }.disabled(!canRedo)
+                    }.disabled(!model.canRedo)
                 }
 #endif
             }
@@ -71,18 +54,7 @@ struct ListView: View {
 }
 
 
-struct TaskListViewHelper : View {
-    @State var model = ListViewModel(sections: [secGraveyard], list: [TaskItem(), TaskItem()])
-    
-    var body: some View {
-#if os(macOS)
-        ListView(model: $model, taskSelector: {a, b, c in debugPrint("triggered")})
-#endif
-#if os(iOS)
-        ListView(model: $model)
-#endif
-    }
-}
+
 #Preview {
-    TaskListViewHelper()
+    ListView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext))
 }

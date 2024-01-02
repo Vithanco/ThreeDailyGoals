@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 private struct Label :View{
     var name: Text
@@ -20,22 +21,21 @@ private struct Label :View{
 }
 
 struct LinkToList: View {
-    @Binding var listModel: ListViewModel
-#if os(macOS)
-    var taskSelector : TaskSelector
-#endif
+    @State var whichList: ListChooser
+    @Bindable var model: TaskManagerViewModel
+    
     var body: some View {
 #if os(iOS)
         NavigationLink {
-            ListView(model: $listModel)
+            ListView(whichList: whichList, model: model)
         } label: {
-            Label(name: listModel.sections.last?.asText ?? Text("Missing"), count:listModel.list.count)
+            Label(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count)
         }
 #endif
 #if os(macOS)
-        Label(name: listModel.sections.last?.asText ?? Text("Missing"), count:listModel.list.count)
+        Label(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count)
             .onTapGesture {
-                taskSelector(listModel.sections,listModel.list,listModel.list.first)
+                model.select(which: whichList,item: model.list(which: whichList).first)
             }
 #endif
     }
@@ -43,21 +43,21 @@ struct LinkToList: View {
 
 
 
+
 struct LinkToListHelper : View {
-    @State var model = ListViewModel( sections: [secClosed,secLastWeek], list: [TaskItem(), TaskItem()])
+    @State var model : TaskManagerViewModel
+    
+    init(context: ModelContext) {
+        model =  TaskManagerViewModel(modelContext: context)
+    }
     
     var body: some View {
-#if os(macOS)
-        LinkToList(listModel: $model, taskSelector: {a,b,c in debugPrint("triggered")})
-#endif
-#if os(iOS)
-        LinkToList(listModel: $model)
-#endif
+        LinkToList(whichList: .openItems, model: model)
     }
 }
 
 #Preview {
-    LinkToListHelper()
+    LinkToListHelper(context:  sharedModelContainer(inMemory: true).mainContext)
 }
 
 
