@@ -7,12 +7,16 @@
 
 import Foundation
 import SwiftData
+import os
 
-
-
+fileprivate let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: String(describing: TaskItem.self)
+)
 
 @Model
-final class TaskItem : ObservableObject, Codable{
+final class TaskItem : ObservableObject, Codable {
+    
     public private (set) var created: Date = Date.now
     public private (set) var changed: Date = Date.now
     public private (set) var closed: Date? = nil
@@ -36,6 +40,7 @@ final class TaskItem : ObservableObject, Codable{
         self._title = title
         self._details = details
         self.changed = changedDate
+        self.comments = []
     }
     
     //MARK: Codable
@@ -70,8 +75,10 @@ final class TaskItem : ObservableObject, Codable{
 }
 
 extension TaskItem: Identifiable {
-    var id: Date {
-        return created
+    var id: String {
+        let result = created.timeIntervalSince1970.description
+        logger.debug("ID for Task '\(self.title)' is \(result), from \(self.created.timeIntervalSince1970)")
+        return result
     }
 }
 
@@ -134,13 +141,13 @@ extension TaskItem {
     }
     
     func addComment(text: String) {
-        if let mc = self.modelContext {
+        if comments == nil {
+            comments = [Comment]()
+        }
+        if let mc = self.modelContext, var comments = comments {
             let aComment = Comment(text: text, taskItem: self)
             mc.insert(aComment)
-            if comments == nil {
-                comments = [Comment]()
-            }
-            comments?.append(aComment)
+            comments.append(aComment)
             changed = Date.now
         }
     }
@@ -155,19 +162,21 @@ extension TaskItem {
     
     func removePriority() {
         if priority != nil {
-            priority = nil
             addComment(text: "removed as priority for \(priority!.day)")
+            priority = nil
         }
     }
     
     func deleteTask(){
-        priority = nil
+        modelContext?.undoManager?.beginUndoGrouping()
+//        priority = nil
+//        if let comments = comments {
+//            for c in comments {
+//                c.deleteComment()
+//            }
+//        }
         modelContext?.delete(self)
-        if let comments = comments {
-            for c in comments {
-                c.deleteComment()
-            }
-        }
+        modelContext?.undoManager?.endUndoGrouping()
     }
     
     func closeTask() {
@@ -189,6 +198,14 @@ extension TaskItem {
     func setChangedDate(_ date: Date) {
         changed = date
     }
+    
+    var draggableString : String {
+        let interval = created.timeIntervalSince1970
+        let integer = Int(interval)
+        let result = integer.description
+        debugPrint("created: \(created), interval: \(interval), integer: \(integer), result: \(result)")
+        return result
+    }
 }
 
 
@@ -197,3 +214,17 @@ extension TaskItem : Comparable {
         return lhs.changed < rhs.changed
     }
 }
+
+
+//import UniformTypeIdentifiers
+//import SwiftUI
+//
+//    extension UTType {
+//        static var taskItem: UTType = UTType(exportedAs: "com.vithanco.three-daily-goals.taskitem")
+//    }
+//
+//extension TaskItem: Transferable {
+//    static var transferRepresentation: some TransferRepresentation {
+//                CodableRepresentation(contentType: .taskItem)
+//            }
+//}

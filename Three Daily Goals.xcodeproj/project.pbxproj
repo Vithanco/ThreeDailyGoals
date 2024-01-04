@@ -58,6 +58,7 @@
 		E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 		E5FF74362B43305600B3B890 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
 		E5FF74372B43307800B3B890 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
+		E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		E5E1F47B2B30632000E83A21 /* DateRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelated.swift; sourceTree = "<group>"; };
 		E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRelated.swift; sourceTree = "<group>"; };
 		E5FF74352B43305600B3B890 /* TaskItemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemState.swift; sourceTree = "<group>"; };
+		E5FF74382B45308800B3B890 /* DoubleRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleRelated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +320,7 @@
 				E5B003112B32382C00A90F8D /* StringRelated.swift */,
 				E511428B2B340FB500AB6E05 /* FilesRelated.swift */,
 				E559203C2B38376F0002C709 /* ViewRelated.swift */,
+				E5FF74382B45308800B3B890 /* DoubleRelated.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -526,6 +529,7 @@
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
 				E5A371902B2EBC6400A310BA /* DatedTaskList.swift in Sources */,
+				E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */,
 				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,

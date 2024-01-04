@@ -27,31 +27,27 @@ struct ContentView: View {
     }
     
     var body: some View {
-        let _ = model.updateModels()
+//        let _ = model.updateModels()
         NavigationSplitView {
             VStack(alignment: .leading){
                 ListView(whichList: .priorities, model: model)
+                Spacer()
                 List {
                     LinkToList(whichList: .openItems, model: model)
                     LinkToList(whichList: .closedItems, model: model)
                     LinkToList(whichList: .deadItems, model: model)
                 }.frame(minHeight: 400)
             }.background(Color.backgroundColor).frame(maxWidth: .infinity)
-                .navigationDestination(isPresented: $model.showItem) {
-                    if let item = model.selectedItem {
-                        TaskItemView(item: item)
-                    }
-                }
+//                .navigationDestination(isPresented: $model.showItem) {
+//                    if let item = model.selectedItem {
+//                        TaskItemView(item: item)
+//                    }
+//                }
 #if os(macOS)
                 .navigationSplitViewColumnWidth(min: 300, ideal: 400)
 #endif
 
                 .toolbar {
-#if os(iOS)
-                    ToolbarItem {
-                        EditButton()
-                    }
-#endif
                     ToolbarItem {
                         Button(action: undo) {
                             Label("Undo", systemImage: imgUndo)
@@ -87,17 +83,13 @@ struct ContentView: View {
             }
             
             .navigationSplitViewColumnWidth(min: 250, ideal: 400)
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-            }
+//            .toolbar {
+//
+//            }
         }
     detail: {
         if let detail = model.selectedItem {
-            TaskItemView(item: detail)
+            TaskItemView(model: model, item: detail)
         } else {
             Text("Select an item")
         }
@@ -113,7 +105,7 @@ struct ContentView: View {
     
     
     private func addItem() {
-        withAnimation {
+        let _ = withAnimation {
             model.addItem()
         }
     }

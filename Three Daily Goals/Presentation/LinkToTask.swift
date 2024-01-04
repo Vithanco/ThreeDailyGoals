@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct LinkToTask: View {
-    let item: TaskItem
+    @Bindable var model: TaskManagerViewModel
+    @Bindable var item: TaskItem
     var body: some View {
         NavigationLink {
-            TaskItemView(item: item)
+            TaskItemView(model: model, item: item)
         } label: {
             TaskAsLine(item: item)
         }
     }
 }
 
-#Preview {
-    LinkToTask(item: TaskItem())
-}
+//#Preview {
+//    LinkToTask(item: TaskItem())
+//}

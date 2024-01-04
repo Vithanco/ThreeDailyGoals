@@ -6,6 +6,7 @@
 //
 
 import XCTest
+//@testable import Three_Daily_Goals
 
 final class Three_Daily_GoalsUITests: XCTestCase {
 
@@ -28,6 +29,14 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         app.launch()
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    @MainActor func testAppStartsEmpty() throws {
+//        let container = sharedModelContainer(inMemory: true)
+//
+//        let sut = TaskManagerViewModel(modelContext: container.mainContext)
+//
+//        XCTAssertEqual(sut.items.count, 0, "There should be 0 movies when the app is first launched.")
     }
 
     func testLaunchPerformance() throws {

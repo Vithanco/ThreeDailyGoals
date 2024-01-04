@@ -9,26 +9,19 @@ import SwiftUI
 
 
 struct TaskItemView: View {
-    @Environment(\.modelContext) var modelContext
-    @EnvironmentObject var today : DailyTasks
+    @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
     
-    @State private var canUndo = false
-    @State private var canRedo = false
-    
     private func undo() {
-        modelContext.undoManager?.undo()
-        updateUndoRedoStatus()
+        model.undo()
     }
     
     private func redo() {
-        modelContext.undoManager?.redo()
-        updateUndoRedoStatus()
+        model.redo()
     }
     
     private func updateUndoRedoStatus() {
-        canUndo =  modelContext.undoManager?.canUndo ?? false
-        canRedo =  modelContext.undoManager?.canRedo ?? false
+        model.updateUndoRedoStatus()
     }
     
     var body: some View {
@@ -85,23 +78,23 @@ struct TaskItemView: View {
                 ToolbarItem {
                     Button(action: undo) {
                         Label("Undo", systemImage: imgUndo)
-                    }.disabled(!canUndo)
+                    }.disabled(!model.canUndo)
                 }
                 ToolbarItem {
                     Button(action: redo) {
                         Label("Redo", systemImage: imgRedo)
-                    }.disabled(!canRedo)
+                    }.disabled(!model.canRedo)
                 }
 #endif
                 ToolbarItem {
                     Button(action: {
-                        if item.priority == nil {
+                        if item.priority == nil, let today = model.today  {
                             item.makePriority(position: today.priorities?.count ?? 0, day: today)
                         } else {
                             item.removePriority()
                         }
                     }) {
-                        Label("Make a Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
+                        Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
                     }
                 }
                 if item.isOpen {
@@ -129,12 +122,11 @@ struct TaskItemView: View {
                         Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
                     }
                 }
-                
-               
             }.onAppear(perform:{updateUndoRedoStatus()})
     }
 }
-
-#Preview {
-    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
-}
+//
+//#Preview {
+//////    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
+////    TaskItemView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples(), item: model.items.first).frame(width: 600, height: 300)
+//}

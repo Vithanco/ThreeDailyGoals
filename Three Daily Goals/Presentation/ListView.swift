@@ -31,7 +31,7 @@ struct ListView: View {
                     }
 #endif
 #if os(iOS)
-                    LinkToTask(item: item)
+                    LinkToTask(model: model,item: item)
 #endif
                 }
             }

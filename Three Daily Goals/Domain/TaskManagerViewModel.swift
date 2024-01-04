@@ -8,6 +8,12 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import os
+
+fileprivate let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: String(describing: TaskManagerViewModel.self)
+)
 
 @Observable
 class ListViewModel {
@@ -77,10 +83,6 @@ final class TaskManagerViewModel {
     
     var today: DailyTasks? = nil
     
-    func updateModels() {
-        
-        updateUndoRedoStatus()
-    }
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -117,44 +119,68 @@ final class TaskManagerViewModel {
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .reverse)])
             items = try modelContext.fetch(descriptor)
-            updateModels()
+            updateUndoRedoStatus()
         } catch {
             print("Fetch failed")
         }
     }
     
-    func addItem() {
+    @discardableResult func addItem() -> TaskItem {
+        modelContext.undoManager?.beginUndoGrouping()
         let newItem = TaskItem()
         modelContext.insert(newItem)
+        items.append(newItem)
+        modelContext.undoManager?.endUndoGrouping()
+        modelContext.processPendingChanges()
         select(which: .openItems, item: newItem)
 #if os(iOS)
         showItem = true
 #endif
         updateUndoRedoStatus()
+        return newItem
     }
     
     func undo() {
         modelContext.undoManager?.undo()
-        updateUndoRedoStatus()
+        modelContext.processPendingChanges()
+        fetchData()
     }
     
     func redo() {
         modelContext.undoManager?.redo()
-        updateUndoRedoStatus()
+        modelContext.processPendingChanges()
+        fetchData()
     }
     
     func updateUndoRedoStatus() {
+        modelContext.processPendingChanges()
+        modelContext.processPendingChanges()
         canUndo =  modelContext.undoManager?.canUndo ?? false
         canRedo =  modelContext.undoManager?.canRedo ?? false
     }
     
     func loadToday() {
         today = loadPriorities(modelContext: modelContext)
-        updateModels()
     }
     
     func priority (which: Int) -> TaskItem? {
         return today?.priorities?[which]
+    }
+    
+    func findTask(withID: String) -> TaskItem? {
+        let result = items.first(where: {$0.id == withID})
+        logger.debug("found Task '\(result != nil)' for ID: \(withID)")
+        return result
+    }
+    
+    func delete(task: TaskItem) {
+        undoManager?.beginUndoGrouping()
+        task.deleteTask()
+        if let index = items.firstIndex(of: task) {
+            items.remove(at: index)
+        }
+        undoManager?.endUndoGrouping()
+        updateUndoRedoStatus()
     }
 }
 
@@ -170,5 +196,12 @@ extension TaskManagerViewModel {
     
     var currentList: [TaskItem] {
         return list(which: whichList)
+    }
+}
+
+
+extension TaskManagerViewModel {
+    internal var undoManager: UndoManager? {
+        return modelContext.undoManager
     }
 }

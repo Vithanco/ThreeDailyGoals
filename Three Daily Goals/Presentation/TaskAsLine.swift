@@ -39,7 +39,7 @@ struct TaskAsLine: View {
     var body: some View {
         HStack {
             Checkbox(isChecked: item.isClosed, action: action).background(Color.backgroundColor).frame(maxWidth: 30)
-            Text(item.title).background(Color.backgroundColor).strikethrough( item.isClosed, color: Color.mainColor)
+            Text(item.title).background(Color.backgroundColor).strikethrough( item.isClosed, color: Color.mainColor).draggable(item.draggableString)
         }.background(Color.backgroundColor)
     }
 }
