@@ -15,13 +15,8 @@ struct ReviewDialog: View {
     
     @Bindable var model: TaskManagerViewModel
     @State var state: DialogState = .inform
-    //    @State var listModel = ListViewModel(sections: [secToday], list: [])
-    //
-    //    func updateModel() {
-    //        listModel.list = today.priorities ?? []
-    //    }
     
-    func startReview(){
+    func removePrioritiesAndStartReview(){
         for p in model.today?.priorities ?? [] {
             p.removePriority()
         }
@@ -32,8 +27,13 @@ struct ReviewDialog: View {
         for p in model.today?.priorities ?? [] {
             p.closeTask()
         }
-        startReview()
+        removePrioritiesAndStartReview()
     }
+    
+    func keepPrioritiesAndReview() {
+        state = .review
+    }
+    
     
     func cancelReview(){
         model.showReviewDialog = false
@@ -50,7 +50,7 @@ struct ReviewDialog: View {
         switch state {
             case .inform:
                 VStack {
-                    Text("Review your Tasks!").font(.caption).foregroundStyle(Color.mainColor)
+                    Text("Review your Tasks!").font(.title).foregroundStyle(Color.mainColor)
                     if hasTasks {
                         Text("The previous Tasks were: ")
                         ListView(whichList: .priorities, model: model)
@@ -64,38 +64,39 @@ struct ReviewDialog: View {
                         }
                         Spacer()
                         if hasTasks {
+                            Button(action: keepPrioritiesAndReview) {
+                                Text("Keep Priorities and Review Now")
+                            }
                             Button(action: startReviewWithClosingAll ){
                                 Text("Close All and Review Now")
                             }
                             Spacer()
                         }
-                        Button(action: startReview){
+                        Button(action: removePrioritiesAndStartReview){
                             Text("Review Now")
                         }
                     }
                     
-                }.padding(4).frame(minWidth: 600, minHeight: 400)
+                }.padding(4).frame(minWidth: 600, minHeight: 400).frame(idealWidth: 1200, idealHeight: 800)
             case .review:
                 VStack{
+                    
+                        Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
                     HStack {
-                        ListView(whichList: .priorities, model: model).dropDestination(for: String.self){
-                            items, location in
-                            for item in items.compactMap({model.findTask(withID: $0)}) {
-                                item.makePriority(position: 0, day: model.today!)
-                            }
-                           return true
-                        }.frame(minHeight: 300)
-                        ListView(whichList: .openItems,model: model).dropDestination(for: String.self){
-                            items, location in
-                            for item in items.compactMap({model.findTask(withID: $0)}) {
-                                item.removePriority()
-                            }
-                           return true
+                        ListView(whichList: .priorities, model: model).frame(minHeight: 300)
+                        VStack {
+                            Image(systemName: "arrowshape.left.arrowshape.right.fill")
+                                Text("drag'n'drop")
+
                         }
-                        .dropDestination(for: Data.self){
-                            items, location in debugPrint(items, location)
-                           return true
-                        }
+                        ListView(whichList: .openMinusPriorities ,model: model)
+//                            .dropDestination(for: String.self){
+//                            items, location in
+//                            for item in items.compactMap({model.findTask(withID: $0)}) {
+//                                item.removePriority()
+//                            }
+//                           return true
+//                        }
                     }
                     Button(action: endReview){
                         Text("Done")

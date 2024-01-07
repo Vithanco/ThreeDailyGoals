@@ -20,89 +20,73 @@ struct SingleView<Content: View>: View {
 
 struct ContentView: View {
     @State var model : TaskManagerViewModel
-    
-    
     init(modelContext: ModelContext){
         model = TaskManagerViewModel(modelContext: modelContext)
     }
     
     var body: some View {
-//        let _ = model.updateModels()
-        NavigationSplitView {
-            VStack(alignment: .leading){
-                ListView(whichList: .priorities, model: model)
-                Spacer()
-                List {
-                    LinkToList(whichList: .openItems, model: model)
-                    LinkToList(whichList: .closedItems, model: model)
-                    LinkToList(whichList: .deadItems, model: model)
-                }.frame(minHeight: 400)
-            }.background(Color.backgroundColor).frame(maxWidth: .infinity)
-//                .navigationDestination(isPresented: $model.showItem) {
-//                    if let item = model.selectedItem {
-//                        TaskItemView(item: item)
-//                    }
-//                }
+        //        let _ = model.updateModels()
+        SingleView{
+            NavigationSplitView {
+                LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
 #if os(macOS)
-                .navigationSplitViewColumnWidth(min: 300, ideal: 400)
+                    .navigationSplitViewColumnWidth(min: 300, ideal: 400)
 #endif
-
-                .toolbar {
-                    ToolbarItem {
-                        Button(action: undo) {
-                            Label("Undo", systemImage: imgUndo)
-                        }.disabled(!model.canUndo)
-                    }
-                    ToolbarItem {
-                        Button(action: redo) {
-                            Label("Redo", systemImage: imgRedo)
-                        }.disabled(!model.canRedo)
-                    }
-
-                    ToolbarItem {
-                        Button(action: review) {
-                            Label("Review", systemImage: imgMagnifyingGlass)
+                    .toolbar {
+                        ToolbarItem {
+                            Button(action: undo) {
+                                Label("Undo", systemImage: imgUndo)
+                            }.disabled(!model.canUndo)
                         }
-                    }
-                    ToolbarItem {
-                        Button(action: addItem) {
-                            Label("Add Item", systemImage: "plus")
+                        ToolbarItem {
+                            Button(action: redo) {
+                                Label("Redo", systemImage: imgRedo)
+                            }.disabled(!model.canRedo)
                         }
-                    }
-                    
-                }.background(Color.backgroundColor)
-            
-        } content: {
-            SingleView{
+                        
+                        ToolbarItem {
+                            Button(action: review) {
+                                Label("Review", systemImage: imgMagnifyingGlass)
+                            }
+                        }
+                        ToolbarItem {
+                            Button(action: addItem) {
+                                Label("Add Item", systemImage: "plus")
+                            }
+                        }
+                        
+                    }.background(Color.background)
+                
+            } content: {
+                SingleView{
 #if os(macOS)
-                ListView( model: model)
+                    ListView( model: model).background(Color.background)
 #endif
 #if os(iOS)
-                Text("Placeholder")
+                    Text("Placeholder")
 #endif
+                }.background(Color.background)
+                    .navigationSplitViewColumnWidth(min: 250, ideal: 400)
+                //            .toolbar {
+                //
+                //            }
             }
-            
-            .navigationSplitViewColumnWidth(min: 250, ideal: 400)
-//            .toolbar {
-//
-//            }
-        }
-    detail: {
-        if let detail = model.selectedItem {
-            TaskItemView(model: model, item: detail)
-        } else {
-            Text("Select an item")
-        }
-    }.background(Color.backgroundColor)
-            .sheet(isPresented: $model.showReviewDialog) {
-                ReviewDialog(model: model)
+        detail: {
+            if let detail = model.selectedItem {
+                TaskItemView(model: model, item: detail)
+            } else {
+                Text("Select an item")
             }
-            .onAppear(perform: {
-                model.loadToday()
-            })
-            .environment(model.today)
+        }.background(Color.background)
+                .sheet(isPresented: $model.showReviewDialog) {
+                    ReviewDialog(model: model)
+                }
+                .onAppear(perform: {
+                    model.loadToday()
+                })
+                .environment(model.today)
+        }.background(Color.background)
     }
-    
     
     private func addItem() {
         let _ = withAnimation {
@@ -122,21 +106,11 @@ struct ContentView: View {
         }
     }
     
-    
-    
     private func review() {
         withAnimation {
             model.showReviewDialog = true
         }
     }
-    
-    //    private func deleteItems(offsets: IndexSet) {
-    //        withAnimation {
-    //            for index in offsets {
-    //                modelContext.delete(openItems[index])
-    //            }
-    //        }
-    //    }
 }
 
 #Preview {

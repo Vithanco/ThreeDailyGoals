@@ -82,6 +82,10 @@ extension TaskItem: Identifiable {
     }
 }
 
+extension TaskItem:Equatable {
+    
+}
+
 extension TaskItem {
     @Transient
     var title: String {
@@ -180,32 +184,38 @@ extension TaskItem {
     }
     
     func closeTask() {
-        state = .closed
-        addComment(text: "closed this task on \(Date.now)")
+        if state != .closed {
+            state = .closed
+            addComment(text: "closed this task on \(Date.now)")
+        }
     }
     
     func reOpenTask() {
-        state = .open
-        addComment(text: "Reopened this on \(Date.now)")
+        if state != .open {
+            state = .open
+            addComment(text: "Reopened this on \(Date.now)")
+        }
+    }
+    func graveyard() {
+        if state != .graveyard {
+            state = .graveyard
+            addComment(text: "Moved task to the Graveyard on \(Date.now)")
+        }
     }
     
     func touch() {
-        state = .open
-        addComment(text: "Touched this task on \(Date.now)")
+        if state == .open {
+            addComment(text: "Touched this task on \(Date.now)")
+        } else {
+            reOpenTask()
+        }
     }
     
     /// only use for test cases
     func setChangedDate(_ date: Date) {
         changed = date
     }
-    
-    var draggableString : String {
-        let interval = created.timeIntervalSince1970
-        let integer = Int(interval)
-        let result = integer.description
-        debugPrint("created: \(created), interval: \(interval), integer: \(integer), result: \(result)")
-        return result
-    }
+   
 }
 
 

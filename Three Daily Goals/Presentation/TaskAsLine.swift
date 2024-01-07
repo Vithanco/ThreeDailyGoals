@@ -19,7 +19,7 @@ struct Checkbox : View {
     var body: some View {
         Button(action: action){
             Image(systemName: isChecked ? imgCheckedBox : imgUncheckedBox)
-        }
+        }.background(Color.background)
         
     }
 }
@@ -30,17 +30,17 @@ struct TaskAsLine: View {
     
     func action () {
         if item.isClosed {
-            item.state = .open
+            item.reOpenTask()
         } else {
-            item.state = .closed
+            item.closeTask()
         }
     }
     
     var body: some View {
         HStack {
-            Checkbox(isChecked: item.isClosed, action: action).background(Color.backgroundColor).frame(maxWidth: 30)
-            Text(item.title).background(Color.backgroundColor).strikethrough( item.isClosed, color: Color.mainColor).draggable(item.draggableString)
-        }.background(Color.backgroundColor)
+            Checkbox(isChecked: item.isClosed, action: action).frame(maxWidth: 30)
+            Text(item.title).strikethrough( item.isClosed, color: Color.mainColor).draggable(item.id)
+        }
     }
 }
 

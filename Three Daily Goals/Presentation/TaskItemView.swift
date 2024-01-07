@@ -27,7 +27,7 @@ struct TaskItemView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack {
-                StateView(state: $item.state)
+                StateView(state: item.state)
                 Text("Task").font(.title).foregroundStyle(Color.mainColor)
                 Spacer()
 
@@ -72,7 +72,7 @@ struct TaskItemView: View {
             } label: {
                 Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
             }
-        }.background(Color.backgroundColor).padding()
+        }.background(Color.background).padding()
             .toolbar {
 #if os(iOS)
                 ToolbarItem {

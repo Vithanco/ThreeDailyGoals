@@ -31,13 +31,14 @@ enum ListChooser{
     case closedItems
     case deadItems
     case priorities
+    case openMinusPriorities
 }
 
 
 extension ListChooser {
     var sections: [TaskSection] {
         switch self {
-            case .openItems : return [secOpen]
+            case .openItems,.openMinusPriorities : return [secOpen]
             case .closedItems: return [secClosed]
             case .deadItems: return [secGraveyard]
             case .priorities: return [secToday]
@@ -52,8 +53,10 @@ final class TaskManagerViewModel {
     private(set) var items = [TaskItem]()
     
     func select(which: ListChooser, item: TaskItem?) {
-        whichList = which
-        selectedItem = item
+        withAnimation {
+            whichList = which
+            selectedItem = item
+        }
     }
     
     ///used in Content view of NavigationSplitView
@@ -141,15 +144,19 @@ final class TaskManagerViewModel {
     }
     
     func undo() {
-        modelContext.undoManager?.undo()
-        modelContext.processPendingChanges()
-        fetchData()
+        withAnimation {
+            modelContext.undoManager?.undo()
+            modelContext.processPendingChanges()
+            fetchData()
+        }
     }
     
     func redo() {
-        modelContext.undoManager?.redo()
-        modelContext.processPendingChanges()
-        fetchData()
+        withAnimation {
+            modelContext.undoManager?.redo()
+            modelContext.processPendingChanges()
+            fetchData()
+        }
     }
     
     func updateUndoRedoStatus() {
@@ -174,13 +181,30 @@ final class TaskManagerViewModel {
     }
     
     func delete(task: TaskItem) {
-        undoManager?.beginUndoGrouping()
-        task.deleteTask()
-        if let index = items.firstIndex(of: task) {
-            items.remove(at: index)
+        withAnimation {
+            undoManager?.beginUndoGrouping()
+            task.deleteTask()
+            if let index = items.firstIndex(of: task) {
+                items.remove(at: index)
+            }
+            undoManager?.endUndoGrouping()
+            updateUndoRedoStatus()
         }
-        undoManager?.endUndoGrouping()
-        updateUndoRedoStatus()
+    }
+    
+    func move(task: TaskItem, to: ListChooser) {
+        switch to {
+            case .openItems: 
+                task.reOpenTask()
+            case .closedItems: 
+                task.closeTask()
+            case .deadItems:
+                task.graveyard()
+            case .priorities, .openMinusPriorities:
+                if let today = today {
+                    task.makePriority(position: 0, day: today)
+                }
+        }
     }
 }
 
@@ -191,6 +215,7 @@ extension TaskManagerViewModel {
             case .closedItems: return closedItems
             case .deadItems: return deadItems
             case .priorities: return today?.priorities ?? []
+            case .openMinusPriorities: return openItems - (today?.priorities ?? [])
         }
     }
     

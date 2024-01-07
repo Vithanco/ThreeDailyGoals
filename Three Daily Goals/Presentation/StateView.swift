@@ -9,7 +9,8 @@ import SwiftUI
 
 
 struct StateView: View {
-    @Binding var state: TaskItemState
+    let state: TaskItemState
+    
     var body: some View {
         switch state {
             case .open: secOpen.asText
@@ -23,7 +24,7 @@ struct StateView: View {
 struct StateViewHelper : View {
     @State var state: TaskItemState
     var body: some View {
-        StateView(state: $state)
+        StateView(state: state)
     }
 }
 #Preview {

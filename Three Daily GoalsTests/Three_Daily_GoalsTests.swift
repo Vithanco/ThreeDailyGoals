@@ -72,8 +72,6 @@ final class Three_Daily_GoalsTests: XCTestCase {
     }
     
     func testTaskITemID() throws {
-        
-        
         let task1 = model.addItem()
         let task2 = model.addItem()
         XCTAssertNotEqual(task1.id,task2.id)
