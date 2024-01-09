@@ -25,40 +25,23 @@ struct ListView: View {
                 }
             }) {
                 ForEach(model.list(which: list)) { item in
-#if os(macOS)
-                    TaskAsLine(item: item).onTapGesture {
-                        model.select(which: list, item: item)
-                    }
-#endif
-#if os(iOS)
-                    LinkToTask(model: model,item: item)
-#endif
+                    LinkToTask(model: model,item: item, list: list)
                 }
-            }.dropDestination(for: String.self){
+            }
+        }.background(Color.background)
+            .dropDestination(for: String.self){
                 items, location in
                 for item in items.compactMap({model.findTask(withID: $0)}) {
                     model.move(task: item, to: list)
                 }
                 return true
             }
-    }.background(Color.background)
-        .toolbar {
 #if os(iOS)
-            ToolbarItem{
-                Button(action: model.undo) {
-                    Label("Undo" , systemImage: imgUndo)
-                }.disabled(!model.canUndo)
-            }
-            ToolbarItem {
-                Button(action: model.redo) {
-                    Label("Redo", systemImage: imgRedo)
-                }.disabled(!model.canRedo)
-            }
+            .tdgToolbar(model: model)
 #endif
-        }
-}
+    }
 }
 
 #Preview {
-    ListView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext))
+    ListView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples())
 }

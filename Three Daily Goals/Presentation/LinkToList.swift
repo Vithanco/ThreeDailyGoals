@@ -37,6 +37,13 @@ struct LinkToList: View {
             .onTapGesture {
                 model.select(which: whichList,item: model.list(which: whichList).first)
             }
+            .dropDestination(for: String.self){
+                items, location in
+                for item in items.compactMap({model.findTask(withID: $0)}) {
+                    model.move(task: item, to: whichList)
+                }
+                return true
+            }
 #endif
     }
 }

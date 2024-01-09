@@ -144,6 +144,10 @@ extension TaskItem {
         return state == .graveyard
     }
     
+    var isPending: Bool {
+        return state == .pendingResponse
+    }
+    
     func addComment(text: String) {
         if comments == nil {
             comments = [Comment]()
@@ -157,6 +161,7 @@ extension TaskItem {
     }
     
     func makePriority(position: Int, day: DailyTasks) {
+        reOpenTask()
         if let priorities = day.priorities {
             let index = min (priorities.count, position)
             day.priorities?.insert(self, at: index)
@@ -193,19 +198,19 @@ extension TaskItem {
     func reOpenTask() {
         if state != .open {
             state = .open
-            addComment(text: "Reopened this on \(Date.now)")
+            addComment(text: "Reopened this Task.")
         }
     }
     func graveyard() {
         if state != .graveyard {
             state = .graveyard
-            addComment(text: "Moved task to the Graveyard on \(Date.now)")
+            addComment(text: "Moved task to the Graveyard of not needed tasks.")
         }
     }
     
     func touch() {
         if state == .open {
-            addComment(text: "Touched this task on \(Date.now)")
+            addComment(text: "Touched this task.")
         } else {
             reOpenTask()
         }
@@ -214,6 +219,14 @@ extension TaskItem {
     /// only use for test cases
     func setChangedDate(_ date: Date) {
         changed = date
+    }
+    
+    func pending() {
+        if state != .pendingResponse {
+            state = .pendingResponse
+            addComment(text: "Done! But pending Response.")
+        }
+        priority = nil
     }
    
 }

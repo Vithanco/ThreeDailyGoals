@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+
+struct InnerHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
 struct ReviewDialog: View {
     enum DialogState {
         case inform
@@ -15,6 +23,8 @@ struct ReviewDialog: View {
     
     @Bindable var model: TaskManagerViewModel
     @State var state: DialogState = .inform
+    
+    @State private var sheetHeight: CGFloat = .zero
     
     func removePrioritiesAndStartReview(){
         for p in model.today?.priorities ?? [] {
@@ -57,6 +67,11 @@ struct ReviewDialog: View {
                     } else {
                         Text("No previous Tasks")
                     }
+                    if model.pendingItems.count > 0 {
+                        Spacer()
+                        Text("Pending Response!").font(.title).foregroundStyle(Color.mainColor)
+                        ListView(whichList: .pendingItems, model: model)
+                    }
                     
                     HStack{
                         Button(action: cancelReview){
@@ -77,26 +92,35 @@ struct ReviewDialog: View {
                         }
                     }
                     
-                }.padding(4).frame(minWidth: 600, minHeight: 400).frame(idealWidth: 1200, idealHeight: 800)
+                }.padding(4)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+                        }
+                    }
+                    .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+                        sheetHeight = newHeight
+                    }
+                    .presentationDetents([.height(sheetHeight)])
             case .review:
                 VStack{
                     
-                        Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
+                    Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
                     HStack {
                         ListView(whichList: .priorities, model: model).frame(minHeight: 300)
                         VStack {
                             Image(systemName: "arrowshape.left.arrowshape.right.fill")
-                                Text("drag'n'drop")
-
+                            Text("drag'n'drop")
+                            
                         }
                         ListView(whichList: .openMinusPriorities ,model: model)
-//                            .dropDestination(for: String.self){
-//                            items, location in
-//                            for item in items.compactMap({model.findTask(withID: $0)}) {
-//                                item.removePriority()
-//                            }
-//                           return true
-//                        }
+                        //                            .dropDestination(for: String.self){
+                        //                            items, location in
+                        //                            for item in items.compactMap({model.findTask(withID: $0)}) {
+                        //                                item.removePriority()
+                        //                            }
+                        //                           return true
+                        //                        }
                     }
                     Button(action: endReview){
                         Text("Done")

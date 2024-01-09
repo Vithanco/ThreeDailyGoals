@@ -10,8 +10,10 @@ import Foundation
 let imgOpen = "figure.walk.circle.fill"
 let imgClosed = "flag.checkered.2.crossed"
 let imgGraveyard = "heart.slash.fill"
+let imgPendingResponse = "alarm.fill"
 let imgDated = "clock.fill"
 let imgMagnifyingGlass = "magnifyingglass.circle.fill"
+let imgAddItem = "plus"
 
 let imgToday = "exclamationmark.square.fill"
 let imgPriority1 = "1.circle.fill"

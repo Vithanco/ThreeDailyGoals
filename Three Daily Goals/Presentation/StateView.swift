@@ -16,6 +16,7 @@ struct StateView: View {
             case .open: secOpen.asText
             case .closed: secClosed.asText
             case .graveyard: secGraveyard.asText
+            case .pendingResponse: secPending.asText
         }
     }
 }

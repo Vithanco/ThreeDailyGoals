@@ -38,6 +38,7 @@ let secToday = TaskSection(text: "Today", image: imgToday, style: .mainSection, 
 let secOpen = TaskSection(text: "Open", image: imgOpen, style: .mainSection, showOlder: false)
 let secClosed = TaskSection(text: "Closed", image: imgClosed, style: .mainSection, showOlder: true )
 let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard, style: .mainSection, showOlder: true)
+let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, style: .mainSection, showOlder: true)
 let secLastWeek = TaskSection(text: "Last Week", image: imgDated, style: .subSection, showOlder: false)
 let secLastMonth = TaskSection(text: "Last Month", image: imgDated, style: .subSection, showOlder: false)
 let secOlder = TaskSection(text: "Older", image: imgDated, style: .subSection, showOlder: false)

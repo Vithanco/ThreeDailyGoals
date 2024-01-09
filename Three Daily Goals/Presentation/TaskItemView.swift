@@ -73,19 +73,22 @@ struct TaskItemView: View {
                 Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
             }
         }.background(Color.background).padding()
-            .toolbar {
 #if os(iOS)
-                ToolbarItem {
-                    Button(action: undo) {
-                        Label("Undo", systemImage: imgUndo)
-                    }.disabled(!model.canUndo)
-                }
-                ToolbarItem {
-                    Button(action: redo) {
-                        Label("Redo", systemImage: imgRedo)
-                    }.disabled(!model.canRedo)
-                }
+            .tdgToolbar(model: model)
 #endif
+            .toolbar {
+//#if os(iOS)
+//                ToolbarItem {
+//                    Button(action: undo) {
+//                        Label("Undo", systemImage: imgUndo)
+//                    }.disabled(!model.canUndo)
+//                }
+//                ToolbarItem {
+//                    Button(action: redo) {
+//                        Label("Redo", systemImage: imgRedo)
+//                    }.disabled(!model.canRedo)
+//                }
+//#endif
                 ToolbarItem {
                     Button(action: {
                         if item.priority == nil, let today = model.today  {

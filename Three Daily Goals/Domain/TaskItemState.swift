@@ -12,6 +12,7 @@ enum TaskItemState: Codable {
     case open
     case closed
     case graveyard
+    case pendingResponse
 }
     
 extension TaskItemState : CustomStringConvertible {
@@ -20,6 +21,7 @@ extension TaskItemState : CustomStringConvertible {
             case .closed: return "closed"
             case .graveyard: return "graveyard"
             case .open: return "open"
+            case .pendingResponse: return "pending"
         }
     }
 }

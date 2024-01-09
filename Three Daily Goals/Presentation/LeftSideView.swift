@@ -21,10 +21,13 @@ struct LeftSideView: View {
             Spacer()
             List{
                 LinkToList(whichList: .openItems, model: model)
+                LinkToList(whichList: .pendingItems, model: model)
                 LinkToList(whichList: .closedItems, model: model)
                 LinkToList(whichList: .deadItems, model: model)
-            }.frame(maxHeight: 160)
-        }.background(Color.background)
+            }.frame(maxHeight: 145)
+        }
+//        .background(Color.background)
+            .tdgToolbar(model: model)
     }
 }
 

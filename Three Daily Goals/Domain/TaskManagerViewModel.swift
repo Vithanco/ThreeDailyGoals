@@ -32,6 +32,7 @@ enum ListChooser{
     case deadItems
     case priorities
     case openMinusPriorities
+    case pendingItems
 }
 
 
@@ -42,6 +43,7 @@ extension ListChooser {
             case .closedItems: return [secClosed]
             case .deadItems: return [secGraveyard]
             case .priorities: return [secToday]
+            case .pendingItems: return [secPending]
         }
     }
 }
@@ -82,6 +84,10 @@ final class TaskManagerViewModel {
     
     var deadItems: [TaskItem]{
         return items.filter({$0.state == .graveyard}).sorted()
+    }
+    
+    var pendingItems: [TaskItem]{
+        return items.filter({$0.state == .pendingResponse}).sorted()
     }
     
     var today: DailyTasks? = nil
@@ -135,8 +141,11 @@ final class TaskManagerViewModel {
         items.append(newItem)
         modelContext.undoManager?.endUndoGrouping()
         modelContext.processPendingChanges()
+        #if os(macOS)
         select(which: .openItems, item: newItem)
+        #endif
 #if os(iOS)
+        selectedItem = newItem
         showItem = true
 #endif
         updateUndoRedoStatus()
@@ -196,14 +205,19 @@ final class TaskManagerViewModel {
         switch to {
             case .openItems: 
                 task.reOpenTask()
-            case .closedItems: 
+                task.priority = nil
+            case .closedItems:
                 task.closeTask()
+                task.priority = nil
             case .deadItems:
                 task.graveyard()
+                task.priority = nil
             case .priorities, .openMinusPriorities:
                 if let today = today {
                     task.makePriority(position: 0, day: today)
                 }
+            case .pendingItems:
+                task.pending()
         }
     }
 }
@@ -216,6 +230,7 @@ extension TaskManagerViewModel {
             case .deadItems: return deadItems
             case .priorities: return today?.priorities ?? []
             case .openMinusPriorities: return openItems - (today?.priorities ?? [])
+            case .pendingItems: return pendingItems
         }
     }
     
