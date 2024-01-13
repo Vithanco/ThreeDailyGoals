@@ -32,10 +32,10 @@ struct LinkToTask: View {
 }
 
 @MainActor fileprivate struct LinkToTaskHelper : View {
-    @State var model = TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples()
+    @State var model = TaskManagerViewModel(modelContext: TestStorage())
     
     var body: some View {
-        LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .openItems)
+        LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .openTasks)
     }
 }
 

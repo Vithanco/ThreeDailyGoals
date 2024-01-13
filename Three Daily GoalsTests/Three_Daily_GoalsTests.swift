@@ -28,17 +28,17 @@ final class Three_Daily_GoalsTests: XCTestCase {
     }
     
     func testTaskUndo() async throws {
-        while model.undoManager == nil {
+        while !model.hasUndoManager {
             await Task.yield()
         }
-        XCTAssertNotNil(model.undoManager)
+        XCTAssertTrue(model.hasUndoManager)
         XCTAssertFalse(model.canUndo)
         XCTAssertFalse(model.canRedo)
-        model.undoManager?.beginUndoGrouping()
+        model.beginUndoGrouping()
         let item = model.addItem()
         XCTAssertEqual(item.comments!.count, 0, "No comments yet")
         item.touch()
-        model.undoManager?.endUndoGrouping()
+        model.endUndoGrouping()
         XCTAssertEqual(item.comments!.count, 1, "touch leads to comment")
         XCTAssertTrue(model.canUndo)
         XCTAssertFalse(model.canRedo)

@@ -63,14 +63,14 @@ struct ReviewDialog: View {
                     Text("Review your Tasks!").font(.title).foregroundStyle(Color.mainColor)
                     if hasTasks {
                         Text("The previous Tasks were: ")
-                        ListView(whichList: .priorities, model: model)
+                        ListView(whichList: .priorityTasks, model: model)
                     } else {
                         Text("No previous Tasks")
                     }
-                    if model.pendingItems.count > 0 {
+                    if model.pendingTasks.count > 0 {
                         Spacer()
                         Text("Pending Response!").font(.title).foregroundStyle(Color.mainColor)
-                        ListView(whichList: .pendingItems, model: model)
+                        ListView(whichList: .pendingTasks, model: model)
                     }
                     
                     HStack{
@@ -107,13 +107,13 @@ struct ReviewDialog: View {
                     
                     Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
                     HStack {
-                        ListView(whichList: .priorities, model: model).frame(minHeight: 300)
+                        ListView(whichList: .priorityTasks, model: model).frame(minHeight: 300)
                         VStack {
                             Image(systemName: "arrowshape.left.arrowshape.right.fill")
                             Text("drag'n'drop")
                             
                         }
-                        ListView(whichList: .openMinusPriorities ,model: model)
+                        ListView(whichList: .openTasks ,model: model)
                         //                            .dropDestination(for: String.self){
                         //                            items, location in
                         //                            for item in items.compactMap({model.findTask(withID: $0)}) {
@@ -131,5 +131,5 @@ struct ReviewDialog: View {
 }
 
 #Preview {
-    return ReviewDialog(model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples())
+    return ReviewDialog(model: TaskManagerViewModel(modelContext: TestStorage()))
 }

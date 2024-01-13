@@ -228,6 +228,15 @@ extension TaskItem {
         }
         priority = nil
     }
+    
+    var belongsTo: ListChooser {
+        switch state {
+            case .closed: return .closedTasks
+            case .open: return priority == nil ? .openTasks : .priorityTasks
+            case .graveyard: return .deadTasks
+            case .pendingResponse: return .pendingTasks
+        }
+    }
    
 }
 

@@ -77,18 +77,6 @@ struct TaskItemView: View {
             .tdgToolbar(model: model)
 #endif
             .toolbar {
-//#if os(iOS)
-//                ToolbarItem {
-//                    Button(action: undo) {
-//                        Label("Undo", systemImage: imgUndo)
-//                    }.disabled(!model.canUndo)
-//                }
-//                ToolbarItem {
-//                    Button(action: redo) {
-//                        Label("Redo", systemImage: imgRedo)
-//                    }.disabled(!model.canRedo)
-//                }
-//#endif
                 ToolbarItem {
                     Button(action: {
                         if item.priority == nil, let today = model.today  {
@@ -128,8 +116,8 @@ struct TaskItemView: View {
             }.onAppear(perform:{updateUndoRedoStatus()})
     }
 }
-//
-//#Preview {
-//////    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
-////    TaskItemView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples(), item: model.items.first).frame(width: 600, height: 300)
-//}
+
+#Preview {
+//    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
+    TaskItemView( model: TaskManagerViewModel(modelContext: TestStorage()), item: TaskItem()).frame(width: 600, height: 300)
+}

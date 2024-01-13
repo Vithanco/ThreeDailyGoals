@@ -28,7 +28,7 @@ struct ListView: View {
                     LinkToTask(model: model,item: item, list: list)
                 }
             }
-        }.background(Color.background)
+        }.frame(minHeight: 200).background(Color.background)
             .dropDestination(for: String.self){
                 items, location in
                 for item in items.compactMap({model.findTask(withID: $0)}) {
@@ -43,5 +43,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView( model: TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext).addSamples())
+    ListView( model: TaskManagerViewModel(modelContext: TestStorage()))
 }

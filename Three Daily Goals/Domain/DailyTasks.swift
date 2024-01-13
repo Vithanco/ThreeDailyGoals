@@ -29,7 +29,7 @@ final class DailyTasks: ObservableObject, Identifiable {
     }
 }
 
-func loadPriorities(modelContext: ModelContext) -> DailyTasks {
+func loadPriorities(modelContext: Storage) -> DailyTasks {
     let fetchDescriptor = FetchDescriptor<DailyTasks>()
     
     do {

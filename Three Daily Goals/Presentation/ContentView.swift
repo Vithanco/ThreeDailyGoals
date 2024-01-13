@@ -20,7 +20,7 @@ struct SingleView<Content: View>: View {
 
 struct ContentView: View {
     @State var model : TaskManagerViewModel
-    init(modelContext: ModelContext){
+    init(modelContext: Storage){
         model = TaskManagerViewModel(modelContext: modelContext)
     }
     
@@ -29,10 +29,14 @@ struct ContentView: View {
             SingleView{
                 NavigationSplitView {
                     LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
+                        .navigationDestination(isPresented: $model.showItem) {
+                            if let item = model.selectedItem {
+                                TaskItemView(model:model, item: item)
+                            }
+                        }
 #if os(macOS)
                         .navigationSplitViewColumnWidth(min: 300, ideal: 400)
 #endif
-                        .background(Color.background)
                 } content: {
                     SingleView{
 #if os(macOS)
@@ -66,6 +70,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(modelContext: sharedModelContainer(inMemory: true).mainContext)
+    ContentView(modelContext: TestStorage())
     
 }

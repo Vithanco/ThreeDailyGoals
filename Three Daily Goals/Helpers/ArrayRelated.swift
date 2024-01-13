@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import Logging
+
+fileprivate let logger = Logger(label: "com.vithanco.array")
 
 
 extension Array where Element: Equatable{
@@ -25,3 +28,121 @@ extension Array where Element: Equatable{
 //    }
 //        
 }
+
+
+
+
+public extension Array where Element: Equatable {
+    // Remove first collection element that is equal to the given `object`:
+    mutating func removeObject(_ object: Iterator.Element) {
+        if let index = self.firstIndex(of: object) {
+            self.remove(at: index)
+        }
+    }
+    
+    func splitAndCombine(makeFirst: Element) -> [Element] {
+        guard let i = self.firstIndex(of: makeFirst) else {
+            logger.logThis(.error, "couldn't split the array properly")
+            return self
+        }
+        var first = Array(self[i..<self.count])
+        let second = Array(self[0..<i])
+        first.append(contentsOf: second)
+        return first
+    }
+
+    var uniqueElements: [Element] {
+        return self.reduce(into: []) {
+            uniqueElements, element in
+
+            if !uniqueElements.contains(element) {
+                uniqueElements.append(element)
+            }
+        }
+    }
+    mutating func toggle(_ object: Element) {
+        if self.contains(object) {
+            removeObject(object)
+            return
+        }
+        append(object)
+    }
+}
+
+extension Sequence {
+    func chunked(into size: Int) -> [[Element]] {
+        let array = Array(self)
+        return stride(from: 0, to: array.count, by: size).map {
+            Array(array[$0 ..< Swift.min($0 + size, array.count)])
+        }
+    }
+}
+
+extension Sequence where Element: Hashable {
+    var asSet: Set<Element> {
+        return Set<Element>(self)
+    }
+}
+
+extension Array {
+
+    func first() -> Element? {
+        if isEmpty {
+            return nil
+        }
+        return self[0]
+    }
+
+    func last() -> Element? {
+        if isEmpty {
+            return nil
+        }
+        let index = count - 1
+        return self[index]
+    }
+
+    func head() -> Element? {
+        return first()
+    }
+
+    func tail() -> [Element] {
+        if isEmpty || count == 1 {
+            return []
+        }
+        let range: CountableRange<Int> = 1..<count
+        let slice = self[range]
+        return Array(slice)
+    }
+}
+
+public protocol OptionalArray {
+}
+
+extension Array: OptionalArray {
+}
+
+// inspired from https://stackoverflow.com/questions/25738817/removing-duplicate-elements-from-an-array-in-swift
+extension Sequence where Iterator.Element: Hashable {
+
+ /// only unique elements, but doesn't respect order
+    func uniqueItemsSet() -> Set<Iterator.Element> {
+      return Set<Iterator.Element>(self)
+    }
+
+  func uniqueItemsArray() -> [Iterator.Element] {
+    return Array(self.uniqueItemsSet())
+  }
+
+/// only unique elements, but keep order
+  func uniqueItemsArrayMaintainedOrder() -> [Iterator.Element] {
+    return reduce([Iterator.Element]()) { $0.contains($1) ? $0 : $0 + [$1] }
+  }
+}
+
+
+internal extension Set {
+    var asArray: [Element] {
+        return Array(self)
+    }
+}
+

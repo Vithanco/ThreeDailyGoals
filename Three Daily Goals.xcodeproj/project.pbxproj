@@ -19,8 +19,8 @@
 		E51142A62B34591600AB6E05 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* TaskItem.swift */; };
 		E51142A72B34591600AB6E05 /* DailyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F4782B30617A00E83A21 /* DailyTasks.swift */; };
 		E51142A82B34591600AB6E05 /* TaskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD82B31956300F0EA9C /* TaskSection.swift */; };
-		E51142AA2B345B7B00AB6E05 /* ModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* ModelContainer.swift */; };
-		E51142AB2B345B9900AB6E05 /* ModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* ModelContainer.swift */; };
+		E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* Storage.swift */; };
+		E51142AB2B345B9900AB6E05 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* Storage.swift */; };
 		E51142AC2B345BFF00AB6E05 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 		E51142AD2B345BFF00AB6E05 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E51142AE2B345BFF00AB6E05 /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
@@ -51,6 +51,10 @@
 		E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD82B31956300F0EA9C /* TaskSection.swift */; };
 		E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */; };
 		E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
+		E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
+		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
+		E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE992B51987B00A68857 /* Logging */; };
+		E5DAFE9C2B51A16A00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE9B2B51A16A00A68857 /* Logging */; };
 		E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5DDC9E52B3F5AED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F4782B30617A00E83A21 /* DailyTasks.swift */; };
@@ -62,6 +66,7 @@
 		E5FEC7F22B46FA2A007BE890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
 		E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */; };
 		E5FEC7F62B4BF0D4007BE890 /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */; };
+		E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */; };
 		E5FF74362B43305600B3B890 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
 		E5FF74372B43307800B3B890 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
 		E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
@@ -116,7 +121,7 @@
 		E511429B2B342E3F00AB6E05 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E511429D2B342E3F00AB6E05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E511429E2B342E3F00AB6E05 /* Three_Daily_Goals__Widget_.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals__Widget_.entitlements; sourceTree = "<group>"; };
-		E51142A92B345B7B00AB6E05 /* ModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainer.swift; sourceTree = "<group>"; };
+		E51142A92B345B7B00AB6E05 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		E51142B22B34947F00AB6E05 /* WPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WPriorities.swift; sourceTree = "<group>"; };
 		E51142B42B35ABB900AB6E05 /* LinkToTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkToTask.swift; sourceTree = "<group>"; };
 		E559203A2B3772EE0002C709 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -147,6 +152,7 @@
 		E5ADEDD82B31956300F0EA9C /* TaskSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSection.swift; sourceTree = "<group>"; };
 		E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDialog.swift; sourceTree = "<group>"; };
 		E5B003112B32382C00A90F8D /* StringRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRelated.swift; sourceTree = "<group>"; };
+		E5DAFE952B5197B000A68857 /* LoggingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingRelated.swift; sourceTree = "<group>"; };
 		E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModel.swift; sourceTree = "<group>"; };
 		E5E1F4782B30617A00E83A21 /* DailyTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTasks.swift; sourceTree = "<group>"; };
 		E5E1F47B2B30632000E83A21 /* DateRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelated.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 		E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayRelated.swift; sourceTree = "<group>"; };
 		E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftSideView.swift; sourceTree = "<group>"; };
 		E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModelLists.swift; sourceTree = "<group>"; };
 		E5FF74352B43305600B3B890 /* TaskItemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemState.swift; sourceTree = "<group>"; };
 		E5FF74382B45308800B3B890 /* DoubleRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleRelated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +172,7 @@
 			files = (
 				E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */,
 				E51142932B342E3C00AB6E05 /* SwiftUI.framework in Frameworks */,
+				E5DAFE9C2B51A16A00A68857 /* Logging in Frameworks */,
 				E51142922B342E3C00AB6E05 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,6 +181,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */,
+				E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */,
 			);
 			path = "Three Daily GoalsTests";
 			sourceTree = "<group>";
@@ -288,7 +298,7 @@
 				E590CE172B1FAD9000B16684 /* Comment.swift */,
 				E5E1F4782B30617A00E83A21 /* DailyTasks.swift */,
 				E5ADEDD82B31956300F0EA9C /* TaskSection.swift */,
-				E51142A92B345B7B00AB6E05 /* ModelContainer.swift */,
+				E51142A92B345B7B00AB6E05 /* Storage.swift */,
 				E5FF74352B43305600B3B890 /* TaskItemState.swift */,
 			);
 			path = Domain;
@@ -333,6 +343,7 @@
 				E559203C2B38376F0002C709 /* ViewRelated.swift */,
 				E5FF74382B45308800B3B890 /* DoubleRelated.swift */,
 				E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */,
+				E5DAFE952B5197B000A68857 /* LoggingRelated.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -353,6 +364,9 @@
 			dependencies = (
 			);
 			name = "Three Daily Goals Widget";
+			packageProductDependencies = (
+				E5DAFE9B2B51A16A00A68857 /* Logging */,
+			);
 			productName = "Three Daily Goals (Widget)Extension";
 			productReference = E51142912B342E3C00AB6E05 /* Three Daily Goals Widget.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -372,6 +386,9 @@
 				E51142A02B342E3F00AB6E05 /* PBXTargetDependency */,
 			);
 			name = "Three Daily Goals";
+			packageProductDependencies = (
+				E5DAFE992B51987B00A68857 /* Logging */,
+			);
 			productName = "Three Daily Goals";
 			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
 			productType = "com.apple.product-type.application";
@@ -447,6 +464,9 @@
 				Base,
 			);
 			mainGroup = E561D6CF2B1F54A6003BE36F;
+			packageReferences = (
+				E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */,
+			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -502,13 +522,14 @@
 				E5FF74372B43307800B3B890 /* TaskItemState.swift in Sources */,
 				E51142982B342E3C00AB6E05 /* Three_Daily_Goals__Widget_.swift in Sources */,
 				E51142A62B34591600AB6E05 /* TaskItem.swift in Sources */,
-				E51142AB2B345B9900AB6E05 /* ModelContainer.swift in Sources */,
+				E51142AB2B345B9900AB6E05 /* Storage.swift in Sources */,
 				E51142AC2B345BFF00AB6E05 /* ColorRelated.swift in Sources */,
 				E51142AD2B345BFF00AB6E05 /* DateRelated.swift in Sources */,
 				E51142AF2B345BFF00AB6E05 /* StringRelated.swift in Sources */,
 				E5FEC7F02B46F9D7007BE890 /* ArrayRelated.swift in Sources */,
 				E51142A72B34591600AB6E05 /* DailyTasks.swift in Sources */,
 				E51142962B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift in Sources */,
+				E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */,
 				E51142AE2B345BFF00AB6E05 /* IconsRelated.swift in Sources */,
 				E5FEC7F22B46FA2A007BE890 /* DoubleRelated.swift in Sources */,
 				E5FEC7F12B46FA27007BE890 /* ViewRelated.swift in Sources */,
@@ -525,6 +546,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5ED903F2B46E44100CF0431 /* ArrayRelated.swift in Sources */,
+				E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */,
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
 				E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */,
 				E559203D2B38376F0002C709 /* ViewRelated.swift in Sources */,
@@ -542,7 +564,7 @@
 				E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */,
 				E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */,
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
-				E51142AA2B345B7B00AB6E05 /* ModelContainer.swift in Sources */,
+				E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */,
 				E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */,
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
@@ -561,6 +583,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
+				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1042,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E5DAFE992B51987B00A68857 /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
+		E5DAFE9B2B51A16A00A68857 /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E561D6D02B1F54A6003BE36F /* Project object */;
 }

@@ -47,24 +47,10 @@ struct LinkToList: View {
 #endif
     }
 }
-
-
-
-
-struct LinkToListHelper : View {
-    @State var model : TaskManagerViewModel
-    
-    init(context: ModelContext) {
-        model =  TaskManagerViewModel(modelContext: context)
-    }
-    
-    var body: some View {
-        LinkToList(whichList: .openItems, model: model)
-    }
-}
+ 
 
 #Preview {
-    LinkToListHelper(context:  sharedModelContainer(inMemory: true).mainContext)
+    LinkToList(whichList: .openTasks, model: TaskManagerViewModel(modelContext: TestStorage()))
 }
 
 

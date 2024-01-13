@@ -27,31 +27,31 @@ class ListViewModel {
 }
 
 enum ListChooser{
-    case openItems
-    case closedItems
-    case deadItems
-    case priorities
-    case openMinusPriorities
-    case pendingItems
+    case openTasks
+    case closedTasks
+    case deadTasks
+    case priorityTasks
+    case pendingTasks
 }
 
 
 extension ListChooser {
     var sections: [TaskSection] {
         switch self {
-            case .openItems,.openMinusPriorities : return [secOpen]
-            case .closedItems: return [secClosed]
-            case .deadItems: return [secGraveyard]
-            case .priorities: return [secToday]
-            case .pendingItems: return [secPending]
+            case .openTasks : return [secOpen]
+            case .closedTasks: return [secClosed]
+            case .deadTasks: return [secGraveyard]
+            case .priorityTasks: return [secToday]
+            case .pendingTasks: return [secPending]
         }
     }
 }
 
 
+
 @Observable
 final class TaskManagerViewModel {
-    private let modelContext: ModelContext
+    private let modelContext: Storage
     private(set) var items = [TaskItem]()
     
     func select(which: ListChooser, item: TaskItem?) {
@@ -62,11 +62,10 @@ final class TaskManagerViewModel {
     }
     
     ///used in Content view of NavigationSplitView
-    var whichList = ListChooser.openItems
+    var whichList = ListChooser.openTasks
     
     /// used in Detail View of NavigationSplitView
     var selectedItem: TaskItem? = nil
-    
     
     var showItem: Bool = false
     var canUndo = false
@@ -74,28 +73,28 @@ final class TaskManagerViewModel {
     
     var showReviewDialog: Bool = false
     
-    var openItems: [TaskItem] {
-        return items.filter({$0.state == .open}).sorted()
-    }
-    
-    var closedItems: [TaskItem]{
-        return items.filter({$0.state == .closed}).sorted()
-    }
-    
-    var deadItems: [TaskItem]{
-        return items.filter({$0.state == .graveyard}).sorted()
-    }
-    
-    var pendingItems: [TaskItem]{
-        return items.filter({$0.state == .pendingResponse}).sorted()
-    }
+    var openTasks: [TaskItem] = []
+    var closedTasks: [TaskItem]  = []
+    var deadTasks: [TaskItem]  = []
+    var pendingTasks: [TaskItem]  = []
     
     var today: DailyTasks? = nil
     
     
-    init(modelContext: ModelContext) {
+    init(modelContext: Storage) {
         self.modelContext = modelContext
+        
+//        NotificationCenter.default.notifications(named: Notification.Name.NSManagedObjectContextObjectsDidChange)
+        NotificationCenter.default.addObserver(self,
+                                   selector: #selector(notification(_ :)),
+                                   name: .NSPersistentStoreRemoteChange,
+                                   object: nil)
         fetchData()
+    }
+    
+    @objc func notification(_ notification: Foundation.Notification) {
+        debugPrint(notification)
+//        fetchData()
     }
     
     func addSamples() -> Self {
@@ -118,16 +117,36 @@ final class TaskManagerViewModel {
         return self
     }
     
-    func clear() {
-        try? modelContext.delete(model: TaskItem.self)
-        try? modelContext.save()
-        fetchData()
-    }
-    
+//    func clear() {
+//        try? modelContext.delete(model: TaskItem.self)
+//        try? modelContext.save()
+//        fetchData()
+//    }
+//    
     func fetchData() {
         do {
-            let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .reverse)])
+            let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
             items = try modelContext.fetch(descriptor)
+            openTasks.removeAll()
+            closedTasks.removeAll()
+            pendingTasks.removeAll()
+            deadTasks.removeAll()
+            for item in items {
+                switch item.state {
+                    case .open:
+                        if item.priority == nil {
+                            // don't add priorities to open Items
+                            openTasks.append(item)
+                        }
+                    case .closed : closedTasks.append(item)
+                    case .pendingResponse : pendingTasks.append(item)
+                    case .graveyard: deadTasks.append(item)
+                }
+            }
+            openTasks = openTasks.sorted()
+            closedTasks = closedTasks.sorted()
+            pendingTasks = pendingTasks.sorted()
+            deadTasks = deadTasks.sorted()
             updateUndoRedoStatus()
         } catch {
             print("Fetch failed")
@@ -135,14 +154,14 @@ final class TaskManagerViewModel {
     }
     
     @discardableResult func addItem() -> TaskItem {
-        modelContext.undoManager?.beginUndoGrouping()
+        modelContext.beginUndoGrouping()
         let newItem = TaskItem()
         modelContext.insert(newItem)
         items.append(newItem)
-        modelContext.undoManager?.endUndoGrouping()
+        modelContext.endUndoGrouping()
         modelContext.processPendingChanges()
         #if os(macOS)
-        select(which: .openItems, item: newItem)
+        select(which: .openTasks, item: newItem)
         #endif
 #if os(iOS)
         selectedItem = newItem
@@ -154,7 +173,7 @@ final class TaskManagerViewModel {
     
     func undo() {
         withAnimation {
-            modelContext.undoManager?.undo()
+            modelContext.undo()
             modelContext.processPendingChanges()
             fetchData()
         }
@@ -162,7 +181,7 @@ final class TaskManagerViewModel {
     
     func redo() {
         withAnimation {
-            modelContext.undoManager?.redo()
+            modelContext.redo()
             modelContext.processPendingChanges()
             fetchData()
         }
@@ -171,8 +190,8 @@ final class TaskManagerViewModel {
     func updateUndoRedoStatus() {
         modelContext.processPendingChanges()
         modelContext.processPendingChanges()
-        canUndo =  modelContext.undoManager?.canUndo ?? false
-        canRedo =  modelContext.undoManager?.canRedo ?? false
+        canUndo =  modelContext.canUndo
+        canRedo =  modelContext.canRedo
     }
     
     func loadToday() {
@@ -191,33 +210,52 @@ final class TaskManagerViewModel {
     
     func delete(task: TaskItem) {
         withAnimation {
-            undoManager?.beginUndoGrouping()
+            modelContext.beginUndoGrouping()
             task.deleteTask()
             if let index = items.firstIndex(of: task) {
                 items.remove(at: index)
             }
-            undoManager?.endUndoGrouping()
+            modelContext.endUndoGrouping()
             updateUndoRedoStatus()
         }
     }
     
+    func removeFromList(task: TaskItem) {
+        switch task.state {
+            case .closed: closedTasks.removeObject(task)
+            case .graveyard: deadTasks.removeObject(task)
+            case .pendingResponse: pendingTasks.removeObject(task)
+            case .open:
+                openTasks.removeObject(task)
+                task.priority = nil
+        }
+    }
+    
     func move(task: TaskItem, to: ListChooser) {
+        if task.belongsTo == to {
+            return // nothing to be done
+        }
+       
         switch to {
-            case .openItems: 
+            case .openTasks: 
                 task.reOpenTask()
                 task.priority = nil
-            case .closedItems:
+                openTasks.append(task)
+            case .closedTasks:
                 task.closeTask()
                 task.priority = nil
-            case .deadItems:
+                closedTasks.append(task)
+            case .deadTasks:
                 task.graveyard()
                 task.priority = nil
-            case .priorities, .openMinusPriorities:
+                deadTasks.append(task)
+            case .priorityTasks:
                 if let today = today {
                     task.makePriority(position: 0, day: today)
                 }
-            case .pendingItems:
+            case .pendingTasks:
                 task.pending()
+                pendingTasks.append(task)
         }
     }
 }
@@ -225,12 +263,11 @@ final class TaskManagerViewModel {
 extension TaskManagerViewModel {
     func list(which: ListChooser) -> [TaskItem] {
         switch which {
-            case .openItems: return openItems
-            case .closedItems: return closedItems
-            case .deadItems: return deadItems
-            case .priorities: return today?.priorities ?? []
-            case .openMinusPriorities: return openItems - (today?.priorities ?? [])
-            case .pendingItems: return pendingItems
+            case .openTasks: return openTasks - (today?.priorities ?? [])
+            case .closedTasks: return closedTasks
+            case .deadTasks: return deadTasks
+            case .priorityTasks: return today?.priorities ?? []
+            case .pendingTasks: return pendingTasks
         }
     }
     
@@ -239,9 +276,26 @@ extension TaskManagerViewModel {
     }
 }
 
+//
+//extension TaskManagerViewModel {
+//    internal var undoManager: UndoManager? {
+//        return modelContext.undoManager
+//    }
+//}
 
+// for testing purposes
 extension TaskManagerViewModel {
-    internal var undoManager: UndoManager? {
-        return modelContext.undoManager
+    
+    
+    var hasUndoManager: Bool {
+        return modelContext.undoManager != nil
+    }
+    
+    func beginUndoGrouping() {
+        modelContext.beginUndoGrouping()
+    }
+    
+    func endUndoGrouping() {
+        modelContext.endUndoGrouping()
     }
 }
