@@ -78,11 +78,11 @@ struct TaskItemView: View {
 #endif
             .toolbar {
                 ToolbarItem {
-                    Button(action: {
-                        if item.priority == nil, let today = model.today  {
-                            item.makePriority(position: today.priorities?.count ?? 0, day: today)
+                    Button(action:  {
+                        if item.state == .priority{
+                            model.move(task: item, to: .open)
                         } else {
-                            item.removePriority()
+                            model.move(task: item, to: .priority)
                         }
                     }) {
                         Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")

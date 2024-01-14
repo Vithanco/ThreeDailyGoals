@@ -12,12 +12,7 @@ struct StateView: View {
     let state: TaskItemState
     
     var body: some View {
-        switch state {
-            case .open: secOpen.asText
-            case .closed: secClosed.asText
-            case .graveyard: secGraveyard.asText
-            case .pendingResponse: secPending.asText
-        }
+        state.sections.first()?.asText
     }
 }
 
@@ -32,7 +27,9 @@ struct StateViewHelper : View {
     Group {
         StateViewHelper(state: TaskItemState.open)
         StateViewHelper(state: TaskItemState.closed)
-        StateViewHelper(state: TaskItemState.graveyard)
+        StateViewHelper(state: TaskItemState.dead)
+        StateViewHelper(state: TaskItemState.pendingResponse)
+        StateViewHelper(state: TaskItemState.priority)
     }
         
 }

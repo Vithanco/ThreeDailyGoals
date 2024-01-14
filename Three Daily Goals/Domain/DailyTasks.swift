@@ -18,9 +18,7 @@ fileprivate let logger = Logger(
 final class DailyTasks: ObservableObject, Identifiable {
     var day: Date  = Date.now
     
-    @Relationship(deleteRule: .nullify) var priorities: [TaskItem]? = [TaskItem]()
-
-    
+//    @Relationship(deleteRule: .nullify) var priorities: [TaskItem]? = [TaskItem]()
     init() {
     }
     

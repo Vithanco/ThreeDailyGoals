@@ -44,16 +44,16 @@ struct Three_Daily_Goals__Widget_EntryView : View {
 
     @Environment(\.modelContext) private var modelContext
     
-    @State var today: DailyTasks? = nil
+//    init(entry: PriorityEntry, storage: ModelContext) {
+//        self.modelContext = storage
+//        model = TaskManagerViewModel(modelContext: modelContext)
+//    }
     
     var entry: PriorityEntry
     
     var body: some View {
-        if let today = today {
-            WPriorities(priorities: today)
-        } else {
-            Text("Loading...").font(.title).foregroundStyle(Color.mainColor).onAppear(perform: {today = loadPriorities(modelContext: modelContext)})
-        }
+            ListView(whichList: .priority, model: TaskManagerViewModel(modelContext: modelContext))
+
     }
 }
 

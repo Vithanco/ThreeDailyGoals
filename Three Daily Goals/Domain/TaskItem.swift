@@ -30,7 +30,7 @@ final class TaskItem : ObservableObject, Codable {
     var _state: TaskItemState = TaskItemState.open
     
     @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
-    @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
+//    @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
     
     init() {
         
@@ -77,7 +77,7 @@ final class TaskItem : ObservableObject, Codable {
 extension TaskItem: Identifiable {
     var id: String {
         let result = created.timeIntervalSince1970.description
-        logger.debug("ID for Task '\(self.title)' is \(result), from \(self.created.timeIntervalSince1970)")
+//        logger.debug("ID for Task '\(self.title)' is \(result), from \(self.created.timeIntervalSince1970)")
         return result
     }
 }
@@ -125,7 +125,7 @@ extension TaskItem {
                 if newValue == .open {
                     closed = nil
                 }
-                if newValue == .graveyard {
+                if newValue == .dead {
                     closed = nil
                 }
             }
@@ -141,7 +141,7 @@ extension TaskItem {
     }
     
     var isGraveyarded: Bool {
-        return state == .graveyard
+        return state == .dead
     }
     
     var isPending: Bool {
@@ -160,21 +160,21 @@ extension TaskItem {
         }
     }
     
-    func makePriority(position: Int, day: DailyTasks) {
-        reOpenTask()
-        if let priorities = day.priorities {
-            let index = min (priorities.count, position)
-            day.priorities?.insert(self, at: index)
-            addComment(text: "added as priority to day \(day.day)")
-        }
-    }
-    
-    func removePriority() {
-        if priority != nil {
-            addComment(text: "removed as priority for \(priority!.day)")
-            priority = nil
-        }
-    }
+//    func makePriority(position: Int, day: DailyTasks) {
+//        reOpenTask()
+//        if let priorities = day.priorities {
+//            let index = min (priorities.count, position)
+//            day.priorities?.insert(self, at: index)
+//            addComment(text: "added as priority to day \(day.day)")
+//        }
+//    }
+//    
+//    func removePriority() {
+//        if priority != nil {
+//            addComment(text: "removed as priority for \(priority!.day)")
+//            priority = nil
+//        }
+//    }
     
     func deleteTask(){
         modelContext?.undoManager?.beginUndoGrouping()
@@ -202,9 +202,16 @@ extension TaskItem {
         }
     }
     func graveyard() {
-        if state != .graveyard {
-            state = .graveyard
+        if state != .dead {
+            state = .dead
             addComment(text: "Moved task to the Graveyard of not needed tasks.")
+        }
+    }
+    
+    func makePriority() {
+        if state != .priority {
+            state = .priority
+            addComment(text: "Turned into a priority.")
         }
     }
     
@@ -226,18 +233,7 @@ extension TaskItem {
             state = .pendingResponse
             addComment(text: "Done! But pending Response.")
         }
-        priority = nil
     }
-    
-    var belongsTo: ListChooser {
-        switch state {
-            case .closed: return .closedTasks
-            case .open: return priority == nil ? .openTasks : .priorityTasks
-            case .graveyard: return .deadTasks
-            case .pendingResponse: return .pendingTasks
-        }
-    }
-   
 }
 
 

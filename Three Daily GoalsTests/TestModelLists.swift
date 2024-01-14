@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import Three_Daily_Goals
 
 final class TestModelLists: XCTestCase {
 
@@ -17,19 +18,38 @@ final class TestModelLists: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testLists() throws {
+        
+        let model = TaskManagerViewModel(modelContext: TestStorage())
+        
+        XCTAssertEqual(6, model.items.count)
+        let item = model.items.first!
+        XCTAssertEqual(item.state, .open)
+        XCTAssertTrue(model.openTasks.contains(item))
+        model.move(task: item, to: .closed)
+        XCTAssertEqual(item.state, .closed)
+        XCTAssertTrue(model.closedTasks.contains(item))
+        XCTAssertFalse(model.openTasks.contains(item))
+        model.move(task: item, to: .pendingResponse)
+        XCTAssertEqual(item.state, .pendingResponse)
+        XCTAssertTrue(model.pendingTasks.contains(item))
+        XCTAssertFalse(model.closedTasks.contains(item))
+        
+        model.move(task: item, to: .dead)
+        XCTAssertEqual(item.state, .dead)
+        XCTAssertTrue(model.deadTasks.contains(item))
+        XCTAssertFalse(model.pendingTasks.contains(item))
+        
+        model.move(task: item, to: .dead)
+        XCTAssertEqual(item.state, .dead)
+        XCTAssertTrue(model.deadTasks.contains(item))
+        XCTAssertFalse(model.pendingTasks.contains(item))
+        
+        model.move(task: item, to: .priority)
+        XCTAssertEqual(item.state, .priority)
+        XCTAssertTrue(model.priorityTasks.contains(item))
+        XCTAssertFalse(model.deadTasks.contains(item))
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
 
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct LinkToTask: View {
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
-    let list: ListChooser
+    let list: TaskItemState
     
     var body: some View {
 #if os(macOS)
@@ -35,7 +35,7 @@ struct LinkToTask: View {
     @State var model = TaskManagerViewModel(modelContext: TestStorage())
     
     var body: some View {
-        LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .openTasks)
+        LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .open)
     }
 }
 

@@ -21,7 +21,7 @@ private struct Label :View{
 }
 
 struct LinkToList: View {
-    @State var whichList: ListChooser
+    @State var whichList: TaskItemState
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
@@ -50,7 +50,7 @@ struct LinkToList: View {
  
 
 #Preview {
-    LinkToList(whichList: .openTasks, model: TaskManagerViewModel(modelContext: TestStorage()))
+    LinkToList(whichList: .open, model: TaskManagerViewModel(modelContext: TestStorage()))
 }
 
 

@@ -27,17 +27,17 @@ struct ReviewDialog: View {
     @State private var sheetHeight: CGFloat = .zero
     
     func removePrioritiesAndStartReview(){
-        for p in model.today?.priorities ?? [] {
-            p.removePriority()
+        for p in model.priorityTasks {
+            model.move(task: p, to: .open)
         }
         state = .review
     }
     
     func startReviewWithClosingAll(){
-        for p in model.today?.priorities ?? [] {
-            p.closeTask()
+        for p in model.priorityTasks {
+            model.move(task: p, to: .closed)
         }
-        removePrioritiesAndStartReview()
+        state = .review
     }
     
     func keepPrioritiesAndReview() {
@@ -56,21 +56,21 @@ struct ReviewDialog: View {
     }
     
     var body: some View {
-        let hasTasks = (model.today?.priorities?.count ?? 0) > 0
+        let hasTasks = (model.priorityTasks.count) > 0
         switch state {
             case .inform:
                 VStack {
                     Text("Review your Tasks!").font(.title).foregroundStyle(Color.mainColor)
                     if hasTasks {
                         Text("The previous Tasks were: ")
-                        ListView(whichList: .priorityTasks, model: model)
+                        ListView(whichList: .priority, model: model)
                     } else {
                         Text("No previous Tasks")
                     }
                     if model.pendingTasks.count > 0 {
                         Spacer()
                         Text("Pending Response!").font(.title).foregroundStyle(Color.mainColor)
-                        ListView(whichList: .pendingTasks, model: model)
+                        ListView(whichList: .pendingResponse, model: model)
                     }
                     
                     HStack{
@@ -107,13 +107,13 @@ struct ReviewDialog: View {
                     
                     Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
                     HStack {
-                        ListView(whichList: .priorityTasks, model: model).frame(minHeight: 300)
+                        ListView(whichList: .priority, model: model).frame(minHeight: 300)
                         VStack {
                             Image(systemName: "arrowshape.left.arrowshape.right.fill")
                             Text("drag'n'drop")
                             
                         }
-                        ListView(whichList: .openTasks ,model: model)
+                        ListView(whichList: .open ,model: model)
                         //                            .dropDestination(for: String.self){
                         //                            items, location in
                         //                            for item in items.compactMap({model.findTask(withID: $0)}) {

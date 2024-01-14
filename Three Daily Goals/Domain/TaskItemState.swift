@@ -11,17 +11,19 @@ import Foundation
 enum TaskItemState: Codable {
     case open
     case closed
-    case graveyard
+    case dead
     case pendingResponse
+    case priority
 }
     
 extension TaskItemState : CustomStringConvertible {
     var description: String {
         switch self {
             case .closed: return "closed"
-            case .graveyard: return "graveyard"
+            case .dead: return "graveyard"
             case .open: return "open"
             case .pendingResponse: return "pending"
+            case .priority: return "priority"
         }
     }
 }

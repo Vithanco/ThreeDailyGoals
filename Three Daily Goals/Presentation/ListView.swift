@@ -10,10 +10,10 @@ import SwiftUI
 
 
 struct ListView: View {
-    @State var whichList: ListChooser?
+    @State var whichList: TaskItemState?
     @Bindable var model: TaskManagerViewModel
     
-    var list: ListChooser {
+    var list: TaskItemState {
         return whichList ?? model.whichList
     }
     

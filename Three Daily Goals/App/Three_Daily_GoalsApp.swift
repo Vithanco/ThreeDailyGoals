@@ -29,7 +29,20 @@ struct Three_Daily_GoalsApp: App {
                     // Add a CommandMenu for saving tasks
                     CommandMenu("Export") {
                         Button("Export Tasks") {
-                            
+//                            #if os(iOS)
+//                            let fileManager = FileManager.default
+//                                    let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
+//                                    let filePath = "\(cachePath[0])/CloudKit"
+//                                    do {
+//                                        let contents = try fileManager.contentsOfDirectory(atPath: filePath)
+//                                        for file in contents {
+//                                            try fileManager.removeItem(atPath: "\(filePath)/\(file)")
+//                                            print("Deleted: \(filePath)/\(file)") //Optional
+//                                        }
+//                                    } catch {
+//                                        print("Errors!")
+//                                    }
+//                            #endif
                             let fetchDescriptor = FetchDescriptor<TaskItem>()
                             
                             do {

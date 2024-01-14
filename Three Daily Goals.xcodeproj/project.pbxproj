@@ -28,6 +28,9 @@
 		E51142B02B345BFF00AB6E05 /* FilesRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511428B2B340FB500AB6E05 /* FilesRelated.swift */; };
 		E51142B32B34947F00AB6E05 /* WPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142B22B34947F00AB6E05 /* WPriorities.swift */; };
 		E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142B42B35ABB900AB6E05 /* LinkToTask.swift */; };
+		E519520E2B52DD2300B1DCA6 /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E582D0B72B2E13E30006DD5D /* TaskItemView.swift */; };
+		E519520F2B52DD2800B1DCA6 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
+		E51952102B52E33B00B1DCA6 /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */; };
 		E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E559203A2B3772EE0002C709 /* CloudKit.framework */; };
 		E559203D2B38376F0002C709 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203E2B38E8380002C709 /* TaskAsLine.swift */; };
@@ -44,7 +47,6 @@
 		E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 		E5A371902B2EBC6400A310BA /* DatedTaskList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718F2B2EBC6400A310BA /* DatedTaskList.swift */; };
 		E5A371942B2EDD5E00A310BA /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
-		E5ADEDD12B30973700F0EA9C /* Priorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD02B30973700F0EA9C /* Priorities.swift */; };
 		E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD22B318B8800F0EA9C /* ListView.swift */; };
 		E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */; };
 		E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
@@ -55,6 +57,11 @@
 		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
 		E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE992B51987B00A68857 /* Logging */; };
 		E5DAFE9C2B51A16A00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE9B2B51A16A00A68857 /* Logging */; };
+		E5DAFE9D2B52CDB900A68857 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD22B318B8800F0EA9C /* ListView.swift */; };
+		E5DAFE9E2B52D3A000A68857 /* LinkToTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142B42B35ABB900AB6E05 /* LinkToTask.swift */; };
+		E5DAFE9F2B52D43F00A68857 /* TaskAsLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203E2B38E8380002C709 /* TaskAsLine.swift */; };
+		E5DAFEA12B52D48500A68857 /* LinkToList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */; };
+		E5DAFEA32B52D49700A68857 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 		E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5DDC9E52B3F5AED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F4782B30617A00E83A21 /* DailyTasks.swift */; };
@@ -518,26 +525,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E519520E2B52DD2300B1DCA6 /* TaskItemView.swift in Sources */,
 				E51142A82B34591600AB6E05 /* TaskSection.swift in Sources */,
+				E5DAFEA12B52D48500A68857 /* LinkToList.swift in Sources */,
 				E5FF74372B43307800B3B890 /* TaskItemState.swift in Sources */,
 				E51142982B342E3C00AB6E05 /* Three_Daily_Goals__Widget_.swift in Sources */,
 				E51142A62B34591600AB6E05 /* TaskItem.swift in Sources */,
 				E51142AB2B345B9900AB6E05 /* Storage.swift in Sources */,
+				E51952102B52E33B00B1DCA6 /* Toolbar.swift in Sources */,
+				E5DAFE9E2B52D3A000A68857 /* LinkToTask.swift in Sources */,
 				E51142AC2B345BFF00AB6E05 /* ColorRelated.swift in Sources */,
+				E519520F2B52DD2800B1DCA6 /* CommentView.swift in Sources */,
 				E51142AD2B345BFF00AB6E05 /* DateRelated.swift in Sources */,
 				E51142AF2B345BFF00AB6E05 /* StringRelated.swift in Sources */,
 				E5FEC7F02B46F9D7007BE890 /* ArrayRelated.swift in Sources */,
 				E51142A72B34591600AB6E05 /* DailyTasks.swift in Sources */,
 				E51142962B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift in Sources */,
 				E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */,
+				E5DAFEA32B52D49700A68857 /* StateView.swift in Sources */,
 				E51142AE2B345BFF00AB6E05 /* IconsRelated.swift in Sources */,
 				E5FEC7F22B46FA2A007BE890 /* DoubleRelated.swift in Sources */,
 				E5FEC7F12B46FA27007BE890 /* ViewRelated.swift in Sources */,
 				E511429A2B342E3C00AB6E05 /* AppIntent.swift in Sources */,
 				E51142B02B345BFF00AB6E05 /* FilesRelated.swift in Sources */,
+				E5DAFE9D2B52CDB900A68857 /* ListView.swift in Sources */,
 				E51142A52B34591600AB6E05 /* Comment.swift in Sources */,
 				E51142B32B34947F00AB6E05 /* WPriorities.swift in Sources */,
 				E5DDC9E52B3F5AED00383C0D /* TaskManagerViewModel.swift in Sources */,
+				E5DAFE9F2B52D43F00A68857 /* TaskAsLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +588,6 @@
 				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
-				E5ADEDD12B30973700F0EA9C /* Priorities.swift in Sources */,
 				E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

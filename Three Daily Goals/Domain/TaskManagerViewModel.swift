@@ -26,23 +26,15 @@ class ListViewModel {
     }
 }
 
-enum ListChooser{
-    case openTasks
-    case closedTasks
-    case deadTasks
-    case priorityTasks
-    case pendingTasks
-}
 
-
-extension ListChooser {
+extension TaskItemState {
     var sections: [TaskSection] {
         switch self {
-            case .openTasks : return [secOpen]
-            case .closedTasks: return [secClosed]
-            case .deadTasks: return [secGraveyard]
-            case .priorityTasks: return [secToday]
-            case .pendingTasks: return [secPending]
+            case .open : return [secOpen]
+            case .closed: return [secClosed]
+            case .dead: return [secGraveyard]
+            case .priority: return [secToday]
+            case .pendingResponse: return [secPending]
         }
     }
 }
@@ -54,7 +46,7 @@ final class TaskManagerViewModel {
     private let modelContext: Storage
     private(set) var items = [TaskItem]()
     
-    func select(which: ListChooser, item: TaskItem?) {
+    func select(which: TaskItemState, item: TaskItem?) {
         withAnimation {
             whichList = which
             selectedItem = item
@@ -62,7 +54,7 @@ final class TaskManagerViewModel {
     }
     
     ///used in Content view of NavigationSplitView
-    var whichList = ListChooser.openTasks
+    var whichList = TaskItemState.open
     
     /// used in Detail View of NavigationSplitView
     var selectedItem: TaskItem? = nil
@@ -77,6 +69,7 @@ final class TaskManagerViewModel {
     var closedTasks: [TaskItem]  = []
     var deadTasks: [TaskItem]  = []
     var pendingTasks: [TaskItem]  = []
+    var priorityTasks: [TaskItem]  = []
     
     var today: DailyTasks? = nil
     
@@ -104,7 +97,7 @@ final class TaskManagerViewModel {
         let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
         let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
         let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
-        today?.priorities?.append(lastWeek1)
+        move(task: lastWeek1, to: .priority)
         modelContext.insert(lastWeek1)
         modelContext.insert(lastWeek2)
         modelContext.insert(lastMonth1)
@@ -131,22 +124,21 @@ final class TaskManagerViewModel {
             closedTasks.removeAll()
             pendingTasks.removeAll()
             deadTasks.removeAll()
+            priorityTasks.removeAll()
             for item in items {
                 switch item.state {
-                    case .open:
-                        if item.priority == nil {
-                            // don't add priorities to open Items
-                            openTasks.append(item)
-                        }
+                    case .open: openTasks.append(item)
                     case .closed : closedTasks.append(item)
                     case .pendingResponse : pendingTasks.append(item)
-                    case .graveyard: deadTasks.append(item)
+                    case .dead: deadTasks.append(item)
+                    case .priority: priorityTasks.append(item)
                 }
             }
-            openTasks = openTasks.sorted()
-            closedTasks = closedTasks.sorted()
-            pendingTasks = pendingTasks.sorted()
-            deadTasks = deadTasks.sorted()
+            openTasks.sort()
+            closedTasks.sort()
+            pendingTasks.sort()
+            deadTasks.sort()
+            priorityTasks.sort()
             updateUndoRedoStatus()
         } catch {
             print("Fetch failed")
@@ -154,14 +146,13 @@ final class TaskManagerViewModel {
     }
     
     @discardableResult func addItem() -> TaskItem {
-        modelContext.beginUndoGrouping()
         let newItem = TaskItem()
         modelContext.insert(newItem)
         items.append(newItem)
-        modelContext.endUndoGrouping()
+        openTasks.append(newItem)
         modelContext.processPendingChanges()
         #if os(macOS)
-        select(which: .openTasks, item: newItem)
+        select(which: .open, item: newItem)
         #endif
 #if os(iOS)
         selectedItem = newItem
@@ -198,10 +189,6 @@ final class TaskManagerViewModel {
         today = loadPriorities(modelContext: modelContext)
     }
     
-    func priority (which: Int) -> TaskItem? {
-        return today?.priorities?[which]
-    }
-    
     func findTask(withID: String) -> TaskItem? {
         let result = items.first(where: {$0.id == withID})
         logger.debug("found Task '\(result != nil)' for ID: \(withID)")
@@ -221,53 +208,55 @@ final class TaskManagerViewModel {
     }
     
     func removeFromList(task: TaskItem) {
+//        list(which: task.state).removeObject(task)
         switch task.state {
             case .closed: closedTasks.removeObject(task)
-            case .graveyard: deadTasks.removeObject(task)
+            case .dead: deadTasks.removeObject(task)
             case .pendingResponse: pendingTasks.removeObject(task)
-            case .open:
-                openTasks.removeObject(task)
-                task.priority = nil
+            case .open: openTasks.removeObject(task)
+            case .priority :priorityTasks.removeObject(task)
         }
     }
     
-    func move(task: TaskItem, to: ListChooser) {
-        if task.belongsTo == to {
+    func move(task: TaskItem, to: TaskItemState) {
+        if task.state == to {
             return // nothing to be done
         }
+        removeFromList(task: task)
        
         switch to {
-            case .openTasks: 
+            case .open:
                 task.reOpenTask()
-                task.priority = nil
                 openTasks.append(task)
-            case .closedTasks:
+                openTasks.sort()
+            case .closed:
                 task.closeTask()
-                task.priority = nil
                 closedTasks.append(task)
-            case .deadTasks:
+                closedTasks.sort()
+            case .dead:
                 task.graveyard()
-                task.priority = nil
                 deadTasks.append(task)
-            case .priorityTasks:
-                if let today = today {
-                    task.makePriority(position: 0, day: today)
-                }
-            case .pendingTasks:
+                deadTasks.sort()
+            case .priority:
+                task.makePriority()
+                priorityTasks.append(task)
+                priorityTasks.sort()
+            case .pendingResponse:
                 task.pending()
                 pendingTasks.append(task)
+                pendingTasks.sort()
         }
     }
 }
 
 extension TaskManagerViewModel {
-    func list(which: ListChooser) -> [TaskItem] {
+    func list(which: TaskItemState) -> [TaskItem] {
         switch which {
-            case .openTasks: return openTasks - (today?.priorities ?? [])
-            case .closedTasks: return closedTasks
-            case .deadTasks: return deadTasks
-            case .priorityTasks: return today?.priorities ?? []
-            case .pendingTasks: return pendingTasks
+            case .open: return openTasks
+            case .closed: return closedTasks
+            case .dead: return deadTasks
+            case .priority: return priorityTasks
+            case .pendingResponse: return pendingTasks
         }
     }
     
