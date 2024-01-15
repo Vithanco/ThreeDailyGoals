@@ -7,13 +7,16 @@
 
 import XCTest
 @testable import Three_Daily_Goals
+import SwiftData
 
 final class Three_Daily_GoalsTests: XCTestCase {
     
     var model : TaskManagerViewModel!
+    var context : ModelContext!
     
     @MainActor override func setUpWithError() throws {
-        model = TaskManagerViewModel(modelContext: sharedModelContainer(inMemory: true).mainContext)
+        context = sharedModelContainer(inMemory: true).mainContext
+        model = TaskManagerViewModel(modelContext: context)
     }
     
     override func tearDownWithError() throws {
@@ -31,30 +34,42 @@ final class Three_Daily_GoalsTests: XCTestCase {
         while !model.hasUndoManager {
             await Task.yield()
         }
+        
+        let descriptor = FetchDescriptor<Comment>()
         XCTAssertTrue(model.hasUndoManager)
         XCTAssertFalse(model.canUndo)
         XCTAssertFalse(model.canRedo)
         model.beginUndoGrouping()
         let item = model.addItem()
         XCTAssertEqual(item.comments!.count, 0, "No comments yet")
-        item.touch()
+        XCTAssertEqual(0,try context.fetchCount(descriptor))
+        model.touch(task: item)
         model.endUndoGrouping()
         XCTAssertEqual(item.comments!.count, 1, "touch leads to comment")
+        XCTAssertEqual(1,try context.fetchCount(descriptor))
+        
+        
         XCTAssertTrue(model.canUndo)
+//        XCTAssertEqual(model.canUndo, model.undo)
         XCTAssertFalse(model.canRedo)
         XCTAssertEqual(item, model.findTask(withID: item.id))
-        model.undo()
+        while model.canUndo {
+            model.undo()
+        }
         XCTAssertFalse(model.canUndo)
         XCTAssertTrue(model.canRedo)
         XCTAssertNil(model.findTask(withID: item.id), "item was deleted")
-        model.redo()
-        model.redo()
+        XCTAssertEqual(0,try context.fetchCount(descriptor))
+        while model.canRedo {
+            model.redo()
+        }
         XCTAssertTrue(model.canUndo)
         XCTAssertFalse(model.canRedo)
         let find = model.findTask(withID: item.id)
         XCTAssertNotNil(find)
         XCTAssertEqual(item, find )
         XCTAssertEqual(find!.comments!.count, 1, "Comment should be recreated, too")
+        XCTAssertEqual(1,try context.fetchCount(descriptor))
         
         //delete
         model.delete(task: item)
@@ -62,13 +77,17 @@ final class Three_Daily_GoalsTests: XCTestCase {
         XCTAssertFalse(model.canRedo)
         let find2 = model.findTask(withID: item.id)
         XCTAssertNil(find2)
-        model.undo()
+        XCTAssertEqual(0,try context.fetchCount(descriptor))
+//        while model.canUndo {
+            model.undo()
+//        }
         XCTAssertTrue(model.canUndo)
         XCTAssertTrue(model.canRedo)
         
-        let find3 = model.findTask(withID: item.id)
+        let find3 = model.findTask(withID: item.id)        
         XCTAssertEqual(find3!, model.findTask(withID: item.id))
         XCTAssertEqual(find3!.comments!.count, 1)
+        XCTAssertEqual(1,try context.fetchCount(descriptor))
     }
     
     func testTaskITemID() throws {

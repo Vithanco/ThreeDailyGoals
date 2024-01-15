@@ -8,14 +8,23 @@
 import SwiftUI
 import SwiftData
 
-private struct Label :View{
+private struct ListLabel :View{
     var name: Text
     var count: Int
+    var showCount: Bool
+    
     var body: some View {
-        HStack {
-            name
-            Spacer()
-            Text(count.description)
+        if showCount {
+            HStack {
+                name
+                Spacer()
+                Text(count.description)
+            }
+        } else {
+            HStack {
+                name
+                Spacer()
+            }
         }
     }
 }
@@ -29,11 +38,11 @@ struct LinkToList: View {
         NavigationLink {
             ListView(whichList: whichList, model: model)
         } label: {
-            Label(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count)
+            ListLabel(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
         }
 #endif
 #if os(macOS)
-        Label(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count)
+        ListLabel(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
             .onTapGesture {
                 model.select(which: whichList,item: model.list(which: whichList).first)
             }

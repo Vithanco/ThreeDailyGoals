@@ -40,6 +40,8 @@ struct TaskItemView: View {
             Text("Title:").bold().foregroundColor(Color.secondaryColor)
         }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
             .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+        
+//        Details
         LabeledContent{
             TextField("Details", text: $item.details, axis: .vertical)
 #if os(macOS)
@@ -48,6 +50,23 @@ struct TaskItemView: View {
                 .frame(idealHeight: 30).frame(minHeight: 30)
         } label: {
             Text("Details:").bold().foregroundColor(Color.secondaryColor)
+        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+        
+//        URL
+        LabeledContent{
+            HStack{
+                TextField("URL", text: $item.url, axis: .vertical)
+#if os(macOS)
+                    .textFieldStyle(.squareBorder)
+#endif
+                    .frame(idealHeight: 30).frame(minHeight: 30)
+                if let link = URL(string: item.url) {
+                    Link("Open",destination: link)
+                }
+            }
+        } label: {
+                Text("URL:").bold().foregroundColor(Color.secondaryColor)
         }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
             .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
         

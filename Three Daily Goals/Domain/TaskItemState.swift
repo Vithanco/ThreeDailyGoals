@@ -26,4 +26,11 @@ extension TaskItemState : CustomStringConvertible {
             case .priority: return "priority"
         }
     }
+    
+    var showCount: Bool {
+        switch self {
+            case .closed, .dead: return false
+            case .open, .pendingResponse, .priority: return true
+        }
+    }
 }

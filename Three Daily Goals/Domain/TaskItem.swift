@@ -28,6 +28,7 @@ final class TaskItem : ObservableObject, Codable {
     var _title: String = "I need to ..."
     var _details: String = "(no details yet)"
     var _state: TaskItemState = TaskItemState.open
+    var _url: String = ""
     
     @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
 //    @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
@@ -45,7 +46,7 @@ final class TaskItem : ObservableObject, Codable {
     
     //MARK: Codable
     enum CodingKeys: CodingKey {
-        case created, changed, title, details, state, comments, important, urgent
+        case created, changed, title, details, state, comments, important, urgent, url
     }
     
     required init(from decoder: Decoder) throws {
@@ -58,6 +59,7 @@ final class TaskItem : ObservableObject, Codable {
         self.comments = try container.decode(Array<Comment>.self, forKey: .comments)
         self.important = try container.decode(Bool.self, forKey: .important)
         self.urgent = try container.decode(Bool.self, forKey: .urgent)
+        self._url = try container.decode(String.self, forKey: .url)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -71,6 +73,7 @@ final class TaskItem : ObservableObject, Codable {
         try container.encode(comments, forKey: .comments)
         try container.encode(important, forKey: .important)
         try container.encode(urgent, forKey: .urgent)
+        try container.encode(_url, forKey: .url)
     }
 }
 
@@ -105,6 +108,17 @@ extension TaskItem {
         }
         set {
             _details = newValue
+            changed = Date.now
+        }
+    }
+    
+    @Transient
+    var url: String {
+        get {
+            return _url
+        }
+        set {
+            _url = newValue
             changed = Date.now
         }
     }
@@ -176,17 +190,10 @@ extension TaskItem {
 //        }
 //    }
     
-    func deleteTask(){
-        modelContext?.undoManager?.beginUndoGrouping()
-//        priority = nil
-//        if let comments = comments {
-//            for c in comments {
-//                c.deleteComment()
-//            }
-//        }
-        modelContext?.delete(self)
-        modelContext?.undoManager?.endUndoGrouping()
-    }
+//    func deleteTask(){
+//        modelContext?.delete(self)
+//        modelContext?.processPendingChanges()
+//    }
     
     func closeTask() {
         if state != .closed {

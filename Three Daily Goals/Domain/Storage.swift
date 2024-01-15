@@ -48,7 +48,7 @@ extension ModelContext: Storage {
     }
     
     var canUndo: Bool {
-        undoManager?.canRedo ?? false
+        undoManager?.canUndo ?? false
     }
     
     var canRedo: Bool {
@@ -57,10 +57,12 @@ extension ModelContext: Storage {
     
     func beginUndoGrouping() {
         undoManager?.beginUndoGrouping()
+        processPendingChanges()
     }
     
     func endUndoGrouping() {
         undoManager?.endUndoGrouping()
+        processPendingChanges()
     }
 }
 

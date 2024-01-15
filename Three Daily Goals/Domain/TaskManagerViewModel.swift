@@ -164,6 +164,7 @@ final class TaskManagerViewModel {
     
     func undo() {
         withAnimation {
+            modelContext.processPendingChanges()
             modelContext.undo()
             modelContext.processPendingChanges()
             fetchData()
@@ -172,6 +173,7 @@ final class TaskManagerViewModel {
     
     func redo() {
         withAnimation {
+            modelContext.processPendingChanges()
             modelContext.redo()
             modelContext.processPendingChanges()
             fetchData()
@@ -195,26 +197,23 @@ final class TaskManagerViewModel {
         return result
     }
     
+    func touch(task: TaskItem) {
+        task.touch()
+        updateUndoRedoStatus()
+    }
+    
     func delete(task: TaskItem) {
         withAnimation {
             modelContext.beginUndoGrouping()
-            task.deleteTask()
+            modelContext.delete(task)
             if let index = items.firstIndex(of: task) {
                 items.remove(at: index)
             }
+            for c in task.comments ?? [] {
+                modelContext.delete(c)
+            }
             modelContext.endUndoGrouping()
             updateUndoRedoStatus()
-        }
-    }
-    
-    func removeFromList(task: TaskItem) {
-//        list(which: task.state).removeObject(task)
-        switch task.state {
-            case .closed: closedTasks.removeObject(task)
-            case .dead: deadTasks.removeObject(task)
-            case .pendingResponse: pendingTasks.removeObject(task)
-            case .open: openTasks.removeObject(task)
-            case .priority :priorityTasks.removeObject(task)
         }
     }
     
@@ -222,7 +221,13 @@ final class TaskManagerViewModel {
         if task.state == to {
             return // nothing to be done
         }
-        removeFromList(task: task)
+        switch task.state {
+            case .closed: closedTasks.removeObject(task)
+            case .dead: deadTasks.removeObject(task)
+            case .pendingResponse: pendingTasks.removeObject(task)
+            case .open: openTasks.removeObject(task)
+            case .priority :priorityTasks.removeObject(task)
+        }
        
         switch to {
             case .open:
@@ -246,6 +251,7 @@ final class TaskManagerViewModel {
                 pendingTasks.append(task)
                 pendingTasks.sort()
         }
+        updateUndoRedoStatus()
     }
 }
 
@@ -275,16 +281,17 @@ extension TaskManagerViewModel {
 // for testing purposes
 extension TaskManagerViewModel {
     
-    
     var hasUndoManager: Bool {
         return modelContext.undoManager != nil
     }
     
     func beginUndoGrouping() {
         modelContext.beginUndoGrouping()
+        updateUndoRedoStatus()
     }
     
     func endUndoGrouping() {
         modelContext.endUndoGrouping()
+        updateUndoRedoStatus()
     }
 }

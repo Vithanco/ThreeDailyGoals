@@ -69,7 +69,7 @@ struct ReviewDialog: View {
                     }
                     if model.pendingTasks.count > 0 {
                         Spacer()
-                        Text("Pending Response!").font(.title).foregroundStyle(Color.mainColor)
+                        Text("Can you close some tasks you wait for?").font(.title).foregroundStyle(Color.mainColor)
                         ListView(whichList: .pendingResponse, model: model)
                     }
                     
