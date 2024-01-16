@@ -64,6 +64,7 @@
 		E5DAFEA32B52D49700A68857 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 		E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5DDC9E52B3F5AED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
+		E5DE0DC72B564C440066CC85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
 		E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F4782B30617A00E83A21 /* DailyTasks.swift */; };
 		E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
@@ -491,6 +492,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5DE0DC72B564C440066CC85 /* Assets.xcassets in Resources */,
 				E511429C2B342E3F00AB6E05 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -830,7 +832,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon1;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
@@ -874,7 +875,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon1;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";

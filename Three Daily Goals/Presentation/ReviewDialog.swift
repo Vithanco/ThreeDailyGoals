@@ -114,13 +114,6 @@ struct ReviewDialog: View {
                             
                         }
                         ListView(whichList: .open ,model: model)
-                        //                            .dropDestination(for: String.self){
-                        //                            items, location in
-                        //                            for item in items.compactMap({model.findTask(withID: $0)}) {
-                        //                                item.removePriority()
-                        //                            }
-                        //                           return true
-                        //                        }
                     }
                     Button(action: endReview){
                         Text("Done")
