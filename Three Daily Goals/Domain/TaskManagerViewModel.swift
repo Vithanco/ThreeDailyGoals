@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 import os
+import CoreData
 
 fileprivate let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -77,12 +78,18 @@ final class TaskManagerViewModel {
     init(modelContext: Storage) {
         self.modelContext = modelContext
         
-//        NotificationCenter.default.notifications(named: Notification.Name.NSManagedObjectContextObjectsDidChange)
+        //        NotificationCenter.default.notifications(named: Notification.Name.NSManagedObjectContextObjectsDidChange)
         NotificationCenter.default.addObserver(self,
-                                   selector: #selector(notification(_ :)),
-                                   name: .NSPersistentStoreRemoteChange,
-                                   object: nil)
+                                               selector: #selector(notification(_ :)),
+                                               name: .NSPersistentStoreRemoteChange,
+                                               object: nil)
         fetchData()
+//#if os(macOS)
+        NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in self.fetchData()}
+//#endif
+//#if os(iOS)
+//        NotificationCenter.default.addObserver(forName: UIPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in self.fetchData()}
+//        #endif
     }
     
     @objc func notification(_ notification: Foundation.Notification) {

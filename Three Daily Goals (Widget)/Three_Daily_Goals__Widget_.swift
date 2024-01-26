@@ -43,17 +43,16 @@ struct PriorityEntry: TimelineEntry {
 struct Three_Daily_Goals__Widget_EntryView : View {
 
     @Environment(\.modelContext) private var modelContext
-    
-//    init(entry: PriorityEntry, storage: ModelContext) {
-//        self.modelContext = storage
-//        model = TaskManagerViewModel(modelContext: modelContext)
-//    }
+//    @Query(filter: #Predicate<TaskItem> { item in
+//        item._state == TaskItemState.priority
+//    }, sort: \.changed, order: .forward)
+    @Query
+    var list : [TaskItem]
     
     var entry: PriorityEntry
     
     var body: some View {
-            ListView(whichList: .priority, model: TaskManagerViewModel(modelContext: modelContext))
-
+        WPriorities(priorities: list.filter({$0.isPriority}))
     }
 }
 

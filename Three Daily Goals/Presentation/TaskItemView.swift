@@ -107,7 +107,7 @@ struct TaskItemView: View {
                         Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
                     }
                 }
-                if item.isOpen {
+                if item.isOpen || item.isPriority {
                     ToolbarItem {
                         Button(action: {
                             item.closeTask()
@@ -115,8 +115,7 @@ struct TaskItemView: View {
                             Label("Close", systemImage: imgCloseTask).help("Close")
                         }
                     }
-                }
-                if item.isClosed {
+                } else {
                     ToolbarItem {
                         Button(action: {
                             item.reOpenTask()

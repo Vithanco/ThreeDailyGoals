@@ -24,6 +24,7 @@ final class TaskItem : ObservableObject, Codable {
     //ignore for now
     public var important: Bool = false
     public var urgent: Bool = false
+    public var dueDate: Date? = nil
     
     var _title: String = "I need to ..."
     var _details: String = "(no details yet)"
@@ -148,6 +149,14 @@ extension TaskItem {
     
     var isOpen: Bool {
         return state == .open
+    }
+    
+    var isPriority: Bool {
+        return state == .priority
+    }
+    
+    var isOpenOrPriority: Bool {
+        return state == .open || state == .priority
     }
     
     var isClosed: Bool {

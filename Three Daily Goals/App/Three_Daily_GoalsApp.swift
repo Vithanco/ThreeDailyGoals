@@ -27,7 +27,7 @@ struct Three_Daily_GoalsApp: App {
         .modelContainer(sharedModelContainer(inMemory: inMemory))
         .commands {
                     // Add a CommandMenu for saving tasks
-                    CommandMenu("Export") {
+            CommandGroup(after: .importExport){
                         Button("Export Tasks") {
 //                            #if os(iOS)
 //                            let fileManager = FileManager.default
