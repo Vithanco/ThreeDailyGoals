@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-
-
-
 struct ListHeader: View, Identifiable{
     
     var id: String {

@@ -77,6 +77,9 @@ struct Three_Daily_GoalsApp: App {
                             .keyboardShortcut("Z", modifiers: [.command, .shift])
                         }
                 }
+        Settings {
+            SettingsView()
+        }
     }
     
 }
