@@ -14,7 +14,7 @@ fileprivate let logger = Logger(
     category: String(describing: TaskItem.self)
 )
 
-typealias TaskItem = SchemaV1.TaskItem
+typealias TaskItem = SchemaLatest.TaskItem
 
 extension TaskItem: Identifiable {
     var id: String {

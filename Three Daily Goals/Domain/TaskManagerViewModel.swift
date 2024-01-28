@@ -195,7 +195,8 @@ final class TaskManagerViewModel {
     }
     
     func loadToday() {
-        today = loadPriorities(modelContext: modelContext)
+//        today = loadPriorities(modelContext: modelContext)
+        
     }
     
     func findTask(withID: String) -> TaskItem? {

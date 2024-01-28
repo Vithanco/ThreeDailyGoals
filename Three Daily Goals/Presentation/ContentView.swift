@@ -20,8 +20,12 @@ struct SingleView<Content: View>: View {
 
 struct ContentView: View {
     @State var model : TaskManagerViewModel
-    init(modelContext: Storage){
-        model = TaskManagerViewModel(modelContext: modelContext)
+    private var modelContext: Storage
+    @State var preferences: Preferences? = nil
+    
+    init(storage: Storage){
+        self.modelContext = storage
+        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: storage))
     }
     
     var body: some View {
@@ -59,7 +63,7 @@ struct ContentView: View {
                         ReviewDialog(model: model)
                     }
                     .onAppear(perform: {
-                        model.loadToday()
+                        preferences = loadPreferences(modelContext: modelContext )
                     })
                     .environment(model.today)
             }.background(Color.background).frame(width:geometry.size.width-20,height: geometry.size.height-20,alignment: .center)
@@ -70,6 +74,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(modelContext: TestStorage())
+    ContentView(storage: TestStorage())
     
 }

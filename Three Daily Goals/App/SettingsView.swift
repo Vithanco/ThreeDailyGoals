@@ -31,10 +31,8 @@ struct TaskSettingsView : View {
     
 }
 
-
-
-
 struct SettingsView: View {
+    var settings: Preferences 
     var body: some View {
         TabView {
             ReviewSettingsView()
@@ -57,5 +55,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(settings: Preferences())
 }

@@ -10,21 +10,26 @@ import SwiftData
 
 @main
 struct Three_Daily_GoalsApp: App {
-    var inMemory = false
+    
+    var container : ModelContainer
+    var preferences: Preferences
     
     init() {
+        var inMemory = false
            #if DEBUG
            if CommandLine.arguments.contains("enable-testing") {
                inMemory = true
            }
            #endif
+        self.container = sharedModelContainer(inMemory: inMemory)
+        self.preferences = loadPreferences(modelContext: container.mainContext)
        }
     
     var body: some Scene {
         WindowGroup {
-            ContentView(modelContext: sharedModelContainer(inMemory: false).mainContext)
+            ContentView(storage: container.mainContext)
         }
-        .modelContainer(sharedModelContainer(inMemory: inMemory))
+        .modelContainer(container)
         .commands {
                     // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){
@@ -46,7 +51,7 @@ struct Three_Daily_GoalsApp: App {
                             let fetchDescriptor = FetchDescriptor<TaskItem>()
                             
                             do {
-                                let items = try sharedModelContainer(inMemory: inMemory).mainContext.fetch(fetchDescriptor)
+                                let items = try container.mainContext.fetch(fetchDescriptor)
                                 
                                 // Create an instance of JSONEncoder
                                 let encoder = JSONEncoder()
@@ -67,18 +72,18 @@ struct Three_Daily_GoalsApp: App {
                     }
             CommandGroup(replacing: .undoRedo) {
                             Button("Undo") {
-                                sharedModelContainer(inMemory: inMemory).mainContext.undoManager?.undo()
+                               container.mainContext.undoManager?.undo()
                             }
                             .keyboardShortcut("z", modifiers: [.command])
 
                             Button("Redo") {
-                                sharedModelContainer(inMemory: inMemory).mainContext.undoManager?.redo()
+                                container.mainContext.undoManager?.redo()
                             }
                             .keyboardShortcut("Z", modifiers: [.command, .shift])
                         }
                 }
         Settings {
-            SettingsView()
+            SettingsView(settings: preferences)
         }
     }
     

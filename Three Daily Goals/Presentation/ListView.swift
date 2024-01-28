@@ -7,47 +7,12 @@
 
 import SwiftUI
 
-struct ListHeader: View, Identifiable{
-    
-    var id: String {
-        return name
-    }
-    
-    let name: String
-    let image: String
-    let timeFrom: Int
-    let timeTo: Int
-    
-    func filter(item: TaskItem) -> Bool {
-        let fromDate = getDate(daysPrior: timeFrom)
-        let toDate = timeTo == 0 ? Date.now : getDate(daysPrior: timeTo)
-        return item.changed > fromDate && item.changed <= toDate
-    }
-    
-    var body: some View {
-//        HStack{
-            
-//            Spacer()
-//            ZStack {
-//                Rectangle()
-//                    .fill(Color.secondaryColor)
-//                    .frame(width: 200, height: 18)
-//                    .cornerRadius(9)
-        Text("Last updated: " + name).font(.callout).foregroundStyle(Color.mainColor)
-//                    .foregroundColor(.white)
-//            }
-//            Spacer()
-//            Spacer()
-//        }
+
+extension ListHeader {
+    var asText: Text {
+        Text("Last updated: " + self.name).font(.callout).foregroundStyle(Color.mainColor)
     }
 }
-
-let secLastWeek = ListHeader(name: "Last Week", image: imgDated, timeFrom: 7, timeTo: 0)
-let secLastMonth = ListHeader(name: "Last Month", image: imgDated, timeFrom: 30, timeTo: 7)
-let secOlder = ListHeader(name: "over a year ago", image: imgDated, timeFrom: 1000000, timeTo: 365)
-let secLastQuarter = ListHeader(name: "Last Quarter", image: imgDated, timeFrom: 91, timeTo: 30)
-let secLastHalfYear = ListHeader(name: "Last Half Year", image: imgDated, timeFrom: 182, timeTo: 91)
-
 
 struct ListView: View {
     @State var whichList: TaskItemState?
@@ -57,7 +22,7 @@ struct ListView: View {
         return whichList ?? model.whichList
     }
     
-    let headers = [secOlder,secLastHalfYear, secLastQuarter, secLastMonth,secLastWeek];
+    let headers = defaultListHeaders;
     
     var body: some View {
         let itemList = model.list(which: list)
@@ -71,7 +36,7 @@ struct ListView: View {
                     let partialList = itemList.filter(header.filter)
                     if partialList.count > 0 {
 //                        if list != .priority {
-                            header.listRowSeparator(.hidden)
+                        header.asText.listRowSeparator(.hidden)
 //                        }
                         ForEach(partialList) { item in
                             LinkToTask(model: model,item: item, list: list).listRowSeparator(.hidden)

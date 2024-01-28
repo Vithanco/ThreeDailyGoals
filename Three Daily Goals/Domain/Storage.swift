@@ -128,12 +128,16 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
     }
     
     let schema = Schema([
-        TaskItem.self ,Comment.self , DailyTasks.self
+        TaskItem.self ,Comment.self , Preferences.self
     ])
+    
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
     
     do {
-        let result = try ModelContainer(for: schema, configurations: [modelConfiguration])
+        let result = try ModelContainer(
+            for: schema,
+            migrationPlan: TDGMigrationPlan.self,
+            configurations: [modelConfiguration])
         DispatchQueue.main.async {
             result.mainContext.undoManager = UndoManager()
         }

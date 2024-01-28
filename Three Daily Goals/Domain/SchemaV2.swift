@@ -7,14 +7,15 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 
 
 enum SchemaV2: VersionedSchema {
-    static var versionIdentifier = Schema.Version(1, 0, 0)
+    static var versionIdentifier = Schema.Version(2, 0, 0)
     
     static var models: [any PersistentModel.Type] {
-        [TaskItem.self, Comment.self, DailyTasks.self]
+        [TaskItem.self, Comment.self, Preferences.self]
     }
     
     @Model
@@ -116,16 +117,14 @@ enum SchemaV2: VersionedSchema {
     
     
     @Model
-    final class DailyTasks: ObservableObject, Identifiable {
-        var day: Date  = Date.now
+    final class Preferences: ObservableObject {
         
-    //    @Relationship(deleteRule: .nullify) var priorities: [TaskItem]? = [TaskItem]()
-        init() {
-        }
+        var mainColorString : String = Color.mainColor.toHex!
         
-        var id: Date {
-            return day
+        init(){
+            
         }
     }
+    
     
 }

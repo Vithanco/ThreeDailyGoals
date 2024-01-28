@@ -8,7 +8,7 @@
 import SwiftData
 import Foundation
 
-typealias Comment = SchemaV1.Comment
+typealias Comment = SchemaLatest.Comment
 
 extension Comment {
     func deleteComment() {
