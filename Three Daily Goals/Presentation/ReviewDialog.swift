@@ -60,7 +60,7 @@ struct ReviewDialog: View {
         switch state {
             case .inform:
                 VStack {
-                    Text("Review your Tasks!").font(.title).foregroundStyle(Color.mainColor)
+                    Text("Review your Tasks!").font(.title).foregroundStyle(model.accentColor)
                     if hasTasks {
                         Text("The previous Tasks were: ")
                         ListView(whichList: .priority, model: model)
@@ -69,7 +69,7 @@ struct ReviewDialog: View {
                     }
                     if model.pendingTasks.count > 0 {
                         Spacer()
-                        Text("Can you close some tasks you wait for?").font(.title).foregroundStyle(Color.mainColor)
+                        Text("Can you close some tasks you wait for?").font(.title).foregroundStyle(model.accentColor)
                         ListView(whichList: .pendingResponse, model: model)
                     }
                     
@@ -105,7 +105,7 @@ struct ReviewDialog: View {
             case .review:
                 VStack{
                     
-                    Text("Choose Today's Priorities!").font(.title).foregroundStyle(Color.mainColor)
+                    Text("Choose Today's Priorities!").font(.title).foregroundStyle(model.accentColor)
                     HStack {
                         ListView(whichList: .priority, model: model).frame(minHeight: 300)
                         VStack {

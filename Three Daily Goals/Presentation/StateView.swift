@@ -10,9 +10,10 @@ import SwiftUI
 
 struct StateView: View {
     let state: TaskItemState
+    let accentColor : Color
     
     var body: some View {
-        state.sections.first()?.asText
+        state.sections.first()?.asText.foregroundStyle(accentColor)
     }
 }
 
@@ -20,7 +21,7 @@ struct StateView: View {
 struct StateViewHelper : View {
     @State var state: TaskItemState
     var body: some View {
-        StateView(state: state)
+        StateView(state: state, accentColor: Color.red)
     }
 }
 #Preview {

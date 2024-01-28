@@ -14,7 +14,7 @@ struct LinkToTask: View {
     
     var body: some View {
 #if os(macOS)
-        TaskAsLine(item: item).onTapGesture {
+        TaskAsLine(item: item, accentColor: model.accentColor).onTapGesture {
             model.select(which: list, item: item)
         }
 #endif
@@ -22,7 +22,7 @@ struct LinkToTask: View {
         NavigationLink {
             TaskItemView(model: model, item: item)
         } label: {
-            TaskAsLine(item: item)
+            TaskAsLine(item: item, accentColor: model.accentColor)
         }
 #endif
         

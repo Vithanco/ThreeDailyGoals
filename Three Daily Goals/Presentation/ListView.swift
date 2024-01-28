@@ -10,7 +10,7 @@ import SwiftUI
 
 extension ListHeader {
     var asText: Text {
-        Text("Last updated: " + self.name).font(.callout).foregroundStyle(Color.mainColor)
+        Text("Last updated: " + self.name).font(.callout)
     }
 }
 
@@ -29,14 +29,16 @@ struct ListView: View {
         List{
             Section (header: VStack(alignment: .leading) {
                 ForEach(list.sections) { sec in
-                    sec.asText
+                    sec.asText.foregroundStyle(model.accentColor)
                 }
             }) {
                 ForEach(headers) {header in
                     let partialList = itemList.filter(header.filter)
                     if partialList.count > 0 {
 //                        if list != .priority {
-                        header.asText.listRowSeparator(.hidden)
+                        header.asText
+                            .foregroundStyle(model.accentColor)
+                            .listRowSeparator(.hidden)
 //                        }
                         ForEach(partialList) { item in
                             LinkToTask(model: model,item: item, list: list).listRowSeparator(.hidden)

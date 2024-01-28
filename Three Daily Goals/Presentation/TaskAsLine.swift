@@ -27,6 +27,7 @@ struct Checkbox : View {
 
 struct TaskAsLine: View {
     let item: TaskItem
+    let accentColor: Color
     
     func action () {
         if item.isClosed {
@@ -39,7 +40,7 @@ struct TaskAsLine: View {
     var body: some View {
         HStack {
             Checkbox(isChecked: item.isClosed, action: action).frame(maxWidth: 30)
-            Text(item.title).strikethrough( item.isClosed, color: Color.mainColor).draggable(item.id)
+            Text(item.title).strikethrough( item.isClosed, color: accentColor).draggable(item.id)
         }
     }
 }
@@ -49,7 +50,7 @@ struct TaskAsLineHelper : View {
     @State var item: TaskItem = TaskItem()
     
     var body: some View {
-        TaskAsLine(item: item)
+        TaskAsLine(item: item, accentColor: Color.green)
     }
 }
 

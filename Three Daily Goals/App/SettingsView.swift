@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ReviewSettingsView : View {
-
+    @Bindable var settings: Preferences
     var body: some View {
         Text("Review Settings")
     }
@@ -16,36 +16,37 @@ struct ReviewSettingsView : View {
 }
 
 struct AppearanceSettingsView : View {
-
+    @Bindable var settings: Preferences
     var body: some View {
-        Text("Appearance Settings")
+        ColorPicker("Accent Color", selection: $settings.accentColor)
     }
     
 }
 
 struct TaskSettingsView : View {
-
+    @Bindable var settings: Preferences
     var body: some View {
-        Text("Appearance Settings")
+        
+            Text("Task-related Settings")
     }
     
 }
 
 struct SettingsView: View {
-    var settings: Preferences 
+    @Bindable var settings: Preferences
     var body: some View {
         TabView {
-            ReviewSettingsView()
+            ReviewSettingsView(settings: settings)
                     .tabItem {
                         Label("Review", systemImage: imgMagnifyingGlass)
                     }
                 
-                AppearanceSettingsView()
+            AppearanceSettingsView(settings: settings)
                     .tabItem {
                         Label("Appearance", systemImage: imAppearance)
                     }
                 
-                TaskSettingsView()
+                TaskSettingsView(settings: settings)
                     .tabItem {
                         Label("Tasks", systemImage: "hand.raised")
                     }

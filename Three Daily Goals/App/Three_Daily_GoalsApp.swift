@@ -12,7 +12,7 @@ import SwiftData
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
-    var preferences: Preferences
+    @State var preferences: Preferences
     
     init() {
         var inMemory = false

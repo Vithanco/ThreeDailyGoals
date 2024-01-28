@@ -47,6 +47,12 @@ final class TaskManagerViewModel {
     private let modelContext: Storage
     private(set) var items = [TaskItem]()
     
+    var preferences: Preferences
+    
+    var accentColor: Color {
+        return preferences.accentColor
+    }
+    
     func select(which: TaskItemState, item: TaskItem?) {
         withAnimation {
             whichList = which
@@ -77,6 +83,7 @@ final class TaskManagerViewModel {
     
     init(modelContext: Storage) {
         self.modelContext = modelContext
+        preferences = loadPreferences(modelContext: modelContext)
         
         //        NotificationCenter.default.notifications(named: Notification.Name.NSManagedObjectContextObjectsDidChange)
         NotificationCenter.default.addObserver(self,

@@ -21,7 +21,6 @@ struct SingleView<Content: View>: View {
 struct ContentView: View {
     @State var model : TaskManagerViewModel
     private var modelContext: Storage
-    @State var preferences: Preferences? = nil
     
     init(storage: Storage){
         self.modelContext = storage
@@ -62,9 +61,9 @@ struct ContentView: View {
                     .sheet(isPresented: $model.showReviewDialog) {
                         ReviewDialog(model: model)
                     }
-                    .onAppear(perform: {
-                        preferences = loadPreferences(modelContext: modelContext )
-                    })
+//                    .onAppear(perform: {
+//                        preferences = loadPreferences(modelContext: modelContext )
+//                    })
                     .environment(model.today)
             }.background(Color.background).frame(width:geometry.size.width-20,height: geometry.size.height-20,alignment: .center)
         }

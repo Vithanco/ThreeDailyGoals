@@ -27,8 +27,8 @@ struct TaskItemView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack {
-                StateView(state: item.state)
-                Text("Task").font(.title).foregroundStyle(Color.mainColor)
+                StateView(state: item.state, accentColor:  model.accentColor)
+                Text("Task").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
 
             }

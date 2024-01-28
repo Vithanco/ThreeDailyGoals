@@ -119,7 +119,26 @@ enum SchemaV2: VersionedSchema {
     @Model
     final class Preferences: ObservableObject {
         
-        var mainColorString : String = Color.mainColor.toHex!
+        var mainColorString : String = ""
+        
+        @Transient
+        var accentColor: Color {
+            get {
+                if mainColorString == "" {
+                    return Color.accentColor
+                }
+                return Color(hex: mainColorString)
+            }
+            set {
+                if let string = newValue.toHex {
+                    mainColorString = string
+                } else {
+                    mainColorString = ""
+                }
+                
+            }
+        }
+        
         
         init(){
             

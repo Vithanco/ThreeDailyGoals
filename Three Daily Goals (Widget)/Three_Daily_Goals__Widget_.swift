@@ -43,6 +43,7 @@ struct PriorityEntry: TimelineEntry {
 struct Three_Daily_Goals__Widget_EntryView : View {
 
     @Environment(\.modelContext) private var modelContext
+    @Bindable var preferences: Preferences
 //    @Query(filter: #Predicate<TaskItem> { item in
 //        item._state == TaskItemState.priority
 //    }, sort: \.changed, order: .forward)
@@ -52,7 +53,7 @@ struct Three_Daily_Goals__Widget_EntryView : View {
     var entry: PriorityEntry
     
     var body: some View {
-        WPriorities(priorities: list.filter({$0.isPriority}))
+        WPriorities(priorities: list.filter({$0.isPriority}), preferences: preferences)
     }
 }
 
@@ -62,7 +63,7 @@ struct Three_Daily_Goals__Widget_: Widget {
     
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-            Three_Daily_Goals__Widget_EntryView(entry: entry)
+            Three_Daily_Goals__Widget_EntryView(preferences: loadPreferences(modelContext: modelContext), entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
                 .modelContainer(sharedModelContainer(inMemory: false))
         }

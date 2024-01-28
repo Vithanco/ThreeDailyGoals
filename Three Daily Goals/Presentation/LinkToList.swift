@@ -42,7 +42,7 @@ struct LinkToList: View {
         }
 #endif
 #if os(macOS)
-        ListLabel(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
+        ListLabel(name: whichList.sections.first?.asText.foregroundStyle(model.accentColor) ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
             .onTapGesture {
                 model.select(which: whichList,item: model.list(which: whichList).first)
             }

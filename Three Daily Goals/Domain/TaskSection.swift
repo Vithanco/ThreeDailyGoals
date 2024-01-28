@@ -8,43 +8,23 @@
 import Foundation
 import SwiftUI
 
-enum SectionStyle {
-    case mainSection
-    case subSection
-    
-    var color: Color {
-        switch self {
-            case .mainSection : return .mainColor
-            case .subSection: return .secondaryColor
-        }
-    }
-    
-    var font: Font {
-        switch self {
-            case .mainSection : return .title
-            case .subSection: return .title2
-        }
-    }
-}
-
 struct TaskSection : Observable     {
     let text : String
     let image: String
-    let style: SectionStyle
     var showOlder: Bool
 }
 
-let secToday = TaskSection(text: "Today", image: imgToday, style: .mainSection, showOlder: false)
-let secOpen = TaskSection(text: "Open", image: imgOpen, style: .mainSection, showOlder: false)
-let secClosed = TaskSection(text: "Closed", image: imgClosed, style: .mainSection, showOlder: true )
-let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard, style: .mainSection, showOlder: true)
-let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, style: .mainSection, showOlder: true)
+let secToday = TaskSection(text: "Today", image: imgToday,  showOlder: false)
+let secOpen = TaskSection(text: "Open", image: imgOpen, showOlder: false)
+let secClosed = TaskSection(text: "Closed", image: imgClosed, showOlder: true )
+let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard,  showOlder: true)
+let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, showOlder: true)
 
 
 
 extension TaskSection {
     var asText: Text {
-        return Text("\(Image(systemName: image)) \(text)").font(style.font).foregroundStyle(style.color)
+        return Text("\(Image(systemName: image)) \(text)").font(.title)
     }
 }
 

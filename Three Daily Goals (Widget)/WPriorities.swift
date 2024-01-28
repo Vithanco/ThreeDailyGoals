@@ -29,10 +29,11 @@ struct AWPriority: View {
 
 struct WPriorities: View {
     let priorities: [TaskItem]
+    @Bindable var preferences: Preferences
     
     var body: some View {
         VStack(alignment: .leading) {
-            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(Color.mainColor)){
+            Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(preferences.accentColor)){
             let prios = priorities.filter({$0.isOpenOrPriority})
                 let count = prios.count
                     AWPriority(image: imgPriority1, item: count > 0 ? prios[0] : nil)
@@ -45,5 +46,5 @@ struct WPriorities: View {
 }
 
 #Preview {
-    WPriorities(priorities: TaskManagerViewModel(modelContext: TestStorage()).priorityTasks)
+    WPriorities(priorities: TaskManagerViewModel(modelContext: TestStorage()).priorityTasks, preferences: Preferences())
 }
