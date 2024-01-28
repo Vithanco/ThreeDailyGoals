@@ -33,7 +33,7 @@ struct ListHeader: View, Identifiable{
 //                    .fill(Color.secondaryColor)
 //                    .frame(width: 200, height: 18)
 //                    .cornerRadius(9)
-                Text("Last updated: " + name).font(.callout)
+        Text("Last updated: " + name).font(.callout).foregroundStyle(Color.mainColor)
 //                    .foregroundColor(.white)
 //            }
 //            Spacer()
@@ -44,7 +44,9 @@ struct ListHeader: View, Identifiable{
 
 let secLastWeek = ListHeader(name: "Last Week", image: imgDated, timeFrom: 7, timeTo: 0)
 let secLastMonth = ListHeader(name: "Last Month", image: imgDated, timeFrom: 30, timeTo: 7)
-let secOlder = ListHeader(name: "over a month ago", image: imgDated, timeFrom: 1000000, timeTo: 30)
+let secOlder = ListHeader(name: "over a year ago", image: imgDated, timeFrom: 1000000, timeTo: 365)
+let secLastQuarter = ListHeader(name: "Last Quarter", image: imgDated, timeFrom: 91, timeTo: 30)
+let secLastHalfYear = ListHeader(name: "Last Half Year", image: imgDated, timeFrom: 182, timeTo: 91)
 
 
 struct ListView: View {
@@ -55,7 +57,7 @@ struct ListView: View {
         return whichList ?? model.whichList
     }
     
-    let headers = [secOlder,secLastMonth,secLastWeek];
+    let headers = [secOlder,secLastHalfYear, secLastQuarter, secLastMonth,secLastWeek];
     
     var body: some View {
         let itemList = model.list(which: list)

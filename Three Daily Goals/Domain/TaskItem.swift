@@ -14,69 +14,7 @@ fileprivate let logger = Logger(
     category: String(describing: TaskItem.self)
 )
 
-@Model
-final class TaskItem : ObservableObject, Codable {
-    
-    public private (set) var created: Date = Date.now
-    public private (set) var changed: Date = Date.now
-    public private (set) var closed: Date? = nil
-    
-    //ignore for now
-    public var important: Bool = false
-    public var urgent: Bool = false
-    public var dueDate: Date? = nil
-    
-    var _title: String = "I need to ..."
-    var _details: String = "(no details yet)"
-    var _state: TaskItemState = TaskItemState.open
-    var _url: String = ""
-    
-    @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
-//    @Relationship(inverse: \DailyTasks.priorities) var priority: DailyTasks? = nil
-    
-    init() {
-        
-    }
-    
-    init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now) {
-        self._title = title
-        self._details = details
-        self.changed = changedDate
-        self.comments = []
-    }
-    
-    //MARK: Codable
-    enum CodingKeys: CodingKey {
-        case created, changed, title, details, state, comments, important, urgent, url
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.created = try container.decode(Date.self, forKey: .created)
-        self.changed = try container.decode(Date.self, forKey: .changed)
-        self._title = try container.decode(String.self, forKey: .title)
-        self._details = try container.decode(String.self, forKey: .details)
-        self._state = try container.decode(TaskItemState.self, forKey: .state)
-        self.comments = try container.decode(Array<Comment>.self, forKey: .comments)
-        self.important = try container.decode(Bool.self, forKey: .important)
-        self.urgent = try container.decode(Bool.self, forKey: .urgent)
-        self._url = try container.decode(String.self, forKey: .url)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(created, forKey: .created)
-        try container.encode(changed, forKey: .changed)
-        try container.encode(_title, forKey: .title)
-        try container.encode(_details, forKey: .details)
-        try container.encode(_state, forKey: .state)
-        try container.encode(_title, forKey: .title)
-        try container.encode(comments, forKey: .comments)
-        try container.encode(important, forKey: .important)
-        try container.encode(urgent, forKey: .urgent)
-        try container.encode(_url, forKey: .url)
-    }
-}
+typealias TaskItem = SchemaV1.TaskItem
 
 extension TaskItem: Identifiable {
     var id: String {
@@ -182,27 +120,6 @@ extension TaskItem {
             changed = Date.now
         }
     }
-    
-//    func makePriority(position: Int, day: DailyTasks) {
-//        reOpenTask()
-//        if let priorities = day.priorities {
-//            let index = min (priorities.count, position)
-//            day.priorities?.insert(self, at: index)
-//            addComment(text: "added as priority to day \(day.day)")
-//        }
-//    }
-//    
-//    func removePriority() {
-//        if priority != nil {
-//            addComment(text: "removed as priority for \(priority!.day)")
-//            priority = nil
-//        }
-//    }
-    
-//    func deleteTask(){
-//        modelContext?.delete(self)
-//        modelContext?.processPendingChanges()
-//    }
     
     func closeTask() {
         if state != .closed {

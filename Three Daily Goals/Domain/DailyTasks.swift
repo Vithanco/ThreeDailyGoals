@@ -14,18 +14,7 @@ fileprivate let logger = Logger(
     category: String(describing: DailyTasks.self)
 )
 
-@Model
-final class DailyTasks: ObservableObject, Identifiable {
-    var day: Date  = Date.now
-    
-//    @Relationship(deleteRule: .nullify) var priorities: [TaskItem]? = [TaskItem]()
-    init() {
-    }
-    
-    var id: Date {
-        return day
-    }
-}
+typealias DailyTasks = SchemaV1.DailyTasks
 
 func loadPriorities(modelContext: Storage) -> DailyTasks {
     let fetchDescriptor = FetchDescriptor<DailyTasks>()

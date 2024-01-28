@@ -128,7 +128,7 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
     }
     
     let schema = Schema([
-        TaskItem.self ,Comment.self, DailyTasks.self
+        TaskItem.self ,Comment.self , DailyTasks.self
     ])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
     
