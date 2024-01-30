@@ -27,14 +27,18 @@ struct Checkbox : View {
 
 struct TaskAsLine: View {
     let item: TaskItem
-    let accentColor: Color
+    @Bindable var model: TaskManagerViewModel
     
     func action () {
-        if item.isClosed {
-            item.reOpenTask()
+        if item.isClosed || item.isGraveyarded {
+            model.move(task: item, to: .open)
         } else {
-            item.closeTask()
+            model.move(task: item, to: .closed)
         }
+    }
+    
+    var accentColor: Color {
+        return model.preferences.accentColor
     }
     
     var body: some View {
@@ -48,9 +52,10 @@ struct TaskAsLine: View {
 
 struct TaskAsLineHelper : View {
     @State var item: TaskItem = TaskItem()
+    @State var model: TaskManagerViewModel = TaskManagerViewModel(modelContext: TestStorage())
     
     var body: some View {
-        TaskAsLine(item: item, accentColor: Color.green)
+        TaskAsLine(item: item, model: model)
     }
 }
 

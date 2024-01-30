@@ -120,6 +120,25 @@ enum SchemaV2: VersionedSchema {
     final class Preferences: ObservableObject {
         
         var mainColorString : String = ""
+        @Transient
+        var reviewTimeHour: Int = 18
+        @Transient
+        var reviewTimeMinutes: Int = 0
+        
+        @Transient
+        var reviewTime: Date {
+            set {
+                reviewTimeHour = Calendar.current.component(.hour, from: newValue)
+                reviewTimeMinutes = Calendar.current.component(.minute, from: newValue)
+            }
+            get {
+                var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinutes, second: 0, of: Date())!
+                if date < Date.now {
+                    date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+                }
+                return date
+            }
+        }
         
         @Transient
         var accentColor: Color {

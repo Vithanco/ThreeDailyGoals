@@ -54,7 +54,7 @@ struct TDGToolBarContent: ToolbarContent {
         }
         ToolbarItem {
             Button(action: addItem) {
-                Label("Add Item", systemImage: imgAddItem)
+                Label("Add Task", systemImage: imgAddItem)
             }
         }
     }

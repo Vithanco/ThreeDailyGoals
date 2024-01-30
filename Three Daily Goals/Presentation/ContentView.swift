@@ -20,11 +20,9 @@ struct SingleView<Content: View>: View {
 
 struct ContentView: View {
     @State var model : TaskManagerViewModel
-    private var modelContext: Storage
     
-    init(storage: Storage){
-        self.modelContext = storage
-        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: storage))
+    init(model: TaskManagerViewModel){
+        self._model = State(wrappedValue: model)
     }
     
     var body: some View {
@@ -73,6 +71,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(storage: TestStorage())
+    ContentView(model: TaskManagerViewModel(modelContext: TestStorage()))
     
 }

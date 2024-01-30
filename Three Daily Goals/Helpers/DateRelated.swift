@@ -10,6 +10,7 @@ import Foundation
 
 
 let stdDateFormat = Date.FormatStyle(date: .numeric, time: .none)
+let stdTimeFormat = Date.FormatStyle(date: .none, time: .shortened)
 
 func getDate (daysPrior: Int) -> Date {
     let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) ?? Date.now

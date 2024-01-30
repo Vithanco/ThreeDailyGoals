@@ -44,6 +44,8 @@ extension TaskItemState {
 
 @Observable
 final class TaskManagerViewModel {
+    
+    var timer : ReviewTimer = ReviewTimer()
     private let modelContext: Storage
     private(set) var items = [TaskItem]()
     
@@ -85,23 +87,20 @@ final class TaskManagerViewModel {
         self.modelContext = modelContext
         preferences = loadPreferences(modelContext: modelContext)
         
-        //        NotificationCenter.default.notifications(named: Notification.Name.NSManagedObjectContextObjectsDidChange)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notification(_ :)),
-                                               name: .NSPersistentStoreRemoteChange,
-                                               object: nil)
         fetchData()
-//#if os(macOS)
-        NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in self.fetchData()}
-//#endif
-//#if os(iOS)
-//        NotificationCenter.default.addObserver(forName: UIPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in self.fetchData()}
-//        #endif
-    }
-    
-    @objc func notification(_ notification: Foundation.Notification) {
-        debugPrint(notification)
-//        fetchData()
+        NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in 
+            
+            if let userInfo = notification.userInfo {
+                logger.debug("\(userInfo.debugDescription)")
+                    if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
+                        if event.type == .import && event.endDate != nil && event.succeeded {
+                            logger.debug("update my list of Tasks")
+                            self.fetchData()
+                        }
+                     }
+                  }
+            }
+
     }
     
     func addSamples() -> Self {
@@ -154,6 +153,7 @@ final class TaskManagerViewModel {
             deadTasks.sort()
             priorityTasks.sort()
             updateUndoRedoStatus()
+            setupReviewNotification()
         } catch {
             print("Fetch failed")
         }
@@ -267,6 +267,14 @@ final class TaskManagerViewModel {
                 pendingTasks.sort()
         }
         updateUndoRedoStatus()
+    }
+    
+    func setupReviewNotification(){
+        let time = self.preferences.reviewTime
+
+        timer.setTimer(forWhen: time ){
+            self.showReviewDialog = true
+        }
     }
 }
 

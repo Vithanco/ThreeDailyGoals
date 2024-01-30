@@ -23,11 +23,15 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
+    func testButtons() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
+        XCTAssertTrue(app.buttons["Add Task"] .exists)
+        XCTAssertTrue(app.buttons["Review"] .exists)
+        XCTAssertTrue(app.buttons["Redo"] .exists)
+        XCTAssertTrue(app.buttons["Undo"] .exists)
+        
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     

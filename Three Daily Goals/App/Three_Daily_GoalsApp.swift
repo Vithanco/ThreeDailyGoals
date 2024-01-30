@@ -7,12 +7,17 @@
 
 import SwiftUI
 import SwiftData
+import os
 
 @main
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
-    @State var preferences: Preferences
+    @State var model: TaskManagerViewModel
+    private let logger = Logger(
+            subsystem: Bundle.main.bundleIdentifier!,
+            category: String(describing: Three_Daily_GoalsApp.self)
+        )
     
     init() {
         var inMemory = false
@@ -22,12 +27,14 @@ struct Three_Daily_GoalsApp: App {
            }
            #endif
         self.container = sharedModelContainer(inMemory: inMemory)
-        self.preferences = loadPreferences(modelContext: container.mainContext)
+        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: container.mainContext))
        }
+    
+  
     
     var body: some Scene {
         WindowGroup {
-            ContentView(storage: container.mainContext)
+            ContentView(model: model)
         }
         .modelContainer(container)
         .commands {
@@ -83,7 +90,7 @@ struct Three_Daily_GoalsApp: App {
                         }
                 }
         Settings {
-            SettingsView(settings: preferences)
+            SettingsView(model: model)
         }
     }
     
