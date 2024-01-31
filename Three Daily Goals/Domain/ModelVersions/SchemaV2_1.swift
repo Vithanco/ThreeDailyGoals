@@ -34,9 +34,9 @@ enum SchemaV2_1: VersionedSchema {
         //ignore for now
 //        @Attribute(originalName: "important") 
         public var important: Bool = false
-//        @Attribute(originalName: "urgent") 
+//        @Attribute(originalName: "urgent")
         public var urgent: Bool = false
-        @Attribute(.externalStorage) 
+        @Attribute(.externalStorage)
         var _imageData: Data? = nil
 //        @Attribute(originalName: "dueDate") 
         public var dueDate: Date? = nil

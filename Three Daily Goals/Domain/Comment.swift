@@ -17,7 +17,7 @@ extension Comment {
     }
 }
 
-extension Comment : Comparable {
+extension Comment : Equatable, Comparable {
 
     static func < (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.created < rhs.created
