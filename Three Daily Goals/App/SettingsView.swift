@@ -38,11 +38,28 @@ struct SettingsView: View {
     
     var body: some View {
         VStack{
-            ColorPicker("Accent Color", selection: $model.preferences.accentColor)
-            DatePicker("Regular Time of Review", selection: $model.preferences.reviewTime, displayedComponents: .hourAndMinute)
-            Button("Adjust Review Time") {
-                model.setupReviewNotification()
+            GroupBox(label:
+                        Label("Colors", systemImage: "paintbrush")
+                    ) {
+                Text("Choose which Color you like best, or use your system's accent color.")
+                ColorPicker("Accent Color", selection: $model.preferences.accentColor)
+                Button("Use System Accent Color"){
+                    model.resetAccentColor()
+                }
             }
+            GroupBox(label:
+                        Label("Review", systemImage: imgReview)
+            ) {Text("Daily Reviews are at the heart of Three Daily Goals. Choose when you want to plan your Daily Review. Press Button to accept selected time.")
+                DatePicker("Regular Time of Review", selection: $model.preferences.reviewTime, displayedComponents: .hourAndMinute)
+                Button("Adjust Review Time") {
+                    model.setupReviewNotification()
+                }
+            }
+            #if os(iOS)
+            Button("Close Preferences"){
+                model.showSettingsDialog = false
+            }
+            #endif
         }
         
 //        TabView {
@@ -61,7 +78,7 @@ struct SettingsView: View {
 //                        Label("Tasks", systemImage: "hand.raised")
 //                    }
 //        }
-        .frame(width: 450, height: 250)
+    
     }
 }
 

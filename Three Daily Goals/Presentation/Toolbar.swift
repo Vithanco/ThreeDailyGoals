@@ -31,7 +31,7 @@ struct TDGToolBarContent: ToolbarContent {
     
     private func review() {
         withAnimation {
-            model.showReviewDialog = true
+            model.reviewNow()
         }
     }
     
@@ -55,7 +55,7 @@ struct TDGToolBarContent: ToolbarContent {
         
         ToolbarItem {
             Button(action: review) {
-                Label("Review", systemImage: imgMagnifyingGlass)
+                Label("Review", systemImage: imgReview)
             }
         }
         ToolbarItem {

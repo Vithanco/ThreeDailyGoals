@@ -94,8 +94,8 @@ class TestStorage : Storage {
         if T.self == TaskItem.self {
             let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
             let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
-            let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
-            let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
+            let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11), state: .priority)
+            let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22),state: .pendingResponse)
             let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
             let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
             return [lastWeek1, lastMonth1,lastWeek2,older1,older2,lastMonth2] as! [T]

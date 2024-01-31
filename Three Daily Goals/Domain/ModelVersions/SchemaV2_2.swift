@@ -42,11 +42,12 @@ enum SchemaV2_2: VersionedSchema {
             
         }
         
-        init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now) {
+        init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now, state: TaskItemState = .open) {
             self._title = title
             self._details = details
             self.changed = changedDate
             self.comments = []
+            self.state = state
         }
         
         //MARK: Codable

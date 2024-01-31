@@ -8,6 +8,21 @@
 import SwiftUI
 import SwiftData
 
+#if os(macOS)
+    let dialogMinWidth = 1440
+    let dialogMinHeight = 900
+    let dialogMaxWidth = 2500
+    let dialogMaxHeight = 1600
+#endif
+
+#if os(iOS)
+    let dialogMinWidth = 1080
+    let dialogMinHeight = 2340
+    let dialogMaxWidth = 2796
+    let dialogMaxHeight = 2340
+#endif
+
+
 
 struct SingleView<Content: View>: View {
     
@@ -57,7 +72,8 @@ struct ContentView: View {
                 }
             }.background(Color.background)
                     .sheet(isPresented: $model.showReviewDialog) {
-                        ReviewDialog(model: model)
+                        ReviewDialog(model: ReviewModel(taskModel: model))
+                        
                     }
                     .sheet(isPresented: $model.showSettingsDialog) {
                         SettingsView(model: model)
@@ -66,7 +82,7 @@ struct ContentView: View {
 //                        preferences = loadPreferences(modelContext: modelContext )
 //                    })
                     .environment(model.today)
-            }.background(Color.background).frame(width:geometry.size.width-20,height: geometry.size.height-20,alignment: .center)
+            }//.background(Color.background).frame(width:geometry.size.width-20,height: geometry.size.height-20,alignment: .center)
         }
     }
     

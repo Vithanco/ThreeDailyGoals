@@ -13,7 +13,7 @@ struct StateView: View {
     let accentColor : Color
     
     var body: some View {
-        state.sections.first()?.asText.foregroundStyle(accentColor)
+        state.section.asText.foregroundStyle(accentColor)
     }
 }
 

@@ -38,11 +38,11 @@ struct LinkToList: View {
         NavigationLink {
             ListView(whichList: whichList, model: model)
         } label: {
-            ListLabel(name: whichList.sections.first?.asText ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
+            ListLabel(name: whichList.section.asText, count:model.list(which: whichList).count, showCount: whichList.showCount).foregroundStyle(model.accentColor)
         }
 #endif
 #if os(macOS)
-        ListLabel(name: whichList.sections.first?.asText.foregroundStyle(model.accentColor) ?? Text("Missing"), count:model.list(which: whichList).count, showCount: whichList.showCount)
+        ListLabel(name: whichList.section.asText, count:model.list(which: whichList).count, showCount: whichList.showCount)
             .onTapGesture {
                 model.select(which: whichList,item: model.list(which: whichList).first)
             }
@@ -53,6 +53,7 @@ struct LinkToList: View {
                 }
                 return true
             }
+            .foregroundStyle(model.accentColor)
 #endif
     }
 }

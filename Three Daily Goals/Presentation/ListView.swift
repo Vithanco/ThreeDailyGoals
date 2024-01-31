@@ -28,9 +28,7 @@ struct ListView: View {
         let itemList = model.list(which: list)
         List{
             Section (header: VStack(alignment: .leading) {
-                ForEach(list.sections) { sec in
-                    sec.asText.foregroundStyle(model.accentColor)
-                }
+                list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden)
             }) {
                 ForEach(headers) {header in
                     let partialList = itemList.filter(header.filter)

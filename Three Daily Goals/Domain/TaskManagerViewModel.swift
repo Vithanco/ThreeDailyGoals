@@ -18,24 +18,23 @@ fileprivate let logger = Logger(
 
 @Observable
 class ListViewModel {
-    var sections: [TaskSection]
+    var section: TaskSection
     var list: [TaskItem]
     
-    init(sections: [TaskSection], list: [TaskItem]) {
-        self.sections = sections
+    init(section: TaskSection, list: [TaskItem]) {
+        self.section = section
         self.list = list
     }
 }
 
-
 extension TaskItemState {
-    var sections: [TaskSection] {
+    var section: TaskSection {
         switch self {
-            case .open : return [secOpen]
-            case .closed: return [secClosed]
-            case .dead: return [secGraveyard]
-            case .priority: return [secToday]
-            case .pendingResponse: return [secPending]
+            case .open : return secOpen
+            case .closed: return secClosed
+            case .dead: return secGraveyard
+            case .priority: return secToday
+            case .pendingResponse: return secPending
         }
     }
 }
@@ -74,6 +73,7 @@ final class TaskManagerViewModel {
     
     var showReviewDialog: Bool = false
     var showSettingsDialog: Bool = false
+    var showMissingReviewAlert : Bool = false
     
     var openTasks: [TaskItem] = []
     var closedTasks: [TaskItem]  = []
@@ -89,19 +89,17 @@ final class TaskManagerViewModel {
         preferences = loadPreferences(modelContext: modelContext)
         
         fetchData()
-        NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in 
-            
+        NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in
             if let userInfo = notification.userInfo {
                 logger.debug("\(userInfo.debugDescription)")
-                    if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
-                        if event.type == .import && event.endDate != nil && event.succeeded {
-                            logger.debug("update my list of Tasks")
-                            self.fetchData()
-                        }
-                     }
-                  }
+                if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
+                    if event.type == .import && event.endDate != nil && event.succeeded {
+                        logger.debug("update my list of Tasks")
+                        self.fetchData()
+                    }
+                }
             }
-
+        }
     }
     
     func addSamples() -> Self {
@@ -155,6 +153,10 @@ final class TaskManagerViewModel {
             priorityTasks.sort()
             updateUndoRedoStatus()
             setupReviewNotification()
+            
+            if preferences.lastReview < getDate(daysPrior: 2) {
+                showReviewDialog = true
+            }
         } catch {
             print("Fetch failed")
         }
@@ -265,12 +267,29 @@ final class TaskManagerViewModel {
         updateUndoRedoStatus()
     }
     
-    func setupReviewNotification(){
-        let time = self.preferences.reviewTime
-
-        timer.setTimer(forWhen: time ){
-            self.showReviewDialog = true
+    func setupReviewNotification(when: Date? = nil){
+        if showReviewDialog {
+            return
         }
+        let time = when ?? self.preferences.reviewTime
+
+        showReviewDialog = false
+        timer.setTimer(forWhen: time ){
+            self.reviewNow()
+            self.setupReviewNotification()
+        }
+    }
+    func resetAccentColor(){
+        preferences.resetAccentColor()
+    }
+    
+    func endReview(){
+        showReviewDialog = false
+        preferences.lastReview = Date.now
+    }
+    
+    func reviewNow(){
+        showReviewDialog = true
     }
 }
 

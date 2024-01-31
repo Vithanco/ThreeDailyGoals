@@ -49,7 +49,9 @@ extension Preferences {
             
         }
     }
-    
+    func resetAccentColor(){
+        mainColorString = ""
+    }
 }
 
 

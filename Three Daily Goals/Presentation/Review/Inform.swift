@@ -1,0 +1,36 @@
+//
+//  Inform.swift
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 31/01/2024.
+//
+
+import SwiftUI
+
+struct Inform: View {
+    
+    @Bindable var model: ReviewModel
+    
+    var body: some View {
+        Text("It is about time to review your tasks").font(.title2).foregroundStyle(model.accentColor)
+        Text("This review is where the daily magic happens. You can choose the best daily time in the preferences. This dialog will only be shown when your last review is more than 4 hours ago. ")
+            .frame(maxWidth: 500)
+            .padding(10)
+                         
+        HStack{
+            Spacer()
+            Button(action: model.cancelReview){
+                Text("Cancel")
+            }
+            Spacer()
+            Button(action: model.waitABit) {
+                Text("Start in 5 min")
+            }
+            Spacer()
+        }
+    }
+}
+
+#Preview {
+    Inform(model: dummyReviewModel())
+}
