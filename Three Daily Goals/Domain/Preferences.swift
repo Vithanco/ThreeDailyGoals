@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 import os
 
 fileprivate let logger = Logger(
@@ -18,7 +19,37 @@ typealias Preferences = SchemaLatest.Preferences
 
 
 extension Preferences {
-   
+    var reviewTime: Date {
+        set {
+            reviewTimeHour = Calendar.current.component(.hour, from: newValue)
+            reviewTimeMinutes = Calendar.current.component(.minute, from: newValue)
+        }
+        get {
+            var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinutes, second: 0, of: Date())!
+            if date < Date.now {
+                date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+            }
+            return date
+        }
+    }
+    
+    var accentColor: Color {
+        get {
+            if mainColorString == "" {
+                return Color.accentColor
+            }
+            return Color(hex: mainColorString)
+        }
+        set {
+            if let string = newValue.toHex {
+                mainColorString = string
+            } else {
+                mainColorString = ""
+            }
+            
+        }
+    }
+    
 }
 
 
