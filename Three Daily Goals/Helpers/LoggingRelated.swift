@@ -11,7 +11,7 @@ import Logging
 public typealias LogType = Logger.Level
 
 private func getLogger() -> Logger {
-    var result = Logger(label: "com.vithanco")
+    var result = Logger(label: "com.vithanco.3dg")
     
 #if DEBUG
     result.logLevel = .debug

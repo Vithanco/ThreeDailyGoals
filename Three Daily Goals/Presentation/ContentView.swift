@@ -59,6 +59,9 @@ struct ContentView: View {
                     .sheet(isPresented: $model.showReviewDialog) {
                         ReviewDialog(model: model)
                     }
+                    .sheet(isPresented: $model.showSettingsDialog) {
+                        SettingsView(model: model)
+                    }
 //                    .onAppear(perform: {
 //                        preferences = loadPreferences(modelContext: modelContext )
 //                    })

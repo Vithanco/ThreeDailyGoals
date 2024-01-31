@@ -18,6 +18,7 @@ extension Comment {
 }
 
 extension Comment : Comparable {
+
     static func < (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.created < rhs.created
     }

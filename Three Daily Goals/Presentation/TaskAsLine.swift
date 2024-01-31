@@ -38,7 +38,7 @@ struct TaskAsLine: View {
     }
     
     var accentColor: Color {
-        return model.preferences.accentColor
+        return model.accentColor
     }
     
     var body: some View {

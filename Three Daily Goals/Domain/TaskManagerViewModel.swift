@@ -73,6 +73,7 @@ final class TaskManagerViewModel {
     var canRedo = false
     
     var showReviewDialog: Bool = false
+    var showSettingsDialog: Bool = false
     
     var openTasks: [TaskItem] = []
     var closedTasks: [TaskItem]  = []
@@ -199,11 +200,6 @@ final class TaskManagerViewModel {
         modelContext.processPendingChanges()
         canUndo =  modelContext.canUndo
         canRedo =  modelContext.canRedo
-    }
-    
-    func loadToday() {
-//        today = loadPriorities(modelContext: modelContext)
-        
     }
     
     func findTask(withID: String) -> TaskItem? {

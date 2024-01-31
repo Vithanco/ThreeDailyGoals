@@ -35,6 +35,12 @@ struct TDGToolBarContent: ToolbarContent {
         }
     }
     
+    private func showPreferences() {
+        withAnimation{
+            model.showSettingsDialog = true
+        }
+    }
+    
     var body: some ToolbarContent {
         ToolbarItem {
             Button(action: undo) {
@@ -57,6 +63,13 @@ struct TDGToolBarContent: ToolbarContent {
                 Label("Add Task", systemImage: imgAddItem)
             }
         }
+        #if os(iOS) // see Three_Daily_GoalsApp for Mac way
+        ToolbarItem {
+            Button(action: showPreferences) {
+                Label("Preferences", systemImage: imgPreferences)
+            }
+        }
+        #endif
     }
 }
 

@@ -22,7 +22,7 @@ struct LinkToTask: View {
         NavigationLink {
             TaskItemView(model: model, item: item)
         } label: {
-            TaskAsLine(item: item, accentColor: model.accentColor)
+            TaskAsLine(item: item, model: model)
         }
 #endif
         

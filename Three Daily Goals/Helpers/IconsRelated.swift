@@ -15,6 +15,7 @@ let imgDated = "clock.fill"
 let imgMagnifyingGlass = "magnifyingglass.circle.fill"
 let imAppearance = "paintpalette"
 let imgAddItem = "plus"
+let imgPreferences = "gearshape"
 
 let imgToday = "exclamationmark.square.fill"
 let imgPriority1 = "1.circle.fill"

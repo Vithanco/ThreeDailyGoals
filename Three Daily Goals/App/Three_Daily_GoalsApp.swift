@@ -89,9 +89,11 @@ struct Three_Daily_GoalsApp: App {
                             .keyboardShortcut("Z", modifiers: [.command, .shift])
                         }
                 }
+        #if os(macOS) // see Toolbar for iOS way
         Settings {
             SettingsView(model: model)
         }
+        #endif
     }
     
 }
