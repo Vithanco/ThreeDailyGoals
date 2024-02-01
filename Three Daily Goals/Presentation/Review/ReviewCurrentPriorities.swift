@@ -19,12 +19,12 @@ struct ReviewCurrentPriorities: View {
             HStack{
                 Button(action: model.closeAllPriorities ){
                     Text("Close All")
-                }
+                }.buttonStyle(.bordered)
                 Button(action: model.movePrioritiesToOpen){
                     Text("Move All to Open")
-                }
+                }.buttonStyle(.bordered)
             }
-        }.frame(minHeight: 800)
+        }.frame(minHeight: 400)
         
     }
 }

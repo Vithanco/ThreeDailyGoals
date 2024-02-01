@@ -52,6 +52,15 @@ extension Preferences {
     func resetAccentColor(){
         mainColorString = ""
     }
+    
+    var expiryAfterString: String {
+        get {
+            return self.expiryAfter.description
+        }
+        set {
+            self.expiryAfter = Int(newValue) ?? 31
+        }
+    }
 }
 
 

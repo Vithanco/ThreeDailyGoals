@@ -36,10 +36,18 @@ struct SettingsView: View {
     @Bindable var model: TaskManagerViewModel
     @State var time: Date = Date.now
     
+    var lastReview: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: model.preferences.lastReview) // "January 14, 2021"
+        
+    }
+    
     var body: some View {
         VStack{
             GroupBox(label:
-                        Label("Colors", systemImage: "paintbrush")
+                        Label("Colors", systemImage: "paintbrush").foregroundColor(model.accentColor)
                     ) {
                 Text("Choose which Color you like best, or use your system's accent color.")
                 ColorPicker("Accent Color", selection: $model.preferences.accentColor)
@@ -48,17 +56,39 @@ struct SettingsView: View {
                 }
             }
             GroupBox(label:
-                        Label("Review", systemImage: imgReview)
-            ) {Text("Daily Reviews are at the heart of Three Daily Goals. Choose when you want to plan your Daily Review. Press Button to accept selected time.")
+                        Label("Review", systemImage: imgReview).foregroundColor(model.accentColor)
+            ) {
+                Text("Daily Reviews are at the heart of Three Daily Goals. Choose when you want to plan your Daily Review. Press Button to accept selected time.")
+                Spacer().frame(height: 10)
+                    Text("Last Review was:")
+                    Text(lastReview).foregroundColor(model.accentColor)
                 DatePicker("Regular Time of Review", selection: $model.preferences.reviewTime, displayedComponents: .hourAndMinute)
                 Button("Adjust Review Time") {
                     model.setupReviewNotification()
+                }.buttonStyle(.bordered)
+            }
+            
+            GroupBox(label:
+                        Label("Graveyard", systemImage: imgGraveyard).foregroundColor(model.accentColor)
+                    ) {
+                Text("Sort old Tasks out. They seem to be not important to you. You can always find them again in the graveyard.")
+                HStack {
+                    Text("Expire after ")
+                    
+                    Text(model.preferences.expiryAfterString).foregroundColor(model.accentColor)
+                    Stepper("", value: $model.preferences.expiryAfter, in: 10...1000, step: 10 )
+                    Text(" days .")
+                    Spacer()
+                }
+                Button("Use System Accent Color"){
+                    model.resetAccentColor()
                 }
             }
             #if os(iOS)
+            Spacer()
             Button("Close Preferences"){
                 model.showSettingsDialog = false
-            }
+            }.buttonStyle(.borderedProminent)
             #endif
         }
         

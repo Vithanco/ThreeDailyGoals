@@ -19,13 +19,9 @@ struct Inform: View {
                          
         HStack{
             Spacer()
-            Button(action: model.cancelReview){
-                Text("Cancel")
-            }
-            Spacer()
             Button(action: model.waitABit) {
                 Text("Start in 5 min")
-            }
+            }.buttonStyle(.bordered)
             Spacer()
         }
     }

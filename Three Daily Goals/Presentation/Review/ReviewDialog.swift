@@ -19,37 +19,39 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 struct ReviewDialog: View {
     
     @Bindable var model: ReviewModel
-    @State private var sheetHeight: CGFloat = .zero
+//    @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
         VStack {
-            GroupBox(label:
-                        HStack{
-                Text("Review your Tasks!").font(.title).foregroundStyle(model.accentColor)
+            
+            HStack{
+                Text("Daily Review").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
                 Button(role: .cancel, action: model.cancelReview) {
                     Text("Cancel")
-                }
+                }.buttonStyle(.bordered).frame(maxHeight: 30)
                 Button(action: model.moveStateForward) {
                     Text(model.nameOfNextStep)
                 }.buttonStyle(.borderedProminent)
-            }){
-                
-                switch model.stateOfReview {
-                    case .inform:
-                        Inform(model: model)
-                    case .currentPriorities:
-                        ReviewCurrentPriorities(model: model)
-                    case .pending:
-                        ReviewPendingResponses(model:model)
-                    case .review:
-                        ReviewNextPriorities(model: model)
-                }
-                
-            }.padding(4)
-        }
-//                .overlay {
-//                    GeometryReader { geometry in
+            }
+            Spacer()
+            
+            switch model.stateOfReview {
+                case .inform:
+                    Inform(model: model)
+                case .currentPriorities:
+                    ReviewCurrentPriorities(model: model)
+                case .pending:
+                    ReviewPendingResponses(model:model)
+                case .review:
+                    ReviewNextPriorities(model: model)
+            }
+            Spacer()
+            
+        }.padding(4)
+    }
+    //                .overlay {
+    //                    GeometryReader { geometry in
 //                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
 //                    }
 //                }
@@ -57,10 +59,9 @@ struct ReviewDialog: View {
 //                    sheetHeight = newHeight
 //                }
 //                .presentationDetents([.height(sheetHeight)])
-        }
-    
 }
+    
 
 #Preview {
-    return ReviewDialog(model: dummyReviewModel())
+    return ReviewDialog(model: dummyReviewModel(state: .review))
 }

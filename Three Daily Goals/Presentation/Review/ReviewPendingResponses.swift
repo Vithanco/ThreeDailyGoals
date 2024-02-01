@@ -15,7 +15,7 @@ struct ReviewPendingResponses: View {
         ListView(whichList: .pendingResponse, model: model.taskModel)
         Button(action: model.moveStateForward) {
             Text("Next Step")
-        }
+        }.buttonStyle(.bordered)
     }
 }
 

@@ -271,7 +271,12 @@ final class TaskManagerViewModel {
         if showReviewDialog {
             return
         }
-        let time = when ?? self.preferences.reviewTime
+        var time = when ?? self.preferences.reviewTime
+        let fourHoursMin = self.preferences.lastReview.addingTimeInterval(60*60*4)
+        if time < fourHoursMin {
+            logger.info("moving review to next day as the last one is less than four hours away.")
+            time = time.addingTimeInterval(60*60*24)
+        }
 
         showReviewDialog = false
         timer.setTimer(forWhen: time ){
@@ -289,6 +294,7 @@ final class TaskManagerViewModel {
     }
     
     func reviewNow(){
+        logger.info("start review \(Date.now)")
         showReviewDialog = true
     }
 }

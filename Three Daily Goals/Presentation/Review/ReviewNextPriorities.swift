@@ -12,15 +12,9 @@ struct ReviewNextPriorities: View {
     @Bindable var model: ReviewModel
     var body: some View {
         VStack{
-            
-            Text("Choose Next Priorities!").font(.title2).foregroundStyle(model.accentColor)
+                Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
                 ListView(whichList: .priority, model: model.taskModel).frame(minHeight: 300)
-                VStack {
-                    Image(systemName: "arrowshape.left.arrowshape.right.fill")
-                    Text("drag'n'drop")
-                    
-                }
                 ListView(whichList: .open ,model: model.taskModel)
             }
         }

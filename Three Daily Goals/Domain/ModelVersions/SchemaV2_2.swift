@@ -130,6 +130,8 @@ enum SchemaV2_2: VersionedSchema {
         var reviewTimeHour: Int = 18
         var reviewTimeMinutes: Int = 0
         var lastReview: Date = getDate(daysPrior: 365)
+        @Transient
+        var expiryAfter: Int = 30
         
         init(){
             

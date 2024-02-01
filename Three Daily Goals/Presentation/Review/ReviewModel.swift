@@ -39,26 +39,38 @@ final class ReviewModel{
     }
     
     func moveStateForward() {
-        if stateOfReview == .inform && !taskModel.list(which: .priority).isEmpty {
-            stateOfReview = .currentPriorities
-        } else if stateOfReview == .currentPriorities && !taskModel.list(which: .pendingResponse).isEmpty{
-            stateOfReview = .pending
-        } else {
-            stateOfReview = .review
+        switch stateOfReview {
+            case .inform:
+                if taskModel.list(which: .priority).isEmpty {
+                    fallthrough
+                } else {
+                    stateOfReview = .currentPriorities
+                }
+            case .currentPriorities:
+                if taskModel.list(which: .pendingResponse).isEmpty {
+                    fallthrough
+                } else {
+                    stateOfReview = .pending
+                }
+            case .pending:
+                stateOfReview = .review
+            case .review:
+                endReview()
         }
     }
     
     var nameOfNextStep: String {
-        switch stateOfReview {
-            case .inform:
-                return "Review Current Priorities"
-            case .currentPriorities:
-                return "Pending Tasks"
-            case .pending:
-                return "Next Priorities"
-            case .review:
-                return "Done"
-        }
+        return "Next"
+//        switch stateOfReview {
+//            case .inform:
+//                return "Current"
+//            case .currentPriorities:
+//                return "Pending"
+//            case .pending:
+//                return "Priorities"
+//            case .review:
+//                return "Done"
+//        }
     }
     
     func cancelReview(){
@@ -86,6 +98,8 @@ final class ReviewModel{
 }
 
 
-func dummyReviewModel() -> ReviewModel {
-    return ReviewModel(taskModel: TaskManagerViewModel(modelContext: TestStorage()))
+func dummyReviewModel(state: DialogState = .inform) -> ReviewModel {
+    let model = ReviewModel(taskModel: TaskManagerViewModel(modelContext: TestStorage()))
+    model.stateOfReview = state
+    return model
 }
