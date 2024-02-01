@@ -76,7 +76,7 @@ struct ContentView: View {
                         
                     }
                     .sheet(isPresented: $model.showSettingsDialog) {
-                        SettingsView(model: model)
+                        PreferencesView(model: model)
                     }
 //                    .onAppear(perform: {
 //                        preferences = loadPreferences(modelContext: modelContext )

@@ -91,7 +91,7 @@ struct Three_Daily_GoalsApp: App {
                 }
         #if os(macOS) // see Toolbar for iOS way
         Settings {
-            SettingsView(model: model).frame(width: 450)
+            PreferencesView(model: model).frame(width: 450)
         }
         #endif
     }
