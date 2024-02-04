@@ -20,7 +20,7 @@ final class TestModelLists: XCTestCase {
 
     func testLists() throws {
         
-        let model = TaskManagerViewModel(modelContext: TestStorage())
+        let model = dummyViewModel()
         
         XCTAssertEqual(6, model.items.count)
         let item = model.items.first!

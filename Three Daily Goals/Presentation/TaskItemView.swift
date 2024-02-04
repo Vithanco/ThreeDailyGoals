@@ -137,5 +137,5 @@ struct TaskItemView: View {
 
 #Preview {
 //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
-    TaskItemView( model: TaskManagerViewModel(modelContext: TestStorage()), item: TaskItem()).frame(width: 600, height: 300)
+    TaskItemView( model: dummyViewModel(), item: TaskItem()).frame(width: 600, height: 300)
 }

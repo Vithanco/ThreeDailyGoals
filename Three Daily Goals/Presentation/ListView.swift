@@ -59,5 +59,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView( model: TaskManagerViewModel(modelContext: TestStorage()))
+    ListView( model: dummyViewModel())
 }

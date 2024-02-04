@@ -19,7 +19,7 @@ enum SchemaV2_2: VersionedSchema {
     }
     
     @Model
-    final class TaskItem : ObservableObject, Codable {
+    final class TaskItem : Codable {
         
         public internal (set) var created: Date = Date.now
         public internal (set) var changed: Date = Date.now
@@ -37,6 +37,10 @@ enum SchemaV2_2: VersionedSchema {
         @Attribute(.externalStorage)
         var _imageData: Data? = nil
         public var dueDate: Date? = nil
+        
+        @Transient
+        var _priority: Int = 0
+        
         
         init() {
             
@@ -91,7 +95,7 @@ enum SchemaV2_2: VersionedSchema {
     
     
     @Model
-    final class Comment: ObservableObject, Codable{
+    final class Comment:  Codable{
         var created: Date  = Date.now
         var changed: Date  = Date.now
         var text: String = ""
@@ -124,14 +128,30 @@ enum SchemaV2_2: VersionedSchema {
     
     
     @Model
-    final class Preferences: ObservableObject {
+    final class Preferences {
         
         var mainColorString : String = ""
         var reviewTimeHour: Int = 18
         var reviewTimeMinutes: Int = 0
         var lastReview: Date = getDate(daysPrior: 365)
+        
         @Transient
         var expiryAfter: Int = 30
+        
+        @Transient
+        var makePriorityNumberOfDaysBeforeDue : Int = 2
+        
+        @Transient
+        var _usePrioritisation: Int = 0
+        
+        @Transient
+        var daysOfReview: Int = 0
+        
+        @Transient
+        var allowedDaysOfSlack : Double = 0.0
+        
+        @Transient
+        var _useCalendar: Int = 0
         
         init(){
             

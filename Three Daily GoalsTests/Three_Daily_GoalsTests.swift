@@ -16,7 +16,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
     
     @MainActor override func setUpWithError() throws {
         context = sharedModelContainer(inMemory: true).mainContext
-        model = TaskManagerViewModel(modelContext: context)
+        model = TaskManagerViewModel(modelContext: context, preferences: CloudPreferences(testData: true))
     }
     
     override func tearDownWithError() throws {

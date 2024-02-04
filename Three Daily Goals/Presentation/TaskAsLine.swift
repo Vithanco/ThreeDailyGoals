@@ -52,7 +52,7 @@ struct TaskAsLine: View {
 
 struct TaskAsLineHelper : View {
     @State var item: TaskItem = TaskItem()
-    @State var model: TaskManagerViewModel = TaskManagerViewModel(modelContext: TestStorage())
+    @State var model: TaskManagerViewModel = dummyViewModel()
     
     var body: some View {
         TaskAsLine(item: item, model: model)

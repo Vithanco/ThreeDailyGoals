@@ -8,43 +8,79 @@
 
 import Foundation
 import SwiftUI
+import WidgetKit
 
 
 struct AWPriority: View {
-    var image: String
-    var item: TaskItem?
+    var item: String
+    @Environment(\.widgetFamily) var widgetFamily: WidgetFamily
+    
+    var font: Font {
+        switch widgetFamily {
+            case .systemSmall : return .system(size: 10)
+            case .systemMedium: return .system(size: 12)
+            case .systemLarge: return .system(size: 16)
+            case .systemExtraLarge: return .system(size: 20)
+            default:
+                return .system(size: 12)
+        }
+    }
+    
     var body: some View {
         HStack {
-            Image(systemName: image)
-            if let item = item {
-                HStack {
-                    Text(item.title)
-                }
-            }else {
-              Text("(missing)")
+            Image(systemName: "smallcircle.filled.circle")
+            HStack {
+                Text(item).font(self.font)
             }
         }
     }
 }
 
 struct WPriorities: View {
-    let priorities: [TaskItem]
-    @Bindable var preferences: Preferences
+    let preferences: CloudPreferences
+    @Environment(\.widgetFamily) var widgetFamily: WidgetFamily
+    
+    
+    var headingText: String {
+        switch widgetFamily {
+            case .systemSmall : return "Today"
+            case .systemMedium: return "Today's Priorities"
+            case .systemLarge: return "Today's Priorities"
+            case .systemExtraLarge: return "Today's Priorities"
+            default:
+                return "Today's Priorities"
+        }
+    }
+    
+    var nrPriorities : Int {
+        switch widgetFamily {
+            case .systemSmall : return 3
+            case .systemMedium: return 3
+            case .systemLarge: return 4
+            case .systemExtraLarge: return 5
+            default:
+                return 3
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
+            Text("\(Image(systemName: "flame.fill")) Streak: \(preferences.daysOfReview)").font(.title2).foregroundStyle(Color.red)
             Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(preferences.accentColor)){
-            let prios = priorities.filter({$0.isOpenOrPriority})
-                let count = prios.count
-                    AWPriority(image: imgPriority1, item: count > 0 ? prios[0] : nil)
-                    AWPriority(image: imgPriority2, item: count > 1 ? prios[1] : nil)
-                    AWPriority(image: imgPriority3, item: count > 2 ? prios[2] : nil)
-                
+                    AWPriority( item: preferences.getPriority(nr: 1))
+                AWPriority( item: preferences.getPriority(nr: 2))
+                AWPriority( item: preferences.getPriority(nr: 3))
+                if nrPriorities > 3 {
+                    AWPriority( item: preferences.getPriority(nr: 4))
+                }
+                if nrPriorities > 4 {
+                    AWPriority( item: preferences.getPriority(nr: 5))
+                }
             }
         }
     }
 }
 
 #Preview {
-    WPriorities(priorities: TaskManagerViewModel(modelContext: TestStorage()).priorityTasks, preferences: Preferences())
+    WPriorities(preferences: dummyPreferences())
 }

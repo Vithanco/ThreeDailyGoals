@@ -60,7 +60,7 @@ struct LinkToList: View {
  
 
 #Preview {
-    LinkToList(whichList: .open, model: TaskManagerViewModel(modelContext: TestStorage()))
+    LinkToList(whichList: .open, model: dummyViewModel())
 }
 
 

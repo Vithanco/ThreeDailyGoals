@@ -12,11 +12,11 @@ import SwiftData
 struct Provider: AppIntentTimelineProvider {
     
     func placeholder(in context: Context) -> PriorityEntry {
-        PriorityEntry(date: Date(), configuration: ConfigurationAppIntent())
+        return PriorityEntry(date: Date(), configuration: ConfigurationAppIntent())
     }
     
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> PriorityEntry {
-        PriorityEntry(date: Date(), configuration: configuration)
+        return PriorityEntry(date: Date(), configuration: configuration)
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<PriorityEntry> {
@@ -37,36 +37,28 @@ struct Provider: AppIntentTimelineProvider {
 struct PriorityEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationAppIntent
-    
 }
 
 struct Three_Daily_Goals__Widget_EntryView : View {
-
-    @Environment(\.modelContext) private var modelContext
-    @Bindable var preferences: Preferences
-//    @Query(filter: #Predicate<TaskItem> { item in
-//        item._state == TaskItemState.priority
-//    }, sort: \.changed, order: .forward)
-    @Query
-    var list : [TaskItem]
-    
     var entry: PriorityEntry
     
     var body: some View {
-        WPriorities(priorities: list.filter({$0.isPriority}), preferences: preferences)
+        WPriorities( preferences: CloudPreferences(testData: false))
     }
 }
 
+
 struct Three_Daily_Goals__Widget_: Widget {
-    @Environment(\.modelContext) private var modelContext
+
     let kind: String = "Three_Daily_Goals__Widget_"
     
+    func getView(entry: PriorityEntry)-> some View {
+        return Three_Daily_Goals__Widget_EntryView(entry: entry)
+            .containerBackground(.fill.tertiary, for: .widget)
+    }
+    
     var body: some WidgetConfiguration {
-        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-            Three_Daily_Goals__Widget_EntryView(preferences: loadPreferences(modelContext: modelContext), entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
-                .modelContainer(sharedModelContainer(inMemory: false))
-        }
+        AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider(), content: getView)
     }
 }
 

@@ -39,8 +39,6 @@ extension TaskItemState {
     }
 }
 
-
-
 @Observable
 final class TaskManagerViewModel {
     
@@ -48,7 +46,7 @@ final class TaskManagerViewModel {
     private let modelContext: Storage
     private(set) var items = [TaskItem]()
     
-    var preferences: Preferences
+    var preferences: CloudPreferences
     
     var accentColor: Color {
         return preferences.accentColor
@@ -84,9 +82,10 @@ final class TaskManagerViewModel {
     var today: DailyTasks? = nil
     
     
-    init(modelContext: Storage) {
+    init(modelContext: Storage, preferences: CloudPreferences) {
         self.modelContext = modelContext
-        preferences = loadPreferences(modelContext: modelContext)
+        self.preferences = preferences
+//        preferences = loadPreferences(modelContext: modelContext)
         
         fetchData()
         NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in
@@ -132,6 +131,7 @@ final class TaskManagerViewModel {
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
             items = try modelContext.fetch(descriptor)
+            logger.info("fetched \(self.items.count) tasks from central store")
             openTasks.removeAll()
             closedTasks.removeAll()
             pendingTasks.removeAll()
@@ -259,6 +259,12 @@ final class TaskManagerViewModel {
                 task.makePriority()
                 priorityTasks.append(task)
                 priorityTasks.sort()
+                for i in 0..<priorityTasks.count {
+                    preferences.setPriority(nr: i+1, value: priorityTasks[i].title)
+                }
+                for i in priorityTasks.count+1...5 {
+                    preferences.setPriority(nr: i, value: "")
+                }
             case .pendingResponse:
                 task.pending()
                 pendingTasks.append(task)
@@ -291,6 +297,29 @@ final class TaskManagerViewModel {
     func endReview(){
         showReviewDialog = false
         preferences.lastReview = Date.now
+    }
+    
+    @discardableResult func killOldTasks(expireAfter: Int? = nil) -> Int{
+        var result = 0
+        let expiryDays = expireAfter ?? preferences.expiryAfter
+        let expireData = getDate(daysPrior: expiryDays)
+        result += killOldTasks(expiryDate: expireData, whichList: .open)
+        result += killOldTasks(expiryDate: expireData, whichList: .priority)
+        result += killOldTasks(expiryDate: expireData, whichList: .pendingResponse)
+        logger.info("killed \(result) tasks")
+        return result
+    }
+    
+    func killOldTasks(expiryDate: Date, whichList: TaskItemState) -> Int {
+        let theList = list(which: whichList)
+        var result = 0
+        for task in theList {
+            if task.changed < expiryDate {
+                move(task: task, to: .dead)
+                result += 1
+            }
+        }
+        return result
     }
     
     func reviewNow(){
@@ -339,3 +368,9 @@ extension TaskManagerViewModel {
         updateUndoRedoStatus()
     }
 }
+
+
+func dummyViewModel() -> TaskManagerViewModel {
+    return TaskManagerViewModel(modelContext: TestStorage(), preferences: CloudPreferences(store: TestPreferences()))
+}
+

@@ -8,6 +8,8 @@
 import XCTest
 @testable import Three_Daily_Goals
 
+
+
 final class PreferencesTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -19,11 +21,12 @@ final class PreferencesTests: XCTestCase {
     }
 
     func testDates() throws {
-        var preferences = Preferences()
+        var tester = TestPreferences()
+        var preferences = CloudPreferences(store: tester )
         var date = Calendar.current.date(from: DateComponents(hour: 23, minute: 59))!
         preferences.reviewTime = date;
-        XCTAssertEqual(preferences.reviewTimeHour,23)
-        XCTAssertEqual(preferences.reviewTimeMinutes,59)
+        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 23)
+        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),59)
         var newDate = preferences.reviewTime
         debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
@@ -35,8 +38,8 @@ final class PreferencesTests: XCTestCase {
         
         date = Calendar.current.date(from: DateComponents(hour: 0, minute: 1))!
         preferences.reviewTime = date;
-        XCTAssertEqual(preferences.reviewTimeHour,0)
-        XCTAssertEqual(preferences.reviewTimeMinutes,1)
+        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"),0)
+        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),1)
         newDate = preferences.reviewTime
         debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Inform: View {
+struct ReviewInformView: View {
     
     @Bindable var model: ReviewModel
     
@@ -28,5 +28,5 @@ struct Inform: View {
 }
 
 #Preview {
-    Inform(model: dummyReviewModel())
+    ReviewInformView(model: dummyReviewModel())
 }

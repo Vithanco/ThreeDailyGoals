@@ -8,22 +8,6 @@
 import SwiftUI
 import SwiftData
 
-#if os(macOS)
-    let dialogMinWidth = 1440
-    let dialogMinHeight = 900
-    let dialogMaxWidth = 2500
-    let dialogMaxHeight = 1600
-#endif
-
-#if os(iOS)
-    let dialogMinWidth = 1080
-    let dialogMinHeight = 2340
-    let dialogMaxWidth = 2796
-    let dialogMaxHeight = 2340
-#endif
-
-
-
 struct SingleView<Content: View>: View {
     
     @ViewBuilder let content: () -> Content
@@ -90,6 +74,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(model: TaskManagerViewModel(modelContext: TestStorage()))
+    ContentView(model: dummyViewModel())
     
 }

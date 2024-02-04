@@ -38,7 +38,7 @@ struct ReviewDialog: View {
             
             switch model.stateOfReview {
                 case .inform:
-                    Inform(model: model)
+                    ReviewInformView(model: model)
                 case .currentPriorities:
                     ReviewCurrentPriorities(model: model)
                 case .pending:

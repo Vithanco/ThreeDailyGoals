@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-enum DialogState {
+enum DialogState : String{
     case inform
     case currentPriorities
     case pending
@@ -61,16 +61,6 @@ final class ReviewModel{
     
     var nameOfNextStep: String {
         return "Next"
-//        switch stateOfReview {
-//            case .inform:
-//                return "Current"
-//            case .currentPriorities:
-//                return "Pending"
-//            case .pending:
-//                return "Priorities"
-//            case .review:
-//                return "Done"
-//        }
     }
     
     func cancelReview(){
@@ -80,13 +70,13 @@ final class ReviewModel{
     
     func endReview(){
         stateOfReview = .inform
+        taskModel.killOldTasks()
         taskModel.endReview()
     }
     
     func waitABit() {
         taskModel.setupReviewNotification(when: Date.now.addingTimeInterval(60*5))
     }
-    
     
     var accentColor: Color {
         return taskModel.accentColor
@@ -99,7 +89,7 @@ final class ReviewModel{
 
 
 func dummyReviewModel(state: DialogState = .inform) -> ReviewModel {
-    let model = ReviewModel(taskModel: TaskManagerViewModel(modelContext: TestStorage()))
+    let model = ReviewModel(taskModel: dummyViewModel())
     model.stateOfReview = state
     return model
 }

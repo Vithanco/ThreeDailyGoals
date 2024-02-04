@@ -12,78 +12,211 @@ import os
 
 fileprivate let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
-    category: String(describing: Preferences.self)
+    category: String(describing: CloudPreferences.self)
 )
 
-typealias Preferences = SchemaLatest.Preferences
+
+let cloudDateFormatter : DateFormatter = {
+    let result = DateFormatter()
+    result.dateStyle = .medium
+    result.timeStyle = .short
+    return result}()
 
 
-extension Preferences {
-    var reviewTime: Date {
-        set {
-            reviewTimeHour = Calendar.current.component(.hour, from: newValue)
-            reviewTimeMinutes = Calendar.current.component(.minute, from: newValue)
+
+enum CloudKey : String {
+    case daysOfReview
+    case reviewTimeHour
+    case reviewTimeMinute
+    case accentColorString
+    case expiryAfter
+    case lastReviewString
+    case priority1
+    case priority2
+    case priority3
+    case priority4
+    case priority5
+
+//    case allowedDaysOfSlack
+//    case useCalendar
+//    case makePriorityNumberOfDaysBeforeDue
+//    case usePrioritisation
+}
+
+protocol KeyValueStorage {
+    func int(forKey aKey: CloudKey) -> Int
+    func set(_ value: Int, forKey aKey: CloudKey)
+    
+    func string(forKey aKey: CloudKey) -> String?
+    func set(_ aString: String?, forKey aKey: CloudKey)
+}
+
+extension KeyValueStorage {
+    func string(forKey aKey: CloudKey, defaultValue: String) -> String{
+        return string(forKey: aKey) ?? defaultValue
+    }
+}
+
+extension NSUbiquitousKeyValueStore : KeyValueStorage {
+    
+    func int(forKey aKey: CloudKey) -> Int {
+        return Int(longLong(forKey: aKey.rawValue))
+    }
+    func set(_ value: Int, forKey aKey: CloudKey) {
+        set(Int64(value), forKey: aKey.rawValue)
+    }
+    
+    func string(forKey aKey: CloudKey) -> String? {
+        return string (forKey: aKey.rawValue)
+    }
+    
+
+    func set(_ aString: String?, forKey aKey: CloudKey)  {
+        set(aString, forKey: aKey.rawValue)
+    }
+}
+
+struct CloudPreferences {
+    var store : KeyValueStorage
+    
+    init(store: KeyValueStorage) {
+        self.store = store
+    }
+    
+    init(testData: Bool){
+        if testData {
+            self.init(store: TestPreferences())
+        } else {
+            self.init(store: NSUbiquitousKeyValueStore.default)
         }
+    }
+    
+    
+    
+    
+}
+
+extension CloudPreferences {
+    var daysOfReview: Int {
         get {
-            var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinutes, second: 0, of: Date())!
+            return self.store.int(forKey: .daysOfReview)
+        }
+        set {
+            store.set(newValue,forKey: .daysOfReview)
+        }
+    }
+
+    var reviewTime: Date {
+        get {
+            let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
+            let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
+            var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!
             if date < Date.now {
                 date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
             }
             return date
         }
+        set {
+            store.set( Calendar.current.component(.hour, from: newValue), forKey: .reviewTimeHour)
+            store.set(Calendar.current.component(.minute, from: newValue), forKey: .reviewTimeMinute)
+        }
+        
     }
     
     var accentColor: Color {
         get {
-            if mainColorString == "" {
-                return Color.accentColor
+            if let mainColorString = store.self.string(forKey: .accentColorString) {
+                return Color(hex: mainColorString)
             }
-            return Color(hex: mainColorString)
+            return Color.accentColor
         }
         set {
             if let string = newValue.toHex {
-                mainColorString = string
+                store.set( string,forKey: .accentColorString)
             } else {
-                mainColorString = ""
+                store.set(nil, forKey: .accentColorString)
             }
             
         }
     }
-    func resetAccentColor(){
-        mainColorString = ""
+    
+    mutating func resetAccentColor(){
+        store.set(nil, forKey: .accentColorString)
+    }
+    
+    var expiryAfter: Int {
+        get {
+            let result = self.store.int(forKey: .expiryAfter)
+            if result > 9 {  // default is 0, and that is an issue!
+                return result
+            }
+            return 30
+        }
+        set {
+            store.set(newValue,forKey: .expiryAfter)
+        }
     }
     
     var expiryAfterString: String {
+        return expiryAfter.description
+    }
+    
+    var lastReview : Date {
         get {
-            return self.expiryAfter.description
+            if let dateAsString = store.string(forKey: .lastReviewString), let result = cloudDateFormatter.date(from: dateAsString){
+                return result
+            }
+            return getDate(daysPrior: 365)
         }
         set {
-            self.expiryAfter = Int(newValue) ?? 31
+            store.set( cloudDateFormatter.string(from: newValue), forKey: .lastReviewString)
         }
     }
+
+    
+    fileprivate func nrToCloudKey(nr: Int) -> CloudKey {
+        switch nr {
+            case 1: return .priority1
+            case 2: return .priority2
+            case 3: return .priority3
+            case 4: return .priority4
+            case 5: return .priority5
+            default: return .priority1
+        }
+    }
+    func getPriority(nr:Int) -> String {
+        return store.string(forKey: nrToCloudKey(nr: nr)) ?? ""
+    }
+    func setPriority(nr: Int, value: String) {
+            store.set(value, forKey: nrToCloudKey(nr: nr))
+    }
+    
 }
 
 
-
-func loadPreferences(modelContext: Storage) -> Preferences {
-    let fetchDescriptor = FetchDescriptor<Preferences>()
+class TestPreferences : KeyValueStorage{
     
-    do {
-        let preferences = try modelContext.fetch(fetchDescriptor)
-        if preferences.count > 1 {
-            logger.error("more than one preferences! Found \(preferences.count) entries! Why?")
-            for d in preferences {
-                modelContext.delete(d)
-            }
-        }
-        if let result = preferences.first {
-            return result
-        }
+    var inner = NSUbiquitousKeyValueStore.default
+    
+    func int(forKey aKey: CloudKey) -> Int {
+        return Int(inner.longLong(forKey: "test_" + aKey.rawValue))
     }
-    catch {
-        logger.warning("no data available? - creating default preferences")
+    func set(_ value: Int, forKey aKey: CloudKey) {
+        inner.set(Int64(value), forKey: "test_" + aKey.rawValue)
     }
-    let new = Preferences()
-    modelContext.insert(new)
-    return new
+    
+    func string(forKey aKey: CloudKey) -> String? {
+        return inner.string (forKey: "test_" + aKey.rawValue)
+    }
+    
+
+    func set(_ aString: String?, forKey aKey: CloudKey)  {
+        inner.set(aString, forKey: "test_" + aKey.rawValue)
+    }
+    
+}
+
+
+func dummyPreferences() -> CloudPreferences {
+    return CloudPreferences(store: TestPreferences())
 }

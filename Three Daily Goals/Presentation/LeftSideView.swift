@@ -33,5 +33,5 @@ struct LeftSideView: View {
 }
 
 #Preview {
-    LeftSideView(model: TaskManagerViewModel(modelContext: TestStorage()))
+    LeftSideView(model: dummyViewModel())
 }
