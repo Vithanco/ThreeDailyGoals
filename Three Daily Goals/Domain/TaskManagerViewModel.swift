@@ -244,8 +244,10 @@ final class TaskManagerViewModel {
             for i in 0..<prios {
                 preferences.setPriority(nr: i+1, value: prioTasks[i].title)
             }
-            for i in prios...4 {
-                preferences.setPriority(nr: i+1, value: "")
+            if prios < 5 {
+                for i in prios...4 {
+                    preferences.setPriority(nr: i+1, value: "")
+                }
             }
         }
         updateUndoRedoStatus()
