@@ -27,13 +27,13 @@ final class ReviewModel{
     }
     
     func movePrioritiesToOpen(){
-        for p in taskModel.priorityTasks {
+        for p in taskModel.list(which: .priority) {
             taskModel.move(task: p, to: .open)
         }
     }
     
     func closeAllPriorities(){
-        for p in taskModel.priorityTasks {
+        for p in taskModel.list(which: .priority) {
             taskModel.move(task: p, to: .closed)
         }
     }

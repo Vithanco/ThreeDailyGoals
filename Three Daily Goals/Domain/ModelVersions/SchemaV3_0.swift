@@ -11,11 +11,11 @@ import SwiftUI
 
 
 
-enum SchemaV2_2: VersionedSchema {
-    static var versionIdentifier = Schema.Version(2, 2, 0)
+enum SchemaV3_0: VersionedSchema {
+    static var versionIdentifier = Schema.Version(3, 0, 0)
     
     static var models: [any PersistentModel.Type] {
-        [TaskItem.self, Comment.self, Preferences.self]
+        [TaskItem.self, Comment.self]
     }
     
     @Model
@@ -37,10 +37,7 @@ enum SchemaV2_2: VersionedSchema {
         @Attribute(.externalStorage)
         var _imageData: Data? = nil
         public var dueDate: Date? = nil
-        
-        @Transient
         var _priority: Int = 0
-        
         
         init() {
             
@@ -56,7 +53,7 @@ enum SchemaV2_2: VersionedSchema {
         
         //MARK: Codable
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, important, urgent,  imageData, dueDate
+            case created, changed, closed, title, details, state, url, comments, important, urgent,  imageData, dueDate, priority
         }
         
         required init(from decoder: Decoder) throws {
@@ -73,6 +70,7 @@ enum SchemaV2_2: VersionedSchema {
             self.urgent = try container.decode(Bool.self, forKey: .urgent)
             self._imageData = try container.decode(Data.self, forKey: .imageData)
             self.dueDate = try container.decode(Date.self, forKey: .dueDate)
+            self._priority = try container.decode(Int.self, forKey: .priority)
         }
         
         func encode(to encoder: Encoder) throws {
@@ -89,8 +87,8 @@ enum SchemaV2_2: VersionedSchema {
             try container.encode(urgent, forKey: .urgent)
             try container.encode(_imageData, forKey: .imageData)
             try container.encode(dueDate, forKey: .dueDate)
+            try container.encode(_priority, forKey: .priority)
         }
-        
     }
     
     
@@ -125,38 +123,5 @@ enum SchemaV2_2: VersionedSchema {
             try container.encode(text, forKey: .text)
         }
     }
-    
-    
-    @Model
-    final class Preferences {
-        
-        var mainColorString : String = ""
-        var reviewTimeHour: Int = 18
-        var reviewTimeMinutes: Int = 0
-        var lastReview: Date = getDate(daysPrior: 365)
-        
-        @Transient
-        var expiryAfter: Int = 30
-        
-        @Transient
-        var makePriorityNumberOfDaysBeforeDue : Int = 2
-        
-        @Transient
-        var _usePrioritisation: Int = 0
-        
-        @Transient
-        var daysOfReview: Int = 0
-        
-        @Transient
-        var allowedDaysOfSlack : Double = 0.0
-        
-        @Transient
-        var _useCalendar: Int = 0
-        
-        init(){
-            
-        }
-    }
-    
     
 }

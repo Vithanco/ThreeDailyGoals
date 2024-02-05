@@ -13,12 +13,12 @@ struct TaskPreferencesView : View {
     var body: some View {
         VStack{
             Spacer()
-            Text("Sort old Tasks out. They seem to be not important to you. You can always find them again in the graveyard.")
+            Text("Sort old Tasks out. They seem to be not important to you. You can always find them again in the graveyard. Btw, you can delete tasks from the Graveyard and from the Closed list.")
             HStack {
                 Spacer()
                 Spacer()
                 Text("Expire after")
-                Stepper(value: $model.preferences.expiryAfter, in: 10...1000, step: 10, label: {Text("  " + model.preferences.expiryAfterString).foregroundColor(model.accentColor)})
+                Stepper(value: $model.preferences.expiryAfter, in: 30...1040, step: 10, label: {Text("  " + model.preferences.expiryAfterString).foregroundColor(model.accentColor)})
                 Text(" days.")
                 Spacer()
                 Spacer()

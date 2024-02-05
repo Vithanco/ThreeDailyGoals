@@ -30,66 +30,69 @@ struct TaskItemView: View {
                 StateView(state: item.state, accentColor:  model.accentColor)
                 Text("Task").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
-
+                
             }
-        }
-        LabeledContent{
-            TextField("Title", text: $item.title)
-                .bold().frame(idealHeight: 13)
-        } label: {
-            Text("Title:").bold().foregroundColor(Color.secondaryColor)
-        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
-        
-//        Details
-        LabeledContent{
-            TextField("Details", text: $item.details, axis: .vertical)
-#if os(macOS)
-                .textFieldStyle(.squareBorder)
-#endif
-                .frame(idealHeight: 30).frame(minHeight: 30)
-        } label: {
-            Text("Details:").bold().foregroundColor(Color.secondaryColor)
-        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
-        
-//        URL
-        LabeledContent{
-            HStack{
-                TextField("URL", text: $item.url, axis: .vertical)
+            
+            LabeledContent{
+                TextField("Title", text: $item.title)
+                    .bold().frame(idealHeight: 13)
+            } label: {
+                Text("Title:").bold().foregroundColor(Color.secondaryColor)
+            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            
+            //        Details
+            LabeledContent{
+                TextField("Details", text: $item.details, axis: .vertical)
 #if os(macOS)
                     .textFieldStyle(.squareBorder)
 #endif
                     .frame(idealHeight: 30).frame(minHeight: 30)
-                if let link = URL(string: item.url) {
-                    Link("Open",destination: link)
-                }
-            }
-        } label: {
-                Text("URL:").bold().foregroundColor(Color.secondaryColor)
-        }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
-        
-        if let comments = item.comments, comments.count > 0 {
-            VStack (alignment: .leading){
-                Text("History:").bold().foregroundColor(Color.secondaryColor)
-                ForEach(comments.sorted()){comment in
-                    CommentView(comment: comment).frame(maxWidth: .infinity)
-                }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+            } label: {
+                Text("Details:").bold().foregroundColor(Color.secondaryColor)
+            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
             
-        }
-        Spacer()
-        HStack{
+            //        URL
             LabeledContent{
-                Text(item.created, format: stdDateFormat)
+                HStack{
+                    TextField("URL", text: $item.url, axis: .vertical)
+#if os(macOS)
+                        .textFieldStyle(.squareBorder)
+#endif
+                        .frame(idealHeight: 30).frame(minHeight: 30)
+                    if let link = URL(string: item.url) {
+                        Link("Open",destination: link)
+                    }
+                }
             } label: {
-                Text("Created:").bold().foregroundColor(Color.secondaryColor)
+                Text("URL:").bold().foregroundColor(Color.secondaryColor)
+            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            
+            Spacer()
+            if let comments = item.comments, comments.count > 0 {
+                VStack (alignment: .leading){
+                    Text("History:").bold().foregroundColor(Color.secondaryColor)
+                    List{
+                        ForEach(comments.sorted()){comment in
+                            CommentView(comment: comment).frame(maxWidth: .infinity)
+                        }.listRowInsets( EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0) )
+                    }
+                }.frame(maxWidth: .infinity, maxHeight: 200)
             }
-            LabeledContent{
-                Text(item.changed, format: stdDateFormat)
-            } label: {
-                Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
+            
+            HStack{
+                LabeledContent{
+                    Text(item.created, format: stdDateFormat)
+                } label: {
+                    Text("Created:").bold().foregroundColor(Color.secondaryColor)
+                }
+                LabeledContent{
+                    Text(item.changed.timeAgoDisplay())
+                } label: {
+                    Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
+                }
             }
         }.background(Color.background).padding()
 #if os(iOS)
@@ -110,7 +113,7 @@ struct TaskItemView: View {
                 if item.isOpen || item.isPriority {
                     ToolbarItem {
                         Button(action: {
-                            item.closeTask()
+                            model.move(task: item, to: .closed)
                         }) {
                             Label("Close", systemImage: imgCloseTask).help("Close")
                         }
@@ -118,9 +121,9 @@ struct TaskItemView: View {
                 } else {
                     ToolbarItem {
                         Button(action: {
-                            item.reOpenTask()
+                            model.move(task: item, to: .open)
                         }) {
-                            Label("Reopen", systemImage: imgReopenTask).help("Reopen")
+                            Label("Open", systemImage: imgReopenTask).help("Open")
                         }
                     }
                 }
@@ -136,6 +139,6 @@ struct TaskItemView: View {
 }
 
 #Preview {
-//    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
+    //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
     TaskItemView( model: dummyViewModel(), item: TaskItem()).frame(width: 600, height: 300)
 }

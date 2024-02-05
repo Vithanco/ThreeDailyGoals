@@ -73,11 +73,8 @@ final class TaskManagerViewModel {
     var showSettingsDialog: Bool = false
     var showMissingReviewAlert : Bool = false
     
-    var openTasks: [TaskItem] = []
-    var closedTasks: [TaskItem]  = []
-    var deadTasks: [TaskItem]  = []
-    var pendingTasks: [TaskItem]  = []
-    var priorityTasks: [TaskItem]  = []
+    
+    var lists : [TaskItemState: [TaskItem]] = [:]
     
     var today: DailyTasks? = nil
     
@@ -86,7 +83,9 @@ final class TaskManagerViewModel {
         self.modelContext = modelContext
         self.preferences = preferences
 //        preferences = loadPreferences(modelContext: modelContext)
-        
+        for c in TaskItemState.allCases {
+            lists[c] = []
+        }
         fetchData()
         NotificationCenter.default.addObserver(forName: NSPersistentCloudKitContainer.eventChangedNotification, object: nil, queue: OperationQueue.main){(notification) in
             if let userInfo = notification.userInfo {
@@ -132,25 +131,15 @@ final class TaskManagerViewModel {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
             items = try modelContext.fetch(descriptor)
             logger.info("fetched \(self.items.count) tasks from central store")
-            openTasks.removeAll()
-            closedTasks.removeAll()
-            pendingTasks.removeAll()
-            deadTasks.removeAll()
-            priorityTasks.removeAll()
-            for item in items {
-                switch item.state {
-                    case .open: openTasks.append(item)
-                    case .closed : closedTasks.append(item)
-                    case .pendingResponse : pendingTasks.append(item)
-                    case .dead: deadTasks.append(item)
-                    case .priority: priorityTasks.append(item)
-                }
+            for t in lists.keys {
+                lists[t]?.removeAll(keepingCapacity: true)
             }
-            openTasks.sort()
-            closedTasks.sort()
-            pendingTasks.sort()
-            deadTasks.sort()
-            priorityTasks.sort()
+            for item in items {
+                lists[item.state]?.append(item)
+            }
+            for t in lists.keys {
+                lists[t]?.sort()
+            }
             updateUndoRedoStatus()
             setupReviewNotification()
             
@@ -166,7 +155,7 @@ final class TaskManagerViewModel {
         let newItem = TaskItem()
         modelContext.insert(newItem)
         items.append(newItem)
-        openTasks.append(newItem)
+        self.lists[.open]?.append(newItem)
         modelContext.processPendingChanges()
         #if os(macOS)
         select(which: .open, item: newItem)
@@ -219,6 +208,7 @@ final class TaskManagerViewModel {
         withAnimation {
             modelContext.beginUndoGrouping()
             modelContext.delete(task)
+            lists[task.state]?.removeObject(task)
             if let index = items.firstIndex(of: task) {
                 items.remove(at: index)
             }
@@ -234,41 +224,29 @@ final class TaskManagerViewModel {
         if task.state == to {
             return // nothing to be done
         }
-        switch task.state {
-            case .closed: closedTasks.removeObject(task)
-            case .dead: deadTasks.removeObject(task)
-            case .pendingResponse: pendingTasks.removeObject(task)
-            case .open: openTasks.removeObject(task)
-            case .priority :priorityTasks.removeObject(task)
-        }
-       
+        lists[task.state]?.removeObject(task)
         switch to {
             case .open:
                 task.reOpenTask()
-                openTasks.append(task)
-                openTasks.sort()
             case .closed:
                 task.closeTask()
-                closedTasks.append(task)
-                closedTasks.sort()
             case .dead:
                 task.graveyard()
-                deadTasks.append(task)
-                deadTasks.sort()
             case .priority:
                 task.makePriority()
-                priorityTasks.append(task)
-                priorityTasks.sort()
-                for i in 0..<priorityTasks.count {
-                    preferences.setPriority(nr: i+1, value: priorityTasks[i].title)
-                }
-                for i in priorityTasks.count+1...5 {
-                    preferences.setPriority(nr: i, value: "")
-                }
             case .pendingResponse:
                 task.pending()
-                pendingTasks.append(task)
-                pendingTasks.sort()
+        }
+        lists[to]?.append(task)
+        lists[to]?.sort()
+        if to == .priority, let prioTasks = lists[to] {
+            let prios = lists[to]?.count ?? 0
+            for i in 0..<prios {
+                preferences.setPriority(nr: i+1, value: prioTasks[i].title)
+            }
+            for i in prios...4 {
+                preferences.setPriority(nr: i+1, value: "")
+            }
         }
         updateUndoRedoStatus()
     }
@@ -296,6 +274,16 @@ final class TaskManagerViewModel {
     
     func endReview(){
         showReviewDialog = false
+        
+        // updating  streak
+        if preferences.lastReview.addingTimeInterval(Seconds.thirtySixHours) > Date.now &&
+            preferences.lastReview.addingTimeInterval(Seconds.eightHours) < Date.now {
+            preferences.daysOfReview = preferences.daysOfReview + 1
+        } else {
+            preferences.daysOfReview = 0
+        }
+        
+        // setting last review date
         preferences.lastReview = Date.now
     }
     
@@ -330,13 +318,11 @@ final class TaskManagerViewModel {
 
 extension TaskManagerViewModel {
     func list(which: TaskItemState) -> [TaskItem] {
-        switch which {
-            case .open: return openTasks
-            case .closed: return closedTasks
-            case .dead: return deadTasks
-            case .priority: return priorityTasks
-            case .pendingResponse: return pendingTasks
+        guard let result = lists[which] else {
+            logger.fault("couldn't retrieve list \(which) from lists")
+            return []
         }
+        return result
     }
     
     var currentList: [TaskItem] {

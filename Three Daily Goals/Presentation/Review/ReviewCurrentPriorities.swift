@@ -13,7 +13,6 @@ struct ReviewCurrentPriorities: View {
     var body: some View {
         VStack{
             Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor)
-            
             Text("Click on Checkbox to close them")
             ListView(whichList: .priority, model: model.taskModel)
             HStack{

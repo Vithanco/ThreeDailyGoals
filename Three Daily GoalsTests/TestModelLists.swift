@@ -18,38 +18,31 @@ final class TestModelLists: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    
+    
     func testLists() throws {
         
         let model = dummyViewModel()
-        
         XCTAssertEqual(6, model.items.count)
         let item = model.items.first!
+        
+        
+        func move(from: TaskItemState, to: TaskItemState) {
+            model.move(task: item, to: to)
+            XCTAssertEqual(item.state, to)
+            XCTAssertTrue(model.lists[to]!.contains(item))
+            XCTAssertFalse(model.lists[from]!.contains(item))
+        }
+        
         XCTAssertEqual(item.state, .open)
-        XCTAssertTrue(model.openTasks.contains(item))
-        model.move(task: item, to: .closed)
-        XCTAssertEqual(item.state, .closed)
-        XCTAssertTrue(model.closedTasks.contains(item))
-        XCTAssertFalse(model.openTasks.contains(item))
-        model.move(task: item, to: .pendingResponse)
-        XCTAssertEqual(item.state, .pendingResponse)
-        XCTAssertTrue(model.pendingTasks.contains(item))
-        XCTAssertFalse(model.closedTasks.contains(item))
+        XCTAssertTrue(model.lists[.open]!.contains(item))
         
-        model.move(task: item, to: .dead)
-        XCTAssertEqual(item.state, .dead)
-        XCTAssertTrue(model.deadTasks.contains(item))
-        XCTAssertFalse(model.pendingTasks.contains(item))
-        
-        model.move(task: item, to: .dead)
-        XCTAssertEqual(item.state, .dead)
-        XCTAssertTrue(model.deadTasks.contains(item))
-        XCTAssertFalse(model.pendingTasks.contains(item))
-        
-        model.move(task: item, to: .priority)
-        XCTAssertEqual(item.state, .priority)
-        XCTAssertTrue(model.priorityTasks.contains(item))
-        XCTAssertFalse(model.deadTasks.contains(item))
+        move(from: .open, to: .closed)
+        move(from: .closed, to: .pendingResponse)
+        move(from: .pendingResponse, to: .dead)
+        move(from: .dead, to: .priority)
+        move(from: .priority, to: .open)
     }
 
-
+  
 }

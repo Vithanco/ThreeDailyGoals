@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum TaskItemState: Codable {
+enum TaskItemState: Codable, Hashable, CaseIterable {
     case open
     case closed
     case dead

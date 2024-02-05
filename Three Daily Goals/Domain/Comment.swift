@@ -20,7 +20,7 @@ extension Comment {
 extension Comment : Equatable, Comparable {
 
     static func < (lhs: Comment, rhs: Comment) -> Bool {
-        return lhs.created < rhs.created
+        return lhs.created > rhs.created
     }
 }
 
