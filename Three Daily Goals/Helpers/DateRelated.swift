@@ -26,6 +26,7 @@ let sevenDaysAgo = getDate(daysPrior: 7)
 let thirtyDaysAgo = getDate(daysPrior: 30)
 
 enum Seconds{
+    static var fiveMin = 60.0 * 5.0
     static var oneHour = 60.0 * 60.0
     static var fullDay = oneHour * 24.0
     static var twoDays = fullDay * 2.0

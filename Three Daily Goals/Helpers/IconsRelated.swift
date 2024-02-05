@@ -5,7 +5,8 @@
 //  Created by Klaus Kneupner on 19/12/2023.
 //
 
-import Foundation
+import AppKit
+import SwiftUI
 
 let imgOpen = "figure.walk.circle.fill"
 let imgClosed = "flag.checkered.2.crossed"
@@ -33,3 +34,50 @@ let imgRedo = "arrow.uturn.forward.circle.fill"
 
 let imgCheckedBox = "checkmark.square.fill"
 let imgUncheckedBox = "square"
+let imgStreak = "flame.fill"
+//
+//
+//enum AppIconProvider {
+//    
+//    // App icons can only be retrieved as named `UIImage`s
+//    // https://stackoverflow.com/a/62064533/17421764
+//    static func appIcon(in bundle: Bundle = .main) -> Image {
+//        guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+//              let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+//              let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+//              let iconFileName = iconFiles.last else {
+//            fatalError("Could not find icons in bundle")
+//        }
+//        #if os(iOS)
+//        if let image = UIImage(named: iconFileName) {
+//            return Image(image)
+//        }
+//        #endif
+//        #if os(macOS)
+//        if let image = NSImage(named: iconFileName) {
+//            return Image(nsImage: image)
+//        }
+//#endif
+//        return Image("halt")
+//    }
+//
+//    struct AppVersionInformationView: View {
+//        let versionString: String
+//        let appIcon: String
+//
+//        var body: some View {
+//            HStack(alignment: .center, spacing: 12) {
+//                VStack(alignment: .leading) {
+//                    Text("Version")
+//                        .bold()
+//                    Text("v\(versionString)")
+//                }
+//                .font(.caption)
+//                .foregroundColor(.primary)
+//            }
+//            .fixedSize()
+//            .accessibilityElement(children: .ignore)
+//            .accessibilityLabel("App version \(versionString)")
+//        }
+//    }
+//}

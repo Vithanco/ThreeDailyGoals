@@ -75,7 +75,7 @@ final class ReviewModel{
     }
     
     func waitABit() {
-        taskModel.setupReviewNotification(when: Date.now.addingTimeInterval(60*5))
+        taskModel.setupReviewNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
     }
     
     var accentColor: Color {

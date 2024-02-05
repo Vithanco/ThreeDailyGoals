@@ -35,6 +35,7 @@ struct Three_Daily_GoalsApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(model: model)
+                .navigationTitle("Three Daily Goals")
         }
         .modelContainer(container)
         .commands {

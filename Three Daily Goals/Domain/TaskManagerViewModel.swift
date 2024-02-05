@@ -220,10 +220,27 @@ final class TaskManagerViewModel {
         }
     }
     
+    
+    ///updating priorities to key value store, so that we show them in the Widget
+    fileprivate func updatePriorities() {
+        if let prioTasks = lists[.priority] {
+            let prios = prioTasks.count
+            for i in 0..<prios {
+                preferences.setPriority(nr: i+1, value: prioTasks[i].title)
+            }
+            if prios < 5 {
+                for i in prios...4 {
+                    preferences.setPriority(nr: i+1, value: "")
+                }
+            }
+        }
+    }
+    
     func move(task: TaskItem, to: TaskItemState) {
         if task.state == to {
             return // nothing to be done
         }
+        let moveFromPriority = task.state == .priority
         lists[task.state]?.removeObject(task)
         switch to {
             case .open:
@@ -239,16 +256,10 @@ final class TaskManagerViewModel {
         }
         lists[to]?.append(task)
         lists[to]?.sort()
-        if to == .priority, let prioTasks = lists[to] {
-            let prios = lists[to]?.count ?? 0
-            for i in 0..<prios {
-                preferences.setPriority(nr: i+1, value: prioTasks[i].title)
-            }
-            if prios < 5 {
-                for i in prios...4 {
-                    preferences.setPriority(nr: i+1, value: "")
-                }
-            }
+        
+        // Did it touch priorities (in or out)? If so, update priorities
+        if to == .priority || moveFromPriority {
+            updatePriorities()
         }
         updateUndoRedoStatus()
     }
@@ -258,10 +269,10 @@ final class TaskManagerViewModel {
             return
         }
         var time = when ?? self.preferences.reviewTime
-        let fourHoursMin = self.preferences.lastReview.addingTimeInterval(60*60*4)
+        let fourHoursMin = self.preferences.lastReview.addingTimeInterval(Seconds.fourHours)
         if time < fourHoursMin {
             logger.info("moving review to next day as the last one is less than four hours away.")
-            time = time.addingTimeInterval(60*60*24)
+            time = time.addingTimeInterval(Seconds.fullDay)
         }
 
         showReviewDialog = false

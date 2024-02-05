@@ -47,6 +47,7 @@ struct ContentView: View {
 #endif
                     }.background(Color.background)
                         .navigationSplitViewColumnWidth(min: 250, ideal: 400)
+                        .navigationSubtitle(Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview)").foregroundStyle(Color.red))
                 }
             detail: {
                 if let detail = model.selectedItem {

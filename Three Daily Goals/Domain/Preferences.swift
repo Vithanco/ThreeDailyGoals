@@ -108,6 +108,8 @@ extension CloudPreferences {
 
     var reviewTime: Date {
         get {
+            
+//            the timing logic needs serious improvement - and some good test cases
             let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
             let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
             var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!

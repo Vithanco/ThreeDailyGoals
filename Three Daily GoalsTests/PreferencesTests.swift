@@ -31,7 +31,7 @@ final class PreferencesTests: XCTestCase {
         debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(60 * 60 * 24))
+        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         XCTAssertEqual(23, Calendar.current.component(.hour, from: newDate))
         XCTAssertEqual(59, Calendar.current.component(.minute, from: newDate))
         XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
@@ -44,7 +44,7 @@ final class PreferencesTests: XCTestCase {
         debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(60 * 60 * 24))
+        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         XCTAssertEqual(0, Calendar.current.component(.hour, from: newDate))
         XCTAssertEqual(1, Calendar.current.component(.minute, from: newDate))
         XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
@@ -55,7 +55,7 @@ final class PreferencesTests: XCTestCase {
         debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(60 * 60 * 24))
+        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
     }
 
