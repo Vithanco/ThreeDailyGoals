@@ -28,7 +28,7 @@ final class PreferencesTests: XCTestCase {
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 23)
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),59)
         var newDate = preferences.reviewTime
-        debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
+        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
         XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
@@ -41,7 +41,7 @@ final class PreferencesTests: XCTestCase {
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"),0)
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),1)
         newDate = preferences.reviewTime
-        debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
+        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
         XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
@@ -52,7 +52,7 @@ final class PreferencesTests: XCTestCase {
         date = Date.now
         preferences.reviewTime = date;
         newDate = preferences.reviewTime
-        debugPrint("Time is : \(stdTimeFormat.format(newDate)), date is: \(stdDateFormat.format(newDate))")
+        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)
         XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))

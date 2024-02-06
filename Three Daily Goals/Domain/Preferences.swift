@@ -20,9 +20,8 @@ let cloudDateFormatter : DateFormatter = {
     let result = DateFormatter()
     result.dateStyle = .medium
     result.timeStyle = .short
-    return result}()
-
-
+    return result
+}()
 
 enum CloudKey : String {
     case daysOfReview
@@ -69,7 +68,6 @@ extension NSUbiquitousKeyValueStore : KeyValueStorage {
     func string(forKey aKey: CloudKey) -> String? {
         return string (forKey: aKey.rawValue)
     }
-    
 
     func set(_ aString: String?, forKey aKey: CloudKey)  {
         set(aString, forKey: aKey.rawValue)
@@ -89,11 +87,13 @@ struct CloudPreferences {
         } else {
             self.init(store: NSUbiquitousKeyValueStore.default)
         }
+        
+        // initiate the store with a proper time
+        if store.string(forKey: .lastReviewString) == nil {
+            store.set(18, forKey: .reviewTimeHour)
+            store.set(00, forKey: .reviewTimeMinute)
+        }
     }
-    
-    
-    
-    
 }
 
 extension CloudPreferences {
@@ -106,25 +106,36 @@ extension CloudPreferences {
         }
     }
 
+    var nextReviewTime : Date {
+        var result = reviewTime
+        if result < Date.now {
+            result = addADay(result)
+        }
+        return result
+    }
+        
+    var didReviewToday : Bool {
+        return lastReview.isToday
+    }
+    
     var reviewTime: Date {
         get {
-            
 //            the timing logic needs serious improvement - and some good test cases
             let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
             let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
             var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!
-            if date < Date.now {
-                date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-            }
             return date
         }
         set {
             store.set( Calendar.current.component(.hour, from: newValue), forKey: .reviewTimeHour)
             store.set(Calendar.current.component(.minute, from: newValue), forKey: .reviewTimeMinute)
         }
-        
     }
     
+    var reviewTimeComponents: DateComponents {
+        return DateComponents(calendar: Calendar.current, hour:  self.store.int(forKey: .reviewTimeHour), minute: self.store.int(forKey: .reviewTimeMinute))
+    }
+                              
     var accentColor: Color {
         get {
             if let mainColorString = store.self.string(forKey: .accentColorString) {

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 struct TaskSection : Observable     {
     let text : String
@@ -19,14 +18,6 @@ let secOpen = TaskSection(text: "Open", image: imgOpen, showOlder: false)
 let secClosed = TaskSection(text: "Closed", image: imgClosed, showOlder: true )
 let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard,  showOlder: true)
 let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, showOlder: true)
-
-
-
-extension TaskSection {
-    var asText: Text {
-        return Text("\(Image(systemName: image)) \(text)").font(.title)
-    }
-}
 
 extension TaskSection : Identifiable {
     var id: String {

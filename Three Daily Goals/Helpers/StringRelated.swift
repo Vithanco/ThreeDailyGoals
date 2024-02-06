@@ -10,7 +10,7 @@ import Foundation
 
 extension String.StringInterpolation {
     mutating func appendInterpolation(_ date: Date) {
-        appendLiteral(date.formatted(stdDateFormat) )
+        appendLiteral(date.formatted(stdOnlyDateFormat) )
     }
 }
 

@@ -14,7 +14,7 @@ struct CommentView: View {
         LabeledContent{
             Text(comment.text).frame(maxWidth: .infinity, alignment: .leading)
         } label: {
-            Text(comment.created, format: stdDateFormat)//.foregroundColor(Color.secondaryColor)
+            Text(comment.created, format: stdOnlyDateFormat)//.foregroundColor(Color.secondaryColor)
         }.frame(maxWidth: .infinity).padding(1)//.background(Color.secondaryBackground)
     }
 }

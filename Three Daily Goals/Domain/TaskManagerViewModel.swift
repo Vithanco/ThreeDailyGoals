@@ -82,7 +82,6 @@ final class TaskManagerViewModel {
     init(modelContext: Storage, preferences: CloudPreferences) {
         self.modelContext = modelContext
         self.preferences = preferences
-//        preferences = loadPreferences(modelContext: modelContext)
         for c in TaskItemState.allCases {
             lists[c] = []
         }
@@ -98,6 +97,7 @@ final class TaskManagerViewModel {
                 }
             }
         }
+        setupReviewNotification()
     }
     
     func addSamples() -> Self {
@@ -141,7 +141,6 @@ final class TaskManagerViewModel {
                 lists[t]?.sort()
             }
             updateUndoRedoStatus()
-            setupReviewNotification()
             
             if preferences.lastReview < getDate(daysPrior: 2) {
                 showReviewDialog = true
@@ -264,16 +263,26 @@ final class TaskManagerViewModel {
         updateUndoRedoStatus()
     }
     
+    var nextRegularReviewTime: Date {
+        var result = self.preferences.reviewTime
+        if Calendar.current.isDate(preferences.lastReview, inSameDayAs: result) {
+            // review happened today, let's do it tomorrow
+            result = addADay(result)
+        } else {
+            if result < Date.now {
+                //regular time passed by, now just do it in 30 secs
+                return Date.now.addingTimeInterval(Seconds.thirtySeconds)
+            }
+        }
+        return result
+    }
+    
     func setupReviewNotification(when: Date? = nil){
+        sendBasicNotification(timing: preferences.reviewTimeComponents, model: self)
         if showReviewDialog {
             return
         }
-        var time = when ?? self.preferences.reviewTime
-        let fourHoursMin = self.preferences.lastReview.addingTimeInterval(Seconds.fourHours)
-        if time < fourHoursMin {
-            logger.info("moving review to next day as the last one is less than four hours away.")
-            time = time.addingTimeInterval(Seconds.fullDay)
-        }
+        let time = when ?? nextRegularReviewTime
 
         showReviewDialog = false
         timer.setTimer(forWhen: time ){
@@ -285,16 +294,26 @@ final class TaskManagerViewModel {
         preferences.resetAccentColor()
     }
     
+    
+    /// updating  streak if that is meaningful
+    fileprivate func updateStreak() {
+        if Calendar.current.isDate(preferences.lastReview, inSameDayAs: Date.now) {
+            //nothing to do, we already got today's credit
+            return
+        }
+        
+        if preferences.lastReview.addingTimeInterval(Seconds.thirtySixHours) > Date.now {
+            preferences.daysOfReview = preferences.daysOfReview + 1
+        } else {
+            // reset the streak to 0
+            preferences.daysOfReview = 0
+        }
+    }
+    
     func endReview(){
         showReviewDialog = false
         
-        // updating  streak
-        if preferences.lastReview.addingTimeInterval(Seconds.thirtySixHours) > Date.now &&
-            preferences.lastReview.addingTimeInterval(Seconds.eightHours) < Date.now {
-            preferences.daysOfReview = preferences.daysOfReview + 1
-        } else {
-            preferences.daysOfReview = 0
-        }
+        updateStreak()
         
         // setting last review date
         preferences.lastReview = Date.now

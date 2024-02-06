@@ -43,11 +43,13 @@ struct ContentView: View {
                         ListView( model: model).background(Color.background)
 #endif
 #if os(iOS)
-                        Text("Placeholder")
+                        Text("Placeholder").redacted(reason: /*@START_MENU_TOKEN@*/.placeholder/*@END_MENU_TOKEN@*/)
 #endif
                     }.background(Color.background)
                         .navigationSplitViewColumnWidth(min: 250, ideal: 400)
-                        .navigationSubtitle(Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview)").foregroundStyle(Color.red))
+                        .navigationSubtitle(
+                            Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview) - next review planned: \(stdDateTimeFormat.format(model.preferences.nextReviewTime))")
+                                .foregroundStyle(Color.red))
                 }
             detail: {
                 if let detail = model.selectedItem {

@@ -84,7 +84,7 @@ struct TaskItemView: View {
             
             HStack{
                 LabeledContent{
-                    Text(item.created, format: stdDateFormat)
+                    Text(item.created, format: stdOnlyDateFormat)
                 } label: {
                     Text("Created:").bold().foregroundColor(Color.secondaryColor)
                 }

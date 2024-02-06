@@ -8,6 +8,13 @@
 import SwiftUI
 
 
+
+extension TaskSection {
+    var asText: Text {
+        return Text("\(Image(systemName: image)) \(text)").font(.title)
+    }
+}
+
 struct StateView: View {
     let state: TaskItemState
     let accentColor : Color
@@ -17,20 +24,13 @@ struct StateView: View {
     }
 }
 
-
-struct StateViewHelper : View {
-    @State var state: TaskItemState
-    var body: some View {
-        StateView(state: state, accentColor: Color.red)
-    }
-}
 #Preview {
     Group {
-        StateViewHelper(state: TaskItemState.open)
-        StateViewHelper(state: TaskItemState.closed)
-        StateViewHelper(state: TaskItemState.dead)
-        StateViewHelper(state: TaskItemState.pendingResponse)
-        StateViewHelper(state: TaskItemState.priority)
+        StateView(state: TaskItemState.open, accentColor: Color.red)
+        StateView(state: TaskItemState.closed, accentColor: Color.red)
+        StateView(state: TaskItemState.dead, accentColor: Color.red)
+        StateView(state: TaskItemState.pendingResponse, accentColor: Color.red)
+        StateView(state: TaskItemState.priority, accentColor: Color.red)
     }
         
 }

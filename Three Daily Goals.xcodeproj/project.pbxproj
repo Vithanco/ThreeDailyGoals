@@ -49,6 +49,8 @@
 		E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */; };
 		E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */; };
 		E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */; };
+		E57C31B02B724B2700943EA1 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C31AF2B724B2700943EA1 /* PushNotification.swift */; };
+		E57C31B22B726A1300943EA1 /* iOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C31B12B726A1300943EA1 /* iOSAppDelegate.swift */; };
 		E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E582D0B72B2E13E30006DD5D /* TaskItemView.swift */; };
 		E590CE182B1FAD9000B16684 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
 		E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
@@ -72,6 +74,7 @@
 		E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 		E5ED903F2B46E44100CF0431 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
+		E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */; };
 		E5FEC7F02B46F9D7007BE890 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
 		E5FEC7F12B46FA27007BE890 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		E5FEC7F22B46FA2A007BE890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
@@ -169,6 +172,8 @@
 		E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Three Daily GoalsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITests.swift; sourceTree = "<group>"; };
 		E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E57C31AF2B724B2700943EA1 /* PushNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotification.swift; sourceTree = "<group>"; };
+		E57C31B12B726A1300943EA1 /* iOSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSAppDelegate.swift; sourceTree = "<group>"; };
 		E582D0B72B2E13E30006DD5D /* TaskItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemView.swift; sourceTree = "<group>"; };
 		E590CE172B1FAD9000B16684 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		E5A3718D2B2E2B0E00A310BA /* StateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateView.swift; sourceTree = "<group>"; };
@@ -187,6 +192,7 @@
 		E5E1F47B2B30632000E83A21 /* DateRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelated.swift; sourceTree = "<group>"; };
 		E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRelated.swift; sourceTree = "<group>"; };
 		E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayRelated.swift; sourceTree = "<group>"; };
+		E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDailyReviewTime.swift; sourceTree = "<group>"; };
 		E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftSideView.swift; sourceTree = "<group>"; };
 		E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModelLists.swift; sourceTree = "<group>"; };
@@ -337,6 +343,7 @@
 				E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */,
 				E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */,
 				E5DE105C2B69041F00381337 /* PreferencesTests.swift */,
+				E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */,
 			);
 			path = "Three Daily GoalsTests";
 			sourceTree = "<group>";
@@ -353,6 +360,7 @@
 		E5E1F4752B3060FD00E83A21 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				E57C31AF2B724B2700943EA1 /* PushNotification.swift */,
 				E50A29B52B6995BC002AC3BC /* ModelVersions */,
 				E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */,
 				E561D6DF2B1F54A6003BE36F /* TaskItem.swift */,
@@ -390,6 +398,7 @@
 			isa = PBXGroup;
 			children = (
 				E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */,
+				E57C31B12B726A1300943EA1 /* iOSAppDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -620,6 +629,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E57C31B02B724B2700943EA1 /* PushNotification.swift in Sources */,
 				E5FFC5C12B6A72FB00C9D60B /* ReviewPendingResponses.swift in Sources */,
 				E53AF7AA2B66210C00C24F78 /* SchemaV2.swift in Sources */,
 				E5FFC5C32B6A73A900C9D60B /* ReviewInformView.swift in Sources */,
@@ -657,6 +667,7 @@
 				E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */,
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
 				E50A29BA2B6A0D79002AC3BC /* ImageRelated.swift in Sources */,
+				E57C31B22B726A1300943EA1 /* iOSAppDelegate.swift in Sources */,
 				E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */,
 				E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */,
 				E5E1F4792B30617A00E83A21 /* DailyTasks.swift in Sources */,
@@ -675,6 +686,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,

@@ -28,6 +28,7 @@ struct Three_Daily_GoalsApp: App {
            #endif
         self.container = sharedModelContainer(inMemory: inMemory)
         self._model = State(wrappedValue: TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false)))
+        
        }
     
   
