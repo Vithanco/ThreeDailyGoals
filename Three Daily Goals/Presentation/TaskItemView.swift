@@ -11,6 +11,7 @@ import SwiftUI
 struct TaskItemView: View {
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
+    @FocusState private var isTitleFocused: Bool 
     
     private func undo() {
         model.undo()
@@ -30,11 +31,10 @@ struct TaskItemView: View {
                 StateView(state: item.state, accentColor:  model.accentColor)
                 Text("Task").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
-                
             }
             
             LabeledContent{
-                TextField("Title", text: $item.title)
+                TextField("Title", text: $item.title).focused($isTitleFocused)
                     .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
@@ -134,7 +134,10 @@ struct TaskItemView: View {
                         Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
                     }
                 }
-            }.onAppear(perform:{updateUndoRedoStatus()})
+            }.onAppear(perform:{
+                updateUndoRedoStatus()
+                isTitleFocused = true
+            })
     }
 }
 

@@ -60,6 +60,9 @@ final class ReviewModel{
     }
     
     var nameOfNextStep: String {
+        if stateOfReview == .review {
+            return "Finish"
+        }
         return "Next"
     }
     

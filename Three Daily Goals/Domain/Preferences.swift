@@ -23,7 +23,7 @@ let cloudDateFormatter : DateFormatter = {
     return result
 }()
 
-enum CloudKey : String {
+enum CloudKey : String, CaseIterable {
     case daysOfReview
     case reviewTimeHour
     case reviewTimeMinute
@@ -94,6 +94,9 @@ struct CloudPreferences {
             store.set(00, forKey: .reviewTimeMinute)
         }
     }
+//    for key in CloudKey.allCases {
+//        
+//    }
 }
 
 extension CloudPreferences {

@@ -49,7 +49,7 @@ struct ContentView: View {
                     .navigationTitle("Three Daily Goals")
 #if os(macOS)
                     .navigationSubtitle(
-                        streakView(model: model)).multilineTextAlignment(.center)
+                        streakView(model: model))
 #endif
             }
         detail: {
