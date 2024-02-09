@@ -40,9 +40,10 @@ final class PreferencesTests: XCTestCase {
         preferences.reviewTime = date;
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"),0)
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),1)
-        newDate = preferences.reviewTime
+        newDate = preferences.nextReviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
+        XCTAssertTrue(preferences.reviewTime < Date.now)
         XCTAssertNotEqual(newDate, Date.today)
         XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         XCTAssertEqual(0, Calendar.current.component(.hour, from: newDate))
@@ -51,7 +52,7 @@ final class PreferencesTests: XCTestCase {
         
         date = Date.now
         preferences.reviewTime = date;
-        newDate = preferences.reviewTime
+        newDate = preferences.nextReviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         XCTAssertTrue(newDate > Date.now)
         XCTAssertNotEqual(newDate, Date.today)

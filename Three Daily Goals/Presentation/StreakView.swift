@@ -8,7 +8,7 @@
 import SwiftUI
 
 func streakView(model: TaskManagerViewModel) -> Text {
-    return Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview) \nReview sc: \(stdDateTimeFormat.format(model.preferences.nextReviewTime))").foregroundStyle(Color.red)
+    return Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview) \nNext Review: \(stdDateTimeFormat.format(model.preferences.nextReviewTime))").foregroundStyle(Color.red)
         
 }
 

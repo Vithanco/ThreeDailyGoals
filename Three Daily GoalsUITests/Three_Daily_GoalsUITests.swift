@@ -8,6 +8,13 @@
 import XCTest
 //@testable import Three_Daily_Goals
 
+func ensureExists(text: String, inApp: XCUIApplication) {
+    let predicate = NSPredicate(format: "value CONTAINS '\(text)'")
+    let elementQuery = inApp.staticTexts.containing(predicate)
+    XCTAssertTrue (elementQuery.count > 0, "couldn't find \(text)")
+}
+
+
 final class Three_Daily_GoalsUITests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -34,6 +41,18 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+    
+    func testInfo() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+        ensureExists(text: "Streak", inApp: app)
+        #if os(macOS)
+        ensureExists(text: "Next Review", inApp: app)
+        #endif
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
     
     @MainActor func testAppStartsEmpty() throws {
 //        let container = sharedModelContainer(inMemory: true)
