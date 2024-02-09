@@ -43,21 +43,29 @@ struct TaskAsLine: View {
     
     var body: some View {
         HStack {
+#if os(macOS)
             Checkbox(isChecked: item.isClosed, action: action).frame(maxWidth: 30)
+#endif
             Text(item.title).strikethrough( item.isClosed, color: accentColor).draggable(item.id)
             if item.isPending {
                 Spacer()
                 Button(action: {model.move(task: item, to: .open)}, label: {return Text("move to \(Image(systemName: imgOpen))")})
             }
-//            if item.isClosed || item.isGraveyarded {
-//                Spacer()
-//                Button(role: .destructive, action: {model.delete(task: item)}, label: {return Text("delete").padding(0)}).foregroundColor(.white)
+            #if os(macOS)
+            if item.isClosed || item.isGraveyarded {
+                Spacer()
+                Button(role: .destructive, action: {model.delete(task: item)}, label: {return Text("delete \(Image(systemName: "trash"))").padding(0)}).foregroundColor(.white)
 //                    .padding(2)
 //                    .background(Color.red) // Red background to indicate a destructive action
 //                    .cornerRadius(8)
-//            }
+            }
+            #endif
         }.swipeActions {
-            if item.isClosed || item.isGraveyarded {
+            if item.canBeClosed {
+                Button{ model.move(task: item, to: .open) } label: {
+                    Label("Move to open", systemImage: TaskItemState.open.imageName)
+                }
+            } else {
                 Button(role: .destructive) { model.delete(task: item) } label: {
                     Label("Delete", systemImage: "trash")
                 }

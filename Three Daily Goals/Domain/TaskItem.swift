@@ -101,6 +101,10 @@ extension TaskItem {
         return state == .closed
     }
     
+    var canBeClosed : Bool {
+        return state == .open || state == .priority || state == .pendingResponse
+    }
+    
     var isGraveyarded: Bool {
         return state == .dead
     }

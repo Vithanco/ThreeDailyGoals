@@ -11,15 +11,12 @@ struct LeftSideView: View {
     @Bindable var model : TaskManagerViewModel
     var body: some View {
         VStack(alignment: .leading){
+#if os(iOS)
+            Text("\(Image(systemName: imgStreak)) Streak: \(model.preferences.daysOfReview) days").foregroundStyle(Color.red).frame(maxWidth: .infinity, alignment: .center)
+#endif
             ListView(whichList: .priority, model: model)
-//                .dropDestination(for: String.self){
-//                items, location in
-//                for item in items.compactMap({model.findTask(withID: $0)}) {
-//                    item.makePriority(position: 0, day: model.today!)
-//                }
-//                return true
-//            }
             Spacer()
+
             List{
                 LinkToList(whichList: .open, model: model)
                 LinkToList(whichList: .pendingResponse, model: model)
@@ -27,8 +24,7 @@ struct LeftSideView: View {
                 LinkToList(whichList: .dead, model: model)
             }.frame(maxHeight: 145)
         }
-//        .background(Color.background)
-            .tdgToolbar(model: model)
+        .tdgToolbar(model: model)
     }
 }
 

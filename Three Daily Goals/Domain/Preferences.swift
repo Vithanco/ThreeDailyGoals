@@ -123,7 +123,7 @@ extension CloudPreferences {
 //            the timing logic needs serious improvement - and some good test cases
             let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
             let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
-            var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!
+            let date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!
             return date
         }
         set {
@@ -161,6 +161,7 @@ extension CloudPreferences {
         get {
             let result = self.store.int(forKey: .expiryAfter)
             if result > 9 {  // default is 0, and that is an issue!
+                store.set(30,forKey: .expiryAfter)
                 return result
             }
             return 30
@@ -179,10 +180,11 @@ extension CloudPreferences {
             if let dateAsString = store.string(forKey: .lastReviewString), let result = cloudDateFormatter.date(from: dateAsString){
                 return result
             }
-            return getDate(daysPrior: 365)
+            store.set(cloudDateFormatter.string(from: Date.now), forKey: .lastReviewString)
+            return Date.now
         }
         set {
-            store.set( cloudDateFormatter.string(from: newValue), forKey: .lastReviewString)
+            store.set(cloudDateFormatter.string(from: newValue), forKey: .lastReviewString)
         }
     }
 
@@ -212,9 +214,13 @@ class TestPreferences : KeyValueStorage{
     var inner = NSUbiquitousKeyValueStore.default
     
     func int(forKey aKey: CloudKey) -> Int {
-        return Int(inner.longLong(forKey: "test_" + aKey.rawValue))
+        let result = Int(inner.longLong(forKey: "test_" + aKey.rawValue))
+        debugPrint("reading \(result) for test_\(aKey.rawValue)")
+        return result
     }
+    
     func set(_ value: Int, forKey aKey: CloudKey) {
+        debugPrint("setting test_\(aKey.rawValue) to \(value)")
         inner.set(Int64(value), forKey: "test_" + aKey.rawValue)
     }
     
@@ -222,14 +228,17 @@ class TestPreferences : KeyValueStorage{
         return inner.string (forKey: "test_" + aKey.rawValue)
     }
     
-
     func set(_ aString: String?, forKey aKey: CloudKey)  {
         inner.set(aString, forKey: "test_" + aKey.rawValue)
     }
-    
 }
 
 
 func dummyPreferences() -> CloudPreferences {
-    return CloudPreferences(store: TestPreferences())
+    let store = TestPreferences()
+    var result = CloudPreferences(store: store)
+    result.daysOfReview = 42
+    store.set(18, forKey: .reviewTimeHour)
+    store.set(00, forKey: .reviewTimeMinute)
+    return result
 }

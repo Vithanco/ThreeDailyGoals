@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 enum TaskItemState: Codable, Hashable, CaseIterable {
@@ -32,5 +33,19 @@ extension TaskItemState : CustomStringConvertible {
             case .closed, .dead: return false
             case .open, .pendingResponse, .priority: return true
         }
+    }
+    
+    var imageName: String {
+        switch self {
+            case .closed: return imgClosed
+            case .dead: return imgGraveyard
+            case .open: return imgOpen
+            case .pendingResponse: return imgPendingResponse
+            case .priority: return imgToday
+        }
+    }
+    
+    var image: Image {
+        return Image(systemName: self.imageName)
     }
 }

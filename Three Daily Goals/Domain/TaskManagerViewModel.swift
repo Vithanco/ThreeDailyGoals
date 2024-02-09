@@ -76,8 +76,6 @@ final class TaskManagerViewModel {
     
     var lists : [TaskItemState: [TaskItem]] = [:]
     
-    var today: DailyTasks? = nil
-    
     
     init(modelContext: Storage, preferences: CloudPreferences) {
         self.modelContext = modelContext
@@ -389,6 +387,6 @@ extension TaskManagerViewModel {
 
 
 func dummyViewModel() -> TaskManagerViewModel {
-    return TaskManagerViewModel(modelContext: TestStorage(), preferences: CloudPreferences(store: TestPreferences()))
+    return TaskManagerViewModel(modelContext: TestStorage(), preferences: dummyPreferences())
 }
 
