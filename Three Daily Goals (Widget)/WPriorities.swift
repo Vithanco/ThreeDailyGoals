@@ -17,10 +17,10 @@ struct AWPriority: View {
     
     var font: Font {
         switch widgetFamily {
-            case .systemSmall : return .system(size: 10)
-            case .systemMedium: return .system(size: 12)
-            case .systemLarge: return .system(size: 16)
-            case .systemExtraLarge: return .system(size: 20)
+            case .systemSmall : return .system(size: 12)
+            case .systemMedium: return .system(size: 14)
+            case .systemLarge: return .system(size: 20)
+            case .systemExtraLarge: return .system(size: 24)
             default:
                 return .system(size: 12)
         }
@@ -45,8 +45,8 @@ struct WPriorities: View {
         switch widgetFamily {
             case .systemSmall : return "Today"
             case .systemMedium: return "Today's Priorities"
-            case .systemLarge: return "Today's Priorities"
-            case .systemExtraLarge: return "Today's Priorities"
+            case .systemLarge: return "Today's \(self.nrPriorities) Priorities"
+            case .systemExtraLarge: return "Today's \(self.nrPriorities) Priorities"
             default:
                 return "Today's Priorities"
         }

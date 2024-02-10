@@ -11,7 +11,7 @@ import SwiftUI
 struct TaskItemView: View {
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
-    @FocusState private var isTitleFocused: Bool 
+    @FocusState private var isTitleFocused: Bool
     
     private func undo() {
         model.undo()
@@ -95,9 +95,7 @@ struct TaskItemView: View {
                 }
             }
         }.background(Color.background).padding()
-#if os(iOS)
-            .tdgToolbar(model: model)
-#endif
+            .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
                 ToolbarItem {
                     Button(action:  {
@@ -110,7 +108,7 @@ struct TaskItemView: View {
                         Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
                     }
                 }
-                if item.isOpen || item.isPriority {
+                if item.canBeClosed {
                     ToolbarItem {
                         Button(action: {
                             model.move(task: item, to: .closed)
@@ -118,7 +116,8 @@ struct TaskItemView: View {
                             Label("Close", systemImage: imgCloseTask).help("Close")
                         }
                     }
-                } else {
+                }
+                if item.canBeMovedToOpen {
                     ToolbarItem {
                         Button(action: {
                             model.move(task: item, to: .open)
@@ -127,11 +126,13 @@ struct TaskItemView: View {
                         }
                     }
                 }
-                ToolbarItem {
-                    Button(action: {
-                        item.touch()
-                    }) {
-                        Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
+                if item.canBeTouched {
+                    ToolbarItem {
+                        Button(action: {
+                            item.touch()
+                        }) {
+                            Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
+                        }
                     }
                 }
             }.onAppear(perform:{

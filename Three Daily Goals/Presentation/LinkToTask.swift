@@ -13,21 +13,17 @@ struct LinkToTask: View {
     let list: TaskItemState
     
     var body: some View {
-#if os(macOS)
-        TaskAsLine(item: item, model: model).onTapGesture {
-            model.select(which: list, item: item)
+        if isLargeDevice {
+            TaskAsLine(item: item, model: model).onTapGesture {
+                model.select(which: list, item: item)
+            }
+        }else {
+            NavigationLink {
+                TaskItemView(model: model, item: item)
+            } label: {
+                TaskAsLine(item: item, model: model)
+            }
         }
-#endif
-#if os(iOS)
-        NavigationLink {
-            TaskItemView(model: model, item: item)
-        } label: {
-            TaskAsLine(item: item, model: model)
-        }
-#endif
-        
-        
-        
     }
 }
 

@@ -7,12 +7,18 @@
 
 import Foundation
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
-//
-//#if os(iOS)
-//extension View {
-//    func navigationSubtitle<S>(_ subtitle: S) -> some View where S : StringProtocol {
-//        return EmptyView()
-//    }
-//}
-//#endif
+var isLargeDevice: Bool {
+#if os(macOS)
+    return true
+#else
+    if UIScreen.main.bounds.width > 1000 {
+        return true
+    } else {
+        return false
+    }
+#endif
+}

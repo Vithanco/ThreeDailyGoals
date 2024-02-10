@@ -102,10 +102,26 @@ extension TaskItem {
     }
     
     var canBeClosed : Bool {
-        return state == .open || state == .priority || state == .pendingResponse
+        let states : [TaskItemState] = [.open, .priority, .pendingResponse]
+        return states.contains(self.state)
     }
     
-    var isGraveyarded: Bool {
+    var canBeMovedToOpen : Bool {
+        let states : [TaskItemState] = [.pendingResponse, .closed, .dead, .priority]
+        return states.contains(self.state)
+    }
+    
+    var canBeTouched : Bool {
+        let states : [TaskItemState] = [.pendingResponse, .open, .priority]
+        return states.contains(self.state)
+    }
+    
+    var canBeDeleted : Bool {
+        let states : [TaskItemState] = [.closed, .dead]
+        return states.contains(self.state)
+    }
+    
+    var isDead: Bool {
         return state == .dead
     }
     

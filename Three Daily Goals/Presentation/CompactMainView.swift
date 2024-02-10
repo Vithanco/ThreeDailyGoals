@@ -1,0 +1,22 @@
+//
+//  RegularMainView.swift
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 10/02/2024.
+//
+
+import SwiftUI
+
+struct CompactMainView: View {
+    @Bindable var model: TaskManagerViewModel
+    
+    var body: some View {
+        NavigationStack{
+            LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
+                
+        }
+    }
+}
+#Preview {
+    CompactMainView(model: dummyViewModel())
+}

@@ -76,17 +76,22 @@ struct TDGToolBarContent: ToolbarContent {
 
 struct TDGToolBarModifier: ViewModifier {
     @Bindable var model: TaskManagerViewModel
+    let include: Bool
     
     func body(content: Content) -> some View {
         return content
             .toolbar {
-                TDGToolBarContent(model: model)
+                if include {
+                    TDGToolBarContent(model: model)
+                }
             }
     }
 }
 
 extension View {
-    func tdgToolbar(model: TaskManagerViewModel) -> some View {
-        return self.modifier(TDGToolBarModifier(model: model))
+    
+    /// include parameter was necessary in order to prevent flooding of the same toolbar on all views when shown on an iPad
+    func tdgToolbar(model: TaskManagerViewModel, include: Bool) -> some View {
+        return self.modifier(TDGToolBarModifier(model: model, include: include))
     }
 }

@@ -27,7 +27,7 @@ struct Three_Daily_GoalsApp: App {
            }
            #endif
         self.container = sharedModelContainer(inMemory: inMemory)
-        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false)))
+        self._model = State(wrappedValue:   dummyViewModel()) //  TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false)))
         
        }
     
@@ -35,10 +35,11 @@ struct Three_Daily_GoalsApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(model: model)
+            MainView(model: model)
                 .navigationTitle("Three Daily Goals")
         }
         .modelContainer(container)
+        .environment(model)
         .commands {
                     // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){
@@ -73,9 +74,6 @@ struct Three_Daily_GoalsApp: App {
                             } catch {
                                 print("Failed to save task items: \(error)")
                             }
-                            
-                            
-
                         }
                         .keyboardShortcut("S", modifiers: [.command])
                     }
