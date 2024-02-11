@@ -60,7 +60,7 @@ struct TDGToolBarContent: ToolbarContent {
         }
         ToolbarItem {
             Button(action: addItem) {
-                Label("Add Task", systemImage: imgAddItem)
+                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks. ")
             }
         }
         #if os(iOS) // see Three_Daily_GoalsApp for Mac way

@@ -25,8 +25,8 @@ enum SchemaV2_1: VersionedSchema {
         public internal (set) var changed: Date = Date.now
         public internal (set) var closed: Date? = nil
         
-        var _title: String = "I need to ..."
-        var _details: String = "(no details yet)"
+        var _title: String = emptyTaskTitle
+        var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
         @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
@@ -45,7 +45,7 @@ enum SchemaV2_1: VersionedSchema {
             
         }
         
-        init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now) {
+        init(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now) {
             self._title = title
             self._details = details
             self.changed = changedDate

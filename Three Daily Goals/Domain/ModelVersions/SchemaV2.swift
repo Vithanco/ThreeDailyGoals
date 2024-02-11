@@ -30,8 +30,8 @@ enum SchemaV2: VersionedSchema {
         public var urgent: Bool = false
         public var dueDate: Date? = nil
         
-        var _title: String = "I need to ..."
-        var _details: String = "(no details yet)"
+        var _title: String = emptyTaskTitle
+        var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
         
@@ -41,7 +41,7 @@ enum SchemaV2: VersionedSchema {
             
         }
         
-        init(title: String  = "I need to ...", details: String = "(no details yet)", changedDate: Date = Date.now) {
+        init(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now) {
             self._title = title
             self._details = details
             self.changed = changedDate

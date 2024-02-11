@@ -53,6 +53,11 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
+    func testSwipe() throws {
+        let app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.["Add Task"] .exists)
+    }
     
     @MainActor func testAppStartsEmpty() throws {
 //        let container = sharedModelContainer(inMemory: true)

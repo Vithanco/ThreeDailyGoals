@@ -147,16 +147,21 @@ final class TaskManagerViewModel {
             print("Fetch failed")
         }
     }
-    
-    @discardableResult func addItem() -> TaskItem {
-        let newItem = TaskItem()
+   
+    @discardableResult func quickAddItem(title: String = emptyTaskTitle) -> TaskItem {
+        let newItem = TaskItem(title: title)
         modelContext.insert(newItem)
         items.append(newItem)
         self.lists[.open]?.append(newItem)
         modelContext.processPendingChanges()
-        #if os(macOS)
+        return newItem
+    }
+    
+    @discardableResult func addItem() -> TaskItem {
+        let newItem = quickAddItem()
+#if os(macOS)
         select(which: .open, item: newItem)
-        #endif
+#endif
 #if os(iOS)
         selectedItem = newItem
         showItem = true
@@ -284,6 +289,9 @@ final class TaskManagerViewModel {
 
         showReviewDialog = false
         timer.setTimer(forWhen: time ){
+            if self.showReviewDialog {
+                return
+            }
             self.reviewNow()
             self.setupReviewNotification()
         }

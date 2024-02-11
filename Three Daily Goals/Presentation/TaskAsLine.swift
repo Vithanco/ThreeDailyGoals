@@ -20,7 +20,8 @@ struct TaskAsLine: View {
             Text(item.title).strikethrough( item.isClosed, color: accentColor)
                 .draggable(item.id)
             Spacer()
-        }.draggable(item.id)
+        }
+        .draggable(item.id)
         .swipeActions {
             if item.canBeMovedToOpen {
                 Button{ model.move(task: item, to: .open) } label: {

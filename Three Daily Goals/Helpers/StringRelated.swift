@@ -8,6 +8,9 @@
 import Foundation
 
 
+let emptyTaskTitle = "I need to ..."
+let emptyTaskDetails = "(no details yet)"
+
 extension String.StringInterpolation {
     mutating func appendInterpolation(_ date: Date) {
         appendLiteral(date.formatted(stdOnlyDateFormat) )

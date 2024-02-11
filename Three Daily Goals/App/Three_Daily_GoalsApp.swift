@@ -21,15 +21,14 @@ struct Three_Daily_GoalsApp: App {
     
     init() {
         var inMemory = false
-           #if DEBUG
-           if CommandLine.arguments.contains("enable-testing") {
-               inMemory = true
-           }
-           #endif
+#if DEBUG
+        if CommandLine.arguments.contains("enable-testing") {
+            inMemory = true
+        }
+#endif
         self.container = sharedModelContainer(inMemory: inMemory)
-        self._model = State(wrappedValue:   dummyViewModel()) //  TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false)))
-        
-       }
+        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false)))
+    }
     
   
     

@@ -18,7 +18,11 @@ final class TestModelLists: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    
+    func testNewItem () throws {
+        let model = dummyViewModel()
+        let new = model.quickAddItem()
+        XCTAssertEqual(new.state, .open)
+    }
     
     func testLists() throws {
         
