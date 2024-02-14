@@ -35,7 +35,7 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 }
 
 
-func sendBasicNotification(timing: DateComponents, model: TaskManagerViewModel ) {
+func scheduleSystemPushNotification(timing: DateComponents, model: TaskManagerViewModel ) {
     let notificationCenter = UNUserNotificationCenter.current()
     if delegate == nil {
         delegate = PushNotificationDelegate(model: model)

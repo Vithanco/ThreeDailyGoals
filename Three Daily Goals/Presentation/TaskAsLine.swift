@@ -44,14 +44,15 @@ struct TaskAsLine: View {
 }
 
 
-struct TaskAsLineHelper : View {
-    @State var model: TaskManagerViewModel = dummyViewModel()
-    
-    var body: some View {
-        TaskAsLine(item: model.items.first!, model: model)
-    }
-}
+//struct TaskAsLineHelper : View {
+//    @State var
+//    
+//    var body: some View {
+//        TaskAsLine(item: model.items.first!, model: model)
+//    }
+//}
 
 #Preview {
-    TaskAsLineHelper()
+    let model: TaskManagerViewModel = dummyViewModel()
+    return TaskAsLine(item: model.items.first!, model: model)
 }

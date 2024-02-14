@@ -129,17 +129,19 @@ extension TaskItem {
         return state == .pendingResponse
     }
     
-    func addComment(text: String) {
+   @discardableResult func addComment(text: String) -> TaskItem{
         if comments == nil {
             comments = [Comment]()
         }
-        if let mc = self.modelContext, var comments = comments {
-            let aComment = Comment(text: text, taskItem: self)
-            mc.insert(aComment)
-            comments.append(aComment)
-            changed = Date.now
-        }
-    }
+       
+       let aComment = Comment(text: text, taskItem: self)
+       if let mc = self.modelContext {
+           mc.insert(aComment)
+       }
+       comments?.append(aComment)
+       changed = Date.now
+       return self
+   }
     
     func closeTask() {
         if state != .closed {
@@ -184,7 +186,7 @@ extension TaskItem {
     func pending() {
         if state != .pendingResponse {
             state = .pendingResponse
-            addComment(text: "Done! But pending Response.")
+            addComment(text: "You did your part. Closure is pending a response.")
         }
     }
 }

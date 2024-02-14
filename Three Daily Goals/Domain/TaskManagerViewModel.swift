@@ -148,8 +148,8 @@ final class TaskManagerViewModel {
         }
     }
    
-    @discardableResult func quickAddItem(title: String = emptyTaskTitle) -> TaskItem {
-        let newItem = TaskItem(title: title)
+    @discardableResult func quickAddItem(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
+        let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
         modelContext.insert(newItem)
         items.append(newItem)
         self.lists[.open]?.append(newItem)
@@ -157,8 +157,8 @@ final class TaskManagerViewModel {
         return newItem
     }
     
-    @discardableResult func addItem() -> TaskItem {
-        let newItem = quickAddItem()
+    @discardableResult func addItem(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
+        let newItem = quickAddItem(title: title, details: details, changedDate: changedDate, state: state)
 #if os(macOS)
         select(which: .open, item: newItem)
 #endif
@@ -271,7 +271,7 @@ final class TaskManagerViewModel {
         if Calendar.current.isDate(preferences.lastReview, inSameDayAs: result) {
             // review happened today, let's do it tomorrow
             result = addADay(result)
-        } else {
+        } else { // today's review missing
             if result < Date.now {
                 //regular time passed by, now just do it in 30 secs
                 return Date.now.addingTimeInterval(Seconds.thirtySeconds)
@@ -281,7 +281,7 @@ final class TaskManagerViewModel {
     }
     
     func setupReviewNotification(when: Date? = nil){
-        sendBasicNotification(timing: preferences.reviewTimeComponents, model: self)
+        scheduleSystemPushNotification(timing: preferences.reviewTimeComponents, model: self)
         if showReviewDialog {
             return
         }
@@ -375,9 +375,9 @@ extension TaskManagerViewModel {
 //    }
 //}
 
-// for testing purposes
 extension TaskManagerViewModel {
     
+    // for testing purposes
     var hasUndoManager: Bool {
         return modelContext.undoManager != nil
     }

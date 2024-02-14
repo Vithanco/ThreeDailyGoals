@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct TaskItemView: View {
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
@@ -71,16 +70,7 @@ struct TaskItemView: View {
                 .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
             
             Spacer()
-            if let comments = item.comments, comments.count > 0 {
-                VStack (alignment: .leading){
-                    Text("History:").bold().foregroundColor(Color.secondaryColor)
-                    List{
-                        ForEach(comments.sorted()){comment in
-                            CommentView(comment: comment).frame(maxWidth: .infinity)
-                        }.listRowInsets( EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0) )
-                    }
-                }.frame(maxWidth: .infinity, maxHeight: 200)
-            }
+            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: 200)
             
             HStack{
                 LabeledContent{
@@ -98,41 +88,21 @@ struct TaskItemView: View {
             .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
                 ToolbarItem {
-                    Button(action:  {
-                        if item.state == .priority{
-                            model.move(task: item, to: .open)
-                        } else {
-                            model.move(task: item, to: .priority)
-                        }
-                    }) {
-                        Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
-                    }
+                    model.toggleButton(item: item)
                 }
                 if item.canBeClosed {
                     ToolbarItem {
-                        Button(action: {
-                            model.move(task: item, to: .closed)
-                        }) {
-                            Label("Close", systemImage: imgCloseTask).help("Close")
-                        }
+                        model.closeButton(item: item)
                     }
                 }
                 if item.canBeMovedToOpen {
                     ToolbarItem {
-                        Button(action: {
-                            model.move(task: item, to: .open)
-                        }) {
-                            Label("Open", systemImage: imgReopenTask).help("Open")
-                        }
+                        model.openButton(item: item)
                     }
                 }
                 if item.canBeTouched {
                     ToolbarItem {
-                        Button(action: {
-                            item.touch()
-                        }) {
-                            Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
-                        }
+                        model.touchButton(item: item)
                     }
                 }
             }.onAppear(perform:{
@@ -144,5 +114,6 @@ struct TaskItemView: View {
 
 #Preview {
     //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
-    TaskItemView( model: dummyViewModel(), item: TaskItem()).frame(width: 600, height: 300)
+    let model = dummyViewModel()
+    return TaskItemView( model: model , item: model.items.first()!).frame(width: 600, height: 300)
 }

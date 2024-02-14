@@ -43,7 +43,7 @@ struct LinkToList: View {
     var body: some View {
         SingleView{
             if isLargeDevice {
-                ListLabel(whichList: whichList, model: model)
+                ListLabel(whichList: whichList, model: model).accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
                     .onTapGesture {
                         model.select(which: whichList,item: model.list(which: whichList).first)
                     }

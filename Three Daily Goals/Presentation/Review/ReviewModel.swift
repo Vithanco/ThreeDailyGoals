@@ -91,6 +91,7 @@ final class ReviewModel{
 }
 
 
+@MainActor 
 func dummyReviewModel(state: DialogState = .inform) -> ReviewModel {
     let model = ReviewModel(taskModel: dummyViewModel())
     model.stateOfReview = state

@@ -29,7 +29,7 @@ struct ListView: View {
         
             List{
                 Section (header: VStack(alignment: .leading) {
-                    list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden)
+                    list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(list.getListAccessibilityIdentifier)
                 }) {
                     ForEach(headers) {header in
                         let partialList = itemList.filter(header.filter)

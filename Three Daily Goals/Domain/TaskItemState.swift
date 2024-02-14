@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-enum TaskItemState: Codable, Hashable, CaseIterable {
+public enum TaskItemState: Codable, Hashable, CaseIterable {
     case open
     case closed
     case dead
@@ -18,7 +18,7 @@ enum TaskItemState: Codable, Hashable, CaseIterable {
 }
     
 extension TaskItemState : CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
             case .closed: return "closed"
             case .dead: return "graveyard"
@@ -27,7 +27,8 @@ extension TaskItemState : CustomStringConvertible {
             case .priority: return "priority"
         }
     }
-    
+}
+public extension TaskItemState{
     var showCount: Bool {
         switch self {
             case .closed, .dead: return false
@@ -47,5 +48,13 @@ extension TaskItemState : CustomStringConvertible {
     
     var image: Image {
         return Image(systemName: self.imageName)
+    }
+    
+    var getLinkedListAccessibilityIdentifier: String {
+        return self.description + "_LinkedList"
+    }
+    
+    var getListAccessibilityIdentifier: String {
+        return self.description + "_List"
     }
 }

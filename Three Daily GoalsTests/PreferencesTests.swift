@@ -21,7 +21,7 @@ final class PreferencesTests: XCTestCase {
     }
 
     func testDates() throws {
-        var tester = TestPreferences()
+        let tester = TestPreferences()
         var preferences = CloudPreferences(store: tester )
         var date = Calendar.current.date(from: DateComponents(hour: 23, minute: 59))!
         preferences.reviewTime = date;

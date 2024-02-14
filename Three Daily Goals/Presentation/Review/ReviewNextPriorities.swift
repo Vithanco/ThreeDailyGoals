@@ -8,23 +8,23 @@
 import SwiftUI
 
 struct ReviewNextPriorities: View {
-
+    
     @Bindable var model: ReviewModel
     
     @State private var presentAlert = false
-     @State private var newTaskName: String = ""
+    @State private var newTaskName: String = ""
     
     var body: some View {
         VStack{
-        #if os(macOS)
-        
+#if os(macOS)
+            
             Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
                 ListView(whichList: .priority, model: model.taskModel).frame(minHeight: 300)
                 ListView(whichList: .open ,model: model.taskModel)
             }
-
-        #endif
+            
+#endif
 #if os(iOS)  // delete this once iOS works as expected and keep macOS path for all
             Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
@@ -58,14 +58,14 @@ struct ReviewNextPriorities: View {
                     ListView(whichList: .open ,model: model.taskModel)
                 }
             }
-        
+            
 #endif
             Button(action: { presentAlert = true}) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks.")
             }
         }.alert("Quick Add", isPresented: $presentAlert, actions: {
             TextField("task title", text: $newTaskName)
-
+            
             Button("Cancel", role: .cancel, action: {presentAlert = false})
             Button("Add Task", action: {
                 presentAlert = false
