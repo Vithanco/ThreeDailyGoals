@@ -24,19 +24,13 @@ struct TaskAsLine: View {
         .draggable(item.id)
         .swipeActions {
             if item.canBeMovedToOpen {
-                Button{ model.move(task: item, to: .open) } label: {
-                    Label("Move to open", systemImage: TaskItemState.open.imageName).help("Move to open")
-                }
+                model.openButton(item: item)
             }
             if item.canBeDeleted{
-                Button(role: .destructive) { model.delete(task: item) } label: {
-                    Label("Delete", systemImage: "trash")
-                }
+                model.deleteButton(item: item)
             }
             if item.canBeClosed {
-                Button{ model.move(task: item, to: .closed) } label: {
-                    Label("Close Task", systemImage: TaskItemState.closed.imageName)
-                }
+                model.closeButton(item: item)
             }
         }
         

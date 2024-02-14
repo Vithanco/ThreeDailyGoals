@@ -44,29 +44,29 @@ struct TDGToolBarContent: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem {
             Button(action: undo) {
-                Label("Undo", systemImage: imgUndo)
+                Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help("undo an action")
             }.disabled(!model.canUndo)
         }
         ToolbarItem {
             Button(action: redo) {
-                Label("Redo", systemImage: imgRedo)
+                Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help("redo an action")
             }.disabled(!model.canRedo)
         }
         
         ToolbarItem {
             Button(action: review) {
-                Label("Review", systemImage: imgReview)
+                Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now.")
             }
         }
         ToolbarItem {
             Button(action: addItem) {
-                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks. ")
+                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks. ").accessibilityIdentifier("addTaskButton")
             }
         }
         #if os(iOS) // see Three_Daily_GoalsApp for Mac way
         ToolbarItem {
             Button(action: showPreferences) {
-                Label("Preferences", systemImage: imgPreferences)
+                Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier("showPreferencesButton").help("Show Preferences Dialog")
             }
         }
         #endif

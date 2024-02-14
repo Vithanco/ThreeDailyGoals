@@ -386,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				E5B698FA2B7C89360086C3EB /* Buttons.swift */,
+				E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -395,7 +396,6 @@
 			children = (
 				E57C31AF2B724B2700943EA1 /* PushNotification.swift */,
 				E50A29B52B6995BC002AC3BC /* ModelVersions */,
-				E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */,
 				E561D6DF2B1F54A6003BE36F /* TaskItem.swift */,
 				E590CE172B1FAD9000B16684 /* Comment.swift */,
 				E5ADEDD82B31956300F0EA9C /* TaskSection.swift */,

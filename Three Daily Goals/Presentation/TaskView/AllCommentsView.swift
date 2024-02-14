@@ -19,8 +19,8 @@ struct AllCommentsView: View {
                 Text("History:").bold().foregroundColor(Color.secondaryColor)
                 Spacer()
                 Button(action: {presentAlert = true}) {
-                    Label("Add Comment", systemImage: "plus.circle.fill")
-                }
+                    Label("Add Comment", systemImage: "plus.circle.fill").help("Add some comment to the history of this task")
+                }.accessibilityIdentifier("addCommentButton")
             }
             if let comments = item.comments, comments.count > 0 {
                 List{

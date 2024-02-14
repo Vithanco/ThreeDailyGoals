@@ -23,7 +23,7 @@ extension TaskManagerViewModel {
                 self.move(task: item, to: .priority)
             }
         }) {
-            Label("Toggle Priority", systemImage: imgToday).help("Add to/ remove from today's priorities")
+            Label("Toggle Priority", systemImage: TaskItemState.priority.imageName).help("Add to/ remove from today's priorities")
         }.accessibilityIdentifier("toggleButton")
     }
     
@@ -31,7 +31,7 @@ extension TaskManagerViewModel {
         return Button(action: {
             self.move(task: item, to: .closed)
         }) {
-            Label("Close", systemImage: imgCloseTask).help("Close the task")
+            Label("Close", systemImage: TaskItemState.closed.imageName).help("Close the task")
         }.accessibilityIdentifier("closeButton").disabled(!item.canBeClosed)
     }
     
@@ -40,7 +40,7 @@ extension TaskManagerViewModel {
         return Button(action: {
             self.move(task: item, to: .open)
         }) {
-            Label("Open", systemImage: imgReopenTask).help("Open this task again")
+            Label("Open", systemImage: TaskItemState.open.imageName).help("Open this task again")
         }.accessibilityIdentifier("openButton").disabled(!item.canBeMovedToOpen)
     }
     
@@ -52,6 +52,14 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("touchButton")
     }
     
+    func deleteButton(item: TaskItem) -> some View {
+        return Button (role: .destructive, action: {
+            self.delete(task: item)
+        }) {
+            Label("Delete", systemImage: "trash").help("Delete this task for good.")
+        }.accessibilityIdentifier("deleteButton")
+    }
+
     
 }
 
