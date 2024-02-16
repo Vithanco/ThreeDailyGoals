@@ -20,14 +20,18 @@ struct Three_Daily_GoalsApp: App {
         )
     
     init() {
-        var enableTesting = false
+        var enableTesting = true
 #if DEBUG
         if CommandLine.arguments.contains("enable-testing") {
             enableTesting = true
         }
 #endif
         self.container = sharedModelContainer(inMemory: enableTesting) // enableTesting -> inMemory
-        self._model = State(wrappedValue: TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: enableTesting))) // enableTesting -> testData
+        if enableTesting {
+            self._model = State(wrappedValue: dummyViewModel())
+        } else {
+            self._model = State(wrappedValue:TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false), isTesting: false)) // enableTesting -> testData
+        }
     }
     
   
@@ -35,7 +39,7 @@ struct Three_Daily_GoalsApp: App {
     var body: some Scene {
         WindowGroup {
             MainView(model: model)
-                .navigationTitle("Three Daily Goals")
+                .navigationTitle("Three Daily Goals").frame(width: 1440, height: 900-52).fixedSize()
         }
         .modelContainer(container)
         .environment(model)

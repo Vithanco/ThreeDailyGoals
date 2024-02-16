@@ -33,7 +33,7 @@ struct TaskItemView: View {
             }
             
             LabeledContent{
-                TextField("Title", text: $item.title).focused($isTitleFocused)
+                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused($isTitleFocused)
                     .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)

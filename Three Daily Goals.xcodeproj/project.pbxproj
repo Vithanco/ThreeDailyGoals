@@ -65,6 +65,8 @@
 		E5B376B32B7B506400E66FAD /* AllCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B22B7B506400E66FAD /* AllCommentsView.swift */; };
 		E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B52B7B551600E66FAD /* TestTaskItems.swift */; };
 		E5B698FB2B7C89360086C3EB /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B698FA2B7C89360086C3EB /* Buttons.swift */; };
+		E5B698FC2B7C95520086C3EB /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
+		E5B698FD2B7C956A0086C3EB /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5D4FB772B749719002BB261 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D4FB762B749719002BB261 /* StreakView.swift */; };
 		E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
 		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
@@ -736,8 +738,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5B698FD2B7C956A0086C3EB /* DateRelated.swift in Sources */,
 				E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */,
 				E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */,
+				E5B698FC2B7C95520086C3EB /* StringRelated.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

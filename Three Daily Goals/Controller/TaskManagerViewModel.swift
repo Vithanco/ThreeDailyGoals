@@ -45,6 +45,7 @@ final class TaskManagerViewModel {
     var timer : ReviewTimer = ReviewTimer()
     private let modelContext: Storage
     private(set) var items = [TaskItem]()
+    var isTesting = false
     
     var preferences: CloudPreferences
     
@@ -77,9 +78,10 @@ final class TaskManagerViewModel {
     var lists : [TaskItemState: [TaskItem]] = [:]
     
     
-    init(modelContext: Storage, preferences: CloudPreferences) {
+    init(modelContext: Storage, preferences: CloudPreferences, isTesting : Bool = false) {
         self.modelContext = modelContext
         self.preferences = preferences
+        self.isTesting = isTesting
         for c in TaskItemState.allCases {
             lists[c] = []
         }
@@ -140,9 +142,7 @@ final class TaskManagerViewModel {
             }
             updateUndoRedoStatus()
             
-            if preferences.lastReview < getDate(daysPrior: 2) {
-                showReviewDialog = true
-            }
+            setupReviewNotification()
         } catch {
             print("Fetch failed")
         }
@@ -285,6 +285,9 @@ final class TaskManagerViewModel {
         if showReviewDialog {
             return
         }
+        if isTesting {
+            return
+        }
         let time = when ?? nextRegularReviewTime
 
         showReviewDialog = false
@@ -395,6 +398,6 @@ extension TaskManagerViewModel {
 
 
 func dummyViewModel() -> TaskManagerViewModel {
-    return TaskManagerViewModel(modelContext: TestStorage(), preferences: dummyPreferences())
+    return TaskManagerViewModel(modelContext: TestStorage(), preferences: dummyPreferences(), isTesting: true)
 }
 

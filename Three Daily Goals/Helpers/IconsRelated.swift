@@ -13,7 +13,7 @@ let imgDated = "clock.fill"
 //let imgMagnifyingGlass = "magnifyingglass.circle.fill"
 let imgReview = "brain.filled.head.profile"
 let imAppearance = "paintpalette"
-let imgAddItem = "plus"
+let imgAddItem = "plus.app.fill" // "plus"
 let imgPreferences = "gearshape"
 
 let imgToday = "exclamationmark.square.fill"

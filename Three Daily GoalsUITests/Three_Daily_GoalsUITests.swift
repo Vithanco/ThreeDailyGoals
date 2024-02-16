@@ -6,7 +6,9 @@
 //
 
 import XCTest
-@testable import Three_Daily_Goals
+
+// this is not working for some reason see https://stackoverflow.com/questions/33755019/linker-error-when-accessing-application-module-in-ui-tests-in-xcode-7-1
+//@testable import Three_Daily_Goals
 
 func ensureExists(text: String, inApp: XCUIApplication) {
     let predicate = NSPredicate(format: "value CONTAINS '\(text)'")
@@ -51,32 +53,40 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
-    func testTaskLifeCycle() throws {
+    
+    func findFirst(string: String, whereToLook: XCUIElementQuery) -> XCUIElement{
+        let list = whereToLook.matching(identifier: string)
+        XCTAssertTrue(list.count > 0, "couldn't find \(string)")
+        return list.element(boundBy: 0)
+    }
+    
+    @MainActor
+    func testTaskLifeCycleMac() throws {
+#if os(macOS)
         let app = launchTestApp()
-        let openList = app.staticTexts["open_LinkedList"]
-        XCTAssertTrue(openList.exists)
+        sleep(2)
+        let firstButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        firstButton.click()
+        sleep(2)
+        let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
+        addButton.click()
+        sleep(2)
         
-        // Show all open elements by pressing on openList
-        openList.tap()
-         
-        let addButton = app.buttons[""]
-        
-        // Expect list to be shown
-        // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
-        let listHeader = app.staticTexts["open_List"] // Adjust the identifier as needed
-        XCTAssertTrue(listHeader.exists, "List header should be visible")
-        
-        // Find first task in list
-        // This assumes tasks have identifiable accessibility labels or identifiers.
-        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
-        XCTAssertTrue(firstTask.exists, "First task should be found")
-        
-        // Ensure I can swipe there
-        firstTask.swipeLeft() // Or swipeRight(), depending on what you need to test
+        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
+//
+//
+//        // Expect list to be shown
+//        // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
+//        let listHeader = app.staticTexts["open_List"] // Adjust the identifier as needed
+//        XCTAssertTrue(listHeader.exists, "List header should be visible")
+//        
+//        // Find first task in list
+//        // This assumes tasks have identifiable accessibility labels or identifiers.
+//        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
+//        XCTAssertTrue(firstTask.exists, "First task should be found")
         
         // Ensure I can press a close button
-        // Assuming "closeButtonIdentifier" is the accessibility identifier for the close button next to a task
-        let closeButton = app.buttons["closeButtonIdentifier"]
+        let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
         XCTAssertTrue(closeButton.exists, "Close button should be found")
         closeButton.tap()
         
@@ -86,7 +96,7 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         
         // Find previously closed task in list
         // Use a unique identifier for finding the task, which might require tracking task names or other identifiers
-        let closedTask = app.staticTexts["closedTaskIdentifier"] // Use the identifier for the closed task
+        let closedTask = app.staticTexts["test title"] // Use the identifier for the closed task
         XCTAssertTrue(closedTask.exists, "Closed task should be found in the list")
         
         // Swipe left on the closed task
@@ -101,6 +111,7 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         
         // Ensure task is deleted
         XCTAssertFalse(closedTask.exists, "Task should be deleted")
+        #endif
     }
 
     
@@ -116,7 +127,7 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
             measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
+                let _ = launchTestApp()
             }
         }
     }
