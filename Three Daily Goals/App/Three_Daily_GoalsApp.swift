@@ -20,7 +20,7 @@ struct Three_Daily_GoalsApp: App {
         )
     
     init() {
-        var enableTesting = true
+        var enableTesting = false
 #if DEBUG
         if CommandLine.arguments.contains("enable-testing") {
             enableTesting = true
@@ -39,7 +39,7 @@ struct Three_Daily_GoalsApp: App {
     var body: some Scene {
         WindowGroup {
             MainView(model: model)
-                .navigationTitle("Three Daily Goals").frame(width: 1440, height: 900-52).fixedSize()
+                .navigationTitle("Three Daily Goals")   
         }
         .modelContainer(container)
         .environment(model)
