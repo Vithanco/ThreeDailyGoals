@@ -51,7 +51,7 @@ struct MainView: View {
             .sheet(isPresented: $model.showSettingsDialog) {
                 PreferencesView(model: model)
             }
-    }
+        .confirmationDialog("All Tasks are saved at \(model.fileUrl)", isPresented: $model.showFileName, actions: {})    }
 }
 
 #Preview {

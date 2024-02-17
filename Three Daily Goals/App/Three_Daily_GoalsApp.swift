@@ -9,15 +9,16 @@ import SwiftUI
 import SwiftData
 import os
 
+
 @main
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
     @State var model: TaskManagerViewModel
     private let logger = Logger(
-            subsystem: Bundle.main.bundleIdentifier!,
-            category: String(describing: Three_Daily_GoalsApp.self)
-        )
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: Three_Daily_GoalsApp.self)
+    )
     
     init() {
         var enableTesting = false
@@ -34,69 +35,28 @@ struct Three_Daily_GoalsApp: App {
         }
     }
     
-  
-    
     var body: some Scene {
         WindowGroup {
             MainView(model: model)
-                .navigationTitle("Three Daily Goals")   
+                .navigationTitle("Three Daily Goals")
         }
         .modelContainer(container)
         .environment(model)
         .commands {
-                    // Add a CommandMenu for saving tasks
+            // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){
-                        Button("Export Tasks") {
-//                            #if os(iOS)
-//                            let fileManager = FileManager.default
-//                                    let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
-//                                    let filePath = "\(cachePath[0])/CloudKit"
-//                                    do {
-//                                        let contents = try fileManager.contentsOfDirectory(atPath: filePath)
-//                                        for file in contents {
-//                                            try fileManager.removeItem(atPath: "\(filePath)/\(file)")
-//                                            print("Deleted: \(filePath)/\(file)") //Optional
-//                                        }
-//                                    } catch {
-//                                        print("Errors!")
-//                                    }
-//                            #endif
-                            let fetchDescriptor = FetchDescriptor<TaskItem>()
-                            
-                            do {
-                                let items = try container.mainContext.fetch(fetchDescriptor)
-                                
-                                // Create an instance of JSONEncoder
-                                let encoder = JSONEncoder()
-                                // Convert your array into JSON data
-                                let data = try encoder.encode(items)
-                                // Specify the file path and name
-                                let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
-                                // Write the data to the file
-                                try data.write(to: url)
-                            } catch {
-                                print("Failed to save task items: \(error)")
-                            }
-                        }
-                        .keyboardShortcut("S", modifiers: [.command])
-                    }
+                model.exportButton
+            }
             CommandGroup(replacing: .undoRedo) {
-                            Button("Undo") {
-                               container.mainContext.undoManager?.undo()
-                            }
-                            .keyboardShortcut("z", modifiers: [.command])
-
-                            Button("Redo") {
-                                container.mainContext.undoManager?.redo()
-                            }
-                            .keyboardShortcut("Z", modifiers: [.command, .shift])
-                        }
-                }
-        #if os(macOS) // see Toolbar for iOS way
+                model.undoButton
+                model.redoButton
+            }
+        }
+#if os(macOS) // see Toolbar for iOS way
         Settings {
             PreferencesView(model: model).frame(width: 450)
         }
-        #endif
+#endif
     }
     
 }

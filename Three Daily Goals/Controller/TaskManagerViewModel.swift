@@ -43,7 +43,7 @@ extension TaskItemState {
 final class TaskManagerViewModel {
     
     var timer : ReviewTimer = ReviewTimer()
-    private let modelContext: Storage
+    let modelContext: Storage
     private(set) var items = [TaskItem]()
     var isTesting = false
     
@@ -77,6 +77,9 @@ final class TaskManagerViewModel {
     
     var lists : [TaskItemState: [TaskItem]] = [:]
     
+    // for export
+    var showFileName: Bool = false
+    var fileUrl: String =  "(invalid)"
     
     init(modelContext: Storage, preferences: CloudPreferences, isTesting : Bool = false) {
         self.modelContext = modelContext

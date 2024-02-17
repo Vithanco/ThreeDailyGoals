@@ -7,11 +7,7 @@
 
 import Foundation
 import SwiftUI
-
-enum Buttons {
-    
-}
-
+import SwiftData
 
 extension TaskManagerViewModel {
     
@@ -60,6 +56,57 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("deleteButton")
     }
 
+    var  exportButton:  some View {
+        Button("Export Tasks") {
+            //                            #if os(iOS)
+            //                            let fileManager = FileManager.default
+            //                                    let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
+            //                                    let filePath = "\(cachePath[0])/CloudKit"
+            //                                    do {
+            //                                        let contents = try fileManager.contentsOfDirectory(atPath: filePath)
+            //                                        for file in contents {
+            //                                            try fileManager.removeItem(atPath: "\(filePath)/\(file)")
+            //                                            print("Deleted: \(filePath)/\(file)") //Optional
+            //                                        }
+            //                                    } catch {
+            //                                        print("Errors!")
+            //                                    }
+            //                            #endif
+            let fetchDescriptor = FetchDescriptor<TaskItem>()
+            
+            do {
+                let items = try self.modelContext.fetch(fetchDescriptor)
+                
+                // Create an instance of JSONEncoder
+                let encoder = JSONEncoder()
+                // Convert your array into JSON data
+                let data = try encoder.encode(items)
+                // Specify the file path and name
+                let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
+                // Write the data to the file
+                try data.write(to: url)
+                self.fileUrl = "The file was saved to \(url)"
+                self.showFileName = true
+            } catch {
+                self.fileUrl = "The file couldn't be saved because: \(error)"
+                self.showFileName = true
+            }
+        }.keyboardShortcut("S", modifiers: [.command])
+    }
+    
+    var undoButton: some View {
+        return Button("Undo") {
+            self.modelContext.undoManager?.undo()
+        }
+        .keyboardShortcut("z", modifiers: [.command])
+    }
+
+    var redoButton: some View {
+        return Button("Redo") {
+            self.modelContext.undoManager?.redo()
+        }
+        .keyboardShortcut("Z", modifiers: [.command, .shift])
+    }
     
 }
 

@@ -74,14 +74,15 @@ extension NSUbiquitousKeyValueStore : KeyValueStorage {
     }
 }
 
-struct CloudPreferences {
+@Observable
+final class CloudPreferences {
     var store : KeyValueStorage
     
     init(store: KeyValueStorage) {
         self.store = store
     }
     
-    init(testData: Bool){
+    convenience init(testData: Bool){
         if testData {
             self.init(store: TestPreferences())
         } else {
@@ -156,18 +157,18 @@ extension CloudPreferences {
         }
     }
     
-    mutating func resetAccentColor(){
+    func resetAccentColor(){
         store.set(nil, forKey: .accentColorString)
     }
     
     var expiryAfter: Int {
         get {
             let result = self.store.int(forKey: .expiryAfter)
-            if result > 9 {  // default is 0, and that is an issue!
+            if result < 9 {  // default is 0, and that is an issue!
                 store.set(30,forKey: .expiryAfter)
-                return result
+                return 30
             }
-            return 30
+            return result
         }
         set {
             store.set(newValue,forKey: .expiryAfter)
