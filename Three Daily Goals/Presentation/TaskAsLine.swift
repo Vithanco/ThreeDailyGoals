@@ -30,8 +30,8 @@ struct TaskAsLine: View {
                 model.deleteButton(item: item)
             }
             if item.canBeClosed {
-                model.closeButton(item: item)
                 model.killButton(item: item)
+                model.closeButton(item: item)
             }
         }
         
