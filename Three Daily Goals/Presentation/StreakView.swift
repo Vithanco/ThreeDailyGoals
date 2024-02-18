@@ -10,7 +10,8 @@ import SwiftUI
 extension TaskManagerViewModel {
     func streakView() -> Text {
         let next = self.nextRegularReviewTime
-        return Text("\(Image(systemName: imgStreak)) Streak: \(self.preferences.daysOfReview) - Next: \(stdOnlyTimeFormat.format(next))").foregroundStyle(Color.red)
+        let today = preferences.lastReview.isToday ? "Done" : stdOnlyTimeFormat.format(next)
+        return Text("\(Image(systemName: imgStreak)) Streak: \(self.preferences.daysOfReview), today: \(today)").foregroundStyle(Color.red)  //- Time:
     }
 }
 

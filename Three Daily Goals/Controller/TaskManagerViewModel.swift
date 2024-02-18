@@ -66,7 +66,7 @@ final class TaskManagerViewModel {
     /// used in Detail View of NavigationSplitView
     var selectedItem: TaskItem? = nil
     
-    var showItem: Bool = false
+    var showItem: Bool
     var canUndo = false
     var canRedo = false
     
@@ -85,6 +85,7 @@ final class TaskManagerViewModel {
         self.modelContext = modelContext
         self.preferences = preferences
         self.isTesting = isTesting
+        self.showItem = false
         for c in TaskItemState.allCases {
             lists[c] = []
         }

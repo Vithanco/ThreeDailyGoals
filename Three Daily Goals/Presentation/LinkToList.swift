@@ -55,12 +55,7 @@ struct LinkToList: View {
                         .foregroundStyle(model.accentColor)
                 }
             }
-        }.navigationDestination(isPresented: $model.showItem) {
-            if let item = model.selectedItem {
-                TaskItemView(model:model, item: item)
-            }
         }
-        
     }
 }
 

@@ -35,7 +35,7 @@ extension TaskManagerViewModel {
         return Button(action: {
             self.move(task: item, to: .dead)
         }) {
-            Label("Kill", systemImage: TaskItemState.closed.imageName).help("Move the task to the Graveyard")
+            Label("Kill", systemImage: TaskItemState.dead.imageName).help("Move the task to the Graveyard")
         }.accessibilityIdentifier("killButton").disabled(!item.canBeClosed)
     }
     

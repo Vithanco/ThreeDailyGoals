@@ -12,9 +12,9 @@ struct TDGToolBarContent: ToolbarContent {
     @Bindable var model: TaskManagerViewModel
     
     private func addItem() {
-        let _ = withAnimation {
+//        let _ = withAnimation {
             model.addItem()
-        }
+//        }
     }
     
     private func undo() {

@@ -12,8 +12,12 @@ struct CompactMainView: View {
     
     var body: some View {
         NavigationStack{
-            LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
-                
+            LeftSideView(model: model).background(Color.background)//.frame(minHeight: 500, maxHeight: .infinity)
+                .navigationDestination(isPresented: $model.showItem) {
+                    if let item = model.selectedItem {
+                        TaskItemView(model:model, item: item)
+                    }
+                }
         }
     }
 }

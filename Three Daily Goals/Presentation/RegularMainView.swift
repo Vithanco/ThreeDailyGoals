@@ -15,11 +15,6 @@ struct RegularMainView: View {
     var body: some View {
         NavigationSplitView (columnVisibility: $columnVisibility){
             LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
-                .navigationDestination(isPresented: $model.showItem) {
-                    if let item = model.selectedItem {
-                        TaskItemView(model:model, item: item)
-                    }
-                }
                 .navigationSplitViewColumnWidth(min: 300, ideal: 400)
         } content: {
             SingleView{

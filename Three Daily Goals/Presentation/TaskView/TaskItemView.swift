@@ -81,7 +81,7 @@ struct TaskItemView: View {
                 LabeledContent{
                     Text(item.changed.timeAgoDisplay())
                 } label: {
-                    Text("Last Changed:").bold().foregroundColor(Color.secondaryColor)
+                    Text("Changed:").bold().foregroundColor(Color.secondaryColor)
                 }
             }
         }.background(Color.background).padding()
