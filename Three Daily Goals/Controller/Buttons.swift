@@ -31,6 +31,13 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("closeButton").disabled(!item.canBeClosed)
     }
     
+    func killButton(item: TaskItem) -> some View {
+        return Button(action: {
+            self.move(task: item, to: .dead)
+        }) {
+            Label("Kill", systemImage: TaskItemState.closed.imageName).help("Move the task to the Graveyard")
+        }.accessibilityIdentifier("killButton").disabled(!item.canBeClosed)
+    }
     
     func openButton(item: TaskItem) -> some View {
         return Button(action: {
