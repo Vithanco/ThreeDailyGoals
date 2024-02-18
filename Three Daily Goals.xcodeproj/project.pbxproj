@@ -53,6 +53,7 @@
 		E57C31B02B724B2700943EA1 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C31AF2B724B2700943EA1 /* PushNotification.swift */; };
 		E582D0B82B2E13E30006DD5D /* TaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E582D0B72B2E13E30006DD5D /* TaskItemView.swift */; };
 		E590CE182B1FAD9000B16684 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
+		E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E559203A2B3772EE0002C709 /* CloudKit.framework */; };
 		E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 		E5A371942B2EDD5E00A310BA /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
 		E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD22B318B8800F0EA9C /* ListView.swift */; };
@@ -237,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */,
+				E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
