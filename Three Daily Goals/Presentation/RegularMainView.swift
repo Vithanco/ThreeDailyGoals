@@ -29,7 +29,7 @@ struct RegularMainView: View {
                 .navigationTitle("Three Daily Goals")
 #if os(macOS)
                 .navigationSubtitle(
-                    streakView(model: model))
+                    model.streakView())
 #endif
         }
     detail: {

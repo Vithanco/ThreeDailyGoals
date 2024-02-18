@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-func streakView(model: TaskManagerViewModel) -> Text {
-    return Text("\(Image(systemName: imgStreak)) Streak \(model.preferences.daysOfReview) - Next Review: \(stdDateTimeFormat.format(model.preferences.nextReviewTime))").foregroundStyle(Color.red)
+extension TaskManagerViewModel {
+    func streakView() -> Text {
+        let next = self.nextRegularReviewTime
+        return Text("\(Image(systemName: imgStreak)) Streak: \(self.preferences.daysOfReview) - Next: \(stdOnlyTimeFormat.format(next))").foregroundStyle(Color.red)
+    }
 }
 
 struct StreakViewHelper: View {
     var body: some View {
-        streakView(model: dummyViewModel())
+        dummyViewModel().streakView()
     }
 }
 

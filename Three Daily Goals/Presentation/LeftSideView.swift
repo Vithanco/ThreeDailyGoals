@@ -12,7 +12,7 @@ struct LeftSideView: View {
     var body: some View {
         VStack(alignment: .leading){
 #if os(iOS)
-            Text("\(Image(systemName: imgStreak)) Streak: \(model.preferences.daysOfReview) days").foregroundStyle(Color.red).frame(maxWidth: .infinity, alignment: .center)
+            model.streakView().frame(maxWidth: .infinity, alignment: .center)
             HStack {
                 Spacer()
                 Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")

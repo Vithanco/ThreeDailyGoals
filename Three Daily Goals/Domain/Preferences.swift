@@ -240,7 +240,7 @@ class TestPreferences : KeyValueStorage{
 
 func dummyPreferences() -> CloudPreferences {
     let store = TestPreferences()
-    var result = CloudPreferences(store: store)
+    let result = CloudPreferences(store: store)
     result.daysOfReview = 42
     store.set(18, forKey: .reviewTimeHour)
     store.set(00, forKey: .reviewTimeMinute)

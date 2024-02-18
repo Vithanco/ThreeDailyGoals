@@ -17,6 +17,12 @@ let timeAgoFormatter = {
     result.unitsStyle = .full
     return result
 }()
+let nextReviewFormatter = {
+    let result = RelativeDateTimeFormatter()
+    result.unitsStyle = .short
+    return result
+}()
+
 
 func getDate (daysPrior: Int) -> Date {
     let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) ?? Date.now
