@@ -76,7 +76,14 @@ extension Array where Element == TaskItem {
 
 
 class TestStorage : Storage {
+    typealias Loader = (() -> [TaskItem])
+    
+    var loader: Loader
     var undoManager: UndoManager? = nil
+    
+    init(loader: @escaping Loader) {
+        self.loader = loader
+    }
     
     func insert<T>(_ model: T) where T : PersistentModel {
         
@@ -97,22 +104,11 @@ class TestStorage : Storage {
     func processPendingChanges() {
         
     }
+   
     
     func fetch<T>(_ descriptor: FetchDescriptor<T>) throws -> [T] where T : PersistentModel {
         if T.self == TaskItem.self {
-            var result : [TaskItem] = []
-            let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
-            theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
-            theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-            result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority)
-            result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5))
-            result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
-            let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .pendingResponse)
-            lastMonth2.url = "https://vithanco.com"
-            result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),state: .pendingResponse)
-            result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
-            result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
-            return result as! [T]
+            return loader() as! [T]
         }
         return []
     }

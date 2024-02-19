@@ -69,7 +69,7 @@ struct ReviewNextPriorities: View {
             Button("Cancel", role: .cancel, action: {presentAlert = false})
             Button("Add Task", action: {
                 presentAlert = false
-                model.taskModel.quickAddItem(title: newTaskName)
+                model.taskModel.addItem(title: newTaskName)
             })
         }, message: {
             Text("Please enter new task name")

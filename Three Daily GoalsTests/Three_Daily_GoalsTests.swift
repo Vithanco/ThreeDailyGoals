@@ -40,7 +40,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         XCTAssertFalse(model.canUndo)
         XCTAssertFalse(model.canRedo)
         model.beginUndoGrouping()
-        let item = model.addItem()
+        let item = model.addAndSelect()
         XCTAssertEqual(item.comments!.count, 0, "No comments yet")
         XCTAssertEqual(0,try context.fetchCount(descriptor))
         model.touch(task: item)
@@ -91,8 +91,8 @@ final class Three_Daily_GoalsTests: XCTestCase {
     }
     
     func testTaskITemID() throws {
-        let task1 = model.addItem()
-        let task2 = model.addItem()
+        let task1 = model.addAndSelect()
+        let task2 = model.addAndSelect()
         XCTAssertNotEqual(task1.id,task2.id)
         
         let id1 = task1.id

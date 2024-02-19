@@ -20,7 +20,7 @@ final class TestTaskItems: XCTestCase {
 
     func testAddComments() throws {
         let dummyM = dummyViewModel()
-        let task = dummyM.addItem()
+        let task = dummyM.addAndSelect()
         XCTAssertEqual(task.comments?.count , 0)
         let task2 = task.addComment(text: "test comment")
         XCTAssertEqual(task, task2)

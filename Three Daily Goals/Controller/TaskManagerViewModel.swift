@@ -8,8 +8,8 @@
 import Foundation
 import SwiftData
 import SwiftUI
-import os
 import CoreData
+import os
 
 fileprivate let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -45,7 +45,8 @@ final class TaskManagerViewModel {
     var timer : ReviewTimer = ReviewTimer()
     let modelContext: Storage
     private(set) var items = [TaskItem]()
-    var isTesting = false
+    var isTesting : Bool = false
+    public var showImportDialog : Bool = false
     
     var preferences: CloudPreferences
     
@@ -152,25 +153,33 @@ final class TaskManagerViewModel {
         }
     }
    
-    @discardableResult func quickAddItem(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
+    @discardableResult func addItem(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
         let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
-        modelContext.insert(newItem)
-        items.append(newItem)
-        self.lists[.open]?.append(newItem)
-        modelContext.processPendingChanges()
+        addItem(item: newItem)
         return newItem
     }
     
-    @discardableResult func addItem(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
-        let newItem = quickAddItem(title: title, details: details, changedDate: changedDate, state: state)
+    func addItem(item: TaskItem) {
+        modelContext.insert(item)
+        items.append(item)
+        self.lists[item.state]?.append(item)
+        modelContext.processPendingChanges()
+        updateUndoRedoStatus()
+    }
+    
+    fileprivate func select(_ newItem: TaskItem) {
 #if os(macOS)
-        select(which: .open, item: newItem)
+        select(which: newItem.state, item: newItem)
 #endif
 #if os(iOS)
         selectedItem = newItem
         showItem = true
 #endif
-        updateUndoRedoStatus()
+    }
+    
+    @discardableResult func addAndSelect(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
+        let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
+        select(newItem)
         return newItem
     }
     
@@ -359,6 +368,15 @@ final class TaskManagerViewModel {
         logger.info("start review \(Date.now)")
         showReviewDialog = true
     }
+    
+    func removeItem(withID: String) {
+        if let item = items.first(where: {$0.id == withID}) {
+            items.removeObject(item)
+            lists[item.state]?.removeObject(item)
+            self.modelContext.delete(item)
+        }
+    }
+    
 }
 
 extension TaskManagerViewModel {
@@ -401,7 +419,23 @@ extension TaskManagerViewModel {
 }
 
 
-func dummyViewModel() -> TaskManagerViewModel {
-    return TaskManagerViewModel(modelContext: TestStorage(), preferences: dummyPreferences(), isTesting: true)
+func dummyViewModel(loader: TestStorage.Loader? = nil) -> TaskManagerViewModel {
+    let loader = loader ?? loadStdItems
+    return TaskManagerViewModel(modelContext: TestStorage(loader: loader), preferences: dummyPreferences(), isTesting: true)
 }
 
+func loadStdItems() -> [TaskItem] {
+    var result : [TaskItem] = []
+    let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+    theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
+    theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
+    result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority)
+    result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5))
+    result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
+    let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .pendingResponse)
+    lastMonth2.url = "https://vithanco.com"
+    result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),state: .pendingResponse)
+    result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
+    result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
+    return result
+}

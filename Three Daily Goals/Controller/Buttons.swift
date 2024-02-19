@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import os
+
+fileprivate let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: String(describing: "TaskManagerViewModel.Buttons")
+)
+
 
 extension TaskManagerViewModel {
     
@@ -63,7 +70,7 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("deleteButton")
     }
 
-    var  exportButton:  some View {
+    var  exportButton: some View {
         Button("Export Tasks") {
             //                            #if os(iOS)
             //                            let fileManager = FileManager.default
@@ -92,13 +99,20 @@ extension TaskManagerViewModel {
                 let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
                 // Write the data to the file
                 try data.write(to: url)
-                self.fileUrl = "The file was saved to \(url)"
+                self.fileUrl = "The tasks were exported and saved as JSON to \(url)"
                 self.showFileName = true
             } catch {
-                self.fileUrl = "The file couldn't be saved because: \(error)"
+                self.fileUrl = "The tasks weren't exported because: \(error)"
                 self.showFileName = true
             }
+            logger.info("\(self.fileUrl)")
         }.keyboardShortcut("S", modifiers: [.command])
+    }
+    
+    var importButton: some View {
+        Button("Import Tasks") {
+            self.showImportDialog = true
+        }
     }
     
     var undoButton: some View {

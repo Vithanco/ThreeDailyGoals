@@ -46,6 +46,28 @@ struct Three_Daily_GoalsApp: App {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){
                 model.exportButton
+                model.importButton.fileImporter(isPresented: $model.showImportDialog,
+                                                allowedContentTypes: [.json],
+                                                onCompletion: { result in
+                                     
+                                     switch result {
+                                         case .success(let url):
+                                             // url contains the URL of the chosen file.
+                                             do {
+                                                 let data = try Data(contentsOf: url)
+                                                 let decoder = JSONDecoder()
+                                                 let jsonData = try decoder.decode([TaskItem].self, from: data)
+                                                 for item in jsonData {
+                                                     model.removeItem(withID: item.id)
+                                                     model.addItem(item:item)
+                                                 }
+                                             } catch {
+                                                 print("error:\(error)")
+                                             }
+                                         case .failure(let error):
+                                             logger.error("Importing Tasks led to \(error.localizedDescription)")
+                                     }
+                                 })
             }
             CommandGroup(replacing: .undoRedo) {
                 model.undoButton
