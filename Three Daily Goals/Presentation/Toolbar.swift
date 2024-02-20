@@ -69,6 +69,12 @@ struct TDGToolBarContent: ToolbarContent {
                 Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier("showPreferencesButton").help("Show Preferences Dialog")
             }
         }
+        ToolbarItem {
+            model.exportButton
+        }
+        ToolbarItem {
+            model.importButton
+        }
         #endif
     }
 }

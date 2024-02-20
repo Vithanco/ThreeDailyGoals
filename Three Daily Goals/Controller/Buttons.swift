@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
+
 extension TaskManagerViewModel {
     
     func toggleButton(item: TaskItem) -> some View {
@@ -75,5 +76,18 @@ extension TaskManagerViewModel {
             self.modelContext.undoManager?.redo()
         }
         .keyboardShortcut("Z", modifiers: [.command, .shift])
+    }
+    
+    var exportButton: some View {
+        Button("Export Tasks") {
+            self.jsonExportDoc = JSONWriteOnlyDoc(content: self.items)
+            self.showExportDialog = true
+        }.keyboardShortcut("S", modifiers: [.command])
+    }
+    
+    var importButton: some View {
+        Button("Import Tasks") {
+            self.showImportDialog = true
+        }
     }
 }

@@ -7,6 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
+import os
+
+private let logger = Logger(
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: String(describing: MainView.self)
+)
 
 struct SingleView<Content: View>: View {
     
@@ -31,7 +38,6 @@ struct SingleView<Content: View>: View {
 struct MainView: View {
     @State var model : TaskManagerViewModel
     
-    
     init(model: TaskManagerViewModel){
         self._model = State(wrappedValue: model)
     }
@@ -50,7 +56,34 @@ struct MainView: View {
             .sheet(isPresented: $model.showSettingsDialog) {
                 PreferencesView(model: model)
             }
-        .confirmationDialog(model.infoMessage, isPresented: $model.showInfoMessage, actions: {})    }
+            .confirmationDialog(model.infoMessage, isPresented: $model.showInfoMessage, actions: {})
+            .fileExporter(isPresented: $model.showExportDialog,
+                          document: model.jsonExportDoc,
+                          contentTypes:  [UTType.json],
+                          onCompletion:  { result in
+                switch result {
+                    case .success(let url):
+                        logger.info("Tasks exported to \(url)")
+                    case .failure(let error):
+                        logger.error("Exporting tasks led to \(error.localizedDescription)")
+                }})
+            .fileImporter(isPresented: $model.showImportDialog,
+                          allowedContentTypes:  [UTType.json],
+                          onCompletion: { result in
+                switch result {
+                    case .success(let url):
+                        // Ensure we have permission to access the file
+                        let gotAccess = url.startAccessingSecurityScopedResource()
+                        if gotAccess {
+                            model.importTasks(url: url)
+                            // Remember to release the file access when done
+                            url.stopAccessingSecurityScopedResource()
+                        }
+                    case .failure(let error):
+                        logger.error("Importing Tasks led to \(error.localizedDescription)")
+                }
+            })
+    }
 }
 
 #Preview {

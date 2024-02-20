@@ -46,8 +46,11 @@ final class TaskManagerViewModel {
     let modelContext: Storage
     private(set) var items = [TaskItem]()
     var isTesting : Bool = false
+    
+    //Import/Export
     public var showImportDialog : Bool = false
     public var showExportDialog : Bool = false
+    var jsonExportDoc: JSONWriteOnlyDoc? = nil
     
     var preferences: CloudPreferences
     
@@ -79,7 +82,7 @@ final class TaskManagerViewModel {
     
     var lists : [TaskItemState: [TaskItem]] = [:]
     
-    // for export
+    // for user messages
     var showInfoMessage: Bool = false
     var infoMessage: String =  "(invalid)"
     
