@@ -7,14 +7,15 @@
 
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 import os
-
 
 @main
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
     @State var model: TaskManagerViewModel
+    @State var jsonExportDoc: JSONWriteOnlyDoc? = nil
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: Three_Daily_GoalsApp.self)
@@ -35,6 +36,8 @@ struct Three_Daily_GoalsApp: App {
         }
     }
     
+    
+    
     var body: some Scene {
         WindowGroup {
             MainView(model: model)
@@ -45,29 +48,38 @@ struct Three_Daily_GoalsApp: App {
         .commands {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){
-                model.exportButton
-                model.importButton.fileImporter(isPresented: $model.showImportDialog,
-                                                allowedContentTypes: [.json],
+                Button("Export Tasks") {
+                    jsonExportDoc = JSONWriteOnlyDoc(content: model.items)
+                    model.showExportDialog = true
+                }.keyboardShortcut("S", modifiers: [.command]).fileExporter(isPresented: $model.showExportDialog,
+                                                document: jsonExportDoc,
+                                                contentTypes:  [UTType.json],
+                                                onCompletion:  { result in
+                    switch result {
+                        case .success(let url):
+                            logger.info("Tasks exported to \(url)")
+                        case .failure(let error):
+                            logger.error("Exporting tasks led to \(error.localizedDescription)")
+                    }})
+                
+                Button("Import Tasks") {
+                    model.showImportDialog = true
+                }.fileImporter(isPresented: $model.showImportDialog,
+                                                allowedContentTypes:  [UTType.json],
                                                 onCompletion: { result in
-                                     
-                                     switch result {
-                                         case .success(let url):
-                                             // url contains the URL of the chosen file.
-                                             do {
-                                                 let data = try Data(contentsOf: url)
-                                                 let decoder = JSONDecoder()
-                                                 let jsonData = try decoder.decode([TaskItem].self, from: data)
-                                                 for item in jsonData {
-                                                     model.removeItem(withID: item.id)
-                                                     model.addItem(item:item)
-                                                 }
-                                             } catch {
-                                                 print("error:\(error)")
-                                             }
-                                         case .failure(let error):
-                                             logger.error("Importing Tasks led to \(error.localizedDescription)")
-                                     }
-                                 })
+                    switch result {
+                        case .success(let url):
+                            // Ensure we have permission to access the file
+                            let gotAccess = url.startAccessingSecurityScopedResource()
+                            if gotAccess {
+                                model.importTasks(url: url)
+                                // Remember to release the file access when done
+                                url.stopAccessingSecurityScopedResource()
+                            }
+                        case .failure(let error):
+                            logger.error("Importing Tasks led to \(error.localizedDescription)")
+                    }
+                })
             }
             CommandGroup(replacing: .undoRedo) {
                 model.undoButton

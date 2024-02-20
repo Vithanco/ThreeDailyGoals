@@ -37,7 +37,7 @@ final class TestDailyReviewTime: XCTestCase {
         
         
         let tester = TestPreferences()
-        var preferences = CloudPreferences(store: tester )
+        let preferences = CloudPreferences(store: tester )
         let date = Calendar.current.date(from: DateComponents(hour: 15, minute: 07))!
         preferences.reviewTime = date;
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 15)

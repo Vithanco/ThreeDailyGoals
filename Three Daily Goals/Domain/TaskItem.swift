@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import os
+import CoreTransferable
 
 fileprivate let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -25,7 +26,9 @@ extension TaskItem: Identifiable {
 }
 
 extension TaskItem:Equatable {
-    
+    static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 extension TaskItem {
@@ -198,6 +201,12 @@ extension TaskItem : Comparable {
     }
 }
 
+
+extension TaskItem: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        CodableRepresentation(contentType: .json)
+    }
+}
 
 //import UniformTypeIdentifiers
 //import SwiftUI

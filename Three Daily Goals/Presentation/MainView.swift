@@ -46,12 +46,11 @@ struct MainView: View {
         }.background(Color.background)
             .sheet(isPresented: $model.showReviewDialog) {
                 ReviewDialog(model: ReviewModel(taskModel: model))
-                
             }
             .sheet(isPresented: $model.showSettingsDialog) {
                 PreferencesView(model: model)
             }
-        .confirmationDialog("All Tasks are saved at \(model.fileUrl)", isPresented: $model.showFileName, actions: {})    }
+        .confirmationDialog(model.infoMessage, isPresented: $model.showInfoMessage, actions: {})    }
 }
 
 #Preview {

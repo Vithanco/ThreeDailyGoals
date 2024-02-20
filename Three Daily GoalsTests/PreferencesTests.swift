@@ -22,7 +22,7 @@ final class PreferencesTests: XCTestCase {
 
     func testDates() throws {
         let tester = TestPreferences()
-        var preferences = CloudPreferences(store: tester )
+        let preferences = CloudPreferences(store: tester )
         var date = Calendar.current.date(from: DateComponents(hour: 23, minute: 59))!
         preferences.reviewTime = date;
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 23)

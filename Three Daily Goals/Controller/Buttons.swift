@@ -8,13 +8,6 @@
 import Foundation
 import SwiftUI
 import SwiftData
-import os
-
-fileprivate let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
-    category: String(describing: "TaskManagerViewModel.Buttons")
-)
-
 
 extension TaskManagerViewModel {
     
@@ -69,51 +62,6 @@ extension TaskManagerViewModel {
             Label("Delete", systemImage: "trash").help("Delete this task for good.")
         }.accessibilityIdentifier("deleteButton")
     }
-
-    var  exportButton: some View {
-        Button("Export Tasks") {
-            //                            #if os(iOS)
-            //                            let fileManager = FileManager.default
-            //                                    let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
-            //                                    let filePath = "\(cachePath[0])/CloudKit"
-            //                                    do {
-            //                                        let contents = try fileManager.contentsOfDirectory(atPath: filePath)
-            //                                        for file in contents {
-            //                                            try fileManager.removeItem(atPath: "\(filePath)/\(file)")
-            //                                            print("Deleted: \(filePath)/\(file)") //Optional
-            //                                        }
-            //                                    } catch {
-            //                                        print("Errors!")
-            //                                    }
-            //                            #endif
-            let fetchDescriptor = FetchDescriptor<TaskItem>()
-            
-            do {
-                let items = try self.modelContext.fetch(fetchDescriptor)
-                
-                // Create an instance of JSONEncoder
-                let encoder = JSONEncoder()
-                // Convert your array into JSON data
-                let data = try encoder.encode(items)
-                // Specify the file path and name
-                let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
-                // Write the data to the file
-                try data.write(to: url)
-                self.fileUrl = "The tasks were exported and saved as JSON to \(url)"
-                self.showFileName = true
-            } catch {
-                self.fileUrl = "The tasks weren't exported because: \(error)"
-                self.showFileName = true
-            }
-            logger.info("\(self.fileUrl)")
-        }.keyboardShortcut("S", modifiers: [.command])
-    }
-    
-    var importButton: some View {
-        Button("Import Tasks") {
-            self.showImportDialog = true
-        }
-    }
     
     var undoButton: some View {
         return Button("Undo") {
@@ -128,8 +76,4 @@ extension TaskManagerViewModel {
         }
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
-    
 }
-
-    
-

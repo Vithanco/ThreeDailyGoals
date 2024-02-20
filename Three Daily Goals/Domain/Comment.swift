@@ -18,9 +18,12 @@ extension Comment {
 }
 
 extension Comment : Equatable, Comparable {
-
     static func < (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.created > rhs.created
+    }
+    
+    static func == (lhs: Comment, rhs: Comment) -> Bool {
+        return lhs.text > rhs.text && lhs.created > rhs.created && lhs.changed > rhs.changed
     }
 }
 

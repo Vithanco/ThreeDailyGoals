@@ -47,6 +47,7 @@ final class TaskManagerViewModel {
     private(set) var items = [TaskItem]()
     var isTesting : Bool = false
     public var showImportDialog : Bool = false
+    public var showExportDialog : Bool = false
     
     var preferences: CloudPreferences
     
@@ -79,8 +80,8 @@ final class TaskManagerViewModel {
     var lists : [TaskItemState: [TaskItem]] = [:]
     
     // for export
-    var showFileName: Bool = false
-    var fileUrl: String =  "(invalid)"
+    var showInfoMessage: Bool = false
+    var infoMessage: String =  "(invalid)"
     
     init(modelContext: Storage, preferences: CloudPreferences, isTesting : Bool = false) {
         self.modelContext = modelContext
@@ -417,6 +418,7 @@ extension TaskManagerViewModel {
         updateUndoRedoStatus()
     }
 }
+
 
 
 func dummyViewModel(loader: TestStorage.Loader? = nil) -> TaskManagerViewModel {
