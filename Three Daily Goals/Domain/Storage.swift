@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import CoreData
+import CloudKit
 
 
 typealias TaskSelector = ([TaskSection],[TaskItem],TaskItem?) -> Void
@@ -155,4 +156,23 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
         fatalError("Could not create ModelContainer: \(error)")
     }
 }
+
+
+extension CKContainer {
+    public var isProductionEnvironment:Bool {
+        let containerID = self.value(forKey: "containerID") as! NSObject // CKContainerID
+        return containerID.value(forKey: "environment")! as! CLongLong == 1
+    }
+    
+    public static var isProductionEnvironment: Bool {
+        let container = CKContainer.default()
+        if let containerID = container.value(forKey: "containerID") as? NSObject, // CKContainerID
+           let environment = containerID.value(forKey: "environment") as? Int64 {
+            debugPrint(containerID)
+            return environment == 2
+        }
+        return false
+    }
+}
+
 

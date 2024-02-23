@@ -75,6 +75,9 @@ struct TDGToolBarContent: ToolbarContent {
         ToolbarItem {
             model.importButton
         }
+        ToolbarItem {
+            model.statsDialog
+        }
         #endif
     }
 }

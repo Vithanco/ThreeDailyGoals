@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import CloudKit
 
 
 extension TaskManagerViewModel {
@@ -79,15 +80,33 @@ extension TaskManagerViewModel {
     }
     
     var exportButton: some View {
-        Button("Export Tasks") {
+        Button(action: {
             self.jsonExportDoc = JSONWriteOnlyDoc(content: self.items)
             self.showExportDialog = true
-        }.keyboardShortcut("S", modifiers: [.command])
+        }, label: {
+            Label("Export Tasks", systemImage: "square.and.arrow.up.on.square.fill")
+        }).keyboardShortcut("S", modifiers: [.command])
     }
     
     var importButton: some View {
-        Button("Import Tasks") {
+        Button(action: {
             self.showImportDialog = true
-        }
+        }, label: {
+            Label("Import Tasks", systemImage: "square.and.arrow.down.on.square.fill")
+        })
+    }
+    
+    var statsDialog: some View {
+        Button(action: {
+            var msg = ""
+            for s in TaskItemState.allCases {
+                msg += "\n\(s.description.capitalized): \(self.lists[s]!.count)"
+            }
+            msg += "\nTotal: \(self.items.count)\nProduction-DB: \(CKContainer.isProductionEnvironment)"
+            self.infoMessage = msg
+            self.showInfoMessage = true
+        }, label: {
+            Label("Task Statistic", systemImage: "chart.bar.fill")
+        })
     }
 }

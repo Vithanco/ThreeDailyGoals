@@ -45,7 +45,7 @@ struct ListView: View {
                         }
                     }
                 }
-            }.frame(minHeight: 200).background(Color.background)
+            }.frame(minHeight: 200, maxHeight: .infinity).background(Color.background)
                 .tdgToolbar(model: model, include : !isLargeDevice)
         .dropDestination(for: String.self){
             items, location in

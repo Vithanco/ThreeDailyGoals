@@ -79,12 +79,17 @@ final class TaskManagerViewModel {
     var showSettingsDialog: Bool = false
     var showMissingReviewAlert : Bool = false
     
+    var streakText: String = ""
+    
     
     var lists : [TaskItemState: [TaskItem]] = [:]
     
     // for user messages
     var showInfoMessage: Bool = false
     var infoMessage: String =  "(invalid)"
+    func finishDialog() {
+        showInfoMessage = false
+    }
     
     init(modelContext: Storage, preferences: CloudPreferences, isTesting : Bool = false) {
         self.modelContext = modelContext
@@ -210,6 +215,10 @@ final class TaskManagerViewModel {
         modelContext.processPendingChanges()
         canUndo =  modelContext.canUndo
         canRedo =  modelContext.canRedo
+        
+        let next = self.nextRegularReviewTime
+        let today = preferences.lastReview.isToday ? "Done" : stdOnlyTimeFormat.format(next)
+        streakText = "Streak: \(self.preferences.daysOfReview), today: \(today)"  //- Time:
     }
     
     func findTask(withID: String) -> TaskItem? {
@@ -334,6 +343,7 @@ final class TaskManagerViewModel {
             // reset the streak to 0
             preferences.daysOfReview = 0
         }
+        updateUndoRedoStatus()
     }
     
     func endReview(){

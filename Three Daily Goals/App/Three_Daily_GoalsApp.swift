@@ -49,6 +49,7 @@ struct Three_Daily_GoalsApp: App {
             CommandGroup(after: .importExport){
                 model.exportButton
                 model.importButton
+                model.statsDialog
             }
             CommandGroup(replacing: .undoRedo) {
                 model.undoButton
