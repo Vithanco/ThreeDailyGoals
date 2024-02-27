@@ -72,7 +72,7 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         addButton.click()
         sleep(2)
         
-        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
+//        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
 //
 //
 //        // Expect list to be shown

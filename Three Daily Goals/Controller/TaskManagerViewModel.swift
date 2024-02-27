@@ -27,16 +27,9 @@ class ListViewModel {
     }
 }
 
-extension TaskItemState {
-    var section: TaskSection {
-        switch self {
-            case .open : return secOpen
-            case .closed: return secClosed
-            case .dead: return secGraveyard
-            case .priority: return secToday
-            case .pendingResponse: return secPending
-        }
-    }
+struct Choice {
+    let existing: TaskItem
+    let new: TaskItem
 }
 
 @Observable
@@ -78,6 +71,8 @@ final class TaskManagerViewModel {
     var showReviewDialog: Bool = false
     var showSettingsDialog: Bool = false
     var showMissingReviewAlert : Bool = false
+    var showSelectDuringImportDialog: Bool = false
+    var selectDuringImport: [Choice] = []
     
     var streakText: String = ""
     
@@ -140,6 +135,10 @@ final class TaskManagerViewModel {
 //        fetchData()
 //    }
 //    
+    fileprivate func sortList(_ t: TaskItemState) {
+        lists[t]?.sort(by: t.sorter)
+    }
+    
     func fetchData() {
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
@@ -152,7 +151,7 @@ final class TaskManagerViewModel {
                 lists[item.state]?.append(item)
             }
             for t in lists.keys {
-                lists[t]?.sort()
+                sortList(t)
             }
             updateUndoRedoStatus()
             
@@ -170,8 +169,14 @@ final class TaskManagerViewModel {
     
     func addItem(item: TaskItem) {
         modelContext.insert(item)
+        if let comments = item.comments {
+            for c in comments {
+                modelContext.insert(c)
+            }
+        }
         items.append(item)
         self.lists[item.state]?.append(item)
+        sortList(item.state)
         modelContext.processPendingChanges()
         updateUndoRedoStatus()
     }
@@ -283,7 +288,7 @@ final class TaskManagerViewModel {
                 task.pending()
         }
         lists[to]?.append(task)
-        lists[to]?.sort()
+        sortList(to)
         
         // Did it touch priorities (in or out)? If so, update priorities
         if to == .priority || moveFromPriority {
@@ -383,11 +388,15 @@ final class TaskManagerViewModel {
         showReviewDialog = true
     }
     
+    func remove(item: TaskItem) {
+        items.removeObject(item)
+        lists[item.state]?.removeObject(item)
+        self.modelContext.delete(item)
+    }
+    
     func removeItem(withID: String) {
         if let item = items.first(where: {$0.id == withID}) {
-            items.removeObject(item)
-            lists[item.state]?.removeObject(item)
-            self.modelContext.delete(item)
+            remove(item: item)
         }
     }
     

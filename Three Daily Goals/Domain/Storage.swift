@@ -166,10 +166,9 @@ extension CKContainer {
     
     public static var isProductionEnvironment: Bool {
         let container = CKContainer.default()
-        if let containerID = container.value(forKey: "containerID") as? NSObject, // CKContainerID
-           let environment = containerID.value(forKey: "environment") as? Int64 {
+        if let containerID = container.value(forKey: "containerID") as? NSObject {
             debugPrint(containerID)
-            return environment == 2
+            return containerID.description.contains("Production")
         }
         return false
     }

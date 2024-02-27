@@ -29,7 +29,7 @@ enum SchemaV3_0: VersionedSchema {
         var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
-        @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
+        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments : [Comment]? = [Comment]()
         
         //ignore for now
         public var important: Bool = false
@@ -98,7 +98,7 @@ enum SchemaV3_0: VersionedSchema {
         var created: Date  = Date.now
         var changed: Date  = Date.now
         var text: String = ""
-        @Relationship(inverse:  \TaskItem.comments) var taskItem: TaskItem? = nil
+        var taskItem: TaskItem? = nil
         
         init(text: String, taskItem: TaskItem) {
             self.text = text

@@ -12,19 +12,21 @@ struct LeftSideView: View {
     var body: some View {
         VStack(alignment: .leading){
 #if os(iOS)
-            model.streakView().frame(maxWidth: .infinity, alignment: .center)
-            HStack {
-                Spacer()
-                Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
-                Spacer()
-            }.dropDestination(for: String.self){
-                items, location in
-                for item in items.compactMap({model.findTask(withID: $0)}) {
-                    model.move(task: item, to: .open)
+            if isLargeDevice {
+                model.streakView().frame(maxWidth: .infinity, alignment: .center)
+                HStack {
+                    Spacer()
+                    Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
+                    Spacer()
                 }
-                return true
+                .dropDestination(for: String.self){
+                    items, location in
+                    for item in items.compactMap({model.findTask(withID: $0)}) {
+                        model.move(task: item, to: .open)
+                    }
+                    return true
+                }
             }
-                
 #endif
             ListView(whichList: .priority, model: model)
             Spacer()
@@ -35,7 +37,7 @@ struct LeftSideView: View {
                 LinkToList(whichList: .closed, model: model)
                 LinkToList(whichList: .dead, model: model)
             }.frame(maxHeight: 145)
-        }
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
         .tdgToolbar(model: model, include: true)
     }
 }

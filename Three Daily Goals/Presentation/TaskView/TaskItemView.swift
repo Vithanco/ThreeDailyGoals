@@ -7,33 +7,23 @@
 
 import SwiftUI
 
-struct TaskItemView: View {
-    @Bindable var model: TaskManagerViewModel
+
+
+struct InnerTaskItemView : View {
+    let accentColor: Color
     @Bindable var item: TaskItem
-    @FocusState private var isTitleFocused: Bool
-    
-    private func undo() {
-        model.undo()
-    }
-    
-    private func redo() {
-        model.redo()
-    }
-    
-    private func updateUndoRedoStatus() {
-        model.updateUndoRedoStatus()
-    }
+//    @FocusState var isTitleFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading){
             HStack {
-                StateView(state: item.state, accentColor:  model.accentColor)
-                Text("Task").font(.title).foregroundStyle(model.accentColor)
+                StateView(state: item.state, accentColor:  accentColor)
+                Text("Task").font(.title).foregroundStyle(accentColor)
                 Spacer()
             }
             
             LabeledContent{
-                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused($isTitleFocused)
+                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField")//.focused($isTitleFocused)
                     .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
@@ -85,6 +75,16 @@ struct TaskItemView: View {
                 }
             }
         }.background(Color.background).padding()
+    }
+}
+
+struct TaskItemView: View {
+    @Bindable var model: TaskManagerViewModel
+    @Bindable var item: TaskItem
+//    @FocusState private var isTitleFocused: Bool
+    
+    var body: some View {
+        InnerTaskItemView(accentColor: model.accentColor, item: item)
             .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
                 ToolbarItem {
@@ -106,8 +106,8 @@ struct TaskItemView: View {
                     }
                 }
             }.onAppear(perform:{
-                updateUndoRedoStatus()
-                isTitleFocused = true
+                model.updateUndoRedoStatus()
+//                isTitleFocused = true
             })
     }
 }

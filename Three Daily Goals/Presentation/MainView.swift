@@ -15,25 +15,14 @@ private let logger = Logger(
     category: String(describing: MainView.self)
 )
 
+
+/// a simple block, to be used e.g. when I use an if then else, see below in MainView
 struct SingleView<Content: View>: View {
-    
     @ViewBuilder let content: () -> Content
-    
     var body: some View {
         content()
     }
 }
-
-//extension UserInterfaceSizeClass {
-//    var columnVisibility : NavigationSplitViewVisibility {
-//        switch self {
-//            case .compact: return .detailOnly
-//            case .regular: return .all
-//            @unknown default:
-//                return .all
-//        }
-//    }columnVisibility: horizontalSizeClass?.columnVisibility ?? .all
-//}
 
 struct MainView: View {
     @State var model : TaskManagerViewModel
@@ -57,6 +46,9 @@ struct MainView: View {
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)
         }
+        .sheet(isPresented: $model.showSelectDuringImportDialog, content: {
+            SelectVersions(choices: model.selectDuringImport, model: model)
+        })
         .confirmationDialog(model.infoMessage, isPresented: $model.showInfoMessage, actions: {Button("ok") {
             model.showInfoMessage = false
         }})

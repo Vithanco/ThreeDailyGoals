@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskSection : Observable     {
+public struct TaskSection : Observable     {
     let text : String
     let image: String
     var showOlder: Bool
@@ -20,7 +20,7 @@ let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard,  showOlde
 let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, showOlder: true)
 
 extension TaskSection : Identifiable {
-    var id: String {
+    public var id: String {
         return text
     }
 }

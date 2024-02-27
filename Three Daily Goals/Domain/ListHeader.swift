@@ -8,13 +8,13 @@
 import Foundation
 
 
-struct ListHeader: Identifiable{
+public struct ListHeader: Identifiable, Equatable{
     
     let name: String
     let timeFrom: Int
     let timeTo: Int
     
-    var id: String {
+    public var id: String {
         name
     }
     
@@ -29,7 +29,18 @@ struct ListHeader: Identifiable{
         self.timeTo = timeTo
         self.timeFrom = timeFrom
     }
+    
+    func filter(items: [TaskItem]) -> [TaskItem] {
+        if items.count > 0 {
+            return items.filter(self.filter).sorted(by:items.first!.state.sorter)
+        }
+        return []
+    }
+    
 }
+
+
+
 
 
 let secLastWeek = ListHeader(name: "Last Week",  timeFrom: 7, timeTo: 0)

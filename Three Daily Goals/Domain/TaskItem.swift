@@ -26,9 +26,44 @@ extension TaskItem: Identifiable {
 }
 
 extension TaskItem:Equatable {
+    
+    // Deep Equality needed during import
     static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
-        return lhs.id == rhs.id
+        let result = lhs.id == rhs.id &&
+        lhs.important == rhs.important &&
+        lhs.title == rhs.title &&
+        lhs.details == rhs.details &&
+        lhs.urgent == rhs.urgent &&
+        lhs.state == rhs.state &&
+        lhs.url == rhs.url &&
+        lhs._priority == rhs._priority &&
+        lhs._imageData == rhs._imageData &&
+        lhs.changed == rhs.changed &&
+        lhs.created == rhs.created &&
+        lhs.dueDate == rhs.dueDate 
+//        (lhs.comments == nil)  == (rhs.comments == nil)
+        if !result {
+            return false
+        }
+//        if var lhsComments = lhs.comments, var rhsComments = rhs.comments {
+//            if lhsComments.count != rhsComments.count {
+//                return false
+//            }
+//            if lhsComments.isEmpty {
+//                return true
+//            }
+//            lhsComments.sort()
+//            rhsComments.sort()
+//            for i in 0 ... lhsComments.count-1 {
+//                if lhsComments[i] != rhsComments[i] {
+//                    return false
+//                }
+//            }
+//        }
+        return true
     }
+
+
 }
 
 extension TaskItem {

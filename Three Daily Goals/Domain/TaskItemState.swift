@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+typealias TaskSorter = (TaskItem, TaskItem) -> Bool
 
 public enum TaskItemState: Codable, Hashable, CaseIterable {
     case open
@@ -28,7 +29,7 @@ extension TaskItemState : CustomStringConvertible {
         }
     }
 }
-public extension TaskItemState{
+extension TaskItemState{
     var showCount: Bool {
         switch self {
             case .closed, .dead: return false
@@ -56,5 +57,39 @@ public extension TaskItemState{
     
     var getListAccessibilityIdentifier: String {
         return self.description + "_List"
+    }
+    
+    var section: TaskSection {
+        switch self {
+            case .open : return secOpen
+            case .closed: return secClosed
+            case .dead: return secGraveyard
+            case .priority: return secToday
+            case .pendingResponse: return secPending
+        }
+    }
+    
+    fileprivate func oldestFirst (a: TaskItem,b: TaskItem) -> Bool {
+        return a.changed < b.changed
+    }
+    
+    fileprivate func youngestFirst (a: TaskItem,b: TaskItem) -> Bool {
+        return a.changed > b.changed
+    }
+    
+    var sorter: TaskSorter {
+        switch self {
+            case .closed, .dead: return youngestFirst
+            case .open, .priority, .pendingResponse: return oldestFirst
+        }
+    }
+    var subHeaders: [ListHeader] {
+        switch self {
+            case .open : return defaultListHeaders
+            case .closed: return defaultListHeaders.reversed()
+            case .dead: return defaultListHeaders.reversed()
+            case .priority: return []
+            case .pendingResponse: return defaultListHeaders
+        }
     }
 }

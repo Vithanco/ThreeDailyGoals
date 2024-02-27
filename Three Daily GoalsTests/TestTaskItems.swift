@@ -26,12 +26,33 @@ final class TestTaskItems: XCTestCase {
         XCTAssertEqual(task, task2)
         XCTAssertEqual(task.comments!.count,1)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func loader(whichList: TaskItemState) -> [TaskItem] {
+        var result : [TaskItem] = []
+        for i in stride(from: 1, to: 100, by: 5) {
+            result.add(title: "day \(i)", changedDate: getDate(daysPrior: i), state: whichList)
         }
+        return result
     }
-
+    
+    func testListSorting() throws {
+        XCTAssertNotEqual(TaskItemState.open.subHeaders, TaskItemState.closed.subHeaders)
+        let dummyM = dummyViewModel(loader: {return self.loader(whichList: .open)})
+        let itemList = dummyM.list(which: .open)
+        let headers = TaskItemState.open.subHeaders
+        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
+        XCTAssertEqual(Array(partialLists.joined()), itemList)
+    }
+    
+    func testEquality() throws {
+        let sameDate = Date.now
+        let a = TaskItem(title: "same",details: "same",changedDate: sameDate)
+        a.created = sameDate
+        let b = TaskItem(title: "same",details: "different",changedDate: sameDate)
+        b.created = sameDate
+        let c = TaskItem(title: "same",details: "same",changedDate: sameDate)
+        c.created = sameDate
+        XCTAssertNotEqual(a,b)
+        XCTAssertEqual(a,c)
+    }
 }

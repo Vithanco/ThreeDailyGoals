@@ -22,17 +22,17 @@ struct ListView: View {
         return whichList ?? model.whichList
     }
     
-    let headers = defaultListHeaders;
-    
     var body: some View {
             let itemList = model.list(which: list)
+            let headers = list.subHeaders
+//        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         
             List{
                 Section (header: VStack(alignment: .leading) {
                     list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(list.getListAccessibilityIdentifier)
                 }) {
                     ForEach(headers) {header in
-                        let partialList = itemList.filter(header.filter)
+                        let partialList = header.filter(items: itemList)
                         if partialList.count > 0 {
                             if list != .priority {
                                 header.asText
