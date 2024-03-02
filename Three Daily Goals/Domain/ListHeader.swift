@@ -49,4 +49,6 @@ let secOlder = ListHeader(name: "over a year ago",  timeFrom: 1000000, timeTo: 3
 let secLastQuarter = ListHeader(name: "Last Quarter",  timeFrom: 91, timeTo: 30)
 let secLastHalfYear = ListHeader(name: "Last Half Year", timeFrom: 182, timeTo: 91)
 
+let all = ListHeader(name: "All", timeFrom: 1000000, timeTo: 0)
+
 let defaultListHeaders = [secOlder, secLastHalfYear, secLastQuarter, secLastMonth, secLastWeek]

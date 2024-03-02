@@ -88,7 +88,7 @@ extension TaskItemState{
             case .open : return defaultListHeaders
             case .closed: return defaultListHeaders.reversed()
             case .dead: return defaultListHeaders.reversed()
-            case .priority: return []
+            case .priority: return [all]
             case .pendingResponse: return defaultListHeaders
         }
     }

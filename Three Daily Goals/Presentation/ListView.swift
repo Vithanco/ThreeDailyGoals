@@ -29,7 +29,10 @@ struct ListView: View {
         
             List{
                 Section (header: VStack(alignment: .leading) {
-                    list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(list.getListAccessibilityIdentifier)
+                    HStack{
+                        list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(list.getListAccessibilityIdentifier)
+//                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
+                    }
                 }) {
                     ForEach(headers) {header in
                         let partialList = header.filter(items: itemList)
@@ -43,6 +46,10 @@ struct ListView: View {
                                 LinkToTask(model: model,item: item, list: list).listRowSeparator(.visible)
                             }
                         }
+                    }
+                    if list != .priority {
+                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
+                            .listRowSeparator(.hidden)
                     }
                 }
             }.frame(minHeight: 200, maxHeight: .infinity).background(Color.background)
