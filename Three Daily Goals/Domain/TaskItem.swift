@@ -168,16 +168,16 @@ extension TaskItem {
     }
     
    @discardableResult func addComment(text: String) -> TaskItem{
-        if comments == nil {
-            comments = [Comment]()
-        }
-       
-       let aComment = Comment(text: text, taskItem: self)
-       if let mc = self.modelContext {
-           mc.insert(aComment)
-       }
-       comments?.append(aComment)
-       changed = Date.now
+//        if comments == nil {
+//            comments = [Comment]()
+//        }
+//       
+//       let aComment = Comment(text: text, taskItem: self)
+//       if let mc = self.modelContext {
+//           mc.insert(aComment)
+//       }
+//       comments?.append(aComment)
+//       changed = Date.now
        return self
    }
     

@@ -47,8 +47,7 @@ struct ReviewDialog: View {
                     ReviewNextPriorities(model: model)
             }
             Spacer()
-            
-        }.padding(4).frame(minHeight: 700)
+        }.padding(4).frame(minHeight: 400,idealHeight: 600)
     }
     //                .overlay {
     //                    GeometryReader { geometry in

@@ -47,12 +47,12 @@ struct ListView: View {
                             }
                         }
                     }
-                    if list != .priority {
+                    if itemList.count > 10 {
                         Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
                             .listRowSeparator(.hidden)
                     }
                 }
-            }.frame(minHeight: 200, maxHeight: .infinity).background(Color.background)
+            }.frame(minHeight: 145, maxHeight: .infinity).background(Color.background)
                 .tdgToolbar(model: model, include : !isLargeDevice)
         .dropDestination(for: String.self){
             items, location in

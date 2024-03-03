@@ -50,8 +50,9 @@ struct ReviewNextPriorities: View {
                         Spacer()
                     }.dropDestination(for: String.self){
                         items, location in
-                        for item in items.compactMap({model.taskModel.findTask(withID: $0)}) {
-                            model.taskModel.move(task: item, to: .priority)
+                        for item in items.compactMap({
+                            model.taskModel.findTask(withID: $0)}) {
+                            model.taskModel.move(task: item, to: .open)
                         }
                         return true
                     }
@@ -63,7 +64,8 @@ struct ReviewNextPriorities: View {
             Button(action: { presentAlert = true}) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks.")
             }
-        }.alert("Quick Add", isPresented: $presentAlert, actions: {
+        }.frame(minHeight: 300,idealHeight: 800, maxHeight: .infinity)
+        .alert("Quick Add", isPresented: $presentAlert, actions: {
             TextField("task title", text: $newTaskName)
             
             Button("Cancel", role: .cancel, action: {presentAlert = false})

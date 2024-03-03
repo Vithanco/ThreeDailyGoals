@@ -23,7 +23,7 @@ struct ReviewCurrentPriorities: View {
                     Text("Move All to Open")
                 }.buttonStyle(.bordered)
             }
-        }.frame(minHeight: 400)
+        }.frame(minHeight: 300, idealHeight: 500)
         
     }
 }

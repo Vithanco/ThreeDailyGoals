@@ -68,22 +68,25 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         let firstButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
         firstButton.click()
         sleep(2)
+        
+        //add a new task
         let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
         addButton.click()
         sleep(2)
         
-//        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
-//
-//
-//        // Expect list to be shown
-//        // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
-//        let listHeader = app.staticTexts["open_List"] // Adjust the identifier as needed
-//        XCTAssertTrue(listHeader.exists, "List header should be visible")
-//        
-//        // Find first task in list
-//        // This assumes tasks have identifiable accessibility labels or identifiers.
-//        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
-//        XCTAssertTrue(firstTask.exists, "First task should be found")
+        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
+        title.
+
+
+        // Expect list to be shown
+        // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
+        let listHeader = app.staticTexts["open_List"] // Adjust the identifier as needed
+        XCTAssertTrue(listHeader.exists, "List header should be visible")
+        
+        // Find first task in list
+        // This assumes tasks have identifiable accessibility labels or identifiers.
+        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
+        XCTAssertTrue(firstTask.exists, "First task should be found")
         
         // Ensure I can press a close button
         let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)

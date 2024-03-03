@@ -16,7 +16,7 @@ struct ReviewPendingResponses: View {
             Spacer()
             Text("Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step).")
             ListView(whichList: .pendingResponse, model: model.taskModel)
-        }
+        }.frame(minHeight: 300, idealHeight: 800, maxHeight:.infinity )
     }
 }
 

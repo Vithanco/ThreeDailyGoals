@@ -115,5 +115,12 @@ struct TaskItemView: View {
 #Preview {
     //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
     let model = dummyViewModel()
+    
+    
+#if os(macOS)
     return TaskItemView( model: model , item: model.items.first()!).frame(width: 600, height: 300)
+#endif
+#if os(iOS)
+    return TaskItemView( model: model , item: model.items.first()!)
+#endif
 }

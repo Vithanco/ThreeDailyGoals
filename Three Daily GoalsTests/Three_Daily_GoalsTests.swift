@@ -45,7 +45,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         XCTAssertEqual(0,try context.fetchCount(descriptor))
         model.touch(task: item)
         model.endUndoGrouping()
-        XCTAssertEqual(item.comments!.count, 1, "touch leads to comment")
+//        XCTAssertEqual(item.comments!.count, 1, "touch leads to comment")
         XCTAssertEqual(1,try context.fetchCount(descriptor))
         
         
@@ -68,7 +68,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         let find = model.findTask(withID: item.id)
         XCTAssertNotNil(find)
         XCTAssertEqual(item, find )
-        XCTAssertEqual(find!.comments!.count, 1, "Comment should be recreated, too")
+//        XCTAssertEqual(find!.comments!.count, 1, "Comment should be recreated, too")
         XCTAssertEqual(1,try context.fetchCount(descriptor))
         
         //delete
@@ -86,7 +86,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         
         let find3 = model.findTask(withID: item.id)        
         XCTAssertEqual(find3!, model.findTask(withID: item.id))
-        XCTAssertEqual(find3!.comments!.count, 1)
+//        XCTAssertEqual(find3!.comments!.count, 1)
         XCTAssertEqual(1,try context.fetchCount(descriptor))
     }
     
