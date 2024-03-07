@@ -8,15 +8,15 @@
 import Foundation
 import os
 
-private let logger = Logger(
+nonisolated(unsafe) private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: ReviewTimer.self)
     )
 
-typealias OnReviewTimer = () -> ()
+typealias OnReviewTimer = @Sendable () -> ()
 
 
-class ReviewTimer {
+final class ReviewTimer : Sendable{
     var timer: Timer? = nil
     
     init() {

@@ -8,7 +8,7 @@
 import Foundation
 import Logging
 
-fileprivate let logger = Logger(label: "com.vithanco.array")
+nonisolated(unsafe) private let logger = Logger(label: "com.vithanco.array")
 
 
 extension Array where Element: Equatable{

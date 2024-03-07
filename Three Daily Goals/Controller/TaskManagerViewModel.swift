@@ -11,7 +11,7 @@ import SwiftUI
 import CoreData
 import os
 
-fileprivate let logger = Logger(
+nonisolated(unsafe) private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: TaskManagerViewModel.self)
 )
@@ -33,9 +33,9 @@ struct Choice {
 }
 
 @Observable
-final class TaskManagerViewModel {
+final class TaskManagerViewModel{
     
-    var timer : ReviewTimer = ReviewTimer()
+    let timer : ReviewTimer = ReviewTimer()
     let modelContext: Storage
     private(set) var items = [TaskItem]()
     var isTesting : Bool = false

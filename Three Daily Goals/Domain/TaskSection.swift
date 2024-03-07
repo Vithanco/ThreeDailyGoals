@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TaskSection : Observable     {
+public struct TaskSection : Observable , Sendable    {
     let text : String
     let image: String
     var showOlder: Bool

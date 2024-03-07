@@ -10,7 +10,7 @@ import SwiftData
 import os
 import CoreTransferable
 
-fileprivate let logger = Logger(
+nonisolated(unsafe) private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: TaskItem.self)
 )

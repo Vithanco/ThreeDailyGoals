@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct ListHeader: Identifiable, Equatable{
+public struct ListHeader: Identifiable, Equatable, Sendable{
     
     let name: String
     let timeFrom: Int

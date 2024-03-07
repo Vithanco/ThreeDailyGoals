@@ -10,7 +10,7 @@ import SwiftData
 import UniformTypeIdentifiers
 import os
 
-private let logger = Logger(
+nonisolated(unsafe) private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: MainView.self)
 )

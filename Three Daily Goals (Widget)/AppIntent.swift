@@ -9,8 +9,8 @@ import WidgetKit
 import AppIntents
 
 struct ConfigurationAppIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Three Daily Goals"
-    static var description = IntentDescription("Display today's priorities, as configured in the iOS/macOS Apps.")
+    static let title: LocalizedStringResource = "Three Daily Goals"
+    static let description = IntentDescription("Display today's priorities, as configured in the iOS/macOS Apps.")
 
 //    // An example configurable parameter.
 //    @Parameter(title: "Favorite Emoji", default: "😃")

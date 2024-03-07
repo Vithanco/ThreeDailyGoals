@@ -23,7 +23,8 @@ struct Three_Daily_GoalsApp: App {
     init() {
         var enableTesting = false
 #if DEBUG
-        if CommandLine.arguments.contains("enable-testing") {
+        let commandLineArguments = CommandLine.arguments
+        if commandLineArguments.contains("enable-testing") {
             enableTesting = true
         }
 #endif

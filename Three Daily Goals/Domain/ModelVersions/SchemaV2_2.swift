@@ -10,9 +10,8 @@ import SwiftData
 import SwiftUI
 
 
-
 enum SchemaV2_2: VersionedSchema {
-    static var versionIdentifier = Schema.Version(2, 2, 0)
+    static let versionIdentifier = Schema.Version(2, 2, 0)
     
     static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self, Preferences.self]
