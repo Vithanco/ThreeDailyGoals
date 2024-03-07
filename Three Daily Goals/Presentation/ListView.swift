@@ -14,6 +14,7 @@ extension ListHeader {
     }
 }
 
+
 struct ListView: View {
     @State var whichList: TaskItemState?
     @Bindable var model: TaskManagerViewModel
@@ -34,23 +35,7 @@ struct ListView: View {
 //                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
                     }
                 }) {
-                    ForEach(headers) {header in
-                        let partialList = header.filter(items: itemList)
-                        if partialList.count > 0 {
-                            if list != .priority {
-                                header.asText
-                                    .foregroundStyle(model.accentColor)
-                                    .listRowSeparator(.hidden)
-                            }
-                            ForEach(partialList) { item in
-                                LinkToTask(model: model,item: item, list: list).listRowSeparator(.visible)
-                            }
-                        }
-                    }
-                    if itemList.count > 10 {
-                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
-                            .listRowSeparator(.hidden)
-                    }
+                    SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, model: model)
                 }
             }.frame(minHeight: 145, maxHeight: .infinity).background(Color.background)
                 .tdgToolbar(model: model, include : !isLargeDevice)

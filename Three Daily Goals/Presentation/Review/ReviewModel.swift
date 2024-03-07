@@ -13,8 +13,20 @@ enum DialogState : String{
     case inform
     case currentPriorities
     case pending
+    case dueDate
     case review
 }
+
+extension TaskManagerViewModel {
+    var dueDateSoon: [TaskItem] {
+        let due = getDate(inDays: 3)
+        let open = self.list(which: .open).filter({$0.dueUntil(date: due)})
+//        let pending = self.list(which: .pendingResponse).filter({$0.dueUntil(date: due)})
+//        open.append(contentsOf: pending)
+        return open.sorted()
+    }
+}
+
 
 @Observable
 final class ReviewModel{
@@ -40,22 +52,29 @@ final class ReviewModel{
     
     func moveStateForward() {
         switch stateOfReview {
-            case .inform:
-                if taskModel.list(which: .priority).isEmpty {
-                    fallthrough
-                } else {
-                    stateOfReview = .currentPriorities
-                }
-            case .currentPriorities:
-                if taskModel.list(which: .pendingResponse).isEmpty {
-                    fallthrough
-                } else {
-                    stateOfReview = .pending
-                }
-            case .pending:
-                stateOfReview = .review
-            case .review:
-                endReview()
+        case .inform:
+            if taskModel.list(which: .priority).isEmpty {
+                fallthrough
+            } else {
+                stateOfReview = .currentPriorities
+            }
+        case .currentPriorities:
+            if taskModel.list(which: .pendingResponse).isEmpty {
+                fallthrough
+            } else {
+                stateOfReview = .pending
+            }
+        case .pending:
+            let dueSoon = taskModel.dueDateSoon
+            if dueSoon.isEmpty {
+                fallthrough
+            } else {
+                stateOfReview = .dueDate
+            }
+        case .dueDate :
+            stateOfReview = .review
+        case .review:
+            endReview()
         }
     }
     
@@ -91,7 +110,7 @@ final class ReviewModel{
 }
 
 
-@MainActor 
+@MainActor
 func dummyReviewModel(state: DialogState = .inform) -> ReviewModel {
     let model = ReviewModel(taskModel: dummyViewModel())
     model.stateOfReview = state

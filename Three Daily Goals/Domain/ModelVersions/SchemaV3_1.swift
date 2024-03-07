@@ -11,7 +11,7 @@ import SwiftUI
 
 
 
-enum SchemaV3_0: VersionedSchema {
+enum SchemaV3_1: VersionedSchema {
     static var versionIdentifier = Schema.Version(3, 0, 0)
     
     static var models: [any PersistentModel.Type] {

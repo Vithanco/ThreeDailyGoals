@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
+		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
+		7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* ReviewDueDate.swift */; };
+		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */; };
 		E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */; };
 		E50117E82B6D016B00B2C25A /* ReviewSoonDueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */; };
@@ -142,6 +146,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
+		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
+		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
+		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreferencesView.swift; sourceTree = "<group>"; };
 		E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSoonDueView.swift; sourceTree = "<group>"; };
@@ -274,6 +282,7 @@
 				E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */,
 				E5FFC5B82B6A388200C9D60B /* SchemaV2_2.swift */,
 				E5315D142B6FFE4C001BB3FB /* SchemaV3_0.swift */,
+				7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */,
 			);
 			path = ModelVersions;
 			sourceTree = "<group>";
@@ -389,6 +398,7 @@
 				E5A371932B2EDD5E00A310BA /* CommentView.swift */,
 				E582D0B72B2E13E30006DD5D /* TaskItemView.swift */,
 				E5B376B22B7B506400E66FAD /* AllCommentsView.swift */,
+				7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */,
 			);
 			path = TaskView;
 			sourceTree = "<group>";
@@ -437,6 +447,7 @@
 				E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */,
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
+				7FA581032B9838B700803614 /* SimpleListView.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -475,6 +486,7 @@
 				E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */,
 				E5FFC5BE2B6A71C300C9D60B /* ReviewModel.swift */,
 				E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */,
+				7FA581012B97AF7600803614 /* ReviewDueDate.swift */,
 				E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */,
 				E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */,
 				E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */,
@@ -682,13 +694,16 @@
 				E5FFC5C32B6A73A900C9D60B /* ReviewInformView.swift in Sources */,
 				E5ED903F2B46E44100CF0431 /* ArrayRelated.swift in Sources */,
 				E5315D152B6FFE4C001BB3FB /* SchemaV3_0.swift in Sources */,
+				7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */,
 				E5B376B32B7B506400E66FAD /* AllCommentsView.swift in Sources */,
 				E53AF7A72B661D0F00C24F78 /* SchemaV1.swift in Sources */,
 				E597A48B2B848CD600BCD061 /* JSONDoc.swift in Sources */,
 				E5FFC5B92B6A388200C9D60B /* SchemaV2_2.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* ReviewPreferencesView.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
+				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
 				E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */,
+				7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */,
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
 				E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */,
 				E53AF7AE2B66244F00C24F78 /* Preferences.swift in Sources */,
@@ -705,6 +720,7 @@
 				E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */,
 				E5FFC5BF2B6A71C400C9D60B /* ReviewModel.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
+				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
 				E5B698FB2B7C89360086C3EB /* Buttons.swift in Sources */,
 				E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* ReviewCurrentPriorities.swift in Sources */,
@@ -796,7 +812,7 @@
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "2024 Vithanco";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -807,7 +823,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -835,7 +851,7 @@
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "2024 Vithanco";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -846,7 +862,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";

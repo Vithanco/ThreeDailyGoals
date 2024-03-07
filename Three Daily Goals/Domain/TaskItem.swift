@@ -90,6 +90,17 @@ extension TaskItem {
     }
     
     @Transient
+    var due: Date? {
+        get {
+            return self.dueDate
+        }
+        set {
+            self.dueDate = newValue
+            changed = Date.now
+        }
+    }
+    
+    @Transient
     var url: String {
         get {
             return _url
@@ -206,6 +217,13 @@ extension TaskItem {
             state = .priority
             addComment(text: "Turned into a priority.")
         }
+    }
+    
+    func dueUntil(date: Date) -> Bool {
+        if let due {
+            return due <= date
+        }
+        return false
     }
     
     func touch() {

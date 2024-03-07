@@ -76,7 +76,6 @@ final class TaskManagerViewModel {
     
     var streakText: String = ""
     
-    
     var lists : [TaskItemState: [TaskItem]] = [:]
     
     // for user messages

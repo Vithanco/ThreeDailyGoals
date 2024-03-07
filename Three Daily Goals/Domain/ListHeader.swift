@@ -39,16 +39,14 @@ public struct ListHeader: Identifiable, Equatable{
     
 }
 
-
-
-
-
-let secLastWeek = ListHeader(name: "Last Week",  timeFrom: 7, timeTo: 0)
-let secLastMonth = ListHeader(name: "Last Month", timeFrom: 30, timeTo: 7)
-let secOlder = ListHeader(name: "over a year ago",  timeFrom: 1000000, timeTo: 365)
-let secLastQuarter = ListHeader(name: "Last Quarter",  timeFrom: 91, timeTo: 30)
-let secLastHalfYear = ListHeader(name: "Last Half Year", timeFrom: 182, timeTo: 91)
+let lhToday = ListHeader(name: "Today",  timeFrom: 1, timeTo: 0)
+let lhYesterday = ListHeader(name: "Yesterday",  timeFrom: 2, timeTo: 1)
+let lhLastWeek = ListHeader(name: "Last Week",  timeFrom: 7, timeTo: 2)
+let lhLastMonth = ListHeader(name: "Last Month", timeFrom: 30, timeTo: 7)
+let lhOlder = ListHeader(name: "over a year ago",  timeFrom: 1000000, timeTo: 365)
+let lhLastQuarter = ListHeader(name: "Last Quarter",  timeFrom: 91, timeTo: 30)
+let lhLastHalfYear = ListHeader(name: "Last Half Year", timeFrom: 182, timeTo: 91)
 
 let all = ListHeader(name: "All", timeFrom: 1000000, timeTo: 0)
 
-let defaultListHeaders = [secOlder, secLastHalfYear, secLastQuarter, secLastMonth, secLastWeek]
+let defaultListHeaders = [lhOlder, lhLastHalfYear, lhLastQuarter, lhLastMonth, lhLastWeek, lhYesterday, lhToday]

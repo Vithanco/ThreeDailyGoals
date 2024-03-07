@@ -8,6 +8,23 @@
 import SwiftUI
 
 
+struct TDGShadowModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        return content.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+    }
+}
+
+extension View {
+    
+    /// include parameter was necessary in order to prevent flooding of the same toolbar on all views when shown on an iPad
+    var tdgShadow: some View {
+        return self.modifier(TDGShadowModifier())
+    }
+}
+
+
+
 
 struct InnerTaskItemView : View {
     let accentColor: Color
@@ -27,8 +44,7 @@ struct InnerTaskItemView : View {
                     .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
-            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            }.tdgShadow
             
             //        Details
             LabeledContent{
@@ -37,10 +53,10 @@ struct InnerTaskItemView : View {
                     .textFieldStyle(.squareBorder)
 #endif
                     .frame(idealHeight: 30).frame(minHeight: 30)
+                    .tdgShadow
             } label: {
                 Text("Details:").bold().foregroundColor(Color.secondaryColor)
-            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            }
             
             //        URL
             LabeledContent{
@@ -49,15 +65,22 @@ struct InnerTaskItemView : View {
 #if os(macOS)
                         .textFieldStyle(.squareBorder)
 #endif
-                        .frame(idealHeight: 30).frame(minHeight: 30)
+                        .frame(idealHeight: 30).frame(minHeight: 30).tdgShadow
                     if let link = URL(string: item.url) {
                         Link("Open",destination: link)
                     }
                 }
             } label: {
                 Text("URL:").bold().foregroundColor(Color.secondaryColor)
-            }.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-                .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+            }
+            
+            LabeledContent{
+                DatePickerNullable(selected: $item.due, defaultDate: getDate(inDays: 7)).tdgShadow
+            } label: {
+                Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
+            }
+            
+    
             
             Spacer()
             AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: 200)

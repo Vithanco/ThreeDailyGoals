@@ -19,7 +19,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 struct ReviewDialog: View {
     
     @Bindable var model: ReviewModel
-//    @State private var sheetHeight: CGFloat = .zero
+    //    @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
         VStack {
@@ -37,29 +37,31 @@ struct ReviewDialog: View {
             Spacer()
             
             switch model.stateOfReview {
-                case .inform:
-                    ReviewInformView(model: model)
-                case .currentPriorities:
-                    ReviewCurrentPriorities(model: model)
-                case .pending:
-                    ReviewPendingResponses(model:model)
-                case .review:
-                    ReviewNextPriorities(model: model)
+            case .inform:
+                ReviewInformView(model: model)
+            case .currentPriorities:
+                ReviewCurrentPriorities(model: model)
+            case .pending:
+                ReviewPendingResponses(model:model)
+            case .review:
+                ReviewNextPriorities(model: model)
+            case .dueDate:
+                ReviewDueDate(model: model)
             }
             Spacer()
         }.padding(4).frame(minHeight: 400,idealHeight: 600)
     }
     //                .overlay {
     //                    GeometryReader { geometry in
-//                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
-//                    }
-//                }
-//                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
-//                    sheetHeight = newHeight
-//                }
-//                .presentationDetents([.height(sheetHeight)])
+    //                        Color.clear.preference(key: InnerHeightPreferenceKey.self, value: geometry.size.height)
+    //                    }
+    //                }
+    //                .onPreferenceChange(InnerHeightPreferenceKey.self) { newHeight in
+    //                    sheetHeight = newHeight
+    //                }
+    //                .presentationDetents([.height(sheetHeight)])
 }
-    
+
 
 #Preview {
     return ReviewDialog(model: dummyReviewModel(state: .review))

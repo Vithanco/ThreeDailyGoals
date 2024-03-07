@@ -29,6 +29,12 @@ func getDate (daysPrior: Int) -> Date {
     return Calendar.current.startOfDay(for: exact)
 }
 
+func getDate (inDays: Int) -> Date {
+    let exact = Calendar.current.date(byAdding: .day, value: inDays, to: Date.now) ?? Date.now
+    return Calendar.current.startOfDay(for: exact)
+}
+
+
 func addADay(_ result: Date) -> Date {
     return Calendar.current.date(byAdding: .day, value: 1, to: result) ?? Date.now
 }
