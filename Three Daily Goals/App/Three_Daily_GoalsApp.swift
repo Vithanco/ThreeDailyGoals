@@ -9,11 +9,13 @@ import SwiftUI
 import SwiftData
 import UniformTypeIdentifiers
 import os
+import EventKit
 
 @main
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
+    var calendar: EKEventStore
     @State var model: TaskManagerViewModel
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -33,6 +35,16 @@ struct Three_Daily_GoalsApp: App {
             self._model = State(wrappedValue: dummyViewModel())
         } else {
             self._model = State(wrappedValue:TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false), isTesting: false)) // enableTesting -> testData
+        }
+        
+        // Initialize the store.
+        calendar = EKEventStore()
+
+        // Request access to reminders.
+        calendar.requestFullAccessToEvents { granted, error in
+//            if error != nil {
+//                self.calendar = nil
+//            }
         }
     }
     
