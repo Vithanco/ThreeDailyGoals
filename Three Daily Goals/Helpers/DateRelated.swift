@@ -17,11 +17,7 @@ let timeAgoFormatter = {
     result.unitsStyle = .full
     return result
 }()
-let nextReviewFormatter = {
-    let result = RelativeDateTimeFormatter()
-    result.unitsStyle = .short
-    return result
-}()
+
 
 
 func getDate (daysPrior: Int) -> Date {
@@ -81,7 +77,7 @@ enum Seconds{
 
 extension Date {
     var isToday: Bool {
-        return Calendar.current.startOfDay(for:self) == Date.today
+        return startOfDay == Date.today
     }
     
     static var today: Date {
@@ -90,5 +86,17 @@ extension Date {
     
     func timeAgoDisplay() -> String {
         return timeAgoFormatter.localizedString(for: self, relativeTo: Date())
+    }
+    
+    var startOfDay: Date {
+       return  Calendar.current.startOfDay(for:self)
+    }
+    
+    var endOfDay: Date {
+        return  Calendar.current.date(byAdding: DateComponents(hour: 23, minute: 59),to: startOfDay) ?? Date.now
+    }
+    
+    var timeRemaining: String {
+        return timeAgoFormatter.string(for: endOfDay) ?? ""
     }
 }

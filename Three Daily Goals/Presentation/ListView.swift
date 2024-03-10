@@ -28,17 +28,12 @@ struct ListView: View {
             let headers = list.subHeaders
 //        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         
-            List{
-                Section (header: VStack(alignment: .leading) {
-                    HStack{
-                        list.section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(list.getListAccessibilityIdentifier)
-//                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
-                    }
-                }) {
-                    SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, model: model)
-                }
-            }.frame(minHeight: 145, maxHeight: .infinity).background(Color.background)
-                .tdgToolbar(model: model, include : !isLargeDevice)
+            
+        SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
+            .frame(minHeight: 145, maxHeight: .infinity)
+            .background(Color.background)
+            .tdgToolbar(model: model, include : !isLargeDevice)
+
         .dropDestination(for: String.self){
             items, location in
             for item in items.compactMap({model.findTask(withID: $0)}) {

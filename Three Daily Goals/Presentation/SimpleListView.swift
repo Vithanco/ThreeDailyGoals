@@ -11,31 +11,43 @@ struct SimpleListView: View {
     let itemList: [TaskItem]
     let headers: [ListHeader]
     let showHeaders: Bool
+    let section: TaskSection
+    let id: String
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
-            ForEach(headers) {header in
-                let partialList = header.filter(items: itemList)
-                if partialList.count > 0 {
-                    if showHeaders {
-                        header.asText
-                            .foregroundStyle(model.accentColor)
-                            .listRowSeparator(.hidden)
-                    }
-                    ForEach(partialList) { item in
-                        LinkToTask(model: model,item: item, list: item.state).listRowSeparator(.visible)
+        List{
+            Section (header: VStack(alignment: .leading) {
+                HStack{
+                    section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(id)
+                    //                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
+                }
+            }) {
+                ForEach(headers) {header in
+                    let partialList = header.filter(items: itemList)
+                    if partialList.count > 0 {
+                        if showHeaders {
+                            header.asText
+                                .foregroundStyle(model.accentColor)
+                                .listRowSeparator(.hidden)
+                        }
+                        ForEach(partialList) { item in
+                            LinkToTask(model: model,item: item, list: item.state).listRowSeparator(.visible)
+                        }
                     }
                 }
+                if itemList.count > 10 {
+                    Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
+                        .listRowSeparator(.hidden)
+                }
             }
-            if itemList.count > 10 {
-                Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
-                    .listRowSeparator(.hidden)
-            }
+            
+        }
+    }
+        
     }
     
-}
-
-#Preview {
-    let dummy = dummyViewModel()
-    return SimpleListView(itemList: dummy.list(which: .open), headers: defaultListHeaders, showHeaders: true, model: dummy)
-}
+    #Preview {
+        let dummy = dummyViewModel()
+        return SimpleListView(itemList: dummy.list(which: .open), headers: defaultListHeaders, showHeaders: true, section: secOpen, id: "yeah", model: dummy)
+    }

@@ -72,6 +72,9 @@ final class ReviewModel{
                 stateOfReview = .dueDate
             }
         case .dueDate :
+                for t in taskModel.dueDateSoon {
+                    taskModel.move(task: t, to: .priority)
+                }
             stateOfReview = .review
         case .review:
             endReview()

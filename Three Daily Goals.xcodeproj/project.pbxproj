@@ -13,7 +13,6 @@
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */; };
 		E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */; };
-		E50117E82B6D016B00B2C25A /* ReviewSoonDueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */; };
 		E50A29B72B6995DA002AC3BC /* SchemaV2_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */; };
 		E50A29BA2B6A0D79002AC3BC /* ImageRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A29B92B6A0D79002AC3BC /* ImageRelated.swift */; };
 		E50A29BB2B6A0D79002AC3BC /* ImageRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A29B92B6A0D79002AC3BC /* ImageRelated.swift */; };
@@ -75,11 +74,11 @@
 		E5B698FB2B7C89360086C3EB /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B698FA2B7C89360086C3EB /* Buttons.swift */; };
 		E5B698FC2B7C95520086C3EB /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
 		E5B698FD2B7C956A0086C3EB /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
+		E5BC12DE2B9CD191008A89EF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5BC12DD2B9CD191008A89EF /* Logging */; };
+		E5BC12E02B9CD19C008A89EF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5BC12DF2B9CD19C008A89EF /* Logging */; };
 		E5D4FB772B749719002BB261 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D4FB762B749719002BB261 /* StreakView.swift */; };
 		E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
 		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
-		E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE992B51987B00A68857 /* Logging */; };
-		E5DAFE9C2B51A16A00A68857 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5DAFE9B2B51A16A00A68857 /* Logging */; };
 		E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5DE0DC72B564C440066CC85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
 		E5DE105B2B68F6D300381337 /* ReviewTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105A2B68F6D300381337 /* ReviewTimer.swift */; };
@@ -152,7 +151,6 @@
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreferencesView.swift; sourceTree = "<group>"; };
 		E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
-		E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSoonDueView.swift; sourceTree = "<group>"; };
 		E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV2_1.swift; sourceTree = "<group>"; };
 		E50A29B92B6A0D79002AC3BC /* ImageRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRelated.swift; sourceTree = "<group>"; };
 		E51142752B33768300AB6E05 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
@@ -242,7 +240,7 @@
 			files = (
 				E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */,
 				E51142932B342E3C00AB6E05 /* SwiftUI.framework in Frameworks */,
-				E5DAFE9C2B51A16A00A68857 /* Logging in Frameworks */,
+				E5BC12E02B9CD19C008A89EF /* Logging in Frameworks */,
 				E51142922B342E3C00AB6E05 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,7 +249,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5DAFE9A2B51987B00A68857 /* Logging in Frameworks */,
+				E5BC12DE2B9CD191008A89EF /* Logging in Frameworks */,
 				E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -489,7 +487,6 @@
 				7FA581012B97AF7600803614 /* ReviewDueDate.swift */,
 				E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */,
 				E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */,
-				E50117E72B6D016B00B2C25A /* ReviewSoonDueView.swift */,
 			);
 			path = Review;
 			sourceTree = "<group>";
@@ -511,7 +508,7 @@
 			);
 			name = "Three Daily Goals Widget";
 			packageProductDependencies = (
-				E5DAFE9B2B51A16A00A68857 /* Logging */,
+				E5BC12DF2B9CD19C008A89EF /* Logging */,
 			);
 			productName = "Three Daily Goals (Widget)Extension";
 			productReference = E51142912B342E3C00AB6E05 /* Three Daily Goals Widget.appex */;
@@ -533,7 +530,7 @@
 			);
 			name = "Three Daily Goals";
 			packageProductDependencies = (
-				E5DAFE992B51987B00A68857 /* Logging */,
+				E5BC12DD2B9CD191008A89EF /* Logging */,
 			);
 			productName = "Three Daily Goals";
 			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
@@ -611,7 +608,7 @@
 			);
 			mainGroup = E561D6CF2B1F54A6003BE36F;
 			packageReferences = (
-				E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */,
+				E5BC12DC2B9CD186008A89EF /* XCRemoteSwiftPackageReference "swift-log" */,
 			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
@@ -744,7 +741,6 @@
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
 				E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */,
 				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
-				E50117E82B6D016B00B2C25A /* ReviewSoonDueView.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 				E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */,
@@ -1230,7 +1226,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */ = {
+		E5BC12DC2B9CD186008A89EF /* XCRemoteSwiftPackageReference "swift-log" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-log.git";
 			requirement = {
@@ -1241,14 +1237,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E5DAFE992B51987B00A68857 /* Logging */ = {
+		E5BC12DD2B9CD191008A89EF /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */;
+			package = E5BC12DC2B9CD186008A89EF /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
 		};
-		E5DAFE9B2B51A16A00A68857 /* Logging */ = {
+		E5BC12DF2B9CD19C008A89EF /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E5DAFE982B51987B00A68857 /* XCRemoteSwiftPackageReference "swift-log" */;
+			package = E5BC12DC2B9CD186008A89EF /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
 		};
 /* End XCSwiftPackageProductDependency section */

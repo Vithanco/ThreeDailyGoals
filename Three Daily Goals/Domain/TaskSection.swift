@@ -10,14 +10,14 @@ import Foundation
 public struct TaskSection : Observable , Sendable    {
     let text : String
     let image: String
-    var showOlder: Bool
 }
 
-let secToday = TaskSection(text: "Today", image: imgToday,  showOlder: false)
-let secOpen = TaskSection(text: "Open", image: imgOpen, showOlder: false)
-let secClosed = TaskSection(text: "Closed", image: imgClosed, showOlder: true )
-let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard,  showOlder: true)
-let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse, showOlder: true)
+let secToday = TaskSection(text: "Today", image: imgToday)
+let secOpen = TaskSection(text: "Open", image: imgOpen)
+let secClosed = TaskSection(text: "Closed", image: imgClosed)
+let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard)
+let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse)
+let secDueSoon = TaskSection(text: "Due Soon", image: imgDueSoon)
 
 extension TaskSection : Identifiable {
     public var id: String {

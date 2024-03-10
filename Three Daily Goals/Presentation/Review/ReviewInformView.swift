@@ -21,7 +21,7 @@ struct ReviewInformView: View {
             HStack{
                 Spacer()
                 Button(action: model.waitABit) {
-                    Text("Start in 5 min")
+                    Text("I would rather start in 5 min")
                 }.buttonStyle(.bordered)
                 Spacer()
             }
