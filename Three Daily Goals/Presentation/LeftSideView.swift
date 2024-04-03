@@ -36,9 +36,38 @@ struct LeftSideView: View {
                 LinkToList(whichList: .pendingResponse, model: model)
                 LinkToList(whichList: .closed, model: model)
                 LinkToList(whichList: .dead, model: model)
-            }.frame(maxHeight: 145)
+                    .toolbar{
+                        
+                        ToolbarItem {
+                            Button(action: model.reviewNow) {
+                                Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now.")
+                            }
+                        }
+                        ToolbarItem {
+                            Button(action: model.addItem) {
+                                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks. ").accessibilityIdentifier("addTaskButton")
+                            }
+                        }
+                        #if os(iOS) // see Three_Daily_GoalsApp for Mac way
+                        ToolbarItem {
+                            Button(action: model.showPreferences) {
+                                Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier("showPreferencesButton").help("Show Preferences Dialog")
+                            }
+                        }
+                        ToolbarItem {
+                            model.exportButton
+                        }
+                        ToolbarItem {
+                            model.importButton
+                        }
+                        ToolbarItem {
+                            model.statsDialog
+                        }
+                        #endif
+                    }
+
+            }.frame(maxHeight: 195)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-        .tdgToolbar(model: model, include: true)
     }
 }
 

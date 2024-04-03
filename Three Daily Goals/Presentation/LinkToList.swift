@@ -26,6 +26,7 @@ private struct ListLabel :View{
                 count
             }
         }.accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
+        .background(model.isProductionEnvironment ? Color.background : Color.yellow)
         .dropDestination(for: String.self){
             items, location in
             for item in items.compactMap({model.findTask(withID: $0)}) {

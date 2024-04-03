@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 import CoreData
 import os
+import CloudKit
 
 nonisolated(unsafe) private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -166,6 +167,10 @@ final class TaskManagerViewModel{
         return newItem
     }
     
+    public var isProductionEnvironment: Bool {
+        return CKContainer.isProductionEnvironment
+    }
+    
     func addItem(item: TaskItem) {
         modelContext.insert(item)
         if let comments = item.comments {
@@ -188,6 +193,10 @@ final class TaskManagerViewModel{
         selectedItem = newItem
         showItem = true
 #endif
+    }
+    
+     func addItem() {
+         addAndSelect()
     }
     
     @discardableResult func addAndSelect(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
@@ -391,6 +400,10 @@ final class TaskManagerViewModel{
         items.removeObject(item)
         lists[item.state]?.removeObject(item)
         self.modelContext.delete(item)
+    }
+    
+    func showPreferences() {
+        showSettingsDialog = true
     }
     
     func removeItem(withID: String) {

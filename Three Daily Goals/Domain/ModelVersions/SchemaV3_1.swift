@@ -30,7 +30,7 @@ enum SchemaV3_1: VersionedSchema {
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
         @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments : [Comment]? = [Comment]()
-        internal var dueDate: Date? = nil
+        public var dueDate: Date? = nil
         
         //ignore for now
         public var important: Bool = false
