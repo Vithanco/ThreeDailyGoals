@@ -6,18 +6,19 @@
 //
 
 import XCTest
+@testable import Three_Daily_Goals
 
 // this is not working for some reason see https://stackoverflow.com/questions/33755019/linker-error-when-accessing-application-module-in-ui-tests-in-xcode-7-1
 //@testable import Three_Daily_Goals
 
-func ensureExists(text: String, inApp: XCUIApplication) {
+@MainActor func ensureExists(text: String, inApp: XCUIApplication) {
     let predicate = NSPredicate(format: "value CONTAINS '\(text)'")
     let elementQuery = inApp.staticTexts.containing(predicate)
     XCTAssertTrue (elementQuery.count > 0, "couldn't find \(text)")
 }
 
 
-final class Three_Daily_GoalsUITests: XCTestCase {
+@MainActor final class Three_Daily_GoalsUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -48,7 +49,7 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         let app = launchTestApp()
         ensureExists(text: "Streak", inApp: app)
         #if os(macOS)
-        ensureExists(text: "Next Review", inApp: app)
+        ensureExists(text: "today", inApp: app)
         #endif
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
@@ -61,7 +62,8 @@ final class Three_Daily_GoalsUITests: XCTestCase {
     }
     
     @MainActor
-    func testTaskLifeCycleMac() throws {
+    func testTaskLifeCycleMac() async throws {
+        let testString = "test title 45#"
 #if os(macOS)
         let app = launchTestApp()
         sleep(2)
@@ -75,18 +77,92 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         sleep(2)
         
         let title = findFirst(string: "titleField", whereToLook:  app.textFields )
-        title.
+        XCTAssertNotNil(title)
+        title.click()
+        title.clearText()
+        title.typeText(testString)
+       // XCTAssertTrue(title.i)
 
 
         // Expect list to be shown
         // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
-        let listHeader = app.staticTexts["open_List"] // Adjust the identifier as needed
+        let listHeader = app.staticTexts["open_LinkedList"] // Adjust the identifier as needed
         XCTAssertTrue(listHeader.exists, "List header should be visible")
         
-        // Find first task in list
-        // This assumes tasks have identifiable accessibility labels or identifiers.
-        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
-        XCTAssertTrue(firstTask.exists, "First task should be found")
+//        // Find first task in list
+//        // This assumes tasks have identifiable accessibility labels or identifiers.
+//        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
+//        XCTAssertTrue(firstTask.exists, "First task should be found")
+        
+        // Ensure I can press a close button
+        let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
+        XCTAssertTrue(closeButton.exists, "Close button should be found")
+        closeButton.tap()
+        
+        // Find and click on "closed_LinkedList"
+        let closedList = app.staticTexts["closed_LinkedList"] // Adjust if your identifier is different
+        closedList.click()
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        
+        // Find previously closed task in list
+        // Use a unique identifier for finding the task, which might require tracking task names or other identifiers
+        let closedTask = findFirst(string: testString, whereToLook:  app.staticTexts )
+         //   closedTask.waitForExistence(timeout: TimeInterval(1))
+        XCTAssertNotNil(closedTask)
+        closedTask.click()
+        
+        // Swipe left on the closed task
+        closedTask.swipeLeft()
+        
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        // Find destructive delete button
+        let deleteButton = app.buttons["deleteButton"] // Use the actual identifier for your delete button
+        XCTAssertTrue(deleteButton.exists, "Delete button should be found")
+        
+        // Press delete
+        deleteButton.tap()
+        
+        // Ensure task is deleted
+        XCTAssertFalse(closedTask.exists, "Task should be deleted")
+        #endif
+    }
+
+    
+    @MainActor
+    func testTaskLifeCycleIOS() async throws {
+        let testString = "test title 45#"
+#if os(iOS)
+        let app = launchTestApp()
+        sleep(2)
+        let extraButton = findFirst(string: "More", whereToLook: app.buttons)
+        let firstButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        firstButton.tap()
+        sleep(2)
+        
+        //add a new task
+        let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
+        addButton.tap()
+        sleep(2)
+        
+        let title = findFirst(string: "titleField", whereToLook:  app.textFields )
+        XCTAssertNotNil(title)
+        title.tap()
+        title.clearText()
+        title.typeText(testString)
+       // XCTAssertTrue(title.i)
+
+
+        // Expect list to be shown
+        // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
+        let listHeader = app.staticTexts["open_LinkedList"] // Adjust the identifier as needed
+        XCTAssertTrue(listHeader.exists, "List header should be visible")
+        
+//        // Find first task in list
+//        // This assumes tasks have identifiable accessibility labels or identifiers.
+//        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
+//        XCTAssertTrue(firstTask.exists, "First task should be found")
         
         // Ensure I can press a close button
         let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
@@ -96,17 +172,23 @@ final class Three_Daily_GoalsUITests: XCTestCase {
         // Find and click on "closed_LinkedList"
         let closedList = app.staticTexts["closed_LinkedList"] // Adjust if your identifier is different
         closedList.tap()
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        
         
         // Find previously closed task in list
         // Use a unique identifier for finding the task, which might require tracking task names or other identifiers
-        let closedTask = app.staticTexts["test title"] // Use the identifier for the closed task
-        XCTAssertTrue(closedTask.exists, "Closed task should be found in the list")
+        let closedTask = findFirst(string: testString, whereToLook:  app.staticTexts )
+         //   closedTask.waitForExistence(timeout: TimeInterval(1))
+        XCTAssertNotNil(closedTask)
+        closedTask.tap()
         
         // Swipe left on the closed task
         closedTask.swipeLeft()
         
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        
         // Find destructive delete button
-        let deleteButton = app.buttons["deleteButtonIdentifier"] // Use the actual identifier for your delete button
+        let deleteButton = app.buttons["deleteButton"] // Use the actual identifier for your delete button
         XCTAssertTrue(deleteButton.exists, "Delete button should be found")
         
         // Press delete

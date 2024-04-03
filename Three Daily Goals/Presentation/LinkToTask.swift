@@ -27,14 +27,9 @@ struct LinkToTask: View {
     }
 }
 
-@MainActor fileprivate struct LinkToTaskHelper : View {
-    @State var model = dummyViewModel()
-    
-    var body: some View {
-        LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .open)
-    }
-}
 
 #Preview {
-    LinkToTaskHelper()
+    @State var model = dummyViewModel()
+    
+     return LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .open)
 }

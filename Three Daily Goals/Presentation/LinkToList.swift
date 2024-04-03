@@ -25,7 +25,7 @@ private struct ListLabel :View{
             if whichList.showCount {
                 count
             }
-        }
+        }.accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
         .dropDestination(for: String.self){
             items, location in
             for item in items.compactMap({model.findTask(withID: $0)}) {
@@ -43,7 +43,7 @@ struct LinkToList: View {
     var body: some View {
         SingleView{
             if isLargeDevice {
-                ListLabel(whichList: whichList, model: model).accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
+                ListLabel(whichList: whichList, model: model)
                     .onTapGesture {
                         model.select(which: whichList,item: model.list(which: whichList).first)
                     }

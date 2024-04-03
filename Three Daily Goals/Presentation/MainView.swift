@@ -49,9 +49,8 @@ struct MainView: View {
         .sheet(isPresented: $model.showSelectDuringImportDialog, content: {
             SelectVersions(choices: model.selectDuringImport, model: model)
         })
-        .confirmationDialog(model.infoMessage, isPresented: $model.showInfoMessage, actions: {Button("ok") {
-            model.showInfoMessage = false
-        }})
+        .sheet(isPresented: $model.showInfoMessage, content: {Text(model.infoMessage).padding(15)}
+        )
         .fileExporter(isPresented: $model.showExportDialog,
                       document: model.jsonExportDoc,
                       contentTypes:  [UTType.json],
@@ -82,7 +81,10 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView(model: dummyViewModel())
+    let model = dummyViewModel()
+    model.infoMessage = " hall "
+    model.showInfoMessage = true
+    return MainView(model: model)
 #if os(macOS)
         .frame(width: 1000, height: 600)
 #endif

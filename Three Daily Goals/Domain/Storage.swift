@@ -22,8 +22,6 @@ extension ModelContainer {
     }
 }
 
-
-
 protocol Storage {
     func insert<T>(_ model: T) where T : PersistentModel
     func save() throws

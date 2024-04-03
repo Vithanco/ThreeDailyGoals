@@ -20,7 +20,9 @@ struct DatePickerNullable: View {
                     selection: date,
                     displayedComponents: [.date]
                 )
+#if os(macOS)
                 .datePickerStyle(.stepperField)
+#endif
                 Button(action: {
                     selected = nil
                 }) {

@@ -8,7 +8,7 @@
 import XCTest
 @testable import Three_Daily_Goals
 
-final class TestDailyReviewTime: XCTestCase {
+@MainActor final class TestDailyReviewTime: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -33,15 +33,12 @@ final class TestDailyReviewTime: XCTestCase {
     }
     
     func testExample() throws {
-
-        
-        
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester )
-        let date = Calendar.current.date(from: DateComponents(hour: 15, minute: 07))!
+        let date = Calendar.current.date(from: DateComponents(hour: 15, minute: 08))!
         preferences.reviewTime = date;
         XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 15)
-        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),07)
+        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),08)
         
         
     }

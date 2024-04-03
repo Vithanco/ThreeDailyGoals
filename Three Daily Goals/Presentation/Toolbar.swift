@@ -43,14 +43,10 @@ struct TDGToolBarContent: ToolbarContent {
     
     var body: some ToolbarContent {
         ToolbarItem {
-            Button(action: undo) {
-                Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help("undo an action")
-            }.disabled(!model.canUndo)
+            model.undoButton
         }
         ToolbarItem {
-            Button(action: redo) {
-                Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help("redo an action")
-            }.disabled(!model.canRedo)
+            model.redoButton
         }
         
         ToolbarItem {

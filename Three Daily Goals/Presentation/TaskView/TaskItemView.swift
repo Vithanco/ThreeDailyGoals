@@ -10,8 +10,8 @@ import SwiftUI
 
 struct TDGShadowModifier: ViewModifier {
     func body(content: Content) -> some View {
-        return content.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
-            .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+        return content //.shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+            //.shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
     }
 }
 
@@ -29,7 +29,7 @@ extension View {
 struct InnerTaskItemView : View {
     let accentColor: Color
     @Bindable var item: TaskItem
-//    @FocusState var isTitleFocused: Bool
+    @FocusState var isTitleFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading){
@@ -40,7 +40,7 @@ struct InnerTaskItemView : View {
             }
             
             LabeledContent{
-                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField")//.focused($isTitleFocused)
+                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused($isTitleFocused)
                     .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
@@ -104,12 +104,20 @@ struct InnerTaskItemView : View {
 struct TaskItemView: View {
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
-//    @FocusState private var isTitleFocused: Bool
+@FocusState private var isTitleFocused: Bool
     
     var body: some View {
         InnerTaskItemView(accentColor: model.accentColor, item: item)
-            .tdgToolbar(model: model, include : !isLargeDevice)
+        // .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
+#if os(iOS)
+                ToolbarItem{
+                    model.undoButton
+                }
+                ToolbarItem{
+                    model.redoButton
+                }
+#endif
                 ToolbarItem {
                     model.toggleButton(item: item)
                 }
@@ -130,7 +138,7 @@ struct TaskItemView: View {
                 }
             }.onAppear(perform:{
                 model.updateUndoRedoStatus()
-//                isTitleFocused = true
+                isTitleFocused = true
             })
     }
 }

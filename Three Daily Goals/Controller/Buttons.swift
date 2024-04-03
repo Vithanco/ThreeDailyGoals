@@ -66,16 +66,16 @@ extension TaskManagerViewModel {
     }
     
     var undoButton: some View {
-        return Button("Undo") {
-            self.modelContext.undoManager?.undo()
-        }
+        Button(action: undo) {
+            Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help("undo an action")
+        }.disabled(!canUndo)
         .keyboardShortcut("z", modifiers: [.command])
     }
 
     var redoButton: some View {
-        return Button("Redo") {
-            self.modelContext.undoManager?.redo()
-        }
+        Button(action: redo) {
+            Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help("redo an action")
+        }.disabled(!canRedo)
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
     
@@ -103,6 +103,7 @@ extension TaskManagerViewModel {
                 msg += "\n\(s.description.capitalized): \(self.lists[s]!.count)"
             }
             msg += "\nTotal: \(self.items.count)\nProduction-DB: \(CKContainer.isProductionEnvironment)"
+            debugPrint(msg)
             self.infoMessage = msg
             self.showInfoMessage = true
         }, label: {

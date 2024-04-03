@@ -239,7 +239,6 @@ final class TaskManagerViewModel{
     func delete(task: TaskItem) {
         withAnimation {
             modelContext.beginUndoGrouping()
-            modelContext.delete(task)
             lists[task.state]?.removeObject(task)
             if let index = items.firstIndex(of: task) {
                 items.remove(at: index)
@@ -247,6 +246,7 @@ final class TaskManagerViewModel{
             for c in task.comments ?? [] {
                 modelContext.delete(c)
             }
+            modelContext.delete(task)
             modelContext.endUndoGrouping()
             updateUndoRedoStatus()
         }

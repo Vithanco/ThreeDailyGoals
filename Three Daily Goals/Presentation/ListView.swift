@@ -32,7 +32,7 @@ struct ListView: View {
         SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
             .frame(minHeight: 145, maxHeight: .infinity)
             .background(Color.background)
-            .tdgToolbar(model: model, include : !isLargeDevice)
+            //.tdgToolbar(model: model, include : !isLargeDevice)
 
         .dropDestination(for: String.self){
             items, location in
@@ -41,6 +41,16 @@ struct ListView: View {
             }
             return true
         }
+        #if os(iOS)
+        .toolbar{
+            ToolbarItem{
+                model.undoButton
+            }
+            ToolbarItem{
+                model.redoButton
+            }
+        }
+        #endif
     }
 }
 

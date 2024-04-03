@@ -24,7 +24,6 @@
       }
     },
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:Three Daily Goals.xcodeproj",
         "identifier" : "E561D6EB2B1F54A9003BE36F",
