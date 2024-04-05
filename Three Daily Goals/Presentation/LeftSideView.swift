@@ -67,6 +67,7 @@ struct LeftSideView: View {
                     }
 
             }.frame(maxHeight: 195)
+                .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

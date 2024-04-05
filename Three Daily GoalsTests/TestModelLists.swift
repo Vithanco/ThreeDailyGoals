@@ -20,7 +20,7 @@ final class TestModelLists: XCTestCase {
 
     func testNewItem () throws {
         let model = dummyViewModel()
-        let new = model.addItem()
+        let new = model.addAndSelect()
         XCTAssertEqual(new.state, .open)
     }
     
