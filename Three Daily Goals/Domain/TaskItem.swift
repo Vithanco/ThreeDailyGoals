@@ -160,6 +160,11 @@ extension TaskItem {
         return states.contains(self.state)
     }
     
+    var canBeMovedToPendingResponse: Bool {
+        let states : [TaskItemState] = [ .closed, .dead, .priority, .open]
+        return states.contains(self.state)
+    }
+    
     var canBeTouched : Bool {
         let states : [TaskItemState] = [.pendingResponse, .open, .priority]
         return states.contains(self.state)

@@ -31,6 +31,9 @@ struct TaskAsLine: View {
         }
         .draggable(item.id)
         .swipeActions {
+            if item.canBeMovedToPendingResponse {
+                model.waitForResponseButton(item: item)
+            }
             if item.canBeMovedToOpen {
                 model.openButton(item: item)
             }

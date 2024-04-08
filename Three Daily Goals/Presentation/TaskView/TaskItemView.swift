@@ -131,6 +131,11 @@ struct TaskItemView: View {
                         model.openButton(item: item)
                     }
                 }
+                if item.canBeMovedToPendingResponse {
+                    ToolbarItem {
+                        model.waitForResponseButton(item: item)
+                    }
+                }
                 if item.canBeTouched {
                     ToolbarItem {
                         model.touchButton(item: item)
