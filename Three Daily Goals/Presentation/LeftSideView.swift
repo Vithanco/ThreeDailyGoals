@@ -37,16 +37,11 @@ struct LeftSideView: View {
                 LinkToList(whichList: .closed, model: model)
                 LinkToList(whichList: .dead, model: model)
                     .toolbar{
-                        
                         ToolbarItem {
-                            Button(action: model.reviewNow) {
-                                Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now.")
-                            }
+                            model.reviewButton
                         }
                         ToolbarItem {
-                            Button(action: model.addItem) {
-                                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks. ").accessibilityIdentifier("addTaskButton")
-                            }
+                            model.addNewItemButton
                         }
                         #if os(iOS) // see Three_Daily_GoalsApp for Mac way
                         ToolbarItem {

@@ -68,6 +68,9 @@ struct Three_Daily_GoalsApp: App {
                 model.undoButton
                 model.redoButton
             }
+            CommandGroup(replacing: .newItem) {
+                model.addNewItemButton
+            }
         }
 #if os(macOS) // see Toolbar for iOS way
         Settings {

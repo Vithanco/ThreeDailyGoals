@@ -118,4 +118,17 @@ extension TaskManagerViewModel {
             Label("Task Statistic", systemImage: "chart.bar.fill")
         })
     }
+    
+    var addNewItemButton: some View {
+        Button(action: addNewItem) {
+            Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskButton")
+        }
+        .keyboardShortcut("n", modifiers: [.command])
+    }
+    
+    var reviewButton: some View {
+        Button(action: reviewNow) {
+            Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now")
+        }
+    }
 }

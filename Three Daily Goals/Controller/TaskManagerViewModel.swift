@@ -195,7 +195,7 @@ final class TaskManagerViewModel{
 #endif
     }
     
-     func addItem() {
+     func addNewItem() {
          addAndSelect()
     }
     
