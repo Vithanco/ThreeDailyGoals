@@ -66,8 +66,9 @@ extension ModelContext: Storage {
 }
 
 extension Array where Element == TaskItem {
-    @discardableResult mutating func add(title: String, changedDate: Date, state: TaskItemState = .open) -> TaskItem {
+    @discardableResult mutating func add(title: String, changedDate: Date, state: TaskItemState = .open, tags: [String] = []) -> TaskItem {
         let new = TaskItem(title: title, changedDate: changedDate, state: state)
+        new.tags = tags
         self.append(new)
         return new
     }

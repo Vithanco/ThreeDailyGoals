@@ -9,11 +9,11 @@ import  SwiftData
 import Foundation
 
 
-typealias SchemaLatest = SchemaV3_0
+typealias SchemaLatest = SchemaV3_1
 
 enum TDGMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self, SchemaV2_1.self, SchemaV2_2.self, SchemaV3_0.self]
+        [SchemaV1.self, SchemaV2.self, SchemaV2_1.self, SchemaV2_2.self, SchemaV3_0.self, SchemaV3_1.self]
     }
     
     static let migrateV1toV2 = MigrationStage.lightweight(fromVersion: SchemaV1.self,
@@ -24,9 +24,11 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
         toVersion: SchemaV2_2.self)
     static let migrateV2_2toV3_0 = MigrationStage.lightweight(fromVersion: SchemaV2_2.self,
         toVersion: SchemaV3_0.self)
+    static let migrateV3_0toV3_1 = MigrationStage.lightweight(fromVersion: SchemaV3_0.self,
+        toVersion: SchemaV3_1.self)
     
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV2_1, migrateV2_1toV2_2, migrateV2_2toV3_0]
+        [migrateV1toV2, migrateV2toV2_1, migrateV2_1toV2_2, migrateV2_2toV3_0, migrateV3_0toV3_1]
     }
 }
 

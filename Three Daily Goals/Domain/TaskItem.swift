@@ -134,6 +134,19 @@ extension TaskItem {
         }
     }
     
+    @Transient
+    var tags: [String] {
+        get {
+            return _tags
+        }
+        set {
+            if (newValue != _tags) {
+                changed = Date.now
+                _tags = newValue
+            }
+        }
+    }
+    
     var isOpen: Bool {
         return state == .open
     }
@@ -150,19 +163,23 @@ extension TaskItem {
         return state == .closed
     }
     
+    
+    
+    private static let activeStates  : [TaskItemState] = [.open, .priority, .pendingResponse]
+    var isActive: Bool {
+        return TaskItem.activeStates.contains(self.state)
+    }
     var canBeClosed : Bool {
         let states : [TaskItemState] = [.open, .priority, .pendingResponse]
         return states.contains(self.state)
     }
     
     var canBeMovedToOpen : Bool {
-        let states : [TaskItemState] = [.pendingResponse, .closed, .dead, .priority]
-        return states.contains(self.state)
+        return self.state != .open
     }
     
     var canBeMovedToPendingResponse: Bool {
-        let states : [TaskItemState] = [ .closed, .dead, .priority, .open]
-        return states.contains(self.state)
+        return self.state != .pendingResponse
     }
     
     var canBeTouched : Bool {

@@ -11,6 +11,7 @@ import SwiftUI
 import CoreData
 import os
 import CloudKit
+import TagKit
 
 nonisolated(unsafe) private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -82,6 +83,16 @@ final class TaskManagerViewModel{
     // for user messages
     var showInfoMessage: Bool = false
     var infoMessage: String =  "(invalid)"
+    
+    var missingTagStyle : TagCapsuleStyle {
+        TagCapsuleStyle(foregroundColor: .white,backgroundColor: .gray,borderColor: .black,padding: .init(top: 1, leading: 2, bottom: 1, trailing: 2))
+    }
+    var selectedTagStyle : TagCapsuleStyle {
+        TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor,borderColor: .clear,padding: .init(top: 1, leading: 2, bottom: 1, trailing: 2))
+    }
+
+
+    
     func finishDialog() {
         showInfoMessage = false
     }
@@ -426,6 +437,7 @@ extension TaskManagerViewModel {
     var currentList: [TaskItem] {
         return list(which: whichList)
     }
+
 }
 
 //
@@ -465,13 +477,41 @@ func loadStdItems() -> [TaskItem] {
     let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
     theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
     theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-    result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority)
-    result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5))
+    result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority, tags: ["CMaps"])
+    result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
     result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
-    let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .pendingResponse)
+    let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .pendingResponse, tags: ["toRead"])
     lastMonth2.url = "https://vithanco.com"
     result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),state: .pendingResponse)
     result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
     result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
     return result
+}
+
+
+extension Sequence where Element : TaskItem {
+    var tags: Set<String> {
+        var result = Set<String> ()
+        for t in self {
+            result.formUnion(t._tags)
+        }
+        return result
+    }
+}
+
+extension TaskManagerViewModel  {
+    var allTags: Set<String> {
+        var result = items.tags
+        result.formUnion(["work","private"])
+        return result
+    }
+    var activeTags: Set<String> {
+        var result = Set<String>()
+        for t in items {
+            if !t.tags.isEmpty && t.isActive {
+                result.formUnion(t.tags)
+            }
+        }
+        return result
+    }
 }

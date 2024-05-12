@@ -36,10 +36,9 @@ public struct ListHeader: Identifiable, Equatable, Sendable{
         }
         return []
     }
-    
 }
 
-let lhToday = ListHeader(name: "Today",  timeFrom: 1, timeTo: 0)
+let lhToday = ListHeader(name: "Last 24h",  timeFrom: 1, timeTo: 0)
 let lhYesterday = ListHeader(name: "Yesterday",  timeFrom: 2, timeTo: 1)
 let lhLastWeek = ListHeader(name: "Last Week",  timeFrom: 7, timeTo: 2)
 let lhLastMonth = ListHeader(name: "Last Month", timeFrom: 30, timeTo: 7)

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import TagKit
 
 struct TDGShadowModifier: ViewModifier {
     func body(content: Content) -> some View {
@@ -14,6 +14,13 @@ struct TDGShadowModifier: ViewModifier {
             //.shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
     }
 }
+//
+//extension TagCapsule {
+//    init (text: String, style: TagCapsuleStyle) {
+//        self.init(text)
+//        self.tagCapsuleStyle(style)
+//    }
+//}
 
 extension View {
     
@@ -22,15 +29,16 @@ extension View {
         return self.modifier(TDGShadowModifier())
     }
 }
-
-
-
-
 struct InnerTaskItemView : View {
     let accentColor: Color
     @Bindable var item: TaskItem
     @FocusState var isTitleFocused: Bool
-    
+    let allTags: [String]
+    @State var buildTag: String = ""
+    let selectedTagStyle: TagCapsuleStyle
+    let missingTagStyle: TagCapsuleStyle
+
+
     var body: some View {
         VStack(alignment: .leading){
             HStack {
@@ -80,7 +88,18 @@ struct InnerTaskItemView : View {
                 Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
             }
             
-    
+            GroupBox {
+                HStack {
+                    Text("Add new Label:")
+                    TagTextField(text:  $buildTag ,placeholder: "Tag Me") { newTag in
+                        item.tags.append(newTag)
+                    }
+                }
+                TagEditList(tags: $item.tags,additionalTags: allTags,container: .vstack) {text, isTag in
+                    TagCapsule(text)
+                        .tagCapsuleStyle(isTag ? selectedTagStyle : missingTagStyle)
+                }
+            }
             
             Spacer()
             AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: 200)
@@ -107,7 +126,7 @@ struct TaskItemView: View {
 @FocusState private var isTitleFocused: Bool
     
     var body: some View {
-        InnerTaskItemView(accentColor: model.accentColor, item: item)
+        InnerTaskItemView(accentColor: model.accentColor, item: item, allTags: model.allTags.asArray, selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle )
         // .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
 #if os(iOS)
@@ -154,7 +173,7 @@ struct TaskItemView: View {
     
     
 #if os(macOS)
-    return TaskItemView( model: model , item: model.items.first()!).frame(width: 600, height: 300)
+    return TaskItemView( model: model , item: model.items.first()!).frame(width: 600, height: 600)
 #endif
 #if os(iOS)
     return TaskItemView( model: model , item: model.items.first()!)

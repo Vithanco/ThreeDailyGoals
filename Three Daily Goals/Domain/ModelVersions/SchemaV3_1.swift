@@ -12,7 +12,7 @@ import SwiftUI
 
 
 enum SchemaV3_1: VersionedSchema {
-    static let versionIdentifier = Schema.Version(3, 0, 0)
+    static let versionIdentifier = Schema.Version(3, 1, 0)
     
     static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self]
@@ -38,6 +38,7 @@ enum SchemaV3_1: VersionedSchema {
         @Attribute(.externalStorage)
         var _imageData: Data? = nil
         var _priority: Int = 0
+        var _tags: [String] = []
         
         init() {
             
@@ -49,11 +50,12 @@ enum SchemaV3_1: VersionedSchema {
             self.changed = changedDate
             self.comments = []
             self._state = state
+            self._tags = []
         }
         
         //MARK: Codable
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, important, urgent,  imageData, dueDate, priority
+            case created, changed, closed, title, details, state, url, comments, important, urgent,  imageData, dueDate, priority, tags
         }
         
         required init(from decoder: Decoder) throws {
@@ -71,6 +73,7 @@ enum SchemaV3_1: VersionedSchema {
             self._imageData = try? container.decode(Data.self, forKey: .imageData)
             self.dueDate = try? container.decode(Date.self, forKey: .dueDate)
             self._priority = try container.decode(Int.self, forKey: .priority)
+            self._tags = try container.decode(Array<String>.self, forKey: .tags)
         }
         
         func encode(to encoder: Encoder) throws {
@@ -89,6 +92,7 @@ enum SchemaV3_1: VersionedSchema {
             try container.encode(_priority, forKey: .priority)
             try container.encode(created, forKey: .created)
             try container.encode(changed, forKey: .changed)
+            try container.encode(_tags, forKey: .tags)
         }
     }
     
