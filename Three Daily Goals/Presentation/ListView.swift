@@ -35,7 +35,11 @@ struct ListView: View {
         let headers = list.subHeaders
 //        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         VStack{
-            TagEditList(tags: $model.selectedTags, additionalTags: model.list(which: whichList ?? model.whichList).tags.asArray, container: .vstack,
+            TagEditList(tags: $model.selectedTags, 
+                        additionalTags: model.list(which: whichList ?? model.whichList).tags.asArray,
+                        container: .vstack,
+                        horizontalSpacing: 1,
+                        verticalSpacing: 1,
                         tagView: {text, isSelected in
                 TagCapsule(text)
                 .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)}
