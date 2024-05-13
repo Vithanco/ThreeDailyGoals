@@ -84,8 +84,10 @@ final class TaskManagerViewModel{
     var showInfoMessage: Bool = false
     var infoMessage: String =  "(invalid)"
     
+    
+    var selectedTags: [String] = []
     var missingTagStyle : TagCapsuleStyle {
-        TagCapsuleStyle(foregroundColor: .white,backgroundColor: .gray,borderColor: .black,padding: .init(top: 1, leading: 2, bottom: 1, trailing: 2))
+        TagCapsuleStyle(foregroundColor: .white,backgroundColor: .gray,borderColor: .clear,padding: .init(top: 1, leading: 2, bottom: 1, trailing: 2))
     }
     var selectedTagStyle : TagCapsuleStyle {
         TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor,borderColor: .clear,padding: .init(top: 1, leading: 2, bottom: 1, trailing: 2))

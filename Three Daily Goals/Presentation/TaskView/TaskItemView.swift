@@ -126,7 +126,7 @@ struct TaskItemView: View {
 @FocusState private var isTitleFocused: Bool
     
     var body: some View {
-        InnerTaskItemView(accentColor: model.accentColor, item: item, allTags: model.allTags.asArray, selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle )
+        InnerTaskItemView(accentColor: model.accentColor, item: item, allTags: model.activeTags.asArray, selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle )
         // .tdgToolbar(model: model, include : !isLargeDevice)
             .toolbar {
 #if os(iOS)
