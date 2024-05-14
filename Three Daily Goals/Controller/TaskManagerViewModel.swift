@@ -92,8 +92,8 @@ final class TaskManagerViewModel{
     var selectedTagStyle : TagCapsuleStyle {
         TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor, borderColor: .clear, borderWidth: 0, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
     }
-
-
+    
+    
     
     func finishDialog() {
         showInfoMessage = false
@@ -142,12 +142,12 @@ final class TaskManagerViewModel{
         return self
     }
     
-//    func clear() {
-//        try? modelContext.delete(model: TaskItem.self)
-//        try? modelContext.save()
-//        fetchData()
-//    }
-//    
+    //    func clear() {
+    //        try? modelContext.delete(model: TaskItem.self)
+    //        try? modelContext.save()
+    //        fetchData()
+    //    }
+    //
     fileprivate func sortList(_ t: TaskItemState) {
         lists[t]?.sort(by: t.sorter)
     }
@@ -173,7 +173,7 @@ final class TaskManagerViewModel{
             print("Fetch failed")
         }
     }
-   
+    
     @discardableResult func addItem(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
         let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
         addItem(item: newItem)
@@ -208,8 +208,8 @@ final class TaskManagerViewModel{
 #endif
     }
     
-     func addNewItem() {
-         addAndSelect()
+    func addNewItem() {
+        addAndSelect()
     }
     
     @discardableResult func addAndSelect(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
@@ -297,16 +297,16 @@ final class TaskManagerViewModel{
         let moveFromPriority = task.state == .priority
         lists[task.state]?.removeObject(task)
         switch to {
-            case .open:
-                task.reOpenTask()
-            case .closed:
-                task.closeTask()
-            case .dead:
-                task.graveyard()
-            case .priority:
-                task.makePriority()
-            case .pendingResponse:
-                task.pending()
+        case .open:
+            task.reOpenTask()
+        case .closed:
+            task.closeTask()
+        case .dead:
+            task.graveyard()
+        case .priority:
+            task.makePriority()
+        case .pendingResponse:
+            task.pending()
         }
         lists[to]?.append(task)
         sortList(to)
@@ -341,7 +341,7 @@ final class TaskManagerViewModel{
             return
         }
         let time = when ?? nextRegularReviewTime
-
+        
         showReviewDialog = false
         timer.setTimer(forWhen: time ){
             if self.showReviewDialog {
@@ -439,7 +439,7 @@ extension TaskManagerViewModel {
     var currentList: [TaskItem] {
         return list(which: whichList)
     }
-
+    
 }
 
 //
@@ -515,5 +515,27 @@ extension TaskManagerViewModel  {
             }
         }
         return result
+    }
+    func statsForTags(tag: String) -> [TaskItemState: Int] {
+        var result : [TaskItemState: Int] = [:]
+        for t in TaskItemState.allCases {
+            result[t] = statsForTags(tag: tag, which: t)
+        }
+        return result
+    }
+    func statsForTags(tag: String, which: TaskItemState) -> Int {
+        let list = self.list(which: which)
+        var result = 0
+        for item in list {
+            if item.tags.contains(tag) {
+                result += 1
+            }
+        }
+        return result
+    }
+    func exchangeTag(from: String, to: String) {
+        for item in items {
+            item.tags = item.tags.map{$0 == from ? to : $0}
+        }
     }
 }

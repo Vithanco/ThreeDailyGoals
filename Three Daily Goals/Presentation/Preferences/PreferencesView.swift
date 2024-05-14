@@ -32,6 +32,10 @@ struct PreferencesView: View {
                     .tabItem {
                         Label("Tasks", systemImage: "hand.raised")
                     }
+                TagsPreferencesView(model: model)
+                    .tabItem {
+                        Label("Tags", systemImage: "tag.circle.fill")
+                    }
             }.frame(minHeight: 250)
 //#if os(iOS)
 //            Spacer()

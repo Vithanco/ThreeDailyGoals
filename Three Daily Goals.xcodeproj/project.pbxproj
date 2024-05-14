@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7F6854D02BF1210700AD0711 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F6854CF2BF1210700AD0711 /* TagKit */; };
+		7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */; };
 		7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
 		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
 		7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* ReviewDueDate.swift */; };
@@ -148,6 +149,7 @@
 
 /* Begin PBXFileReference section */
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
+		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
 		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				E53C13132B6BED3B00E51553 /* ReviewPreferencesView.swift */,
 				E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */,
 				E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */,
+				7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -750,6 +753,7 @@
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
 				E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */,
+				7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */,
 				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,

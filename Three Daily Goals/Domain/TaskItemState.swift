@@ -18,7 +18,7 @@ public enum TaskItemState: Codable, Hashable, CaseIterable {
     case priority
 }
     
-extension TaskItemState : CustomStringConvertible {
+extension TaskItemState : CustomStringConvertible, Identifiable{
     public var description: String {
         switch self {
             case .closed: return "closed"
@@ -28,7 +28,11 @@ extension TaskItemState : CustomStringConvertible {
             case .priority: return "priority"
         }
     }
+    public var id: String {
+        return self.description
+    }
 }
+
 extension TaskItemState{
     var showCount: Bool {
         switch self {
