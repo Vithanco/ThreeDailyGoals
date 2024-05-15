@@ -1,5 +1,5 @@
 {
-  "originHash" : "df1c07b51917a1cc3ae17733b2b162190d08c52c14f2eb6f68410c133c2f28cc",
+  "originHash" : "033e20a5cbf6c603f8c31b671744aa52eb5981ad9b0ee41bb575ed946aa93c96",
   "pins" : [
     {
       "identity" : "swift-log",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
         "version" : "1.5.4"
+      }
+    },
+    {
+      "identity" : "tagkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vithanco/tagkit",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bf81f0c2aad14a3cb419fa9c56596480b83432ca"
       }
     }
   ],
