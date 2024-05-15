@@ -538,4 +538,12 @@ extension TaskManagerViewModel  {
             item.tags = item.tags.map{$0 == from ? to : $0}
         }
     }
+    func delete(tag: String) {
+        if tag.isEmpty {
+            return
+        }
+        for item in items {
+            item.tags = item.tags.filter{$0 != tag}
+        }
+    }
 }

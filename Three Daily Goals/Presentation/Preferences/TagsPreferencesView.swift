@@ -13,8 +13,18 @@ struct EditTag : View {
     @Binding var currentTagName: String
     @Binding var changeTo: String
     @Bindable var model: TaskManagerViewModel
+    
+    var displayCurrentTagName : String {
+        if currentTagName == "private" {
+            return "private (inbuilt)"
+        }
+        if currentTagName == "work" {
+            return "private (work)"
+        }
+        return currentTagName
+    }
     var body: some View {
-        GroupBox(label: Text("Tag: \(currentTagName)").bold()){
+        GroupBox(label: Text("Tag: \(displayCurrentTagName)").bold()){
             VStack(alignment: .leading){
                 ForEach(TaskItemState.allCases) {state in
                     HStack{
@@ -22,14 +32,20 @@ struct EditTag : View {
                         Text( "\(model.statsForTags(tag: currentTagName, which: state))")
                     }
                 }
-                HStack {
-                    TextField("Name", text: $changeTo)
-                    Button ("Change") {
+            
+                    TextField("New Name", text: $changeTo)
+                    Button ("Change Name") {
                         model.exchangeTag(from: currentTagName, to: changeTo)
-                    }
-                }
+                    }.buttonStyle(.bordered)
+            
+
                 
             }
+            Spacer()
+            Button("Delete this tag", role: .destructive){
+                model.delete(tag: currentTagName)
+            }.buttonStyle(.bordered)
+                .disabled(currentTagName == "private" || currentTagName == "work")
         }
         Spacer()
     }
