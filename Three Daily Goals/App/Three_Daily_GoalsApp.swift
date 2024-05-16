@@ -39,12 +39,12 @@ struct Three_Daily_GoalsApp: App {
         
         // Initialize the store.
         calendar = EKEventStore()
-
+        
         // Request access to reminders.
         calendar.requestFullAccessToEvents { granted, error in
-//            if error != nil {
-//                self.calendar = nil
-//            }
+            //            if error != nil {
+            //                self.calendar = nil
+            //            }
         }
     }
     
@@ -54,6 +54,9 @@ struct Three_Daily_GoalsApp: App {
         WindowGroup {
             MainView(model: model)
                 .navigationTitle("Three Daily Goals")
+                .onDisappear {
+                    terminateApp()
+                }
         }
         .modelContainer(container)
         .environment(model)
@@ -76,6 +79,12 @@ struct Three_Daily_GoalsApp: App {
         Settings {
             PreferencesView(model: model).frame(width: 450)
         }
+#endif
+    }
+    
+    private func terminateApp() {
+#if os(macOS)
+        NSApplication.shared.terminate(self)
 #endif
     }
     
