@@ -82,7 +82,8 @@ struct Three_Daily_GoalsApp: App {
 #endif
     }
     
-    private func terminateApp() {
+    @MainActor private func terminateApp() {
+        container.mainContext.processPendingChanges()
 #if os(macOS)
         NSApplication.shared.terminate(self)
 #endif
