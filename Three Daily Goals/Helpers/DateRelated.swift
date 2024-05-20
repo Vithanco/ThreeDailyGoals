@@ -19,6 +19,31 @@ let timeAgoFormatter = {
 }()
 
 
+public func getReviewInterval () -> DateInterval {
+    let calendar = Calendar.current
+    let currentDate = Date()
+    
+    let hour = calendar.component(.hour, from: currentDate)
+    
+    var startDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+    var endDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+    
+    startDateComponents.hour = 12
+    endDateComponents.hour = 12
+    if hour < 12 {
+        // if AM
+        startDateComponents.day! -= 1 // Yesterday
+    } else {
+        // if PM
+        endDateComponents.day! += 1 // Tomorrow
+    }
+    
+    guard let startDate = calendar.date(from: startDateComponents),
+          let endDate = calendar.date(from: endDateComponents) else { return DateInterval(start: Date.now, duration: 0) }
+    
+    return DateInterval(start: startDate, end: endDate)
+}
+
 
 func getDate (daysPrior: Int) -> Date {
     let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) ?? Date.now

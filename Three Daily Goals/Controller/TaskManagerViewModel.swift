@@ -34,6 +34,14 @@ struct Choice {
     let new: TaskItem
 }
 
+enum DialogState : String{
+    case inform
+    case currentPriorities
+    case pending
+    case dueDate
+    case review
+}
+
 @Observable
 final class TaskManagerViewModel{
     
@@ -41,6 +49,8 @@ final class TaskManagerViewModel{
     let modelContext: Storage
     private(set) var items = [TaskItem]()
     var isTesting : Bool = false
+    
+    var stateOfReview: DialogState = .inform
     
     //Import/Export
     public var showImportDialog : Bool = false
@@ -93,8 +103,6 @@ final class TaskManagerViewModel{
         TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor, borderColor: .clear, borderWidth: 0, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
     }
     
-    
-    
     func finishDialog() {
         showInfoMessage = false
     }
@@ -119,8 +127,11 @@ final class TaskManagerViewModel{
                 }
             }
         }
+        
+        preferences.onChange = self.onPreferencesChange
         setupReviewNotification()
     }
+
     
     func addSamples() -> Self {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
@@ -317,68 +328,9 @@ final class TaskManagerViewModel{
         }
         updateUndoRedoStatus()
     }
-    
-    var nextRegularReviewTime: Date {
-        var result = self.preferences.reviewTime
-        if Calendar.current.isDate(preferences.lastReview, inSameDayAs: result) {
-            // review happened today, let's do it tomorrow
-            result = addADay(result)
-        } else { // today's review missing
-            if result < Date.now {
-                //regular time passed by, now just do it in 30 secs
-                return Date.now.addingTimeInterval(Seconds.thirtySeconds)
-            }
-        }
-        return result
-    }
-    
-    func setupReviewNotification(when: Date? = nil){
-        scheduleSystemPushNotification(timing: preferences.reviewTimeComponents, model: self)
-        if showReviewDialog {
-            return
-        }
-        if isTesting {
-            return
-        }
-        let time = when ?? nextRegularReviewTime
-        
-        showReviewDialog = false
-        timer.setTimer(forWhen: time ){
-            if self.showReviewDialog {
-                return
-            }
-            self.reviewNow()
-            self.setupReviewNotification()
-        }
-    }
+
     func resetAccentColor(){
         preferences.resetAccentColor()
-    }
-    
-    
-    /// updating  streak if that is meaningful
-    fileprivate func updateStreak() {
-        if Calendar.current.isDate(preferences.lastReview, inSameDayAs: Date.now) {
-            //nothing to do, we already got today's credit
-            return
-        }
-        
-        if preferences.lastReview.addingTimeInterval(Seconds.thirtySixHours) > Date.now {
-            preferences.daysOfReview = preferences.daysOfReview + 1
-        } else {
-            // reset the streak to 0
-            preferences.daysOfReview = 0
-        }
-        updateUndoRedoStatus()
-    }
-    
-    func endReview(){
-        showReviewDialog = false
-        
-        updateStreak()
-        
-        // setting last review date
-        preferences.lastReview = Date.now
     }
     
     @discardableResult func killOldTasks(expireAfter: Int? = nil) -> Int{
@@ -404,10 +356,6 @@ final class TaskManagerViewModel{
         return result
     }
     
-    func reviewNow(){
-        logger.info("start review \(Date.now)")
-        showReviewDialog = true
-    }
     
     func remove(item: TaskItem) {
         items.removeObject(item)
@@ -469,9 +417,9 @@ extension TaskManagerViewModel {
 
 
 
-func dummyViewModel(loader: TestStorage.Loader? = nil) -> TaskManagerViewModel {
+func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> TaskManagerViewModel {
     let loader = loader ?? loadStdItems
-    return TaskManagerViewModel(modelContext: TestStorage(loader: loader), preferences: dummyPreferences(), isTesting: true)
+    return TaskManagerViewModel(modelContext: TestStorage(loader: loader), preferences: preferences ?? dummyPreferences(), isTesting: true)
 }
 
 func loadStdItems() -> [TaskItem] {
@@ -482,11 +430,13 @@ func loadStdItems() -> [TaskItem] {
     result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority, tags: ["CMaps"])
     result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
     result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
-    let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .pendingResponse, tags: ["toRead"])
+    let lastMonth2 = result.add(title: "Read about Structured Visual Thinking", changedDate: getDate(daysPrior: 22),state: .open, tags: ["toRead"])
     lastMonth2.url = "https://vithanco.com"
     result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),state: .pendingResponse)
     result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
     result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
+    result.add(title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
+    result.add(title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open, dueDate: getDate(inDays: 2))
     return result
 }
 

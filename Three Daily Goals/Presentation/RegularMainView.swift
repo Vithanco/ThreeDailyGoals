@@ -10,7 +10,7 @@ import SwiftUI
 struct RegularMainView: View {
     @Bindable var model: TaskManagerViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
-      
+    
     
     var body: some View {
         NavigationSplitView (columnVisibility: $columnVisibility){
@@ -23,15 +23,14 @@ struct RegularMainView: View {
                 .navigationSplitViewColumnWidth(min: 250, ideal: 400)
                 .navigationTitle("Three Daily Goals")
 #if os(macOS)
-                .navigationSubtitle(
-                    model.streakView())
+                .navigationSubtitle(model.streakView())
 #endif
         }
     detail: {
         if let detail = model.selectedItem {
-            TaskItemView(model: model, item: detail)
+            TaskItemView(model: model, item: detail).frame(minWidth: 300)
         } else {
-            Text("Select an item")
+            Text("Select an item").frame(minWidth: 300)
         }
     }.navigationSplitViewStyle(.balanced)
     }

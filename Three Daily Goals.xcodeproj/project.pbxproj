@@ -14,6 +14,9 @@
 		7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* ReviewDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FC2D1BF2BF48F3B00D27857 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC2D1BE2BF48F3B00D27857 /* TagKit */; };
+		7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */; };
+		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
+		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */; };
 		E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */; };
 		E50A29B72B6995DA002AC3BC /* SchemaV2_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */; };
@@ -104,7 +107,6 @@
 		E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
 		E5FFC5B92B6A388200C9D60B /* SchemaV2_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5B82B6A388200C9D60B /* SchemaV2_2.swift */; };
 		E5FFC5BD2B6A717B00C9D60B /* ReviewCurrentPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */; };
-		E5FFC5BF2B6A71C400C9D60B /* ReviewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5BE2B6A71C300C9D60B /* ReviewModel.swift */; };
 		E5FFC5C12B6A72FB00C9D60B /* ReviewPendingResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */; };
 		E5FFC5C32B6A73A900C9D60B /* ReviewInformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */; };
 		E5FFC5C52B6A7A1600C9D60B /* ReviewNextPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */; };
@@ -155,6 +157,9 @@
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
+		7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModelReviewSpecific.swift; sourceTree = "<group>"; };
+		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
 		E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreferencesView.swift; sourceTree = "<group>"; };
 		E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV2_1.swift; sourceTree = "<group>"; };
@@ -234,7 +239,6 @@
 		E5FF74382B45308800B3B890 /* DoubleRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleRelated.swift; sourceTree = "<group>"; };
 		E5FFC5B82B6A388200C9D60B /* SchemaV2_2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV2_2.swift; sourceTree = "<group>"; };
 		E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCurrentPriorities.swift; sourceTree = "<group>"; };
-		E5FFC5BE2B6A71C300C9D60B /* ReviewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewModel.swift; sourceTree = "<group>"; };
 		E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPendingResponses.swift; sourceTree = "<group>"; };
 		E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewInformView.swift; sourceTree = "<group>"; };
 		E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNextPriorities.swift; sourceTree = "<group>"; };
@@ -366,6 +370,7 @@
 				E561D6E32B1F54A8003BE36F /* Three_Daily_Goals.entitlements */,
 				E561D6E72B1F54A8003BE36F /* Info.plist */,
 				E561D6E42B1F54A8003BE36F /* Preview Content */,
+				7FC89D262BFB1D7400FBA363 /* Credits.rtf */,
 			);
 			path = "Three Daily Goals";
 			sourceTree = "<group>";
@@ -387,6 +392,7 @@
 				E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */,
 				E5B376B52B7B551600E66FAD /* TestTaskItems.swift */,
 				E597A4862B83D7B000BCD061 /* TestImportExport.swift */,
+				7FC89D282BFB239200FBA363 /* TestReview.swift */,
 			);
 			path = "Three Daily GoalsTests";
 			sourceTree = "<group>";
@@ -494,11 +500,11 @@
 			children = (
 				E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */,
 				E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */,
-				E5FFC5BE2B6A71C300C9D60B /* ReviewModel.swift */,
 				E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */,
 				7FA581012B97AF7600803614 /* ReviewDueDate.swift */,
 				E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */,
 				E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */,
+				7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */,
 			);
 			path = Review;
 			sourceTree = "<group>";
@@ -652,6 +658,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E561D6E62B1F54A8003BE36F /* Preview Assets.xcassets in Resources */,
+				7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */,
 				E561D6E22B1F54A8003BE36F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -719,6 +726,7 @@
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
 				E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */,
 				E53AF7AE2B66244F00C24F78 /* Preferences.swift in Sources */,
+				7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */,
 				E516288D2B75504E0030B10A /* PreviewScreenshot.swift in Sources */,
 				E5E8B3962B7744E0003300C3 /* CompactMainView.swift in Sources */,
 				E559203D2B38376F0002C709 /* ViewRelated.swift in Sources */,
@@ -730,7 +738,6 @@
 				E597A4892B83D83D00BCD061 /* ImportExport.swift in Sources */,
 				E5D4FB772B749719002BB261 /* StreakView.swift in Sources */,
 				E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */,
-				E5FFC5BF2B6A71C400C9D60B /* ReviewModel.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
 				E5B698FB2B7C89360086C3EB /* Buttons.swift in Sources */,
@@ -768,6 +775,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				E597A4872B83D7B000BCD061 /* TestImportExport.swift in Sources */,
 				E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,

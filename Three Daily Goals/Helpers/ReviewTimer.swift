@@ -29,10 +29,15 @@ final class ReviewTimer : Sendable{
         }
     }
     
-    func setTimer( forWhen fireAt: Date, onReviewTimer: @escaping OnReviewTimer) {
+    func cancelTimer() {
         if let t = timer {
             t.invalidate()
         }
+        timer = nil
+    }
+    
+    func setTimer( forWhen fireAt: Date, onReviewTimer: @escaping OnReviewTimer) {
+        cancelTimer()
         timer = Timer(fire: fireAt, interval: 1, repeats:false) { timer in
             logger.info("Time for Review")
             onReviewTimer()

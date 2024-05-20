@@ -41,7 +41,7 @@ struct MainView: View {
         }
         .background(Color.background)
         .sheet(isPresented: $model.showReviewDialog) {
-            ReviewDialog(model: ReviewModel(taskModel: model))
+            ReviewDialog(model: model)
         }
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)

@@ -58,13 +58,14 @@ final class PreferencesTests: XCTestCase {
         XCTAssertNotEqual(newDate, Date.today)
         XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        
+        var dateInterval = DateInterval(start:  Calendar.current.date(from: DateComponents(hour: 13, minute: 13))!, duration: Seconds.eightHours)
+        preferences.currentReviewInterval = dateInterval
+        
+        var returned = preferences.currentReviewInterval
+        XCTAssertEqual(dateInterval.start, returned.start)
+        XCTAssertEqual(dateInterval.end, returned.end)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+    
 }

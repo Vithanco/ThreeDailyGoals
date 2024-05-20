@@ -22,6 +22,7 @@ extension ModelContainer {
     }
 }
 
+
 protocol Storage {
     func insert<T>(_ model: T) where T : PersistentModel
     func save() throws
@@ -66,8 +67,9 @@ extension ModelContext: Storage {
 }
 
 extension Array where Element == TaskItem {
-    @discardableResult mutating func add(title: String, changedDate: Date, state: TaskItemState = .open, tags: [String] = []) -> TaskItem {
+    @discardableResult mutating func add(title: String, changedDate: Date, state: TaskItemState = .open, tags: [String] = [], dueDate: Date? = nil) -> TaskItem {
         let new = TaskItem(title: title, changedDate: changedDate, state: state)
+        new.dueDate = dueDate
         new.tags = tags
         self.append(new)
         return new

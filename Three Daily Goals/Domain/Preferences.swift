@@ -25,6 +25,9 @@ let cloudDateFormatter : DateFormatter = {
 
 enum CloudKey : String, CaseIterable {
     case daysOfReview
+    case longestStreak
+    case currentReviewIntervalStart
+    case currentReviewIntervalEnd
     case reviewTimeHour
     case reviewTimeMinute
     case accentColorString
@@ -48,16 +51,31 @@ protocol KeyValueStorage {
     
     func string(forKey aKey: CloudKey) -> String?
     func set(_ aString: String?, forKey aKey: CloudKey)
+    
+    func date(forKey aKey: CloudKey) -> Date
+    func set(_ aDate: Date, forKey aKey: CloudKey)
 }
 
 extension KeyValueStorage {
     func string(forKey aKey: CloudKey, defaultValue: String) -> String{
         return string(forKey: aKey) ?? defaultValue
     }
+    
+    func date(forKey aKey: CloudKey) -> Date {
+        if let dateAsString = string(forKey: aKey), let result = cloudDateFormatter.date(from: dateAsString){
+            return result
+        }
+        set(cloudDateFormatter.string(from: Date.now), forKey: .lastReviewString)
+        return Date.now
+    }
+    
+    func set(_ aDate: Date, forKey aKey: CloudKey) {
+        set(cloudDateFormatter.string(from: aDate), forKey: aKey)
+    }
 }
 
 extension NSUbiquitousKeyValueStore : KeyValueStorage {
-    
+
     func int(forKey aKey: CloudKey) -> Int {
         return Int(longLong(forKey: aKey.rawValue))
     }
@@ -77,16 +95,21 @@ extension NSUbiquitousKeyValueStore : KeyValueStorage {
 @Observable
 final class CloudPreferences {
     var store : KeyValueStorage
+    typealias OnChange = ()-> Void
+    var onChange: OnChange?
     
-    init(store: KeyValueStorage) {
+    init(store: KeyValueStorage, onChange: OnChange? = nil) {
         self.store = store
+        self.onChange = onChange
     }
     
-    convenience init(testData: Bool){
+    convenience init(testData: Bool, onChange: OnChange? = nil){
         if testData {
-            self.init(store: TestPreferences())
+            self.init(store: TestPreferences(), onChange: onChange)
         } else {
-            self.init(store: NSUbiquitousKeyValueStore.default)
+            self.init(store: NSUbiquitousKeyValueStore.default, onChange: onChange)
+            
+            NotificationCenter.default.addObserver( forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self, queue: nil, using: ubiquitousKeyValueStoreDidChange)
         }
         
         // initiate the store with a proper time
@@ -95,9 +118,13 @@ final class CloudPreferences {
             store.set(00, forKey: .reviewTimeMinute)
         }
     }
-//    for key in CloudKey.allCases {
-//        
-//    }
+    
+    func ubiquitousKeyValueStoreDidChange(notification: Notification) {
+        if let onChange = onChange {
+            onChange()
+        }
+    }
+
 }
 
 extension CloudPreferences {
@@ -157,6 +184,15 @@ extension CloudPreferences {
         }
     }
     
+    var longestStreak: Int {
+        get {
+            return store.int(forKey: .longestStreak)
+        }
+        set {
+            store.set(newValue, forKey: .longestStreak)
+        }
+    }
+    
     func resetAccentColor(){
         store.set(nil, forKey: .accentColorString)
     }
@@ -189,6 +225,24 @@ extension CloudPreferences {
         }
         set {
             store.set(cloudDateFormatter.string(from: newValue), forKey: .lastReviewString)
+        }
+    }
+    
+    var currentReviewInterval: DateInterval {
+        get {
+            let start = store.date(forKey: .currentReviewIntervalStart)
+            let end = store.date(forKey: .currentReviewIntervalEnd)
+            
+            var result = DateInterval(start: start, end: end)
+            if result.duration < Seconds.oneHour {
+                result = getReviewInterval()
+                currentReviewInterval = result
+            }
+            return result
+        }
+        set {
+            store.set(newValue.start, forKey: .currentReviewIntervalStart)
+            store.set(newValue.end,forKey: .currentReviewIntervalEnd)
         }
     }
 
@@ -244,5 +298,6 @@ func dummyPreferences() -> CloudPreferences {
     result.daysOfReview = 42
     store.set(18, forKey: .reviewTimeHour)
     store.set(00, forKey: .reviewTimeMinute)
+    result.currentReviewInterval = getReviewInterval()
     return result
 }

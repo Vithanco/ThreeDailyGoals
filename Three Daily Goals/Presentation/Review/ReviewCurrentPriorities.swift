@@ -8,26 +8,20 @@
 import SwiftUI
 
 struct ReviewCurrentPriorities: View {
-    @Bindable var model: ReviewModel
+    @Bindable var model: TaskManagerViewModel
     
     var body: some View {
         VStack{
-            Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor)
-            Text("Click on Checkbox to close them")
-            ListView(whichList: .priority, model: model.taskModel)
-            HStack{
-                Button(action: model.closeAllPriorities ){
-                    Text("Close All")
-                }.buttonStyle(.bordered)
-                Button(action: model.movePrioritiesToOpen){
-                    Text("Move All to Open")
-                }.buttonStyle(.bordered)
-            }
+            Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor).padding(5)
+            Text("Slide tasks to the left to close them." )
+            Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
+            ListView(whichList: .priority, model: model)
         }.frame(minHeight: 300, idealHeight: 500)
-        
     }
 }
 
 #Preview {
-    ReviewCurrentPriorities(model: dummyReviewModel())
+    let model = dummyViewModel()
+    model.stateOfReview = .currentPriorities
+    return ReviewCurrentPriorities(model: model)
 }

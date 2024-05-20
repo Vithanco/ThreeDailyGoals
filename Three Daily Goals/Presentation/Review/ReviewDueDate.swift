@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct ReviewDueDate: View {
-    @Bindable var model: ReviewModel
+    @Bindable var model: TaskManagerViewModel
     
     var body: some View {
         VStack{
             Text("These Tasks are close to their due Dates. They will now be moved to Priority").font(.title2).foregroundStyle(model.accentColor)
             Spacer()
             Text("Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step).")
-            SimpleListView(itemList: model.taskModel.dueDateSoon, headers: [all], showHeaders: false, section: secDueSoon, id: "dueSoonList", model: model.taskModel)
+            SimpleListView(itemList: model.dueDateSoon, headers: [all], showHeaders: false, section: secDueSoon, id: "dueSoonList", model: model)
         }.frame(minHeight: 300, idealHeight: 800, maxHeight:.infinity )
     }
 }
 
 #Preview {
-    ReviewPendingResponses(model: dummyReviewModel())
+    let model = dummyViewModel()
+    model.stateOfReview = .dueDate
+    return ReviewDueDate(model: model)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReviewNextPriorities: View {
     
-    @Bindable var model: ReviewModel
+    @Bindable var model: TaskManagerViewModel
     
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
@@ -20,8 +20,8 @@ struct ReviewNextPriorities: View {
             
             Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
-                ListView(whichList: .priority, model: model.taskModel).frame(minHeight: 300)
-                ListView(whichList: .open ,model: model.taskModel)
+                ListView(whichList: .priority, model: model).frame(minHeight: 300)
+                ListView(whichList: .open ,model: model)
             }
             
 #endif
@@ -36,8 +36,8 @@ struct ReviewNextPriorities: View {
                     }.dropDestination(for: String.self){
                         items, location in
                         for item in items.compactMap({
-                            model.taskModel.findTask(withID: $0)}) {
-                            model.taskModel.move(task: item, to: .priority)
+                            model.findTask(withID: $0)}) {
+                            model.move(task: item, to: .priority)
                         }
                         return true
                     }
@@ -56,7 +56,7 @@ struct ReviewNextPriorities: View {
                         }
                         return true
                     }
-                    ListView(whichList: .open ,model: model.taskModel)
+                    ListView(whichList: .open ,model: model)
                 }
             }
             
@@ -71,7 +71,7 @@ struct ReviewNextPriorities: View {
             Button("Cancel", role: .cancel, action: {presentAlert = false})
             Button("Add Task", action: {
                 presentAlert = false
-                model.taskModel.addItem(title: newTaskName)
+                model.addItem(title: newTaskName)
             })
         }, message: {
             Text("Please enter new task name")
@@ -80,5 +80,7 @@ struct ReviewNextPriorities: View {
 }
 
 #Preview {
-    ReviewNextPriorities(model: dummyReviewModel())
+    let model = dummyViewModel()
+    model.stateOfReview = .review
+    return ReviewNextPriorities(model: model)
 }

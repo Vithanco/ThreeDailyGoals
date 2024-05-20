@@ -18,7 +18,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 
 struct ReviewDialog: View {
     
-    @Bindable var model: ReviewModel
+    @Bindable var model: TaskManagerViewModel
     //    @State private var sheetHeight: CGFloat = .zero
     
     var body: some View {
@@ -64,5 +64,7 @@ struct ReviewDialog: View {
 
 
 #Preview {
-    return ReviewDialog(model: dummyReviewModel(state: .review))
+    let model = dummyViewModel()
+    model.stateOfReview = .review
+    return ReviewDialog(model: model)
 }

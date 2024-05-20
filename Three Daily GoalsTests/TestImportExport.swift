@@ -64,7 +64,7 @@ final class TestImportExport: XCTestCase {
         
         XCTAssertEqual(first, newModel.findTask(withID: first.id))
         XCTAssertEqual(model.items.count, newModel.items.count)
-        XCTAssertEqual(8, newModel.items.count)
+        XCTAssertEqual(10, newModel.items.count)
         for item in model.items {
             debugPrint(item)
             XCTAssertNotNil(model.findTask(withID: item.id))
