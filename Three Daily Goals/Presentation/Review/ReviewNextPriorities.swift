@@ -41,7 +41,7 @@ struct ReviewNextPriorities: View {
                         }
                         return true
                     }
-                    ListView(whichList: .priority, model: model.taskModel).frame(minHeight: 300)
+                    ListView(whichList: .priority, model: model).frame(minHeight: 300)
                 }
                 VStack{
                     HStack {
@@ -51,8 +51,8 @@ struct ReviewNextPriorities: View {
                     }.dropDestination(for: String.self){
                         items, location in
                         for item in items.compactMap({
-                            model.taskModel.findTask(withID: $0)}) {
-                            model.taskModel.move(task: item, to: .open)
+                            model.findTask(withID: $0)}) {
+                            model.move(task: item, to: .open)
                         }
                         return true
                     }
