@@ -13,7 +13,8 @@
       "containerPath" : "container:Three Daily Goals.xcodeproj",
       "identifier" : "E561D6D72B1F54A6003BE36F",
       "name" : "Three Daily Goals"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {

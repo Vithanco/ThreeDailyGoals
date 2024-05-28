@@ -464,6 +464,7 @@ extension TaskManagerViewModel  {
                 result.formUnion(t.tags)
             }
         }
+        result.formUnion(["work","private"])
         return result
     }
     func statsForTags(tag: String) -> [TaskItemState: Int] {

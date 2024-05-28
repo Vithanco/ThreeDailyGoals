@@ -27,24 +27,25 @@ struct ReviewPreferencesView : View {
                 HStack{
                     Text("Last Review was:")
                     Text(lastReview).foregroundColor(model.accentColor)
-                }.padding(5)
+                }.padding(5).frame(minWidth: 300)
                 
                 model.streakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
 
                 
                 Text("Current Review Interval").bold()
                 HStack{
-                    Text ("From:")
+                    Text ("Started:")
                     Text (model.preferences.currentReviewInterval.start.timeAgoDisplay())
-                    
-                    Text ("To:")
+                }
+                HStack{
+                    Text ("Ends:")
                     Text (model.preferences.currentReviewInterval.end.timeAgoDisplay())
                 }
                 HStack{
                     Text ("Done for this period: ")
                     Text (model.didLastReviewHappenInCurrentReviewInterval() ? "yes" : "no")
-                }
-            }
+                }.frame(minWidth: 300)
+            }.frame(minWidth: 300)
             GroupBox {
                 DatePicker("Time of Review Notification", selection: $model.preferences.reviewTime, displayedComponents: .hourAndMinute).frame(maxWidth: 258).padding(5)
                 Button("Set Review Time") {
@@ -58,10 +59,9 @@ struct ReviewPreferencesView : View {
                 Button( "No Notifications Please", role: .destructive){
                     model.deleteNotifications()
                 }.buttonStyle(.bordered).padding(5)
-            }.frame(minWidth: 200)
+            }.frame(minWidth: 300)
             Spacer()
-            Spacer()
-        }.padding(10).frame(maxWidth: 400, minHeight: 500)
+        }.padding(10).frame(minWidth: 400, minHeight: 500)
     }
     
 }

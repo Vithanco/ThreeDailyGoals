@@ -48,5 +48,41 @@ final class TestModelLists: XCTestCase {
         move(from: .priority, to: .open)
     }
 
-  
+    func testTags() throws {
+        let testTag = "aTestTag34"
+        let testTag2 = "aTestTag346"
+        XCTAssertNotEqual(testTag, testTag2)
+        
+        
+        let model = dummyViewModel()
+        XCTAssertTrue(model.allTags.contains("private"))
+        XCTAssertTrue(model.allTags.contains("work"))
+        XCTAssertTrue(model.activeTags.contains("private"))
+        XCTAssertTrue(model.activeTags.contains("work"))
+        
+        model.list(which: .open).first?.tags.append(testTag)
+        XCTAssertTrue(model.activeTags.contains(testTag))
+        XCTAssertTrue(model.allTags.contains(testTag))
+        
+        let deadTask = model.list(which: .dead).first!
+        XCTAssertFalse(deadTask.isActive)
+        deadTask.tags.append(testTag2)
+        
+        let stats = model.statsForTags(tag: testTag2)
+        XCTAssertEqual(stats.count, 1)
+        
+        
+        XCTAssertFalse(model.activeTags.contains(testTag2))
+        XCTAssertTrue(model.allTags.contains(testTag2))
+        
+        model.delete(tag: testTag2)
+        
+        XCTAssertFalse(model.activeTags.contains(testTag2))
+        XCTAssertFalse(model.allTags.contains(testTag2))
+        
+        model.delete(tag: "private")
+        
+        XCTAssertTrue(model.allTags.contains("private"))
+        XCTAssertTrue(model.activeTags.contains("private"))
+    }
 }
