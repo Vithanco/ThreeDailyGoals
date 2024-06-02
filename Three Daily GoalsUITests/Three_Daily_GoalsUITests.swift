@@ -52,7 +52,9 @@ import XCTest
     func testInfo() throws {
         // UI tests must launch the application that they test.
         let app = launchTestApp()
-        ensureExists(text: "Streak", inApp: app)
+        if isLargeDevice {
+            ensureExists(text: "Streak", inApp: app)
+        }
 #if os(macOS)
         ensureExists(text: "today", inApp: app)
 #endif

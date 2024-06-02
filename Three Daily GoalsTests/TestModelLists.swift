@@ -8,6 +8,16 @@
 import XCTest
 @testable import Three_Daily_Goals
 
+extension Dictionary where Value : Numeric {
+    var total: Value {
+        var result = Value.zero
+        for key in keys {
+            result += self[key] ?? .zero
+        }
+        return result
+    }
+}
+
 final class TestModelLists: XCTestCase {
 
     override func setUpWithError() throws {
@@ -47,6 +57,9 @@ final class TestModelLists: XCTestCase {
         move(from: .dead, to: .priority)
         move(from: .priority, to: .open)
     }
+    
+
+    
 
     func testTags() throws {
         let testTag = "aTestTag34"
@@ -69,7 +82,7 @@ final class TestModelLists: XCTestCase {
         deadTask.tags.append(testTag2)
         
         let stats = model.statsForTags(tag: testTag2)
-        XCTAssertEqual(stats.count, 1)
+        XCTAssertEqual(stats.total, 1, stats.debugDescription)
         
         
         XCTAssertFalse(model.activeTags.contains(testTag2))

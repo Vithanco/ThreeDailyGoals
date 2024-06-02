@@ -146,7 +146,7 @@ extension CloudPreferences {
     }
         
     var didReviewToday : Bool {
-        return lastReview.isToday
+        return  currentReviewInterval.contains(lastReview)
     }
     
     var reviewTime: Date {
@@ -235,8 +235,8 @@ extension CloudPreferences {
             
             var result = DateInterval(start: start, end: end)
             if result.duration < Seconds.oneHour {
-                result = getReviewInterval()
-                currentReviewInterval = result
+                result = getReviewInterval(forDate: Date.now)
+                self.currentReviewInterval = result
             }
             return result
         }

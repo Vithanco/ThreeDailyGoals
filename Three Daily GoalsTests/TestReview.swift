@@ -121,5 +121,48 @@ final class TestReview: XCTestCase {
         XCTAssertEqual(model.stateOfReview, .inform)
         XCTAssertEqual(pref.daysOfReview, 43)
     }
+    
+    func testReviewInterval() throws {
+        let model = dummyViewModel()
+        let pref = model.preferences
+        let date: Date = now
+        
+        pref.lastReview = m15
+        XCTAssertTrue(model.didLastReviewHappenInCurrentReviewInterval())
+        
+        
+        pref.lastReview = m24
+        XCTAssertFalse(model.didLastReviewHappenInCurrentReviewInterval())
+        XCTAssertFalse(pref.lastReview.isToday)
+        
+    }
+    
+    let now: Date = "2024-06-02T03:48:00Z"
+    let m15: Date = "2024-06-01T13:48:00Z"
+    let m24: Date = "2024-06-01T03:48:00Z"
+    
+    
+    func testStreak() throws {
+        let model = dummyViewModel()
+        let pref = model.preferences
+        
+        pref.lastReview = m24
+        pref.currentReviewInterval = getReviewInterval(forDate: m24)
+        XCTAssertTrue (pref.didReviewToday)
+        
+        pref.currentReviewInterval = getReviewInterval()
+        XCTAssertFalse (pref.didReviewToday)
+        
+    }
 
+}
+
+extension Date: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        let dateFormatter = ISO8601DateFormatter()
+        guard let date = dateFormatter.date(from: value) else {
+            fatalError("Invalid ISO 8601 date format \(value)")
+        }
+        self = date
+    }
 }

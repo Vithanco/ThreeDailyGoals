@@ -19,14 +19,13 @@ let timeAgoFormatter = {
 }()
 
 
-public func getReviewInterval () -> DateInterval {
+public func getReviewInterval (forDate: Date = Date.now) -> DateInterval {
     let calendar = Calendar.current
-    let currentDate = Date()
     
-    let hour = calendar.component(.hour, from: currentDate)
+    let hour = calendar.component(.hour, from: forDate)
     
-    var startDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
-    var endDateComponents = calendar.dateComponents([.year, .month, .day], from: currentDate)
+    var startDateComponents = calendar.dateComponents([.year, .month, .day], from: forDate)
+    var endDateComponents = calendar.dateComponents([.year, .month, .day], from: forDate)
     
     startDateComponents.hour = 12
     endDateComponents.hour = 12
@@ -103,6 +102,11 @@ enum Seconds{
 extension Date {
     var isToday: Bool {
         return startOfDay == Date.today
+    }
+    
+    var beginOfReviewWindow: Date {
+        let inter = getReviewInterval(forDate: self)
+        return inter.start
     }
     
     static var today: Date {
