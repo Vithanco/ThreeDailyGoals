@@ -8,23 +8,28 @@
 import XCTest
 @testable import Three_Daily_Goals
 
-final class TestTaskItems: XCTestCase {
+enum TestError: Error {
+    case taskNotFound
+}
 
+
+final class TestTaskItems: XCTestCase {
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
     func testAddComments() throws {
-//        let dummyM = dummyViewModel()
-//        let task = dummyM.addAndSelect()
-//        XCTAssertEqual(task.comments?.count , 0)
-//        let task2 = task.addComment(text: "test comment")
-//        XCTAssertEqual(task, task2)
-//        XCTAssertEqual(task.comments!.count,1)
+        //        let dummyM = dummyViewModel()
+        //        let task = dummyM.addAndSelect()
+        //        XCTAssertEqual(task.comments?.count , 0)
+        //        let task2 = task.addComment(text: "test comment")
+        //        XCTAssertEqual(task, task2)
+        //        XCTAssertEqual(task.comments!.count,1)
     }
     
     func loader(whichList: TaskItemState) -> [TaskItem] {
@@ -54,5 +59,34 @@ final class TestTaskItems: XCTestCase {
         c.created = sameDate
         XCTAssertNotEqual(a,b)
         XCTAssertEqual(a,c)
+    }
+    
+    func testTouch() throws {
+        let store = TestPreferences()
+        let pref = CloudPreferences(store: store)
+        let model = dummyViewModel( preferences:  pref)
+        
+        guard let task = model.list(which: .dead).first else {
+            throw TestError.taskNotFound
+        }
+        XCTAssert(task.canBeTouched)
+        XCTAssert(task.changed < getDate(daysPrior: 30))
+        model.touch(task: task)
+        XCTAssert(task.changed > getDate(daysPrior: 1))
+    }
+    
+    
+    func testTouch2() throws {
+        let store = TestPreferences()
+        let pref = CloudPreferences(store: store)
+        let model = dummyViewModel( preferences:  pref)
+        
+        guard let task = model.list(which: .open).first else {
+            throw TestError.taskNotFound
+        }
+        XCTAssert(task.canBeTouched)
+        let date = task.changed
+        model.touch(task: task)
+        XCTAssert(date != task.changed)
     }
 }

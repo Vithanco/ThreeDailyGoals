@@ -250,7 +250,8 @@ extension TaskItem {
     
     func touch() {
         if state == .open {
-            addComment(text: "You 'touched' this task.")
+            setChangedDate(.now)
+           // addComment(text: "You 'touched' this task.")
         } else {
             reOpenTask()
         }

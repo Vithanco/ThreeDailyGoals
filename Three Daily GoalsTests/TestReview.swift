@@ -125,13 +125,13 @@ final class TestReview: XCTestCase {
     func testReviewInterval() throws {
         let model = dummyViewModel()
         let pref = model.preferences
-        let date: Date = now
         
+        pref.currentReviewInterval = DateInterval(start: m24, end: now)
         pref.lastReview = m15
         XCTAssertTrue(model.didLastReviewHappenInCurrentReviewInterval())
         
         
-        pref.lastReview = m24
+        pref.lastReview = m25
         XCTAssertFalse(model.didLastReviewHappenInCurrentReviewInterval())
         XCTAssertFalse(pref.lastReview.isToday)
         
@@ -140,6 +140,7 @@ final class TestReview: XCTestCase {
     let now: Date = "2024-06-02T03:48:00Z"
     let m15: Date = "2024-06-01T13:48:00Z"
     let m24: Date = "2024-06-01T03:48:00Z"
+    let m25: Date = "2024-06-01T02:48:00Z"
     
     
     func testStreak() throws {

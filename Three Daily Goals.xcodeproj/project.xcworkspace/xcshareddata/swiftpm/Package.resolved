@@ -1,13 +1,22 @@
 {
-  "originHash" : "033e20a5cbf6c603f8c31b671744aa52eb5981ad9b0ee41bb575ed946aa93c96",
+  "originHash" : "793e41dff2902cf3e522d6c838948cbc08f5fbb1f46e3cd14949b89ffaee5de7",
   "pins" : [
+    {
+      "identity" : "simplecalendar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Vithanco/SimpleCalendar",
+      "state" : {
+        "branch" : "main",
+        "revision" : "c45ef593e3728ba40a4e5a9a926105269e4cccb0"
+      }
+    },
     {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
       }
     },
     {
