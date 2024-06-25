@@ -43,7 +43,7 @@ struct ListView: View {
                         tagView: {text, isSelected in
                 TagCapsule(text)
                 .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)}
-            ).padding(2).background(Color.white)
+            ).padding(2).frame(maxHeight: 30)
                 
             
             SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)

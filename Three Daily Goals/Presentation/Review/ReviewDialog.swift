@@ -49,7 +49,7 @@ struct ReviewDialog: View {
                 ReviewDueDate(model: model)
             }
             Spacer()
-        }.padding(4).frame(minHeight: 400,idealHeight: 600)
+        }.padding(4).frame(minHeight: 350,idealHeight: 600)
     }
     //                .overlay {
     //                    GeometryReader { geometry in

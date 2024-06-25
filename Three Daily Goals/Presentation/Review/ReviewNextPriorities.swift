@@ -34,7 +34,8 @@ struct ReviewNextPriorities: View {
                 //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target because iOS has an issue. Will be hopefully removed with next version of iOS.")
                 //                        Spacer()
                 
-                ListView(whichList: .priority, model: model).frame(minHeight: 300)
+                ListView(whichList: .priority, model: model)
+                    .frame(minHeight: 300)
                     .dropDestination(for: String.self){
                         items, location in
                         for item in items.compactMap({
@@ -50,7 +51,9 @@ struct ReviewNextPriorities: View {
                 //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
                 //                        Spacer()
                 
-                ListView(whichList: .open ,model: model).dropDestination(for: String.self){
+                ListView(whichList: .open ,model: model)
+                    .frame(minHeight: 300)
+                    .dropDestination(for: String.self){
                     items, location in
                     for item in items.compactMap({
                         model.findTask(withID: $0)}) {
