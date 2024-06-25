@@ -28,12 +28,14 @@ struct ReviewNextPriorities: View {
 #if os(iOS)  // delete this once iOS works as expected and keep macOS path for all
             Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
-                VStack{
-                    HStack {
-                        Spacer()
-                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target because iOS has an issue. Will be hopefully removed with next version of iOS.")
-                        Spacer()
-                    }.dropDestination(for: String.self){
+                //                VStack{
+                //                    HStack {
+                //                        Spacer()
+                //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target because iOS has an issue. Will be hopefully removed with next version of iOS.")
+                //                        Spacer()
+                
+                ListView(whichList: .priority, model: model).frame(minHeight: 300)
+                    .dropDestination(for: String.self){
                         items, location in
                         for item in items.compactMap({
                             model.findTask(withID: $0)}) {
@@ -41,23 +43,22 @@ struct ReviewNextPriorities: View {
                         }
                         return true
                     }
-                    ListView(whichList: .priority, model: model).frame(minHeight: 300)
-                }
-                VStack{
-                    HStack {
-                        Spacer()
-                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
-                        Spacer()
-                    }.dropDestination(for: String.self){
-                        items, location in
-                        for item in items.compactMap({
-                            model.findTask(withID: $0)}) {
-                            model.move(task: item, to: .open)
-                        }
-                        return true
+                
+                //   VStack{
+                //                    HStack {
+                //                        Spacer()
+                //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
+                //                        Spacer()
+                
+                ListView(whichList: .open ,model: model).dropDestination(for: String.self){
+                    items, location in
+                    for item in items.compactMap({
+                        model.findTask(withID: $0)}) {
+                        model.move(task: item, to: .open)
                     }
-                    ListView(whichList: .open ,model: model)
+                    return true
                 }
+                
             }
             
 #endif
