@@ -40,6 +40,7 @@ enum DialogState : String{
     case pending
     case dueDate
     case review
+    case plan
 }
 
 @Observable

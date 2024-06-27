@@ -59,11 +59,8 @@ struct TagsPreferencesView : View {
         VStack{
             HStack(alignment: .top){
                 GroupBox(label: Text("All Tags").bold()){
-                    TagList(tags: model.allTags.asArray, onSelectTag: {text in
-                        tag = text ?? ""
-                        changeTo = text ?? ""
-                    }, tagView: {text in return
-                        TagCapsule(text).tagCapsuleStyle(model.selectedTagStyle)})
+                    TagList(tags: model.allTags.asArray, tagView: {text in return
+                        TagCapsule(text).tagCapsuleStyle(model.selectedTagStyle).onTapGesture(perform: {tag = text; changeTo = text})})
                     Spacer()
                 }
                 Spacer()

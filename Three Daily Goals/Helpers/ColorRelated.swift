@@ -33,12 +33,10 @@ public extension Color {
 
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193
-import SwiftUI
-
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
 // Make Color codable. This includes support for transparency.
 // See https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-extension Color: Codable {
+extension Color {
     init(hex: String) {
         let rgba = hex.toRGBA()
         
@@ -48,18 +46,18 @@ extension Color: Codable {
                   blue: Double(rgba.b),
                   opacity: Double(rgba.alpha))
     }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let hex = try container.decode(String.self)
-        
-        self.init(hex: hex)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(toHex)
-    }
+//    
+//    public init(from decoder: Decoder) throws {
+//        let container = try decoder.singleValueContainer()
+//        let hex = try container.decode(String.self)
+//        
+//        self.init(hex: hex)
+//    }
+//    
+//    public func encode(to encoder: Encoder) throws {
+//        var container = encoder.singleValueContainer()
+//        try container.encode(toHex)
+//    }
     
     var toHex: String? {
         return toHex()

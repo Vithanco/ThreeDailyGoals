@@ -91,9 +91,9 @@ struct InnerTaskItemView : View {
             GroupBox {
                 HStack {
                     Text("Add new Label:")
-                    TagTextField(text:  $buildTag ,placeholder: "Tag Me") { newTag in
-                        item.tags.append(newTag)
-                    }
+                    TagTextField(text:  $buildTag ,placeholder: "Tag Me").onSubmit({
+                        item.tags.append(buildTag)
+                    })
                 }
                 TagEditList(tags: $item.tags,additionalTags: allTags,container: .vstack) {text, isTag in
                     TagCapsule(text)

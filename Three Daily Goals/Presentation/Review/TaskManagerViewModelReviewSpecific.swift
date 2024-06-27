@@ -58,6 +58,8 @@ extension TaskManagerViewModel {
             }
             stateOfReview = .review
         case .review:
+            stateOfReview = .plan
+        case .plan:
             endReview(didReview: true)
         }
     }
