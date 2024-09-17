@@ -11,7 +11,7 @@ import XCTest
 // this is not working for some reason see https://stackoverflow.com/questions/33755019/linker-error-when-accessing-application-module-in-ui-tests-in-xcode-7-1
 //@testable import Three_Daily_Goals
 
-@MainActor func ensureExists(text: String, inApp: XCUIApplication) {
+func ensureExists(text: String, inApp: XCUIApplication) {
     let predicate = NSPredicate(format: "value CONTAINS '\(text)'")
     let elementQuery = inApp.staticTexts.containing(predicate)
     XCTAssertTrue (elementQuery.count > 0, "couldn't find \(text)")

@@ -48,7 +48,7 @@ struct ReviewDialog: View {
             case .dueDate:
                 ReviewDueDate(model: model)
             case .plan:
-                ReviewPlanDay(model: model, events: [], date: .today)
+                ReviewPlanDay(model: model, date: .today)
             }
             Spacer()
         }.padding(4).frame(minHeight: 350,idealHeight: 600)

@@ -163,15 +163,12 @@ extension TaskItem {
         return state == .closed
     }
     
-    
-    
-    private static let activeStates  : [TaskItemState] = [.open, .priority, .pendingResponse]
     var isActive: Bool {
-        return TaskItem.activeStates.contains(self.state)
+        return [.open, .priority, .pendingResponse].contains(self.state)
     }
+    
     var canBeClosed : Bool {
-        let states : [TaskItemState] = [.open, .priority, .pendingResponse]
-        return states.contains(self.state)
+        return [.open, .priority, .pendingResponse, .dead].contains(self.state)
     }
     
     var canBeMovedToOpen : Bool {
@@ -183,13 +180,11 @@ extension TaskItem {
     }
     
     var canBeTouched : Bool {
-        let states : [TaskItemState] = [.pendingResponse, .open, .priority]
-        return states.contains(self.state)
+        return [.pendingResponse, .open, .priority].contains(self.state)
     }
     
     var canBeDeleted : Bool {
-        let states : [TaskItemState] = [.closed, .dead]
-        return states.contains(self.state)
+        return  [.closed, .dead].contains(self.state)
     }
     
     var isDead: Bool {

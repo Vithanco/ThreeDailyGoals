@@ -40,6 +40,8 @@ enum SchemaV3_1: VersionedSchema {
         var _priority: Int = 0
         var _tags: [String] = []
         
+        @Transient var eventId: String?
+        
         init() {
             
         }

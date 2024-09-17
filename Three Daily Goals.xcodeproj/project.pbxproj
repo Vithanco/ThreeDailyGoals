@@ -11,6 +11,7 @@
 		7F5130D02C0C5FF200097437 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F6854D02BF1210700AD0711 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F6854CF2BF1210700AD0711 /* TagKit */; };
 		7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */; };
+		7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8EBC852C2FC39E0003C1BB /* EventManager.swift */; };
 		7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
 		7FA02AB12C18AABE00EC81CE /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA02AB02C18AABE00EC81CE /* SimpleCalendar */; };
 		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
@@ -20,6 +21,7 @@
 		7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
+		7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE38F0E2C33084100C9A798 /* TDGEvent.swift */; };
 		E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */; };
 		E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */; };
 		E50A29B72B6995DA002AC3BC /* SchemaV2_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */; };
@@ -85,7 +87,6 @@
 		E5B698FD2B7C956A0086C3EB /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5BC12DE2B9CD191008A89EF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5BC12DD2B9CD191008A89EF /* Logging */; };
 		E5BC12E02B9CD19C008A89EF /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = E5BC12DF2B9CD19C008A89EF /* Logging */; };
-		E5BC12E22B9DD7BE008A89EF /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC12E12B9DD7BE008A89EF /* CalendarView.swift */; };
 		E5D4FB772B749719002BB261 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D4FB762B749719002BB261 /* StreakView.swift */; };
 		E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
 		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
@@ -157,6 +158,7 @@
 		7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPlanDay.swift; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
 		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
+		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 		7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModelReviewSpecific.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
+		7FE38F0E2C33084100C9A798 /* TDGEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDGEvent.swift; sourceTree = "<group>"; };
 		E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreferencesView.swift; sourceTree = "<group>"; };
 		E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		E50A29B62B6995DA002AC3BC /* SchemaV2_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV2_1.swift; sourceTree = "<group>"; };
@@ -224,7 +227,6 @@
 		E5B376B22B7B506400E66FAD /* AllCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommentsView.swift; sourceTree = "<group>"; };
 		E5B376B52B7B551600E66FAD /* TestTaskItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskItems.swift; sourceTree = "<group>"; };
 		E5B698FA2B7C89360086C3EB /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
-		E5BC12E12B9DD7BE008A89EF /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		E5D4FB762B749719002BB261 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		E5DAFE952B5197B000A68857 /* LoggingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingRelated.swift; sourceTree = "<group>"; };
 		E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModel.swift; sourceTree = "<group>"; };
@@ -289,6 +291,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7FE38F0D2C33083300C9A798 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				7F8EBC852C2FC39E0003C1BB /* EventManager.swift */,
+				7FE38F0E2C33084100C9A798 /* TDGEvent.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
 		E50A29B52B6995BC002AC3BC /* ModelVersions */ = {
 			isa = PBXGroup;
 			children = (
@@ -426,6 +437,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7FE38F0D2C33083300C9A798 /* Events */,
 				E5B698FA2B7C89360086C3EB /* Buttons.swift */,
 				E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */,
 				E597A4882B83D83D00BCD061 /* ImportExport.swift */,
@@ -468,7 +480,6 @@
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
 				7FA581032B9838B700803614 /* SimpleListView.swift */,
-				E5BC12E12B9DD7BE008A89EF /* CalendarView.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -607,7 +618,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1510;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					E51142902B342E3C00AB6E05 = {
 						CreatedOnToolsVersion = 15.1;
@@ -726,7 +737,9 @@
 				E53AF7A72B661D0F00C24F78 /* SchemaV1.swift in Sources */,
 				E597A48B2B848CD600BCD061 /* JSONDoc.swift in Sources */,
 				E5FFC5B92B6A388200C9D60B /* SchemaV2_2.swift in Sources */,
+				7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* ReviewPreferencesView.swift in Sources */,
+				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
 				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
 				E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */,
@@ -765,7 +778,6 @@
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
 				E50A29BA2B6A0D79002AC3BC /* ImageRelated.swift in Sources */,
 				E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */,
-				E5BC12E22B9DD7BE008A89EF /* CalendarView.swift in Sources */,
 				E5E8B3942B77442F003300C3 /* RegularMainView.swift in Sources */,
 				E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */,
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
@@ -843,7 +855,7 @@
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "2024 Vithanco";
-				IPHONEOS_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -854,7 +866,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -882,7 +894,7 @@
 				INFOPLIST_FILE = "Three Daily Goals (Widget)/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "2024 Vithanco";
-				IPHONEOS_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -893,7 +905,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1043,6 +1055,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ANALYZER_GCD_PERFORMANCE = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_TIDY_BUGPRONE_REDUNDANT_BRANCH_CONDITION = YES;
+				CLANG_TIDY_MISC_REDUNDANT_EXPRESSION = YES;
+				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
+				CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC = YES;
+				CLANG_WARN_IMPLICIT_FALLTHROUGH = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1050,7 +1073,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals";
@@ -1065,10 +1093,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1088,6 +1116,17 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ANALYZER_GCD_PERFORMANCE = YES;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_TIDY_BUGPRONE_REDUNDANT_BRANCH_CONDITION = YES;
+				CLANG_TIDY_MISC_REDUNDANT_EXPRESSION = YES;
+				CLANG_WARN_COMPLETION_HANDLER_MISUSE = YES;
+				CLANG_WARN_FRAMEWORK_INCLUDE_PRIVATE_FROM_PUBLIC = YES;
+				CLANG_WARN_IMPLICIT_FALLTHROUGH = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1095,7 +1134,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Three Daily Goals/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Three Daily Goals";
@@ -1110,10 +1154,10 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1136,8 +1180,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1160,8 +1204,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
-				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1183,8 +1227,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = "";
-				MACOSX_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1206,8 +1250,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = "";
-				MACOSX_DEPLOYMENT_TARGET = "";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
+				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

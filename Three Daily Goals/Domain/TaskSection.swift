@@ -12,7 +12,7 @@ public struct TaskSection : Observable , Sendable    {
     let image: String
 }
 
-let secToday = TaskSection(text: "Today", image: imgToday)
+let secToday = TaskSection(text: "Today's Goals", image: imgToday)
 let secOpen = TaskSection(text: "Open", image: imgOpen)
 let secClosed = TaskSection(text: "Closed", image: imgClosed)
 let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard)
