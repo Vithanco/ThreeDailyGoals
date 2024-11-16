@@ -23,22 +23,28 @@ struct SimpleListView: View {
                     //                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
                 }
             }) {
-                ForEach(headers) {header in
-                    let partialList = header.filter(items: itemList)
-                    if partialList.count > 0 {
-                        if showHeaders {
-                            header.asText
-                                .foregroundStyle(model.accentColor)
-                                .listRowSeparator(.hidden)
-                        }
-                        ForEach(partialList) { item in
-                            LinkToTask(model: model,item: item, list: item.state).listRowSeparator(.visible)
+                if itemList.isEmpty {
+                    Spacer(minLength: 20)
+                    Text("(No items found)").foregroundStyle(model.accentColor).frame(maxWidth: .infinity)
+                    Spacer(minLength: 20)
+                } else {
+                    ForEach(headers) {header in
+                        let partialList = header.filter(items: itemList)
+                        if partialList.count > 0 {
+                            if showHeaders {
+                                header.asText
+                                    .foregroundStyle(model.accentColor)
+                                    .listRowSeparator(.hidden)
+                            }
+                            ForEach(partialList) { item in
+                                LinkToTask(model: model,item: item, list: item.state).listRowSeparator(.visible)
+                            }
                         }
                     }
-                }
-                if itemList.count > 10 {
-                    Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
-                        .listRowSeparator(.hidden)
+                    if itemList.count > 10 {
+                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
+                            .listRowSeparator(.hidden)
+                    }
                 }
             }
             

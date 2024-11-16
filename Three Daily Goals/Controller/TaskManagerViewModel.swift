@@ -428,6 +428,7 @@ func loadStdItems() -> [TaskItem] {
     let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
     theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
     theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
+    theGoal.dueDate = getDate(inDays: 2)
     result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority, tags: ["CMaps"])
     result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
     result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)

@@ -85,7 +85,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         XCTAssertTrue(model.canRedo)
         
         let find3 = model.findTask(withID: item.id)        
-        XCTAssertEqual(find3!, model.findTask(withID: item.id))
+        XCTAssertEqual(find3, model.findTask(withID: item.id))
 //        XCTAssertEqual(find3!.comments!.count, 1)
 //        XCTAssertEqual(1,try context.fetchCount(descriptor))
     }

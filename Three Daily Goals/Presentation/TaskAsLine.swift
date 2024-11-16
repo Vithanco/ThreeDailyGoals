@@ -15,19 +15,25 @@ struct TaskAsLine: View {
         return model.accentColor
     }
     
-    var text: String {
-        var result = item.title
-        if let due = item.due, item.isOpenOrPriority {
-            result += "\n\(due.timeRemaining)"
-        }
-        return result
+    var text: some View {
+        return Text(item.title)
+            .strikethrough( item.isClosed, color: accentColor)
+            .draggable(item.id)
     }
+    
+    var hasDue: Bool {
+        return item.due != nil && item.isOpenOrPriority
+    }
+    
+
     
     var body: some View {
         HStack{
-            Text(text).strikethrough( item.isClosed, color: accentColor)
-                .draggable(item.id)
+            text
             Spacer()
+            if hasDue {
+                Text(item.due!.timeRemaining).italic().foregroundStyle(Color.gray)
+            }
         }
         .draggable(item.id)
         .swipeActions {

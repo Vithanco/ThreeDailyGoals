@@ -36,7 +36,7 @@ final class EventManager {
 
     init() {
         calendar = Calendar.current
-        var today = Calendar.current.startOfDay(for: Date.today)
+        let today = Calendar.current.startOfDay(for: Date.today)
         startDate = today
         endDate = Calendar.current.date(byAdding: .day, value: 1, to: today)!
         requestCalendarAccess()
