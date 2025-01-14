@@ -10,7 +10,7 @@ import SwiftData
 import UniformTypeIdentifiers
 import os
 
-nonisolated(unsafe) private let logger = Logger(
+private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: MainView.self)
 )
@@ -46,9 +46,12 @@ struct MainView: View {
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)
         }
-        .sheet(isPresented: $model.showSelectDuringImportDialog, content: {
+        .sheet(isPresented: $model.showSelectDuringImportDialog){
             SelectVersions(choices: model.selectDuringImport, model: model)
-        })
+        }
+        .confirmationDialog("Add new Task", isPresented: $model.showNewItemNameDialog) {
+            NewItemDialog(model: model)
+        }
         .sheet(isPresented: $model.showInfoMessage, content: {Text(model.infoMessage).padding(15)}
         )
         .fileExporter(isPresented: $model.showExportDialog,

@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 import os
 
-nonisolated(unsafe) private let logger = Logger(
+private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: CloudPreferences.self)
 )

@@ -26,7 +26,15 @@ struct ReviewPlanDay: View {
             Text("Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
                 SimpleCalendarView(events: $events, selectedDate: $date, selectionAction: .inform(self.onSelection) ,dateSelectionStyle: .selectedDates([Date.today]))
-                ListView(whichList: .priority, model: model).frame(minHeight: 300)
+                SimpleListView(
+                    itemList: model.priorityTasks,
+                    headers: [all],
+                    showHeaders: false,
+                    section: secToday,
+                    id: TaskItemState.priority.getListAccessibilityIdentifier,
+                    model:  model
+                )
+                    .frame(minHeight: 300)
             }
         }
     }
@@ -42,7 +50,9 @@ struct ReviewPlanDay: View {
 
    // return Text ("in total: \(events.count)")
     let  date = Date.today
-    return  ReviewPlanDay(model: dummyViewModel(), date: date)
+    let model = dummyViewModel()
+    model.priorityTasks.first?.state = .priority
+    return  ReviewPlanDay(model: model, date: date)
     
     
     

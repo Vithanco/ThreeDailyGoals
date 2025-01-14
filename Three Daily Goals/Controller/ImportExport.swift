@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 
 import os
 
-nonisolated(unsafe) private let logger = Logger(
+private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: "TaskManagerViewModel.Buttons")
 )

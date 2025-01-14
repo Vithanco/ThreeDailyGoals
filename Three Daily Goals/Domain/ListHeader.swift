@@ -45,7 +45,10 @@ let lhLastMonth = ListHeader(name: "Last Month", timeFrom: 30, timeTo: 7)
 let lhOlder = ListHeader(name: "over a year ago",  timeFrom: 1000000, timeTo: 365)
 let lhLastQuarter = ListHeader(name: "Last Quarter",  timeFrom: 91, timeTo: 30)
 let lhLastHalfYear = ListHeader(name: "Last Half Year", timeFrom: 182, timeTo: 91)
+let lhPrevHalfYear = ListHeader(name: "Previous Half Year", timeFrom: 365, timeTo: 182)
+let lhPrevYear = ListHeader(name: "Previous Half Year", timeFrom: 730, timeTo: 365)
+let lh2ndYear = ListHeader(name: "Previous Half Year", timeFrom: 1095, timeTo: 730)
 
 let all = ListHeader(name: "All", timeFrom: 1000000, timeTo: 0)
 
-let defaultListHeaders = [lhOlder, lhLastHalfYear, lhLastQuarter, lhLastMonth, lhLastWeek, lhYesterday, lhToday]
+let defaultListHeaders = [lhOlder,  lh2ndYear, lhPrevYear, lhPrevHalfYear, lhLastHalfYear, lhLastQuarter, lhLastMonth, lhLastWeek, lhYesterday, lhToday]

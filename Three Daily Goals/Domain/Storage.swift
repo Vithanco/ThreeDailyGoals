@@ -140,8 +140,9 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
     }
     
     let schema = Schema(versionedSchema: SchemaLatest.self)
+    let useCloudDB = inMemory ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
     
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory)
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
     
     do {
         let result = try ModelContainer(

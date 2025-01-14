@@ -13,7 +13,8 @@ import os
 import CloudKit
 import TagKit
 
-nonisolated(unsafe) private let logger = Logger(
+
+private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: TaskManagerViewModel.self)
 )
@@ -41,6 +42,13 @@ enum DialogState : String{
     case dueDate
     case review
     case plan
+}
+
+extension TagCapsuleStyle.Border {
+    static let none: TagCapsuleStyle.Border = .init(
+        color: .clear,
+        width: 0
+    )
 }
 
 @Observable
@@ -85,6 +93,7 @@ final class TaskManagerViewModel{
     var showSettingsDialog: Bool = false
     var showMissingReviewAlert : Bool = false
     var showSelectDuringImportDialog: Bool = false
+    var showNewItemNameDialog: Bool = false
     var selectDuringImport: [Choice] = []
     
     var streakText: String = ""
@@ -98,10 +107,10 @@ final class TaskManagerViewModel{
     
     var selectedTags: [String] = []
     var missingTagStyle : TagCapsuleStyle {
-        TagCapsuleStyle(foregroundColor: .white,backgroundColor: .gray, borderColor: .clear, borderWidth: 0, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
+        TagCapsuleStyle(foregroundColor: .white,backgroundColor: .gray, border: .none, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
     }
     var selectedTagStyle : TagCapsuleStyle {
-        TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor, borderColor: .clear, borderWidth: 0, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
+        TagCapsuleStyle(foregroundColor: accentColor.readableTextColor ,backgroundColor: accentColor, border: .none, padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3))
     }
     
     func finishDialog() {
@@ -221,7 +230,7 @@ final class TaskManagerViewModel{
     }
     
     func addNewItem() {
-        addAndSelect()
+        showNewItemNameDialog = true
     }
     
     @discardableResult func addAndSelect(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) -> TaskItem {
@@ -283,7 +292,9 @@ final class TaskManagerViewModel{
             modelContext.delete(task)
             modelContext.endUndoGrouping()
             updateUndoRedoStatus()
+            selectedItem = currentList.first
         }
+        
     }
     
     
@@ -388,7 +399,6 @@ extension TaskManagerViewModel {
     var currentList: [TaskItem] {
         return list(which: whichList)
     }
-    
 }
 
 //
@@ -417,7 +427,7 @@ extension TaskManagerViewModel {
 }
 
 
-
+@MainActor
 func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> TaskManagerViewModel {
     let loader = loader ?? loadStdItems
     return TaskManagerViewModel(modelContext: TestStorage(loader: loader), preferences: preferences ?? dummyPreferences(), isTesting: true)

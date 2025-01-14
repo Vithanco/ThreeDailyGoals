@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftData
+@preconcurrency import SwiftData
 import SwiftUI
 
 
@@ -21,9 +21,9 @@ enum SchemaV2_1: VersionedSchema {
     @Model
     final class TaskItem : ObservableObject, Codable {
         
-        public internal (set) var created: Date = Date.now
-        public internal (set) var changed: Date = Date.now
-        public internal (set) var closed: Date? = nil
+        public internal(set) var created: Date = Date.now
+        public internal(set) var changed: Date = Date.now
+        public internal(set) var closed: Date? = nil
         
         var _title: String = emptyTaskTitle
         var _details: String = emptyTaskDetails
