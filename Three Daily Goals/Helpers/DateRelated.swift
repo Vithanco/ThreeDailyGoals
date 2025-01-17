@@ -47,6 +47,7 @@ public func getReviewInterval (forDate: Date = Date.now) -> DateInterval {
 func getDate (daysPrior: Int) -> Date {
     guard let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) else {
         assert(false, "Could not create date \(daysPrior)")
+        return Date.now
     }
     return Calendar.current.startOfDay(for: exact)
 }
