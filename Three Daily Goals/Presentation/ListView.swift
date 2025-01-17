@@ -9,8 +9,8 @@ import SwiftUI
 import TagKit
 
 extension ListHeader {
-    var asText: Text {
-        Text("Last updated: " + name).font(.callout)
+    var asText : Text {
+        Text("Last updated: \(name)"  ).font(.callout)
     }
 }
 
@@ -58,7 +58,7 @@ struct ListView: View {
 #endif
                 .dropDestination(for: String.self) {
                     items, _ in
-                    for item in items.compactMap({ model.findTask(withID: $0) }) {
+                    for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
                         model.move(task: item, to: list)
                     }
                     return true
@@ -68,5 +68,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView(model: dummyViewModel())
+    ListView(whichList: .dead, model: dummyViewModel())
 }

@@ -5,19 +5,21 @@
 //  Created by Klaus Kneupner on 19/12/2023.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
-private struct ListLabel :View{
+private struct ListLabel: View {
     let whichList: TaskItemState
     @Bindable var model: TaskManagerViewModel
-    
-    var name : Text {
+
+    var name: Text {
         return whichList.section.asText
     }
-    var count : Text {
-        return Text( model.list(which: whichList).count.description)
+
+    var count: Text {
+        return Text(model.list(which: whichList).count.description)
     }
+
     var body: some View {
         HStack {
             name
@@ -28,7 +30,7 @@ private struct ListLabel :View{
         }.accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
         .dropDestination(for: String.self){
             items, location in
-            for item in items.compactMap({model.findTask(withID: $0)}) {
+            for item in items.compactMap({model.findTask(withUuidString: $0)}) {
                 model.move(task: item, to: whichList)
             }
             return true}
@@ -39,13 +41,13 @@ private struct ListLabel :View{
 struct LinkToList: View {
     @State var whichList: TaskItemState
     @Bindable var model: TaskManagerViewModel
-    
+
     var body: some View {
-        SingleView{
+        SingleView {
             if isLargeDevice {
                 ListLabel(whichList: whichList, model: model)
                     .onTapGesture {
-                        model.select(which: whichList,item: model.list(which: whichList).first)
+                        model.select(which: whichList, item: model.list(which: whichList).first)
                     }
             } else {
                 NavigationLink {
@@ -59,9 +61,6 @@ struct LinkToList: View {
     }
 }
 
-
 #Preview {
     LinkToList(whichList: .open, model: dummyViewModel())
 }
-
-

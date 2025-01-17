@@ -187,6 +187,14 @@ final class TaskManagerViewModel{
             for t in lists.keys {
                 sortList(t)
             }
+            let allUuids: Set<UUID> = []
+            for i in items {
+                if allUuids.contains(i.uuid) {
+                    i.uuid = UUID()
+                }
+            }
+            
+            assert(Set(items.map(\.uuid)).count == items.count, "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
             updateUndoRedoStatus()
             
             setupReviewNotification()
@@ -272,6 +280,13 @@ final class TaskManagerViewModel{
         let result = items.first(where: {$0.id == withID})
         logger.debug("found Task '\(result != nil)' for ID: \(withID)")
         return result
+    }
+    
+    func findTask(withUuidString: String) -> TaskItem? {
+        if let uuid = UUID(uuidString: withUuidString) {
+            return findTask(withID: uuid.uuidString)
+        }
+        return nil
     }
     
     func touch(task: TaskItem) {
@@ -449,6 +464,9 @@ func loadStdItems() -> [TaskItem] {
     result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
     result.add(title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
     result.add(title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open, dueDate: getDate(inDays: 2))
+    for i in 32..<200 {
+        result.add(title: "Dead Task \(i)", changedDate: getDate(daysPrior: i), state: .dead)
+    }
     return result
 }
 

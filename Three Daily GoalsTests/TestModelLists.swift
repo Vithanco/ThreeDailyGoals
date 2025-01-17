@@ -28,16 +28,18 @@ final class TestModelLists: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    @MainActor
     func testNewItem () throws {
         let model = dummyViewModel()
         let new = model.addAndSelect()
         XCTAssertEqual(new.state, .open)
     }
     
+    @MainActor
     func testLists() throws {
         
         let model = dummyViewModel()
-        XCTAssertEqual(10, model.items.count)
+        XCTAssertEqual(180, model.items.count)
         let item = model.items.first!
         
         
@@ -60,7 +62,7 @@ final class TestModelLists: XCTestCase {
     
 
     
-
+    @MainActor
     func testTags() throws {
         let testTag = "aTestTag34"
         let testTag2 = "aTestTag346"

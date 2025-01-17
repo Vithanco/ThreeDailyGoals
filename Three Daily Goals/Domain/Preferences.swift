@@ -264,7 +264,6 @@ extension CloudPreferences {
     func setPriority(nr: Int, value: String) {
             store.set(value, forKey: nrToCloudKey(nr: nr))
     }
-    
 }
 
 
@@ -274,12 +273,12 @@ class TestPreferences : KeyValueStorage{
     
     func int(forKey aKey: CloudKey) -> Int {
         let result = Int(inner.longLong(forKey: "test_" + aKey.rawValue))
-        debugPrint("reading \(result) for test_\(aKey.rawValue)")
+      //  debugPrint("reading \(result) for test_\(aKey.rawValue)")
         return result
     }
     
     func set(_ value: Int, forKey aKey: CloudKey) {
-        debugPrint("setting test_\(aKey.rawValue) to \(value)")
+      //  debugPrint("setting test_\(aKey.rawValue) to \(value)")
         inner.set(Int64(value), forKey: "test_" + aKey.rawValue)
     }
     

@@ -55,5 +55,12 @@ struct SimpleListView: View {
     
     #Preview {
         let dummy = dummyViewModel()
-        return SimpleListView(itemList: dummy.list(which: .open), headers: defaultListHeaders, showHeaders: true, section: secOpen, id: "yeah", model: dummy)
+        return SimpleListView(
+            itemList: dummy.list(which: .dead),
+            headers: ListHeader.defaultListHeaders,
+            showHeaders: true,
+            section: secGraveyard,
+            id: "yeah",
+            model: dummy
+        )
     }

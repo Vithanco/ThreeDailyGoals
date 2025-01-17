@@ -100,7 +100,7 @@ final class Three_Daily_GoalsTests: XCTestCase {
         
         XCTAssertEqual(task1, model.findTask(withID: id1))
         XCTAssertEqual(task2, model.findTask(withID: id2))
-        XCTAssertNil(model.findTask(withID: "2834"))
+        XCTAssertNil(model.findTask(withUuidString: UUID().uuidString))
     }
     
     

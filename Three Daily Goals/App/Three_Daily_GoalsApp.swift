@@ -21,12 +21,12 @@ struct Three_Daily_GoalsApp: App {
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: Three_Daily_GoalsApp.self)
     )
-    
+     
     init() {
         var enableTesting = false
 #if DEBUG
         let commandLineArguments = CommandLine.arguments
-        if commandLineArguments.contains("enable-testing") {
+        if commandLineArguments.contains("enable-testing")  || ProcessInfo.processInfo.environment["XCTestSessionIdentifier"] != nil{
             enableTesting = true
         }
 #endif
@@ -42,6 +42,8 @@ struct Three_Daily_GoalsApp: App {
         
         // Request access to reminders.
         calendar.requestFullAccessToEvents { granted, error in
+            debugPrint("Calendar access granted: \(granted)", terminator: "\n")
+            debugPrint(error ?? "No error", terminator: "\n")
             //            if error != nil {
             //                self.calendar = nil
             //            }

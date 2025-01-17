@@ -19,9 +19,7 @@ typealias TaskItem = SchemaLatest.TaskItem
 
 extension TaskItem: Identifiable {
     var id: String {
-        let result = created.timeIntervalSince1970.description
-//        logger.debug("ID for Task '\(self.title)' is \(result), from \(self.created.timeIntervalSince1970)")
-        return result
+        return uuid.uuidString
     }
 }
 

@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		7F2D67612C2BC13D00C893B3 /* ReviewPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */; };
+		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
 		7F5130D02C0C5FF200097437 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */; };
 		7F6854D02BF1210700AD0711 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F6854CF2BF1210700AD0711 /* TagKit */; };
+		7F76355F2D39E6D9000FE15A /* SchemaV3_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */; };
 		7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */; };
 		7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8EBC852C2FC39E0003C1BB /* EventManager.swift */; };
 		7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
@@ -157,9 +159,11 @@
 
 /* Begin PBXFileReference section */
 		7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPlanDay.swift; sourceTree = "<group>"; };
+		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
 		7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemDialog.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
+		7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV3_2.swift; sourceTree = "<group>"; };
 		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
 		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
@@ -313,6 +317,7 @@
 				E5FFC5B82B6A388200C9D60B /* SchemaV2_2.swift */,
 				E5315D142B6FFE4C001BB3FB /* SchemaV3_0.swift */,
 				7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */,
+				7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */,
 			);
 			path = ModelVersions;
 			sourceTree = "<group>";
@@ -406,6 +411,7 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */,
 				E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */,
 				E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */,
 				E5DE105C2B69041F00381337 /* PreferencesTests.swift */,
@@ -789,6 +795,7 @@
 				7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
 				7F2D67612C2BC13D00C893B3 /* ReviewPlanDay.swift in Sources */,
+				7F76355F2D39E6D9000FE15A /* SchemaV3_2.swift in Sources */,
 				E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */,
 				7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */,
 				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
@@ -802,6 +809,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				E597A4872B83D7B000BCD061 /* TestImportExport.swift in Sources */,
 				E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */,
@@ -958,9 +966,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				DYLIB_CURRENT_VERSION = "${CURRENT_PROJECT_VERSION}";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -984,6 +994,7 @@
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SHARED_MARKETING_VERSION = 1.4.3;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1027,9 +1038,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 99;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				DYLIB_CURRENT_VERSION = "${CURRENT_PROJECT_VERSION}";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1047,6 +1060,7 @@
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NEW_SETTING = "";
 				SHARED_MARKETING_VERSION = 1.4.3;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_STRICT_CONCURRENCY = complete;
@@ -1074,7 +1088,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 98;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
@@ -1103,7 +1117,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
-				MARKETING_VERSION = 1.4.3;
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1135,7 +1149,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 98;
+				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
@@ -1164,7 +1178,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = "$(inherited)";
-				MARKETING_VERSION = 1.4.3;
+				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;

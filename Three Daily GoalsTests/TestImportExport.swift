@@ -52,6 +52,7 @@ final class TestImportExport: XCTestCase {
         XCTAssertEqual(original.id, id)
     }
     
+    @MainActor
     func testFile() throws {
         let model = dummyViewModel()
         let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
@@ -64,7 +65,7 @@ final class TestImportExport: XCTestCase {
         
         XCTAssertEqual(first, newModel.findTask(withID: first.id))
         XCTAssertEqual(model.items.count, newModel.items.count)
-        XCTAssertEqual(10, newModel.items.count)
+        XCTAssertEqual(180, newModel.items.count)
         for item in model.items {
             debugPrint(item)
             XCTAssertNotNil(model.findTask(withID: item.id))
@@ -83,12 +84,6 @@ final class TestImportExport: XCTestCase {
                 }
                 
             }
-        }
-    }
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
         }
     }
     

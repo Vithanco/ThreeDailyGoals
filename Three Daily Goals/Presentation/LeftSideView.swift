@@ -21,7 +21,7 @@ struct LeftSideView: View {
                 }
                 .dropDestination(for: String.self){
                     items, location in
-                    for item in items.compactMap({model.findTask(withID: $0)}) {
+                    for item in items.compactMap({model.findTask(withUuidString: $0)}) {
                         model.move(task: item, to: .open)
                     }
                     return true

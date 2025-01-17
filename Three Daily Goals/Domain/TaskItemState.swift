@@ -89,11 +89,11 @@ extension TaskItemState{
     }
     var subHeaders: [ListHeader] {
         switch self {
-            case .open : return defaultListHeaders
-            case .closed: return defaultListHeaders.reversed()
-            case .dead: return defaultListHeaders.reversed()
-            case .priority: return [all]
-            case .pendingResponse: return defaultListHeaders
+        case .open : return ListHeader.defaultListHeaders
+        case .closed: return ListHeader.defaultListHeaders.reversed()
+        case .dead: return ListHeader.defaultListHeaders.reversed()
+        case .priority: return [ListHeader.all]
+        case .pendingResponse: return ListHeader.defaultListHeaders
         }
     }
 }

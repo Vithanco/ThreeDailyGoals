@@ -40,6 +40,7 @@ final class TestTaskItems: XCTestCase {
         return result
     }
     
+    @MainActor
     func testListSorting() throws {
         XCTAssertNotEqual(TaskItemState.open.subHeaders, TaskItemState.closed.subHeaders)
         let dummyM = dummyViewModel(loader: {return self.loader(whichList: .open)})
@@ -49,6 +50,7 @@ final class TestTaskItems: XCTestCase {
         XCTAssertEqual(Array(partialLists.joined()), itemList)
     }
     
+    @MainActor
     func testEquality() throws {
         let sameDate = Date.now
         let a = TaskItem(title: "same",details: "same",changedDate: sameDate)
@@ -61,6 +63,7 @@ final class TestTaskItems: XCTestCase {
         XCTAssertEqual(a,c)
     }
     
+    @MainActor
     func testTouch() throws {
         let store = TestPreferences()
         let pref = CloudPreferences(store: store)
@@ -75,7 +78,7 @@ final class TestTaskItems: XCTestCase {
         XCTAssert(task.changed > getDate(daysPrior: 1))
     }
     
-    
+    @MainActor
     func testTouch2() throws {
         let store = TestPreferences()
         let pref = CloudPreferences(store: store)

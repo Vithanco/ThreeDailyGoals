@@ -4,136 +4,133 @@
 //
 //  Created by Klaus Kneupner on 20/05/2024.
 //
-
-import XCTest
+import Foundation
+import Testing
 @testable import Three_Daily_Goals
 
-final class TestReview: XCTestCase {
+@Suite
+@MainActor
+struct TestReview {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
 
     func testNoStreak() throws {
         let store = TestPreferences()
         let pref = CloudPreferences(store: store)
         let model = dummyViewModel( preferences:  pref)
         
-        XCTAssertEqual(pref.currentReviewInterval,getReviewInterval())
+        #expect(pref.currentReviewInterval == getReviewInterval())
         
         pref.currentReviewInterval = DateInterval(start: getDate(daysPrior: 2), duration: Seconds.eightHours)
-        XCTAssertFalse(pref.currentReviewInterval.contains(Date.now))
+        #expect(!pref.currentReviewInterval.contains(Date.now))
         
         model.reviewNow()
-        XCTAssert(model.stateOfReview == .inform)
+        #expect(model.stateOfReview == .inform)
         model.moveStateForward()
-        XCTAssertEqual(model.list(which: .priority).count, 1)
-        XCTAssert(model.stateOfReview == .currentPriorities)
+        #expect(model.list(which: .priority).count == 1)
+        #expect(model.stateOfReview == .currentPriorities)
         model.moveStateForward()
-        XCTAssertEqual(model.list(which: .priority).count, 0)
-        XCTAssertEqual(model.stateOfReview, .pending)
+        #expect(model.list(which: .priority).count == 0)
+        #expect(model.stateOfReview == .pending)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview,.dueDate)
+        #expect(model.stateOfReview == .dueDate)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .review)
+        #expect(model.stateOfReview == .review)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .inform)
-        XCTAssertEqual(pref.daysOfReview, 1)
+        #expect(model.stateOfReview == .inform)
+        #expect(pref.daysOfReview == 1)
         for t in model.items {
             t.dueDate = nil
         }
-        XCTAssertTrue(model.dueDateSoon.isEmpty)
+        #expect(model.dueDateSoon.isEmpty)
         
-        XCTAssertFalse(model.showReviewDialog)
+        #expect(!model.showReviewDialog)
         model.reviewNow()
         
-        XCTAssertTrue(model.showReviewDialog)
-        XCTAssert(model.stateOfReview == .inform)
+        #expect(model.showReviewDialog)
+        #expect(model.stateOfReview == .inform)
         
-        XCTAssertTrue(model.dueDateSoon.isEmpty)
-        XCTAssertEqual(model.list(which: .priority).count, 1)
-        model.moveStateForward()
-        
-        XCTAssertTrue(model.dueDateSoon.isEmpty)
-        XCTAssert(model.stateOfReview == .currentPriorities)
+        #expect(model.dueDateSoon.isEmpty)
+        #expect(model.list(which: .priority).count == 1)
         model.moveStateForward()
         
-        XCTAssertTrue(model.dueDateSoon.isEmpty)
-        XCTAssertEqual(model.stateOfReview, .pending)
-        XCTAssertTrue(model.dueDateSoon.isEmpty)
+        #expect(model.dueDateSoon.isEmpty)
+        #expect(model.stateOfReview == .currentPriorities)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .review)
+        
+        #expect(model.dueDateSoon.isEmpty)
+        #expect(model.stateOfReview == .pending)
+        #expect(model.dueDateSoon.isEmpty)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .inform)
-        XCTAssertEqual(pref.daysOfReview, 1)
-        XCTAssertFalse(model.showReviewDialog)
+        #expect(model.stateOfReview == .review)
+        model.moveStateForward()
+        #expect(model.stateOfReview == .inform)
+        #expect(pref.daysOfReview == 1)
+        #expect(model.showReviewDialog)
         
         model.reviewNow()
-        XCTAssertTrue(model.showReviewDialog)
-        XCTAssert(model.stateOfReview == .inform)
-        XCTAssertEqual(model.list(which: .priority).count, 0)
+        #expect(model.showReviewDialog)
+        #expect(model.stateOfReview == .inform)
+        #expect(model.list(which: .priority).count == 0)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .pending)
+        #expect(model.stateOfReview == .pending)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .review)
+        #expect(model.stateOfReview == .review)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .inform)
-        XCTAssertEqual(pref.daysOfReview, 1)
+        #expect(model.stateOfReview == .inform)
+        #expect(pref.daysOfReview == 1)
     }
     
+    @MainActor
     func testIncreaseStreak() throws {
         let model = dummyViewModel()
         let pref = model.preferences
         
-        XCTAssertEqual(pref.daysOfReview, 42)
-        XCTAssertEqual(pref.currentReviewInterval,getReviewInterval())
+        #expect(pref.daysOfReview == 42)
+        #expect(pref.currentReviewInterval == getReviewInterval())
         pref.lastReview = getDate(daysPrior: 1)
         
         model.reviewNow()
-        XCTAssert(model.stateOfReview == .inform)
+        #expect(model.stateOfReview == .inform)
         model.moveStateForward()
-        XCTAssert(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfReview == .currentPriorities)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .pending)
+        #expect(model.stateOfReview == .pending)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview,.dueDate)
+        #expect(model.stateOfReview == .dueDate)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .review)
+        #expect(model.stateOfReview == .review)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .inform)
-        XCTAssertEqual(pref.daysOfReview, 43)
+        #expect(model.stateOfReview == .inform)
+        #expect(pref.daysOfReview == 43)
         
         model.reviewNow()
-        XCTAssert(model.stateOfReview == .inform)
+        #expect(model.stateOfReview == .inform)
         model.moveStateForward()
-        XCTAssert(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfReview == .currentPriorities)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .pending)
+        #expect(model.stateOfReview == .pending)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview,.dueDate)
+        #expect(model.stateOfReview == .dueDate)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .review)
+        #expect(model.stateOfReview == .review)
         model.moveStateForward()
-        XCTAssertEqual(model.stateOfReview, .inform)
-        XCTAssertEqual(pref.daysOfReview, 43)
+        #expect(model.stateOfReview == .inform)
+        #expect(pref.daysOfReview == 43)
     }
     
+    @MainActor
     func testReviewInterval() throws {
         let model = dummyViewModel()
         let pref = model.preferences
         
         pref.currentReviewInterval = DateInterval(start: m24, end: now)
         pref.lastReview = m15
-        XCTAssertTrue(model.didLastReviewHappenInCurrentReviewInterval())
+        #expect(model.didLastReviewHappenInCurrentReviewInterval())
         
         
         pref.lastReview = m25
-        XCTAssertFalse(model.didLastReviewHappenInCurrentReviewInterval())
-        XCTAssertFalse(pref.lastReview.isToday)
+        #expect(!model.didLastReviewHappenInCurrentReviewInterval())
+        #expect(!pref.lastReview.isToday)
         
     }
     
@@ -143,22 +140,25 @@ final class TestReview: XCTestCase {
     let m25: Date = "2024-06-01T02:48:00Z"
     
     
+    @MainActor
     func testStreak() throws {
         let model = dummyViewModel()
         let pref = model.preferences
         
         pref.lastReview = m24
         pref.currentReviewInterval = getReviewInterval(forDate: m24)
-        XCTAssertTrue (pref.didReviewToday)
+        #expect (pref.didReviewToday)
         
         pref.currentReviewInterval = getReviewInterval()
-        XCTAssertFalse (pref.didReviewToday)
+        #expect (!pref.didReviewToday)
         
     }
 
 }
 
-extension Date: ExpressibleByStringLiteral {
+extension Date: @retroactive ExpressibleByExtendedGraphemeClusterLiteral {}
+extension Date: @retroactive ExpressibleByUnicodeScalarLiteral {}
+extension Date: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         let dateFormatter = ISO8601DateFormatter()
         guard let date = dateFormatter.date(from: value) else {
