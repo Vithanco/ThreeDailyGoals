@@ -162,11 +162,16 @@ extension TaskManagerViewModel {
         
         showReviewDialog = false
         timer.setTimer(forWhen: time ){
-            if self.showReviewDialog {
-                return
+            
+            Task {
+                do {
+                    if await self.showReviewDialog {
+                        return
+                    }
+                    await self.reviewNow()
+                    await self.setupReviewNotification()
+                }
             }
-            self.reviewNow()
-            self.setupReviewNotification()
         }
     }
     

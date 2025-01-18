@@ -12,6 +12,10 @@ import Foundation
 let stdOnlyDateFormat = Date.FormatStyle(date: .numeric, time: .none)
 let stdOnlyTimeFormat = Date.FormatStyle(date: .none, time: .shortened)
 let stdDateTimeFormat = Date.FormatStyle(date: .numeric, time: .shortened)
+
+extension RelativeDateTimeFormatter: @unchecked Sendable {
+    
+}
 let timeAgoFormatter = {
     let result = RelativeDateTimeFormatter()
     result.unitsStyle = .full

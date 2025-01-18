@@ -9,9 +9,12 @@ import Foundation
 import UserNotifications
 
 let id = "3dg.dailyReview"
+
+extension PushNotificationDelegate: @unchecked Sendable {}
+
 fileprivate var delegate : PushNotificationDelegate? = nil
 
-class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
     let model: TaskManagerViewModel
     
     init(model: TaskManagerViewModel) {
@@ -33,7 +36,6 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         completionHandler()
     }
 }
-
 
 func scheduleSystemPushNotification(timing: DateComponents, model: TaskManagerViewModel ) {
     let notificationCenter = UNUserNotificationCenter.current()

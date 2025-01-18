@@ -17,7 +17,7 @@ private let logger = Logger(
 
 typealias TaskItem = SchemaLatest.TaskItem
 
-extension TaskItem: Identifiable {
+extension TaskItem: Identifiable, @unchecked Sendable {
     var id: String {
         return uuid.uuidString
     }

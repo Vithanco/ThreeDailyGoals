@@ -23,7 +23,11 @@ private let logger = Logger(
     category: String(describing: Three_Daily_GoalsApp.self)
 )
 
+
+extension EKEventStore: @unchecked Sendable {}
+
 @Observable
+@MainActor
 final class EventManager {
     
     public var events : [TDGEvent] = []
@@ -48,21 +52,22 @@ final class EventManager {
         return eventStore.events(matching: predicate).map({e in TDGEvent(base:e)})
     }
 
-    private func requestCalendarAccess() {
-        Task.init{
-            do {
-                let granted = try await self.eventStore.requestFullAccessToEvents()
-                if granted {
-                    logger.info("Calendar access granted")
-                    state = .granted
-                } else {
-                    logger.warning("Calendar access denied")
-                    state = .denied
-                }
-            } catch {
-                logger.error("Error requesting calendar access: \(error.localizedDescription)")
-                self.state = .error("Error requesting calendar access: \(error.localizedDescription)")
-            }
-        }
-    }
+       private func requestCalendarAccess() {
+           Task { @MainActor in
+               do {
+                   let granted = try await self.eventStore.requestFullAccessToEvents()
+                   if granted {
+                       logger.info("Calendar access granted")
+                       self.state = .granted
+                   } else {
+                       logger.warning("Calendar access denied")
+                       self.state = .denied
+                   }
+               } catch {
+                   let errorMessage = "Error requesting calendar access: \(error.localizedDescription)"
+                   logger.error("\(errorMessage)")
+                   self.state = .error(errorMessage)
+               }
+           }
+       }
 }

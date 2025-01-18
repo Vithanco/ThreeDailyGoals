@@ -44,7 +44,7 @@ enum SchemaV3_2: VersionedSchema {
             self.eventId = nil
         }
         
-        init(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID()) {
+        init(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID(), eventId : String? = nil) {
             self._title = title
             self._details = details
             self.changed = changedDate

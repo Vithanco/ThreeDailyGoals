@@ -14,6 +14,7 @@ import CloudKit
 typealias TaskSelector = ([TaskSection],[TaskItem],TaskItem?) -> Void
 typealias OnSelectItem = (TaskItem) -> Void
 
+@MainActor
 fileprivate var container: ModelContainer? = nil
 
 extension ModelContainer {
@@ -134,6 +135,7 @@ class TestStorage : Storage {
     
 }
 
+@MainActor
 func sharedModelContainer(inMemory: Bool) -> ModelContainer {
     if let result = container, result.isInMemory == inMemory {
         return result

@@ -15,8 +15,7 @@ private let logger = Logger(
 
 typealias OnReviewTimer = @Sendable () -> ()
 
-
-final class ReviewTimer : Sendable{
+final class ReviewTimer : Sendable {
     var timer: Timer? = nil
     
     init() {
@@ -24,15 +23,11 @@ final class ReviewTimer : Sendable{
     }
     
     deinit{
-        if let t = timer {
-            t.invalidate()
-        }
+        timer?.invalidate()
     }
     
     func cancelTimer() {
-        if let t = timer {
-            t.invalidate()
-        }
+        timer?.invalidate()
         timer = nil
     }
     
