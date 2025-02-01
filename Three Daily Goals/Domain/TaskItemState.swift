@@ -73,18 +73,18 @@ extension TaskItemState{
         }
     }
     
-    fileprivate func oldestFirst (a: TaskItem,b: TaskItem) -> Bool {
+    static func oldestFirst (a: TaskItem,b: TaskItem) -> Bool {
         return a.changed < b.changed
     }
     
-    fileprivate func youngestFirst (a: TaskItem,b: TaskItem) -> Bool {
+    static func youngestFirst (a: TaskItem,b: TaskItem) -> Bool {
         return a.changed > b.changed
     }
     
     var sorter: TaskSorter {
         switch self {
-            case .closed, .dead: return youngestFirst
-            case .open, .priority, .pendingResponse: return oldestFirst
+        case .closed, .dead: return TaskItemState.youngestFirst
+        case .open, .priority, .pendingResponse: return TaskItemState.oldestFirst
         }
     }
     var subHeaders: [ListHeader] {

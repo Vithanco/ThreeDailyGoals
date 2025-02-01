@@ -32,7 +32,11 @@ public struct ListHeader: Identifiable, Equatable, Sendable {
     }
     
     func filter(items: [TaskItem]) -> [TaskItem] {
-        return items.filter(filter).sorted(by: items.first!.state.sorter)
+        var sorter : TaskSorter  = TaskItemState.youngestFirst
+        if let first = items.first  {
+            sorter = first.state.sorter
+        }
+        return items.filter(filter).sorted(by:sorter)
     }
     
     static let lhToday = ListHeader(name: "Last 24h", timeFrom: 1, timeTo: 0)

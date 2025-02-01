@@ -33,15 +33,18 @@ struct ListView: View {
         let headers = list.subHeaders
 //        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         VStack {
-            TagEditList(tags: $model.selectedTags,
-                        additionalTags: model.list(which: whichList ?? model.whichList).tags.asArray,
-                        container: .vstack,
-                        horizontalSpacing: 1,
-                        verticalSpacing: 1,
-                        tagView: { text, isSelected in
-                            TagCapsule(text)
-                                .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
-                        }).padding(2).frame(maxHeight: 30)
+            let tags = model.list(which: whichList ?? model.whichList).tags.asArray
+            if !tags.isEmpty {
+                TagEditList(tags: $model.selectedTags,
+                            additionalTags: tags,
+                            container: .vstack,
+                            horizontalSpacing: 1,
+                            verticalSpacing: 1,
+                            tagView: { text, isSelected in
+                    TagCapsule(text)
+                        .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
+                }).background(Color.background).frame(maxHeight: 35)
+            }
 
             SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
                 .frame(minHeight: 145, maxHeight: .infinity)
@@ -63,7 +66,7 @@ struct ListView: View {
                     }
                     return true
                 }
-        }.background(Color.white)
+        }
     }
 }
 

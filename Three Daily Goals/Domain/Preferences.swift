@@ -152,15 +152,15 @@ extension CloudPreferences {
     
     var reviewTime: Date {
         get {
-//            the timing logic needs serious improvement - and some good test cases
+//TODO            the timing logic needs serious improvement - and some good test cases
             let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
             let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
-            let date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinute, second: 0, of: Date())!
-            return date
+           
+            return todayAt(hour: reviewTimeHour, min: reviewTimeMinute)
         }
         set {
-            store.set( Calendar.current.component(.hour, from: newValue), forKey: .reviewTimeHour)
-            store.set(Calendar.current.component(.minute, from: newValue), forKey: .reviewTimeMinute)
+            self.store.set( newValue.hour, forKey: .reviewTimeHour)
+            self.store.set(newValue.min, forKey: .reviewTimeMinute)
         }
     }
     
@@ -278,7 +278,7 @@ class TestPreferences : KeyValueStorage{
     }
     
     func set(_ value: Int, forKey aKey: CloudKey) {
-      //  debugPrint("setting test_\(aKey.rawValue) to \(value)")
+     //   debugPrint("setting test_\(aKey.rawValue) to \(value)")
         inner.set(Int64(value), forKey: "test_" + aKey.rawValue)
     }
     

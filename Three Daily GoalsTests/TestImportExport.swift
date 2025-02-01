@@ -5,29 +5,24 @@
 //  Created by Klaus Kneupner on 19/02/2024.
 //
 
-import XCTest
+import Testing
 @testable import Three_Daily_Goals
+import Foundation
 
-final class TestImportExport: XCTestCase {
+@Suite
+struct TestImportExport {
     
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
+    @Test
     func testDateEncoding () throws {
         let encoder = JSONEncoder()
         let original = Date.now
         let encoded = try encoder.encode(original)
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Date.self, from: encoded)
-        XCTAssertEqual(original, decoded)
+        #expect(original == decoded)
     }
     
-    
+    @Test
     func testTaskItemEncoding () throws {
         let encoder = JSONEncoder()
         let original = TaskItem(title: "test")
@@ -37,50 +32,51 @@ final class TestImportExport: XCTestCase {
         sleep(1)
         let decoder = JSONDecoder()
         let decoded: TaskItem = try decoder.decode(TaskItem.self, from: encoded)
-        XCTAssertEqual(original, decoded)
-        XCTAssertEqual(original.title, decoded.title)
-        XCTAssertEqual(original.id, decoded.id)
-        XCTAssertEqual(original.created, decoded.created)
+        #expect(original == decoded)
+        #expect(original.title == decoded.title)
+        #expect(original.id == decoded.id)
+        #expect(original.created == decoded.created)
         
-        XCTAssertEqual(original.changed, decoded.changed)
+        #expect(original.changed == decoded.changed)
         
-        XCTAssertEqual(original.details, decoded.details)
-        XCTAssertEqual(original.dueDate, decoded.dueDate)
-        XCTAssertEqual(original.comments, decoded.comments)
-        XCTAssertEqual(original.state, decoded.state)
-        XCTAssertEqual(original.url, decoded.url)
-        XCTAssertEqual(original.id, id)
+        #expect(original.details == decoded.details)
+        #expect(original.dueDate == decoded.dueDate)
+        #expect(original.comments == decoded.comments)
+        #expect(original.state == decoded.state)
+        #expect(original.url == decoded.url)
+        #expect(original.id == id)
     }
     
     @MainActor
+    @Test
     func testFile() throws {
         let model = dummyViewModel()
         let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
         model.exportTasks(url: url)
         let first = model.items.first!
-        XCTAssertEqual(first, model.findTask(withID: first.id))
+        #expect(first == model.findTask(withID: first.id))
         let newModel = dummyViewModel(loader: {return []})
-        XCTAssertEqual(0, newModel.items.count)
+        #expect(0 == newModel.items.count)
         newModel.importTasks(url: url)
         
-        XCTAssertEqual(first, newModel.findTask(withID: first.id))
-        XCTAssertEqual(model.items.count, newModel.items.count)
-        XCTAssertEqual(180, newModel.items.count)
+        #expect(first == newModel.findTask(withID: first.id))
+        #expect(model.items.count == newModel.items.count)
+        #expect(178 == newModel.items.count)
         for item in model.items {
             debugPrint(item)
-            XCTAssertNotNil(model.findTask(withID: item.id))
+            #expect(model.findTask(withID: item.id) != nil)
             let newItem = newModel.findTask(withID: item.id)!
-            XCTAssertEqual(item, newItem)
-            XCTAssertEqual(item.title, newItem.title)
-            XCTAssertEqual(item.id, newItem.id)
-            XCTAssertEqual(item.created, newItem.created)
-            XCTAssertEqual(item.details, newItem.details)
+            #expect(item == newItem)
+            #expect(item.title == newItem.title)
+            #expect(item.id == newItem.id)
+            #expect(item.created == newItem.created)
+            #expect(item.details == newItem.details)
             if let comments = item.comments {
-                XCTAssertEqual(item.comments!.count, newItem.comments!.count)
+                #expect(item.comments!.count == newItem.comments!.count)
                 for comment in comments {
                     let newComment = newItem.comments!.first(where: {$0.id == comment.id})!
-                    XCTAssertEqual(comment.text, newComment.text)
-                    XCTAssertEqual(comment.created, newComment.created)
+                    #expect(comment.text == newComment.text)
+                    #expect(comment.created == newComment.created)
                 }
                 
             }

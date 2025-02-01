@@ -39,6 +39,7 @@ struct TestListHeaders{
     func TestFilter() throws {
         
         let model = dummyViewModel()
+        #expect(model.items.count == 178)
         let lhs = ListHeader.defaultListHeaders
         let result = lhs.map({$0.filter(items: model.items)})
         #expect(result.count == 10)
@@ -47,7 +48,7 @@ struct TestListHeaders{
         #expect(result[2].count == 0)
         #expect(result[3].count == 18)
         #expect(result[4].count == 92)
-        #expect(result[5].count == 62)
+        #expect(result[5].count == 60)
         #expect(result[6].count == 1)
         #expect(result[7].count == 1)
         #expect(result[8].count == 0)

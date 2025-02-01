@@ -198,7 +198,7 @@ final class TaskManagerViewModel {
         assert(Set(items.map(\.uuid)).count == items.count, "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
     }
     
-    func fetchData() async {
+    func fetchData() {
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
             let items = try modelContext.fetch(descriptor)
@@ -266,11 +266,11 @@ final class TaskManagerViewModel {
     }
     
     fileprivate func callFetch() {
-        Task {
-            do {
-                await fetchData()
-            }
-        }
+//        Task {
+//            do {
+                fetchData()
+//            }
+//        }
     }
     
     func undo() {

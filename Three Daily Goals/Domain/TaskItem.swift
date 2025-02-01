@@ -178,7 +178,7 @@ extension TaskItem {
     }
     
     var canBeTouched : Bool {
-        return [.pendingResponse, .open, .priority].contains(self.state)
+        return [.pendingResponse, .open, .priority, .dead].contains(self.state)
     }
     
     var canBeDeleted : Bool {

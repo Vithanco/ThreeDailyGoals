@@ -14,7 +14,7 @@ import XCTest
 func ensureExists(text: String, inApp: XCUIApplication) {
     let predicate = NSPredicate(format: "value CONTAINS '\(text)'")
     let elementQuery = inApp.staticTexts.containing(predicate)
-    XCTAssertTrue (elementQuery.count > 0, "couldn't find \(text)")
+    #expect (elementQuery.count > 0, "couldn't find \(text)")
 }
 
 
@@ -36,15 +36,15 @@ func ensureExists(text: String, inApp: XCUIApplication) {
     func testButtons() throws {
         // UI tests must launch the application that they test.
         let app = launchTestApp()
-        XCTAssertTrue(app.buttons["Add Task"] .exists)
-        XCTAssertTrue(app.buttons["Review"] .exists)
+        #expect(app.buttons["Add Task"] .exists)
+        #expect(app.buttons["Review"] .exists)
 #if os(iOS)
-        XCTAssertTrue(app.buttons["Redo"] .exists)
-        XCTAssertTrue(app.buttons["Undo"] .exists)
+        #expect(app.buttons["Redo"] .exists)
+        #expect(app.buttons["Undo"] .exists)
 #endif
 #if os(macOS)
-        XCTAssertTrue(app.menuItems["Redo"].exists)
-        XCTAssertTrue(app.menuItems["Undo"].exists)
+        #expect(app.menuItems["Redo"].exists)
+        #expect(app.menuItems["Undo"].exists)
 #endif
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
@@ -64,7 +64,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
     
     func findFirst(string: String, whereToLook: XCUIElementQuery) -> XCUIElement{
         let list = whereToLook.matching(identifier: string)
-        XCTAssertTrue(list.count > 0, "couldn't find \(string)")
+        #expect(list.count > 0, "couldn't find \(string)")
         return list.element(boundBy: 0)
     }
     
@@ -88,22 +88,22 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         title.click()
         title.clearText()
         title.typeText(testString)
-        // XCTAssertTrue(title.i)
+        // #expect(title.i)
         
         
         // Expect list to be shown
         // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
         let listHeader = app.staticTexts["open_LinkedList"] // Adjust the identifier as needed
-        XCTAssertTrue(listHeader.exists, "List header should be visible")
+        #expect(listHeader.exists, "List header should be visible")
         
         //        // Find first task in list
         //        // This assumes tasks have identifiable accessibility labels or identifiers.
         //        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
-        //        XCTAssertTrue(firstTask.exists, "First task should be found")
+        //        #expect(firstTask.exists, "First task should be found")
         
         // Ensure I can press a close button
         let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
-        XCTAssertTrue(closeButton.exists, "Close button should be found")
+        #expect(closeButton.exists, "Close button should be found")
         closeButton.tap()
         
         // Find and click on "closed_LinkedList"
@@ -126,13 +126,13 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         
         // Find destructive delete button
         let deleteButton = app.buttons["deleteButton"] // Use the actual identifier for your delete button
-        XCTAssertTrue(deleteButton.exists, "Delete button should be found")
+        #expect(deleteButton.exists, "Delete button should be found")
         
         // Press delete
         deleteButton.tap()
         
         // Ensure task is deleted
-        XCTAssertFalse(closedTask.exists, "Task should be deleted")
+        #expect(!closedTask.exists, "Task should be deleted")
 #endif
     }
     
@@ -158,22 +158,22 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         title.tap()
         title.clearText()
         title.typeText(testString)
-        // XCTAssertTrue(title.i)
+        // #expect(title.i)
         
         
         // Expect list to be shown
         // Ensure app.staticTexts["open_LinkedList"] exists; it's the header to the list
         let listHeader = app.staticTexts["open_LinkedList"] // Adjust the identifier as needed
-        XCTAssertTrue(listHeader.exists, "List header should be visible")
+        #expect(listHeader.exists, "List header should be visible")
         
         //        // Find first task in list
         //        // This assumes tasks have identifiable accessibility labels or identifiers.
         //        let firstTask = app.staticTexts["firstTaskIdentifier"] // Use actual identifier for the first task
-        //        XCTAssertTrue(firstTask.exists, "First task should be found")
+        //        #expect(firstTask.exists, "First task should be found")
         
         // Ensure I can press a close button
         let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
-        XCTAssertTrue(closeButton.exists, "Close button should be found")
+        #expect(closeButton.exists, "Close button should be found")
         closeButton.tap()
         
         // Find and click on "closed_LinkedList"
@@ -196,13 +196,13 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         
         // Find destructive delete button
         let deleteButton = app.buttons["deleteButton"] // Use the actual identifier for your delete button
-        XCTAssertTrue(deleteButton.exists, "Delete button should be found")
+        #expect(deleteButton.exists, "Delete button should be found")
         
         // Press delete
         deleteButton.tap()
         
         // Ensure task is deleted
-        XCTAssertFalse(closedTask.exists, "Task should be deleted")
+        #expect(!closedTask.exists, "Task should be deleted")
 #endif
     }
     
@@ -212,7 +212,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         //
         //        let sut = TaskManagerViewModel(modelContext: container.mainContext)
         //
-        //        XCTAssertEqual(sut.items.count, 0, "There should be 0 movies when the app is first launched.")
+        //        #expect(sut.items.count, 0, "There should be 0 movies when the app is first launched.")
     }
     
     func testLaunchPerformance() throws {

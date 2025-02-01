@@ -13,6 +13,14 @@ let stdOnlyDateFormat = Date.FormatStyle(date: .numeric, time: .none)
 let stdOnlyTimeFormat = Date.FormatStyle(date: .none, time: .shortened)
 let stdDateTimeFormat = Date.FormatStyle(date: .numeric, time: .shortened)
 
+let cal = getCal()
+
+func getCal() -> Calendar {
+    var cal = Calendar.current
+    cal.timeZone = .current
+    return cal
+}
+
 extension RelativeDateTimeFormatter: @unchecked Sendable {
     
 }
@@ -66,7 +74,7 @@ func addADay(_ result: Date) -> Date {
     return Calendar.current.date(byAdding: .day, value: 1, to: result) ?? Date.now
 }
 
-func todayAt(hour: Int, min: Int) -> Date {
+public func todayAt(hour: Int, min: Int) -> Date {
     var h = hour
     if hour < 0 {
         h = 0
@@ -79,7 +87,8 @@ func todayAt(hour: Int, min: Int) -> Date {
     } else if min > 59 {
         m = 59
     }
-    let calendar = Calendar.current
+    var calendar = Calendar.current
+    calendar.timeZone = TimeZone.current
     
     var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date.now)
     
@@ -134,5 +143,17 @@ extension Date {
     
     var timeRemaining: String {
         return timeAgoFormatter.string(for: endOfDay) ?? ""
+    }
+    
+    var hour: Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        return calendar.component(.hour, from: self)
+    }
+    
+    var min: Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+        return calendar.component(.minute, from: self)
     }
 }

@@ -10,10 +10,9 @@ import Logging
 
 private let logger = Logger(label: "com.vithanco.array")
 
-
-extension Array where Element: Equatable{
-    public static func - (left: Array<Element>, right: Array<Element>) -> Array<Element> {
-        var result = Array<Element>()
+public extension Array where Element: Equatable {
+    static func - (left: [Element], right: [Element]) -> [Element] {
+        var result = [Element]()
         for ele in left {
             if !right.contains(ele) {
                 result.append(ele)
@@ -21,38 +20,35 @@ extension Array where Element: Equatable{
         }
         return result
     }
-//    
+//
 //    public static func - (left: Array<Element>, right: Optional<Array<Element>>) -> Array<Element> {
 //        let right = right ?? []
 //        return left - right
 //    }
-//        
+//
 }
-
-
-
 
 public extension Array where Element: Equatable {
     // Remove first collection element that is equal to the given `object`:
     mutating func removeObject(_ object: Iterator.Element) {
-        if let index = self.firstIndex(of: object) {
-            self.remove(at: index)
+        if let index = firstIndex(of: object) {
+            remove(at: index)
         }
     }
-    
+
     func splitAndCombine(makeFirst: Element) -> [Element] {
-        guard let i = self.firstIndex(of: makeFirst) else {
+        guard let i = firstIndex(of: makeFirst) else {
             logger.logThis(.error, "couldn't split the array properly")
             return self
         }
-        var first = Array(self[i..<self.count])
+        var first = Array(self[i..<count])
         let second = Array(self[0..<i])
         first.append(contentsOf: second)
         return first
     }
 
     var uniqueElements: [Element] {
-        return self.reduce(into: []) {
+        return reduce(into: []) {
             uniqueElements, element in
 
             if !uniqueElements.contains(element) {
@@ -60,8 +56,9 @@ public extension Array where Element: Equatable {
             }
         }
     }
+
     mutating func toggle(_ object: Element) {
-        if self.contains(object) {
+        if contains(object) {
             removeObject(object)
             return
         }
@@ -73,7 +70,13 @@ extension Sequence {
     func chunked(into size: Int) -> [[Element]] {
         let array = Array(self)
         return stride(from: 0, to: array.count, by: size).map {
-            Array(array[$0 ..< Swift.min($0 + size, array.count)])
+            Array(array[$0..<Swift.min($0 + size, array.count)])
+        }
+    }
+
+    func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Element] {
+        return sorted { a, b in
+            a[keyPath: keyPath] < b[keyPath: keyPath]
         }
     }
 }
@@ -85,7 +88,6 @@ extension Sequence where Element: Hashable {
 }
 
 extension Array {
-
     func first() -> Element? {
         if isEmpty {
             return nil
@@ -115,34 +117,29 @@ extension Array {
     }
 }
 
-public protocol OptionalArray {
-}
+public protocol OptionalArray {}
 
-extension Array: OptionalArray {
-}
+extension Array: OptionalArray {}
 
 // inspired from https://stackoverflow.com/questions/25738817/removing-duplicate-elements-from-an-array-in-swift
 extension Sequence where Iterator.Element: Hashable {
-
- /// only unique elements, but doesn't respect order
+    /// only unique elements, but doesn't respect order
     func uniqueItemsSet() -> Set<Iterator.Element> {
-      return Set<Iterator.Element>(self)
+        return Set<Iterator.Element>(self)
     }
 
-  func uniqueItemsArray() -> [Iterator.Element] {
-    return Array(self.uniqueItemsSet())
-  }
+    func uniqueItemsArray() -> [Iterator.Element] {
+        return Array(uniqueItemsSet())
+    }
 
-/// only unique elements, but keep order
-  func uniqueItemsArrayMaintainedOrder() -> [Iterator.Element] {
-    return reduce([Iterator.Element]()) { $0.contains($1) ? $0 : $0 + [$1] }
-  }
+    /// only unique elements, but keep order
+    func uniqueItemsArrayMaintainedOrder() -> [Iterator.Element] {
+        return reduce([Iterator.Element]()) { $0.contains($1) ? $0 : $0 + [$1] }
+    }
 }
 
-
-internal extension Set {
+extension Set {
     var asArray: [Element] {
         return Array(self)
     }
 }
-

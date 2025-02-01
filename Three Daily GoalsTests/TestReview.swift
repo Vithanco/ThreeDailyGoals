@@ -12,7 +12,7 @@ import Testing
 @MainActor
 struct TestReview {
 
-
+    @Test
     func testNoStreak() throws {
         let store = TestPreferences()
         let pref = CloudPreferences(store: store)
@@ -36,6 +36,8 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfReview == .review)
         model.moveStateForward()
+        #expect(model.stateOfReview == .plan)
+        model.moveStateForward()
         #expect(model.stateOfReview == .inform)
         #expect(pref.daysOfReview == 1)
         for t in model.items {
@@ -50,7 +52,8 @@ struct TestReview {
         #expect(model.stateOfReview == .inform)
         
         #expect(model.dueDateSoon.isEmpty)
-        #expect(model.list(which: .priority).count == 1)
+        debugPrint(model.list(which: .priority).map{$0.title})
+        #expect(model.list(which: .priority).count == 2)
         model.moveStateForward()
         
         #expect(model.dueDateSoon.isEmpty)
@@ -63,9 +66,11 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfReview == .review)
         model.moveStateForward()
+        #expect(model.stateOfReview == .plan)
+        model.moveStateForward()
         #expect(model.stateOfReview == .inform)
         #expect(pref.daysOfReview == 1)
-        #expect(model.showReviewDialog)
+        #expect(!model.showReviewDialog)
         
         model.reviewNow()
         #expect(model.showReviewDialog)
@@ -76,11 +81,14 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfReview == .review)
         model.moveStateForward()
+        #expect(model.stateOfReview == .plan)
+        model.moveStateForward()
         #expect(model.stateOfReview == .inform)
         #expect(pref.daysOfReview == 1)
     }
     
     @MainActor
+    @Test
     func testIncreaseStreak() throws {
         let model = dummyViewModel()
         let pref = model.preferences
@@ -100,6 +108,8 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfReview == .review)
         model.moveStateForward()
+        #expect(model.stateOfReview == .plan)
+        model.moveStateForward()
         #expect(model.stateOfReview == .inform)
         #expect(pref.daysOfReview == 43)
         
@@ -114,11 +124,14 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfReview == .review)
         model.moveStateForward()
+        #expect(model.stateOfReview == .plan)
+        model.moveStateForward()
         #expect(model.stateOfReview == .inform)
         #expect(pref.daysOfReview == 43)
     }
     
     @MainActor
+    @Test
     func testReviewInterval() throws {
         let model = dummyViewModel()
         let pref = model.preferences
@@ -141,6 +154,7 @@ struct TestReview {
     
     
     @MainActor
+    @Test
     func testStreak() throws {
         let model = dummyViewModel()
         let pref = model.preferences

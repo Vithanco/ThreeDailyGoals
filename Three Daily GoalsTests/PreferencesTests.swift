@@ -5,66 +5,65 @@
 //  Created by Klaus Kneupner on 30/01/2024.
 //
 
-import XCTest
+import Testing
 @testable import Three_Daily_Goals
+import Foundation
 
+@Suite
+struct PreferencesTests {
 
-
-final class PreferencesTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+    @Test
     func testDates() throws {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester )
-        var date = Calendar.current.date(from: DateComponents(hour: 23, minute: 59))!
+        var date = todayAt(hour: 23, min: 59)
+        debugPrint("Date is : \(date.formatted())")
+        #expect(Calendar.current.component(.second, from: date) == 0)
+        #expect(Calendar.current.component(.minute, from: date) == 59)
+        #expect(Calendar.current.component(.hour, from: date) == 23)
+        
         preferences.reviewTime = date;
-        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"), 23)
-        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),59)
+        #expect(preferences.reviewTime == date)
+        #expect(tester.inner.longLong(forKey: "test_reviewTimeHour") == 23)
+        #expect(tester.inner.longLong(forKey: "test_reviewTimeMinute") == 59)
         var newDate = preferences.reviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
-        XCTAssertTrue(newDate > Date.now)
-        XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        XCTAssertEqual(23, Calendar.current.component(.hour, from: newDate))
-        XCTAssertEqual(59, Calendar.current.component(.minute, from: newDate))
-        XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(newDate > Date.now)
+        #expect(newDate != Date.today)
+        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(23 == newDate.hour)
+        #expect(59 == newDate.min)
+        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
         
-        date = Calendar.current.date(from: DateComponents(hour: 0, minute: 1))!
+        date = todayAt(hour: 0, min: 1)!
         preferences.reviewTime = date;
-        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeHour"),0)
-        XCTAssertEqual(tester.inner.longLong(forKey: "test_reviewTimeMinute"),1)
+        #expect(tester.inner.longLong(forKey: "test_reviewTimeHour") == 0)
+        #expect(tester.inner.longLong(forKey: "test_reviewTimeMinute") == 1)
         newDate = preferences.nextReviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
-        XCTAssertTrue(newDate > Date.now)
-        XCTAssertTrue(preferences.reviewTime < Date.now)
-        XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        XCTAssertEqual(0, Calendar.current.component(.hour, from: newDate))
-        XCTAssertEqual(1, Calendar.current.component(.minute, from: newDate))
-        XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(newDate > Date.now)
+        #expect(preferences.reviewTime < Date.now)
+        #expect(newDate != Date.today)
+        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(0 == Calendar.current.component(.hour, from: newDate))
+        #expect(1 == Calendar.current.component(.minute, from: newDate))
+        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
         
         date = Date.now
         preferences.reviewTime = date;
         newDate = preferences.nextReviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
-        XCTAssertTrue(newDate > Date.now)
-        XCTAssertNotEqual(newDate, Date.today)
-        XCTAssertTrue (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        XCTAssertTrue(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(newDate > Date.now)
+        #expect(newDate != Date.today)
+        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
         
         var dateInterval = DateInterval(start:  Calendar.current.date(from: DateComponents(hour: 13, minute: 13))!, duration: Seconds.eightHours)
         preferences.currentReviewInterval = dateInterval
         
         var returned = preferences.currentReviewInterval
-        XCTAssertEqual(dateInterval.start, returned.start)
-        XCTAssertEqual(dateInterval.end, returned.end)
+        #expect(dateInterval.start == returned.start)
+        #expect(dateInterval.end == returned.end)
     }
 
     
