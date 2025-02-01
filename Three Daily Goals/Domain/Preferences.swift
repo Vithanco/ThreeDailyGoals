@@ -165,7 +165,7 @@ extension CloudPreferences {
     }
     
     var reviewTimeComponents: DateComponents {
-        return DateComponents(calendar: Calendar.current, hour:  self.store.int(forKey: .reviewTimeHour), minute: self.store.int(forKey: .reviewTimeMinute))
+        return DateComponents(calendar: getCal(), hour:  self.store.int(forKey: .reviewTimeHour), minute: self.store.int(forKey: .reviewTimeMinute))
     }
                               
     var accentColor: Color {
@@ -269,25 +269,24 @@ extension CloudPreferences {
 
 class TestPreferences : KeyValueStorage{
     
-    var inner = NSUbiquitousKeyValueStore.default
+    var values : [String : String] = [:]
     
     func int(forKey aKey: CloudKey) -> Int {
-        let result = Int(inner.longLong(forKey: "test_" + aKey.rawValue))
+        return Int(values[aKey.rawValue] ?? "0") ?? 0
       //  debugPrint("reading \(result) for test_\(aKey.rawValue)")
-        return result
     }
     
     func set(_ value: Int, forKey aKey: CloudKey) {
      //   debugPrint("setting test_\(aKey.rawValue) to \(value)")
-        inner.set(Int64(value), forKey: "test_" + aKey.rawValue)
+       values[aKey.rawValue] = String(value)
     }
     
     func string(forKey aKey: CloudKey) -> String? {
-        return inner.string (forKey: "test_" + aKey.rawValue)
+        return values[aKey.rawValue]
     }
     
     func set(_ aString: String?, forKey aKey: CloudKey)  {
-        inner.set(aString, forKey: "test_" + aKey.rawValue)
+        values[aKey.rawValue] = aString
     }
 }
 

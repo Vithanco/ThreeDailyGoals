@@ -18,14 +18,14 @@ struct PreferencesTests {
         let preferences = CloudPreferences(store: tester )
         var date = todayAt(hour: 23, min: 59)
         debugPrint("Date is : \(date.formatted())")
-        #expect(Calendar.current.component(.second, from: date) == 0)
-        #expect(Calendar.current.component(.minute, from: date) == 59)
-        #expect(Calendar.current.component(.hour, from: date) == 23)
+        #expect(getCal().component(.second, from: date) == 0)
+        #expect(getCal().component(.minute, from: date) == 59)
+        #expect(getCal().component(.hour, from: date) == 23)
         
         preferences.reviewTime = date;
         #expect(preferences.reviewTime == date)
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeHour") == 23)
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeMinute") == 59)
+        #expect(tester.int(forKey: .reviewTimeHour) == 23)
+        #expect(tester.int(forKey: .reviewTimeMinute) == 59)
         var newDate = preferences.reviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         #expect(newDate > Date.now)
@@ -33,21 +33,21 @@ struct PreferencesTests {
         #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         #expect(23 == newDate.hour)
         #expect(59 == newDate.min)
-        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
         
-        date = todayAt(hour: 0, min: 1)!
+        date = todayAt(hour: 0, min: 1)
         preferences.reviewTime = date;
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeHour") == 0)
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeMinute") == 1)
+        #expect(tester.int(forKey: .reviewTimeHour) == 0)
+        #expect(tester.int(forKey: .reviewTimeMinute) == 1)
         newDate = preferences.nextReviewTime
         debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
         #expect(newDate > Date.now)
         #expect(preferences.reviewTime < Date.now)
         #expect(newDate != Date.today)
         #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        #expect(0 == Calendar.current.component(.hour, from: newDate))
-        #expect(1 == Calendar.current.component(.minute, from: newDate))
-        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(0 == getCal().component(.hour, from: newDate))
+        #expect(1 == getCal().component(.minute, from: newDate))
+        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
         
         date = Date.now
         preferences.reviewTime = date;
@@ -56,9 +56,9 @@ struct PreferencesTests {
         #expect(newDate > Date.now)
         #expect(newDate != Date.today)
         #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        #expect(newDate.isToday || Calendar.current.isDateInTomorrow(newDate))
+        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
         
-        var dateInterval = DateInterval(start:  Calendar.current.date(from: DateComponents(hour: 13, minute: 13))!, duration: Seconds.eightHours)
+        var dateInterval = DateInterval(start:  getCal().date(from: DateComponents(hour: 13, minute: 13))!, duration: Seconds.eightHours)
         preferences.currentReviewInterval = dateInterval
         
         var returned = preferences.currentReviewInterval

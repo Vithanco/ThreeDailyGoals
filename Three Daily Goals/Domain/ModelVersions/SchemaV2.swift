@@ -128,13 +128,13 @@ enum SchemaV2: VersionedSchema {
         @Transient
         var reviewTime: Date {
             set {
-                reviewTimeHour = Calendar.current.component(.hour, from: newValue)
-                reviewTimeMinutes = Calendar.current.component(.minute, from: newValue)
+                reviewTimeHour = newValue.hour
+                reviewTimeMinutes = newValue.min
             }
             get {
-                var date = Calendar.current.date(bySettingHour: reviewTimeHour, minute: reviewTimeMinutes, second: 0, of: Date())!
+                var date = getCal().date(bySettingHour: reviewTimeHour, minute: reviewTimeMinutes, second: 0, of: Date())!
                 if date < Date.now {
-                    date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+                    date = getCal().date(byAdding: .day, value: 1, to: date)!
                 }
                 return date
             }

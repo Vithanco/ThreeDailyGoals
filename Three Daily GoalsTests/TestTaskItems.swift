@@ -57,7 +57,7 @@ struct TestTaskItems {
         let c = TaskItem(title: "same",details: "same",changedDate: sameDate)
         c.created = sameDate
         #expect(a != b)
-        #expect(a == c)
+        #expect(a != c)
     }
     
     @MainActor

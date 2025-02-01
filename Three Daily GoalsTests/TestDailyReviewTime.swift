@@ -33,8 +33,8 @@ struct TestDailyReviewTime {
         let preferences = CloudPreferences(store: tester )
         let date = Calendar.current.date(from: DateComponents(hour: 15, minute: 08))!
         preferences.reviewTime = date;
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeHour") == 15)
-        #expect(tester.inner.longLong(forKey: "test_reviewTimeMinute") == 08)
+        #expect(tester.int(forKey: CloudKey.reviewTimeHour) == 15)
+        #expect(tester.int(forKey: CloudKey.reviewTimeMinute) == 08)
     
     }
 

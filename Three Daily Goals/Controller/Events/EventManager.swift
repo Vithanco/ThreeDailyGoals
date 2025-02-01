@@ -39,10 +39,10 @@ final class EventManager {
     var endDate : Date
 
     init() {
-        calendar = Calendar.current
-        let today = Calendar.current.startOfDay(for: Date.today)
+        calendar = getCal()
+        let today = getCal().startOfDay(for: Date.today)
         startDate = today
-        endDate = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+        endDate = getCal().date(byAdding: .day, value: 1, to: today)!
         requestCalendarAccess()
         events = fetchEvents()
     }

@@ -13,8 +13,6 @@ let stdOnlyDateFormat = Date.FormatStyle(date: .numeric, time: .none)
 let stdOnlyTimeFormat = Date.FormatStyle(date: .none, time: .shortened)
 let stdDateTimeFormat = Date.FormatStyle(date: .numeric, time: .shortened)
 
-let cal = getCal()
-
 func getCal() -> Calendar {
     var cal = Calendar.current
     cal.timeZone = .current
@@ -32,7 +30,7 @@ let timeAgoFormatter = {
 
 
 public func getReviewInterval (forDate: Date = Date.now) -> DateInterval {
-    let calendar = Calendar.current
+    let calendar = getCal()
     
     let hour = calendar.component(.hour, from: forDate)
     
@@ -57,21 +55,21 @@ public func getReviewInterval (forDate: Date = Date.now) -> DateInterval {
 
 
 func getDate (daysPrior: Int) -> Date {
-    guard let exact = Calendar.current.date(byAdding: .day, value: -1 * daysPrior, to: Date.now) else {
+    guard let exact = getCal().date(byAdding: .day, value: -1 * daysPrior, to: Date.now) else {
         assert(false, "Could not create date \(daysPrior)")
         return Date.now
     }
-    return Calendar.current.startOfDay(for: exact)
+    return getCal().startOfDay(for: exact)
 }
 
 func getDate (inDays: Int) -> Date {
-    let exact = Calendar.current.date(byAdding: .day, value: inDays, to: Date.now) ?? Date.now
-    return Calendar.current.startOfDay(for: exact)
+    let exact = getCal().date(byAdding: .day, value: inDays, to: Date.now) ?? Date.now
+    return getCal().startOfDay(for: exact)
 }
 
 
 func addADay(_ result: Date) -> Date {
-    return Calendar.current.date(byAdding: .day, value: 1, to: result) ?? Date.now
+    return getCal().date(byAdding: .day, value: 1, to: result) ?? Date.now
 }
 
 public func todayAt(hour: Int, min: Int) -> Date {
@@ -87,8 +85,7 @@ public func todayAt(hour: Int, min: Int) -> Date {
     } else if min > 59 {
         m = 59
     }
-    var calendar = Calendar.current
-    calendar.timeZone = TimeZone.current
+    let calendar = getCal()
     
     var components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date.now)
     
@@ -126,7 +123,7 @@ extension Date {
     }
     
     static var today: Date {
-        return Calendar.current.startOfDay(for: now)
+        return getCal().startOfDay(for: now)
     }
     
     func timeAgoDisplay() -> String {
@@ -134,11 +131,11 @@ extension Date {
     }
     
     var startOfDay: Date {
-       return  Calendar.current.startOfDay(for:self)
+       return  getCal().startOfDay(for:self)
     }
     
     var endOfDay: Date {
-        return  Calendar.current.date(byAdding: DateComponents(hour: 23, minute: 59),to: startOfDay) ?? Date.now
+        return  getCal().date(byAdding: DateComponents(hour: 23, minute: 59),to: startOfDay) ?? Date.now
     }
     
     var timeRemaining: String {
@@ -146,14 +143,10 @@ extension Date {
     }
     
     var hour: Int {
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone.current
-        return calendar.component(.hour, from: self)
+        return getCal().component(.hour, from: self)
     }
     
     var min: Int {
-        var calendar = Calendar.current
-        calendar.timeZone = TimeZone.current
-        return calendar.component(.minute, from: self)
+        return getCal().component(.minute, from: self)
     }
 }

@@ -138,7 +138,7 @@ extension TaskManagerViewModel {
     
     var nextRegularReviewTime: Date {
         var result = self.preferences.reviewTime
-        if Calendar.current.isDate(preferences.lastReview, inSameDayAs: result) {
+        if getCal().isDate(preferences.lastReview, inSameDayAs: result) {
             // review happened today, let's do it tomorrow
             result = addADay(result)
         } else { // today's review missing
