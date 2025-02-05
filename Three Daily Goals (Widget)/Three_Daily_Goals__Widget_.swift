@@ -25,7 +25,7 @@ struct Provider: AppIntentTimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
+            let entryDate = getCal().date(byAdding: .hour, value: hourOffset, to: currentDate)!
             let entry = PriorityEntry(date: entryDate, configuration: configuration)
             entries.append(entry)
         }

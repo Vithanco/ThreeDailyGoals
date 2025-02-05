@@ -31,7 +31,7 @@ struct TestDailyReviewTime {
     func testTime() throws {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester )
-        let date = Calendar.current.date(from: DateComponents(hour: 15, minute: 08))!
+        let date = getCal().date(from: DateComponents(hour: 15, minute: 08))!
         preferences.reviewTime = date;
         #expect(tester.int(forKey: CloudKey.reviewTimeHour) == 15)
         #expect(tester.int(forKey: CloudKey.reviewTimeMinute) == 08)

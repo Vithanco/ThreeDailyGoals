@@ -861,7 +861,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 104;
+				CURRENT_PROJECT_VERSION = 105;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -881,7 +881,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.5;
+				MARKETING_VERSION = 1.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -900,7 +900,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 104;
+				CURRENT_PROJECT_VERSION = 105;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -920,7 +920,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.5;
+				MARKETING_VERSION = 1.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1099,7 +1099,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 104;
+				CURRENT_PROJECT_VERSION = 105;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
@@ -1128,7 +1128,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.5;
+				MARKETING_VERSION = 1.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1161,7 +1161,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 104;
+				CURRENT_PROJECT_VERSION = 105;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
@@ -1190,7 +1190,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.5;
+				MARKETING_VERSION = 1.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
