@@ -494,7 +494,7 @@ extension Sequence where Element: TaskItem {
     var tags: Set<String> {
         var result = Set<String>()
         for t in self {
-            result.formUnion(t._tags)
+            result.formUnion(t.allTags)
         }
         return result
     }

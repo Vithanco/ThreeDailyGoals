@@ -1,38 +1,67 @@
+import Foundation
 //
 //  Migrations.swift
 //  Three Daily Goals
 //
 //  Created by Klaus Kneupner on 28/01/2024.
 //
-@preconcurrency import  SwiftData
+@preconcurrency import SwiftData
 
-import Foundation
-
-
-typealias SchemaLatest = SchemaV3_2
+typealias SchemaLatest = SchemaV3_3
 
 enum TDGMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self, SchemaV2_1.self, SchemaV2_2.self, SchemaV3_0.self, SchemaV3_1.self, SchemaV3_2.self]
+        [SchemaV3_1.self, SchemaV3_2.self, SchemaV3_3.self]
     }
-    
-    static let migrateV1toV2 = MigrationStage.lightweight(fromVersion: SchemaV1.self,
-        toVersion: SchemaV2.self)
-    static let migrateV2toV2_1 = MigrationStage.lightweight(fromVersion: SchemaV2.self,
-        toVersion: SchemaV2_1.self)
-    static let migrateV2_1toV2_2 = MigrationStage.lightweight(fromVersion: SchemaV2_1.self,
-        toVersion: SchemaV2_2.self)
-    static let migrateV2_2toV3_0 = MigrationStage.lightweight(fromVersion: SchemaV2_2.self,
-        toVersion: SchemaV3_0.self)
-    static let migrateV3_0toV3_1 = MigrationStage.lightweight(fromVersion: SchemaV3_0.self,
-        toVersion: SchemaV3_1.self)
-    static let migrateV3_1toV3_2 = MigrationStage.lightweight(fromVersion: SchemaV3_1.self,
-                                                              toVersion: SchemaV3_2.self)
-    
+
+    static let migrateV3_1toV3_2 = MigrationStage.lightweight(
+        fromVersion: SchemaV3_1.self,
+        toVersion: SchemaV3_2.self
+    )
+
+    static let migrateV3_2toV3_3 = MigrationStage.custom(
+        fromVersion: SchemaV3_2.self,
+        toVersion: SchemaV3_3.self,
+        willMigrate: { context in
+            let oldTasks = try context.fetch(FetchDescriptor<SchemaV3_2.TaskItem>())
+            
+            for oldTask in oldTasks {
+                
+                guard let jsonData = try? JSONEncoder().encode(oldTask),
+                      let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    fatalError()
+                }
+                print("Migrating TaskItem:\n\(jsonString)")
+                
+                var newTask = SchemaV3_3.TaskItem()  // V3_3 version
+                newTask.allTags = oldTask._tags
+                newTask._details = oldTask._details
+                newTask._title = oldTask._title
+                newTask._url = oldTask._url
+                newTask._state = oldTask._state
+                if let comments = oldTask.comments {
+                    newTask.comments = []
+                    for comment in comments {
+                        let newComment = SchemaV3_3.Comment(old: comment)
+                        newTask.comments?.append(newComment)
+                    }
+                }
+                newTask.eventId = oldTask.eventId
+                newTask.dueDate = oldTask.dueDate
+                newTask.uuid = oldTask.uuid
+                newTask.created = oldTask.created
+                newTask.changed = oldTask.changed
+                newTask.closed = oldTask.closed
+                context.insert(newTask)
+            }
+            try? context.save()
+        },
+        didMigrate: { context in
+            print("Migration from V3.2 to V3.3 completed successfully.")
+        }
+    )
+
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV2_1, migrateV2_1toV2_2, migrateV2_2toV3_0, migrateV3_0toV3_1, migrateV3_1toV3_2]
+        [ migrateV3_1toV3_2, migrateV3_2toV3_3]
     }
 }
-
-
-

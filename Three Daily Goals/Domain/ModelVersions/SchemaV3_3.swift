@@ -1,8 +1,8 @@
 //
-//  SchemaV1.swift
+//  SchemaV3_2.swift
 //  Three Daily Goals
 //
-//  Created by Klaus Kneupner on 28/01/2024.
+//  Created by Klaus Kneupner on 17/01/2025.
 //
 
 import Foundation
@@ -10,16 +10,22 @@ import Foundation
 import SwiftUI
 
 
-enum SchemaV2_2: VersionedSchema {
-    static let versionIdentifier = Schema.Version(2, 2, 0)
+//--------------------------------------------------------------------------------
+// ⚠️⛔️ new version -- please read ⛔️⚠️
+// First, change app to be connected to iCloud development (entitlements File, change com.apple.developer.icloud-container-environment)
+// Then develop, then deploy in CloudKit Console to Production, only then switch back entitlements file to production
+// ⚠️⛔️ everything else leads to issues - I just lost all tags because I did the migration first in production ⛔️⚠️
+//--------------------------------------------------------------------------------
+
+enum SchemaV3_3: VersionedSchema {
+    static let versionIdentifier = Schema.Version(3, 3, 0)
     
     static var models: [any PersistentModel.Type] {
-        [TaskItem.self, Comment.self, Preferences.self]
+        [TaskItem.self, Comment.self]
     }
     
     @Model
-    final class TaskItem : Codable {
-        
+    final class TaskItem: Codable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
@@ -28,84 +34,97 @@ enum SchemaV2_2: VersionedSchema {
         var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
-        @Relationship(deleteRule: .cascade) var comments : [Comment]? = [Comment]()
-        
-        //ignore for now
-        public var important: Bool = false
-        public var urgent: Bool = false
-        @Attribute(.externalStorage)
-        var _imageData: Data? = nil
+        var uuid: UUID = UUID()
+        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [Comment]()
         public var dueDate: Date? = nil
+        var eventId: String? = nil
+        var allTags: [String] = []
         
-        @Transient
-        var _priority: Int = 0
-        
+        //future potential additions:
+        //Eisenhower Matrix (Important, Urgent),
+        //Priority (1-10)
+        //ImageData
         
         init() {
-            
+            self.uuid = UUID()
+            self.eventId = nil
         }
         
-        init(title: String  = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open) {
+        init(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID(), eventId : String? = nil) {
             self._title = title
             self._details = details
             self.changed = changedDate
             self.comments = []
             self._state = state
+            self.allTags = []
+            self.uuid = UUID()
+            self.eventId = nil
         }
         
-        //MARK: Codable
+        // MARK: Codable
+
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, important, urgent,  imageData, dueDate
+            case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid, eventId
         }
         
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
-            self.closed = try container.decode(Date.self, forKey: .closed)
+            self.closed = try? container.decode(Date.self, forKey: .closed)
             self._title = try container.decode(String.self, forKey: .title)
             self._details = try container.decode(String.self, forKey: .details)
             self._state = try container.decode(TaskItemState.self, forKey: .state)
             self._url = try container.decode(String.self, forKey: .url)
-            self.comments = try container.decode(Array<Comment>.self, forKey: .comments)
-            self.important = try container.decode(Bool.self, forKey: .important)
-            self.urgent = try container.decode(Bool.self, forKey: .urgent)
-            self._imageData = try container.decode(Data.self, forKey: .imageData)
-            self.dueDate = try container.decode(Date.self, forKey: .dueDate)
+            self.comments = try container.decode([Comment].self, forKey: .comments)
+            self.dueDate = try? container.decode(Date.self, forKey: .dueDate)
+            self.allTags = try container.decode([String].self, forKey: .tags)
+            if let uuid = try? container.decode(UUID.self, forKey: .uuid) {
+                self.uuid = uuid
+            } else {
+                self.uuid = UUID()
+            }
+            self.eventId = try? container.decode(String?.self, forKey: .eventId)
         }
         
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(created, forKey: .created)
-            try container.encode(changed, forKey: .changed)
+            
             try container.encode(closed, forKey: .closed)
             try container.encode(_title, forKey: .title)
             try container.encode(_details, forKey: .details)
             try container.encode(_state, forKey: .state)
             try container.encode(_url, forKey: .url)
             try container.encode(comments, forKey: .comments)
-            try container.encode(important, forKey: .important)
-            try container.encode(urgent, forKey: .urgent)
-            try container.encode(_imageData, forKey: .imageData)
             try container.encode(dueDate, forKey: .dueDate)
+            try container.encode(created, forKey: .created)
+            try container.encode(changed, forKey: .changed)
+            try container.encode(allTags, forKey: .tags)
+            try container.encode(uuid, forKey: .uuid)
+            try container.encode(eventId, forKey: .eventId)
         }
-        
     }
     
-    
     @Model
-    final class Comment:  Codable{
-        var created: Date  = Date.now
-        var changed: Date  = Date.now
+    final class Comment: Codable {
+        var created: Date = Date.now
+        var changed: Date = Date.now
         var text: String = ""
-        @Relationship(inverse:  \TaskItem.comments) var taskItem: TaskItem? = nil
+        var taskItem: TaskItem? = nil
         
         init(text: String, taskItem: TaskItem) {
             self.text = text
             self.taskItem = taskItem
         }
         
-        //MARK: Codable
+        init(old: SchemaV3_2.Comment) {
+            self.text = old.text
+            self.created = old.created
+            self.changed = old.created
+        }
+        
+        // MARK: Codable
+
         enum CodingKeys: CodingKey {
             case created, changed, text
         }
@@ -124,38 +143,4 @@ enum SchemaV2_2: VersionedSchema {
             try container.encode(text, forKey: .text)
         }
     }
-    
-    
-    @Model
-    final class Preferences {
-        
-        var mainColorString : String = ""
-        var reviewTimeHour: Int = 18
-        var reviewTimeMinutes: Int = 0
-        var lastReview: Date = getDate(daysPrior: 365)
-        
-        @Transient
-        var expiryAfter: Int = 30
-        
-        @Transient
-        var makePriorityNumberOfDaysBeforeDue : Int = 2
-        
-        @Transient
-        var _usePrioritisation: Int = 0
-        
-        @Transient
-        var daysOfReview: Int = 0
-        
-        @Transient
-        var allowedDaysOfSlack : Double = 0.0
-        
-        @Transient
-        var _useCalendar: Int = 0
-        
-        init(){
-            
-        }
-    }
-    
-    
 }

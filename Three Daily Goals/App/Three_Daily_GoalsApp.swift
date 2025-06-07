@@ -17,10 +17,6 @@ struct Three_Daily_GoalsApp: App {
     var container : ModelContainer
     var calendar: EKEventStore
     @State var model: TaskManagerViewModel
-    private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: Three_Daily_GoalsApp.self)
-    )
      
     init() {
         var enableTesting = false

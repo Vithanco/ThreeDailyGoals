@@ -28,14 +28,10 @@ extension TaskItem:Equatable {
     // Deep Equality needed during import
     static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
         let result = lhs.id == rhs.id &&
-        lhs.important == rhs.important &&
         lhs.title == rhs.title &&
         lhs.details == rhs.details &&
-        lhs.urgent == rhs.urgent &&
         lhs.state == rhs.state &&
         lhs.url == rhs.url &&
-        lhs._priority == rhs._priority &&
-        lhs._imageData == rhs._imageData &&
         lhs.changed == rhs.changed &&
         lhs.created == rhs.created &&
         lhs.dueDate == rhs.dueDate 
@@ -135,12 +131,12 @@ extension TaskItem {
     @Transient
     var tags: [String] {
         get {
-            return _tags
+            return allTags
         }
         set {
-            if (newValue != _tags) {
+            if (newValue != allTags) {
                 changed = Date.now
-                _tags = newValue
+                allTags = newValue
             }
         }
     }

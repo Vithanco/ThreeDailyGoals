@@ -6,9 +6,6 @@
 //
 
 import Foundation
-import Logging
-
-private let logger = Logger(label: "com.vithanco.array")
 
 public extension Array where Element: Equatable {
     static func - (left: [Element], right: [Element]) -> [Element] {
@@ -38,7 +35,7 @@ public extension Array where Element: Equatable {
 
     func splitAndCombine(makeFirst: Element) -> [Element] {
         guard let i = firstIndex(of: makeFirst) else {
-            logger.logThis(.error, "couldn't split the array properly")
+            debugPrint( "couldn't split the array properly")
             return self
         }
         var first = Array(self[i..<count])

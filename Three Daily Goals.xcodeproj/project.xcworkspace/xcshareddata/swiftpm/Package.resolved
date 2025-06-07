@@ -1,5 +1,5 @@
 {
-  "originHash" : "793e41dff2902cf3e522d6c838948cbc08f5fbb1f46e3cd14949b89ffaee5de7",
+  "originHash" : "41bd9c6e9294264837d0c54024d849c65eab41f1eadaec558145e8fbb1b79af9",
   "pins" : [
     {
       "identity" : "simplecalendar",
@@ -11,21 +11,12 @@
       }
     },
     {
-      "identity" : "swift-log",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log.git",
-      "state" : {
-        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
-        "version" : "1.6.1"
-      }
-    },
-    {
       "identity" : "tagkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vithanco/tagkit",
       "state" : {
         "branch" : "main",
-        "revision" : "6facbf236515da8171bb8f0089b718c1a2d303be"
+        "revision" : "47577b60cae0c48ee676e87f8a0f1edbd5c2ad24"
       }
     }
   ],

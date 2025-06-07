@@ -8,11 +8,6 @@
 import Foundation
 import os
 
-private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
-    category: String(describing: TaskManagerViewModel.self ) + "_Review"
-)
-
 extension TaskManagerViewModel {
     
     var dueDateSoon: [TaskItem] {
@@ -131,7 +126,7 @@ extension TaskManagerViewModel {
     
     func reviewNow(){
         if !showReviewDialog && stateOfReview == .inform{
-            logger.info("start review \(Date.now)")
+            debugPrint("start review \(Date.now)")
             showReviewDialog = true
         }
     }
@@ -165,11 +160,11 @@ extension TaskManagerViewModel {
             
             Task {
                 do {
-                    if await self.showReviewDialog {
+                    if self.showReviewDialog {
                         return
                     }
-                    await self.reviewNow()
-                    await self.setupReviewNotification()
+                    self.reviewNow()
+                    self.setupReviewNotification()
                 }
             }
         }
