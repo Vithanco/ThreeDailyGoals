@@ -27,7 +27,6 @@ private let logger = Logger(
 extension EKEventStore: @unchecked Sendable {}
 
 @Observable
-@MainActor
 final class EventManager {
     
     public var events : [TDGEvent] = []

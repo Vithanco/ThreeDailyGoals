@@ -14,7 +14,7 @@ extension PushNotificationDelegate: @unchecked Sendable {}
 
 fileprivate var delegate : PushNotificationDelegate? = nil
 
-class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
+class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     let model: TaskManagerViewModel
     
     init(model: TaskManagerViewModel) {
