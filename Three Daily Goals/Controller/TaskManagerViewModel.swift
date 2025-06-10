@@ -52,8 +52,6 @@ extension TagCapsuleStyle.Border: @unchecked Sendable {
 
 extension Notification: @unchecked Sendable {}
 
-@MainActor
-@preconcurrency
 @Observable
 final class TaskManagerViewModel {
     private var notificationTask: Task<Void, Never>? {
