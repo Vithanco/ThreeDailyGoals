@@ -170,9 +170,9 @@ struct TestReview {
 
 }
 
-extension Date: @retroactive ExpressibleByExtendedGraphemeClusterLiteral {}
-extension Date: @retroactive ExpressibleByUnicodeScalarLiteral {}
-extension Date: @retroactive ExpressibleByStringLiteral {
+extension Date: ExpressibleByExtendedGraphemeClusterLiteral {}
+extension Date:  ExpressibleByUnicodeScalarLiteral {}
+extension Date:  ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         let dateFormatter = ISO8601DateFormatter()
         guard let date = dateFormatter.date(from: value) else {

@@ -50,7 +50,7 @@ extension TagCapsuleStyle.Border: @unchecked Sendable {
     )
 }
 
-extension Notification: @unchecked @retroactive Sendable {}
+extension Notification: @unchecked Sendable {}
 
 @MainActor
 @preconcurrency

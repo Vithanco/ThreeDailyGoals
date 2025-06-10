@@ -833,7 +833,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 110;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -874,7 +874,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 110;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1075,7 +1075,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 110;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
@@ -1139,7 +1139,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 110;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Three Daily Goals/Preview Content\"";
 				DEVELOPMENT_TEAM = HN3M9PRAT4;

@@ -13,7 +13,6 @@ import CloudKit
 
 extension TaskManagerViewModel {
     
-    @MainActor
     func toggleButton(item: TaskItem) -> some View {
         return Button(action:  {
             if item.state == .priority{
@@ -26,7 +25,6 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("toggleButton")
     }
     
-    @MainActor
     func closeButton(item: TaskItem) -> some View {
         return Button(action: {
             self.move(task: item, to: .closed)
@@ -35,7 +33,6 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("closeButton").disabled(!item.canBeClosed)
     }
     
-    @MainActor
     func killButton(item: TaskItem) -> some View {
         return Button(action: {
             self.move(task: item, to: .dead)
@@ -44,7 +41,6 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("killButton").disabled(!item.canBeClosed)
     }
     
-    @MainActor
     func openButton(item: TaskItem) -> some View {
         return Button(action: {
             self.move(task: item, to: .open)
@@ -53,7 +49,6 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("openButton").disabled(!item.canBeMovedToOpen)
     }
     
-    @MainActor
     func waitForResponseButton(item: TaskItem) -> some View {
         return Button(action: {
             self.move(task: item, to: .pendingResponse)
@@ -62,7 +57,6 @@ extension TaskManagerViewModel {
         }.accessibilityIdentifier("openButton").disabled(!item.canBeMovedToOpen)
     }
     
-    @MainActor
     func touchButton(item: TaskItem) -> some View {
         return Button(action: {
             item.touch()
@@ -79,8 +73,7 @@ extension TaskManagerViewModel {
             Label("Delete", systemImage: "trash").help("Delete this task for good.")
         }.accessibilityIdentifier("deleteButton")
     }
-    
-    @MainActor
+
     var undoButton: some View {
         Button(action: undo) {
             Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help("undo an action")
@@ -88,7 +81,6 @@ extension TaskManagerViewModel {
         .keyboardShortcut("z", modifiers: [.command])
     }
 
-    @MainActor
     var redoButton: some View {
         Button(action: redo) {
             Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help("redo an action")
@@ -96,7 +88,6 @@ extension TaskManagerViewModel {
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
     
-    @MainActor
     var exportButton: some View {
         Button(action: {
             self.jsonExportDoc = JSONWriteOnlyDoc(content: self.items)
@@ -106,7 +97,6 @@ extension TaskManagerViewModel {
         }).keyboardShortcut("S", modifiers: [.command])
     }
     
-    @MainActor
     var importButton: some View {
         Button(action: {
             self.showImportDialog = true
@@ -115,7 +105,6 @@ extension TaskManagerViewModel {
         })
     }
     
-    @MainActor
     var statsDialog: some View {
         Button(action: {
             var msg = ""
@@ -131,7 +120,6 @@ extension TaskManagerViewModel {
         })
     }
     
-    @MainActor
     var addNewItemButton: some View {
         Button(action: addNewItem) {
             Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskButton")
@@ -139,7 +127,6 @@ extension TaskManagerViewModel {
         .keyboardShortcut("n", modifiers: [.command])
     }
 
-    @MainActor
     var reviewButton: some View {
         Button(action: reviewNow) {
             Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now")
