@@ -31,7 +31,12 @@ struct ReviewPlanDay: View {
         VStack {
             Text("Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
-                SimpleCalendarView(events: $events, selectedDate: $date, selectionAction: .inform(self.onSelection), dateSelectionStyle: .selectedDates([Date.today]))
+                SimpleCalendarView(
+                    events: $events,
+                    selectedDate: $date,
+                    selectionAction: .inform(self.onSelection),
+                    dateSelectionStyle: .selectedDates([Date.today])
+                )
                 SimpleListView(
                     itemList: model.priorityTasks,
                     headers: [ListHeader.all],

@@ -28,7 +28,9 @@ class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCent
         // Determine the user action
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
-                model.reviewNow()
+            Task {
+               await model.reviewNow()
+            }
         default:
             break
         }

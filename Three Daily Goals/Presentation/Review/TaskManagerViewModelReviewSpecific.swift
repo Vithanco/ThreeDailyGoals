@@ -124,6 +124,7 @@ extension TaskManagerViewModel {
         }
     }
     
+    @MainActor
     func reviewNow(){
         if !showReviewDialog && stateOfReview == .inform{
             debugPrint("start review \(Date.now)")
@@ -160,11 +161,11 @@ extension TaskManagerViewModel {
             
             Task {
                 do {
-                    if self.showReviewDialog {
+                    if await self.showReviewDialog {
                         return
                     }
-                    self.reviewNow()
-                    self.setupReviewNotification()
+                    await self.reviewNow()
+                    await self.setupReviewNotification()
                 }
             }
         }

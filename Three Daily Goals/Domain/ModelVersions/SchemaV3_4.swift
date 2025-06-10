@@ -17,15 +17,15 @@ import SwiftUI
 // ⚠️⛔️ everything else leads to issues - I just lost all tags because I did the migration first in production ⛔️⚠️
 //--------------------------------------------------------------------------------
 
-enum SchemaV3_3: VersionedSchema {
-    static let versionIdentifier = Schema.Version(3, 3, 0)
+enum SchemaV3_4: VersionedSchema {
+    static let versionIdentifier = Schema.Version(3, 4, 0)
     
     static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self]
     }
     
     @Model
-    final class TaskItem: Codable {
+    final class TaskItem: Codable, Sendable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
@@ -38,7 +38,8 @@ enum SchemaV3_3: VersionedSchema {
         @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [Comment]()
         public var dueDate: Date? = nil
         var eventId: String? = nil
-        var allTags: [String] = []
+        var allTagsString: String = ""
+        var estimatedMinutes: Int = 0
         
         //future potential additions:
         //Eisenhower Matrix (Important, Urgent),
@@ -50,21 +51,30 @@ enum SchemaV3_3: VersionedSchema {
             self.eventId = nil
         }
         
-        init(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID(), eventId : String? = nil) {
+        init(title: String = emptyTaskTitle,
+             details: String = emptyTaskDetails,
+             changedDate: Date = Date.now,
+             state: TaskItemState = .open,
+             uuid: UUID = UUID(),
+             eventId : String? = nil,
+             estimatedMinutes: Int = 0
+) {
             self._title = title
             self._details = details
             self.changed = changedDate
             self.comments = []
             self._state = state
-            self.allTags = []
+            self._url = ""
+            self.allTagsString  = ""
             self.uuid = uuid
             self.eventId = nil
+            self.estimatedMinutes = estimatedMinutes
         }
         
         // MARK: Codable
 
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid, eventId
+            case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid, eventId, estimatedMinutes
         }
         
         required init(from decoder: Decoder) throws {
@@ -78,13 +88,14 @@ enum SchemaV3_3: VersionedSchema {
             self._url = try container.decode(String.self, forKey: .url)
             self.comments = try container.decode([Comment].self, forKey: .comments)
             self.dueDate = try? container.decode(Date.self, forKey: .dueDate)
-            self.allTags = try container.decode([String].self, forKey: .tags)
+            self.allTagsString = try container.decode(String.self, forKey: .tags)
             if let uuid = try? container.decode(UUID.self, forKey: .uuid) {
                 self.uuid = uuid
             } else {
                 self.uuid = UUID()
             }
             self.eventId = try? container.decode(String?.self, forKey: .eventId)
+            self.estimatedMinutes = try container.decode(Int.self, forKey: .estimatedMinutes)
         }
         
         func encode(to encoder: Encoder) throws {
@@ -99,14 +110,15 @@ enum SchemaV3_3: VersionedSchema {
             try container.encode(dueDate, forKey: .dueDate)
             try container.encode(created, forKey: .created)
             try container.encode(changed, forKey: .changed)
-            try container.encode(allTags, forKey: .tags)
+            try container.encode(allTagsString, forKey: .tags)
             try container.encode(uuid, forKey: .uuid)
             try container.encode(eventId, forKey: .eventId)
+            try container.encode(estimatedMinutes, forKey: .estimatedMinutes)
         }
     }
     
     @Model
-    final class Comment: Codable {
+    final class Comment: Codable , Sendable{
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""
@@ -117,7 +129,7 @@ enum SchemaV3_3: VersionedSchema {
             self.taskItem = taskItem
         }
         
-        init(old: SchemaV3_2.Comment) {
+        init(old: SchemaV3_3.Comment) {
             self.text = old.text
             self.created = old.created
             self.changed = old.created

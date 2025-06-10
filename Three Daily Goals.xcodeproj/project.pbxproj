@@ -21,6 +21,7 @@
 		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
 		7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* ReviewDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
+		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
 		7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
@@ -162,6 +163,7 @@
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
+		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
 		7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModelReviewSpecific.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */,
 				7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */,
 				7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */,
+				7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */,
 			);
 			path = ModelVersions;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
 				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
+				7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */,
 				E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */,
 				7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */,
 				E5A3718E2B2E2B0E00A310BA /* StateView.swift in Sources */,
@@ -849,13 +853,14 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -889,13 +894,14 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1098,7 +1104,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1162,7 +1168,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.4.6;
+				MARKETING_VERSION = 1.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

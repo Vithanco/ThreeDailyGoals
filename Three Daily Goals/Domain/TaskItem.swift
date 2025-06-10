@@ -17,7 +17,7 @@ private let logger = Logger(
 
 typealias TaskItem = SchemaLatest.TaskItem
 
-extension TaskItem: Identifiable, @unchecked Sendable {
+extension TaskItem: Identifiable{
     var id: String {
         return uuid.uuidString
     }
@@ -131,12 +131,12 @@ extension TaskItem {
     @Transient
     var tags: [String] {
         get {
-            return allTags
+            return allTagsString.components(separatedBy: ",")
         }
         set {
-            if (newValue != allTags) {
+            if (newValue != tags) {
                 changed = Date.now
-                allTags = newValue
+                allTagsString = newValue.joined(separator: ",")
             }
         }
     }
