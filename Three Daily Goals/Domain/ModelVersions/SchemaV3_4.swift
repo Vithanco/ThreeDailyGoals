@@ -15,6 +15,7 @@ import SwiftUI
 // First, change app to be connected to iCloud development (entitlements File, change com.apple.developer.icloud-container-environment)
 // Then develop, then deploy in CloudKit Console to Production, only then switch back entitlements file to production
 // ⚠️⛔️ everything else leads to issues - I just lost all tags because I did the migration first in production ⛔️⚠️
+// oh! and don't deploy to production before the app is approved
 //--------------------------------------------------------------------------------
 
 enum SchemaV3_4: VersionedSchema {

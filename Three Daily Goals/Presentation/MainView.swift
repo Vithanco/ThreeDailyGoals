@@ -25,6 +25,7 @@ struct SingleView<Content: View>: View {
 }
 
 struct MainView: View {
+
     @State var model : TaskManagerViewModel
     
     init(model: TaskManagerViewModel){

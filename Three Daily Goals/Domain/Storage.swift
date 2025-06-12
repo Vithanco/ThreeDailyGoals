@@ -35,6 +35,7 @@ protocol Storage {
     var canUndo: Bool { get }
     var canRedo: Bool { get }
     var undoManager: UndoManager? { get }
+    var hasChanges: Bool { get }
 }
 
 extension ModelContext: Storage {
@@ -82,6 +83,10 @@ extension Array where Element == TaskItem {
 }
 
 class TestStorage: Storage {
+    var hasChanges: Bool {
+        return false
+    }
+
     typealias Loader = (() -> [TaskItem])
 
     var loader: Loader

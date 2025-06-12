@@ -152,8 +152,11 @@ final class TaskManagerViewModel {
                     )
                     if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
                         if event.type == .import && event.endDate != nil && event.succeeded {
-                            logger.debug("update my list of Tasks")
-                            fetchData()
+                            if !modelContext.hasChanges {
+                                logger.debug("update my list of Tasks")
+                                fetchData()
+                            }
+
                         }
                     }
                 }
@@ -482,7 +485,6 @@ extension TaskManagerViewModel {
         updateUndoRedoStatus()
     }
 }
-
 
 @MainActor
 func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> TaskManagerViewModel {
