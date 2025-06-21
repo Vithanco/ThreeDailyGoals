@@ -17,6 +17,7 @@ struct NewItemDialog : View {
     
     func addTask() {
         model.addAndSelect(title: title)
+        dismiss()
     }
     
     @State var title: String = emptyTaskTitle
@@ -25,7 +26,11 @@ struct NewItemDialog : View {
             Text("Add a new task").bold().foregroundColor(Color.accentColor)
             LabeledContent{
                 TextField("titleField", text: $title, axis: .vertical).accessibilityIdentifier("titleField")
-                    .bold().frame(idealHeight: 13)
+                    .bold()
+                    .frame(idealHeight: 13)
+                    .onSubmit {
+                        addTask()
+                    }
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
             }.tdgShadow
@@ -34,7 +39,7 @@ struct NewItemDialog : View {
             Button(action: addTask) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskButton")
             }
-        }
+        }.padding(5)
         .frame(maxWidth: 300)
     }
 }

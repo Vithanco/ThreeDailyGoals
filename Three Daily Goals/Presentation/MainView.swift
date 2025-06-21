@@ -50,7 +50,7 @@ struct MainView: View {
         .sheet(isPresented: $model.showSelectDuringImportDialog){
             SelectVersions(choices: model.selectDuringImport, model: model)
         }
-        .confirmationDialog("Add new Task", isPresented: $model.showNewItemNameDialog) {
+        .sheet( isPresented: $model.showNewItemNameDialog) {
             NewItemDialog(model: model)
         }
         .sheet(isPresented: $model.showInfoMessage, content: {Text(model.infoMessage).padding(15)}

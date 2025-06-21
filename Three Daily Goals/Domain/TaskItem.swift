@@ -24,7 +24,6 @@ extension TaskItem: Identifiable{
 }
 
 extension TaskItem:Equatable {
-    
     // Deep Equality needed during import
     static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
         let result = lhs.id == rhs.id &&
@@ -34,7 +33,13 @@ extension TaskItem:Equatable {
         lhs.url == rhs.url &&
         lhs.changed == rhs.changed &&
         lhs.created == rhs.created &&
-        lhs.dueDate == rhs.dueDate 
+        lhs.dueDate == rhs.dueDate &&
+        lhs.eventId == rhs.eventId &&
+        lhs.due == rhs.due &&
+        lhs.closed == rhs.closed &&
+        lhs.allTagsString == rhs.allTagsString &&
+        lhs.uuid == rhs.uuid &&
+        lhs.estimatedMinutes == rhs.estimatedMinutes
 //        (lhs.comments == nil)  == (rhs.comments == nil)
         if !result {
             return false
@@ -56,8 +61,24 @@ extension TaskItem:Equatable {
 //        }
         return true
     }
-
-
+    
+    func updateFrom(_ other: TaskItem) {
+        if other.uuid != self.uuid {
+            logger.error("UUID mismatch during import: \(other.uuid) != \(self.uuid) for  \(self.title) ")
+        }
+        self._title = other._title
+        self._details = other._details
+        self.dueDate = other.dueDate
+        self._url = other._url
+        self.changed = other.changed
+        self.allTagsString = other.allTagsString
+        self.comments = other.comments
+        self.state = other.state
+        self.eventId = other.eventId
+        self.created = other.created
+        self.closed = other.closed
+        self.estimatedMinutes = other.estimatedMinutes
+    }
 }
 
 extension TaskItem {
@@ -131,7 +152,7 @@ extension TaskItem {
     @Transient
     var tags: [String] {
         get {
-            return allTagsString.components(separatedBy: ",")
+            return allTagsString.components(separatedBy: ",").filter({!$0.isEmpty})
         }
         set {
             if (newValue != tags) {

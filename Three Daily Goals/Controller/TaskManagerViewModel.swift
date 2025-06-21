@@ -52,6 +52,7 @@ extension TagCapsuleStyle.Border: @unchecked Sendable {
 
 extension Notification: @unchecked Sendable {}
 
+@MainActor
 @Observable
 final class TaskManagerViewModel {
     private var notificationTask: Task<Void, Never>? {
@@ -154,7 +155,7 @@ final class TaskManagerViewModel {
                         if event.type == .import && event.endDate != nil && event.succeeded {
                             if !modelContext.hasChanges {
                                 logger.debug("update my list of Tasks")
-                                fetchData()
+                                await mergeDataFromCentralStorage()
                             }
 
                         }
@@ -166,9 +167,6 @@ final class TaskManagerViewModel {
         setupReviewNotification()
     }
 
-    deinit {
-        notificationTask?.cancel()
-    }
 
     func addSamples() -> Self {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
@@ -212,12 +210,16 @@ final class TaskManagerViewModel {
         assert(Set(items.map(\.uuid)).count == items.count, "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
     }
 
-    func fetchData() {
+    @MainActor
+    func mergeDataFromCentralStorage() {
+        modelContext.processPendingChanges()
         do {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
             let items = try modelContext.fetch(descriptor)
-            self.items = items
-            logger.info("fetched \(items.count) tasks from central store")
+            let fetchedItems = try modelContext.fetch(descriptor)
+            let ( added, updated) = mergeItems(fetchedItems)
+            
+            logger.info("fetched \(items.count) tasks from central store, added \(added), updated \(updated)")
             for t in lists.keys {
                 lists[t]?.removeAll(keepingCapacity: true)
             }
@@ -233,6 +235,27 @@ final class TaskManagerViewModel {
         } catch {
             print("Fetch failed")
         }
+    }
+    
+    private func mergeItems(_ fetchedItems: [TaskItem])  -> (Int, Int){
+        var itemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+        
+        var addedCount = 0
+        var updatedCount = 0
+        
+        for fetchedItem in fetchedItems {
+            if let existingItem = itemsById[fetchedItem.id] {
+                if fetchedItem.changed > existingItem.changed {
+                    existingItem.updateFrom(fetchedItem)
+                    updatedCount = updatedCount + 1
+                }
+            } else {
+                items.append(fetchedItem)
+                itemsById[fetchedItem.id] = fetchedItem
+                addedCount = addedCount + 1
+            }
+        }
+        return (addedCount, updatedCount)
     }
 
     @discardableResult func addItem(
@@ -289,14 +312,16 @@ final class TaskManagerViewModel {
         return newItem
     }
 
+    @MainActor
     fileprivate func callFetch() {
         //        Task {
         //            do {
-        fetchData()
+        mergeDataFromCentralStorage()
         //            }
         //        }
     }
 
+    @MainActor
     func undo() {
         withAnimation {
             modelContext.processPendingChanges()
@@ -306,6 +331,7 @@ final class TaskManagerViewModel {
         }
     }
 
+    @MainActor
     func redo() {
         withAnimation {
             modelContext.processPendingChanges()
@@ -315,6 +341,7 @@ final class TaskManagerViewModel {
         }
     }
 
+    @MainActor
     func updateUndoRedoStatus() {
         modelContext.processPendingChanges()
         modelContext.processPendingChanges()
@@ -524,6 +551,11 @@ extension Sequence where Element: TaskItem {
         var result = Set<String>()
         for t in self {
             result.formUnion(t.tags)
+        }
+        for t in result {
+            if t.isEmpty {
+                result.remove(t)
+            }
         }
         return result
     }
