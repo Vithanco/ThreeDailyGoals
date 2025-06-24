@@ -127,9 +127,13 @@ extension TaskManagerViewModel {
         .keyboardShortcut("n", modifiers: [.command])
     }
 
-    var reviewButton: some View {
-        Button(action: reviewNow) {
-            Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now")
+    var compassCheckButton: some View {
+        Button(action: compassCheckNow) {
+            Label("Compass Check", systemImage: imgCompassCheck)
+               // .symbolRenderingMode(.palette)
+                .foregroundStyle(.gray,preferences.accentColor )
+                .accessibilityIdentifier("reviewButton").help("Start the Compass Check now")
+
         }
     }
 }

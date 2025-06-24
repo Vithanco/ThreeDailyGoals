@@ -29,7 +29,7 @@ let timeAgoFormatter = {
 }()
 
 
-public func getReviewInterval (forDate: Date = Date.now) -> DateInterval {
+public func getCompassCheckInterval (forDate: Date = Date.now) -> DateInterval {
     let calendar = getCal()
     
     let hour = calendar.component(.hour, from: forDate)
@@ -118,7 +118,7 @@ extension Date {
     }
     
     var beginOfReviewWindow: Date {
-        let inter = getReviewInterval(forDate: self)
+        let inter = getCompassCheckInterval(forDate: self)
         return inter.start
     }
     

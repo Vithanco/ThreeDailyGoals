@@ -41,8 +41,8 @@ struct MainView: View {
             }
         }
         .background(Color.background)
-        .sheet(isPresented: $model.showReviewDialog) {
-            ReviewDialog(model: model)
+        .sheet(isPresented: $model.showCompassCheckDialog) {
+            CompassCheckDialog(model: model)
         }
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)

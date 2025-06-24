@@ -8,7 +8,7 @@
 import SwiftData
 import Foundation
 
-typealias Comment = SchemaLatest.Comment
+public typealias Comment = SchemaLatest.Comment
 
 extension Comment {
     func deleteComment() {
@@ -18,20 +18,19 @@ extension Comment {
 }
 
 extension Comment : Equatable, Comparable {
-    static func < (lhs: Comment, rhs: Comment) -> Bool {
+    public static func < (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.created > rhs.created
     }
     
-    static func == (lhs: Comment, rhs: Comment) -> Bool {
+    public static func == (lhs: Comment, rhs: Comment) -> Bool {
         return lhs.text == rhs.text &&
         lhs.created == rhs.created &&
         lhs.changed == rhs.changed
     }
 }
 
-
 extension Comment: Identifiable {
-    var id: Date {
+    public var id: Date {
         return created
     }
 }

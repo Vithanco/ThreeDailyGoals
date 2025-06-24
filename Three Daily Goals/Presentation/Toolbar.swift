@@ -29,9 +29,9 @@ struct TDGToolBarContent: ToolbarContent {
         }
     }
     
-    private func review() {
+    private func compassCheck() {
         withAnimation {
-            model.reviewNow()
+            model.compassCheckNow()
         }
     }
     
@@ -50,8 +50,8 @@ struct TDGToolBarContent: ToolbarContent {
         }
         
         ToolbarItem {
-            Button(action: review) {
-                Label("Review", systemImage: imgReview).accessibilityIdentifier("reviewButton").help("Start the daily review now.")
+            Button(action: compassCheck) {
+                Label("Compass Check", systemImage: imgCompassCheck).accessibilityIdentifier("reviewButton").help("Start the daily Compass Check now.")
             }
         }
         ToolbarItem {

@@ -35,6 +35,7 @@ private struct ListLabel: View {
             }
             return true}
         .foregroundStyle(model.accentColor)
+        .frame(maxWidth: .infinity)
     }
 }
 

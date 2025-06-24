@@ -10,12 +10,13 @@ import os
 
 private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: ReviewTimer.self)
+        category: String(describing: CompassCheckTimer.self)
     )
 
-typealias OnReviewTimer = @Sendable () -> ()
+typealias OnCompassCheckTimer = @Sendable () -> ()
 
-final class ReviewTimer : Sendable {
+
+final class CompassCheckTimer {
     var timer: Timer? = nil
     
     init() {
@@ -23,7 +24,7 @@ final class ReviewTimer : Sendable {
     }
     
     deinit{
-        timer?.invalidate()
+            timer?.invalidate()
     }
     
     func cancelTimer() {
@@ -31,11 +32,11 @@ final class ReviewTimer : Sendable {
         timer = nil
     }
     
-    func setTimer( forWhen fireAt: Date, onReviewTimer: @escaping OnReviewTimer) {
+    func setTimer( forWhen fireAt: Date, onCompassCheckTimer: @escaping OnCompassCheckTimer) {
         cancelTimer()
         timer = Timer(fire: fireAt, interval: 1, repeats:false) { timer in
-            logger.info("Time for Review")
-            onReviewTimer()
+            logger.info("Time for Compass Check")
+            onCompassCheckTimer()
         }
         if let timer = timer {
             RunLoop.main.add(timer, forMode: .common)

@@ -10,7 +10,7 @@ import Testing
 import Foundation
 
 @Suite
-struct TestDailyReviewTime {
+struct TestDailyCompassCheckTime {
 
     @Test
     func testToday()throws {
@@ -32,9 +32,9 @@ struct TestDailyReviewTime {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester )
         let date = getCal().date(from: DateComponents(hour: 15, minute: 08))!
-        preferences.reviewTime = date;
-        #expect(tester.int(forKey: CloudKey.reviewTimeHour) == 15)
-        #expect(tester.int(forKey: CloudKey.reviewTimeMinute) == 08)
+        preferences.compassCheckTime = date;
+        #expect(tester.int(forKey: CloudKey.compassCheckTimeHour) == 15)
+        #expect(tester.int(forKey: CloudKey.compassCheckTimeMinute) == 08)
     
     }
 

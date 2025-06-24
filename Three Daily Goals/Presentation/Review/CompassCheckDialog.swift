@@ -16,7 +16,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 }
 
 
-struct ReviewDialog: View {
+struct CompassCheckDialog: View {
     
     @Bindable var model: TaskManagerViewModel
     //    @State private var sheetHeight: CGFloat = .zero
@@ -25,9 +25,9 @@ struct ReviewDialog: View {
         VStack {
             
             HStack{
-                Text("Daily Review").font(.title).foregroundStyle(model.accentColor)
+                Text("Daily Compass Check").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
-                Button(role: .cancel, action: model.cancelReview) {
+                Button(role: .cancel, action: model.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
                 Button(action: model.moveStateForward) {
@@ -36,19 +36,19 @@ struct ReviewDialog: View {
             }
             Spacer()
             
-            switch model.stateOfReview {
+            switch model.stateOfCompassCheck {
             case .inform:
-                ReviewInformView(model: model)
+                CompassCheckInformView(model: model)
             case .currentPriorities:
-                ReviewCurrentPriorities(model: model)
+                CompassCheckCurrentPriorities(model: model)
             case .pending:
-                ReviewPendingResponses(model:model)
+                CompassCheckPendingResponses(model:model)
             case .review:
-                ReviewNextPriorities(model: model)
+                CompassCheckNextPriorities(model: model)
             case .dueDate:
-                ReviewDueDate(model: model)
+                CompassCheckDueDate(model: model)
             case .plan:
-                ReviewPlanDay(model: model, date: .today)
+                CompassCheckPlanDay(model: model, date: .today)
             }
             Spacer()
         }.padding(4).frame(minHeight: 350,idealHeight: 600)
@@ -67,6 +67,6 @@ struct ReviewDialog: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .review
-    return ReviewDialog(model: model)
+    model.stateOfCompassCheck = .review
+    return CompassCheckDialog(model: model)
 }

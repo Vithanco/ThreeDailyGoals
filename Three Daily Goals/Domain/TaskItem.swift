@@ -15,35 +15,35 @@ private let logger = Logger(
     category: String(describing: TaskItem.self)
 )
 
-typealias TaskItem = SchemaLatest.TaskItem
+public typealias TaskItem = SchemaLatest.TaskItem
 
 extension TaskItem: Identifiable{
-    var id: String {
+    public var id: String {
         return uuid.uuidString
     }
 }
 
-extension TaskItem:Equatable {
-    // Deep Equality needed during import
-    static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
-        let result = lhs.id == rhs.id &&
-        lhs.title == rhs.title &&
-        lhs.details == rhs.details &&
-        lhs.state == rhs.state &&
-        lhs.url == rhs.url &&
-        lhs.changed == rhs.changed &&
-        lhs.created == rhs.created &&
-        lhs.dueDate == rhs.dueDate &&
-        lhs.eventId == rhs.eventId &&
-        lhs.due == rhs.due &&
-        lhs.closed == rhs.closed &&
-        lhs.allTagsString == rhs.allTagsString &&
-        lhs.uuid == rhs.uuid &&
-        lhs.estimatedMinutes == rhs.estimatedMinutes
+
+// Deep Equality needed during import
+public func deepEqual (_ lhs: TaskItem, _ rhs: TaskItem) -> Bool {
+    let result = lhs.id == rhs.id &&
+    lhs.title == rhs.title &&
+    lhs.details == rhs.details &&
+    lhs.state == rhs.state &&
+    lhs.url == rhs.url &&
+    lhs.changed == rhs.changed &&
+    lhs.created == rhs.created &&
+    lhs.dueDate == rhs.dueDate &&
+    lhs.eventId == rhs.eventId &&
+    lhs.due == rhs.due &&
+    lhs.closed == rhs.closed &&
+    lhs.allTagsString == rhs.allTagsString &&
+    lhs.uuid == rhs.uuid &&
+    lhs.estimatedMinutes == rhs.estimatedMinutes
 //        (lhs.comments == nil)  == (rhs.comments == nil)
-        if !result {
-            return false
-        }
+    if !result {
+        return false
+    }
 //        if var lhsComments = lhs.comments, var rhsComments = rhs.comments {
 //            if lhsComments.count != rhsComments.count {
 //                return false
@@ -59,8 +59,18 @@ extension TaskItem:Equatable {
 //                }
 //            }
 //        }
-        return true
+    return true
+}
+
+extension TaskItem:Equatable {
+    
+    public static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
+        return lhs.uuid == rhs.uuid
     }
+    
+}
+
+extension TaskItem {
     
     func updateFrom(_ other: TaskItem) {
         if other.uuid != self.uuid {
@@ -134,7 +144,7 @@ extension TaskItem {
         set {
             if (newValue != state) {
                 changed = Date.now
-//                addComment(text: "Changed state to: \(newValue)")
+                addComment(text: "Changed state to: \(newValue)")
                 _state = newValue
                 if newValue == .closed {
                     closed = Date.now
@@ -157,9 +167,29 @@ extension TaskItem {
         set {
             if (newValue != tags) {
                 changed = Date.now
-                allTagsString = newValue.joined(separator: ",")
+                allTagsString = newValue.filter({!$0.isEmpty}).joined(separator: ",")
             }
         }
+    }
+    
+    func addTag(_ newTag: String) {
+        var tags = self.tags
+        if !tags.contains(newTag) {
+            tags.append(newTag)
+            changed = Date.now
+            self.tags = tags
+        }
+        assert(tags.contains(newTag))
+    }
+    
+    func removeTag(_ oldTag: String) {
+        var tags = self.tags
+        if tags.contains(oldTag) {
+            tags.removeObject(oldTag)
+            changed = Date.now
+            self.tags = tags
+        }
+        assert(!tags.contains(oldTag))
     }
     
     var isOpen: Bool {
@@ -210,19 +240,19 @@ extension TaskItem {
         return state == .pendingResponse
     }
     
-   @discardableResult func addComment(text: String) -> TaskItem{
-//        if comments == nil {
-//            comments = [Comment]()
-//        }
-//       
-//       let aComment = Comment(text: text, taskItem: self)
-//       if let mc = self.modelContext {
-//           mc.insert(aComment)
-//       }
-//       comments?.append(aComment)
-//       changed = Date.now
-       return self
-   }
+    @discardableResult func addComment(text: String) -> TaskItem{
+        if comments == nil {
+            comments = [Comment]()
+        }
+        
+        let aComment = Comment(text: text, taskItem: self)
+        if let mc = self.modelContext {
+            mc.insert(aComment)
+        }
+        comments?.append(aComment)
+        changed = Date.now
+        return self
+    }
     
     func closeTask() {
         if state != .closed {
@@ -261,7 +291,7 @@ extension TaskItem {
     func touch() {
         if state == .open {
             setChangedDate(.now)
-           // addComment(text: "You 'touched' this task.")
+            addComment(text: "You 'touched' this task.")
         } else {
             reOpenTask()
         }
@@ -279,17 +309,26 @@ extension TaskItem {
         }
     }
 }
+extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
+    
+    public var description: String {
+        return title
+    }
+    public var debugDescription: String {
+        return title
+    }
+}
 
 
 extension TaskItem : Comparable {
-    static func < (lhs: TaskItem, rhs: TaskItem) -> Bool {
+    public static func < (lhs: TaskItem, rhs: TaskItem) -> Bool {
         return lhs.changed < rhs.changed
     }
 }
 
 
 extension TaskItem: Transferable {
-    static var transferRepresentation: some TransferRepresentation {
+    public static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .json)
     }
 }

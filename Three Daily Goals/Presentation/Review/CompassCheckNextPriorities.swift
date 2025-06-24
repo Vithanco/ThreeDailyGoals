@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReviewNextPriorities: View {
+struct CompassCheckNextPriorities: View {
     
     @Bindable var model: TaskManagerViewModel
     
@@ -85,6 +85,6 @@ struct ReviewNextPriorities: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .review
-    return ReviewNextPriorities(model: model)
+    model.stateOfCompassCheck = .review
+    return CompassCheckNextPriorities(model: model)
 }

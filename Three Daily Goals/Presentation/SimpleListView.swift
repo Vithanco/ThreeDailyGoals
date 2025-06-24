@@ -23,6 +23,7 @@ struct SimpleListView: View {
                     //                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
                 }
             }) {
+                Spacer().frame(height: 10)
                 if itemList.isEmpty {
                     Spacer(minLength: 20)
                     Text("(No items found)").foregroundStyle(model.accentColor).frame(maxWidth: .infinity)

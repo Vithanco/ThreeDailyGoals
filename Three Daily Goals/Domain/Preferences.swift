@@ -24,15 +24,15 @@ let cloudDateFormatter : DateFormatter = {
 }()
 
 enum CloudKey : String, CaseIterable {
-    case daysOfReview
+    case daysOfCompassCheck
     case longestStreak
-    case currentReviewIntervalStart
-    case currentReviewIntervalEnd
-    case reviewTimeHour
-    case reviewTimeMinute
+    case currentCompassCheckIntervalStart
+    case currentCompassCheckIntervalEnd
+    case compassCheckTimeHour
+    case compassCheckTimeMinute
     case accentColorString
     case expiryAfter
-    case lastReviewString
+    case lastCompassCheckString
     case priority1
     case priority2
     case priority3
@@ -65,7 +65,7 @@ extension KeyValueStorage {
         if let dateAsString = string(forKey: aKey), let result = cloudDateFormatter.date(from: dateAsString){
             return result
         }
-        set(cloudDateFormatter.string(from: Date.now), forKey: .lastReviewString)
+        set(cloudDateFormatter.string(from: Date.now), forKey: .lastCompassCheckString)
         return Date.now
     }
     
@@ -113,9 +113,9 @@ final class CloudPreferences {
         }
         
         // initiate the store with a proper time
-        if store.string(forKey: .lastReviewString) == nil {
-            store.set(18, forKey: .reviewTimeHour)
-            store.set(00, forKey: .reviewTimeMinute)
+        if store.string(forKey: .lastCompassCheckString) == nil {
+            store.set(18, forKey: .compassCheckTimeHour)
+            store.set(00, forKey: .compassCheckTimeMinute)
         }
     }
     
@@ -129,43 +129,43 @@ final class CloudPreferences {
 }
 
 extension CloudPreferences {
-    var daysOfReview: Int {
+    var daysOfCompassCheck: Int {
         get {
-            return self.store.int(forKey: .daysOfReview)
+            return self.store.int(forKey: .daysOfCompassCheck)
         }
         set {
-            store.set(newValue,forKey: .daysOfReview)
+            store.set(newValue,forKey: .daysOfCompassCheck)
         }
     }
 
-    var nextReviewTime : Date {
-        var result = reviewTime
+    var nextCompassCheckTime : Date {
+        var result = compassCheckTime
         if result < Date.now {
             result = addADay(result)
         }
         return result
     }
         
-    var didReviewToday : Bool {
-        return  currentReviewInterval.contains(lastReview)
+    var didCompassCheckToday : Bool {
+        return  currentCompassCheckInterval.contains(lastCompassCheck)
     }
     
-    var reviewTime: Date {
+    var compassCheckTime: Date {
         get {
 //TODO            the timing logic needs serious improvement - and some good test cases
-            let reviewTimeHour = self.store.int(forKey: .reviewTimeHour)
-            let reviewTimeMinute = self.store.int(forKey: .reviewTimeMinute)
+            let compassCheckTimeHour = self.store.int(forKey: .compassCheckTimeHour)
+            let compassCheckTimeMinute = self.store.int(forKey: .compassCheckTimeMinute)
            
-            return todayAt(hour: reviewTimeHour, min: reviewTimeMinute)
+            return todayAt(hour: compassCheckTimeHour, min: compassCheckTimeMinute)
         }
         set {
-            self.store.set( newValue.hour, forKey: .reviewTimeHour)
-            self.store.set(newValue.min, forKey: .reviewTimeMinute)
+            self.store.set( newValue.hour, forKey: .compassCheckTimeHour)
+            self.store.set(newValue.min, forKey: .compassCheckTimeMinute)
         }
     }
     
-    var reviewTimeComponents: DateComponents {
-        return DateComponents(calendar: getCal(), hour:  self.store.int(forKey: .reviewTimeHour), minute: self.store.int(forKey: .reviewTimeMinute))
+    var compassCheckTimeComponents: DateComponents {
+        return DateComponents(calendar: getCal(), hour:  self.store.int(forKey: .compassCheckTimeHour), minute: self.store.int(forKey: .compassCheckTimeMinute))
     }
                               
     var accentColor: Color {
@@ -216,34 +216,34 @@ extension CloudPreferences {
         return expiryAfter.description
     }
     
-    var lastReview : Date {
+    var lastCompassCheck : Date {
         get {
-            if let dateAsString = store.string(forKey: .lastReviewString), let result = cloudDateFormatter.date(from: dateAsString){
+            if let dateAsString = store.string(forKey: .lastCompassCheckString), let result = cloudDateFormatter.date(from: dateAsString){
                 return result
             }
-            store.set(cloudDateFormatter.string(from: Date.now), forKey: .lastReviewString)
+            store.set(cloudDateFormatter.string(from: Date.now), forKey: .lastCompassCheckString)
             return Date.now
         }
         set {
-            store.set(cloudDateFormatter.string(from: newValue), forKey: .lastReviewString)
+            store.set(cloudDateFormatter.string(from: newValue), forKey: .lastCompassCheckString)
         }
     }
     
-    var currentReviewInterval: DateInterval {
+    var currentCompassCheckInterval: DateInterval {
         get {
-            let start = store.date(forKey: .currentReviewIntervalStart)
-            let end = store.date(forKey: .currentReviewIntervalEnd)
+            let start = store.date(forKey: .currentCompassCheckIntervalStart)
+            let end = store.date(forKey: .currentCompassCheckIntervalEnd)
             
             var result = DateInterval(start: start, end: end)
             if result.duration < Seconds.oneHour {
-                result = getReviewInterval(forDate: Date.now)
-                self.currentReviewInterval = result
+                result = getCompassCheckInterval(forDate: Date.now)
+                self.currentCompassCheckInterval = result
             }
             return result
         }
         set {
-            store.set(newValue.start, forKey: .currentReviewIntervalStart)
-            store.set(newValue.end,forKey: .currentReviewIntervalEnd)
+            store.set(newValue.start, forKey: .currentCompassCheckIntervalStart)
+            store.set(newValue.end,forKey: .currentCompassCheckIntervalEnd)
         }
     }
 
@@ -294,9 +294,9 @@ class TestPreferences : KeyValueStorage{
 func dummyPreferences() -> CloudPreferences {
     let store = TestPreferences()
     let result = CloudPreferences(store: store)
-    result.daysOfReview = 42
-    store.set(18, forKey: .reviewTimeHour)
-    store.set(00, forKey: .reviewTimeMinute)
-    result.currentReviewInterval = getReviewInterval()
+    result.daysOfCompassCheck = 42
+    store.set(18, forKey: .compassCheckTimeHour)
+    store.set(00, forKey: .compassCheckTimeMinute)
+    result.currentCompassCheckInterval = getCompassCheckInterval()
     return result
 }

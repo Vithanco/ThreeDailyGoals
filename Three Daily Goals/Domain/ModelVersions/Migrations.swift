@@ -7,7 +7,7 @@ import Foundation
 //
 @preconcurrency import SwiftData
 
-typealias SchemaLatest = SchemaV3_4
+public typealias SchemaLatest = SchemaV3_4
 
 enum TDGMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {

@@ -18,9 +18,9 @@ struct PreferencesView: View {
     var body: some View {
 //        VStack{
             TabView {
-                ReviewPreferencesView(model: model)
+                CompassCheckPreferencesView(model: model)
                     .tabItem {
-                        Label("Review", systemImage: imgReview)
+                        Label("Compass Check", systemImage: imgCompassCheck)
                     }
                 
                 AppearancePreferencesView(model: model)

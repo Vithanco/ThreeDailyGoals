@@ -18,17 +18,6 @@ private let logger = Logger(
     category: String(describing: TaskManagerViewModel.self)
 )
 
-@Observable
-class ListViewModel {
-    var section: TaskSection
-    var list: [TaskItem]
-
-    init(section: TaskSection, list: [TaskItem]) {
-        self.section = section
-        self.list = list
-    }
-}
-
 struct Choice {
     let existing: TaskItem
     let new: TaskItem
@@ -50,7 +39,7 @@ extension TagCapsuleStyle.Border: @unchecked Sendable {
     )
 }
 
-extension Notification: @unchecked Sendable {}
+//extension Notification: @unchecked Sendable {}
 
 @MainActor
 @Observable
@@ -60,12 +49,12 @@ final class TaskManagerViewModel {
             notificationTask?.cancel()
         }
     }
-    let timer: ReviewTimer = .init()
+    let timer: CompassCheckTimer = .init()
     let modelContext: Storage
     private(set) var items = [TaskItem]()
     var isTesting: Bool = false
 
-    var stateOfReview: DialogState = .inform
+    var stateOfCompassCheck: DialogState = .inform
 
     // Import/Export
     public var showImportDialog: Bool = false
@@ -95,9 +84,9 @@ final class TaskManagerViewModel {
     var canUndo = false
     var canRedo = false
 
-    var showReviewDialog: Bool = false
+    var showCompassCheckDialog: Bool = false
     var showSettingsDialog: Bool = false
-    var showMissingReviewAlert: Bool = false
+    var showMissingCompassCheckAlert: Bool = false
     var showSelectDuringImportDialog: Bool = false
     var showNewItemNameDialog: Bool = false
     var selectDuringImport: [Choice] = []
@@ -148,25 +137,30 @@ final class TaskManagerViewModel {
             for await notification in center.notifications(named: NSPersistentCloudKitContainer.eventChangedNotification) {
                 guard let self else { break }
                 if let userInfo = notification.userInfo {
-                    Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: TaskManagerViewModel.self)).debug(
-                        "Event: \(userInfo.debugDescription)"
-                    )
+//                    Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: TaskManagerViewModel.self)).debug(
+//                        "Event: \(userInfo.debugDescription)"
+//                    )
                     if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
                         if event.type == .import && event.endDate != nil && event.succeeded {
                             if !modelContext.hasChanges {
-                                logger.debug("update my list of Tasks")
-                                await mergeDataFromCentralStorage()
+                                mergeDataFromCentralStorage()
+                            } else {
+                                do {
+                                    try modelContext.save()
+                                    logger.debug("Saved pending changes, now merging from central storage")
+                                    mergeDataFromCentralStorage()
+                                } catch {
+                                    logger.error("Failed to save pending changes: \(error)")
+                                }
                             }
-
                         }
                     }
                 }
             }
         }
         preferences.onChange = onPreferencesChange
-        setupReviewNotification()
+        setupCompassCheckNotification()
     }
-
 
     func addSamples() -> Self {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
@@ -218,6 +212,8 @@ final class TaskManagerViewModel {
             let items = try modelContext.fetch(descriptor)
             let fetchedItems = try modelContext.fetch(descriptor)
             let ( added, updated) = mergeItems(fetchedItems)
+            
+            
             
             logger.info("fetched \(items.count) tasks from central store, added \(added), updated \(updated)")
             for t in lists.keys {
@@ -348,14 +344,14 @@ final class TaskManagerViewModel {
         canUndo = modelContext.canUndo
         canRedo = modelContext.canRedo
 
-        let next = nextRegularReviewTime
-        let today = preferences.lastReview.isToday ? "Done" : stdOnlyTimeFormat.format(next)
-        streakText = "Streak: \(preferences.daysOfReview), today: \(today)"  // - Time:
+        let next = nextRegularCompassCheckTime
+        let today = preferences.lastCompassCheck.isToday ? "Done" : stdOnlyTimeFormat.format(next)
+        streakText = "Streak: \(preferences.daysOfCompassCheck), today: \(today)"  // - Time:
     }
 
     func findTask(withID: String) -> TaskItem? {
         let result = items.first(where: { $0.id == withID })
-        logger.debug("found Task '\(result != nil)' for ID: \(withID)")
+    //    logger.debug("found Task '\(result != nil)' for ID: \(withID)")
         return result
     }
 
@@ -515,36 +511,11 @@ extension TaskManagerViewModel {
 
 @MainActor
 func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> TaskManagerViewModel {
-    let loader = loader ?? loadStdItems
-    return TaskManagerViewModel(modelContext: TestStorage(loader: loader), preferences: preferences ?? dummyPreferences(), isTesting: true)
+    let testStorage = loader == nil ? TestStorage() : TestStorage(loader: loader!)
+    return TaskManagerViewModel(modelContext: testStorage, preferences: preferences ?? dummyPreferences(), isTesting: true)
 }
 
-func loadStdItems() -> [TaskItem] {
-    var result: [TaskItem] = []
-    let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
-    theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
-    theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-    theGoal.dueDate = getDate(inDays: 2)
-    result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority, tags: ["CMaps"])
-    result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
-    result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
-    let lastMonth2 = result.add(
-        title: "Read about Structured Visual Thinking",
-        changedDate: getDate(daysPrior: 22),
-        state: .open,
-        tags: ["toRead"]
-    )
-    lastMonth2.url = "https://vithanco.com"
-    result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3), state: .pendingResponse)
-    result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
-    result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
-    result.add(title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
-    result.add(title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open, dueDate: getDate(inDays: 2))
-    for i in 32..<200 {
-        result.add(title: "Dead Task \(i)", changedDate: getDate(daysPrior: i), state: .dead)
-    }
-    return result
-}
+
 
 extension Sequence where Element: TaskItem {
     var tags: Set<String> {
@@ -559,6 +530,18 @@ extension Sequence where Element: TaskItem {
         }
         return result
     }
+    
+    var activeTags: Set<String> {
+        var result = Set<String>()
+        for t in self {
+            if !t.tags.isEmpty && t.isActive {
+                result.formUnion(t.tags)
+            }
+        }
+        result.formUnion(["work", "private"])
+        return result
+    }
+
 }
 
 extension TaskManagerViewModel {

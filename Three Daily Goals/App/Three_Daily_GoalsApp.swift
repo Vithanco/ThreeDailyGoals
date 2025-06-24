@@ -15,7 +15,7 @@ import EventKit
 struct Three_Daily_GoalsApp: App {
     
     var container : ModelContainer
-    var calendar: EKEventStore
+    let calendarManager = CalendarManager()
     @State var model: TaskManagerViewModel
      
     init() {
@@ -33,17 +33,11 @@ struct Three_Daily_GoalsApp: App {
             self._model = State(wrappedValue:TaskManagerViewModel(modelContext: container.mainContext, preferences: CloudPreferences(testData: false), isTesting: false)) // enableTesting -> testData
         }
         
-        // Initialize the store.
-        calendar = EKEventStore()
-        
-        // Request access to reminders.
-        calendar.requestFullAccessToEvents { granted, error in
-            debugPrint("Calendar access granted: \(granted)", terminator: "\n")
-            debugPrint(error ?? "No error", terminator: "\n")
-            //            if error != nil {
-            //                self.calendar = nil
-            //            }
-        }
+        guard calendarManager.hasCalendarAccess else {
+                    debugPrint("No calendar access available")
+                    return
+                }
+    
     }
     
     
@@ -58,6 +52,7 @@ struct Three_Daily_GoalsApp: App {
         }
         .modelContainer(container)
         .environment(model)
+        .environment(calendarManager)
         .commands {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport){

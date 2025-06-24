@@ -12,7 +12,11 @@ let imgPendingResponse = "alarm.fill"
 let imgDueSoon = "calendar"
 let imgDated = "clock.fill"
 //let imgMagnifyingGlass = "magnifyingglass.circle.fill"
-let imgReview = "brain.filled.head.profile"
+let imgCompassCheck = "safari"
+//let compassCheck = Image(systemName: "safari")
+//    .symbolRenderingMode(.palette)
+//    .foregroundStyle(.gray,.accentColor )
+
 let imAppearance = "paintpalette"
 let imgAddItem = "plus.app.fill" // "plus"
 let imgPreferences = "gearshape"
@@ -79,3 +83,6 @@ let imgStreak = "flame.fill"
 //        }
 //    }
 //}
+
+
+  //  .symbolEffect(.bounce.down.byLayer, options: .nonRepeating)

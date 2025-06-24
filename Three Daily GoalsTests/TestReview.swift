@@ -18,38 +18,38 @@ struct TestReview {
         let pref = CloudPreferences(store: store)
         let model = dummyViewModel( preferences:  pref)
         
-        #expect(pref.currentReviewInterval == getReviewInterval())
+        #expect(pref.currentCompassCheckInterval == getCompassCheckInterval())
         
-        pref.currentReviewInterval = DateInterval(start: getDate(daysPrior: 2), duration: Seconds.eightHours)
-        #expect(!pref.currentReviewInterval.contains(Date.now))
+        pref.currentCompassCheckInterval = DateInterval(start: getDate(daysPrior: 2), duration: Seconds.eightHours)
+        #expect(!pref.currentCompassCheckInterval.contains(Date.now))
         
-        model.reviewNow()
-        #expect(model.stateOfReview == .inform)
+        model.compassCheckNow()
+        #expect(model.stateOfCompassCheck == .inform)
         model.moveStateForward()
         #expect(model.list(which: .priority).count == 1)
-        #expect(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfCompassCheck == .currentPriorities)
         model.moveStateForward()
         #expect(model.list(which: .priority).count == 0)
-        #expect(model.stateOfReview == .pending)
+        #expect(model.stateOfCompassCheck == .pending)
         model.moveStateForward()
-        #expect(model.stateOfReview == .dueDate)
+        #expect(model.stateOfCompassCheck == .dueDate)
         model.moveStateForward()
-        #expect(model.stateOfReview == .review)
+        #expect(model.stateOfCompassCheck == .review)
         model.moveStateForward()
-        #expect(model.stateOfReview == .plan)
+        #expect(model.stateOfCompassCheck == .plan)
         model.moveStateForward()
-        #expect(model.stateOfReview == .inform)
-        #expect(pref.daysOfReview == 1)
+        #expect(model.stateOfCompassCheck == .inform)
+        #expect(pref.daysOfCompassCheck == 1)
         for t in model.items {
             t.dueDate = nil
         }
         #expect(model.dueDateSoon.isEmpty)
         
-        #expect(!model.showReviewDialog)
-        model.reviewNow()
+        #expect(!model.showCompassCheckDialog)
+        model.compassCheckNow()
         
-        #expect(model.showReviewDialog)
-        #expect(model.stateOfReview == .inform)
+        #expect(model.showCompassCheckDialog)
+        #expect(model.stateOfCompassCheck == .inform)
         
         #expect(model.dueDateSoon.isEmpty)
         debugPrint(model.list(which: .priority).map{$0.title})
@@ -57,34 +57,40 @@ struct TestReview {
         model.moveStateForward()
         
         #expect(model.dueDateSoon.isEmpty)
-        #expect(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfCompassCheck == .currentPriorities)
         model.moveStateForward()
         
-        #expect(model.dueDateSoon.isEmpty)
-        #expect(model.stateOfReview == .pending)
-        #expect(model.dueDateSoon.isEmpty)
-        model.moveStateForward()
-        #expect(model.stateOfReview == .review)
-        model.moveStateForward()
-        #expect(model.stateOfReview == .plan)
-        model.moveStateForward()
-        #expect(model.stateOfReview == .inform)
-        #expect(pref.daysOfReview == 1)
-        #expect(!model.showReviewDialog)
+        #expect(model.dueDateSoon.count == 2)
+        #expect(model.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
+        #expect(model.dueDateSoon[1].title == "Tax Declaration")
+        model.dueDateSoon[1].dueDate = nil
+        model.dueDateSoon[0].dueDate = nil
         
-        model.reviewNow()
-        #expect(model.showReviewDialog)
-        #expect(model.stateOfReview == .inform)
+        
+        #expect(model.stateOfCompassCheck == .pending)
+        #expect(model.dueDateSoon.isEmpty)
+        model.moveStateForward()
+        #expect(model.stateOfCompassCheck == .review)
+        model.moveStateForward()
+        #expect(model.stateOfCompassCheck == .plan)
+        model.moveStateForward()
+        #expect(model.stateOfCompassCheck == .inform)
+        #expect(pref.daysOfCompassCheck == 1)
+        #expect(!model.showCompassCheckDialog)
+        
+        model.compassCheckNow()
+        #expect(model.showCompassCheckDialog)
+        #expect(model.stateOfCompassCheck == .inform)
         #expect(model.list(which: .priority).count == 0)
         model.moveStateForward()
-        #expect(model.stateOfReview == .pending)
+        #expect(model.stateOfCompassCheck == .pending)
         model.moveStateForward()
-        #expect(model.stateOfReview == .review)
+        #expect(model.stateOfCompassCheck == .review)
         model.moveStateForward()
-        #expect(model.stateOfReview == .plan)
+        #expect(model.stateOfCompassCheck == .plan)
         model.moveStateForward()
-        #expect(model.stateOfReview == .inform)
-        #expect(pref.daysOfReview == 1)
+        #expect(model.stateOfCompassCheck == .inform)
+        #expect(pref.daysOfCompassCheck == 1)
     }
     
     @MainActor
@@ -93,41 +99,41 @@ struct TestReview {
         let model = dummyViewModel()
         let pref = model.preferences
         
-        #expect(pref.daysOfReview == 42)
-        #expect(pref.currentReviewInterval == getReviewInterval())
-        pref.lastReview = getDate(daysPrior: 1)
+        #expect(pref.daysOfCompassCheck == 42)
+        #expect(pref.currentCompassCheckInterval == getCompassCheckInterval())
+        pref.lastCompassCheck = getDate(daysPrior: 1)
         
-        model.reviewNow()
-        #expect(model.stateOfReview == .inform)
+        model.compassCheckNow()
+        #expect(model.stateOfCompassCheck == .inform)
         model.moveStateForward()
-        #expect(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfCompassCheck == .currentPriorities)
         model.moveStateForward()
-        #expect(model.stateOfReview == .pending)
+        #expect(model.stateOfCompassCheck == .pending)
         model.moveStateForward()
-        #expect(model.stateOfReview == .dueDate)
+        #expect(model.stateOfCompassCheck == .dueDate)
         model.moveStateForward()
-        #expect(model.stateOfReview == .review)
+        #expect(model.stateOfCompassCheck == .review)
         model.moveStateForward()
-        #expect(model.stateOfReview == .plan)
+        #expect(model.stateOfCompassCheck == .plan)
         model.moveStateForward()
-        #expect(model.stateOfReview == .inform)
-        #expect(pref.daysOfReview == 43)
+        #expect(model.stateOfCompassCheck == .inform)
+        #expect(pref.daysOfCompassCheck == 43)
         
-        model.reviewNow()
-        #expect(model.stateOfReview == .inform)
+        model.compassCheckNow()
+        #expect(model.stateOfCompassCheck == .inform)
         model.moveStateForward()
-        #expect(model.stateOfReview == .currentPriorities)
+        #expect(model.stateOfCompassCheck == .currentPriorities)
         model.moveStateForward()
-        #expect(model.stateOfReview == .pending)
+        #expect(model.stateOfCompassCheck == .pending)
         model.moveStateForward()
-        #expect(model.stateOfReview == .dueDate)
+        #expect(model.stateOfCompassCheck == .dueDate)
         model.moveStateForward()
-        #expect(model.stateOfReview == .review)
+        #expect(model.stateOfCompassCheck == .review)
         model.moveStateForward()
-        #expect(model.stateOfReview == .plan)
+        #expect(model.stateOfCompassCheck == .plan)
         model.moveStateForward()
-        #expect(model.stateOfReview == .inform)
-        #expect(pref.daysOfReview == 43)
+        #expect(model.stateOfCompassCheck == .inform)
+        #expect(pref.daysOfCompassCheck == 43)
     }
     
     @MainActor
@@ -136,14 +142,14 @@ struct TestReview {
         let model = dummyViewModel()
         let pref = model.preferences
         
-        pref.currentReviewInterval = DateInterval(start: m24, end: now)
-        pref.lastReview = m15
-        #expect(model.didLastReviewHappenInCurrentReviewInterval())
+        pref.currentCompassCheckInterval = DateInterval(start: m24, end: now)
+        pref.lastCompassCheck = m15
+        #expect(model.didLastCompassCheckHappenInCurrentCompassCheckInterval())
         
         
-        pref.lastReview = m25
-        #expect(!model.didLastReviewHappenInCurrentReviewInterval())
-        #expect(!pref.lastReview.isToday)
+        pref.lastCompassCheck = m25
+        #expect(!model.didLastCompassCheckHappenInCurrentCompassCheckInterval())
+        #expect(!pref.lastCompassCheck.isToday)
         
     }
     
@@ -159,12 +165,12 @@ struct TestReview {
         let model = dummyViewModel()
         let pref = model.preferences
         
-        pref.lastReview = m24
-        pref.currentReviewInterval = getReviewInterval(forDate: m24)
-        #expect (pref.didReviewToday)
+        pref.lastCompassCheck = m24
+        pref.currentCompassCheckInterval = getCompassCheckInterval(forDate: m24)
+        #expect (pref.didCompassCheckToday)
         
-        pref.currentReviewInterval = getReviewInterval()
-        #expect (!pref.didReviewToday)
+        pref.currentCompassCheckInterval = getCompassCheckInterval()
+        #expect (!pref.didCompassCheckToday)
         
     }
 

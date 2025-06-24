@@ -18,15 +18,15 @@ import SwiftUI
 // oh! and don't deploy to production before the app is approved
 //--------------------------------------------------------------------------------
 
-enum SchemaV3_4: VersionedSchema {
-    static let versionIdentifier = Schema.Version(3, 4, 0)
+public enum SchemaV3_4: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(3, 4, 0)
     
-    static var models: [any PersistentModel.Type] {
+    public static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self]
     }
     
     @Model
-    final class TaskItem: Codable, Sendable {
+    public final class TaskItem: Codable, Sendable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
@@ -78,7 +78,7 @@ enum SchemaV3_4: VersionedSchema {
             case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid, eventId, estimatedMinutes
         }
         
-        required init(from decoder: Decoder) throws {
+       public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
@@ -99,7 +99,7 @@ enum SchemaV3_4: VersionedSchema {
             self.estimatedMinutes = try container.decode(Int.self, forKey: .estimatedMinutes)
         }
         
-        func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             
             try container.encode(closed, forKey: .closed)
@@ -119,7 +119,7 @@ enum SchemaV3_4: VersionedSchema {
     }
     
     @Model
-    final class Comment: Codable , Sendable{
+    public final class Comment: Codable , Sendable{
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""
@@ -142,14 +142,14 @@ enum SchemaV3_4: VersionedSchema {
             case created, changed, text
         }
         
-        required init(from decoder: Decoder) throws {
+        public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
             self.text = try container.decode(String.self, forKey: .text)
         }
         
-        func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(created, forKey: .created)
             try container.encode(changed, forKey: .changed)

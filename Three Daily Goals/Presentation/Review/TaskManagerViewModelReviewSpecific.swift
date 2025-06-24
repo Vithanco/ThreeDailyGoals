@@ -26,90 +26,90 @@ extension TaskManagerViewModel {
     
     func moveStateForward() {
      //   assert(showReviewDialog)
-        switch stateOfReview {
+        switch stateOfCompassCheck {
         case .inform:
             if list(which: .priority).isEmpty {
                 fallthrough
             } else {
-                stateOfReview = .currentPriorities
+                stateOfCompassCheck = .currentPriorities
             }
         case .currentPriorities:
             moveAllPrioritiesToOpen()
             if list(which: .pendingResponse).isEmpty {
                 fallthrough
             } else {
-                stateOfReview = .pending
+                stateOfCompassCheck = .pending
             }
         case .pending:
             let dueSoon = dueDateSoon
             if dueSoon.isEmpty {
                 fallthrough
             } else {
-                stateOfReview = .dueDate
+                stateOfCompassCheck = .dueDate
             }
         case .dueDate :
             for t in dueDateSoon {
                 move(task: t, to: .priority)
             }
-            stateOfReview = .review
+            stateOfCompassCheck = .review
         case .review:
-            stateOfReview = .plan
+            stateOfCompassCheck = .plan
         case .plan:
-            endReview(didReview: true)
+            endCompassCheck(didCompassCheck: true)
         }
     }
     
     var nameOfNextStep: String {
-        if stateOfReview == .review {
+        if stateOfCompassCheck == .review {
             return "Finish"
         }
         return "Next"
     }
     
-    func cancelReview(){
-        showReviewDialog = false
-        stateOfReview = .inform
+    func cancelCompassCheck(){
+        showCompassCheckDialog = false
+        stateOfCompassCheck = .inform
     }
     
-    func didLastReviewHappenInCurrentReviewInterval() -> Bool {
-        let savedReviewInterval = preferences.currentReviewInterval
-        let lastReview = preferences.lastReview
-        return savedReviewInterval.contains(lastReview)
+    func didLastCompassCheckHappenInCurrentCompassCheckInterval() -> Bool {
+        let savedCompassCheckInterval = preferences.currentCompassCheckInterval
+        let lastCompassCheck = preferences.lastCompassCheck
+        return savedCompassCheckInterval.contains(lastCompassCheck)
     }
     
-    func endReview(didReview : Bool){
-        showReviewDialog = false
-        stateOfReview = .inform
+    func endCompassCheck(didCompassCheck : Bool){
+        showCompassCheckDialog = false
+        stateOfCompassCheck = .inform
         
-        let countedBefore = didLastReviewHappenInCurrentReviewInterval()
+        let countedBefore = didLastCompassCheckHappenInCurrentCompassCheckInterval()
         
         // setting last review date
-        if didReview {
-            preferences.lastReview = Date.now
+        if didCompassCheck {
+            preferences.lastCompassCheck = Date.now
             if !countedBefore {
-                preferences.daysOfReview = preferences.daysOfReview + 1
-                if preferences.daysOfReview > preferences.longestStreak {
-                    preferences.longestStreak = preferences.daysOfReview
+                preferences.daysOfCompassCheck = preferences.daysOfCompassCheck + 1
+                if preferences.daysOfCompassCheck > preferences.longestStreak {
+                    preferences.longestStreak = preferences.daysOfCompassCheck
                 }
             }
         }
         
-        let currentReviewInterval = getReviewInterval()
+        let currentCompassCheckInterval = getCompassCheckInterval()
         
-        if currentReviewInterval.intersection(with: preferences.currentReviewInterval)?.duration ?? 0 < Seconds.fourHours {
+        if currentCompassCheckInterval.intersection(with: preferences.currentCompassCheckInterval)?.duration ?? 0 < Seconds.fourHours {
             // new day!
             if !countedBefore{
                 // reset the streak to 0
-                preferences.daysOfReview = didReview ? 1 : 0
+                preferences.daysOfCompassCheck = didCompassCheck ? 1 : 0
             }
-            preferences.currentReviewInterval = currentReviewInterval
+            preferences.currentCompassCheckInterval = currentCompassCheckInterval
         }
         updateUndoRedoStatus()
         killOldTasks()
     }
     
     func waitABit() {
-        setupReviewNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
+        setupCompassCheckNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
     }
     
     var priorityTasks: [TaskItem]{
@@ -119,21 +119,21 @@ extension TaskManagerViewModel {
     
     
     func onPreferencesChange() {
-        if preferences.didReviewToday && stateOfReview == .inform {
-            endReview(didReview: false)
+        if preferences.didCompassCheckToday && stateOfCompassCheck == .inform {
+            endCompassCheck(didCompassCheck: false)
         }
     }
     
-    func reviewNow(){
-        if !showReviewDialog && stateOfReview == .inform{
-            debugPrint("start review \(Date.now)")
-            showReviewDialog = true
+    func compassCheckNow(){
+        if !showCompassCheckDialog && stateOfCompassCheck == .inform{
+            debugPrint("start compass check \(Date.now)")
+            showCompassCheckDialog = true
         }
     }
     
-    var nextRegularReviewTime: Date {
-        var result = self.preferences.reviewTime
-        if getCal().isDate(preferences.lastReview, inSameDayAs: result) {
+    var nextRegularCompassCheckTime: Date {
+        var result = self.preferences.compassCheckTime
+        if getCal().isDate(preferences.lastCompassCheck, inSameDayAs: result) {
             // review happened today, let's do it tomorrow
             result = addADay(result)
         } else { // today's review missing
@@ -145,26 +145,26 @@ extension TaskManagerViewModel {
         return result
     }
     
-    func setupReviewNotification(when: Date? = nil){
-        scheduleSystemPushNotification(timing: preferences.reviewTimeComponents, model: self)
-        if showReviewDialog {
+    func setupCompassCheckNotification(when: Date? = nil){
+        scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+        if showCompassCheckDialog {
             return
         }
         if isTesting {
             return
         }
-        let time = when ?? nextRegularReviewTime
+        let time = when ?? nextRegularCompassCheckTime
         
-        showReviewDialog = false
+        showCompassCheckDialog = false
         timer.setTimer(forWhen: time ){
             
             Task {
                 do {
-                    if await self.showReviewDialog {
+                    if await self.showCompassCheckDialog {
                         return
                     }
-                    await self.reviewNow()
-                    await self.setupReviewNotification()
+                    await self.compassCheckNow()
+                    await self.setupCompassCheckNotification()
                 }
             }
         }
@@ -172,6 +172,6 @@ extension TaskManagerViewModel {
     
     func deleteNotifications() {
         timer.cancelTimer()
-        showReviewDialog = false
+        showCompassCheckDialog = false
     }
 }

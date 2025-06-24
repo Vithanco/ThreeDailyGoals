@@ -60,25 +60,37 @@ struct TestModelLists {
     
     @MainActor
     @Test
-    func testTags() throws {
+    func testTags() async throws {
         let testTag = "aTestTag34"
         let testTag2 = "aTestTag346"
         #expect(testTag != testTag2)
         
         
         let model = dummyViewModel()
+        #expect(model.items.count == 178)
         #expect(model.allTags.contains("private"))
         #expect(model.allTags.contains("work"))
         #expect(model.activeTags.contains("private"))
         #expect(model.activeTags.contains("work"))
         
-        model.list(which: .open).first?.tags.append(testTag)
+        #expect( model.list(which: .open).first != nil)
+        if let first = model.list(which: .open).first {
+            #expect(model.list(which: .open).contains(first))
+            #expect(model.items.contains(first))
+            first.addTag(testTag)
+            #expect( first.tags.contains(testTag))
+            #expect( first.isActive)
+            #expect(first.state == .open)
+        }
+        #expect(model.list(which: .open).tags.contains(testTag))
+        #expect(model.list(which: .open).activeTags.contains(testTag))
+
         #expect(model.activeTags.contains(testTag))
         #expect(model.allTags.contains(testTag))
         
         let deadTask = model.list(which: .dead).first!
         #expect(!deadTask.isActive)
-        deadTask.tags.append(testTag2)
+        deadTask.addTag(testTag2)
         
         let stats = model.statsForTags(tag: testTag2)
         #expect(stats.total == 1, "\(stats.debugDescription)")

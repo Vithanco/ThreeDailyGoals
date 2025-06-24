@@ -46,7 +46,7 @@ extension TaskManagerViewModel {
             beginUndoGrouping()
             for item in jsonData {
                 if let existing = findTask(withID: item.id) {
-                    if existing != item {
+                    if !deepEqual(existing , item)  {
                         choices.append(Choice(existing: existing, new: item))
                     }
                 } else {

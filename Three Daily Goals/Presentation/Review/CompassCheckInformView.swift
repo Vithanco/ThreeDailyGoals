@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct ReviewInformView: View {
+struct CompassCheckInformView: View {
     
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
         VStack{
-            Text("It is about time to review your tasks").font(.title2).foregroundStyle(model.accentColor).padding(10)
-            Text("This review is where the daily magic happens. You can choose the best daily time in the preferences.").padding(10)
-            Text("This dialog will only be shown when your last review is more than 4 hours ago. ")
+            Text("It is about time to do a Compass Check and review your tasks").font(.title2).foregroundStyle(model.accentColor).padding(10)
+            Text("The Compass Check is where the daily magic happens. You can choose the best daily time in the preferences.").padding(10)
+            Text("This dialog will only be shown when your last Compass Check is more than 4 hours ago. ")
                 .frame(maxWidth: 500)
                 .padding(10)
             
@@ -32,6 +32,6 @@ struct ReviewInformView: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .inform
-    return ReviewInformView(model: model)
+    model.stateOfCompassCheck = .inform
+    return CompassCheckInformView(model: model)
 }

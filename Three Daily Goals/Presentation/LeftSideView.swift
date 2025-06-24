@@ -28,9 +28,8 @@ struct LeftSideView: View {
                 }
             }
 #endif
-            ListView(whichList: .priority, model: model)
+            ListView(whichList: .priority, model: model).padding(5)
             Spacer()
-
             List{
                 LinkToList(whichList: .open, model: model)
                 LinkToList(whichList: .pendingResponse, model: model)
@@ -38,7 +37,7 @@ struct LeftSideView: View {
                 LinkToList(whichList: .dead, model: model)
                     .toolbar{
                         ToolbarItem {
-                            model.reviewButton
+                            model.compassCheckButton
                         }
                         ToolbarItem {
                             model.addNewItemButton

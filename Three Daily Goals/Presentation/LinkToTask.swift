@@ -16,7 +16,7 @@ struct LinkToTask: View {
         if isLargeDevice {
             TaskAsLine(item: item, model: model).onTapGesture {
                 model.select(which: list, item: item)
-            }.accessibilityIdentifier(item.id.description)
+            }.accessibilityIdentifier("linkToTask"+item.title)
         }else {
             NavigationLink {
                 TaskItemView(model: model, item: item)

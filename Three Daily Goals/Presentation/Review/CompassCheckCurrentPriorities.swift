@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReviewCurrentPriorities: View {
+struct CompassCheckCurrentPriorities: View {
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
@@ -22,6 +22,6 @@ struct ReviewCurrentPriorities: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .currentPriorities
-    return ReviewCurrentPriorities(model: model)
+    model.stateOfCompassCheck = .currentPriorities
+    return CompassCheckCurrentPriorities(model: model)
 }

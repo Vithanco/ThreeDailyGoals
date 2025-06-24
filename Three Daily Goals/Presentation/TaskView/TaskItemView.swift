@@ -92,17 +92,17 @@ struct InnerTaskItemView : View {
                 HStack {
                     Text("Add new Label:")
                     TagTextField(text:  $buildTag ,placeholder: "Tag Me").onSubmit({
-                        item.tags.append(buildTag)
+                        item.addTag(buildTag)
                     })
                 }
                 TagEditList(tags: $item.tags,additionalTags: allTags,container: .vstack) {text, isTag in
                     TagCapsule(text)
                         .tagCapsuleStyle(isTag ? selectedTagStyle : missingTagStyle)
-                }
+                }.frame(maxHeight: 70)
             }
             
             Spacer()
-            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: 200)
+            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
             
             HStack{
                 LabeledContent{

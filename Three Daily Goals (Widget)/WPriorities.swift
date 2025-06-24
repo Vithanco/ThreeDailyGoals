@@ -65,7 +65,7 @@ struct WPriorities: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(Image(systemName: imgStreak)) Streak: \(preferences.daysOfReview)").font(.title2).foregroundStyle(Color.red)
+            Text("\(Image(systemName: imgStreak)) Streak: \(preferences.daysOfCompassCheck)").font(.title2).foregroundStyle(Color.red)
             Section (header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(preferences.accentColor)){
                     AWPriority( item: preferences.getPriority(nr: 1))
                 AWPriority( item: preferences.getPriority(nr: 2))

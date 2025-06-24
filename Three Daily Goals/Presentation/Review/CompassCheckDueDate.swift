@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReviewDueDate: View {
+struct CompassCheckDueDate: View {
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
@@ -22,6 +22,6 @@ struct ReviewDueDate: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .dueDate
-    return ReviewDueDate(model: model)
+    model.stateOfCompassCheck = .dueDate
+    return CompassCheckDueDate(model: model)
 }

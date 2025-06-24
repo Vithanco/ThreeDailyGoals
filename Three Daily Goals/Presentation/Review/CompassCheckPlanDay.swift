@@ -15,7 +15,7 @@ extension TaskItem {
 //    }
 }
 
-struct ReviewPlanDay: View {
+struct CompassCheckPlanDay: View {
     @Bindable var model: TaskManagerViewModel
     let eventMgr = EventManager()
     @State var events: [any CalendarEventRepresentable]
@@ -61,9 +61,12 @@ struct ReviewPlanDay: View {
 }
 
 #Preview {
+    
     // return Text ("in total: \(events.count)")
     let date = Date.today
     let model = dummyViewModel()
-    model.priorityTasks.first?.state = .priority
-    return ReviewPlanDay(model: model, date: date)
+    if let first = model.priorityTasks.first {
+        model.move(task: first, to: .priority)
+    }
+    return CompassCheckPlanDay(model: model, date: date)
 }

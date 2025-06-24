@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-let id = "3dg.dailyReview"
+let id = "3dg.dailyCompssCheck"
 
 extension PushNotificationDelegate: @unchecked Sendable {}
 
@@ -29,7 +29,7 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
             Task {
-               await model.reviewNow()
+               await model.compassCheckNow()
             }
         default:
             break
@@ -58,8 +58,8 @@ func scheduleSystemPushNotification(timing: DateComponents, model: TaskManagerVi
         
         // Configure the content of the notification
         let content = UNMutableNotificationContent()
-        content.title = "Time for the daily Review"
-        content.body = "Click here for starting the review"
+        content.title = "Time for the daily Compass Check!"
+        content.body = "Click here for starting the Compass Check"
         
         // Configure the trigger
         let trigger = UNCalendarNotificationTrigger(dateMatching: timing, repeats: true)

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReviewPendingResponses: View {
+struct CompassCheckPendingResponses: View {
     @Bindable var model: TaskManagerViewModel
     
     var body: some View {
@@ -22,6 +22,6 @@ struct ReviewPendingResponses: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfReview = .pending
-    return ReviewPendingResponses(model: model)
+    model.stateOfCompassCheck = .pending
+    return CompassCheckPendingResponses(model: model)
 }

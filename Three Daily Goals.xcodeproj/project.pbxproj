@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		7F13D03A2DF490B80036ACCB /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F13D0392DF490B80036ACCB /* TagKit */; };
 		7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
-		7F2D67612C2BC13D00C893B3 /* ReviewPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */; };
+		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
+		7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */; };
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
 		7F5130D02C0C5FF200097437 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */; };
@@ -19,7 +20,7 @@
 		7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
 		7FA02AB12C18AABE00EC81CE /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7FA02AB02C18AABE00EC81CE /* SimpleCalendar */; };
 		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
-		7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* ReviewDueDate.swift */; };
+		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
 		7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */; };
@@ -50,7 +51,7 @@
 		E53AF7AE2B66244F00C24F78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
 		E53AF7AF2B66244F00C24F78 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
 		E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7B02B6628A400C24F78 /* ListHeader.swift */; };
-		E53C13142B6BED3B00E51553 /* ReviewPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C13132B6BED3B00E51553 /* ReviewPreferencesView.swift */; };
+		E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */; };
 		E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E559203A2B3772EE0002C709 /* CloudKit.framework */; };
 		E559203D2B38376F0002C709 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203E2B38E8380002C709 /* TaskAsLine.swift */; };
@@ -75,7 +76,7 @@
 		E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */; };
 		E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
 		E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD82B31956300F0EA9C /* TaskSection.swift */; };
-		E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */; };
+		E5B003102B31FE4900A90F8D /* CompassCheckDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */; };
 		E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
 		E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B02B78984200E66FAD /* AppLauncher.swift */; };
 		E5B376B32B7B506400E66FAD /* AllCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B22B7B506400E66FAD /* AllCommentsView.swift */; };
@@ -88,15 +89,15 @@
 		E5DAFE972B51982800A68857 /* LoggingRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DAFE952B5197B000A68857 /* LoggingRelated.swift */; };
 		E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */; };
 		E5DE0DC72B564C440066CC85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
-		E5DE105B2B68F6D300381337 /* ReviewTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105A2B68F6D300381337 /* ReviewTimer.swift */; };
+		E5DE105B2B68F6D300381337 /* CompassCheckTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */; };
 		E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105C2B69041F00381337 /* PreferencesTests.swift */; };
-		E5DE105E2B6911E000381337 /* ReviewTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105A2B68F6D300381337 /* ReviewTimer.swift */; };
+		E5DE105E2B6911E000381337 /* CompassCheckTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */; };
 		E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 		E5E8B3942B77442F003300C3 /* RegularMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B3932B77442F003300C3 /* RegularMainView.swift */; };
 		E5E8B3962B7744E0003300C3 /* CompactMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8B3952B7744E0003300C3 /* CompactMainView.swift */; };
 		E5ED903F2B46E44100CF0431 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
-		E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */; };
+		E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F705EB2B71EE56007BF387 /* TestDailyCompassCheckTime.swift */; };
 		E5FEC7F02B46F9D7007BE890 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
 		E5FEC7F12B46FA27007BE890 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		E5FEC7F22B46FA2A007BE890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
@@ -105,10 +106,10 @@
 		E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */; };
 		E5FF74362B43305600B3B890 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
 		E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
-		E5FFC5BD2B6A717B00C9D60B /* ReviewCurrentPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */; };
-		E5FFC5C12B6A72FB00C9D60B /* ReviewPendingResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */; };
-		E5FFC5C32B6A73A900C9D60B /* ReviewInformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */; };
-		E5FFC5C52B6A7A1600C9D60B /* ReviewNextPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */; };
+		E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5BC2B6A717A00C9D60B /* CompassCheckCurrentPriorities.swift */; };
+		E5FFC5C12B6A72FB00C9D60B /* CompassCheckPendingResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */; };
+		E5FFC5C32B6A73A900C9D60B /* CompassCheckInformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */; };
+		E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,7 +152,8 @@
 
 /* Begin PBXFileReference section */
 		7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_3.swift; sourceTree = "<group>"; };
-		7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPlanDay.swift; sourceTree = "<group>"; };
+		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPlanDay.swift; sourceTree = "<group>"; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
 		7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemDialog.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
@@ -161,7 +163,7 @@
 		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
-		7FA581012B97AF7600803614 /* ReviewDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewDueDate.swift; sourceTree = "<group>"; };
+		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
 		7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModelReviewSpecific.swift; sourceTree = "<group>"; };
@@ -188,7 +190,7 @@
 		E53AF7A42B661BF900C24F78 /* Migrations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migrations.swift; sourceTree = "<group>"; };
 		E53AF7AD2B66244F00C24F78 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		E53AF7B02B6628A400C24F78 /* ListHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHeader.swift; sourceTree = "<group>"; };
-		E53C13132B6BED3B00E51553 /* ReviewPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPreferencesView.swift; sourceTree = "<group>"; };
+		E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPreferencesView.swift; sourceTree = "<group>"; };
 		E559203A2B3772EE0002C709 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		E559203C2B38376F0002C709 /* ViewRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRelated.swift; sourceTree = "<group>"; };
 		E559203E2B38E8380002C709 /* TaskAsLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAsLine.swift; sourceTree = "<group>"; };
@@ -217,7 +219,7 @@
 		E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkToList.swift; sourceTree = "<group>"; };
 		E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsRelated.swift; sourceTree = "<group>"; };
 		E5ADEDD82B31956300F0EA9C /* TaskSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskSection.swift; sourceTree = "<group>"; };
-		E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewDialog.swift; sourceTree = "<group>"; };
+		E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckDialog.swift; sourceTree = "<group>"; };
 		E5B003112B32382C00A90F8D /* StringRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRelated.swift; sourceTree = "<group>"; };
 		E5B376B02B78984200E66FAD /* AppLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncher.swift; sourceTree = "<group>"; };
 		E5B376B22B7B506400E66FAD /* AllCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCommentsView.swift; sourceTree = "<group>"; };
@@ -226,23 +228,23 @@
 		E5D4FB762B749719002BB261 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		E5DAFE952B5197B000A68857 /* LoggingRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingRelated.swift; sourceTree = "<group>"; };
 		E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModel.swift; sourceTree = "<group>"; };
-		E5DE105A2B68F6D300381337 /* ReviewTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewTimer.swift; sourceTree = "<group>"; };
+		E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckTimer.swift; sourceTree = "<group>"; };
 		E5DE105C2B69041F00381337 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
 		E5E1F47B2B30632000E83A21 /* DateRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelated.swift; sourceTree = "<group>"; };
 		E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorRelated.swift; sourceTree = "<group>"; };
 		E5E8B3932B77442F003300C3 /* RegularMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegularMainView.swift; sourceTree = "<group>"; };
 		E5E8B3952B7744E0003300C3 /* CompactMainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompactMainView.swift; sourceTree = "<group>"; };
 		E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayRelated.swift; sourceTree = "<group>"; };
-		E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDailyReviewTime.swift; sourceTree = "<group>"; };
+		E5F705EB2B71EE56007BF387 /* TestDailyCompassCheckTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDailyCompassCheckTime.swift; sourceTree = "<group>"; };
 		E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftSideView.swift; sourceTree = "<group>"; };
 		E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModelLists.swift; sourceTree = "<group>"; };
 		E5FF74352B43305600B3B890 /* TaskItemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItemState.swift; sourceTree = "<group>"; };
 		E5FF74382B45308800B3B890 /* DoubleRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleRelated.swift; sourceTree = "<group>"; };
-		E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCurrentPriorities.swift; sourceTree = "<group>"; };
-		E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPendingResponses.swift; sourceTree = "<group>"; };
-		E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewInformView.swift; sourceTree = "<group>"; };
-		E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewNextPriorities.swift; sourceTree = "<group>"; };
+		E5FFC5BC2B6A717A00C9D60B /* CompassCheckCurrentPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckCurrentPriorities.swift; sourceTree = "<group>"; };
+		E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPendingResponses.swift; sourceTree = "<group>"; };
+		E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckInformView.swift; sourceTree = "<group>"; };
+		E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckNextPriorities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -332,7 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				E5278A392B658FB90020C83D /* PreferencesView.swift */,
-				E53C13132B6BED3B00E51553 /* ReviewPreferencesView.swift */,
+				E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */,
 				E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */,
 				E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */,
 				7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */,
@@ -397,7 +399,7 @@
 				E561D6F02B1F54A9003BE36F /* Three_Daily_GoalsTests.swift */,
 				E5FEC7F72B4EF7AF007BE890 /* TestModelLists.swift */,
 				E5DE105C2B69041F00381337 /* PreferencesTests.swift */,
-				E5F705EB2B71EE56007BF387 /* TestDailyReviewTime.swift */,
+				E5F705EB2B71EE56007BF387 /* TestDailyCompassCheckTime.swift */,
 				E5B376B52B7B551600E66FAD /* TestTaskItems.swift */,
 				E597A4862B83D7B000BCD061 /* TestImportExport.swift */,
 				7FC89D282BFB239200FBA363 /* TestReview.swift */,
@@ -430,6 +432,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */,
 				7FE38F0D2C33083300C9A798 /* Events */,
 				E5B698FA2B7C89360086C3EB /* Buttons.swift */,
 				E5DDC9E32B3F59ED00383C0D /* TaskManagerViewModel.swift */,
@@ -488,7 +491,7 @@
 		E5E1F47A2B30630C00E83A21 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				E5DE105A2B68F6D300381337 /* ReviewTimer.swift */,
+				E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */,
 				E5E1F47B2B30632000E83A21 /* DateRelated.swift */,
 				E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */,
 				E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */,
@@ -506,14 +509,14 @@
 		E5FFC5BB2B6A715400C9D60B /* Review */ = {
 			isa = PBXGroup;
 			children = (
-				E5B0030F2B31FE4900A90F8D /* ReviewDialog.swift */,
-				E5FFC5BC2B6A717A00C9D60B /* ReviewCurrentPriorities.swift */,
-				E5FFC5C02B6A72FB00C9D60B /* ReviewPendingResponses.swift */,
-				7FA581012B97AF7600803614 /* ReviewDueDate.swift */,
-				E5FFC5C22B6A73A900C9D60B /* ReviewInformView.swift */,
-				E5FFC5C42B6A7A1600C9D60B /* ReviewNextPriorities.swift */,
+				E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */,
+				E5FFC5BC2B6A717A00C9D60B /* CompassCheckCurrentPriorities.swift */,
+				E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */,
+				7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */,
+				E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */,
+				E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */,
 				7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */,
-				7F2D67602C2BC13D00C893B3 /* ReviewPlanDay.swift */,
+				7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */,
 			);
 			path = Review;
 			sourceTree = "<group>";
@@ -694,7 +697,7 @@
 				E51142982B342E3C00AB6E05 /* Three_Daily_Goals__Widget_.swift in Sources */,
 				E51142AC2B345BFF00AB6E05 /* ColorRelated.swift in Sources */,
 				E51142AD2B345BFF00AB6E05 /* DateRelated.swift in Sources */,
-				E5DE105E2B6911E000381337 /* ReviewTimer.swift in Sources */,
+				E5DE105E2B6911E000381337 /* CompassCheckTimer.swift in Sources */,
 				E51142AF2B345BFF00AB6E05 /* StringRelated.swift in Sources */,
 				E5FEC7F02B46F9D7007BE890 /* ArrayRelated.swift in Sources */,
 				E51142962B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift in Sources */,
@@ -714,14 +717,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E57C31B02B724B2700943EA1 /* PushNotification.swift in Sources */,
-				E5FFC5C12B6A72FB00C9D60B /* ReviewPendingResponses.swift in Sources */,
-				E5FFC5C32B6A73A900C9D60B /* ReviewInformView.swift in Sources */,
+				E5FFC5C12B6A72FB00C9D60B /* CompassCheckPendingResponses.swift in Sources */,
+				E5FFC5C32B6A73A900C9D60B /* CompassCheckInformView.swift in Sources */,
 				E5ED903F2B46E44100CF0431 /* ArrayRelated.swift in Sources */,
-				7FA581022B97AF7600803614 /* ReviewDueDate.swift in Sources */,
+				7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */,
 				E5B376B32B7B506400E66FAD /* AllCommentsView.swift in Sources */,
 				E597A48B2B848CD600BCD061 /* JSONDoc.swift in Sources */,
 				7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */,
-				E53C13142B6BED3B00E51553 /* ReviewPreferencesView.swift in Sources */,
+				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
 				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
@@ -747,16 +750,16 @@
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
 				E5B698FB2B7C89360086C3EB /* Buttons.swift in Sources */,
 				E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */,
-				E5FFC5BD2B6A717B00C9D60B /* ReviewCurrentPriorities.swift in Sources */,
+				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
 				E53AF7A52B661BF900C24F78 /* Migrations.swift in Sources */,
 				E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */,
-				E5FFC5C52B6A7A1600C9D60B /* ReviewNextPriorities.swift in Sources */,
+				E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */,
 				E5DDC9E42B3F59ED00383C0D /* TaskManagerViewModel.swift in Sources */,
 				E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
 				E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */,
 				E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */,
-				E5DE105B2B68F6D300381337 /* ReviewTimer.swift in Sources */,
+				E5DE105B2B68F6D300381337 /* CompassCheckTimer.swift in Sources */,
 				E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */,
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
 				E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */,
@@ -765,15 +768,16 @@
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
 				7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,
-				7F2D67612C2BC13D00C893B3 /* ReviewPlanDay.swift in Sources */,
+				7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */,
 				7F76355F2D39E6D9000FE15A /* SchemaV3_2.swift in Sources */,
 				E5FF74392B45308800B3B890 /* DoubleRelated.swift in Sources */,
 				7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */,
-				E5B003102B31FE4900A90F8D /* ReviewDialog.swift in Sources */,
+				E5B003102B31FE4900A90F8D /* CompassCheckDialog.swift in Sources */,
 				7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E590CE182B1FAD9000B16684 /* Comment.swift in Sources */,
 				E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */,
+				7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,7 +788,7 @@
 				7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				E597A4872B83D7B000BCD061 /* TestImportExport.swift in Sources */,
-				E5F705EC2B71EE56007BF387 /* TestDailyReviewTime.swift in Sources */,
+				E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,

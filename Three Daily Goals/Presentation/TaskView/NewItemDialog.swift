@@ -37,7 +37,7 @@ struct NewItemDialog : View {
             Spacer()
      
             Button(action: addTask) {
-                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskButton")
+                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskWithTitleButton")
             }
         }.padding(5)
         .frame(maxWidth: 300)
