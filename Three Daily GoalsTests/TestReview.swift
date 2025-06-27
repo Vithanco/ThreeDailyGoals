@@ -59,12 +59,7 @@ struct TestReview {
         #expect(model.dueDateSoon.isEmpty)
         #expect(model.stateOfCompassCheck == .currentPriorities)
         model.moveStateForward()
-        
-        #expect(model.dueDateSoon.count == 2)
-        #expect(model.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
-        #expect(model.dueDateSoon[1].title == "Tax Declaration")
-        model.dueDateSoon[1].dueDate = nil
-        model.dueDateSoon[0].dueDate = nil
+        #expect(model.stateOfCompassCheck == .pending)
         
         
         #expect(model.stateOfCompassCheck == .pending)

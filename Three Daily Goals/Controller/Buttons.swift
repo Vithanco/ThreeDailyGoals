@@ -132,7 +132,7 @@ extension TaskManagerViewModel {
             Label("Compass Check", systemImage: imgCompassCheck)
                // .symbolRenderingMode(.palette)
                 .foregroundStyle(.gray,preferences.accentColor )
-                .accessibilityIdentifier("reviewButton").help("Start the Compass Check now")
+                .accessibilityIdentifier("compassCheckButton").help("Start the Compass Check now")
 
         }
     }

@@ -19,17 +19,23 @@ struct SimpleListView: View {
         List{
             Section (header: VStack(alignment: .leading) {
                 HStack{
-                    section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier(id)
-                    //                        Text(" - \(itemList.count)").font(.title).foregroundStyle(model.accentColor)
+                    section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier("ListView"+id)
                 }
             }) {
-                Spacer().frame(height: 10)
                 if itemList.isEmpty {
                     Spacer(minLength: 20)
                     Text("(No items found)").foregroundStyle(model.accentColor).frame(maxWidth: .infinity)
                     Spacer(minLength: 20)
                 } else {
-                    ForEach(headers) {header in
+                    if !showHeaders {
+                        Spacer().frame(height: 10)
+                    }
+
+                    let allItems = headers.flatMap { header in
+                        header.filter(items: itemList)
+                    }
+
+                    ForEach(headers) { header in
                         let partialList = header.filter(items: itemList)
                         if partialList.count > 0 {
                             if showHeaders {
@@ -38,7 +44,10 @@ struct SimpleListView: View {
                                     .listRowSeparator(.hidden)
                             }
                             ForEach(partialList) { item in
-                                LinkToTask(model: model,item: item, list: item.state).listRowSeparator(.visible)
+                                LinkToTask(model: model, item: item, list: item.state)
+                                    .listRowSeparator(
+                                        !showHeaders && allItems.first?.id == item.id ? .hidden : .visible
+                                    )
                             }
                         }
                     }

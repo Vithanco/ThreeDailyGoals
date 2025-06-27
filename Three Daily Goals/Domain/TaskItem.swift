@@ -178,6 +178,7 @@ extension TaskItem {
             tags.append(newTag)
             changed = Date.now
             self.tags = tags
+            addComment(text: "Added tag: \(newTag)")
         }
         assert(tags.contains(newTag))
     }
@@ -188,6 +189,7 @@ extension TaskItem {
             tags.removeObject(oldTag)
             changed = Date.now
             self.tags = tags
+            addComment(text: "Removed tag: \(oldTag)")
         }
         assert(!tags.contains(oldTag))
     }

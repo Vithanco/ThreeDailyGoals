@@ -56,8 +56,6 @@ struct TestModelLists {
         move(from: .priority, to: .open)
     }
     
-
-    
     @MainActor
     @Test
     func testTags() async throws {
@@ -108,5 +106,35 @@ struct TestModelLists {
         
         #expect(model.allTags.contains("private"))
         #expect(model.activeTags.contains("private"))
+    }
+    
+    @MainActor
+        @Test
+    func testDueDate() async throws {
+        let model = dummyViewModel(loader: {
+            var result: [TaskItem] = []
+                let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+                theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
+                theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
+                theGoal.dueDate = getDate(inDays: 2)
+            return result
+        })
+        
+        #expect(model.dueDateSoon.count == 1)
+        #expect(model.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
+        
+        
+        model.moveStateForward()
+        #expect(model.dueDateSoon.count == 1)
+        
+        model.moveStateForward()
+        #expect(model.stateOfCompassCheck == .review)
+        #expect(model.dueDateSoon.count == 1)
+        model.moveStateForward()
+        #expect(model.dueDateSoon.count == 1)
+        model.moveStateForward()
+        #expect(model.dueDateSoon.count == 1)
+        
+        
     }
 }

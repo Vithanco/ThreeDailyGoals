@@ -7,8 +7,10 @@
 
 import XCTest
 
+var app: XCUIApplication!
+
 func launchTestApp() -> XCUIApplication{
-    let app = XCUIApplication()
+    app = XCUIApplication()
     app.launchArguments = ["enable-testing"]
     app.launch()
     return app
@@ -17,18 +19,22 @@ func launchTestApp() -> XCUIApplication{
 
 extension XCUIElement {
     func clearText() {
-        guard let stringValue = self.value as? String else {
-            return
-        }
-        // workaround for apple bug
-        if let placeholderString = self.placeholderValue, placeholderString == stringValue {
-            return
-        }
+    
+     if self.value as? String == nil {
+         XCTFail("Tried to clear and enter text into a non string value")
+         return
+     }
 
-        var deleteString = String()
-        for _ in stringValue {
-            deleteString += XCUIKeyboardKey.delete.rawValue
-        }
-        typeText(deleteString)
+     // Repeatedly delete text as long as there is something in the text field.
+     // This is required to clear text that does not fit in to the textfield and is partially hidden initally.
+     // Important to check for placeholder value, otherwise it gets into an infinite loop.
+     while let stringValue = self.value as? String, !stringValue.isEmpty, stringValue != self.placeholderValue {
+         // Move the cursor to the end of the text field
+         let lowerRightCorner = self.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.9))
+         lowerRightCorner.tap()
+         let delete = String(repeating: XCUIKeyboardKey.delete.rawValue, count: stringValue.count)
+         self.typeText(delete)
+     }
+        
     }
 }

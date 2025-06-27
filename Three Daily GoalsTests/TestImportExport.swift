@@ -29,7 +29,7 @@ struct TestImportExport {
         let id = original.id
         let encoded = try encoder.encode(original)
         debugPrint(encoded)
-        sleep(1)
+
         let decoder = JSONDecoder()
         let decoded: TaskItem = try decoder.decode(TaskItem.self, from: encoded)
         #expect(original == decoded)

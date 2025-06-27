@@ -33,19 +33,7 @@ struct ListView: View {
         let headers = list.subHeaders
 //        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         VStack {
-            let tags = model.list(which: whichList ?? model.whichList).tags.asArray
-            if !tags.isEmpty {
-                TagEditList(tags: $model.selectedTags,
-                            additionalTags: tags,
-                            container: .vstack,
-                            horizontalSpacing: 1,
-                            verticalSpacing: 1,
-                            tagView: { text, isSelected in
-                    TagCapsule(text)
-                        .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
-                }).background(Color.background).frame(maxHeight: 35, minHe).padding(5)
-            }
-
+           
             SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
                 .frame(minHeight: 145, maxHeight: .infinity)
                 .background(Color.background)
@@ -57,6 +45,9 @@ struct ListView: View {
                     ToolbarItem {
                         model.redoButton
                     }
+                    ToolbarItem {
+                        model.addNewItemButton
+                    }
                 }
 #endif
                 .dropDestination(for: String.self) {
@@ -66,6 +57,20 @@ struct ListView: View {
                     }
                     return true
                 }
+            Spacer()
+            let tags = model.list(which: whichList ?? model.whichList).tags.asArray
+            if !tags.isEmpty {
+                TagEditList(tags: $model.selectedTags,
+                            additionalTags: tags,
+                            container: .vstack,
+                            horizontalSpacing: 1,
+                            verticalSpacing: 1,
+                            tagView: { text, isSelected in
+                    TagCapsule(text)
+                        .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
+                }).fixedSize(horizontal: false, vertical: true).background(Color.background).padding(5)
+            }
+
         }
     }
 }

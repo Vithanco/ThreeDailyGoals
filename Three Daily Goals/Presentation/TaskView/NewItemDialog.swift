@@ -16,7 +16,7 @@ struct NewItemDialog : View {
     }
     
     func addTask() {
-        model.addAndSelect(title: title)
+        model.addAndSelect(title: title.trimmingCharacters(in: .whitespacesAndNewlines))
         dismiss()
     }
     

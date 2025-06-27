@@ -16,7 +16,7 @@ struct TaskAsLine: View {
     }
     
     var text: some View {
-        return Text(item.title)
+        return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
             .strikethrough( item.isClosed, color: accentColor)
             .draggable(item.id)
     }
