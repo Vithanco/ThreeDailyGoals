@@ -68,7 +68,7 @@ struct ListView: View {
                             tagView: { text, isSelected in
                     TagCapsule(text)
                         .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
-                }).fixedSize(horizontal: false, vertical: true).background(Color.background).padding(5)
+                }).frame(maxWidth: 300, idealHeight: 15, maxHeight: 50).background(Color.background).padding(5)
             }
 
         }

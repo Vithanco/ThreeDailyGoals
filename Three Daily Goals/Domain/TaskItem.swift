@@ -5,10 +5,10 @@
 //  Created by Klaus Kneupner on 05/12/2023.
 //
 
+import CoreTransferable
 import Foundation
 import SwiftData
 import os
-import CoreTransferable
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -17,61 +17,57 @@ private let logger = Logger(
 
 public typealias TaskItem = SchemaLatest.TaskItem
 
-extension TaskItem: Identifiable{
+extension TaskItem: Identifiable {
     public var id: String {
         return uuid.uuidString
     }
 }
 
-
 // Deep Equality needed during import
-public func deepEqual (_ lhs: TaskItem, _ rhs: TaskItem) -> Bool {
-    let result = lhs.id == rhs.id &&
-    lhs.title == rhs.title &&
-    lhs.details == rhs.details &&
-    lhs.state == rhs.state &&
-    lhs.url == rhs.url &&
-    lhs.changed == rhs.changed &&
-    lhs.created == rhs.created &&
-    lhs.dueDate == rhs.dueDate &&
-    lhs.eventId == rhs.eventId &&
-    lhs.due == rhs.due &&
-    lhs.closed == rhs.closed &&
-    lhs.allTagsString == rhs.allTagsString &&
-    lhs.uuid == rhs.uuid &&
-    lhs.estimatedMinutes == rhs.estimatedMinutes
-//        (lhs.comments == nil)  == (rhs.comments == nil)
+public func deepEqual(_ lhs: TaskItem, _ rhs: TaskItem) -> Bool {
+    let result =
+        lhs.id == rhs.id && lhs.title == rhs.title && lhs.details == rhs.details && lhs.state == rhs.state && lhs.url == rhs.url
+        && lhs.changed == rhs.changed && lhs.created == rhs.created && lhs.dueDate == rhs.dueDate && lhs.eventId == rhs.eventId
+        && lhs.due == rhs.due && lhs.closed == rhs.closed && lhs.allTagsString == rhs.allTagsString && lhs.uuid == rhs.uuid
+        && lhs.estimatedMinutes == rhs.estimatedMinutes
+    //        (lhs.comments == nil)  == (rhs.comments == nil)
     if !result {
         return false
     }
-//        if var lhsComments = lhs.comments, var rhsComments = rhs.comments {
-//            if lhsComments.count != rhsComments.count {
-//                return false
-//            }
-//            if lhsComments.isEmpty {
-//                return true
-//            }
-//            lhsComments.sort()
-//            rhsComments.sort()
-//            for i in 0 ... lhsComments.count-1 {
-//                if lhsComments[i] != rhsComments[i] {
-//                    return false
-//                }
-//            }
-//        }
+    //        if var lhsComments = lhs.comments, var rhsComments = rhs.comments {
+    //            if lhsComments.count != rhsComments.count {
+    //                return false
+    //            }
+    //            if lhsComments.isEmpty {
+    //                return true
+    //            }
+    //            lhsComments.sort()
+    //            rhsComments.sort()
+    //            for i in 0 ... lhsComments.count-1 {
+    //                if lhsComments[i] != rhsComments[i] {
+    //                    return false
+    //                }
+    //            }
+    //        }
     return true
 }
 
-extension TaskItem:Equatable {
-    
+extension TaskItem: Equatable {
+
     public static func == (lhs: TaskItem, rhs: TaskItem) -> Bool {
         return lhs.uuid == rhs.uuid
     }
-    
+
 }
 
-extension TaskItem {
-    
+protocol Taggable {
+    var tags: [String] { get }
+    func addTag(_ newTag: String)
+    func removeTag(_ oldTag: String)
+}
+
+extension TaskItem: Taggable {
+
     func updateFrom(_ other: TaskItem) {
         if other.uuid != self.uuid {
             logger.error("UUID mismatch during import: \(other.uuid) != \(self.uuid) for  \(self.title) ")
@@ -102,7 +98,7 @@ extension TaskItem {
             changed = Date.now
         }
     }
-    
+
     @Transient
     var details: String {
         get {
@@ -113,7 +109,7 @@ extension TaskItem {
             changed = Date.now
         }
     }
-    
+
     @Transient
     var due: Date? {
         get {
@@ -124,7 +120,7 @@ extension TaskItem {
             changed = Date.now
         }
     }
-    
+
     @Transient
     var url: String {
         get {
@@ -135,14 +131,14 @@ extension TaskItem {
             changed = Date.now
         }
     }
-    
+
     @Transient
     var state: TaskItemState {
         get {
             return _state
         }
         set {
-            if (newValue != state) {
+            if newValue != state {
                 changed = Date.now
                 addComment(text: "Changed state to: \(newValue)")
                 _state = newValue
@@ -158,20 +154,23 @@ extension TaskItem {
             }
         }
     }
-    
+
     @Transient
     var tags: [String] {
         get {
-            return allTagsString.components(separatedBy: ",").filter({!$0.isEmpty})
+            return allTagsString.components(separatedBy: ",").filter({ !$0.isEmpty })
         }
         set {
-            if (newValue != tags) {
+            let tags: [String] = self.tags
+            if newValue != tags {
                 changed = Date.now
-                allTagsString = newValue.filter({!$0.isEmpty}).joined(separator: ",")
+                newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)") })
+                tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)") })
+                allTagsString = newValue.filter({ !$0.isEmpty }).joined(separator: ",")
             }
         }
     }
-    
+
     func addTag(_ newTag: String) {
         var tags = self.tags
         if !tags.contains(newTag) {
@@ -182,7 +181,7 @@ extension TaskItem {
         }
         assert(tags.contains(newTag))
     }
-    
+
     func removeTag(_ oldTag: String) {
         var tags = self.tags
         if tags.contains(oldTag) {
@@ -193,60 +192,60 @@ extension TaskItem {
         }
         assert(!tags.contains(oldTag))
     }
-    
+
     var isOpen: Bool {
         return state == .open
     }
-    
+
     var isPriority: Bool {
         return state == .priority
     }
-    
+
     var isOpenOrPriority: Bool {
         return state == .open || state == .priority
     }
-    
+
     var isClosed: Bool {
         return state == .closed
     }
-    
+
     var isActive: Bool {
         return [.open, .priority, .pendingResponse].contains(self.state)
     }
-    
-    var canBeClosed : Bool {
+
+    var canBeClosed: Bool {
         return [.open, .priority, .pendingResponse, .dead].contains(self.state)
     }
-    
-    var canBeMovedToOpen : Bool {
+
+    var canBeMovedToOpen: Bool {
         return self.state != .open
     }
-    
+
     var canBeMovedToPendingResponse: Bool {
         return self.state != .pendingResponse
     }
-    
-    var canBeTouched : Bool {
+
+    var canBeTouched: Bool {
         return [.pendingResponse, .open, .priority, .dead].contains(self.state)
     }
-    
-    var canBeDeleted : Bool {
-        return  [.closed, .dead].contains(self.state)
+
+    var canBeDeleted: Bool {
+        return [.closed, .dead].contains(self.state)
     }
-    
+
     var isDead: Bool {
         return state == .dead
     }
-    
+
     var isPending: Bool {
         return state == .pendingResponse
     }
-    
-    @discardableResult func addComment(text: String) -> TaskItem{
+
+    @discardableResult func addComment(text: String) -> TaskItem {
         if comments == nil {
             comments = [Comment]()
         }
-        
+
         let aComment = Comment(text: text, taskItem: self)
         if let mc = self.modelContext {
             mc.insert(aComment)
@@ -255,14 +254,14 @@ extension TaskItem {
         changed = Date.now
         return self
     }
-    
+
     func closeTask() {
         if state != .closed {
             state = .closed
             addComment(text: "closed this task on \(Date.now)")
         }
     }
-    
+
     func reOpenTask() {
         if state != .open {
             state = .open
@@ -275,21 +274,21 @@ extension TaskItem {
             addComment(text: "Moved task to the Graveyard of not needed tasks.")
         }
     }
-    
+
     func makePriority() {
         if state != .priority {
             state = .priority
             addComment(text: "Turned into a priority.")
         }
     }
-    
+
     func dueUntil(date: Date) -> Bool {
         if let due {
             return due <= date
         }
         return false
     }
-    
+
     func touch() {
         if state == .open {
             setChangedDate(.now)
@@ -298,12 +297,12 @@ extension TaskItem {
             reOpenTask()
         }
     }
-    
+
     /// only use for test cases
     func setChangedDate(_ date: Date) {
         changed = date
     }
-    
+
     func pending() {
         if state != .pendingResponse {
             state = .pendingResponse
@@ -312,7 +311,7 @@ extension TaskItem {
     }
 }
 extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
-    
+
     public var description: String {
         return title
     }
@@ -321,13 +320,11 @@ extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
     }
 }
 
-
-extension TaskItem : Comparable {
+extension TaskItem: Comparable {
     public static func < (lhs: TaskItem, rhs: TaskItem) -> Bool {
         return lhs.changed < rhs.changed
     }
 }
-
 
 extension TaskItem: Transferable {
     public static var transferRepresentation: some TransferRepresentation {

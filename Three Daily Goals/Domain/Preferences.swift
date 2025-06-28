@@ -181,7 +181,6 @@ extension CloudPreferences {
             } else {
                 store.set(nil, forKey: .accentColorString)
             }
-            
         }
     }
     

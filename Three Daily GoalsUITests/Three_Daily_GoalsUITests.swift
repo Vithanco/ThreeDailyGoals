@@ -67,55 +67,72 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         return list.element(boundBy: 0)
     }
 
+    @MainActor
+    func testScrolling() async throws {
+        let app = launchTestApp()
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
+        let openList = findFirst(string:"scrollView_open_List", whereToLook: app.descendants(matching: .any))
+       // openList.tap()
+        openList.swipeUp()
+    }
 
     @MainActor
     func testTaskLifeCycle() async throws {
         let testString = "test title 45#"
-    //
-            let app = launchTestApp()
-            let firstButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
-            firstButton.tap()
+        //
+        let app = launchTestApp()
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
-            let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
-            addButton.tap()
+        let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
+        addButton.tap()
 
-            let title = findFirst(string: "titleField", whereToLook: app.textFields)
-            XCTAssertNotNil(title)
-            title.doubleTap()
-            title.clearText()
-            title.typeText(testString)
-            let submit = findFirst(string: "addTaskWithTitleButton", whereToLook: app.buttons)
-            submit.tap()
+        let title = findFirst(string: "titleField", whereToLook: app.textFields)
+        XCTAssertNotNil(title)
+        title.doubleTap()
+        title.clearText()
+        title.typeText(testString)
+        let submit = findFirst(string: "addTaskWithTitleButton", whereToLook: app.buttons)
+        submit.tap()
 
-#if os(iOS)
+        #if os(iOS)
             let back = findFirst(string: "Back", whereToLook: app.buttons)
             back.tap()
-#endif
-            firstButton.tap()
+        #endif
+        listOpenButton.tap()
 
-            let testTask = findFirst(string: testString, whereToLook: app.staticTexts)  // Use actual identifier for the first task
-            XCTAssertTrue(testTask.exists, "First task should be found")
-            testTask.tap()
+        let openList = findFirst(string:"scrollView_open_List", whereToLook: app.descendants(matching: .any))
+        XCTAssertNotNil(openList)
+        openList.swipeUp()
 
-            let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
-            XCTAssertTrue(closeButton.exists, "Close button should be found")
-            closeButton.tap()
-#if os(iOS)
+        let testTask = findFirst(string: testString, whereToLook: app.staticTexts)
+        XCTAssertTrue(testTask.exists, "First task should be found")
+
+        testTask.tap()
+
+        let closeButton = findFirst(string: "closeButton", whereToLook: app.buttons)
+        XCTAssertTrue(closeButton.exists, "Close button should be found")
+        closeButton.tap()
+        #if os(iOS)
             back.tap()
             back.tap()
-#endif
-            let closedList = app.staticTexts["closed_LinkedList"]
-            closedList.tap()
-            let closedTask = findFirst(string: testString, whereToLook: app.staticTexts)
-            XCTAssertNotNil(closedTask)
-            closedTask.swipeLeft()
+        #endif
+        let listClosed = app.staticTexts["closed_LinkedList"]
+        listClosed.tap()
+        let closedTask = findFirst(string: testString, whereToLook: app.staticTexts)
+        XCTAssertNotNil(closedTask)
+        #if os(macOS)
+       closedTask.tap()
+        #endif
+        closedTask.swipeLeft()
 
-            let deleteButton = app.buttons["deleteButton"]
-            XCTAssertTrue(deleteButton.exists, "Delete button should be found")
-            deleteButton.tap()
+        let deleteButton = app.buttons["deleteButton"]
+        XCTAssertTrue(deleteButton.exists, "Delete button should be found")
+        deleteButton.tap()
 
-            XCTAssertTrue(!closedTask.exists, "Task should be deleted")
-      //
+        XCTAssertTrue(!closedTask.exists, "Task should be deleted")
+        //
     }
 
     @MainActor func testAppStartsEmpty() throws {

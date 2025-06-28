@@ -141,18 +141,15 @@ struct TestReview {
         pref.lastCompassCheck = m15
         #expect(model.didLastCompassCheckHappenInCurrentCompassCheckInterval())
         
-        
         pref.lastCompassCheck = m25
         #expect(!model.didLastCompassCheckHappenInCurrentCompassCheckInterval())
         #expect(!pref.lastCompassCheck.isToday)
-        
     }
     
     let now: Date = "2024-06-02T03:48:00Z"
     let m15: Date = "2024-06-01T13:48:00Z"
     let m24: Date = "2024-06-01T03:48:00Z"
     let m25: Date = "2024-06-01T02:48:00Z"
-    
     
     @MainActor
     @Test
@@ -168,7 +165,6 @@ struct TestReview {
         #expect (!pref.didCompassCheckToday)
         
     }
-
 }
 
 extension Date: ExpressibleByExtendedGraphemeClusterLiteral {}
