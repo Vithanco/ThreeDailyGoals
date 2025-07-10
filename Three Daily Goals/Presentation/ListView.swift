@@ -24,7 +24,7 @@ struct ListView: View {
     }
 
     var list: TaskItemState {
-        return whichList ?? model.whichList
+        return whichList ?? (model.whichList == .priority ? .open : model.whichList)
     }
 
     var body: some View {
@@ -37,8 +37,9 @@ struct ListView: View {
             SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
                 .frame(minHeight: 145, maxHeight: .infinity)
                 .background(Color.background)
-#if os(iOS)
+
                 .toolbar {
+                    
                     ToolbarItem {
                         model.undoButton
                     }
@@ -48,8 +49,11 @@ struct ListView: View {
                     ToolbarItem {
                         model.addNewItemButton
                     }
+                    ToolbarItem {
+                        model.compassCheckButton
+                    }
                 }
-#endif
+
                 .dropDestination(for: String.self) {
                     items, _ in
                     for item in items.compactMap({ model.findTask(withUuidString: $0) }) {

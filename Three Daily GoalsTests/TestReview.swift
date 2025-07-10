@@ -148,18 +148,19 @@ struct TestReview {
     
     let now: Date = "2024-06-02T03:48:00Z"
     let m15: Date = "2024-06-01T13:48:00Z"
-    let m24: Date = "2024-06-01T03:48:00Z"
+    let m24: Date = "2024-06-01T03:48:00Z"  //minus 24 hours
     let m25: Date = "2024-06-01T02:48:00Z"
     
     @MainActor
     @Test
     func testStreak() throws {
-        let model = dummyViewModel()
+        let model = dummyViewModel(preferences: dummyPreferences())
         let pref = model.preferences
         
         pref.lastCompassCheck = m24
         pref.currentCompassCheckInterval = getCompassCheckInterval(forDate: m24)
         #expect (pref.didCompassCheckToday)
+        #expect (model.didLastCompassCheckHappenInCurrentCompassCheckInterval())
         
         pref.currentCompassCheckInterval = getCompassCheckInterval()
         #expect (!pref.didCompassCheckToday)

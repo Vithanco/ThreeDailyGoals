@@ -16,8 +16,8 @@ struct CompassCheckNextPriorities: View {
     
     var body: some View {
         VStack{
-#if os(macOS)
-            
+    #if os(macOS)
+                
             Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
                 ListView(whichList: .priority, model: model).frame(minHeight: 300)
@@ -25,44 +25,10 @@ struct CompassCheckNextPriorities: View {
             }
             
 #endif
-#if os(iOS)  // delete this once iOS works as expected and keep macOS path for all
-            Text("Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
-            HStack {
-                //                VStack{
-                //                    HStack {
-                //                        Spacer()
-                //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target because iOS has an issue. Will be hopefully removed with next version of iOS.")
-                //                        Spacer()
-                
+#if os(iOS)
+
                 ListView(whichList: .priority, model: model)
                     .frame(minHeight: 300)
-                    .dropDestination(for: String.self){
-                        items, location in
-                        for item in items.compactMap({
-                            model.findTask(withUuidString: $0)}) {
-                            model.move(task: item, to: .priority)
-                        }
-                        return true
-                    }
-                
-                //   VStack{
-                //                    HStack {
-                //                        Spacer()
-                //                        Circle().frame(width: 10).foregroundColor(.accentColor).help("Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS.")
-                //                        Spacer()
-                
-                ListView(whichList: .open ,model: model)
-                    .frame(minHeight: 300)
-                    .dropDestination(for: String.self){
-                    items, location in
-                    for item in items.compactMap({
-                        model.findTask(withUuidString: $0)}) {
-                        model.move(task: item, to: .open)
-                    }
-                    return true
-                }
-                
-            }
             
 #endif
             Button(action: { presentAlert = true}) {

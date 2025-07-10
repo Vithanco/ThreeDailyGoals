@@ -29,6 +29,7 @@ struct TaskAsLine: View {
     
     var body: some View {
         HStack{
+
             text
             Spacer()
             if hasDue {
@@ -49,6 +50,9 @@ struct TaskAsLine: View {
             if item.canBeClosed {
                 model.killButton(item: item)
                 model.closeButton(item: item)
+            }
+            if item.canBeMadePriority {
+                model.priorityButton(item: item)
             }
         }
         

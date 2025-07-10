@@ -31,7 +31,7 @@ struct CompassCheckDialog: View {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
                 Button(action: model.moveStateForward) {
-                    Text(model.nameOfNextStep)
+                    Text(model.moveStateForwardText)
                 }.buttonStyle(.borderedProminent)
             }
             Spacer()

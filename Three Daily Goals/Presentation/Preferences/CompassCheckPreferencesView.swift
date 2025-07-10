@@ -20,14 +20,19 @@ struct CompassCheckPreferencesView : View {
     var body: some View {
         VStack{
             Spacer()
-            Text("Daily Compass Checks are at the heart of Three Daily Goals. Choose when you want to plan your Daily Compass Check. In the morning? Or the evening before?").multilineTextAlignment(.center).padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
+            Text(
+                "Daily Compass Checks are at the heart of Three Daily Goals. Choose when you want to plan your Daily Compass Check. In the morning? Or the evening before?"
+            )
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: 400, maxHeight: .infinity)
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
             Text("Three Daily Goals is assuming that you should do a Compass Check to occur at least once between noon of one day and noon the next day.").multilineTextAlignment(.center)
             Spacer().frame(height: 10)
             GroupBox{
                 HStack{
                     Text("Last Compass Check was:")
                     Text(lastCompassCheck).foregroundColor(model.accentColor)
-                }.padding(5).frame(minWidth: 300)
+                }.padding(5)
                 
                 model.streakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
 
@@ -44,8 +49,8 @@ struct CompassCheckPreferencesView : View {
                 HStack{
                     Text ("Done for this period: ")
                     Text (model.didLastCompassCheckHappenInCurrentCompassCheckInterval() ? "yes" : "no")
-                }.frame(minWidth: 300)
-            }.frame(minWidth: 300)
+                }
+            }
             GroupBox {
                 DatePicker("Time of Compass Check Notification", selection: $model.preferences.compassCheckTime, displayedComponents: .hourAndMinute).frame(maxWidth: 258).padding(5)
                 Button("Set Compass Check Time") {
@@ -59,9 +64,9 @@ struct CompassCheckPreferencesView : View {
                 Button( "No Notifications Please", role: .destructive){
                     model.deleteNotifications()
                 }.buttonStyle(.bordered).padding(5)
-            }.frame(minWidth: 300)
-            Spacer()
-        }.padding(10).frame(minWidth: 400, minHeight: 500)
+            }
+            Spacer(minLength: 10)
+        }.fixedSize(horizontal: false, vertical: true).padding(10)
     }
     
 }

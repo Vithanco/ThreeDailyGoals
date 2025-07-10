@@ -131,9 +131,13 @@ final class CloudPreferences {
 extension CloudPreferences {
     var daysOfCompassCheck: Int {
         get {
-            return self.store.int(forKey: .daysOfCompassCheck)
+            
+            let result = self.store.int(forKey: .daysOfCompassCheck)
+            debugPrint("read daysOfCompassCheck: \(result)")
+            return result
         }
         set {
+            debugPrint("write new daysOfCompassCheck: \(newValue)")
             store.set(newValue,forKey: .daysOfCompassCheck)
         }
     }
@@ -238,9 +242,11 @@ extension CloudPreferences {
                 result = getCompassCheckInterval(forDate: Date.now)
                 self.currentCompassCheckInterval = result
             }
+            debugPrint("read currentCompassCheckInterval: \(result)")
             return result
         }
         set {
+            debugPrint("set currentCompassCheckInterval: \(newValue)")
             store.set(newValue.start, forKey: .currentCompassCheckIntervalStart)
             store.set(newValue.end,forKey: .currentCompassCheckIntervalEnd)
         }

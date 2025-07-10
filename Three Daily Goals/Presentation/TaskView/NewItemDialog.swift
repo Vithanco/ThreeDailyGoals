@@ -36,8 +36,14 @@ struct NewItemDialog : View {
             }.tdgShadow
             Spacer()
      
-            Button(action: addTask) {
-                Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskWithTitleButton")
+            HStack {
+                Button(role: .destructive,action: dismiss) {
+                    Text("Cancel").foregroundColor(Color.secondaryColor)
+                }
+                Spacer()
+                Button(action: addTask) {
+                    Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskWithTitleButton")
+                }
             }
         }.padding(5)
         .frame(maxWidth: 300)

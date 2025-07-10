@@ -36,7 +36,7 @@ struct PreferencesView: View {
                     .tabItem {
                         Label("Tags", systemImage: "tag.circle.fill")
                     }
-            }.frame(minHeight: 250)
+            }
 //#if os(iOS)
 //            Spacer()
 //            Button("Close Preferences"){

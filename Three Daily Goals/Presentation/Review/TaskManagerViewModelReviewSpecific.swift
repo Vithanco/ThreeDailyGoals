@@ -24,6 +24,7 @@ extension TaskManagerViewModel {
         }
     }
     
+    @MainActor
     func moveStateForward() {
      //   assert(showReviewDialog)
         switch stateOfCompassCheck {
@@ -60,8 +61,8 @@ extension TaskManagerViewModel {
         debugPrint("new state is: \(stateOfCompassCheck)")
     }
     
-    var nameOfNextStep: String {
-        if stateOfCompassCheck == .review {
+    var moveStateForwardText: String {
+        if stateOfCompassCheck == .plan {
             return "Finish"
         }
         return "Next"
@@ -81,26 +82,40 @@ extension TaskManagerViewModel {
     func endCompassCheck(didCompassCheck : Bool){
         showCompassCheckDialog = false
         stateOfCompassCheck = .inform
-        
+        debugPrint("endCompassCheck, finished: \(didCompassCheck)")
+        debugPrint("did check: \(preferences.didCompassCheckToday)")
+        debugPrint("current interval: \(preferences.currentCompassCheckInterval)")
+        debugPrint("next interval: \(preferences.nextCompassCheckTime)")
         let countedBefore = didLastCompassCheckHappenInCurrentCompassCheckInterval()
+        debugPrint("counted before: \(countedBefore)")
         
         // setting last review date
         if didCompassCheck {
-            preferences.lastCompassCheck = Date.now
             if !countedBefore {
+                debugPrint("current streak: \(preferences.daysOfCompassCheck)")
                 preferences.daysOfCompassCheck = preferences.daysOfCompassCheck + 1
                 if preferences.daysOfCompassCheck > preferences.longestStreak {
                     preferences.longestStreak = preferences.daysOfCompassCheck
                 }
+                debugPrint("current streak: \(preferences.daysOfCompassCheck), longest: \(preferences.longestStreak)")
             }
+            debugPrint("----- set date -----")
+            preferences.lastCompassCheck = Date.now
+            debugPrint("lastCompassCheck: \(preferences.lastCompassCheck)")
+            debugPrint("next interval: \(preferences.nextCompassCheckTime)")
+            debugPrint("did check: \(preferences.didCompassCheckToday)")
         }
         
         let currentCompassCheckInterval = getCompassCheckInterval()
+        debugPrint("currentCompassCheckInterval: \(currentCompassCheckInterval)")
+        debugPrint("stored interval: \(preferences.currentCompassCheckInterval)")
         
         if currentCompassCheckInterval.intersection(with: preferences.currentCompassCheckInterval)?.duration ?? 0 < Seconds.fourHours {
+            debugPrint("new Day")
             // new day!
             if !countedBefore{
                 // reset the streak to 0
+                debugPrint("reset streak")
                 preferences.daysOfCompassCheck = didCompassCheck ? 1 : 0
             }
             preferences.currentCompassCheckInterval = currentCompassCheckInterval

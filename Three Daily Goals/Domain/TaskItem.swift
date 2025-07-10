@@ -213,6 +213,10 @@ extension TaskItem {
         return [.open, .priority, .pendingResponse].contains(self.state)
     }
 
+    var canBeMadePriority: Bool {
+        return [.open, .pendingResponse].contains(self.state)
+    }
+
     var canBeClosed: Bool {
         return [.open, .priority, .pendingResponse, .dead].contains(self.state)
     }

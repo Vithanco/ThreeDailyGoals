@@ -14,7 +14,7 @@ struct RegularMainView: View {
     
     var body: some View {
         NavigationSplitView (columnVisibility: $columnVisibility){
-            LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
+            LeftSideView( model: model).background(Color.background).frame(maxHeight: .infinity)
                 .navigationSplitViewColumnWidth(min: 300, ideal: 400)
         } content: {
             SingleView{
