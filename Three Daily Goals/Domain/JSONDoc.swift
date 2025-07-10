@@ -6,20 +6,18 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 import SwiftUI
-
-
+import UniformTypeIdentifiers
 
 // simple doc to save my JSON data
 struct JSONWriteOnlyDoc: FileDocument {
     static var readableContentTypes: [UTType] { [.json] }
-    
+
     private var content: [TaskItem]
     init(content: [TaskItem]) {
         self.content = content
     }
-    
+
     // simple wrapper, w/o WriteConfiguration multi types or
     // existing file selected handling (it is up to you)
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
@@ -28,7 +26,7 @@ struct JSONWriteOnlyDoc: FileDocument {
         let data = try encoder.encode(content)
         return FileWrapper(regularFileWithContents: data)
     }
-    
+
     init(configuration: ReadConfiguration) throws {
         assert(false)
         self.content = []

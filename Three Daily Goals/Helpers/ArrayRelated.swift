@@ -7,35 +7,33 @@
 
 import Foundation
 
-public extension Array where Element: Equatable {
-    static func - (left: [Element], right: [Element]) -> [Element] {
+extension Array where Element: Equatable {
+    public static func - (left: [Element], right: [Element]) -> [Element] {
         var result = [Element]()
-        for ele in left {
-            if !right.contains(ele) {
-                result.append(ele)
-            }
+        for ele in left where !right.contains(ele) {
+            result.append(ele)
         }
         return result
     }
-//
-//    public static func - (left: Array<Element>, right: Optional<Array<Element>>) -> Array<Element> {
-//        let right = right ?? []
-//        return left - right
-//    }
-//
+    //
+    //    public static func - (left: Array<Element>, right: Optional<Array<Element>>) -> Array<Element> {
+    //        let right = right ?? []
+    //        return left - right
+    //    }
+    //
 }
 
-public extension Array where Element: Equatable {
+extension Array where Element: Equatable {
     // Remove first collection element that is equal to the given `object`:
-    mutating func removeObject(_ object: Iterator.Element) {
+    public mutating func removeObject(_ object: Iterator.Element) {
         if let index = firstIndex(of: object) {
             remove(at: index)
         }
     }
 
-    func splitAndCombine(makeFirst: Element) -> [Element] {
+    public func splitAndCombine(makeFirst: Element) -> [Element] {
         guard let i = firstIndex(of: makeFirst) else {
-            debugPrint( "couldn't split the array properly")
+            debugPrint("couldn't split the array properly")
             return self
         }
         var first = Array(self[i..<count])
@@ -44,7 +42,7 @@ public extension Array where Element: Equatable {
         return first
     }
 
-    var uniqueElements: [Element] {
+    public var uniqueElements: [Element] {
         return reduce(into: []) {
             uniqueElements, element in
 
@@ -54,7 +52,7 @@ public extension Array where Element: Equatable {
         }
     }
 
-    mutating func toggle(_ object: Element) {
+    public mutating func toggle(_ object: Element) {
         if contains(object) {
             removeObject(object)
             return

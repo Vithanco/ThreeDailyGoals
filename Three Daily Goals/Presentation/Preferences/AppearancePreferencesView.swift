@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct AppearancePreferencesView : View {
+struct AppearancePreferencesView: View {
     @Bindable var model: TaskManagerViewModel
     var body: some View {
-        VStack{
+        VStack {
             Spacer()
             Text("Choose which Color you like best for list headers, or use your system's accent color.")
-            HStack{
+            HStack {
                 Spacer()
                 ColorPicker("Accent Color", selection: $model.preferences.accentColor)
                 Spacer()
             }
-            Button("Use System Accent Color"){
+            Button("Use System Accent Color") {
                 model.resetAccentColor()
             }
             Spacer()

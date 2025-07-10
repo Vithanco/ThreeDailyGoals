@@ -49,8 +49,10 @@ struct InnerTaskItemView: View {
             }
 
             LabeledContent {
-                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused($isTitleFocused)
-                    .bold().frame(idealHeight: 13)
+                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused(
+                    $isTitleFocused
+                )
+                .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
             }.tdgShadow
@@ -142,39 +144,8 @@ struct TaskItemView: View {
             missingTagStyle: model.missingTagStyle
         )
         // .tdgToolbar(model: model, include : !isLargeDevice)
-        .toolbar {
-            #if os(iOS)
-                ToolbarItem {
-                    model.undoButton
-                }
-                ToolbarItem {
-                    model.redoButton
-                }
-            #endif
-            ToolbarItem {
-                model.toggleButton(item: item)
-            }
-            if item.canBeClosed {
-                ToolbarItem {
-                    model.closeButton(item: item)
-                }
-            }
-            if item.canBeMovedToOpen {
-                ToolbarItem {
-                    model.openButton(item: item)
-                }
-            }
-            if item.canBeMovedToPendingResponse {
-                ToolbarItem {
-                    model.waitForResponseButton(item: item)
-                }
-            }
-            if item.canBeTouched {
-                ToolbarItem {
-                    model.touchButton(item: item)
-                }
-            }
-        }.onAppear(perform: {
+        .itemToolbar(model: model, item: item)
+        .onAppear(perform: {
             model.updateUndoRedoStatus()
             isTitleFocused = true
         })

@@ -9,38 +9,37 @@ import Foundation
 import os
 
 private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
-        category: String(describing: CompassCheckTimer.self)
-    )
+    subsystem: Bundle.main.bundleIdentifier!,
+    category: String(describing: CompassCheckTimer.self)
+)
 
-typealias OnCompassCheckTimer = @Sendable () -> ()
-
+typealias OnCompassCheckTimer = @Sendable () -> Void
 
 final class CompassCheckTimer {
     var timer: Timer? = nil
-    
+
     init() {
-        
+
     }
-    
-    deinit{
-            timer?.invalidate()
+
+    deinit {
+        timer?.invalidate()
     }
-    
+
     func cancelTimer() {
         timer?.invalidate()
         timer = nil
     }
-    
-    func setTimer( forWhen fireAt: Date, onCompassCheckTimer: @escaping OnCompassCheckTimer) {
+
+    func setTimer(forWhen fireAt: Date, onCompassCheckTimer: @escaping OnCompassCheckTimer) {
         cancelTimer()
-        timer = Timer(fire: fireAt, interval: 1, repeats:false) { timer in
+        timer = Timer(fire: fireAt, interval: 1, repeats: false) { timer in
             logger.info("Time for Compass Check")
             onCompassCheckTimer()
         }
         if let timer = timer {
             RunLoop.main.add(timer, forMode: .common)
         }
-        
+
     }
 }

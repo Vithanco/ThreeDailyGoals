@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct InnerHeightPreferenceKey: PreferenceKey {
     static let defaultValue: CGFloat = .zero
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
@@ -15,16 +14,15 @@ struct InnerHeightPreferenceKey: PreferenceKey {
     }
 }
 
-
 struct CompassCheckDialog: View {
-    
+
     @Bindable var model: TaskManagerViewModel
     //    @State private var sheetHeight: CGFloat = .zero
-    
+
     var body: some View {
         VStack {
-            
-            HStack{
+
+            HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(model.accentColor)
                 Spacer()
                 Button(role: .cancel, action: model.cancelCompassCheck) {
@@ -35,14 +33,14 @@ struct CompassCheckDialog: View {
                 }.buttonStyle(.borderedProminent)
             }
             Spacer()
-            
+
             switch model.stateOfCompassCheck {
             case .inform:
                 CompassCheckInformView(model: model)
             case .currentPriorities:
                 CompassCheckCurrentPriorities(model: model)
             case .pending:
-                CompassCheckPendingResponses(model:model)
+                CompassCheckPendingResponses(model: model)
             case .review:
                 CompassCheckNextPriorities(model: model)
             case .dueDate:
@@ -51,7 +49,7 @@ struct CompassCheckDialog: View {
                 CompassCheckPlanDay(model: model, date: .today)
             }
             Spacer()
-        }.padding(4).frame(minHeight: 350,idealHeight: 600)
+        }.padding(4).frame(minHeight: 350, idealHeight: 600)
     }
     //                .overlay {
     //                    GeometryReader { geometry in
@@ -63,7 +61,6 @@ struct CompassCheckDialog: View {
     //                }
     //                .presentationDetents([.height(sheetHeight)])
 }
-
 
 #Preview {
     let model = dummyViewModel()

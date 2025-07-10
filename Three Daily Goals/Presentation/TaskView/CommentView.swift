@@ -9,13 +9,13 @@ import SwiftUI
 
 struct CommentView: View {
     let comment: Comment
-    
+
     var body: some View {
-        LabeledContent{
+        LabeledContent {
             Text(comment.text).frame(maxWidth: .infinity, alignment: .leading)
         } label: {
-            Text(comment.created, format: stdOnlyDateFormat)//.foregroundColor(Color.secondaryColor)
-        }.frame(maxWidth: .infinity).padding(1)//.background(Color.secondaryBackground)
+            Text(comment.created, format: stdOnlyDateFormat)  //.foregroundColor(Color.secondaryColor)
+        }.frame(maxWidth: .infinity).padding(1)  //.background(Color.secondaryBackground)
     }
 }
 

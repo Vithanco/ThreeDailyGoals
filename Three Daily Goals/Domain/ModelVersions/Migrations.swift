@@ -24,15 +24,16 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
         toVersion: SchemaV3_3.self,
         willMigrate: { context in
             let oldTasks = try context.fetch(FetchDescriptor<SchemaV3_2.TaskItem>())
-            
+
             for oldTask in oldTasks {
-                
+
                 guard let jsonData = try? JSONEncoder().encode(oldTask),
-                      let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    let jsonString = String(data: jsonData, encoding: .utf8)
+                else {
                     fatalError()
                 }
                 print("Migrating TaskItem:\n\(jsonString)")
-                
+
                 var newTask = SchemaV3_3.TaskItem()  // V3_3 version
                 newTask.allTags = oldTask._tags
                 newTask._details = oldTask._details
@@ -60,15 +61,15 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
             print("Migration from V3.2 to V3.3 completed successfully.")
         }
     )
-    
+
     static let migrateV3_3toV3_4 = MigrationStage.custom(
         fromVersion: SchemaV3_3.self,
         toVersion: SchemaV3_4.self,
         willMigrate: { context in
             let oldTasks = try context.fetch(FetchDescriptor<SchemaV3_3.TaskItem>())
-            
+
             for oldTask in oldTasks {
-                var newTask = SchemaV3_4.TaskItem() 
+                var newTask = SchemaV3_4.TaskItem()
                 newTask.tags = oldTask.allTags
                 newTask._details = oldTask._details
                 newTask._title = oldTask._title
@@ -97,6 +98,6 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
     )
 
     static var stages: [MigrationStage] {
-        [ migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4]
+        [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4]
     }
 }

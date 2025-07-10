@@ -9,14 +9,16 @@ import SwiftUI
 
 struct CompassCheckPendingResponses: View {
     @Bindable var model: TaskManagerViewModel
-    
+
     var body: some View {
-        VStack{
+        VStack {
             Text("Can you close some tasks you wait on?").font(.title2).foregroundStyle(model.accentColor)
             Spacer()
-            Text("Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step).")
+            Text(
+                "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."
+            )
             ListView(whichList: .pendingResponse, model: model)
-        }.frame(minHeight: 300, idealHeight: 800, maxHeight:.infinity )
+        }.frame(minHeight: 300, idealHeight: 800, maxHeight: .infinity)
     }
 }
 

@@ -9,8 +9,8 @@ import SwiftUI
 import TagKit
 
 extension ListHeader {
-    var asText : Text {
-        Text("Last updated: \(name)"  ).font(.callout)
+    var asText: Text {
+        Text("Last updated: \(name)").font(.callout)
     }
 }
 
@@ -28,54 +28,44 @@ struct ListView: View {
     }
 
     var body: some View {
-        let filterFunc: (TaskItem) -> Bool = model.selectedTags.isEmpty ? { _ in true } : { $0.tags.contains(where: model.selectedTags.contains) }
+        let filterFunc: (TaskItem) -> Bool =
+            model.selectedTags.isEmpty
+            ? { _ in true } : { $0.tags.contains(where: model.selectedTags.contains) }
         let itemList = model.list(which: list).filter(filterFunc)
         let headers = list.subHeaders
-//        let partialLists : [[TaskItem]] = headers.map({$0.filter(items: itemList)})
         VStack {
-           
-            SimpleListView(itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section, id: list.getListAccessibilityIdentifier, model: model)
-                .frame(minHeight: 145, maxHeight: .infinity)
-                .background(Color.background)
-
-                .toolbar {
-                    
-                    ToolbarItem {
-                        model.undoButton
-                    }
-                    ToolbarItem {
-                        model.redoButton
-                    }
-                    ToolbarItem {
-                        model.addNewItemButton
-                    }
-                    ToolbarItem {
-                        model.compassCheckButton
-                    }
+            SimpleListView(
+                itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section,
+                id: list.getListAccessibilityIdentifier, model: model
+            )
+            .frame(minHeight: 145, maxHeight: .infinity)
+            .background(Color.background)
+            .dropDestination(for: String.self) {
+                items, _ in
+                for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
+                    model.move(task: item, to: list)
                 }
-
-                .dropDestination(for: String.self) {
-                    items, _ in
-                    for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
-                        model.move(task: item, to: list)
-                    }
-                    return true
-                }
+                return true
+            }
             Spacer()
             let tags = model.list(which: whichList ?? model.whichList).tags.asArray
             if !tags.isEmpty {
-                TagEditList(tags: $model.selectedTags,
-                            additionalTags: tags,
-                            container: .vstack,
-                            horizontalSpacing: 1,
-                            verticalSpacing: 1,
-                            tagView: { text, isSelected in
-                    TagCapsule(text)
-                        .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
-                }).frame(maxWidth: 300, idealHeight: 15, maxHeight: 50).background(Color.background).padding(5)
+                TagEditList(
+                    tags: $model.selectedTags,
+                    additionalTags: tags,
+                    container: .vstack,
+                    horizontalSpacing: 1,
+                    verticalSpacing: 1,
+                    tagView: { text, isSelected in
+                        TagCapsule(text)
+                            .tagCapsuleStyle(isSelected ? model.selectedTagStyle : model.missingTagStyle)
+                    }
+                ).frame(maxWidth: 300, idealHeight: 15, maxHeight: 50).background(Color.background).padding(
+                    5)
             }
 
         }
+        .mainToolbar(model: model, include: !isLargeDevice)
     }
 }
 

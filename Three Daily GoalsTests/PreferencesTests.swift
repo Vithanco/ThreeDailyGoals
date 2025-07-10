@@ -5,9 +5,10 @@
 //  Created by Klaus Kneupner on 30/01/2024.
 //
 
-import Testing
-@testable import Three_Daily_Goals
 import Foundation
+import Testing
+
+@testable import Three_Daily_Goals
 
 @Suite
 struct PreferencesTests {
@@ -15,56 +16,62 @@ struct PreferencesTests {
     @Test
     func testDates() throws {
         let tester = TestPreferences()
-        let preferences = CloudPreferences(store: tester )
+        let preferences = CloudPreferences(store: tester)
         var date = todayAt(hour: 23, min: 59)
         debugPrint("Date is : \(date.formatted())")
         #expect(getCal().component(.second, from: date) == 0)
         #expect(getCal().component(.minute, from: date) == 59)
         #expect(getCal().component(.hour, from: date) == 23)
-        
-        preferences.compassCheckTime = date;
-        #expect(preferences.compassCheckTime == date)
+
+        preferences.lastCompassCheck = date
+        #expect(preferences.lastCompassCheck == date)
         #expect(tester.int(forKey: .compassCheckTimeHour) == 23)
         #expect(tester.int(forKey: .compassCheckTimeMinute) == 59)
-        var newDate = preferences.compassCheckTime
-        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
+        var newDate = preferences.lastCompassCheck
+        debugPrint(
+            "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
+        )
         #expect(newDate > Date.now)
         #expect(newDate != Date.today)
-        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         #expect(23 == newDate.hour)
         #expect(59 == newDate.min)
         #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
-        
+
         date = todayAt(hour: 0, min: 1)
-        preferences.compassCheckTime = date;
+        preferences.lastCompassCheck = date
         #expect(tester.int(forKey: .compassCheckTimeHour) == 0)
         #expect(tester.int(forKey: .compassCheckTimeMinute) == 1)
         newDate = preferences.nextCompassCheckTime
-        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
+        debugPrint(
+            "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
+        )
         #expect(newDate > Date.now)
-        #expect(preferences.compassCheckTime < Date.now)
+        #expect(preferences.lastCompassCheck < Date.now)
         #expect(newDate != Date.today)
-        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         #expect(0 == getCal().component(.hour, from: newDate))
         #expect(1 == getCal().component(.minute, from: newDate))
         #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
-        
+
         date = Date.now
-        preferences.compassCheckTime = date;
+        preferences.lastCompassCheck = date
         newDate = preferences.nextCompassCheckTime
-        debugPrint("Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))")
+        debugPrint(
+            "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
+        )
         #expect(newDate > Date.now)
         #expect(newDate != Date.today)
-        #expect (newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
+        #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
         #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
-        
-        var dateInterval = DateInterval(start:  getCal().date(from: DateComponents(hour: 13, minute: 13))!, duration: Seconds.eightHours)
-        preferences.currentCompassCheckInterval = dateInterval
-        
-        var returned = preferences.currentCompassCheckInterval
+
+        var dateInterval = DateInterval(
+            start: getCal().date(from: DateComponents(hour: 13, minute: 13))!,
+            duration: Seconds.eightHours)
+
+        var returned = getCompassCheckInterval()
         #expect(dateInterval.start == returned.start)
         #expect(dateInterval.end == returned.end)
     }
 
-    
 }

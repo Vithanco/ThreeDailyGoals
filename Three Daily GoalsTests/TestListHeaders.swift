@@ -7,41 +7,39 @@
 
 import Foundation
 import Testing
+
 @testable import Three_Daily_Goals
 
-
-struct PartialList : Identifiable {
+struct PartialList: Identifiable {
     var id: String {
         return header.id
     }
-    
+
     var header: ListHeader
     var list: [TaskItem]
-    
+
 }
 
 extension Array where Element == PartialList {
-    
+
     var reduced: Int {
-        return  self.reduce(0) { (result, next) in
+        return self.reduce(0) { (result, next) in
             return result + next.list.count
         }
     }
 }
 
-
 @MainActor
 @Suite
-struct TestListHeaders{
-    
-    
+struct TestListHeaders {
+
     @Test
     func TestFilter() throws {
-        
+
         let model = dummyViewModel()
         #expect(model.items.count == 178)
         let lhs = ListHeader.defaultListHeaders
-        let result = lhs.map({$0.filter(items: model.items)})
+        let result = lhs.map({ $0.filter(items: model.items) })
         #expect(result.count == 10)
         #expect(result[0].count == 0)
         #expect(result[1].count == 0)
@@ -54,26 +52,26 @@ struct TestListHeaders{
         #expect(result[8].count == 0)
         #expect(result[9].count == 6)
     }
-    
-    func split(headers: [ListHeader], itemList: [TaskItem]) ->  [PartialList] {
+
+    func split(headers: [ListHeader], itemList: [TaskItem]) -> [PartialList] {
         var result = [PartialList]()
         for lh in headers {
-            result.append(PartialList(header: lh,list: lh.filter(items: itemList)))
+            result.append(PartialList(header: lh, list: lh.filter(items: itemList)))
         }
-        
+
         assert(itemList.count == result.reduced)
         return result
     }
-    
+
     @Test
     func testSplitting() throws {
         let model = dummyViewModel()
         let lhs = ListHeader.defaultListHeaders
         var splitted = split(headers: lhs, itemList: model.items)
         #expect(splitted.reduced == model.items.count)
-        
-        let graveyard : [TaskItem] = model.list(which: .dead)
-        splitted = split(headers: lhs, itemList: graveyard )
+
+        let graveyard: [TaskItem] = model.list(which: .dead)
+        splitted = split(headers: lhs, itemList: graveyard)
         #expect(splitted.reduced == graveyard.count)
     }
 }

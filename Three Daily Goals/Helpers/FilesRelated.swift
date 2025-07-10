@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 // Helper function to get the documents directory
 func getDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)

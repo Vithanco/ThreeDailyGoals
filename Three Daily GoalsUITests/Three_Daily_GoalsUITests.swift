@@ -72,8 +72,9 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         let app = launchTestApp()
         let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
         listOpenButton.tap()
-        let openList = findFirst(string:"scrollView_open_List", whereToLook: app.descendants(matching: .any))
-       // openList.tap()
+        let openList = findFirst(
+            string: "scrollView_open_List", whereToLook: app.descendants(matching: .any))
+        // openList.tap()
         openList.swipeUp()
     }
 
@@ -102,7 +103,8 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         #endif
         listOpenButton.tap()
 
-        let openList = findFirst(string:"scrollView_open_List", whereToLook: app.descendants(matching: .any))
+        let openList = findFirst(
+            string: "scrollView_open_List", whereToLook: app.descendants(matching: .any))
         XCTAssertNotNil(openList)
         openList.swipeUp()
 
@@ -123,7 +125,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         let closedTask = findFirst(string: testString, whereToLook: app.staticTexts)
         XCTAssertNotNil(closedTask)
         #if os(macOS)
-       closedTask.tap()
+            closedTask.tap()
         #endif
         closedTask.swipeLeft()
 

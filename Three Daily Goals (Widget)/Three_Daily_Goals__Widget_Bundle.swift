@@ -5,9 +5,9 @@
 //  Created by Klaus Kneupner on 21/12/2023.
 //
 
-import WidgetKit
-import SwiftUI
 import SwiftData
+import SwiftUI
+import WidgetKit
 
 @main
 struct Three_Daily_Goals__Widget_Bundle: WidgetBundle {

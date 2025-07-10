@@ -14,21 +14,19 @@ struct TaskAsLine: View {
     var accentColor: Color {
         return model.accentColor
     }
-    
+
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
-            .strikethrough( item.isClosed, color: accentColor)
+            .strikethrough(item.isClosed, color: accentColor)
             .draggable(item.id)
     }
-    
+
     var hasDue: Bool {
         return item.due != nil && item.isOpenOrPriority
     }
-    
 
-    
     var body: some View {
-        HStack{
+        HStack {
 
             text
             Spacer()
@@ -44,7 +42,7 @@ struct TaskAsLine: View {
             if item.canBeMovedToOpen {
                 model.openButton(item: item)
             }
-            if item.canBeDeleted{
+            if item.canBeDeleted {
                 model.deleteButton(item: item)
             }
             if item.canBeClosed {
@@ -55,14 +53,13 @@ struct TaskAsLine: View {
                 model.priorityButton(item: item)
             }
         }
-        
+
     }
 }
 
-
 //struct TaskAsLineHelper : View {
 //    @State var
-//    
+//
 //    var body: some View {
 //        TaskAsLine(item: model.items.first!, model: model)
 //    }

@@ -17,15 +17,15 @@ public enum TaskItemState: Codable, Hashable, CaseIterable {
     case pendingResponse
     case priority
 }
-    
-extension TaskItemState : CustomStringConvertible, Identifiable{
+
+extension TaskItemState: CustomStringConvertible, Identifiable {
     public var description: String {
         switch self {
-            case .closed: return "closed"
-            case .dead: return "graveyard"
-            case .open: return "open"
-            case .pendingResponse: return "pending"
-            case .priority: return "priority"
+        case .closed: return "closed"
+        case .dead: return "graveyard"
+        case .open: return "open"
+        case .pendingResponse: return "pending"
+        case .priority: return "priority"
         }
     }
     public var id: String {
@@ -33,54 +33,54 @@ extension TaskItemState : CustomStringConvertible, Identifiable{
     }
 }
 
-extension TaskItemState{
+extension TaskItemState {
     var showCount: Bool {
         switch self {
-            case .closed, .dead: return false
-            case .open, .pendingResponse, .priority: return true
+        case .closed, .dead: return false
+        case .open, .pendingResponse, .priority: return true
         }
     }
-    
+
     var imageName: String {
         switch self {
-            case .closed: return imgClosed
-            case .dead: return imgGraveyard
-            case .open: return imgOpen
-            case .pendingResponse: return imgPendingResponse
-            case .priority: return imgToday
+        case .closed: return imgClosed
+        case .dead: return imgGraveyard
+        case .open: return imgOpen
+        case .pendingResponse: return imgPendingResponse
+        case .priority: return imgToday
         }
     }
-    
+
     var image: Image {
         return Image(systemName: self.imageName)
     }
-    
+
     var getLinkedListAccessibilityIdentifier: String {
         return self.description + "_LinkedList"
     }
-    
+
     var getListAccessibilityIdentifier: String {
         return self.description + "_List"
     }
-    
+
     var section: TaskSection {
         switch self {
-            case .open : return secOpen
-            case .closed: return secClosed
-            case .dead: return secGraveyard
-            case .priority: return secToday
-            case .pendingResponse: return secPending
+        case .open: return secOpen
+        case .closed: return secClosed
+        case .dead: return secGraveyard
+        case .priority: return secToday
+        case .pendingResponse: return secPending
         }
     }
-    
-    static func oldestFirst (a: TaskItem,b: TaskItem) -> Bool {
+
+    static func oldestFirst(a: TaskItem, b: TaskItem) -> Bool {
         return a.changed < b.changed
     }
-    
-    static func youngestFirst (a: TaskItem,b: TaskItem) -> Bool {
+
+    static func youngestFirst(a: TaskItem, b: TaskItem) -> Bool {
         return a.changed > b.changed
     }
-    
+
     var sorter: TaskSorter {
         switch self {
         case .closed, .dead: return TaskItemState.youngestFirst
@@ -89,7 +89,7 @@ extension TaskItemState{
     }
     var subHeaders: [ListHeader] {
         switch self {
-        case .open : return ListHeader.defaultListHeaders
+        case .open: return ListHeader.defaultListHeaders
         case .closed: return ListHeader.defaultListHeaders.reversed()
         case .dead: return ListHeader.defaultListHeaders.reversed()
         case .priority: return [ListHeader.all]

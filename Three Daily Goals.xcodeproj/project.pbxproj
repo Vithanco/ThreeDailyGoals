@@ -152,6 +152,7 @@
 
 /* Begin PBXFileReference section */
 		7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_3.swift; sourceTree = "<group>"; };
+		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPlanDay.swift; sourceTree = "<group>"; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
@@ -345,6 +346,7 @@
 		E561D6CF2B1F54A6003BE36F = {
 			isa = PBXGroup;
 			children = (
+				7F1774622E1F8D1B00C12285 /* Requirements.txt */,
 				7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */,
 				E561D6DA2B1F54A6003BE36F /* Three Daily Goals */,
 				E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */,

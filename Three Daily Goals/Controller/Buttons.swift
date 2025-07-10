@@ -21,8 +21,12 @@ extension TaskManagerViewModel {
                 self.move(task: item, to: .priority)
             }
         }) {
-            Label("Toggle Priority", systemImage: item.state == .priority ?  TaskItemState.open.imageName : TaskItemState.priority.imageName    )
-                .help("Add to/ remove from today's priorities")
+            Label(
+                "Toggle Priority",
+                systemImage: item.state == .priority
+                    ? TaskItemState.open.imageName : TaskItemState.priority.imageName
+            )
+            .help("Add to/ remove from today's priorities")
         }.accessibilityIdentifier("toggleButton")
     }
 
@@ -38,7 +42,8 @@ extension TaskManagerViewModel {
         return Button(action: {
             self.move(task: item, to: .dead)
         }) {
-            Label("Kill", systemImage: TaskItemState.dead.imageName).help("Move the task to the Graveyard")
+            Label("Kill", systemImage: TaskItemState.dead.imageName).help(
+                "Move the task to the Graveyard")
         }.accessibilityIdentifier("killButton").disabled(!item.canBeClosed)
     }
 
@@ -64,7 +69,8 @@ extension TaskManagerViewModel {
         return Button(action: {
             item.touch()
         }) {
-            Label("Touch", systemImage: imgTouch).help("'Touch' the task - when you did something with it.")
+            Label("Touch", systemImage: imgTouch).help(
+                "'Touch' the task - when you did something with it.")
         }.accessibilityIdentifier("touchButton")
     }
 
@@ -72,11 +78,11 @@ extension TaskManagerViewModel {
         return Button(action: {
             self.move(task: item, to: .priority)
         }) {
-            Image(systemName: imgToday).frame(width: 8, height: 8).help("Make this task a priority for today")
+            Image(systemName: imgToday).frame(width: 8, height: 8).help(
+                "Make this task a priority for today")
         }.accessibilityIdentifier("prioritiseButton")
     }
 
-    @MainActor
     func deleteButton(item: TaskItem) -> some View {
         return Button(
             role: .destructive,
@@ -90,14 +96,16 @@ extension TaskManagerViewModel {
 
     var undoButton: some View {
         Button(action: undo) {
-            Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help("undo an action")
+            Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help(
+                "undo an action")
         }.disabled(!canUndo)
             .keyboardShortcut("z", modifiers: [.command])
     }
 
     var redoButton: some View {
         Button(action: redo) {
-            Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help("redo an action")
+            Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help(
+                "redo an action")
         }.disabled(!canRedo)
             .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
@@ -141,22 +149,34 @@ extension TaskManagerViewModel {
                 Label("Task Statistic", systemImage: "chart.bar.fill")
             }
         )
+        .keyboardShortcut("s", modifiers: [.command])
     }
 
     var addNewItemButton: some View {
         Button(action: addNewItem) {
-            Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks").accessibilityIdentifier("addTaskButton")
+            Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks")
+                .accessibilityIdentifier("addTaskButton")
         }
         .keyboardShortcut("n", modifiers: [.command])
     }
 
     var compassCheckButton: some View {
-        Button(action: compassCheckNow) {
+        Button(action: startCompassCheckNow) {
             Label("Compass Check", systemImage: imgCompassCheck)
                 // .symbolRenderingMode(.palette)
                 .foregroundStyle(.gray, preferences.accentColor)
                 .accessibilityIdentifier("compassCheckButton").help("Start the Compass Check now")
 
+        }
+    }
+
+    var preferencesButton: some View {
+        Button(action: showPreferences) {
+            Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier(
+                "showPreferencesButton"
+            ).help(
+                "Show Preferences Dialog"
+            )
         }
     }
 }

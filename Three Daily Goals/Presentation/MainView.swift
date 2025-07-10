@@ -5,8 +5,8 @@
 //  Created by Klaus Kneupner on 05/12/2023.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 import UniformTypeIdentifiers
 import os
 
@@ -14,7 +14,6 @@ private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: MainView.self)
 )
-
 
 /// a simple block, to be used e.g. when I use an if then else, see below in MainView
 struct SingleView<Content: View>: View {
@@ -26,20 +25,21 @@ struct SingleView<Content: View>: View {
 
 struct MainView: View {
 
-    @State var model : TaskManagerViewModel
-    
-    init(model: TaskManagerViewModel){
+    @State var model: TaskManagerViewModel
+
+    init(model: TaskManagerViewModel) {
         self._model = State(wrappedValue: model)
     }
-    
+
     var body: some View {
-        SingleView{
+        SingleView {
             if isLargeDevice {
                 RegularMainView(model: model).frame(minWidth: 1000, minHeight: 600)
             } else {
                 CompactMainView(model: model).frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .mainToolbar(model: model)
         .background(Color.background)
         .sheet(isPresented: $model.showCompassCheckDialog) {
             CompassCheckDialog(model: model)
@@ -47,28 +47,34 @@ struct MainView: View {
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)
         }
-        .sheet(isPresented: $model.showSelectDuringImportDialog){
+        .sheet(isPresented: $model.showSelectDuringImportDialog) {
             SelectVersions(choices: model.selectDuringImport, model: model)
         }
-        .sheet( isPresented: $model.showNewItemNameDialog) {
+        .sheet(isPresented: $model.showNewItemNameDialog) {
             NewItemDialog(model: model)
         }
-        .sheet(isPresented: $model.showInfoMessage, content: {Text(model.infoMessage).padding(15)}
+        .sheet(
+            isPresented: $model.showInfoMessage,
+            content: { Text(model.infoMessage).padding(15) }
         )
-        .fileExporter(isPresented: $model.showExportDialog,
-                      document: model.jsonExportDoc,
-                      contentTypes:  [UTType.json],
-                      onCompletion:  { result in
-            switch result {
+        .fileExporter(
+            isPresented: $model.showExportDialog,
+            document: model.jsonExportDoc,
+            contentTypes: [UTType.json],
+            onCompletion: { result in
+                switch result {
                 case .success(let url):
                     logger.info("Tasks exported to \(url)")
                 case .failure(let error):
                     logger.error("Exporting tasks led to \(error.localizedDescription)")
-            }})
-        .fileImporter(isPresented: $model.showImportDialog,
-                      allowedContentTypes:  [UTType.json],
-                      onCompletion: { result in
-            switch result {
+                }
+            }
+        )
+        .fileImporter(
+            isPresented: $model.showImportDialog,
+            allowedContentTypes: [UTType.json],
+            onCompletion: { result in
+                switch result {
                 case .success(let url):
                     // Ensure we have permission to access the file
                     let gotAccess = url.startAccessingSecurityScopedResource()
@@ -79,8 +85,10 @@ struct MainView: View {
                     }
                 case .failure(let error):
                     logger.error("Importing Tasks led to \(error.localizedDescription)")
+                }
             }
-        })
+        )
+
     }
 }
 
@@ -89,8 +97,8 @@ struct MainView: View {
     model.infoMessage = " hall "
     model.showInfoMessage = true
     return MainView(model: model)
-#if os(macOS)
-        .frame(width: 1000, height: 600)
-#endif
-    
+        #if os(macOS)
+            .frame(width: 1000, height: 600)
+        #endif
+
 }

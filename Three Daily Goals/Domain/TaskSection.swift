@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct TaskSection : Observable , Sendable    {
-    let text : String
+public struct TaskSection: Observable, Sendable {
+    let text: String
     let image: String
 }
 
@@ -19,7 +19,7 @@ let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard)
 let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse)
 let secDueSoon = TaskSection(text: "Due Soon", image: imgDueSoon)
 
-extension TaskSection : Identifiable {
+extension TaskSection: Identifiable {
     public var id: String {
         return text
     }

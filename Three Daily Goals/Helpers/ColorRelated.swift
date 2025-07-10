@@ -8,29 +8,27 @@
 import Foundation
 import SwiftUI
 
-
 //
 //let mainColor = Color(red: 234.0/255.0, green: 88.0/255.0, blue: 12.0/255.0, opacity: 1.0)
 //let secondaryColor = Color(red: 255.0/255.0, green: 128.0/255.0, blue: 0/255.0, opacity: 1.0)
 
-
-public extension Color {
+extension Color {
     //    static let backgroundColor = Color(red: 0.99, green: 0.99, blue: 0.99)   //red: 225.0 / 255.0, green: 225.0 / 255.0, blue: 235.0 / 255.0, opacity: 1.0)
-    static let mainColor = Color(red: 234.0/255.0, green: 88.0/255.0, blue: 12.0/255.0, opacity: 1.0)
-    static let secondaryColor = Color.secondary
-    
-#if os(macOS)
-    static let background = Color(NSColor.windowBackgroundColor)
-    static let secondaryBackground = Color(NSColor.underPageBackgroundColor)
-    static let tertiaryBackground = Color(NSColor.controlBackgroundColor)
-#else
-    
-    static let background = Color(UIColor.systemBackground)
-    static let secondaryBackground = Color(UIColor.secondarySystemBackground)
-    static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
-#endif
-}
+    public static let mainColor = Color(
+        red: 234.0 / 255.0, green: 88.0 / 255.0, blue: 12.0 / 255.0, opacity: 1.0)
+    public static let secondaryColor = Color.secondary
 
+    #if os(macOS)
+        static let background = Color(NSColor.windowBackgroundColor)
+        static let secondaryBackground = Color(NSColor.underPageBackgroundColor)
+        static let tertiaryBackground = Color(NSColor.controlBackgroundColor)
+    #else
+
+        static let background = Color(UIColor.systemBackground)
+        static let secondaryBackground = Color(UIColor.secondarySystemBackground)
+        static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
+    #endif
+}
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
@@ -39,95 +37,96 @@ public extension Color {
 extension Color {
     init(hex: String) {
         let rgba = hex.toRGBA()
-        
-        self.init(.sRGB,
-                  red: Double(rgba.r),
-                  green: Double(rgba.g),
-                  blue: Double(rgba.b),
-                  opacity: Double(rgba.alpha))
+
+        self.init(
+            .sRGB,
+            red: Double(rgba.r),
+            green: Double(rgba.g),
+            blue: Double(rgba.b),
+            opacity: Double(rgba.alpha))
     }
-//    
-//    public init(from decoder: Decoder) throws {
-//        let container = try decoder.singleValueContainer()
-//        let hex = try container.decode(String.self)
-//        
-//        self.init(hex: hex)
-//    }
-//    
-//    public func encode(to encoder: Encoder) throws {
-//        var container = encoder.singleValueContainer()
-//        try container.encode(toHex)
-//    }
-    
+    //
+    //    public init(from decoder: Decoder) throws {
+    //        let container = try decoder.singleValueContainer()
+    //        let hex = try container.decode(String.self)
+    //
+    //        self.init(hex: hex)
+    //    }
+    //
+    //    public func encode(to encoder: Encoder) throws {
+    //        var container = encoder.singleValueContainer()
+    //        try container.encode(toHex)
+    //    }
+
     var toHex: String? {
         return toHex()
     }
-    
+
     func toHex(alpha: Bool = false) -> String? {
         guard let components = cgColor?.components, components.count >= 3 else {
             return nil
         }
-        
+
         let r = Float(components[0])
         let g = Float(components[1])
         let b = Float(components[2])
         var a = Float(1.0)
-        
+
         if components.count >= 4 {
             a = Float(components[3])
         }
-        
-        if alpha {
-            return String(format: "%02lX%02lX%02lX%02lX",
-                          lroundf(r * 255),
-                          lroundf(g * 255),
-                          lroundf(b * 255),
-                          lroundf(a * 255))
+
+        guard alpha else {
+            return String(
+                format: "%02lX%02lX%02lX",
+                lroundf(r * 255),
+                lroundf(g * 255),
+                lroundf(b * 255))
         }
-        else {
-            return String(format: "%02lX%02lX%02lX",
-                          lroundf(r * 255),
-                          lroundf(g * 255),
-                          lroundf(b * 255))
-        }
+        return String(
+            format: "%02lX%02lX%02lX%02lX",
+            lroundf(r * 255),
+            lroundf(g * 255),
+            lroundf(b * 255),
+            lroundf(a * 255))
     }
-    
+
     var readableTextColor: Color {
         let components = self.cgColor?.components
-        let brightness = (components?[0] ?? 0) * 299 + (components?[1] ?? 0) * 587 + (components?[2] ?? 0) * 114
+        let brightness =
+            (components?[0] ?? 0) * 299 + (components?[1] ?? 0) * 587 + (components?[2] ?? 0) * 114
         return brightness > 500 ? .black : .white
     }
-    
+
 }
 
 extension String {
     func toRGBA() -> (r: CGFloat, g: CGFloat, b: CGFloat, alpha: CGFloat) {
         var hexSanitized = self.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-        
+
         var rgb: UInt64 = 0
-        
+
         var r: CGFloat = 0.0
         var g: CGFloat = 0.0
         var b: CGFloat = 0.0
         var a: CGFloat = 1.0
-        
+
         let length = hexSanitized.count
-        
+
         Scanner(string: hexSanitized).scanHexInt64(&rgb)
-        
+
         if length == 6 {
             r = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
             g = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
             b = CGFloat(rgb & 0x0000FF) / 255.0
+        } else if length == 8 {
+            r = CGFloat((rgb & 0xFF00_0000) >> 24) / 255.0
+            g = CGFloat((rgb & 0x00FF_0000) >> 16) / 255.0
+            b = CGFloat((rgb & 0x0000_FF00) >> 8) / 255.0
+            a = CGFloat(rgb & 0x0000_00FF) / 255.0
         }
-        else if length == 8 {
-            r = CGFloat((rgb & 0xFF000000) >> 24) / 255.0
-            g = CGFloat((rgb & 0x00FF0000) >> 16) / 255.0
-            b = CGFloat((rgb & 0x0000FF00) >> 8) / 255.0
-            a = CGFloat(rgb & 0x000000FF) / 255.0
-        }
-        
+
         return (r, g, b, a)
     }
 }

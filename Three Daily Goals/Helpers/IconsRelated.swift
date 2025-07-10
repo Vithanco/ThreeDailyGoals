@@ -18,7 +18,7 @@ let imgCompassCheck = "safari"
 //    .foregroundStyle(.gray,.accentColor )
 
 let imAppearance = "paintpalette"
-let imgAddItem = "plus.app.fill" // "plus"
+let imgAddItem = "plus.app.fill"  // "plus"
 let imgPreferences = "gearshape"
 
 let imgToday = "exclamationmark.square.fill"
@@ -40,7 +40,7 @@ let imgStreak = "flame.fill"
 //
 //
 //enum AppIconProvider {
-//    
+//
 //    // App icons can only be retrieved as named `UIImage`s
 //    // https://stackoverflow.com/a/62064533/17421764
 //    static func appIcon(in bundle: Bundle = .main) -> Image {
@@ -84,5 +84,4 @@ let imgStreak = "flame.fill"
 //    }
 //}
 
-
-  //  .symbolEffect(.bounce.down.byLayer, options: .nonRepeating)
+//  .symbolEffect(.bounce.down.byLayer, options: .nonRepeating)

@@ -26,9 +26,12 @@ extension TaskItem: Identifiable {
 // Deep Equality needed during import
 public func deepEqual(_ lhs: TaskItem, _ rhs: TaskItem) -> Bool {
     let result =
-        lhs.id == rhs.id && lhs.title == rhs.title && lhs.details == rhs.details && lhs.state == rhs.state && lhs.url == rhs.url
-        && lhs.changed == rhs.changed && lhs.created == rhs.created && lhs.dueDate == rhs.dueDate && lhs.eventId == rhs.eventId
-        && lhs.due == rhs.due && lhs.closed == rhs.closed && lhs.allTagsString == rhs.allTagsString && lhs.uuid == rhs.uuid
+        lhs.id == rhs.id && lhs.title == rhs.title && lhs.details == rhs.details
+        && lhs.state == rhs.state && lhs.url == rhs.url
+        && lhs.changed == rhs.changed && lhs.created == rhs.created && lhs.dueDate == rhs.dueDate
+        && lhs.eventId == rhs.eventId
+        && lhs.due == rhs.due && lhs.closed == rhs.closed && lhs.allTagsString == rhs.allTagsString
+        && lhs.uuid == rhs.uuid
         && lhs.estimatedMinutes == rhs.estimatedMinutes
     //        (lhs.comments == nil)  == (rhs.comments == nil)
     if !result {

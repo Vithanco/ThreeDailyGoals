@@ -9,14 +9,20 @@ import SwiftUI
 
 struct CompassCheckDueDate: View {
     @Bindable var model: TaskManagerViewModel
-    
+
     var body: some View {
-        VStack{
-            Text("These Tasks are close to their due Dates. They will now be moved to Priority").font(.title2).foregroundStyle(model.accentColor)
+        VStack {
+            Text("These Tasks are close to their due Dates. They will now be moved to Priority").font(
+                .title2
+            ).foregroundStyle(model.accentColor)
             Spacer()
-            Text("Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step).")
-            SimpleListView(itemList: model.dueDateSoon, headers: [ListHeader.all], showHeaders: false, section: secDueSoon, id: "dueSoonList", model: model)
-        }.frame(minHeight: 300, idealHeight: 800, maxHeight:.infinity )
+            Text(
+                "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."
+            )
+            SimpleListView(
+                itemList: model.dueDateSoon, headers: [ListHeader.all], showHeaders: false,
+                section: secDueSoon, id: "dueSoonList", model: model)
+        }.frame(minHeight: 300, idealHeight: 800, maxHeight: .infinity)
     }
 }
 

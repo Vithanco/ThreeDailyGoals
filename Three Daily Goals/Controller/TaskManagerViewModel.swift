@@ -134,12 +134,14 @@ final class TaskManagerViewModel {
 
         Task { [weak self] in
             let center = NotificationCenter.default
-            for await notification in center.notifications(named: NSPersistentCloudKitContainer.eventChangedNotification) {
+            for await notification in center.notifications(
+                named: NSPersistentCloudKitContainer.eventChangedNotification)
+            {
                 guard let self else { break }
                 if let userInfo = notification.userInfo {
-//                    Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: TaskManagerViewModel.self)).debug(
-//                        "Event: \(userInfo.debugDescription)"
-//                    )
+                    //                    Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: TaskManagerViewModel.self)).debug(
+                    //                        "Event: \(userInfo.debugDescription)"
+                    //                    )
                     if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
                         if event.type == .import && event.endDate != nil && event.succeeded {
                             if !modelContext.hasChanges {
@@ -201,21 +203,24 @@ final class TaskManagerViewModel {
                 allUuids.insert(i.uuid)
             }
         }
-        assert(Set(items.map(\.uuid)).count == items.count, "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
+        assert(
+            Set(items.map(\.uuid)).count == items.count,
+            "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
     }
 
     @MainActor
     func mergeDataFromCentralStorage() {
         modelContext.processPendingChanges()
         do {
-            let descriptor = FetchDescriptor<TaskItem>(sortBy: [SortDescriptor(\.changed, order: .forward)])
+            let descriptor = FetchDescriptor<TaskItem>(sortBy: [
+                SortDescriptor(\.changed, order: .forward)
+            ])
             let items = try modelContext.fetch(descriptor)
             let fetchedItems = try modelContext.fetch(descriptor)
-            let ( added, updated) = mergeItems(fetchedItems)
-            
-            
-            
-            logger.info("fetched \(items.count) tasks from central store, added \(added), updated \(updated)")
+            let (added, updated) = mergeItems(fetchedItems)
+
+            logger.info(
+                "fetched \(items.count) tasks from central store, added \(added), updated \(updated)")
             for t in lists.keys {
                 lists[t]?.removeAll(keepingCapacity: true)
             }
@@ -232,13 +237,13 @@ final class TaskManagerViewModel {
             print("Fetch failed")
         }
     }
-    
-    private func mergeItems(_ fetchedItems: [TaskItem])  -> (Int, Int){
+
+    private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
         var itemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
-        
+
         var addedCount = 0
         var updatedCount = 0
-        
+
         for fetchedItem in fetchedItems {
             if let existingItem = itemsById[fetchedItem.id] {
                 if fetchedItem.changed > existingItem.changed {
@@ -345,13 +350,13 @@ final class TaskManagerViewModel {
         canRedo = modelContext.canRedo
 
         let next = nextRegularCompassCheckTime
-        let today = preferences.lastCompassCheck.isToday ? "Done" : stdOnlyTimeFormat.format(next)
+        let today = preferences.didCompassCheckToday ? "Done" : stdOnlyTimeFormat.format(next)
         streakText = "Streak: \(preferences.daysOfCompassCheck), today: \(today)"  // - Time:
     }
 
     func findTask(withID: String) -> TaskItem? {
         let result = items.first(where: { $0.id == withID })
-    //    logger.debug("found Task '\(result != nil)' for ID: \(withID)")
+        //    logger.debug("found Task '\(result != nil)' for ID: \(withID)")
         return result
     }
 
@@ -445,11 +450,9 @@ final class TaskManagerViewModel {
     func killOldTasks(expiryDate: Date, whichList: TaskItemState) -> Int {
         let theList = list(which: whichList)
         var result = 0
-        for task in theList {
-            if task.changed < expiryDate {
-                move(task: task, to: .dead)
-                result += 1
-            }
+        for task in theList where task.changed < expiryDate {
+            move(task: task, to: .dead)
+            result += 1
         }
         return result
     }
@@ -510,12 +513,13 @@ extension TaskManagerViewModel {
 }
 
 @MainActor
-func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> TaskManagerViewModel {
+func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil)
+    -> TaskManagerViewModel
+{
     let testStorage = loader == nil ? TestStorage() : TestStorage(loader: loader!)
-    return TaskManagerViewModel(modelContext: testStorage, preferences: preferences ?? dummyPreferences(), isTesting: true)
+    return TaskManagerViewModel(
+        modelContext: testStorage, preferences: preferences ?? dummyPreferences(), isTesting: true)
 }
-
-
 
 extension Sequence where Element: TaskItem {
     var tags: Set<String> {
@@ -523,20 +527,16 @@ extension Sequence where Element: TaskItem {
         for t in self {
             result.formUnion(t.tags)
         }
-        for t in result {
-            if t.isEmpty {
-                result.remove(t)
-            }
+        for t in result where t.isEmpty {
+            result.remove(t)
         }
         return result
     }
-    
+
     var activeTags: Set<String> {
         var result = Set<String>()
-        for t in self {
-            if !t.tags.isEmpty && t.isActive {
-                result.formUnion(t.tags)
-            }
+        for t in self where !t.tags.isEmpty && t.isActive {
+            result.formUnion(t.tags)
         }
         result.formUnion(["work", "private"])
         return result
@@ -553,10 +553,8 @@ extension TaskManagerViewModel {
 
     var activeTags: Set<String> {
         var result = Set<String>()
-        for t in items {
-            if !t.tags.isEmpty && t.isActive {
-                result.formUnion(t.tags)
-            }
+        for t in items where !t.tags.isEmpty && t.isActive {
+            result.formUnion(t.tags)
         }
         result.formUnion(["work", "private"])
         return result
@@ -573,10 +571,8 @@ extension TaskManagerViewModel {
     func statsForTags(tag: String, which: TaskItemState) -> Int {
         let list = self.list(which: which)
         var result = 0
-        for item in list {
-            if item.tags.contains(tag) {
-                result += 1
-            }
+        for item in list where item.tags.contains(tag) {
+            result += 1
         }
         return result
     }

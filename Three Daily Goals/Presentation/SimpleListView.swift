@@ -14,14 +14,17 @@ struct SimpleListView: View {
     let section: TaskSection
     let id: String
     @Bindable var model: TaskManagerViewModel
-    
+
     var body: some View {
-        List{
-            Section (header: VStack(alignment: .leading) {
-                HStack{
-                    section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden).accessibilityIdentifier("ListView"+id)
+        List {
+            Section(
+                header: VStack(alignment: .leading) {
+                    HStack {
+                        section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden)
+                            .accessibilityIdentifier("ListView" + id)
+                    }
                 }
-            }) {
+            ) {
                 if itemList.isEmpty {
                     Spacer(minLength: 20)
                     Text("(No items found)").foregroundStyle(model.accentColor).frame(maxWidth: .infinity)
@@ -57,20 +60,20 @@ struct SimpleListView: View {
                     }
                 }
             }
-            
+
         }.accessibilityIdentifier("scrollView_\(id)")
     }
-        
-    }
-    
-    #Preview {
-        let dummy = dummyViewModel()
-        return SimpleListView(
-            itemList: dummy.list(which: .dead),
-            headers: ListHeader.defaultListHeaders,
-            showHeaders: true,
-            section: secGraveyard,
-            id: "yeah",
-            model: dummy
-        )
-    }
+
+}
+
+#Preview {
+    let dummy = dummyViewModel()
+    return SimpleListView(
+        itemList: dummy.list(which: .dead),
+        headers: ListHeader.defaultListHeaders,
+        showHeaders: true,
+        section: secGraveyard,
+        id: "yeah",
+        model: dummy
+    )
+}

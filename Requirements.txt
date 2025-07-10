@@ -1,0 +1,143 @@
+//
+//  Requirements.txt
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 10/07/2025.
+//
+
+I would like you to help me writing some code for a daily "compass Check", basically, a daily review of items on my todo list.
+
+I have the following requirements. Feel free to suggest improvements on them.
+- compass check interval is 24 hours. 
+- compass check interval resets at 10am. Idea is that it should happen ideally in the evening before, but can be done in the morning. 
+- compass checks will be triggered by a notification, at a regular time. Time can be set, default is 6pm.
+- the 10am interval reset time should be flexible, but is the default. 
+- I want to count the "streak" of compass checks. Each successive day of finishing a compass check adds 1 to the streak. But only one time during the interval, and at least 4 hours after the last one. 
+
+I write in Swift, and can store time, date etc in a CloudPreferences, in order to be able to work on Mac and iPhone. It works like this
+
+enum CloudKey : String, CaseIterable {
+    case daysOfCompassCheck
+    // just add here
+}
+
+final class CloudPreferences {
+	... //setup etc
+    var store : KeyValueStorage // can be changed for tests and real usage
+    var daysOfCompassCheck: Int {
+        get {
+            
+            let result = self.store.int(forKey: .daysOfCompassCheck)
+            return result
+        }
+        set {
+            store.set(newValue,forKey: .daysOfCompassCheck)
+        }
+    }
+    // add here
+}
+
+final class TaskManagerViewModel {
+	... // setup etc
+	var preferences: CloudPreferences
+                                              
+	func endCompassCheck(didCompleteCompassCheck : Bool){
+	// fill here
+	}
+	
+	var nextRegularCompassCheckTime: Date {
+	// fill here, default is 6pm
+	}
+	
+	func startCompassCheckNow(){
+	// existing already
+	}
+}
+
+and I would like test cases: 
+
+@Suite
+@MainActor
+struct TestCompassCheck {
+
+    @Test
+    func testStreak() throws {
+    // please fill
+    }
+     
+     // more tests please
+}
+
+
+
+
+/// answer so far:
+//
+//  Requirements.txt
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 10/07/2025.
+//
+
+I would like you to help me writing some code for a daily "compass Check", basically, a daily review of items on my todo list.
+
+I have the following requirements. Feel free to suggest improvements on them.
+- compass check interval is 24 hours. 
+- compass check interval resets at 10am. Idea is that it should happen ideally in the evening before, but can be done in the morning. 
+- compass checks will be triggered by a notification, at a regular time. Time can be set, default is 6pm.
+- the 10am interval reset time should be flexible, but is the default. 
+- I want to count the "streak" of compass checks. Each successive day of finishing a compass check adds 1 to the streak. But only one time during the interval, and at least 4 hours after the last one. 
+
+I write in Swift, and can store time, date etc in a CloudPreferences, in order to be able to work on Mac and iPhone. It works like this
+
+enum CloudKey : String, CaseIterable {
+    case daysOfCompassCheck
+    // just add here
+}
+
+final class CloudPreferences {
+	... //setup etc
+    var store : KeyValueStorage // can be changed for tests and real usage
+    var daysOfCompassCheck: Int {
+        get {
+            
+            let result = self.store.int(forKey: .daysOfCompassCheck)
+            return result
+        }
+        set {
+            store.set(newValue,forKey: .daysOfCompassCheck)
+        }
+    }
+    // add here
+}
+
+final class TaskManagerViewModel {
+	... // setup etc
+	var preferences: CloudPreferences
+                                              
+	func endCompassCheck(didCompleteCompassCheck : Bool){
+	// fill here
+	}
+	
+	var nextRegularCompassCheckTime: Date {
+	// fill here, default is 6pm
+	}
+	
+	func startCompassCheckNow(){
+	// existing already
+	}
+}
+
+and I would like test cases: 
+
+@Suite
+@MainActor
+struct TestCompassCheck {
+
+    @Test
+    func testStreak() throws {
+    // please fill
+    }
+     
+     // more tests please
+}

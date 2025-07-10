@@ -9,7 +9,6 @@ import Foundation
 @preconcurrency import SwiftData
 import SwiftUI
 
-
 //--------------------------------------------------------------------------------
 // ⚠️⛔️ new version -- please read ⛔️⚠️
 // First, change app to be connected to iCloud development (entitlements File, change com.apple.developer.icloud-container-environment)
@@ -20,65 +19,69 @@ import SwiftUI
 
 public enum SchemaV3_4: VersionedSchema {
     public static let versionIdentifier = Schema.Version(3, 4, 0)
-    
+
     public static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self]
     }
-    
+
     @Model
     public final class TaskItem: Codable, Sendable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
-        
+
         var _title: String = emptyTaskTitle
         var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
         var uuid: UUID = UUID()
-        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [Comment]()
+        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [
+            Comment
+        ]()
         public var dueDate: Date? = nil
         var eventId: String? = nil
         var allTagsString: String = ""
         var estimatedMinutes: Int = 0
-        
+
         //future potential additions:
         //Eisenhower Matrix (Important, Urgent),
         //Priority (1-10)
         //ImageData
-        
+
         init() {
             self.uuid = UUID()
             self.eventId = nil
         }
-        
-        init(title: String = emptyTaskTitle,
-             details: String = emptyTaskDetails,
-             changedDate: Date = Date.now,
-             state: TaskItemState = .open,
-             uuid: UUID = UUID(),
-             eventId : String? = nil,
-             estimatedMinutes: Int = 0
-) {
+
+        init(
+            title: String = emptyTaskTitle,
+            details: String = emptyTaskDetails,
+            changedDate: Date = Date.now,
+            state: TaskItemState = .open,
+            uuid: UUID = UUID(),
+            eventId: String? = nil,
+            estimatedMinutes: Int = 0
+        ) {
             self._title = title
             self._details = details
             self.changed = changedDate
             self.comments = []
             self._state = state
             self._url = ""
-            self.allTagsString  = ""
+            self.allTagsString = ""
             self.uuid = uuid
             self.eventId = nil
             self.estimatedMinutes = estimatedMinutes
         }
-        
+
         // MARK: Codable
 
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid, eventId, estimatedMinutes
+            case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid,
+                eventId, estimatedMinutes
         }
-        
-       public required init(from decoder: Decoder) throws {
+
+        public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
@@ -98,10 +101,10 @@ public enum SchemaV3_4: VersionedSchema {
             self.eventId = try? container.decode(String?.self, forKey: .eventId)
             self.estimatedMinutes = try container.decode(Int.self, forKey: .estimatedMinutes)
         }
-        
+
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            
+
             try container.encode(closed, forKey: .closed)
             try container.encode(_title, forKey: .title)
             try container.encode(_details, forKey: .details)
@@ -117,38 +120,38 @@ public enum SchemaV3_4: VersionedSchema {
             try container.encode(estimatedMinutes, forKey: .estimatedMinutes)
         }
     }
-    
+
     @Model
-    public final class Comment: Codable , Sendable{
+    public final class Comment: Codable, Sendable {
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""
         var taskItem: TaskItem? = nil
-        
+
         init(text: String, taskItem: TaskItem) {
             self.text = text
             self.taskItem = taskItem
         }
-        
+
         init(old: SchemaV3_3.Comment) {
             self.text = old.text
             self.created = old.created
             self.changed = old.created
         }
-        
+
         // MARK: Codable
 
         enum CodingKeys: CodingKey {
             case created, changed, text
         }
-        
+
         public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
             self.text = try container.decode(String.self, forKey: .text)
         }
-        
+
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(created, forKey: .created)

@@ -7,18 +7,18 @@
 
 import Foundation
 import SwiftUI
+
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 var isLargeDevice: Bool {
-#if os(macOS)
-    return true
-#else
-    if UIScreen.main.bounds.width > 1000 {
+    #if os(macOS)
         return true
-    } else {
-        return false
-    }
-#endif
+    #else
+        guard UIScreen.main.bounds.width > 1000 else {
+            return false
+        }
+        return true
+    #endif
 }

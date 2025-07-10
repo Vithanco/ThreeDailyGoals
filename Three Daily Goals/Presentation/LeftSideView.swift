@@ -41,27 +41,9 @@ struct LeftSideView: View {
             }.padding(5)
 
                 .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            .toolbar {
-                #if os(iOS)  // see Three_Daily_GoalsApp for Mac way
-                    ToolbarItem {
-                        Button(action: model.showPreferences) {
-                            Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier("showPreferencesButton").help(
-                                "Show Preferences Dialog"
-                            )
-                        }
-                    }
-                    ToolbarItem {
-                        model.exportButton
-                    }
-                    ToolbarItem {
-                        model.importButton
-                    }
-                    ToolbarItem {
-                        model.statsDialog
-                    }
-                #endif
-            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .mainToolbar(model: model)
     }
 }
 

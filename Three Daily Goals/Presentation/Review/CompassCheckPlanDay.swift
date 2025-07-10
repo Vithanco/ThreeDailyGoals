@@ -10,9 +10,9 @@ import SimpleCalendar
 import SwiftUI
 
 extension TaskItem {
-//    var asEvent: TDGEvent {
-//        var result = TDGEvent(title: self.title, startDate: startDate, endDate: endDate)
-//    }
+    //    var asEvent: TDGEvent {
+    //        var result = TDGEvent(title: self.title, startDate: startDate, endDate: endDate)
+    //    }
 }
 
 struct CompassCheckPlanDay: View {
@@ -29,7 +29,9 @@ struct CompassCheckPlanDay: View {
 
     var body: some View {
         VStack {
-            Text("Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))").font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
+            Text(
+                "Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
+            ).font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
             HStack {
                 SimpleCalendarView(
                     events: $events,
@@ -48,10 +50,10 @@ struct CompassCheckPlanDay: View {
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {
                     items, _ in
-                    for _ in items.compactMap({model.findTask(withUuidString: $0)}){
+                    for _ in items.compactMap({ model.findTask(withUuidString: $0) }) {
                         return true
                     }
-                    return true 
+                    return true
                 }
             }
         }
@@ -61,7 +63,7 @@ struct CompassCheckPlanDay: View {
 }
 
 #Preview {
-    
+
     // return Text ("in total: \(events.count)")
     let date = Date.today
     let model = dummyViewModel()

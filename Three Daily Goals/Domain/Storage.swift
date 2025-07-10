@@ -82,8 +82,6 @@ extension Array where Element == TaskItem {
     }
 }
 
-
-
 class TestStorage: Storage {
     var hasChanges: Bool {
         return false
@@ -95,13 +93,20 @@ class TestStorage: Storage {
     var items: [TaskItem]
     init() {
         var result: [TaskItem] = []
-        let theGoal = result.add(title: "Read 'The Goal' by Goldratt", changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+        let theGoal = result.add(
+            title: "Read 'The Goal' by Goldratt",
+            changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
         theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
         theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
         theGoal.dueDate = getDate(inDays: 2)
-        result.add(title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority, tags: ["CMaps"])
-        result.add(title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
-        result.add(title: "Transfer tasks from old task manager into this one", changedDate: getDate(daysPrior: 11), state: .open)
+        result.add(
+            title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority,
+            tags: ["CMaps"])
+        result.add(
+            title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
+        result.add(
+            title: "Transfer tasks from old task manager into this one",
+            changedDate: getDate(daysPrior: 11), state: .open)
         let lastMonth2 = result.add(
             title: "Read about Structured Visual Thinking",
             changedDate: getDate(daysPrior: 22),
@@ -109,11 +114,18 @@ class TestStorage: Storage {
             tags: ["toRead"]
         )
         lastMonth2.url = "https://vithanco.com"
-        result.add(title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3), state: .pendingResponse)
+        result.add(
+            title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),
+            state: .pendingResponse)
         result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
-        result.add(title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101), state: .dead)
-        result.add(title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
-        result.add(title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open, dueDate: getDate(inDays: 2))
+        result.add(
+            title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101),
+            state: .dead)
+        result.add(
+            title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
+        result.add(
+            title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open,
+            dueDate: getDate(inDays: 2))
         for i in 32..<200 {
             result.add(title: "Dead Task \(i)", changedDate: getDate(daysPrior: i), state: .dead)
         }
@@ -176,9 +188,12 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
     }
 
     let schema = Schema(versionedSchema: SchemaLatest.self)
-    let useCloudDB = inMemory ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
+    let useCloudDB =
+        inMemory
+        ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
 
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
+    let modelConfiguration = ModelConfiguration(
+        schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
 
     do {
         let result = try ModelContainer(
@@ -197,11 +212,11 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
 }
 
 extension CKContainer {
-//    public var isProductionEnvironment: Bool {
-//        let containerID = self.value(forKey: "containerID") as! NSObject  // CKContainerID
-//        debugPrint("containerID: \(containerID)")
-//        return containerID.value(forKey: "environment")! as! CLongLong == 1
-//    }
+    //    public var isProductionEnvironment: Bool {
+    //        let containerID = self.value(forKey: "containerID") as! NSObject  // CKContainerID
+    //        debugPrint("containerID: \(containerID)")
+    //        return containerID.value(forKey: "environment")! as! CLongLong == 1
+    //    }
 
     public static var isProductionEnvironment: Bool {
         let container = CKContainer.default()

@@ -8,13 +8,12 @@
 import SwiftUI
 import TagKit
 
-
-struct EditTag : View {
+struct EditTag: View {
     @Binding var currentTagName: String
     @Binding var changeTo: String
     @Bindable var model: TaskManagerViewModel
-    
-    var displayCurrentTagName : String {
+
+    var displayCurrentTagName: String {
         if currentTagName == "private" {
             return "private (inbuilt)"
         }
@@ -24,25 +23,23 @@ struct EditTag : View {
         return currentTagName
     }
     var body: some View {
-        GroupBox(label: Text("Tag: \(displayCurrentTagName)").bold()){
-            VStack(alignment: .leading){
-                ForEach(TaskItemState.allCases) {state in
-                    HStack{
-                        Text( state.description + ":").bold()
-                        Text( "\(model.statsForTags(tag: currentTagName, which: state))")
+        GroupBox(label: Text("Tag: \(displayCurrentTagName)").bold()) {
+            VStack(alignment: .leading) {
+                ForEach(TaskItemState.allCases) { state in
+                    HStack {
+                        Text(state.description + ":").bold()
+                        Text("\(model.statsForTags(tag: currentTagName, which: state))")
                     }
                 }
-            
-                    TextField("New Name", text: $changeTo)
-                    Button ("Change Name") {
-                        model.exchangeTag(from: currentTagName, to: changeTo)
-                    }.buttonStyle(.bordered)
-            
 
-                
+                TextField("New Name", text: $changeTo)
+                Button("Change Name") {
+                    model.exchangeTag(from: currentTagName, to: changeTo)
+                }.buttonStyle(.bordered)
+
             }
             Spacer()
-            Button("Delete this tag", role: .destructive){
+            Button("Delete this tag", role: .destructive) {
                 model.delete(tag: currentTagName)
             }.buttonStyle(.bordered)
                 .disabled(currentTagName == "private" || currentTagName == "work")
@@ -51,20 +48,27 @@ struct EditTag : View {
     }
 }
 
-struct TagsPreferencesView : View {
+struct TagsPreferencesView: View {
     @Bindable var model: TaskManagerViewModel
     @State var tag: String = ""
     @State var changeTo: String = ""
     var body: some View {
-        VStack{
-            HStack(alignment: .top){
-                GroupBox(label: Text("All Tags").bold()){
-                    TagList(tags: model.allTags.asArray, tagView: {text in return
-                        TagCapsule(text).tagCapsuleStyle(model.selectedTagStyle).onTapGesture(perform: {tag = text; changeTo = text})})
+        VStack {
+            HStack(alignment: .top) {
+                GroupBox(label: Text("All Tags").bold()) {
+                    TagList(
+                        tags: model.allTags.asArray,
+                        tagView: { text in
+                            return
+                                TagCapsule(text).tagCapsuleStyle(model.selectedTagStyle).onTapGesture(perform: {
+                                    tag = text
+                                    changeTo = text
+                                })
+                        })
                     Spacer()
                 }
                 Spacer()
-                EditTag (currentTagName: $tag, changeTo: $changeTo, model: model)
+                EditTag(currentTagName: $tag, changeTo: $changeTo, model: model)
             }
         }.padding(10).frame(maxWidth: 400)
     }

@@ -9,7 +9,6 @@ import Foundation
 import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
-
 import os
 
 private let logger = Logger(
@@ -18,13 +17,13 @@ private let logger = Logger(
 )
 
 extension TaskManagerViewModel {
-    func exportTasks(url: URL){
+    func exportTasks(url: URL) {
         do {
             // Create an instance of JSONEncoder
             let encoder = JSONEncoder()
             // Convert your array into JSON data
             let data = try encoder.encode(items)
-            
+
             // Write the data to the file
             try data.write(to: url)
             self.infoMessage = "The tasks were exported and saved as JSON to \(url)"
@@ -34,9 +33,8 @@ extension TaskManagerViewModel {
         logger.info("\(self.infoMessage)")
         self.showInfoMessage = true
     }
-    
-    
-        /// url contains the URL of the chosen file.
+
+    /// url contains the URL of the chosen file.
     func importTasks(url: URL) {
         var choices = [Choice]()
         do {
@@ -46,7 +44,7 @@ extension TaskManagerViewModel {
             beginUndoGrouping()
             for item in jsonData {
                 if let existing = findTask(withID: item.id) {
-                    if !deepEqual(existing , item)  {
+                    if !deepEqual(existing, item) {
                         choices.append(Choice(existing: existing, new: item))
                     }
                 } else {
@@ -56,60 +54,60 @@ extension TaskManagerViewModel {
             self.selectDuringImport = choices
             showSelectDuringImportDialog = true
             self.infoMessage = "\(jsonData.count) tasks were imported."
-        }catch {
-            self.infoMessage  = "The tasks weren't imported because :\(error)"
+        } catch {
+            self.infoMessage = "The tasks weren't imported because :\(error)"
         }
-        
-        
+
         endUndoGrouping()
         logger.info("\(self.infoMessage)")
         self.showInfoMessage = true
     }
 }
 
-
 struct SelectVersions: View {
     let choices: [Choice]
     @State var index: Int = 0
     @Bindable var model: TaskManagerViewModel
-    
+
     func nextChoice() {
         index += 1
-        if index == choices.count{
-           done()
+        if index == choices.count {
+            done()
         }
     }
-    
+
     func done() {
         model.showSelectDuringImportDialog = false
     }
-    
-    func alwaysUseNew(){
-        for i in index ... choices.count - 1 {
+
+    func alwaysUseNew() {
+        for i in index...choices.count - 1 {
             model.remove(item: choices[i].existing)
             model.addItem(item: choices[i].new)
         }
         done()
     }
-    
+
     var currentChoice: Choice {
         if index >= choices.count {
             return choices[0]
         }
-       return choices[index]
+        return choices[index]
     }
-    
+
     var remaining: Int {
         return choices.count - index
     }
     var body: some View {
-        VStack{
+        VStack {
             Text("Remaining Choices: \(remaining)")
-            HStack{
-                VStack{
+            HStack {
+                VStack {
                     Text("Existing Version")
-                    InnerTaskItemView(accentColor: model.accentColor, item: currentChoice.existing, allTags: [], selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle)
-                    Button("Use existing"){
+                    InnerTaskItemView(
+                        accentColor: model.accentColor, item: currentChoice.existing, allTags: [],
+                        selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle)
+                    Button("Use existing") {
                         nextChoice()
                     }
                     Button("Always use Existing", role: .destructive) {
@@ -117,12 +115,14 @@ struct SelectVersions: View {
                         done()
                     }
                 }
-                VStack{
+                VStack {
                     Text("Imported Version")
-                    InnerTaskItemView(accentColor: model.accentColor, item: currentChoice.new, allTags: [], selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle)
-                    Button("Use new"){
+                    InnerTaskItemView(
+                        accentColor: model.accentColor, item: currentChoice.new, allTags: [],
+                        selectedTagStyle: model.selectedTagStyle, missingTagStyle: model.missingTagStyle)
+                    Button("Use new") {
                         model.remove(item: currentChoice.existing)
-                        model.addItem(item:currentChoice.new)
+                        model.addItem(item: currentChoice.new)
                         nextChoice()
                     }
                     Button("Always use new", role: .destructive) {
@@ -130,6 +130,6 @@ struct SelectVersions: View {
                     }
                 }
             }
-        }.frame(minWidth: 600, idealWidth: 1000, minHeight: 600,  idealHeight: 1000)
+        }.frame(minWidth: 600, idealWidth: 1000, minHeight: 600, idealHeight: 1000)
     }
 }

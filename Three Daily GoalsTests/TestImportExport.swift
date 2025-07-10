@@ -5,15 +5,16 @@
 //  Created by Klaus Kneupner on 19/02/2024.
 //
 
-import Testing
-@testable import Three_Daily_Goals
 import Foundation
+import Testing
+
+@testable import Three_Daily_Goals
 
 @Suite
 struct TestImportExport {
-    
+
     @Test
-    func testDateEncoding () throws {
+    func testDateEncoding() throws {
         let encoder = JSONEncoder()
         let original = Date.now
         let encoded = try encoder.encode(original)
@@ -21,9 +22,9 @@ struct TestImportExport {
         let decoded = try decoder.decode(Date.self, from: encoded)
         #expect(original == decoded)
     }
-    
+
     @Test
-    func testTaskItemEncoding () throws {
+    func testTaskItemEncoding() throws {
         let encoder = JSONEncoder()
         let original = TaskItem(title: "test")
         let id = original.id
@@ -36,9 +37,9 @@ struct TestImportExport {
         #expect(original.title == decoded.title)
         #expect(original.id == decoded.id)
         #expect(original.created == decoded.created)
-        
+
         #expect(original.changed == decoded.changed)
-        
+
         #expect(original.details == decoded.details)
         #expect(original.dueDate == decoded.dueDate)
         #expect(original.comments == decoded.comments)
@@ -46,7 +47,7 @@ struct TestImportExport {
         #expect(original.url == decoded.url)
         #expect(original.id == id)
     }
-    
+
     @MainActor
     @Test
     func testFile() throws {
@@ -55,10 +56,10 @@ struct TestImportExport {
         model.exportTasks(url: url)
         let first = model.items.first!
         #expect(first == model.findTask(withID: first.id))
-        let newModel = dummyViewModel(loader: {return []})
+        let newModel = dummyViewModel(loader: { return [] })
         #expect(0 == newModel.items.count)
         newModel.importTasks(url: url)
-        
+
         #expect(first == newModel.findTask(withID: first.id))
         #expect(model.items.count == newModel.items.count)
         #expect(178 == newModel.items.count)
@@ -74,14 +75,13 @@ struct TestImportExport {
             if let comments = item.comments {
                 #expect(item.comments!.count == newItem.comments!.count)
                 for comment in comments {
-                    let newComment = newItem.comments!.first(where: {$0.id == comment.id})!
+                    let newComment = newItem.comments!.first(where: { $0.id == comment.id })!
                     #expect(comment.text == newComment.text)
                     #expect(comment.created == newComment.created)
                 }
-                
+
             }
         }
     }
-    
-}
 
+}

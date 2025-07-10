@@ -9,8 +9,6 @@ import XCTest
 
 final class Three_Daily_GoalsUITestsLaunchTests: XCTestCase {
 
-    
-    
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

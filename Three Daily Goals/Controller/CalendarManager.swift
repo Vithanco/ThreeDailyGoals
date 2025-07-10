@@ -11,17 +11,17 @@ import Foundation
 @Observable
 class CalendarManager {
     private var eventStore: EKEventStore?
-    
+
     init() {
         setupCalendarAccess()
     }
-    
+
     private func setupCalendarAccess() {
         eventStore = EKEventStore()
-        
+
         // Check current authorization status first
         let authStatus = EKEventStore.authorizationStatus(for: .event)
-        
+
         switch authStatus {
         case .notDetermined:
             // First time - request permission
@@ -29,7 +29,7 @@ class CalendarManager {
         case .authorized, .fullAccess:
             // Already have access - ready to use
             debugPrint("Calendar access already granted")
-            // Calendar is ready to use
+        // Calendar is ready to use
         case .denied, .restricted:
             // User denied or access restricted
             debugPrint("Calendar access denied or restricted")
@@ -44,17 +44,17 @@ class CalendarManager {
             requestCalendarAccess()
         }
     }
-    
+
     private func requestCalendarAccess() {
         guard let eventStore = eventStore else { return }
-        
+
         eventStore.requestFullAccessToEvents { [weak self] granted, error in
             DispatchQueue.main.async {
                 if let error = error {
                     debugPrint("Calendar access error: \(error)")
                     return
                 }
-                
+
                 if granted {
                     debugPrint("Calendar access granted")
                     // Access granted - calendar is ready to use
@@ -66,23 +66,23 @@ class CalendarManager {
             }
         }
     }
-    
+
     private func onAccessGranted() {
         // Perform any setup needed when access is granted
         // This is where you'd initialize calendar-dependent features
     }
-    
+
     private func handleAccessDenied() {
         // Handle the case where access is denied
         // You might want to show an alert directing user to Settings
     }
-    
+
     // Check if calendar access is available
     var hasCalendarAccess: Bool {
         let status = EKEventStore.authorizationStatus(for: .event)
         return status == .authorized || status == .fullAccess
     }
-    
+
     // Get the event store (only if access is granted)
     var calendar: EKEventStore? {
         return hasCalendarAccess ? eventStore : nil
@@ -92,20 +92,20 @@ class CalendarManager {
 //// Usage example:
 //class ViewController: UIViewController {
 //    private let calendarManager = CalendarManager()
-//    
+//
 //    override func viewDidLoad() {
 //        super.viewDidLoad()
-//        
+//
 //        // Calendar access is automatically handled by CalendarManager
 //        // Use calendarManager.calendar when you need to access events
 //    }
-//    
+//
 //    private func createEvent() {
 //        guard let eventStore = calendarManager.calendar else {
 //            debugPrint("No calendar access available")
 //            return
 //        }
-//        
+//
 //        // Use eventStore to create events
 //        let event = EKEvent(eventStore: eventStore)
 //        // ... configure event

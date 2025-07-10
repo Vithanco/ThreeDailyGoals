@@ -28,14 +28,15 @@ private struct ListLabel: View {
                 count
             }
         }.accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
-        .dropDestination(for: String.self){
-            items, location in
-            for item in items.compactMap({model.findTask(withUuidString: $0)}) {
-                model.move(task: item, to: whichList)
+            .dropDestination(for: String.self) {
+                items, location in
+                for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
+                    model.move(task: item, to: whichList)
+                }
+                return true
             }
-            return true}
-        .foregroundStyle(model.accentColor)
-        .frame(maxWidth: .infinity)
+            .foregroundStyle(model.accentColor)
+            .frame(maxWidth: .infinity)
     }
 }
 

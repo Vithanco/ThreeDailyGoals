@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-
 struct DatePickerNullable: View {
     @Binding var selected: Date?
     let defaultDate: Date
-    
+
     var body: some View {
         HStack {
             if let date = Binding($selected) {
@@ -20,9 +19,9 @@ struct DatePickerNullable: View {
                     selection: date,
                     displayedComponents: [.date]
                 )
-#if os(macOS)
-                .datePickerStyle(.stepperField)
-#endif
+                #if os(macOS)
+                    .datePickerStyle(.stepperField)
+                #endif
                 Button(action: {
                     selected = nil
                 }) {
@@ -48,5 +47,5 @@ struct DatePickerNullable: View {
 #Preview {
     @Previewable
     @State var date: Date?
-    return DatePickerNullable(selected: $date,defaultDate: getDate(inDays: 7))
+    return DatePickerNullable(selected: $date, defaultDate: getDate(inDays: 7))
 }

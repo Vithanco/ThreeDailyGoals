@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-
 extension TaskSection {
     var asText: Text {
         return Text("\(Image(systemName: image)) \(text)").font(.title)
@@ -17,8 +15,8 @@ extension TaskSection {
 
 struct StateView: View {
     let state: TaskItemState
-    let accentColor : Color
-    
+    let accentColor: Color
+
     var body: some View {
         state.section.asText.foregroundStyle(accentColor)
     }
@@ -32,5 +30,5 @@ struct StateView: View {
         StateView(state: TaskItemState.pendingResponse, accentColor: Color.red)
         StateView(state: TaskItemState.priority, accentColor: Color.red)
     }
-        
+
 }

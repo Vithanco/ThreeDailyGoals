@@ -11,26 +11,28 @@ import SwiftUI
 
 enum SchemaV3_2: VersionedSchema {
     static let versionIdentifier = Schema.Version(3, 2, 0)
-    
+
     static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self]
     }
-    
+
     @Model
     final class TaskItem: Codable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
-        
+
         var _title: String = emptyTaskTitle
         var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
         var _url: String = ""
         var uuid: UUID = UUID()
-        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [Comment]()
+        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) var comments: [Comment]? = [
+            Comment
+        ]()
         public var dueDate: Date? = nil
         var eventId: String? = nil
-        
+
         // ignore for now
         public var important: Bool = false
         public var urgent: Bool = false
@@ -38,13 +40,17 @@ enum SchemaV3_2: VersionedSchema {
         var _imageData: Data? = nil
         var _priority: Int = 0
         var _tags: [String] = []
-        
+
         init() {
             self.uuid = UUID()
             self.eventId = nil
         }
-        
-        init(title: String = emptyTaskTitle, details: String = emptyTaskDetails, changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID(), eventId : String? = nil) {
+
+        init(
+            title: String = emptyTaskTitle, details: String = emptyTaskDetails,
+            changedDate: Date = Date.now, state: TaskItemState = .open, uuid: UUID = UUID(),
+            eventId: String? = nil
+        ) {
             self._title = title
             self._details = details
             self.changed = changedDate
@@ -54,13 +60,14 @@ enum SchemaV3_2: VersionedSchema {
             self.uuid = UUID()
             self.eventId = nil
         }
-        
+
         // MARK: Codable
 
         enum CodingKeys: CodingKey {
-            case created, changed, closed, title, details, state, url, comments, important, urgent, imageData, dueDate, priority, tags, uuid, eventId
+            case created, changed, closed, title, details, state, url, comments, important, urgent,
+                imageData, dueDate, priority, tags, uuid, eventId
         }
-        
+
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
@@ -84,10 +91,10 @@ enum SchemaV3_2: VersionedSchema {
             }
             self.eventId = try? container.decode(String?.self, forKey: .eventId)
         }
-        
+
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            
+
             try container.encode(closed, forKey: .closed)
             try container.encode(_title, forKey: .title)
             try container.encode(_details, forKey: .details)
@@ -106,32 +113,32 @@ enum SchemaV3_2: VersionedSchema {
             try container.encode(eventId, forKey: .eventId)
         }
     }
-    
+
     @Model
     final class Comment: Codable {
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""
         var taskItem: TaskItem? = nil
-        
+
         init(text: String, taskItem: TaskItem) {
             self.text = text
             self.taskItem = taskItem
         }
-        
+
         // MARK: Codable
 
         enum CodingKeys: CodingKey {
             case created, changed, text
         }
-        
+
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
             self.text = try container.decode(String.self, forKey: .text)
         }
-        
+
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(created, forKey: .created)
