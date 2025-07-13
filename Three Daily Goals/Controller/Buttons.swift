@@ -140,8 +140,8 @@ extension TaskManagerViewModel {
                 for s in TaskItemState.allCases {
                     msg += "\n\(s.description.capitalized): \(self.lists[s]!.count)"
                 }
-                msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
-                debugPrint(msg)
+               // msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
+              //  debugPrint(msg)
                 self.infoMessage = msg
                 self.showInfoMessage = true
             },
@@ -149,7 +149,7 @@ extension TaskManagerViewModel {
                 Label("Task Statistic", systemImage: "chart.bar.fill")
             }
         )
-        .keyboardShortcut("s", modifiers: [.command])
+        .keyboardShortcut("t", modifiers: [.command])
     }
 
     var addNewItemButton: some View {
@@ -157,7 +157,6 @@ extension TaskManagerViewModel {
             Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks")
                 .accessibilityIdentifier("addTaskButton")
         }
-        .keyboardShortcut("n", modifiers: [.command])
     }
 
     var compassCheckButton: some View {
@@ -166,7 +165,6 @@ extension TaskManagerViewModel {
                 // .symbolRenderingMode(.palette)
                 .foregroundStyle(.gray, preferences.accentColor)
                 .accessibilityIdentifier("compassCheckButton").help("Start the Compass Check now")
-
         }
     }
 

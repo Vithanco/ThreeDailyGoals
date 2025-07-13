@@ -54,6 +54,7 @@ struct LinkToList: View {
             } else {
                 NavigationLink {
                     ListView(whichList: whichList, model: model)
+                        .standardToolbar(model: model, include: !isLargeDevice)
                 } label: {
                     ListLabel(whichList: whichList, model: model)
                         .foregroundStyle(model.accentColor)

@@ -8,28 +8,26 @@
 import Foundation
 import SwiftUI
 
-struct TDGMainToolBarContent: ToolbarContent {
+struct MainToolbarContent: ToolbarContent {
     let model: TaskManagerViewModel
 
     var body: some ToolbarContent {
-        #if os(iOS)  // see Three_Daily_GoalsApp for Mac way
-            ToolbarItem {
-                model.preferencesButton
-            }
-            ToolbarItem {
-                model.exportButton
-            }
-            ToolbarItem {
-                model.importButton
-            }
-            ToolbarItem {
-                model.statsDialog
-            }
-        #endif
+        ToolbarItem {
+            model.preferencesButton
+        }
+        ToolbarItem {
+            model.exportButton
+        }
+        ToolbarItem {
+            model.importButton
+        }
+        ToolbarItem {
+            model.statsDialog
+        }
     }
 }
 
-struct TDGStandardToolBarContent: ToolbarContent {
+struct StandardToolbarContent: ToolbarContent {
     let model: TaskManagerViewModel
 
     var body: some ToolbarContent {
@@ -39,17 +37,16 @@ struct TDGStandardToolBarContent: ToolbarContent {
         ToolbarItem {
             model.redoButton
         }
-
         ToolbarItem {
             model.compassCheckButton
         }
-        ToolbarItem {
+        ToolbarItem{
             model.addNewItemButton
         }
     }
 }
 
-struct TDGItemToolBarContent: ToolbarContent {
+struct ItemToolbarContent: ToolbarContent {
     let model: TaskManagerViewModel
     let item: TaskItem
 
@@ -88,7 +85,7 @@ struct TDGItemToolBarContent: ToolbarContent {
     }
 }
 
-struct TDGToolBarModifier: ViewModifier {
+struct StandardToolbarModifier: ViewModifier {
     @Bindable var model: TaskManagerViewModel
     let include: Bool
 
@@ -97,13 +94,13 @@ struct TDGToolBarModifier: ViewModifier {
             content
             .toolbar {
                 if include {
-                    TDGMainToolBarContent(model: model)
+                    StandardToolbarContent(model: model)
                 }
             }
     }
 }
 
-struct TDGItemToolbarModifier: ViewModifier {
+struct ItemToolbarModifier: ViewModifier {
     @Bindable var model: TaskManagerViewModel
     let item: TaskItem
     let include: Bool
@@ -113,7 +110,22 @@ struct TDGItemToolbarModifier: ViewModifier {
             content
             .toolbar {
                 if include {
-                    TDGItemToolBarContent(model: model, item: item)
+                    ItemToolbarContent(model: model, item: item)
+                }
+            }
+    }
+}
+
+struct MainToolbarModifier: ViewModifier {
+    @Bindable var model: TaskManagerViewModel
+    let include: Bool
+
+    func body(content: Content) -> some View {
+        return
+            content
+            .toolbar {
+                if include {
+                    MainToolbarContent(model: model)
                 }
             }
     }
@@ -122,12 +134,16 @@ struct TDGItemToolbarModifier: ViewModifier {
 extension View {
 
     /// include parameter was necessary in order to prevent flooding of the same toolbar on all views when shown on an iPad
-    func mainToolbar(model: TaskManagerViewModel, include: Bool = true) -> some View {
-        return self.modifier(TDGToolBarModifier(model: model, include: include))
+    func standardToolbar(model: TaskManagerViewModel, include: Bool = true) -> some View {
+        return self.modifier(StandardToolbarModifier(model: model, include: include))
     }
 
     func itemToolbar(model: TaskManagerViewModel, item: TaskItem, include: Bool = true) -> some View {
-        return self.modifier(TDGItemToolbarModifier(model: model, item: item, include: include))
+        return self.modifier(ItemToolbarModifier(model: model, item: item, include: include))
+    }
+
+    func mainToolbar(model: TaskManagerViewModel, include: Bool = true) -> some View {
+        return self.modifier(MainToolbarModifier(model: model, include: include))
     }
 
 }

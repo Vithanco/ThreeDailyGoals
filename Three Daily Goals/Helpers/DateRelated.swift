@@ -28,7 +28,6 @@ let timeAgoFormatter = {
 
 public func getCompassCheckInterval(forDate: Date = Date.now) -> DateInterval {
     let calendar = getCal()
-
     let hour = calendar.component(.hour, from: forDate)
 
     var startDateComponents = calendar.dateComponents([.year, .month, .day], from: forDate)
@@ -131,7 +130,7 @@ extension Date {
     }
 
     var endOfDay: Date {
-        return getCal().date(byAdding: DateComponents(hour: 23, minute: 59), to: startOfDay) ?? Date.now
+        return startOfDay.addingTimeInterval(Seconds.fullDay) 
     }
 
     var timeRemaining: String {

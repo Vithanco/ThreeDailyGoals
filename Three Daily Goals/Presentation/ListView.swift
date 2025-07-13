@@ -65,7 +65,6 @@ struct ListView: View {
             }
 
         }
-        .mainToolbar(model: model, include: !isLargeDevice)
     }
 }
 

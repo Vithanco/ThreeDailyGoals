@@ -46,7 +46,7 @@ struct CompassCheckDialog: View {
             case .dueDate:
                 CompassCheckDueDate(model: model)
             case .plan:
-                CompassCheckPlanDay(model: model, date: .today)
+                CompassCheckPlanDay(model: model, date: getCompassCheckInterval().end)
             }
             Spacer()
         }.padding(4).frame(minHeight: 350, idealHeight: 600)

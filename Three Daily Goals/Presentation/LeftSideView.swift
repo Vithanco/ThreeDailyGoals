@@ -12,8 +12,8 @@ struct LeftSideView: View {
     var body: some View {
         VStack {
             #if os(iOS)
+                FullStreakView(model: model).frame(maxWidth: .infinity, alignment: .center)
                 if isLargeDevice {
-                    model.streakView().frame(maxWidth: .infinity, alignment: .center)
                     HStack {
                         Spacer()
                         Circle().frame(width: 10).foregroundColor(.accentColor).help(
@@ -31,19 +31,19 @@ struct LeftSideView: View {
                     }
                 }
             #endif
-            ListView(whichList: .priority, model: model).padding(5)
+            ListView(whichList: .priority, model: model)
+                .padding(5)
             Spacer()
             VStack {
                 LinkToList(whichList: .open, model: model)
                 LinkToList(whichList: .pendingResponse, model: model)
                 LinkToList(whichList: .closed, model: model)
                 LinkToList(whichList: .dead, model: model)
-            }.padding(5)
-
-                .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
+            }
+            .padding(5)
+            .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .mainToolbar(model: model)
     }
 }
 

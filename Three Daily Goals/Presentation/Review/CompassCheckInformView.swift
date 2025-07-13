@@ -12,24 +12,22 @@ struct CompassCheckInformView: View {
     @Bindable var model: TaskManagerViewModel
 
     var body: some View {
-        VStack {
-            Text("It is about time to do a Compass Check and review your tasks").font(.title2)
-                .foregroundStyle(model.accentColor).padding(10)
-            Text(
-                "The Compass Check is where the daily magic happens. You can choose the best daily time in the preferences."
-            ).padding(10)
-            Text("This dialog will only be shown when your last Compass Check is more than 4 hours ago. ")
-                .frame(maxWidth: 500)
-                .padding(10)
-
-            HStack {
-                Spacer()
-                Button(action: model.waitABit) {
-                    Text("I would rather start in 5 min")
-                }.buttonStyle(.bordered)
-                Spacer()
+        VStack(spacing:5) {
+            GroupBox(label:  Text("Current Streak").foregroundStyle(model.accentColor) ) {
+                model.streakView().padding(5).border(Color.gray)
             }
-        }.frame(minHeight: 300, idealHeight: 300)
+            Spacer (minLength: 10)
+            Text("It is about time to do a Compass Check and review your tasks").font(.title2)
+                .foregroundStyle(model.accentColor)
+                .frame(maxWidth: 300, maxHeight: .infinity)
+            Text("The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work.\n\n" +
+                 "You can choose the best daily time in the preferences.\n\n" +
+                 "This dialog will only be shown when your last Compass Check is more than 4 hours ago. ")
+                .frame(maxWidth: 300, maxHeight: .infinity)
+            Button(action: model.waitABit) {
+                Text("Remind me in 5 min")
+            }.buttonStyle(.bordered)
+        }.frame(maxWidth: 320,maxHeight: 400)
     }
 }
 

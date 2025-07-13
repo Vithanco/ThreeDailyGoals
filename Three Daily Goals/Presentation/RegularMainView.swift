@@ -14,7 +14,8 @@ struct RegularMainView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             LeftSideView(model: model).background(Color.background).frame(maxHeight: .infinity)
-                .navigationSplitViewColumnWidth(min: 300, ideal: 400)
+                .navigationSplitViewColumnWidth(min: 300, ideal: 450)
+                .mainToolbar(model: model)
         } content: {
             SingleView {
                 ListView(model: model).background(Color.background)
@@ -31,6 +32,7 @@ struct RegularMainView: View {
                 Text("Select an item").frame(minWidth: 300)
             }
         }.navigationSplitViewStyle(.balanced)
+            .standardToolbar(model: model)
     }
 }
 

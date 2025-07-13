@@ -37,7 +37,7 @@ struct CompassCheckPlanDay: View {
                     events: $events,
                     selectedDate: $date,
                     selectionAction: .inform(self.onSelection),
-                    dateSelectionStyle: .selectedDates([Date.today])
+                    dateSelectionStyle: .selectedDates([date])
                 )
                 SimpleListView(
                     itemList: model.priorityTasks,

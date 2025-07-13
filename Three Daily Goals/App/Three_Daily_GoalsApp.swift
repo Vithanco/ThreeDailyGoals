@@ -69,6 +69,11 @@ struct Three_Daily_GoalsApp: App {
             }
             CommandGroup(replacing: .newItem) {
                 model.addNewItemButton
+                    .keyboardShortcut("n", modifiers: [.command])
+            }
+            CommandMenu("Three Daily Goals"){
+                model.compassCheckButton
+                    .keyboardShortcut("r", modifiers: [.command])
             }
         }
         #if os(macOS)  // see Toolbar for iOS way

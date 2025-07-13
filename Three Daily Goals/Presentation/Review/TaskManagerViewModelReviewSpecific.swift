@@ -94,7 +94,7 @@ extension TaskManagerViewModel {
                     .timeIntervalSince(preferences.lastCompassCheck)
                 debugPrint("secondsOfLastCCBeforeCurrentInterval: \(secondsOfLastCCBeforeCurrentInterval)")
                 debugPrint("smaller than a day?: \(secondsOfLastCCBeforeCurrentInterval < Seconds.fullDay)")
-                if (0...secondsOfLastCCBeforeCurrentInterval).contains(secondsOfLastCCBeforeCurrentInterval) {
+                if !(0...Seconds.fullDay).contains(secondsOfLastCCBeforeCurrentInterval) {
                     // reset the streak to 0
                     debugPrint("reset streak")
                     preferences.daysOfCompassCheck = 0  // will soon be set to 1

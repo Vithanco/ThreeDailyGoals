@@ -39,7 +39,6 @@ struct MainView: View {
                 CompactMainView(model: model).frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .mainToolbar(model: model)
         .background(Color.background)
         .sheet(isPresented: $model.showCompassCheckDialog) {
             CompassCheckDialog(model: model)
@@ -55,7 +54,20 @@ struct MainView: View {
         }
         .sheet(
             isPresented: $model.showInfoMessage,
-            content: { Text(model.infoMessage).padding(15) }
+            content: {
+                VStack {
+                    GroupBox {
+                        HStack(alignment: .center){
+                            Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(model.accentColor)
+                            Text(model.infoMessage).padding(5)
+                        }
+                    }.padding(5)
+                    Button("OK") {
+                        model.showInfoMessage = false
+                    }
+                }.padding(10)
+                
+            }
         )
         .fileExporter(
             isPresented: $model.showExportDialog,

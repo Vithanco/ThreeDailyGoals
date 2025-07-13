@@ -11,6 +11,7 @@ let imgGraveyard = "heart.slash.fill"
 let imgPendingResponse = "alarm.fill"
 let imgDueSoon = "calendar"
 let imgDated = "clock.fill"
+let imgInformation = "info.square.fill"
 //let imgMagnifyingGlass = "magnifyingglass.circle.fill"
 let imgCompassCheck = "safari"
 //let compassCheck = Image(systemName: "safari")

@@ -18,7 +18,9 @@ struct CompactMainView: View {
                         TaskItemView(model: model, item: item)
                     }
                 }
+                .mainToolbar(model: model)
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
+
     }
 }
 #Preview {

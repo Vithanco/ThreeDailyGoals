@@ -13,6 +13,18 @@ extension TaskManagerViewModel {
     }
 }
 
+struct FullStreakView: View {
+    @Bindable var model: TaskManagerViewModel
+    var body: some View {
+        GroupBox {
+            HStack {
+                model.streakView()
+                model.compassCheckButton
+            }
+        }
+    }
+}
+
 struct StreakViewHelper: View {
     var body: some View {
         dummyViewModel().streakView()
