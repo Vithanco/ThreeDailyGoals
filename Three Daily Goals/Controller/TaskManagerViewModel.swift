@@ -32,6 +32,12 @@ enum DialogState: String {
     case plan
 }
 
+enum SupportedOS {
+    case iOS
+    case macOS
+    case ipadOS
+}
+
 extension TagCapsuleStyle.Border: @unchecked Sendable {
     static let none: TagCapsuleStyle.Border = .init(
         color: .clear,
@@ -84,6 +90,17 @@ final class TaskManagerViewModel {
     var canUndo = false
     var canRedo = false
 
+    var os: SupportedOS {
+    #if os(iOS)
+        if isLargeDevice {
+            return .ipadOS
+        }
+        return .iOS
+#elseif os(macOS)
+        return .macOS
+#endif
+    }
+    
     var showCompassCheckDialog: Bool = false
     var showSettingsDialog: Bool = false
     var showMissingCompassCheckAlert: Bool = false
@@ -131,6 +148,7 @@ final class TaskManagerViewModel {
             lists[c] = []
         }
         callFetch()
+        
 
         Task { [weak self] in
             let center = NotificationCenter.default

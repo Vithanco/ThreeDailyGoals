@@ -20,10 +20,8 @@ struct CompassCheckInformView: View {
             Text("It is about time to do a Compass Check and review your tasks").font(.title2)
                 .foregroundStyle(model.accentColor)
                 .frame(maxWidth: 300, maxHeight: .infinity)
-            Text("The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work.\n\n" +
-                 "You can choose the best daily time in the preferences.\n\n" +
-                 "This dialog will only be shown when your last Compass Check is more than 4 hours ago. ")
-                .frame(maxWidth: 300, maxHeight: .infinity)
+            Text("The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work.")
+                .multilineTextAlignment(.leading)
             Button(action: model.waitABit) {
                 Text("Remind me in 5 min")
             }.buttonStyle(.bordered)

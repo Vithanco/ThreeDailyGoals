@@ -28,8 +28,11 @@ struct CompassCheckNextPriorities: View {
 
             #endif
             #if os(iOS)
-
-                ListView(whichList: .priority, model: model)
+            Text("Choose Next Priorities. Swipe left to move to Priorites \(Image(systemName: TaskItemState.priority.imageName))")
+                .font(.title2)
+                .foregroundStyle(model.accentColor)
+                .multilineTextAlignment(.center)
+                ListView(whichList: .open, model: model)
                     .frame(minHeight: 300)
 
             #endif

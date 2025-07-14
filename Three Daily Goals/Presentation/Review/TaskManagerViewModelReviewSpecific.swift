@@ -54,7 +54,11 @@ extension TaskManagerViewModel {
             }
             stateOfCompassCheck = .review
         case .review:
-            stateOfCompassCheck = .plan
+            if os == .iOS {
+                endCompassCheck(didFinishCompassCheck: true)
+            } else {
+                stateOfCompassCheck = .plan
+            }
         case .plan:
             endCompassCheck(didFinishCompassCheck: true)
         }
@@ -62,8 +66,14 @@ extension TaskManagerViewModel {
     }
 
     var moveStateForwardText: String {
-        if stateOfCompassCheck == .plan {
-            return "Finish"
+        if (os == .iOS) {
+            if stateOfCompassCheck == .review {
+                return "Finish"
+            }
+        } else {
+            if stateOfCompassCheck == .plan {
+                return "Finish"
+            }
         }
         return "Next"
     }
