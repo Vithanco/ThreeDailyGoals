@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-extension TaskManagerViewModel {
-    func streakView() -> Text {
-        return Text("\(Image(systemName: imgStreak)) \(streakText)").foregroundStyle(Color.red)  //- Time:
+struct StreakView: View {
+    @Bindable var model: TaskManagerViewModel
+    var body: some View {
+        Text("\(Image(systemName: imgStreak)) \(model.preferences.streakText)").foregroundStyle(Color.red)
     }
 }
 
@@ -18,19 +19,14 @@ struct FullStreakView: View {
     var body: some View {
         GroupBox {
             HStack {
-                model.streakView()
+                StreakView(model: model)
                 model.compassCheckButton
             }
         }
     }
 }
 
-struct StreakViewHelper: View {
-    var body: some View {
-        dummyViewModel().streakView()
-    }
-}
 
 #Preview {
-    StreakViewHelper()
+    StreakView(model: dummyViewModel())
 }

@@ -83,10 +83,6 @@ extension TaskManagerViewModel {
         stateOfCompassCheck = .inform
     }
 
-    var haveMoreThanFourHoursPassedSinceLastReview: Bool {
-        return Date.now.timeIntervalSince(preferences.lastCompassCheck) < Seconds.fourHours
-    }
-
     func endCompassCheck(didFinishCompassCheck: Bool) {
         showCompassCheckDialog = false
         stateOfCompassCheck = .inform
@@ -182,7 +178,9 @@ extension TaskManagerViewModel {
                     if await self.showCompassCheckDialog {
                         return
                     }
-                    await self.startCompassCheckNow()
+                    if await !self.preferences.didCompassCheckToday {
+                        await self.startCompassCheckNow()
+                    }
                     await self.setupCompassCheckNotification()
                 }
             }

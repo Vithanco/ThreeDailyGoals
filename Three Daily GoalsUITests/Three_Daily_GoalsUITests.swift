@@ -154,9 +154,9 @@ func ensureExists(text: String, inApp: XCUIApplication) {
     
     @MainActor
     func testEnsureButtonsVisible() async throws {
-        start view: main buttons
-        item view : item buttons
-        always undo buttons, etc.
+//        start view: main buttons
+//        item view : item buttons
+//        always undo buttons, etc.
     }
             
     

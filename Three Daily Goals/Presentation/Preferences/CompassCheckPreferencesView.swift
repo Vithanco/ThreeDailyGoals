@@ -36,7 +36,7 @@ struct CompassCheckPreferencesView: View {
                     Text(lastCompassCheck).foregroundColor(model.accentColor)
                 }.padding(5)
 
-                model.streakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
+                StreakView(model: model).padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
 
                 Text("Current Compass Check Interval").bold()
                 HStack {

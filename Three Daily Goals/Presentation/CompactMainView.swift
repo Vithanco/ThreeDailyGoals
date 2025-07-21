@@ -19,6 +19,14 @@ struct CompactMainView: View {
                     }
                 }
                 .mainToolbar(model: model)
+                .toolbar{
+                    ToolbarItem {
+                        model.compassCheckButton
+                    }
+                    ToolbarItem{
+                        model.addNewItemButton
+                    }
+                }
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
 
     }

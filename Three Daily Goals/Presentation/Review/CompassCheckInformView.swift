@@ -14,7 +14,7 @@ struct CompassCheckInformView: View {
     var body: some View {
         VStack(spacing:5) {
             GroupBox(label:  Text("Current Streak").foregroundStyle(model.accentColor) ) {
-                model.streakView().padding(5).border(Color.gray)
+                StreakView(model: model).padding(5).border(Color.gray)
             }
             Spacer (minLength: 10)
             Text("It is about time to do a Compass Check and review your tasks").font(.title2)

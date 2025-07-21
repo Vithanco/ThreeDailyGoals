@@ -60,7 +60,6 @@ struct SimpleListView: View {
                     }
                 }
             }
-
         }.accessibilityIdentifier("scrollView_\(id)")
     }
 

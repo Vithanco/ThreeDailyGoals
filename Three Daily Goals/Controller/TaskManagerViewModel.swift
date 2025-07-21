@@ -108,8 +108,6 @@ final class TaskManagerViewModel {
     var showNewItemNameDialog: Bool = false
     var selectDuringImport: [Choice] = []
 
-    var streakText: String = ""
-
     var lists: [TaskItemState: [TaskItem]] = [:]
 
     // for user messages
@@ -369,7 +367,6 @@ final class TaskManagerViewModel {
 
         let next = nextRegularCompassCheckTime
         let today = preferences.didCompassCheckToday ? "Done" : stdOnlyTimeFormat.format(next)
-        streakText = "Streak: \(preferences.daysOfCompassCheck), today: \(today)"  // - Time:
     }
 
     func findTask(withID: String) -> TaskItem? {

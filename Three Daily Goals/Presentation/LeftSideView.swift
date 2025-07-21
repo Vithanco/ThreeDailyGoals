@@ -13,6 +13,7 @@ struct LeftSideView: View {
         VStack {
             #if os(iOS)
                 FullStreakView(model: model).frame(maxWidth: .infinity, alignment: .center)
+                .standardToolbar(model: model, include: !isLargeDevice)
                 if isLargeDevice {
                     HStack {
                         Spacer()

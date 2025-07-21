@@ -66,7 +66,7 @@ struct WPriorities: View {
                 .title2
             ).foregroundStyle(Color.red)
             Section(
-                header: Text("\(Image(systemName: imgToday)) Today").font(.title).foregroundStyle(
+                header: Text("today: \(preferences.didCompassCheckToday ? "✅" : "⏳")").font(.subheadline).foregroundStyle(
                     preferences.accentColor)
             ) {
                 AWPriority(item: preferences.getPriority(nr: 1))

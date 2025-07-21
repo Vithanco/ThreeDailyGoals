@@ -94,6 +94,7 @@ final class CloudPreferences {
     var store: KeyValueStorage
     typealias OnChange = () -> Void
     var onChange: OnChange?
+    var streakText = ""
 
     init(store: KeyValueStorage, onChange: OnChange? = nil) {
         self.store = store
@@ -105,18 +106,20 @@ final class CloudPreferences {
             self.init(store: TestPreferences(), onChange: onChange)
         } else {
             self.init(store: NSUbiquitousKeyValueStore.default, onChange: onChange)
-
+            
             NotificationCenter.default.addObserver(
                 forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self,
                 queue: nil, using: ubiquitousKeyValueStoreDidChange)
-        }
-
-        // initiate the store with a proper time
-        if store.string(forKey: .lastCompassCheckString) == nil {
-            store.set(18, forKey: .compassCheckTimeHour)
-            store.set(00, forKey: .compassCheckTimeMinute)
+            setStreakText ()
+            
+            // initiate the store with a proper time
+            if store.string(forKey: .lastCompassCheckString) == nil {
+                store.set(18, forKey: .compassCheckTimeHour)
+                store.set(00, forKey: .compassCheckTimeMinute)
+            }
         }
     }
+    
 
     func ubiquitousKeyValueStoreDidChange(notification: Notification) {
         if let onChange = onChange {
@@ -127,9 +130,13 @@ final class CloudPreferences {
 }
 
 extension CloudPreferences {
+    
+    func setStreakText () {
+        streakText = "Streak: \(daysOfCompassCheck), today: \(didCompassCheckToday ? "✅" : "⏳")"
+    }
+    
     var daysOfCompassCheck: Int {
         get {
-
             let result = self.store.int(forKey: .daysOfCompassCheck)
             debugPrint("read daysOfCompassCheck: \(result)")
             return result
@@ -137,6 +144,7 @@ extension CloudPreferences {
         set {
             debugPrint("write new daysOfCompassCheck: \(newValue)")
             store.set(newValue, forKey: .daysOfCompassCheck)
+            setStreakText()
         }
     }
 
@@ -154,10 +162,8 @@ extension CloudPreferences {
 
     var compassCheckTime: Date {
         get {
-            //TODO            the timing logic needs serious improvement - and some good test cases
             let compassCheckTimeHour = self.store.int(forKey: .compassCheckTimeHour)
             let compassCheckTimeMinute = self.store.int(forKey: .compassCheckTimeMinute)
-
             return todayAt(hour: compassCheckTimeHour, min: compassCheckTimeMinute)
         }
         set {
