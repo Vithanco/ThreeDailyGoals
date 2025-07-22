@@ -122,6 +122,7 @@ final class CloudPreferences {
     
 
     func ubiquitousKeyValueStoreDidChange(notification: Notification) {
+        setStreakText()
         if let onChange = onChange {
             onChange()
         }

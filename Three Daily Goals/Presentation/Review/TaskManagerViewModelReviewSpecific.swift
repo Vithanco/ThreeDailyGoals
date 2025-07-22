@@ -140,6 +140,7 @@ extension TaskManagerViewModel {
     }
 
     func startCompassCheckNow() {
+        preferences.setStreakText()
         if !showCompassCheckDialog && stateOfCompassCheck == .inform {
             debugPrint("start compass check \(Date.now)")
             showCompassCheckDialog = true
@@ -167,6 +168,9 @@ extension TaskManagerViewModel {
         }
         if isTesting {
             return
+        }
+        if showInfoMessage || showExportDialog || showImportDialog || showSettingsDialog || showNewItemNameDialog {
+            waitABit()
         }
         let time = when ?? nextRegularCompassCheckTime
 

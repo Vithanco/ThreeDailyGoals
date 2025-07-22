@@ -20,9 +20,6 @@ struct CompactMainView: View {
                 }
                 .mainToolbar(model: model)
                 .toolbar{
-                    ToolbarItem {
-                        model.compassCheckButton
-                    }
                     ToolbarItem{
                         model.addNewItemButton
                     }

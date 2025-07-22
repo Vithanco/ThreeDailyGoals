@@ -155,9 +155,6 @@ final class TaskManagerViewModel {
             {
                 guard let self else { break }
                 if let userInfo = notification.userInfo {
-                    //                    Logger(subsystem: Bundle.main.bundleIdentifier!, category: String(describing: TaskManagerViewModel.self)).debug(
-                    //                        "Event: \(userInfo.debugDescription)"
-                    //                    )
                     if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
                         if event.type == .import && event.endDate != nil && event.succeeded {
                             if !modelContext.hasChanges {
@@ -331,11 +328,7 @@ final class TaskManagerViewModel {
 
     @MainActor
     fileprivate func callFetch() {
-        //        Task {
-        //            do {
         mergeDataFromCentralStorage()
-        //            }
-        //        }
     }
 
     @MainActor
