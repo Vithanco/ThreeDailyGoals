@@ -26,7 +26,6 @@ struct FullStreakView: View {
     }
 }
 
-
 #Preview {
     StreakView(model: dummyViewModel())
 }

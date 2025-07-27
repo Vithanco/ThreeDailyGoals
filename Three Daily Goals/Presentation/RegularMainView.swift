@@ -23,7 +23,9 @@ struct RegularMainView: View {
                 .navigationSplitViewColumnWidth(min: 250, ideal: 400)
                 .navigationTitle("Three Daily Goals")
                 #if os(macOS)
-                .navigationSubtitle(Text("\(Image(systemName: imgStreak)) \(model.preferences.streakText)").foregroundStyle(Color.red))
+                    .navigationSubtitle(
+                        Text("\(Image(systemName: imgStreak)) \(model.preferences.streakText)").foregroundStyle(
+                            Color.red))
                 #endif
         } detail: {
             if let detail = model.selectedItem {

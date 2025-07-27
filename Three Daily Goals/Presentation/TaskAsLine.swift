@@ -34,7 +34,10 @@ struct TaskAsLine: View {
                 Text(item.due!.timeRemaining).italic().foregroundStyle(Color.gray)
             }
         }
-        .draggable(item.id)
+        .contentShape(Rectangle())
+        #if os(macOS)
+            .draggable(item.id)
+        #endif
         .swipeActions {
             if item.canBeMovedToPendingResponse {
                 model.waitForResponseButton(item: item)

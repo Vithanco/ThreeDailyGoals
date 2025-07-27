@@ -9,9 +9,9 @@ import SwiftUI
 
 struct CompassCheckCurrentPriorities: View {
     @Bindable var model: TaskManagerViewModel
-    
+
     @State private var presentAlert = false
-        @State private var newTaskName: String = ""
+    @State private var newTaskName: String = ""
 
     var body: some View {
         VStack {
@@ -29,7 +29,7 @@ struct CompassCheckCurrentPriorities: View {
                     Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor).padding(5)
                     Text("Slide tasks to the left to close them.")
                     Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
-                    ListView(whichList: .open, model: model)
+                    ListView(whichList: .priority, model: model)
                 }.frame(minHeight: 300, idealHeight: 500)
             #endif
             Button(action: { presentAlert = true }) {

@@ -91,16 +91,16 @@ final class TaskManagerViewModel {
     var canRedo = false
 
     var os: SupportedOS {
-    #if os(iOS)
-        if isLargeDevice {
-            return .ipadOS
-        }
-        return .iOS
-#elseif os(macOS)
-        return .macOS
-#endif
+        #if os(iOS)
+            if isLargeDevice {
+                return .ipadOS
+            }
+            return .iOS
+        #elseif os(macOS)
+            return .macOS
+        #endif
     }
-    
+
     var showCompassCheckDialog: Bool = false
     var showSettingsDialog: Bool = false
     var showMissingCompassCheckAlert: Bool = false
@@ -146,7 +146,6 @@ final class TaskManagerViewModel {
             lists[c] = []
         }
         callFetch()
-        
 
         Task { [weak self] in
             let center = NotificationCenter.default

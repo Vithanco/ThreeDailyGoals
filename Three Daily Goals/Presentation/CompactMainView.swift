@@ -19,8 +19,8 @@ struct CompactMainView: View {
                     }
                 }
                 .mainToolbar(model: model)
-                .toolbar{
-                    ToolbarItem{
+                .toolbar {
+                    ToolbarItem {
                         model.addNewItemButton
                     }
                 }

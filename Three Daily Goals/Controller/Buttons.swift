@@ -140,8 +140,8 @@ extension TaskManagerViewModel {
                 for s in TaskItemState.allCases {
                     msg += "\n\(s.description.capitalized): \(self.lists[s]!.count)"
                 }
-               // msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
-              //  debugPrint(msg)
+                // msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
+                //  debugPrint(msg)
                 self.infoMessage = msg
                 self.showInfoMessage = true
             },

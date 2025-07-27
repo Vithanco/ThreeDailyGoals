@@ -18,12 +18,14 @@ struct LinkToTask: View {
                 model.select(which: list, item: item)
             }.accessibilityIdentifier("linkToTask" + item.title)
         } else {
-            HStack {
-                NavigationLink {
-                    TaskItemView(model: model, item: item)
-                } label: {
-                    TaskAsLine(item: item, model: model).accessibilityIdentifier(item.id.description)
+            ZStack {
+                TaskAsLine(item: item, model: model)
+                    .accessibilityIdentifier(item.id.description)
+                NavigationLink(destination: TaskItemView(model: model, item: item)) {
+                    EmptyView()
                 }
+                .opacity(0)
+                .accessibilityHidden(true)
             }
         }
     }

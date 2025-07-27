@@ -28,7 +28,9 @@ struct CompassCheckNextPriorities: View {
 
             #endif
             #if os(iOS)
-            Text("Choose Next Priorities. Swipe left to move to Priorites \(Image(systemName: TaskItemState.priority.imageName))")
+                Text(
+                    "Choose Next Priorities. Swipe left to move to Priorites \(Image(systemName: TaskItemState.priority.imageName))"
+                )
                 .font(.title2)
                 .foregroundStyle(model.accentColor)
                 .multilineTextAlignment(.center)

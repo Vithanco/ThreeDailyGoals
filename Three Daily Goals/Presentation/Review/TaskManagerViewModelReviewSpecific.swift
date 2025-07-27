@@ -66,7 +66,7 @@ extension TaskManagerViewModel {
     }
 
     var moveStateForwardText: String {
-        if (os == .iOS) {
+        if os == .iOS {
             if stateOfCompassCheck == .review {
                 return "Finish"
             }

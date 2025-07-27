@@ -130,7 +130,7 @@ extension Date {
     }
 
     var endOfDay: Date {
-        return startOfDay.addingTimeInterval(Seconds.fullDay) 
+        return startOfDay.addingTimeInterval(Seconds.fullDay)
     }
 
     var timeRemaining: String {

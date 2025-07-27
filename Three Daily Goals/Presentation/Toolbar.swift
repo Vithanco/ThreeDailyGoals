@@ -40,7 +40,7 @@ struct StandardToolbarContent: ToolbarContent {
         ToolbarItem {
             model.compassCheckButton
         }
-        ToolbarItem{
+        ToolbarItem {
             model.addNewItemButton
         }
     }

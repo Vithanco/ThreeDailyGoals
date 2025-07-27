@@ -71,7 +71,7 @@ struct Three_Daily_GoalsApp: App {
                 model.addNewItemButton
                     .keyboardShortcut("n", modifiers: [.command])
             }
-            CommandMenu("Three Daily Goals"){
+            CommandMenu("Three Daily Goals") {
                 model.compassCheckButton
                     .keyboardShortcut("r", modifiers: [.command])
             }

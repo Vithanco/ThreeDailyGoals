@@ -40,9 +40,15 @@ struct MainView: View {
             }
         }
         .background(Color.background)
-        .sheet(isPresented: $model.showCompassCheckDialog) {
-            CompassCheckDialog(model: model)
-        }
+        #if os(iOS)
+            .fullScreenCover(isPresented: $model.showCompassCheckDialog) {
+                CompassCheckDialog(model: model)
+            }
+        #else
+            .sheet(isPresented: $model.showCompassCheckDialog) {
+                CompassCheckDialog(model: model)
+            }
+        #endif
         .sheet(isPresented: $model.showSettingsDialog) {
             PreferencesView(model: model)
         }
@@ -57,8 +63,9 @@ struct MainView: View {
             content: {
                 VStack {
                     GroupBox {
-                        HStack(alignment: .center){
-                            Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(model.accentColor)
+                        HStack(alignment: .center) {
+                            Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
+                                model.accentColor)
                             Text(model.infoMessage).padding(5)
                         }
                     }.padding(5)
@@ -66,7 +73,7 @@ struct MainView: View {
                         model.showInfoMessage = false
                     }
                 }.padding(10)
-                
+
             }
         )
         .fileExporter(

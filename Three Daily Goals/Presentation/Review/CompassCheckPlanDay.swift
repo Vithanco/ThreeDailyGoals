@@ -29,6 +29,7 @@ struct CompassCheckPlanDay: View {
 
     var body: some View {
         VStack {
+            Text("This is under development and not yet working.").font(.title)
             Text(
                 "Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
             ).font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)

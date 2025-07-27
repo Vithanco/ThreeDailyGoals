@@ -66,19 +66,19 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         XCTAssertTrue(list.count > 0, "couldn't find \(string)")
         return list.element(boundBy: 0)
     }
-    
+
     func assertOneExists(string: String, whereToLook: XCUIElementQuery) {
-            let list = whereToLook.matching(identifier: string)
-            XCTAssertTrue(list.count == 1, "\(string) exists not exactly once, but \(list.count) times")
-        }
-    
+        let list = whereToLook.matching(identifier: string)
+        XCTAssertTrue(list.count == 1, "\(string) exists not exactly once, but \(list.count) times")
+    }
+
     func assertMainButtonsExistsOnce(whereToLook: XCUIElementQuery) {
         assertOneExists(string: "Add Task", whereToLook: whereToLook)
         assertOneExists(string: "compassCheckButton", whereToLook: whereToLook)
         #if os(iOS)
-        assertOneExists(string: "redo", whereToLook: whereToLook)
-        assertOneExists(string: "redo", whereToLook: whereToLook)
-        
+            assertOneExists(string: "redo", whereToLook: whereToLook)
+            assertOneExists(string: "redo", whereToLook: whereToLook)
+
         #endif
     }
 
@@ -151,15 +151,13 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         XCTAssertTrue(!closedTask.exists, "Task should be deleted")
         //
     }
-    
+
     @MainActor
     func testEnsureButtonsVisible() async throws {
-//        start view: main buttons
-//        item view : item buttons
-//        always undo buttons, etc.
+        //        start view: main buttons
+        //        item view : item buttons
+        //        always undo buttons, etc.
     }
-            
-    
 
     @MainActor func testAppStartsEmpty() throws {
         //        let container = sharedModelContainer(inMemory: true)
