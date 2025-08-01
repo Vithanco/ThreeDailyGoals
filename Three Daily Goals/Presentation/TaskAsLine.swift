@@ -38,25 +38,27 @@ struct TaskAsLine: View {
         #if os(macOS)
             .draggable(item.id)
         #endif
-        .swipeActions {
-            if item.canBeMovedToPendingResponse {
-                model.waitForResponseButton(item: item)
-            }
+        .swipeActions(edge: .leading) {
+
             if item.canBeMovedToOpen {
                 model.openButton(item: item)
-            }
-            if item.canBeDeleted {
-                model.deleteButton(item: item)
-            }
-            if item.canBeClosed {
-                model.killButton(item: item)
-                model.closeButton(item: item)
             }
             if item.canBeMadePriority {
                 model.priorityButton(item: item)
             }
         }
-
+        .swipeActions(edge: .trailing) {
+            if item.canBeMovedToPendingResponse {
+                model.waitForResponseButton(item: item)
+            }
+            if item.canBeClosed {
+                model.killButton(item: item)
+                model.closeButton(item: item)
+            }
+            if item.canBeDeleted {
+                model.deleteButton(item: item)
+            }
+        }
     }
 }
 

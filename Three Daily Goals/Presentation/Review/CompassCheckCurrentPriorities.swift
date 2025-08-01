@@ -15,23 +15,12 @@ struct CompassCheckCurrentPriorities: View {
 
     var body: some View {
         VStack {
-            #if os(macOS)
-                Text(
-                    "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
-                ).font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
-                HStack {
-                    ListView(whichList: .priority, model: model).frame(minHeight: 300)
-                    ListView(whichList: .open, model: model)
-                }
-            #endif
-            #if os(iOS)
-                VStack {
-                    Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor).padding(5)
-                    Text("Slide tasks to the left to close them.")
-                    Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
-                    ListView(whichList: .priority, model: model)
-                }.frame(minHeight: 300, idealHeight: 500)
-            #endif
+            VStack {
+                Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor).padding(5)
+                Text("Slide tasks to the left to close them.")
+                Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
+                ListView(whichList: .priority, model: model)
+            }.frame(minHeight: 300, idealHeight: 500)
             Button(action: { presentAlert = true }) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks.")
             }

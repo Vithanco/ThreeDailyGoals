@@ -52,6 +52,10 @@ struct Three_Daily_GoalsApp: App {
                 .onDisappear {
                     terminateApp()
                 }
+                .onOpenURL { url in
+                    // Parse the URL and create a task
+                    createTaskFrom(url: url)
+                }
         }
         .modelContainer(container)
         .environment(model)
@@ -88,6 +92,15 @@ struct Three_Daily_GoalsApp: App {
         #if os(macOS)
             NSApplication.shared.terminate(self)
         #endif
+    }
+
+    @MainActor func createTaskFrom(url: URL) {
+        let reviewTask = TaskItem()
+        reviewTask.title = "review" + url.lastPathComponent
+        reviewTask.url = url.absoluteString
+        model.addItem(item: reviewTask)
+        model.infoMessage = "Review Task added from \(url)"
+        model.showInfoMessage = true
     }
 
 }

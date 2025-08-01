@@ -37,10 +37,10 @@ struct StandardToolbarContent: ToolbarContent {
         ToolbarItem {
             model.redoButton
         }
-        ToolbarItem {
+        ToolbarItem(placement: .principal) {
             model.compassCheckButton
         }
-        ToolbarItem {
+        ToolbarItem(placement: .principal) {
             model.addNewItemButton
         }
     }
