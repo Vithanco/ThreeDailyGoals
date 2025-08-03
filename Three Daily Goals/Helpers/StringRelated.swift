@@ -7,7 +7,7 @@
 
 import Foundation
 
-let emptyTaskTitle = "I need to ..."
+public let emptyTaskTitle = "I need to ..."
 let emptyTaskDetails = "(no details yet)"
 
 extension String.StringInterpolation {

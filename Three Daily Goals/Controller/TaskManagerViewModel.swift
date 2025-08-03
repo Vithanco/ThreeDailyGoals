@@ -287,12 +287,10 @@ final class TaskManagerViewModel {
     }
 
     func addItem(item: TaskItem) {
-        modelContext.insert(item)
-        if let comments = item.comments {
-            for c in comments {
-                modelContext.insert(c)
-            }
+        if item.isEmpty {
+            return
         }
+        modelContext.insert(item)
         items.append(item)
         lists[item.state]?.append(item)
         sortList(item.state)

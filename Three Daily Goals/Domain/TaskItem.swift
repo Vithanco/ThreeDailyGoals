@@ -196,6 +196,11 @@ extension TaskItem {
         assert(!tags.contains(oldTag))
     }
 
+    var isEmpty: Bool {
+        return (title.isEmpty || title == emptyTaskTitle) && (details.isEmpty || details == emptyTaskDetails)
+            && url.isEmpty
+    }
+
     var isOpen: Bool {
         return state == .open
     }

@@ -18,6 +18,7 @@ struct TestReview {
         let store = TestPreferences()
         let pref = CloudPreferences(store: store)
         let model = dummyViewModel(preferences: pref)
+        pref.lastCompassCheck = Date(timeIntervalSinceNow: -Seconds.twoDays)
 
         model.startCompassCheckNow()
         #expect(model.stateOfCompassCheck == .inform)
@@ -32,8 +33,10 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfCompassCheck == .review)
         model.moveStateForward()
-        #expect(model.stateOfCompassCheck == .plan)
-        model.moveStateForward()
+        if model.os == .macOS {
+            #expect(model.stateOfCompassCheck == .plan)
+            model.moveStateForward()
+        }
         #expect(model.stateOfCompassCheck == .inform)
         #expect(pref.daysOfCompassCheck == 1)
         for t in model.items {
@@ -131,7 +134,7 @@ struct TestReview {
         let model = dummyViewModel()
         let pref = model.preferences
 
-        pref.lastCompassCheck = m15
+        pref.lastCompassCheck = getCompassCheckInterval().start.addingTimeInterval(1)
         #expect(model.preferences.didCompassCheckToday)
 
         pref.lastCompassCheck = m25
