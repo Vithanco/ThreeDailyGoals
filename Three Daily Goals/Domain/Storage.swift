@@ -182,18 +182,17 @@ class TestStorage: Storage {
 }
 
 @MainActor
-func sharedModelContainer(inMemory: Bool) -> ModelContainer {
+func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContainer {
     if let result = container, result.isInMemory == inMemory {
         return result
     }
 
     let schema = Schema(versionedSchema: SchemaLatest.self)
     let useCloudDB =
-        inMemory
+        (inMemory || !withCloud)
         ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
 
-    let modelConfiguration = ModelConfiguration(
-        schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
+    let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
 
     do {
         let result = try ModelContainer(
@@ -201,9 +200,7 @@ func sharedModelContainer(inMemory: Bool) -> ModelContainer {
             migrationPlan: TDGMigrationPlan.self,
             configurations: [modelConfiguration]
         )
-        DispatchQueue.main.async {
-            result.mainContext.undoManager = UndoManager()
-        }
+        result.mainContext.undoManager = UndoManager()
         container = result
         return result
     } catch {

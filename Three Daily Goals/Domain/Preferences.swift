@@ -89,8 +89,9 @@ extension NSUbiquitousKeyValueStore: KeyValueStorage {
     }
 }
 
+@MainActor
 @Observable
-final class CloudPreferences {
+final class CloudPreferences: ObservableObject {
     var store: KeyValueStorage
     typealias OnChange = () -> Void
     var onChange: OnChange?
@@ -283,6 +284,7 @@ class TestPreferences: KeyValueStorage {
     }
 }
 
+@MainActor
 func dummyPreferences() -> CloudPreferences {
     let store = TestPreferences()
     let result = CloudPreferences(store: store)

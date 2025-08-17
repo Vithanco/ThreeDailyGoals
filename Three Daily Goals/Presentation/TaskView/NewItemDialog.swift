@@ -10,6 +10,7 @@ import SwiftUI
 struct NewItemDialog: View {
 
     @Bindable var model: TaskManagerViewModel
+    @FocusState var isTitleFocused: Bool
 
     func dismiss() {
         model.showNewItemNameDialog = false
@@ -22,6 +23,12 @@ struct NewItemDialog: View {
     }
 
     @State var title: String = emptyTaskTitle
+
+    public init(model: TaskManagerViewModel) {
+        self.model = model
+        self.isTitleFocused = true
+    }
+
     var body: some View {
         VStack {
             Text("Add a new task").bold().foregroundColor(Color.accentColor)
@@ -29,12 +36,13 @@ struct NewItemDialog: View {
                 TextField("titleField", text: $title, axis: .vertical).accessibilityIdentifier("titleField")
                     .bold()
                     .frame(idealHeight: 13)
+                    .focused($isTitleFocused)
                     .onSubmit {
                         addTask()
                     }
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
-            }.tdgShadow
+            }
             Spacer()
 
             HStack {

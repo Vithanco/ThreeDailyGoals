@@ -38,13 +38,6 @@ enum SupportedOS {
     case ipadOS
 }
 
-extension TagCapsuleStyle.Border: @unchecked Sendable {
-    static let none: TagCapsuleStyle.Border = .init(
-        color: .clear,
-        width: 0
-    )
-}
-
 //extension Notification: @unchecked Sendable {}
 
 @MainActor
@@ -115,23 +108,6 @@ final class TaskManagerViewModel {
     var infoMessage: String = "(invalid)"
 
     var selectedTags: [String] = []
-    var missingTagStyle: TagCapsuleStyle {
-        TagCapsuleStyle(
-            foregroundColor: .white,
-            backgroundColor: .gray,
-            border: .none,
-            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
-        )
-    }
-
-    var selectedTagStyle: TagCapsuleStyle {
-        TagCapsuleStyle(
-            foregroundColor: accentColor.readableTextColor,
-            backgroundColor: accentColor,
-            border: .none,
-            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
-        )
-    }
 
     func finishDialog() {
         showInfoMessage = false
@@ -251,7 +227,17 @@ final class TaskManagerViewModel {
     }
 
     private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
-        var itemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+        var seenIDs = Set<UUID>()
+        let adjustedItems = fetchedItems.map { item -> TaskItem in
+            if seenIDs.contains(item.uuid) {
+                let newItem = item
+                newItem.uuid = UUID()
+                return newItem
+            }
+            seenIDs.insert(item.uuid)
+            return item
+        }
+        var itemsById = Dictionary(uniqueKeysWithValues: adjustedItems.map { ($0.id, $0) })
 
         var addedCount = 0
         var updatedCount = 0

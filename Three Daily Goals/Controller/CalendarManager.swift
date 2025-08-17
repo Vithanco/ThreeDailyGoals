@@ -8,6 +8,7 @@
 import EventKit
 import Foundation
 
+@MainActor
 @Observable
 class CalendarManager {
     private var eventStore: EKEventStore?

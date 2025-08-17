@@ -28,7 +28,7 @@ struct Three_Daily_GoalsApp: App {
                 enableTesting = true
             }
         #endif
-        self.container = sharedModelContainer(inMemory: enableTesting)  // enableTesting -> inMemory
+        self.container = sharedModelContainer(inMemory: enableTesting, withCloud: true)  // enableTesting -> inMemory
         if enableTesting {
             self._model = State(wrappedValue: dummyViewModel())
         } else {

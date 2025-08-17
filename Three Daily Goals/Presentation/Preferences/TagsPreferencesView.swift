@@ -59,8 +59,9 @@ struct TagsPreferencesView: View {
                     TagList(
                         tags: model.allTags.asArray,
                         tagView: { text in
-                            return
-                                TagCapsule(text).tagCapsuleStyle(model.selectedTagStyle).onTapGesture(perform: {
+                            return TagCapsule(text)
+                                .tagCapsuleStyle(selectedTagStyle(accentColor: model.accentColor))
+                                .onTapGesture(perform: {
                                     tag = text
                                     changeTo = text
                                 })
