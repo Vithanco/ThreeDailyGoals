@@ -91,7 +91,7 @@ extension NSUbiquitousKeyValueStore: KeyValueStorage {
 
 @MainActor
 @Observable
-final class CloudPreferences: ObservableObject {
+final class CloudPreferences {
     var store: KeyValueStorage
     typealias OnChange = () -> Void
     var onChange: OnChange?

@@ -182,7 +182,7 @@ class TestStorage: Storage {
 }
 
 @MainActor
-func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContainer {
+public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContainer {
     if let result = container, result.isInMemory == inMemory {
         return result
     }

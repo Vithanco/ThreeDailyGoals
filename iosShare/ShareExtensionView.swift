@@ -8,16 +8,22 @@
 import SwiftData
 import SwiftUI
 import TagKit
+import UniformTypeIdentifiers
 
 struct ShareExtensionView: View {
     @State private var item: TaskItem = .init()
-    @EnvironmentObject private var pref: CloudPreferences
+    @Environment(CloudPreferences.self) private var pref: CloudPreferences
     @Environment(\.modelContext) var model
 
     @Query private var allItems: [TaskItem]
 
     init(text: String) {
-        self.item.title = text
+        if text.count > 30 {
+            self.item.details = text
+            self.item.title = "Review"
+        } else {
+            self.item.title = text
+        }
     }
     init(details: String) {
         self.item.details = details
@@ -25,6 +31,10 @@ struct ShareExtensionView: View {
     init(url: String) {
         self.item.title = "Read"
         self.item.url = url
+    }
+
+    init(fileURL: URL, contentType: UTType) {
+
     }
 
     init() {

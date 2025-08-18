@@ -9,6 +9,7 @@ import CoreTransferable
 import Foundation
 import SwiftData
 import os
+import UniformTypeIdentifiers
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,

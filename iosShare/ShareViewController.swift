@@ -1,101 +1,70 @@
-import Foundation.NSItemProvider
-import Social
+import Foundation
 import SwiftUI
-import UIKit
-//
-//  ShareViewController.swift
-//  iosShare
-//
-//  Created by Klaus Kneupner on 05/08/2025.
-//
 import UniformTypeIdentifiers
 
-@objc(ShareViewController)
-public class ShareViewController: UIViewController {
+#if os(iOS)
+    import UIKit
+    public typealias BaseViewController = UIViewController
+    public typealias HostingController = UIHostingController
+#elseif os(macOS)
+    import AppKit
+    public typealias BaseViewController = NSViewController
+    public typealias HostingController = NSHostingController
+#endif
+
+public class ShareViewController: BaseViewController {
+
+    private lazy var preferences = CloudPreferences(testData: false)
+    private lazy var container = sharedModelContainer(inMemory: false, withCloud: true)
 
     public override func viewDidLoad() {
         super.viewDidLoad()
+
         guard
-            let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem,
-            let itemProvider = extensionItem.attachments?.first
+            let extItem = extensionContext?.inputItems.first as? NSExtensionItem,
+            let provider = extItem.attachments?.first
         else {
-            self.close()
+            close()
             return
-        }
-        if itemProvider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
-            itemProvider.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) {
-                (providedText, error) in
-                if error != nil {
-                    self.close()
-                    return
-                }
-                guard let text = providedText as? String else {
-                    self.close()
-                    return
-                }
-                DispatchQueue.main.async {
-                    let preferences = CloudPreferences(testData: false)
-                    let container = sharedModelContainer(inMemory: false, withCloud: true)
-
-                    let rootView = ShareExtensionView(text: text)
-                        .environmentObject(preferences)
-                        .modelContainer(container)
-
-                    let contentView = UIHostingController(rootView: rootView)
-                    self.addChild(contentView)
-                    self.view.addSubview(contentView.view)
-
-                    // set up constraints
-                    contentView.view.translatesAutoresizingMaskIntoConstraints = false
-                    contentView.view.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-                    contentView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-                    contentView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-                    contentView.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-                }
-            }
-        } else if itemProvider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-            itemProvider.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { (providedURL, error) in
-                if error != nil {
-                    self.close()
-                    return
-                }
-                guard let url = providedURL as? URL else {
-                    self.close()
-                    return
-                }
-
-                DispatchQueue.main.async {
-                    let preferences = CloudPreferences(testData: false)
-                    let container = sharedModelContainer(inMemory: false, withCloud: true)
-
-                    let rootView = ShareExtensionView(url: url.absoluteString)
-                        .environmentObject(preferences)
-                        .modelContainer(container)
-
-                    let contentView = UIHostingController(rootView: rootView)
-                    self.addChild(contentView)
-                    self.view.addSubview(contentView.view)
-
-                    // set up constraints
-                    contentView.view.translatesAutoresizingMaskIntoConstraints = false
-                    contentView.view.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-                    contentView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-                    contentView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-                    contentView.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-                }
-            }
-
         }
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name("close"), object: nil, queue: nil) { _ in
-            DispatchQueue.main.async {
-                self.close()
+            Task { @MainActor in self.close() }
+        }
+
+        Task { @MainActor in
+            do {
+                guard let payload = try await ShareFlow.resolve(from: provider) else {
+                    close()
+                    return
+                }
+                let root = ShareFlow.makeView(for: payload, preferences: preferences, container: container)
+                presentRoot(root)
+            } catch {
+                close()
             }
         }
     }
 
-    func close() {
-        self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+    @MainActor
+    private func presentRoot<Content: View>(_ content: Content) {
+        let host = HostingController(rootView: content)
+        addChild(host)
+        view.addSubview(host.view)
+
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            host.view.topAnchor.constraint(equalTo: view.topAnchor),
+            host.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            host.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            host.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        #if os(iOS)
+            host.didMove(toParent: self)
+        #endif
     }
 
+    func close() {
+        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+    }
 }

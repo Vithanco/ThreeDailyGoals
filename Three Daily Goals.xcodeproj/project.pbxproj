@@ -11,6 +11,35 @@
 		7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
 		7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */; };
+		7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F2F0A812E52DEB200461679 /* macosShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7F2F0A992E52E1C200461679 /* InnerTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE1FDFD2E42B0FE0016C181 /* InnerTaskItemView.swift */; };
+		7F2F0A9A2E52E1C200461679 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
+		7F2F0A9C2E52E1C200461679 /* AllCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B22B7B506400E66FAD /* AllCommentsView.swift */; };
+		7F2F0A9D2E52E1C200461679 /* Migrations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7A42B661BF900C24F78 /* Migrations.swift */; };
+		7F2F0A9E2E52E1C200461679 /* SchemaV3_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */; };
+		7F2F0A9F2E52E1C200461679 /* SchemaV3_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */; };
+		7F2F0AA02E52E1C200461679 /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
+		7F2F0AA12E52E1C200461679 /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
+		7F2F0AA22E52E1C200461679 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DF2B1F54A6003BE36F /* TaskItem.swift */; };
+		7F2F0AA32E52E1C200461679 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
+		7F2F0AA42E52E1C200461679 /* TaskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD82B31956300F0EA9C /* TaskSection.swift */; };
+		7F2F0AA52E52E1C200461679 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* Storage.swift */; };
+		7F2F0AA62E52E1C200461679 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
+		7F2F0AA72E52E1C200461679 /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7B02B6628A400C24F78 /* ListHeader.swift */; };
+		7F2F0AA82E52E1C200461679 /* TagRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */; };
+		7F2F0AA92E52E1C200461679 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
+		7F2F0AAA2E52E1C200461679 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
+		7F2F0AAB2E52E1C200461679 /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
+		7F2F0AAC2E52E1C200461679 /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
+		7F2F0AAD2E52E1C200461679 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
+		7F2F0AAE2E52E1C200461679 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
+		7F2F0AAF2E52E1C200461679 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
+		7F2F0AB12E52E22300461679 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
+		7F2F0AB22E52E2C600461679 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
+		7F2F0AB42E52E2FF00461679 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB32E52E2FF00461679 /* CloudKit.framework */; };
+		7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB52E52E30700461679 /* SwiftUI.framework */; };
+		7F2F0AB82E52E30D00461679 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F2F0AB72E52E30D00461679 /* TagKit */; };
+		7F2F0AB92E52E34300461679 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
 		7F5130D02C0C5FF200097437 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */; };
@@ -143,6 +172,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7F2F0A8B2E52DEB200461679 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F2F0A802E52DEB200461679;
+			remoteInfo = macosShare;
+		};
 		7FE1FDE42E42845B0016C181 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E561D6D02B1F54A6003BE36F /* Project object */;
@@ -180,6 +216,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */,
 				7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */,
 				E51142A12B342E3F00AB6E05 /* Three Daily Goals Widget.appex in Embed Foundation Extensions */,
 			);
@@ -193,6 +230,9 @@
 		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPlanDay.swift; sourceTree = "<group>"; };
+		7F2F0A812E52DEB200461679 /* macosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = macosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F2F0AB32E52E2FF00461679 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		7F2F0AB52E52E30700461679 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
 		7F5930BA2D3607A80055D6F8 /* NewItemDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemDialog.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
@@ -292,6 +332,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7F2F0A8E2E52DEB200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7F2F0A802E52DEB200461679 /* macosShare */;
+		};
+		7F2F0A932E52DF6200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AttachmentResolver.swift,
+				ShareApp.swift,
+				ShareExtensionView.swift,
+				ShareFlow.swift,
+				ShareViewController.swift,
+			);
+			target = 7F2F0A802E52DEB200461679 /* macosShare */;
+		};
 		7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -302,10 +360,21 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
+		7F2F0A822E52DEB200461679 /* macosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7F2F0A8E2E52DEB200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = macosShare; sourceTree = "<group>"; };
+		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 7F2F0A932E52DF6200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7F2F0A7E2E52DEB200461679 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */,
+				7F2F0AB82E52E30D00461679 /* TagKit in Frameworks */,
+				7F2F0AB42E52E2FF00461679 /* CloudKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FE1FDD92E42845B0016C181 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -377,6 +446,8 @@
 		E51142742B33768300AB6E05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7F2F0AB52E52E30700461679 /* SwiftUI.framework */,
+				7F2F0AB32E52E2FF00461679 /* CloudKit.framework */,
 				7FE1FE042E42B3230016C181 /* SwiftUI.framework */,
 				E559203A2B3772EE0002C709 /* CloudKit.framework */,
 				7FE1FE022E42B3060016C181 /* CloudKit.framework */,
@@ -422,6 +493,7 @@
 				E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */,
 				E51142942B342E3C00AB6E05 /* Three Daily Goals (Widget) */,
 				7FE1FDDD2E42845B0016C181 /* iosShare */,
+				7F2F0A822E52DEB200461679 /* macosShare */,
 				E51142742B33768300AB6E05 /* Frameworks */,
 				E561D6D92B1F54A6003BE36F /* Products */,
 			);
@@ -435,6 +507,7 @@
 				E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */,
 				E51142912B342E3C00AB6E05 /* Three Daily Goals Widget.appex */,
 				7FE1FDDC2E42845B0016C181 /* iosShare.appex */,
+				7F2F0A812E52DEB200461679 /* macosShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -599,6 +672,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7F2F0A802E52DEB200461679 /* macosShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F2F0A8F2E52DEB200461679 /* Build configuration list for PBXNativeTarget "macosShare" */;
+			buildPhases = (
+				7F2F0A7D2E52DEB200461679 /* Sources */,
+				7F2F0A7E2E52DEB200461679 /* Frameworks */,
+				7F2F0A7F2E52DEB200461679 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				7F2F0A822E52DEB200461679 /* macosShare */,
+			);
+			name = macosShare;
+			packageProductDependencies = (
+				7F2F0AB72E52E30D00461679 /* TagKit */,
+			);
+			productName = macosShare;
+			productReference = 7F2F0A812E52DEB200461679 /* macosShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		7FE1FDDB2E42845B0016C181 /* iosShare */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7FE1FDEA2E42845B0016C181 /* Build configuration list for PBXNativeTarget "iosShare" */;
@@ -655,6 +751,7 @@
 			dependencies = (
 				E51142A02B342E3F00AB6E05 /* PBXTargetDependency */,
 				7FE1FDE52E42845B0016C181 /* PBXTargetDependency */,
+				7F2F0A8C2E52DEB200461679 /* PBXTargetDependency */,
 			);
 			name = "Three Daily Goals";
 			packageProductDependencies = (
@@ -711,6 +808,9 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
+					7F2F0A802E52DEB200461679 = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					7FE1FDDB2E42845B0016C181 = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -752,11 +852,19 @@
 				E561D6F52B1F54A9003BE36F /* Three Daily GoalsUITests */,
 				E51142902B342E3C00AB6E05 /* Three Daily Goals Widget */,
 				7FE1FDDB2E42845B0016C181 /* iosShare */,
+				7F2F0A802E52DEB200461679 /* macosShare */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7F2F0A7F2E52DEB200461679 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FE1FDDA2E42845B0016C181 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -800,6 +908,38 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7F2F0A7D2E52DEB200461679 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F2F0AB92E52E34300461679 /* DatePickerNullable.swift in Sources */,
+				7F2F0AB22E52E2C600461679 /* StateView.swift in Sources */,
+				7F2F0AB12E52E22300461679 /* Preferences.swift in Sources */,
+				7F2F0A992E52E1C200461679 /* InnerTaskItemView.swift in Sources */,
+				7F2F0A9A2E52E1C200461679 /* CommentView.swift in Sources */,
+				7F2F0A9C2E52E1C200461679 /* AllCommentsView.swift in Sources */,
+				7F2F0A9D2E52E1C200461679 /* Migrations.swift in Sources */,
+				7F2F0A9E2E52E1C200461679 /* SchemaV3_1.swift in Sources */,
+				7F2F0A9F2E52E1C200461679 /* SchemaV3_2.swift in Sources */,
+				7F2F0AA02E52E1C200461679 /* SchemaV3_3.swift in Sources */,
+				7F2F0AA12E52E1C200461679 /* SchemaV3_4.swift in Sources */,
+				7F2F0AA22E52E1C200461679 /* TaskItem.swift in Sources */,
+				7F2F0AA32E52E1C200461679 /* Comment.swift in Sources */,
+				7F2F0AA42E52E1C200461679 /* TaskSection.swift in Sources */,
+				7F2F0AA52E52E1C200461679 /* Storage.swift in Sources */,
+				7F2F0AA62E52E1C200461679 /* TaskItemState.swift in Sources */,
+				7F2F0AA72E52E1C200461679 /* ListHeader.swift in Sources */,
+				7F2F0AA82E52E1C200461679 /* TagRelated.swift in Sources */,
+				7F2F0AA92E52E1C200461679 /* DateRelated.swift in Sources */,
+				7F2F0AAA2E52E1C200461679 /* ColorRelated.swift in Sources */,
+				7F2F0AAB2E52E1C200461679 /* IconsRelated.swift in Sources */,
+				7F2F0AAC2E52E1C200461679 /* StringRelated.swift in Sources */,
+				7F2F0AAD2E52E1C200461679 /* ViewRelated.swift in Sources */,
+				7F2F0AAE2E52E1C200461679 /* DoubleRelated.swift in Sources */,
+				7F2F0AAF2E52E1C200461679 /* ArrayRelated.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7FE1FDD82E42845B0016C181 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -955,6 +1095,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		7F2F0A8C2E52DEB200461679 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F2F0A802E52DEB200461679 /* macosShare */;
+			targetProxy = 7F2F0A8B2E52DEB200461679 /* PBXContainerItemProxy */;
+		};
 		7FE1FDE52E42845B0016C181 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -979,6 +1124,76 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		7F2F0A902E52DEB200461679 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = macosShare/macosShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = macosShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = macosShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.macosShare";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7F2F0A912E52DEB200461679 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = macosShare/macosShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HN3M9PRAT4;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = macosShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = macosShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.macosShare";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		7FE1FDE72E42845B0016C181 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1495,6 +1710,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7F2F0A8F2E52DEB200461679 /* Build configuration list for PBXNativeTarget "macosShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F2F0A902E52DEB200461679 /* Debug */,
+				7F2F0A912E52DEB200461679 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7FE1FDEA2E42845B0016C181 /* Build configuration list for PBXNativeTarget "iosShare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1572,6 +1796,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		7F13D0392DF490B80036ACCB /* TagKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */;
+			productName = TagKit;
+		};
+		7F2F0AB72E52E30D00461679 /* TagKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */;
 			productName = TagKit;
