@@ -160,15 +160,15 @@ struct InnerTaskItemView: View {
                 do {
                     let type = try url.resourceValues(forKeys: [.contentTypeKey]).contentType
                               ?? UTType(filenameExtension: url.pathExtension) ?? .data
-                    _ = try addAttachment(
+                    let attachment = try addAttachment(
                         fileURL: url,
                         type: type,
                         to: item,
                         sortIndex: (item.attachments ?? []).count,
                         in: modelContext
                     )
-                    // Touch the task to update the changed timestamp
-                    item.touch()
+                    // Add a comment about the attachment
+                    item.addComment(text: "Added attachment: \(attachment.filename)")
                 } catch {
                     // TODO: surface an error toast if you have one
                     print("Add attachment failed:", error)
@@ -179,14 +179,16 @@ struct InnerTaskItemView: View {
     }
     
     private func deleteAttachment(_ attachment: Attachment) {
+        let filename = attachment.filename
+        
         // Remove the attachment from the task
         item.attachments?.removeAll { $0.id == attachment.id }
         
         // Delete the attachment from the model context
         modelContext.delete(attachment)
         
-        // Touch the task to update the changed timestamp
-        item.touch()
+        // Add a comment about the deletion
+        item.addComment(text: "Removed attachment: \(filename)")
         
         // Save the changes
         do {

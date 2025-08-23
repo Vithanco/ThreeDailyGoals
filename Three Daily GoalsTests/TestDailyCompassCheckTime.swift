@@ -29,6 +29,7 @@ struct TestDailyCompassCheckTime {
     }
 
     @Test
+    @MainActor
     func testTime() throws {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester)

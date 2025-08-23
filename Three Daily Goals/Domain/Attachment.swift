@@ -23,9 +23,16 @@ func addAttachment(fileURL: URL,
     let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
     let hash = data.sha256Hex
 
-    if let existing = try? context.fetch(
-        FetchDescriptor<Attachment>(predicate: #Predicate { $0.taskItem == taskItem && $0.sha256 == hash })
-    ).first { return existing }
+    // Check for existing attachment with same content
+    let descriptor = FetchDescriptor<Attachment>(
+        predicate: #Predicate { $0.sha256 == hash }
+    )
+    if let existing = try? context.fetch(descriptor).first {
+        // Verify it belongs to the same task
+        if existing.taskItem == taskItem {
+            return existing
+        }
+    }
 
     let att = Attachment()
     att.blob = data
@@ -51,10 +58,15 @@ func addAttachment(fileURL: URL,
     att.isPurged = false
     att.purgedAt = nil
     att.taskItem = taskItem
+    
+    // Add attachment to task item's attachments array
+    if taskItem.attachments == nil {
+        taskItem.attachments = []
+    }
+    taskItem.attachments?.append(att)
 
     context.insert(att)
     try context.save()
-    print("✅ Attachment created successfully: \(att.filename) (\(att.byteSize) bytes)")
     return att
 }
 
@@ -73,7 +85,9 @@ extension Attachment {
     }
     
     func isDueForPurge(at date: Date = .now) -> Bool {
-        !isPurged && (nextPurgePrompt?.compare(date) != .orderedDescending)
+        guard !isPurged else { return false }
+        guard let nextPurgePrompt = nextPurgePrompt else { return false }
+        return nextPurgePrompt.compare(date) != .orderedDescending
     }
     
     var storedBytes: Int { blob?.count ?? 0 }

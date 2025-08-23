@@ -14,6 +14,7 @@ import Testing
 struct PreferencesTests {
 
     @Test
+    @MainActor
     func testDates() throws {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester)
