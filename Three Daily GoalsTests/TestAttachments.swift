@@ -62,7 +62,6 @@ final class TestAttachments: XCTestCase {
         XCTAssertEqual(attachment.blob, testData)
         // Thumbnail is nil for text files (only images get thumbnails)
         XCTAssertNil(attachment.thumbnail)
-        XCTAssertNotNil(attachment.sha256)
         XCTAssertEqual(attachment.taskItem, taskItem)
         XCTAssertFalse(attachment.isPurged)
         XCTAssertNil(attachment.purgedAt)
@@ -106,7 +105,6 @@ final class TestAttachments: XCTestCase {
         )
         
         // Verify first attachment was created
-        XCTAssertNotNil(attachment1.sha256)
         XCTAssertEqual(taskItem.attachments?.count, 1)
         
         // Try to add duplicate (same content, different filename)
@@ -117,10 +115,9 @@ final class TestAttachments: XCTestCase {
             in: context
         )
         
-        // Verify duplicate detection worked
-        XCTAssertEqual(attachment1.sha256, attachment2.sha256, "SHA256 should be the same for duplicate content")
-        XCTAssertEqual(attachment1.id, attachment2.id, "Should return the same attachment due to duplicate detection")
-        XCTAssertEqual(taskItem.attachments?.count, 1, "Should still have only one attachment")
+        // Verify both attachments were created (no duplicate detection)
+        XCTAssertNotEqual(attachment1.id, attachment2.id, "Should create separate attachments")
+        XCTAssertEqual(taskItem.attachments?.count, 2, "Should have two attachments")
         
         try FileManager.default.removeItem(at: tempURL1)
         try FileManager.default.removeItem(at: tempURL2)
@@ -273,6 +270,105 @@ final class TestAttachments: XCTestCase {
         let expectedDate = Calendar.current.date(byAdding: .month, value: 3, to: .now)!
         let tolerance: TimeInterval = 60 // 1 minute tolerance
         XCTAssertEqual(attachment.nextPurgePrompt?.timeIntervalSince1970 ?? 0, expectedDate.timeIntervalSince1970, accuracy: tolerance)
+        
+        try FileManager.default.removeItem(at: tempURL)
+    }
+    
+    func testSameContentDifferentTasks() throws {
+        // Create a second task item
+        let taskItem2 = TaskItem()
+        taskItem2.title = "Second Task"
+        context.insert(taskItem2)
+        try context.save()
+        
+        let testData = "Shared content".data(using: .utf8)!
+        let tempURL1 = createTempFile(data: testData, filename: "shared1.txt")
+        let tempURL2 = createTempFile(data: testData, filename: "shared2.txt")
+        
+        // Add attachment to first task
+        let attachment1 = try addAttachment(
+            fileURL: tempURL1,
+            type: .plainText,
+            to: taskItem,
+            in: context
+        )
+        
+        // Add same content to second task
+        let attachment2 = try addAttachment(
+            fileURL: tempURL2,
+            type: .plainText,
+            to: taskItem2,
+            in: context
+        )
+        
+        // Verify they are different attachment objects
+        XCTAssertNotEqual(attachment1.id, attachment2.id, "Should create separate attachments for different tasks")
+        XCTAssertEqual(attachment1.taskItem, taskItem, "First attachment should belong to first task")
+        XCTAssertEqual(attachment2.taskItem, taskItem2, "Second attachment should belong to second task")
+        
+        // Verify both have the blob data (current behavior - duplication)
+        XCTAssertNotNil(attachment1.blob, "First attachment should have blob data")
+        XCTAssertNotNil(attachment2.blob, "Second attachment should have blob data")
+        XCTAssertEqual(attachment1.blob, attachment2.blob, "Blob data should be identical")
+        
+        try FileManager.default.removeItem(at: tempURL1)
+        try FileManager.default.removeItem(at: tempURL2)
+    }
+    
+    func testFileSizeValidation() throws {
+        // Test files at various sizes around the 20MB limit
+        let testCases = [
+            (size: 19 * 1024 * 1024, shouldPass: true, description: "19MB file (under limit)"),
+            (size: 20 * 1024 * 1024, shouldPass: true, description: "20MB file (at limit)"),
+            (size: 21 * 1024 * 1024, shouldPass: false, description: "21MB file (over limit)"),
+            (size: 25 * 1024 * 1024, shouldPass: false, description: "25MB file (over limit)")
+        ]
+        
+        for testCase in testCases {
+            let testData = Data(repeating: 0, count: testCase.size)
+            let tempURL = createTempFile(data: testData, filename: "test_file_\(testCase.size).bin")
+            
+            do {
+                let attachment = try addAttachment(
+                    fileURL: tempURL,
+                    type: .data,
+                    to: taskItem,
+                    in: context
+                )
+                
+                if testCase.shouldPass {
+                    XCTAssertEqual(attachment.byteSize, testCase.size, "\(testCase.description) should pass")
+                } else {
+                    XCTFail("\(testCase.description) should have failed but passed")
+                }
+            } catch AttachmentError.fileTooLarge(let fileSize, let maxSize) {
+                if testCase.shouldPass {
+                    XCTFail("\(testCase.description) should have passed but failed")
+                } else {
+                    XCTAssertEqual(fileSize, testCase.size, "File size should match")
+                    XCTAssertEqual(maxSize, 20 * 1024 * 1024, "Max size should be 20MB")
+                }
+            } catch {
+                XCTFail("Unexpected error for \(testCase.description): \(error)")
+            }
+            
+            try FileManager.default.removeItem(at: tempURL)
+        }
+    }
+    
+    func testDefaultSizeLimit() throws {
+        // Test that we can create a file exactly at the 20MB limit
+        let exactLimitData = Data(repeating: 0, count: 20 * 1024 * 1024) // Exactly 20MB
+        let tempURL = createTempFile(data: exactLimitData, filename: "exact_limit.bin")
+        
+        let attachment = try addAttachment(
+            fileURL: tempURL,
+            type: .data,
+            to: taskItem,
+            in: context
+        )
+        
+        XCTAssertEqual(attachment.byteSize, 20 * 1024 * 1024, "Should accept exactly 20MB file")
         
         try FileManager.default.removeItem(at: tempURL)
     }

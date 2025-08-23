@@ -169,7 +169,6 @@ public enum SchemaV3_5: VersionedSchema {
         var filename: String = ""
         var utiIdentifier: String?
         var byteSize: Int = 0
-        var sha256: String?
         
         var caption: String?
         var sortIndex: Int = 0

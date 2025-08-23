@@ -1,16 +1,24 @@
 import SwiftData
 import Foundation
 import UniformTypeIdentifiers
-import CryptoKit
 
 public typealias Attachment = SchemaLatest.Attachment
 
-extension Data {
-    var sha256Hex: String {
-        let digest = SHA256.hash(data: self)
-        return digest.map { String(format: "%02x", $0) }.joined()
+enum AttachmentError: LocalizedError {
+    case fileTooLarge(fileSize: Int, maxSize: Int)
+    
+    var errorDescription: String? {
+        switch self {
+        case .fileTooLarge(let fileSize, let maxSize):
+            let fileSizeMB = Double(fileSize) / (1024 * 1024)
+            let maxSizeMB = Double(maxSize) / (1024 * 1024)
+            return "File is too large (\(String(format: "%.1f", fileSizeMB))MB). Maximum size is \(String(format: "%.1f", maxSizeMB))MB."
+        }
     }
 }
+
+// MARK: - Attachment Configuration
+private let defaultMaxAttachmentSizeBytes = 20 * 1024 * 1024 // 20MB
 
 func addAttachment(fileURL: URL,
                    type: UTType,
@@ -18,21 +26,17 @@ func addAttachment(fileURL: URL,
                    sortIndex: Int? = nil,
                    caption: String? = nil,
                    makeBookmark: Bool = true,
+                   maxSizeBytes: Int = defaultMaxAttachmentSizeBytes,
                    in context: ModelContext) throws -> Attachment {
     let rv = try fileURL.resourceValues(forKeys: [.fileSizeKey, .localizedNameKey])
-    let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
-    let hash = data.sha256Hex
-
-    // Check for existing attachment with same content
-    let descriptor = FetchDescriptor<Attachment>(
-        predicate: #Predicate { $0.sha256 == hash }
-    )
-    if let existing = try? context.fetch(descriptor).first {
-        // Verify it belongs to the same task
-        if existing.taskItem == taskItem {
-            return existing
-        }
+    
+    // Check file size before loading into memory
+    let fileSize = rv.fileSize ?? 0
+    if fileSize > maxSizeBytes {
+        throw AttachmentError.fileTooLarge(fileSize: fileSize, maxSize: maxSizeBytes)
     }
+    
+    let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
 
     let att = Attachment()
     att.blob = data
@@ -40,7 +44,6 @@ func addAttachment(fileURL: URL,
     att.filename = rv.localizedName ?? fileURL.lastPathComponent
     att.utiIdentifier = type.identifier
     att.byteSize = rv.fileSize ?? data.count
-    att.sha256 = hash
     att.caption = caption
     att.sortIndex = sortIndex ?? taskItem.attachments?.count ?? 0
     att.createdAt = .now
