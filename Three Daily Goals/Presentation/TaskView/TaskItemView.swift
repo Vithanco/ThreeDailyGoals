@@ -17,7 +17,6 @@ struct TaskItemView: View {
         InnerTaskItemView(
             accentColor: model.accentColor,
             item: item,
-            model: model,
             allTags: model.activeTags.asArray,
             selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
             missingTagStyle: missingTagStyle

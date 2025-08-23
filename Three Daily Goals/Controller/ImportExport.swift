@@ -105,7 +105,7 @@ struct SelectVersions: View {
                 VStack {
                     Text("Existing Version")
                     InnerTaskItemView(
-                        accentColor: model.accentColor, item: currentChoice.existing, model: model, allTags: [],
+                        accentColor: model.accentColor, item: currentChoice.existing, allTags: [],
                         selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
                         missingTagStyle: missingTagStyle)
                     Button("Use existing") {
@@ -119,7 +119,7 @@ struct SelectVersions: View {
                 VStack {
                     Text("Imported Version")
                     InnerTaskItemView(
-                        accentColor: model.accentColor, item: currentChoice.new, model: model, allTags: [],
+                        accentColor: model.accentColor, item: currentChoice.new, allTags: [],
                         selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
                         missingTagStyle: missingTagStyle)
                     Button("Use new") {

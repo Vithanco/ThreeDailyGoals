@@ -177,12 +177,4 @@ extension TaskManagerViewModel {
             )
         }
     }
-    
-    func attachmentImporterButton(item: TaskItem) -> some View {
-        Button(action: {
-            showAttachmentImporter = true
-        }) {
-            Label("Add Attachment", systemImage: "paperclip").help("Add file attachment to this task")
-        }.accessibilityIdentifier("attachmentImporterButton")
-    }
 }

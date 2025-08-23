@@ -99,7 +99,6 @@ final class TaskManagerViewModel {
     var showMissingCompassCheckAlert: Bool = false
     var showSelectDuringImportDialog: Bool = false
     var showNewItemNameDialog: Bool = false
-    var showAttachmentImporter: Bool = false
     var selectDuringImport: [Choice] = []
 
     var lists: [TaskItemState: [TaskItem]] = [:]
