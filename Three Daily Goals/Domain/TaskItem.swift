@@ -10,6 +10,7 @@ import Foundation
 import SwiftData
 import os
 import UniformTypeIdentifiers
+import CryptoKit
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
@@ -322,6 +323,13 @@ extension TaskItem {
             addComment(text: "You did your part. Closure is pending a response.")
         }
     }
+    
+    func purgeableStoredBytes(at date: Date = Date())-> Int {
+        return attachments?.reduce(0) { $0 + ($1.isDueForPurge(at: date) ? $1.storedBytes : 0) } ?? 0
+    }
+    var totalStoredBytes: Int { attachments?.reduce(0) { $0 + $1.storedBytes } ?? 0}  // current storage
+    var totalOriginalBytes: Int { attachments?.reduce(0) { $0 + $1.byteSize } ?? 0}  // original sizes
+
 }
 extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
 

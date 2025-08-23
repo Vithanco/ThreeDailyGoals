@@ -66,6 +66,7 @@ struct ShareExtensionView: View {
                 InnerTaskItemView(
                     accentColor: pref.accentColor,
                     item: item,
+                    model: dummyViewModel(),
                     allTags: [],
                     selectedTagStyle: selectedTagStyle(accentColor: pref.accentColor),
                     missingTagStyle: missingTagStyle

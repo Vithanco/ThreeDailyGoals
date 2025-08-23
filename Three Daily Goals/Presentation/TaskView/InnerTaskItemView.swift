@@ -6,10 +6,13 @@
 //
 import SwiftUI
 import TagKit
+import UniformTypeIdentifiers
+import SwiftData
 
 struct InnerTaskItemView: View {
     let accentColor: Color
     @Bindable var item: TaskItem
+    @Bindable var model: TaskManagerViewModel
     @FocusState var isTitleFocused: Bool
     let allTags: [String]
     @State var buildTag: String = ""
@@ -65,6 +68,28 @@ struct InnerTaskItemView: View {
             } label: {
                 Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
             }
+            
+            GroupBox {
+                HStack {
+                    Text("Attachments").font(.headline)
+                    Spacer()
+                    Button {
+                        model.showAttachmentImporter = true
+                    } label: {
+                        Label("Add…", systemImage: "paperclip")
+                    }
+                }
+                .padding(.bottom, 4)
+
+                let atts = item.attachments ?? []
+                if atts.isEmpty {
+                    Text("No attachments yet").foregroundStyle(.secondary)
+                } else {
+                    ForEach(atts) { att in
+                        AttachmentRow(attachment: att)
+                    }
+                }
+            }
 
             GroupBox {
                 HStack {
@@ -101,6 +126,31 @@ struct InnerTaskItemView: View {
                     Text("Changed:").bold().foregroundColor(Color.secondaryColor)
                 }
             }
-        }.background(Color.background).padding()
+        }
+        .background(Color.background)
+        .padding()
+        .fileImporter(
+            isPresented: $model.showAttachmentImporter,
+            allowedContentTypes: [.item], // anything
+            allowsMultipleSelection: true
+        ) { result in
+            guard case .success(let urls) = result else { return }
+            for url in urls {
+                do {
+                    let type = try url.resourceValues(forKeys: [.contentTypeKey]).contentType
+                              ?? UTType(filenameExtension: url.pathExtension) ?? .data
+                    _ = try addAttachment(
+                        fileURL: url,
+                        type: type,
+                        to: item,
+                        sortIndex: (item.attachments ?? []).count,
+                        in: model.modelContext
+                    )
+                } catch {
+                    // TODO: surface an error toast if you have one
+                    print("Add attachment failed:", error)
+                }
+            }
+        }
     }
 }

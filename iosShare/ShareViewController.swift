@@ -32,16 +32,18 @@ public class ShareViewController: BaseViewController {
             Task { @MainActor in self.close() }
         }
 
-        Task { @MainActor in
+        Task {
             do {
                 guard let payload = try await ShareFlow.resolve(from: provider) else {
-                    close()
+                    await MainActor.run { self.close() }
                     return
                 }
-                let root = ShareFlow.makeView(for: payload, preferences: preferences, container: container)
-                presentRoot(root)
+                await MainActor.run {
+                    let root = ShareFlow.makeView(for: payload, preferences: preferences, container: container)
+                    self.presentRoot(root)
+                }
             } catch {
-                close()
+                await MainActor.run { self.close() }
             }
         }
     }

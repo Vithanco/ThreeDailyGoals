@@ -99,6 +99,7 @@ final class TaskManagerViewModel {
     var showMissingCompassCheckAlert: Bool = false
     var showSelectDuringImportDialog: Bool = false
     var showNewItemNameDialog: Bool = false
+    var showAttachmentImporter: Bool = false
     var selectDuringImport: [Choice] = []
 
     var lists: [TaskItemState: [TaskItem]] = [:]
@@ -151,7 +152,7 @@ final class TaskManagerViewModel {
         preferences.onChange = onPreferencesChange
         setupCompassCheckNotification()
     }
-
+    
     func addSamples() -> Self {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
         let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))

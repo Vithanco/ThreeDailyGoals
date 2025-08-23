@@ -7,11 +7,11 @@ import Foundation
 //
 @preconcurrency import SwiftData
 
-public typealias SchemaLatest = SchemaV3_4
+public typealias SchemaLatest = SchemaV3_5
 
 enum TDGMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV3_1.self, SchemaV3_2.self, SchemaV3_3.self, SchemaV3_4.self]
+        [SchemaV3_1.self, SchemaV3_2.self, SchemaV3_3.self, SchemaV3_4.self, SchemaV3_5.self]
     }
 
     static let migrateV3_1toV3_2 = MigrationStage.lightweight(
@@ -70,7 +70,7 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
 
             for oldTask in oldTasks {
                 var newTask = SchemaV3_4.TaskItem()
-                newTask.tags = oldTask.allTags
+                newTask.allTagsString = oldTask.allTags.joined(separator: ",")
                 newTask._details = oldTask._details
                 newTask._title = oldTask._title
                 newTask._url = oldTask._url
@@ -96,8 +96,13 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
             print("Migration from V3.3 to V3.4 completed successfully.")
         }
     )
+    
+    static let migrateV3_4toV3_5 = MigrationStage.lightweight(
+            fromVersion: SchemaV3_4.self,
+            toVersion: SchemaV3_5.self
+        )
 
     static var stages: [MigrationStage] {
-        [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4]
+        [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4, migrateV3_4toV3_5]
     }
 }

@@ -13,6 +13,8 @@ struct AttachmentResolution {
     let type: UTType
 }
 
+private let utf8PlainText = UTType("public.utf8-plain-text")
+
 enum AttachmentResolver {
 
     // URL / Text
@@ -29,42 +31,71 @@ enum AttachmentResolver {
     }
 
     static func resolveText(from p: NSItemProvider) async throws -> String? {
-        if let d = try await loadDataRepresentation(for: .plainText, from: p),
-            let s = String(data: d, encoding: .utf8)
-        {
-            return s
+        // What the provider actually offers
+        let offered = p.registeredTypeIdentifiers
+
+        // Prefer these if present; otherwise any type that conforms to public.text
+        let preferred = [
+            UTType("public.utf8-plain-text")?.identifier,
+            UTType.plainText.identifier,
+            UTType.text.identifier,
+        ].compactMap { $0 }
+
+        var candidates: [String] = preferred.filter { offered.contains($0) }
+        for id in offered where !candidates.contains(id) {
+            if let t = UTType(id), t.conforms(to: .text) { candidates.append(id) }
         }
-        if let d = try await loadDataRepresentation(for: .text, from: p),
-            let s = String(data: d, encoding: .utf8)
-        {
-            return s
+
+        for id in candidates {
+            // 1) Try as data
+            if let d = try await loadDataRepresentation(forTypeIdentifier: id, from: p),
+                let s = String(data: d, encoding: .utf8)
+            {
+                return s
+            }
+            // 2) Fallback to loadItem for String / URL / Data
+            if let s = try await loadString(forTypeIdentifier: id, from: p) { return s }
         }
-        return try await withCheckedThrowingContinuation { c in
-            p.loadItem(forTypeIdentifier: UTType.text.identifier, options: nil) { item, err in
+        return nil
+    }
+
+    private static func loadDataRepresentation(forTypeIdentifier id: String, from p: NSItemProvider) async throws
+        -> Data?
+    {
+        try await withCheckedThrowingContinuation { c in
+            p.loadDataRepresentation(forTypeIdentifier: id) { data, err in
+                if let err = err {
+                    c.resume(throwing: err)
+                    return
+                }
+                c.resume(returning: data)
+            }
+        }
+    }
+
+    private static func loadString(forTypeIdentifier id: String, from p: NSItemProvider) async throws -> String? {
+        try await withCheckedThrowingContinuation { c in
+            p.loadItem(forTypeIdentifier: id, options: nil) { item, err in
                 if let err = err {
                     c.resume(throwing: err)
                     return
                 }
                 if let s = item as? String {
                     c.resume(returning: s)
-                    return
-                }
-                if let url = item as? URL, let s = try? String(contentsOf: url) {
+                } else if let u = item as? URL, let s = try? String(contentsOf: u) {
                     c.resume(returning: s)
-                    return
-                }
-                if let d = item as? Data, let s = String(data: d, encoding: .utf8) {
+                } else if let d = item as? Data, let s = String(data: d, encoding: .utf8) {
                     c.resume(returning: s)
-                    return
+                } else {
+                    c.resume(returning: nil)
                 }
-                c.resume(returning: nil)
             }
         }
     }
 
     // Attachments → (fileURL, UTType)
     static func resolveAttachment(from p: NSItemProvider) async throws -> AttachmentResolution? {
-        if let url = try await loadFile(for: [.movie, .video, .pdf, .image], from: p) {
+        if let url = try await loadFile(for: [.movie, .video, .pdf, .image, .html], from: p) {
             return .init(url: url, type: inferType(from: url) ?? .data)
         }
         if let url = try await loadFileURL(from: p) {
