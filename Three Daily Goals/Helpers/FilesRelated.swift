@@ -29,8 +29,17 @@ func createAttachmentTempFile(
     // Extract extension from filename if not provided
     let ext = fileExtension ?? URL(fileURLWithPath: filename).pathExtension
     
-    // Create unique filename to avoid conflicts
-    let uniqueName = "\(uniqueIdentifier)_\(filename)"
+    // Create a short, safe unique identifier using hash of the original identifier
+    let hash = uniqueIdentifier.hashValue
+    let shortIdentifier = String(format: "att_%d", abs(hash))
+    
+    // Create unique filename to avoid conflicts (limit total length)
+    let maxFilenameLength = 100 // Reasonable limit for filesystem compatibility
+    let availableLength = maxFilenameLength - shortIdentifier.count - 1 // -1 for underscore
+    let truncatedFilename = filename.count > availableLength ? 
+        String(filename.prefix(availableLength)) : filename
+    
+    let uniqueName = "\(shortIdentifier)_\(truncatedFilename)"
     
     #if os(iOS)
     // On iOS, use the app's documents directory for better file access

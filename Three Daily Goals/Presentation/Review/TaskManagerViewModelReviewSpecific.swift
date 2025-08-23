@@ -154,8 +154,8 @@ extension TaskManagerViewModel {
             result = addADay(result)
         } else {  // today's review missing
             if result < Date.now {
-                //regular time passed by, now just do it in 30 secs
-                return Date.now.addingTimeInterval(Seconds.thirtySeconds)
+                //regular time passed by, now just do it in 5 minutes to allow app to fully load
+                return Date.now.addingTimeInterval(Seconds.oneMin)
             }
         }
         return result

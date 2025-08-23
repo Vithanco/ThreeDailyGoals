@@ -25,7 +25,6 @@ func addAttachment(fileURL: URL,
                    to taskItem: TaskItem,
                    sortIndex: Int? = nil,
                    caption: String? = nil,
-                   makeBookmark: Bool = true,
                    maxSizeBytes: Int = defaultMaxAttachmentSizeBytes,
                    in context: ModelContext) throws -> Attachment {
     let rv = try fileURL.resourceValues(forKeys: [.fileSizeKey, .localizedNameKey])
@@ -47,17 +46,6 @@ func addAttachment(fileURL: URL,
     att.caption = caption
     att.sortIndex = sortIndex ?? taskItem.attachments?.count ?? 0
     att.createdAt = .now
-    att.modifiedAt = .now
-    if makeBookmark {
-        #if os(macOS)
-        att.sourceBookmark = try? fileURL.bookmarkData(options: .withSecurityScope,
-                                                       includingResourceValuesForKeys: nil,
-                                                       relativeTo: nil)
-        #else
-        // iOS doesn't support withSecurityScope, so we'll skip bookmark creation
-        att.sourceBookmark = nil
-        #endif
-    }
     att.isPurged = false
     att.purgedAt = nil
     att.taskItem = taskItem

@@ -174,9 +174,7 @@ public enum SchemaV3_5: VersionedSchema {
         var sortIndex: Int = 0
         
         var createdAt: Date = Date.now
-        var modifiedAt: Date = Date.now
         
-        var sourceBookmark: Data?
         var isPurged: Bool = false
         var purgedAt: Date?
         var nextPurgePrompt: Date?
@@ -187,7 +185,6 @@ public enum SchemaV3_5: VersionedSchema {
         
         public init () {
             createdAt = .now
-            modifiedAt = .now
             filename = ""
             byteSize = 0
             taskItem = .init()
