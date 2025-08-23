@@ -132,6 +132,7 @@ final class TaskManagerViewModel {
                 if let userInfo = notification.userInfo {
                     if let event = userInfo["event"] as? NSPersistentCloudKitContainer.Event {
                         if event.type == .import && event.endDate != nil && event.succeeded {
+                            logger.debug("CloudKit import succeeded, processing changes")
                             if !modelContext.hasChanges {
                                 mergeDataFromCentralStorage()
                             } else {
@@ -143,6 +144,12 @@ final class TaskManagerViewModel {
                                     logger.error("Failed to save pending changes: \(error)")
                                 }
                             }
+                        } else if event.type == .export && event.endDate != nil && event.succeeded {
+                            logger.debug("CloudKit export succeeded")
+                        } else if event.type == .setup && event.endDate != nil && event.succeeded {
+                            logger.debug("CloudKit setup succeeded")
+                        } else if let error = event.error {
+                            logger.error("CloudKit event failed: \(error)")
                         }
                     }
                 }

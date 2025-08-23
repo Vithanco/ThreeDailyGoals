@@ -107,7 +107,8 @@ struct SelectVersions: View {
                     InnerTaskItemView(
                         accentColor: model.accentColor, item: currentChoice.existing, allTags: [],
                         selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
-                        missingTagStyle: missingTagStyle)
+                        missingTagStyle: missingTagStyle,
+                        showAttachmentImport: false)
                     Button("Use existing") {
                         nextChoice()
                     }
@@ -121,7 +122,8 @@ struct SelectVersions: View {
                     InnerTaskItemView(
                         accentColor: model.accentColor, item: currentChoice.new, allTags: [],
                         selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
-                        missingTagStyle: missingTagStyle)
+                        missingTagStyle: missingTagStyle,
+                        showAttachmentImport: false)
                     Button("Use new") {
                         model.remove(item: currentChoice.existing)
                         model.addItem(item: currentChoice.new)

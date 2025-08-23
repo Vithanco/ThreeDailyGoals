@@ -12,11 +12,22 @@ import SwiftData
 struct InnerTaskItemView: View {
     let accentColor: Color
     @Bindable var item: TaskItem
-    @FocusState var isTitleFocused: Bool
     let allTags: [String]
     @State var buildTag: String = ""
+    @State var showAttachmentImporter: Bool = false
     let selectedTagStyle: TagCapsuleStyle
     let missingTagStyle: TagCapsuleStyle
+    @Environment(\.modelContext) private var modelContext
+    let showAttachmentImport: Bool
+
+    private var attachmentButton: some View {
+        Button {
+            showAttachmentImporter = true
+        } label: {
+            Label("Add Attachment", systemImage: imgAttachment)
+        }
+        .help("Add file attachment to this task")
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -27,9 +38,7 @@ struct InnerTaskItemView: View {
             }
 
             LabeledContent {
-                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField").focused(
-                    $isTitleFocused
-                )
+                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField")
                 .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
@@ -72,20 +81,24 @@ struct InnerTaskItemView: View {
                 HStack {
                     Text("Attachments").font(.headline)
                     Spacer()
-                    Button {
-                        showImporter = true
-                    } label: {
-                        Label("Add…", systemImage: "paperclip")
+                    if showAttachmentImport {
+                        attachmentButton
                     }
                 }
                 .padding(.bottom, 4)
 
                 let atts = item.attachments ?? []
+                let _ = print("📎 Task '\(item.title)' has \(atts.count) attachments")
                 if atts.isEmpty {
                     Text("No attachments yet").foregroundStyle(.secondary)
                 } else {
                     ForEach(atts) { att in
-                        AttachmentRow(attachment: att)
+                        AttachmentRow(
+                            attachment: att,
+                            onDelete: showAttachmentImport ? {
+                                deleteAttachment(att)
+                            } : nil
+                        )
                     }
                 }
             }
@@ -111,7 +124,6 @@ struct InnerTaskItemView: View {
             }
 
             Spacer()
-            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
 
             HStack {
                 LabeledContent {
@@ -125,6 +137,62 @@ struct InnerTaskItemView: View {
                     Text("Changed:").bold().foregroundColor(Color.secondaryColor)
                 }
             }
-        }.background(Color.background).padding()
+        }
+        .background(Color.background)
+        .padding()
+
+        .fileImporter(
+            isPresented: $showAttachmentImporter,
+            allowedContentTypes: [.item], // anything
+            allowsMultipleSelection: true
+        ) { result in
+            guard case .success(let urls) = result else { return }
+            
+            for url in urls {
+                // Start accessing the security-scoped resource
+                let accessing = url.startAccessingSecurityScopedResource()
+                defer {
+                    if accessing {
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
+                
+                do {
+                    let type = try url.resourceValues(forKeys: [.contentTypeKey]).contentType
+                              ?? UTType(filenameExtension: url.pathExtension) ?? .data
+                    _ = try addAttachment(
+                        fileURL: url,
+                        type: type,
+                        to: item,
+                        sortIndex: (item.attachments ?? []).count,
+                        in: modelContext
+                    )
+                    // Touch the task to update the changed timestamp
+                    item.touch()
+                } catch {
+                    // TODO: surface an error toast if you have one
+                    print("Add attachment failed:", error)
+                }
+            }
+        }
+        .opacity(showAttachmentImport ? 1 : 0) // Hide fileImporter when not needed
+    }
+    
+    private func deleteAttachment(_ attachment: Attachment) {
+        // Remove the attachment from the task
+        item.attachments?.removeAll { $0.id == attachment.id }
+        
+        // Delete the attachment from the model context
+        modelContext.delete(attachment)
+        
+        // Touch the task to update the changed timestamp
+        item.touch()
+        
+        // Save the changes
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to delete attachment: \(error)")
+        }
     }
 }

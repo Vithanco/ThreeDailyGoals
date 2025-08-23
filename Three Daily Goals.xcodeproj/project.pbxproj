@@ -26,7 +26,7 @@
 		7F27E0802E5652FC007BC2BD /* SchemaV3_5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813832E5444E100CEA462 /* SchemaV3_5.swift */; };
 		7F27E0812E5652FC007BC2BD /* SchemaV3_5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813832E5444E100CEA462 /* SchemaV3_5.swift */; };
 		7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */; };
-		7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F2F0A812E52DEB200461679 /* macosShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F2F0A812E52DEB200461679 /* macosShare.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7F2F0A992E52E1C200461679 /* InnerTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE1FDFD2E42B0FE0016C181 /* InnerTaskItemView.swift */; };
 		7F2F0A9A2E52E1C200461679 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
 		7F2F0A9C2E52E1C200461679 /* AllCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B22B7B506400E66FAD /* AllCommentsView.swift */; };
@@ -1147,6 +1147,9 @@
 /* Begin PBXTargetDependency section */
 		7F2F0A8C2E52DEB200461679 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilters = (
+				macos,
+			);
 			target = 7F2F0A802E52DEB200461679 /* macosShare */;
 			targetProxy = 7F2F0A8B2E52DEB200461679 /* PBXContainerItemProxy */;
 		};

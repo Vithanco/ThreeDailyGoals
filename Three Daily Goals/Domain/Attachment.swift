@@ -39,9 +39,14 @@ func addAttachment(fileURL: URL,
     att.createdAt = .now
     att.modifiedAt = .now
     if makeBookmark {
+        #if os(macOS)
         att.sourceBookmark = try? fileURL.bookmarkData(options: .withSecurityScope,
                                                        includingResourceValuesForKeys: nil,
                                                        relativeTo: nil)
+        #else
+        // iOS doesn't support withSecurityScope, so we'll skip bookmark creation
+        att.sourceBookmark = nil
+        #endif
     }
     att.isPurged = false
     att.purgedAt = nil
@@ -49,6 +54,7 @@ func addAttachment(fileURL: URL,
 
     context.insert(att)
     try context.save()
+    print("✅ Attachment created successfully: \(att.filename) (\(att.byteSize) bytes)")
     return att
 }
 

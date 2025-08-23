@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct AttachmentRow: View {
     let attachment: Attachment
+    let onDelete: (() -> Void)?
     @Environment(\.openURL) private var openURL
 
     var body: some View {
@@ -17,7 +18,21 @@ struct AttachmentRow: View {
             Spacer()
             if let url = tempURL(), !attachment.isPurged {
                 ShareLink(item: url)
-                Button("Open") { openURL(url) }
+                Button("Open") { 
+                    print("Open button pressed for URL: \(url)")
+                    #if os(macOS)
+                    let success = NSWorkspace.shared.open(url)
+                    print("NSWorkspace.open result: \(success)")
+                    #else
+                    openURL(url)
+                    #endif
+                }
+                if let onDelete = onDelete {
+                    Button("Delete") {
+                        onDelete()
+                    }
+                    .foregroundColor(.red)
+                }
             } else if attachment.isPurged {
                 Text("Purged").font(.caption).foregroundStyle(.tertiary)
             }
@@ -53,7 +68,10 @@ struct AttachmentRow: View {
     }
 
     private func tempURL() -> URL? {
-        guard let data = attachment.blob, !attachment.isPurged else { return nil }
+        guard let data = attachment.blob, !attachment.isPurged else { 
+            print("tempURL: No blob data or attachment is purged")
+            return nil 
+        }
         let ext = attachment.type?.preferredFilenameExtension
         let name = URL(fileURLWithPath: attachment.filename).deletingPathExtension().lastPathComponent
         let url = URL(fileURLWithPath: NSTemporaryDirectory())
@@ -62,9 +80,15 @@ struct AttachmentRow: View {
         do {
             if !FileManager.default.fileExists(atPath: url.path) {
                 try data.write(to: url, options: .atomic)
+                print("tempURL: Created file at \(url.path)")
+            } else {
+                print("tempURL: File already exists at \(url.path)")
             }
             return url
-        } catch { return nil }
+        } catch { 
+            print("tempURL: Error writing file: \(error)")
+            return nil 
+        }
     }
 
     private var byteCount: String {

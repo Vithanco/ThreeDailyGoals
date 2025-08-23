@@ -38,6 +38,7 @@ let imgRedo = "arrow.uturn.forward.circle.fill"
 let imgCheckedBox = "checkmark.square.fill"
 let imgUncheckedBox = "square"
 let imgStreak = "flame.fill"
+let imgAttachment = "paperclip"
 //
 //
 //enum AppIconProvider {

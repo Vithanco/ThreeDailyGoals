@@ -34,7 +34,15 @@ struct ShareExtensionView: View {
     }
 
     init(fileURL: URL, contentType: UTType) {
+        // Create a task item for the shared file
+        self.item.title = "Review File"
 
+        // Store the file URL and content type for later attachment
+        self.item.url = fileURL.absoluteString
+        self.item.details = "Shared file: \(fileURL.lastPathComponent)"
+
+        // Note: The actual attachment will be handled when the user clicks "Add to Three Daily Goals"
+        // because we need access to the ModelContext which is provided by the .modelContainer modifier
     }
 
     init() {
@@ -45,6 +53,24 @@ struct ShareExtensionView: View {
             VStack(spacing: 20) {
                 Button {
                     debugPrint("Number: \(allItems.count)")
+
+                    // If this is a file attachment, add it to the task
+                    if let fileURL = URL(string: item.url), !item.url.isEmpty && item.details.hasPrefix("Shared file:")
+                    {
+                        do {
+                            let type = try fileURL.resourceValues(forKeys: [.contentTypeKey]).contentType ?? .data
+                            _ = try addAttachment(
+                                fileURL: fileURL,
+                                type: type,
+                                to: item,
+                                sortIndex: 0,
+                                in: model
+                            )
+                        } catch {
+                            debugPrint("Failed to add attachment: \(error)")
+                        }
+                    }
+
                     model.insert(item)
 
                     do {
@@ -68,7 +94,8 @@ struct ShareExtensionView: View {
                     item: item,
                     allTags: [],
                     selectedTagStyle: selectedTagStyle(accentColor: pref.accentColor),
-                    missingTagStyle: missingTagStyle
+                    missingTagStyle: missingTagStyle,
+                    showAttachmentImport: false
                 )
 
             }

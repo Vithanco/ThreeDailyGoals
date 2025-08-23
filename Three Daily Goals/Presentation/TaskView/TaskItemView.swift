@@ -14,13 +14,18 @@ struct TaskItemView: View {
     @FocusState private var isTitleFocused: Bool
 
     var body: some View {
-        InnerTaskItemView(
-            accentColor: model.accentColor,
-            item: item,
-            allTags: model.activeTags.asArray,
-            selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
-            missingTagStyle: missingTagStyle
-        )
+        VStack {
+            InnerTaskItemView(
+                accentColor: model.accentColor,
+                item: item,
+                allTags: model.activeTags.asArray,
+                selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
+                missingTagStyle: missingTagStyle,
+                showAttachmentImport: true
+            )
+            
+            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
         .itemToolbar(model: model, item: item)
         .onAppear(perform: {
             model.updateUndoRedoStatus()
