@@ -197,7 +197,7 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContai
     do {
         let result = try ModelContainer(
             for: schema,
-            migrationPlan: TDGMigrationPlan.self,
+            // migrationPlan: TDGMigrationPlan.self,  // Temporarily disabled for development
             configurations: [modelConfiguration]
         )
         result.mainContext.undoManager = UndoManager()

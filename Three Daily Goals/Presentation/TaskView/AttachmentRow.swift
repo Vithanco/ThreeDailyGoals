@@ -24,7 +24,12 @@ struct AttachmentRow: View {
                     let success = NSWorkspace.shared.open(url)
                     print("NSWorkspace.open result: \(success)")
                     #else
-                    openURL(url)
+                    // On iOS, we need to ensure the file is accessible
+                    if FileManager.default.fileExists(atPath: url.path) {
+                        openURL(url)
+                    } else {
+                        print("File does not exist at path: \(url.path)")
+                    }
                     #endif
                 }
                 if let onDelete = onDelete {
@@ -67,28 +72,18 @@ struct AttachmentRow: View {
         return "doc"
     }
 
-    private func tempURL() -> URL? {
-        guard let data = attachment.blob, !attachment.isPurged else { 
+        private func tempURL() -> URL? {
+        guard let data = attachment.blob, !attachment.isPurged else {
             print("tempURL: No blob data or attachment is purged")
-            return nil 
+            return nil
         }
-        let ext = attachment.type?.preferredFilenameExtension
-        let name = URL(fileURLWithPath: attachment.filename).deletingPathExtension().lastPathComponent
-        let url = URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent(name)
-            .appendingPathExtension(ext ?? URL(fileURLWithPath: attachment.filename).pathExtension)
-        do {
-            if !FileManager.default.fileExists(atPath: url.path) {
-                try data.write(to: url, options: .atomic)
-                print("tempURL: Created file at \(url.path)")
-            } else {
-                print("tempURL: File already exists at \(url.path)")
-            }
-            return url
-        } catch { 
-            print("tempURL: Error writing file: \(error)")
-            return nil 
-        }
+        
+        return createAttachmentTempFile(
+            data: data,
+            filename: attachment.filename,
+            fileExtension: attachment.type?.preferredFilenameExtension,
+            uniqueIdentifier: String(describing: attachment.id)
+        )
     }
 
     private var byteCount: String {

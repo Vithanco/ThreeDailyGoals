@@ -21,7 +21,7 @@ public enum SchemaV3_5: VersionedSchema {
     public static let versionIdentifier = Schema.Version(3, 5, 0)
     
     public static var models: [any PersistentModel.Type] {
-        [TaskItem.self, Comment.self]
+        [TaskItem.self, Comment.self, Attachment.self]
     }
     
     @Model
