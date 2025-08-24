@@ -26,6 +26,7 @@ struct InnerTaskItemView: View {
         } label: {
             Label("Add Attachment", systemImage: imgAttachment)
         }
+        .accessibilityIdentifier("addAttachmentButton")
         .help("Add file attachment to this task")
     }
 
@@ -91,6 +92,7 @@ struct InnerTaskItemView: View {
                 let _ = print("📎 Task '\(item.title)' has \(atts.count) attachments")
                 if atts.isEmpty {
                     Text("No attachments yet").foregroundStyle(.secondary)
+                        .accessibilityIdentifier("noAttachmentsMessage")
                 } else {
                     ForEach(atts) { att in
                         AttachmentRow(
@@ -102,6 +104,7 @@ struct InnerTaskItemView: View {
                     }
                 }
             }
+            .accessibilityIdentifier("attachmentsGroupBox")
 
             GroupBox {
                 HStack {

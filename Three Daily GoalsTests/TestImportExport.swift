@@ -52,9 +52,14 @@ struct TestImportExport {
     @Test
     func testFile() throws {
         let model = dummyViewModel()
-        let url = getDocumentsDirectory().appendingPathComponent("taskItems.json")
+        let count = model.items.count
+        #expect(count > 0)
+        let url = getDocumentsDirectory().appendingPathComponent("taskItems-test.json")
         model.exportTasks(url: url)
-        let first = model.items.first!
+        #expect(model.items.count == count)
+        guard let first = model.items.first else {
+            #expect(false); return
+        }
         #expect(first == model.findTask(withID: first.id))
         let newModel = dummyViewModel(loader: { return [] })
         #expect(0 == newModel.items.count)

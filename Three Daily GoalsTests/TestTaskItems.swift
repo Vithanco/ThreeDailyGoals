@@ -15,6 +15,7 @@ enum TestError: Error {
 }
 
 @Suite
+@MainActor
 struct TestTaskItems {
 
     @Test

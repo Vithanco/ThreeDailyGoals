@@ -210,16 +210,15 @@ final class TaskManagerViewModel {
             let descriptor = FetchDescriptor<TaskItem>(sortBy: [
                 SortDescriptor(\.changed, order: .forward)
             ])
-            let items = try modelContext.fetch(descriptor)
             let fetchedItems = try modelContext.fetch(descriptor)
             let (added, updated) = mergeItems(fetchedItems)
 
             logger.info(
-                "fetched \(items.count) tasks from central store, added \(added), updated \(updated)")
+                "fetched \(fetchedItems.count) tasks from central store, added \(added), updated \(updated)")
             for t in lists.keys {
                 lists[t]?.removeAll(keepingCapacity: true)
             }
-            for item in items {
+            for item in self.items {
                 lists[item.state]?.append(item)
             }
             for t in lists.keys {
@@ -244,23 +243,28 @@ final class TaskManagerViewModel {
             seenIDs.insert(item.uuid)
             return item
         }
-        var itemsById = Dictionary(uniqueKeysWithValues: adjustedItems.map { ($0.id, $0) })
-
+        
         var addedCount = 0
         var updatedCount = 0
 
-        for fetchedItem in fetchedItems {
-            if let existingItem = itemsById[fetchedItem.id] {
+        // Create a dictionary of existing items by ID for quick lookup
+        var existingItemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+
+        for fetchedItem in adjustedItems {
+            if let existingItem = existingItemsById[fetchedItem.id] {
+                // Item exists, check if it needs updating
                 if fetchedItem.changed > existingItem.changed {
                     existingItem.updateFrom(fetchedItem)
                     updatedCount = updatedCount + 1
                 }
             } else {
+                // New item, add it
                 items.append(fetchedItem)
-                itemsById[fetchedItem.id] = fetchedItem
+                existingItemsById[fetchedItem.id] = fetchedItem
                 addedCount = addedCount + 1
             }
         }
+        
         return (addedCount, updatedCount)
     }
 
