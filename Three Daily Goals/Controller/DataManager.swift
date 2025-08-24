@@ -714,6 +714,40 @@ final class DataManager {
         }
         save()
     }
+    
+    // MARK: - Command Buttons
+    
+    /// Undo button for app commands
+    var undoButton: some View {
+        Button(action: { [self] in
+            withAnimation {
+                undo()
+                callFetch()
+            }
+        }) {
+            Label("Undo", systemImage: "arrow.uturn.backward")
+                .accessibilityIdentifier("undoButton")
+                .help("undo an action")
+        }
+        .disabled(!canUndo)
+        .keyboardShortcut("z", modifiers: [.command])
+    }
+    
+    /// Redo button for app commands
+    var redoButton: some View {
+        Button(action: { [self] in
+            withAnimation {
+                redo()
+                callFetch()
+            }
+        }) {
+            Label("Redo", systemImage: "arrow.uturn.forward")
+                .accessibilityIdentifier("redoButton")
+                .help("redo an action")
+        }
+        .disabled(!canRedo)
+        .keyboardShortcut("Z", modifiers: [.command, .shift])
+    }
 }
 
 // MARK: - Test Helper

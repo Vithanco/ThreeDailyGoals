@@ -119,6 +119,48 @@ final class UIStateManager: @preconcurrency ItemSelector {
     func addNewItem() {
         showNewItemNameDialog = true
     }
+    
+    // MARK: - Command Buttons
+    
+    /// Add new item button for app commands
+    var addNewItemButton: some View {
+        Button(action: { [self] in
+            addNewItem()
+        }) {
+            Label("Add New Task", systemImage: "plus")
+                .help("Add a new task")
+        }
+    }
+    
+    /// Export button for app commands
+    var exportButton: some View {
+        Button(action: { [self] in
+            showExportDialog = true
+        }) {
+            Label("Export Tasks", systemImage: "square.and.arrow.up")
+                .help("Export tasks to JSON")
+        }
+    }
+    
+    /// Import button for app commands
+    var importButton: some View {
+        Button(action: { [self] in
+            showImportDialog = true
+        }) {
+            Label("Import Tasks", systemImage: "square.and.arrow.down")
+                .help("Import tasks from JSON")
+        }
+    }
+    
+    /// Stats dialog button for app commands
+    var statsDialog: some View {
+        Button(action: { [self] in
+            showInfoMessage = true
+        }) {
+            Label("Show Statistics", systemImage: "chart.bar")
+                .help("Show task statistics")
+        }
+    }
 }
 
 // MARK: - Convenience Initializers

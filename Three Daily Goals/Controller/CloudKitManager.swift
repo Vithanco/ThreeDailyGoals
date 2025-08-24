@@ -4,7 +4,7 @@ import SwiftData
 
 @MainActor
 @Observable
-final class CloudKitManager: PriorityUpdater {
+final class CloudKitManager: @preconcurrency PriorityUpdater {
     let dataManager: DataManager
     let preferences: CloudPreferences
     

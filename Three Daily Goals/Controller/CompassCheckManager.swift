@@ -241,6 +241,16 @@ final class CompassCheckManager {
         timer.cancelTimer()
         uiState.showCompassCheckDialog = false
     }
+    
+    // MARK: - Command Buttons
+    
+    /// Compass check button for app commands
+    var compassCheckButton: some View {
+        Button(action: { [self] in
+            startCompassCheckNow()
+        }) {
+            Label("Compass Check", systemImage: "location.north")
+                .help("Start compass check")
+        }
+    }
 }
-
-

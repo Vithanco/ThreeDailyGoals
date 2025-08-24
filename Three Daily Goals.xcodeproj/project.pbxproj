@@ -94,7 +94,7 @@
 		7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357562E5B5020004581B7 /* PriorityUpdater.swift */; };
 		7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357592E5B5040004581B7 /* ItemSelector.swift */; };
 		7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3575A2E5B5050004581B7 /* AppSetup.swift */; };
-		7FB3575D2E5B5060004581B7 /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3575C2E5B5060004581B7 /* AppCommands.swift */; };
+
 		7FB357592E5B5030004581B7 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357582E5B5030004581B7 /* AppManager.swift */; };
 		7FB357552E5B5010004581B7 /* OsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357522E5B5010004581B7 /* OsRelated.swift */; };
 		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
@@ -290,7 +290,7 @@
 		7FB357562E5B5020004581B7 /* PriorityUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityUpdater.swift; sourceTree = "<group>"; };
 		7FB357592E5B5040004581B7 /* ItemSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelector.swift; sourceTree = "<group>"; };
 		7FB3575A2E5B5050004581B7 /* AppSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetup.swift; sourceTree = "<group>"; };
-		7FB3575C2E5B5060004581B7 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
+
 		7FB357582E5B5030004581B7 /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		7FB357522E5B5010004581B7 /* OsRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsRelated.swift; sourceTree = "<group>"; };
 		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
@@ -637,7 +637,7 @@
 				7FB357562E5B5020004581B7 /* PriorityUpdater.swift */,
 				7FB357592E5B5040004581B7 /* ItemSelector.swift */,
 				7FB3575A2E5B5050004581B7 /* AppSetup.swift */,
-				7FB3575C2E5B5060004581B7 /* AppCommands.swift */,
+
 				7FB357582E5B5030004581B7 /* AppManager.swift */,
 				7F160E882E5AE6DF006ABEEE /* DataManager.swift */,
 				7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */,
@@ -1092,7 +1092,7 @@
 				7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */,
 				7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */,
 				7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */,
-				7FB3575D2E5B5060004581B7 /* AppCommands.swift in Sources */,
+
 				7FB357592E5B5030004581B7 /* AppManager.swift in Sources */,
 				7FB357552E5B5010004581B7 /* OsRelated.swift in Sources */,
 				7F7FE5FD2E43926700DA3DC0 /* TagRelated.swift in Sources */,

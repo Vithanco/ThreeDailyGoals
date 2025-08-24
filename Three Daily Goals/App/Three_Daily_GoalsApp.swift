@@ -57,23 +57,22 @@ struct Three_Daily_GoalsApp: App {
         .environment(appComponents.uiState)
         .environment(appComponents.dataManager)
         .commands {
-            let commands = AppCommands(appComponents: appComponents)
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport) {
-                commands.exportButton
-                commands.importButton
-                commands.statsDialog
+                appComponents.uiState.exportButton
+                appComponents.uiState.importButton
+                appComponents.uiState.statsDialog
             }
             CommandGroup(replacing: .undoRedo) {
-                commands.undoButton
-                commands.redoButton
+                appComponents.dataManager.undoButton
+                appComponents.dataManager.redoButton
             }
             CommandGroup(replacing: .newItem) {
-                commands.addNewItemButton
+                appComponents.uiState.addNewItemButton
                     .keyboardShortcut("n", modifiers: [.command])
             }
             CommandMenu("Three Daily Goals") {
-                commands.compassCheckButton
+                appComponents.compassCheckManager.compassCheckButton
                     .keyboardShortcut("r", modifiers: [.command])
             }
         }
