@@ -52,26 +52,29 @@ struct TestImportExport {
     @Test
     func testFile() throws {
         let model = dummyViewModel()
-        let count = model.items.count
+        let count = model.dataManager.items.count
         #expect(count > 0)
         let url = getDocumentsDirectory().appendingPathComponent("taskItems-test.json")
         model.exportTasks(url: url)
-        #expect(model.items.count == count)
-        guard let first = model.items.first else {
+        #expect(model.dataManager.items.count == count)
+        guard let first = model.dataManager.items.first else {
             #expect(false); return
         }
         #expect(first == model.findTask(withID: first.id))
         let newModel = dummyViewModel(loader: { return [] })
-        #expect(0 == newModel.items.count)
+        #expect(0 == newModel.dataManager.items.count)
         newModel.importTasks(url: url)
 
         #expect(first == newModel.findTask(withID: first.id))
-        #expect(model.items.count == newModel.items.count)
-        #expect(178 == newModel.items.count)
-        for item in model.items {
+        #expect(model.dataManager.items.count == newModel.dataManager.items.count)
+        #expect(178 == newModel.dataManager.items.count)
+        for item in model.dataManager.items {
             debugPrint(item)
             #expect(model.findTask(withID: item.id) != nil)
-            let newItem = newModel.findTask(withID: item.id)!
+            guard let newItem = newModel.findTask(withID: item.id) else {
+                #expect (false)
+                return
+            }
             #expect(item == newItem)
             #expect(item.title == newItem.title)
             #expect(item.id == newItem.id)

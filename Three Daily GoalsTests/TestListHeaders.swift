@@ -37,9 +37,9 @@ struct TestListHeaders {
     func TestFilter() throws {
 
         let model = dummyViewModel()
-        #expect(model.items.count == 178)
+        #expect(model.dataManager.items.count == 178)
         let lhs = ListHeader.defaultListHeaders
-        let result = lhs.map({ $0.filter(items: model.items) })
+        let result = lhs.map({ $0.filter(items: model.dataManager.items) })
         #expect(result.count == 10)
         #expect(result[0].count == 0)
         #expect(result[1].count == 0)
@@ -67,8 +67,8 @@ struct TestListHeaders {
     func testSplitting() throws {
         let model = dummyViewModel()
         let lhs = ListHeader.defaultListHeaders
-        var splitted = split(headers: lhs, itemList: model.items)
-        #expect(splitted.reduced == model.items.count)
+        var splitted = split(headers: lhs, itemList: model.dataManager.items)
+        #expect(splitted.reduced == model.dataManager.items.count)
 
         let graveyard: [TaskItem] = model.list(which: .dead)
         splitted = split(headers: lhs, itemList: graveyard)

@@ -39,7 +39,7 @@ struct TestReview {
         }
         #expect(model.stateOfCompassCheck == .inform)
         #expect(pref.daysOfCompassCheck == 1)
-        for t in model.items {
+        for t in model.dataManager.items {
             t.dueDate = nil
         }
         #expect(model.dueDateSoon.isEmpty)

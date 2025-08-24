@@ -36,18 +36,18 @@ struct TestModelLists {
     func testLists() throws {
 
         let model = dummyViewModel()
-        #expect(178 == model.items.count)
-        let item = model.items.first!
+        #expect(178 == model.dataManager.items.count)
+        let item = model.dataManager.items.first!
 
         func move(from: TaskItemState, to: TaskItemState) {
             model.move(task: item, to: to)
             #expect(item.state == to)
-            #expect(model.lists[to]!.contains(item))
-            #expect(!model.lists[from]!.contains(item))
+            #expect(model.list(which: to).contains(item))
+            #expect(!model.list(which: from).contains(item))
         }
 
-        #expect(item.state == .open)
-        #expect(model.lists[.open]!.contains(item))
+        #expect(item.state == TaskItemState.open)
+        #expect(model.list(which: .open).contains(item))
 
         move(from: .open, to: .closed)
         move(from: .closed, to: .pendingResponse)
@@ -64,7 +64,7 @@ struct TestModelLists {
         #expect(testTag != testTag2)
 
         let model = dummyViewModel()
-        #expect(model.items.count == 178)
+        #expect(model.dataManager.items.count == 178)
         #expect(model.allTags.contains("private"))
         #expect(model.allTags.contains("work"))
         #expect(model.activeTags.contains("private"))
@@ -73,7 +73,7 @@ struct TestModelLists {
         #expect(model.list(which: .open).first != nil)
         if let first = model.list(which: .open).first {
             #expect(model.list(which: .open).contains(first))
-            #expect(model.items.contains(first))
+            #expect(model.dataManager.items.contains(first))
             first.addTag(testTag)
             #expect(first.tags.contains(testTag))
             #expect(first.isActive)

@@ -98,9 +98,9 @@ struct TestTaskItems {
     func dontAddEmptyTask() throws {
         let model = dummyViewModel(loader: { return [] })
 
-        #expect(model.items.count == 0)
+        #expect(model.dataManager.items.count == 0)
         model.addItem(item: TaskItem(title: ""))
-        #expect(model.items.count == 0)
+        #expect(model.dataManager.items.count == 0)
 
         model.addItem(item: TaskItem(title: emptyTaskTitle))
     }
@@ -110,9 +110,9 @@ struct TestTaskItems {
     func addTaskWithDetails() throws {
         let model = dummyViewModel(loader: { return [] })
         let newTask = TaskItem(title: "", details: "something")
-        #expect(model.items.count == 0)
+        #expect(model.dataManager.items.count == 0)
         model.addItem(item: newTask)
-        #expect(model.items.count == 1)
+        #expect(model.dataManager.items.count == 1)
 
     }
 }
