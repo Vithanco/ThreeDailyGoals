@@ -10,6 +10,12 @@ import SwiftUI
 import SwiftData
 import os
 
+/// Struct for import conflict resolution
+struct Choice {
+    let existing: TaskItem
+    let new: TaskItem
+}
+
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: "DataManager"
@@ -713,6 +719,53 @@ final class DataManager {
             item.tags = item.tags.filter { $0 != tag }
         }
         save()
+    }
+    
+    // MARK: - Import/Export
+    
+    /// Export tasks to JSON file
+    func exportTasks(url: URL, uiState: UIStateManager) {
+        do {
+            // Create an instance of JSONEncoder
+            let encoder = JSONEncoder()
+            // Convert your array into JSON data
+            let data = try encoder.encode(items)
+
+            // Write the data to the file
+            try data.write(to: url)
+            uiState.infoMessage = "The tasks were exported and saved as JSON to \(url)"
+        } catch {
+            uiState.infoMessage = "The tasks weren't exported because: \(error)"
+        }
+        uiState.showInfoMessage = true
+    }
+
+    /// Import tasks from JSON file
+    func importTasks(url: URL, uiState: UIStateManager) {
+        var choices = [Choice]()
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let jsonData = try decoder.decode([TaskItem].self, from: data)
+            beginUndoGrouping()
+            for item in jsonData {
+                if let existing = findTask(withUuidString: item.id) {
+                    if !deepEqual(existing, item) {
+                        choices.append(Choice(existing: existing, new: item))
+                    }
+                } else {
+                    addItem(item: item)
+                }
+            }
+            uiState.selectDuringImport = choices
+            uiState.showSelectDuringImportDialog = true
+            uiState.infoMessage = "\(jsonData.count) tasks were imported."
+        } catch {
+            uiState.infoMessage = "The tasks weren't imported because :\(error)"
+        }
+
+        endUndoGrouping()
+        uiState.showInfoMessage = true
     }
     
     // MARK: - Command Buttons

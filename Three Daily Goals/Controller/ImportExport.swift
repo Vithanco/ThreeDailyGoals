@@ -11,69 +11,15 @@ import SwiftUI
 import UniformTypeIdentifiers
 import os
 
-/// Struct for import conflict resolution
-struct Choice {
-    let existing: TaskItem
-    let new: TaskItem
-}
-
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
-    category: String(describing: "TaskManagerViewModel.Buttons")
+    category: String(describing: "ImportExport")
 )
-
-extension TaskManagerViewModel {
-    func exportTasks(url: URL) {
-        do {
-            // Create an instance of JSONEncoder
-            let encoder = JSONEncoder()
-            // Convert your array into JSON data
-            let data = try encoder.encode(dataManager.items)
-
-            // Write the data to the file
-            try data.write(to: url)
-            self.uiState.infoMessage = "The tasks were exported and saved as JSON to \(url)"
-        } catch {
-            self.uiState.infoMessage = "The tasks weren't exported because: \(error)"
-        }
-        logger.info("\(self.uiState.infoMessage)")
-        self.uiState.showInfoMessage = true
-    }
-
-    /// url contains the URL of the chosen file.
-    func importTasks(url: URL) {
-        var choices = [Choice]()
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            let jsonData = try decoder.decode([TaskItem].self, from: data)
-            dataManager.beginUndoGrouping()
-            for item in jsonData {
-                if let existing = dataManager.findTask(withUuidString: item.id) {
-                    if !deepEqual(existing, item) {
-                        choices.append(Choice(existing: existing, new: item))
-                    }
-                } else {
-                    dataManager.addItem(item: item)
-                }
-            }
-            self.uiState.selectDuringImport = choices
-            self.uiState.showSelectDuringImportDialog = true
-            self.uiState.infoMessage = "\(jsonData.count) tasks were imported."
-        } catch {
-            self.uiState.infoMessage = "The tasks weren't imported because :\(error)"
-        }
-
-        dataManager.endUndoGrouping()
-        logger.info("\(self.uiState.infoMessage)")
-        self.uiState.showInfoMessage = true
-    }
-}
 
 struct SelectVersions: View {
     let choices: [Choice]
     @State var index: Int = 0
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
 
@@ -90,8 +36,8 @@ struct SelectVersions: View {
 
     func alwaysUseNew() {
         for i in index...choices.count - 1 {
-            model.dataManager.remove(task: choices[i].existing)
-            model.dataManager.addItem(item: choices[i].new)
+            dataManager.remove(task: choices[i].existing)
+            dataManager.addItem(item: choices[i].new)
         }
         done()
     }
@@ -133,8 +79,8 @@ struct SelectVersions: View {
                         missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use new") {
-                        model.dataManager.remove(task: currentChoice.existing)
-                        model.dataManager.addItem(item: currentChoice.new)
+                        dataManager.remove(task: currentChoice.existing)
+                        dataManager.addItem(item: currentChoice.new)
                         nextChoice()
                     }
                     Button("Always use new", role: .destructive) {

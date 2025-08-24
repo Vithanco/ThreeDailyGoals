@@ -19,12 +19,13 @@ struct StreakView: View {
 struct FullStreakView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CompassCheckManager.self) private var compassCheckManager
     
     var body: some View {
         GroupBox {
             HStack {
                 StreakView()
-                model.compassCheckButton
+                compassCheckManager.compassCheckButton
             }
         }
     }

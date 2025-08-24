@@ -26,6 +26,7 @@ struct MainView: View {
     @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(DataManager.self) private var dataManager
     
 
 
@@ -94,7 +95,7 @@ struct MainView: View {
                     // Ensure we have permission to access the file
                     let gotAccess = url.startAccessingSecurityScopedResource()
                     if gotAccess {
-                        model.importTasks(url: url)
+                        dataManager.importTasks(url: url, uiState: uiState)
                         // Remember to release the file access when done
                         url.stopAccessingSecurityScopedResource()
                     }

@@ -9,53 +9,60 @@ import SwiftUI
 
 struct StandardToolbarContent: ToolbarContent {
     @Environment(TaskManagerViewModel.self) private var model
+    @Environment(UIStateManager.self) private var uiState
 
     var body: some ToolbarContent {
         ToolbarItem {
-            model.preferencesButton
+            Button(action: { uiState.showPreferences() }) {
+                Label("Preferences", systemImage: "gear").accessibilityIdentifier("showPreferencesButton").help("Show Preferences Dialog")
+            }
         }
         ToolbarItem {
-            model.exportButton
+            uiState.exportButton
         }
         ToolbarItem {
-            model.importButton
+            uiState.importButton
         }
         ToolbarItem {
-            model.statsDialog
+            uiState.statsDialog
         }
     }
 }
 
 struct MainToolbarContent: ToolbarContent {
     @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
+    @Environment(UIStateManager.self) private var uiState
+    @Environment(CompassCheckManager.self) private var compassCheckManager
 
     var body: some ToolbarContent {
         ToolbarItem {
-            model.undoButton
+            dataManager.undoButton
         }
         ToolbarItem {
-            model.redoButton
+            dataManager.redoButton
         }
         ToolbarItem(placement: .principal) {
-            model.compassCheckButton
+            compassCheckManager.compassCheckButton
         }
         ToolbarItem(placement: .principal) {
-            model.addNewItemButton
+            uiState.addNewItemButton
         }
     }
 }
 
 struct ItemToolbarContent: ToolbarContent {
     @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
     let item: TaskItem
 
     var body: some ToolbarContent {
         #if os(iOS)
             ToolbarItem {
-                model.undoButton
+                dataManager.undoButton
             }
             ToolbarItem {
-                model.redoButton
+                dataManager.redoButton
             }
         #endif
         ToolbarItem {

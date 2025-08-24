@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CompactMainView: View {
     @Environment(TaskManagerViewModel.self) private var model
+    @Environment(UIStateManager.self) private var uiState
 
     var body: some View {
         @Bindable var model = model
@@ -22,7 +23,7 @@ struct CompactMainView: View {
                 .mainToolbar()
                 .toolbar {
                     ToolbarItem {
-                        model.addNewItemButton
+                        uiState.addNewItemButton
                     }
                 }
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
