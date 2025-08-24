@@ -23,14 +23,7 @@ struct Choice {
     let new: TaskItem
 }
 
-enum DialogState: String {
-    case inform
-    case currentPriorities
-    case pending
-    case dueDate
-    case review
-    case plan
-}
+
 
 enum SupportedOS {
     case iOS
@@ -48,10 +41,7 @@ final class TaskManagerViewModel {
             notificationTask?.cancel()
         }
     }
-    let timer: CompassCheckTimer = .init()
     var isTesting: Bool = false
-
-    var stateOfCompassCheck: DialogState = .inform
 
     // Import/Export
     var jsonExportDoc: JSONWriteOnlyDoc?
@@ -59,12 +49,19 @@ final class TaskManagerViewModel {
     var preferences: CloudPreferences
     var uiState: UIStateManager
     var dataManager: DataManager
+    var compassCheckManager: CompassCheckManager!
+    
+    var currentList: [TaskItem] {
+        return dataManager.list(which: uiState.whichList)
+    }
 
     var accentColor: Color {
         return preferences.accentColor
     }
     var canUndo = false
     var canRedo = false
+    
+
 
     var os: SupportedOS {
         #if os(iOS)
@@ -97,6 +94,9 @@ final class TaskManagerViewModel {
         dataManager.loadData()
         uiState.showItem = false
         dataManager.mergeDataFromCentralStorage()
+        
+        // Initialize CompassCheckManager after all other properties are ready
+        self.compassCheckManager = CompassCheckManager(dataManager: dataManager, uiState: uiState, preferences: preferences, isTesting: isTesting)
 
         Task { [weak self] in
             let center = NotificationCenter.default
@@ -130,8 +130,8 @@ final class TaskManagerViewModel {
                 }
             }
         }
-        preferences.onChange = onPreferencesChange
-        setupCompassCheckNotification()
+        preferences.onChange = compassCheckManager.onPreferencesChange
+        compassCheckManager.setupCompassCheckNotification()
     }
 
 
@@ -181,27 +181,12 @@ final class TaskManagerViewModel {
     }
 
     func move(task: TaskItem, to: TaskItemState) {
-        if task.state == to {
-            return  // nothing to be done
-        }
-        let moveFromPriority = task.state == .priority
-        
-        // Update the task state using DataManager
-        dataManager.move(task: task, to: to)
-        
-        // Did it touch priorities (in or out)? If so, update priorities
-        if to == .priority || moveFromPriority {
-            updatePriorities()
+        dataManager.moveWithPriorityTracking(task: task, to: to) {
+            self.updatePriorities()
         }
     }
 
 
-}
-
-extension TaskManagerViewModel {
-    var currentList: [TaskItem] {
-        return dataManager.list(which: uiState.whichList)
-    }
 }
 
 @MainActor

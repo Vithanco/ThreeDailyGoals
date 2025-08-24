@@ -50,6 +50,12 @@ final class DataManager {
         return items
     }
     
+    /// Get current list based on UI state (delegates to TaskManagerViewModel)
+    var currentList: [TaskItem] {
+        // This will be overridden by TaskManagerViewModel to provide the actual current list
+        return []
+    }
+    
     /// Get all active tags across all tasks
     var activeTags: Set<String> {
         var result = Set<String>()
@@ -97,6 +103,22 @@ final class DataManager {
         sortList(state)
         
         save()
+    }
+    
+    /// Move a task to a different state with priority tracking
+    func moveWithPriorityTracking(task: TaskItem, to state: TaskItemState, onPriorityChange: @escaping () -> Void) {
+        if task.state == state {
+            return  // nothing to be done
+        }
+        let moveFromPriority = task.state == .priority
+        
+        // Update the task state
+        move(task: task, to: state)
+        
+        // Did it touch priorities (in or out)? If so, call the callback
+        if state == .priority || moveFromPriority {
+            onPriorityChange()
+        }
     }
     
     /// Create a new task

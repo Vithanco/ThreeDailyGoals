@@ -1,91 +1,139 @@
 //
-//  ReviewSpecific.swift
+//  CompassCheckManager.swift
 //  Three Daily Goals
 //
 //  Created by Klaus Kneupner on 19/05/2024.
 //
 
 import Foundation
+import SwiftUI
 import os
 
-extension TaskManagerViewModel {
+enum CompassCheckState: String {
+    case inform
+    case currentPriorities
+    case pending
+    case dueDate
+    case review
+    case plan
+}
 
+@MainActor
+@Observable
+final class CompassCheckManager {
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: String(describing: CompassCheckManager.self)
+    )
+    
+    private var notificationTask: Task<Void, Never>? {
+        willSet {
+            notificationTask?.cancel()
+        }
+    }
+    
+    let timer: CompassCheckTimer = .init()
+    var isTesting: Bool = false
+    
+    var state: CompassCheckState = .inform
+    
+    // Dependencies
+    private let dataManager: DataManager
+    private let uiState: UIStateManager
+    private let preferences: CloudPreferences
+    
+    var os: SupportedOS {
+        #if os(iOS)
+            if isLargeDevice {
+                return .ipadOS
+            }
+            return .iOS
+        #elseif os(macOS)
+            return .macOS
+        #endif
+    }
+    
+    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, isTesting: Bool = false) {
+        self.dataManager = dataManager
+        self.uiState = uiState
+        self.preferences = preferences
+        self.isTesting = isTesting
+    }
+    
+    // MARK: - Compass Check Logic
+    
     var dueDateSoon: [TaskItem] {
         let due = getDate(inDays: 3)
         let open = self.dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
-        //        let pending = self.list(which: .pendingResponse).filter({$0.dueUntil(date: due)})
-        //        open.append(contentsOf: pending)
         return open.sorted()
     }
-
+    
     func moveAllPrioritiesToOpen() {
         for p in dataManager.list(which: .priority) {
-            move(task: p, to: .open)
+            dataManager.move(task: p, to: .open)
         }
     }
-
-    @MainActor
+    
     func moveStateForward() {
-        //   assert(showReviewDialog)
-        switch stateOfCompassCheck {
+        switch state {
         case .inform:
             if dataManager.list(which: .priority).isEmpty {
                 fallthrough
             } else {
-                stateOfCompassCheck = .currentPriorities
+                state = .currentPriorities
             }
         case .currentPriorities:
             moveAllPrioritiesToOpen()
             if dataManager.list(which: .pendingResponse).isEmpty {
                 fallthrough
             } else {
-                stateOfCompassCheck = .pending
+                state = .pending
             }
         case .pending:
             let dueSoon = dueDateSoon
             if dueSoon.isEmpty {
                 fallthrough
             } else {
-                stateOfCompassCheck = .dueDate
+                state = .dueDate
             }
         case .dueDate:
             for t in dueDateSoon {
-                move(task: t, to: .priority)
+                dataManager.move(task: t, to: .priority)
             }
-            stateOfCompassCheck = .review
+            state = .review
         case .review:
             if os == .iOS {
                 endCompassCheck(didFinishCompassCheck: true)
             } else {
-                stateOfCompassCheck = .plan
+                state = .plan
             }
         case .plan:
             endCompassCheck(didFinishCompassCheck: true)
         }
-        debugPrint("new state is: \(stateOfCompassCheck)")
+        debugPrint("new state is: \(state)")
     }
-
+    
     var moveStateForwardText: String {
         if os == .iOS {
-            if stateOfCompassCheck == .review {
+            if state == .review {
                 return "Finish"
             }
         } else {
-            if stateOfCompassCheck == .plan {
+            if state == .plan {
                 return "Finish"
             }
         }
         return "Next"
     }
-
+    
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
-        stateOfCompassCheck = .inform
+        state = .inform
     }
-
+    
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
-        stateOfCompassCheck = .inform
+        state = .inform
         debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
         debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
         debugPrint("current interval: \(getCompassCheckInterval())")
@@ -95,7 +143,6 @@ extension TaskManagerViewModel {
         // setting last review date
         if didFinishCompassCheck {
             if !didCCAlreadyHappenInCurrentInterval {
-
                 let secondsOfLastCCBeforeCurrentInterval: TimeInterval = getCompassCheckInterval().start
                     .timeIntervalSince(preferences.lastCompassCheck)
                 debugPrint("secondsOfLastCCBeforeCurrentInterval: \(secondsOfLastCCBeforeCurrentInterval)")
@@ -124,29 +171,29 @@ extension TaskManagerViewModel {
         dataManager.updateUndoRedoStatus()
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
     }
-
+    
     func waitABit() {
         setupCompassCheckNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
     }
-
+    
     var priorityTasks: [TaskItem] {
         return dataManager.list(which: .priority)
     }
-
+    
     func onPreferencesChange() {
-        if preferences.didCompassCheckToday && stateOfCompassCheck == .inform {
+        if preferences.didCompassCheckToday && state == .inform {
             endCompassCheck(didFinishCompassCheck: false)
         }
     }
-
+    
     func startCompassCheckNow() {
         preferences.setStreakText()
-        if !uiState.showCompassCheckDialog && stateOfCompassCheck == .inform {
+        if !uiState.showCompassCheckDialog && state == .inform {
             debugPrint("start compass check \(Date.now)")
             uiState.showCompassCheckDialog = true
         }
     }
-
+    
     var nextRegularCompassCheckTime: Date {
         var result = self.preferences.compassCheckTime
         if getCal().isDate(preferences.lastCompassCheck, inSameDayAs: result) {
@@ -160,7 +207,7 @@ extension TaskManagerViewModel {
         }
         return result
     }
-
+    
     func setupCompassCheckNotification(when: Date? = nil) {
         scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
         if uiState.showCompassCheckDialog {
@@ -176,7 +223,6 @@ extension TaskManagerViewModel {
 
         uiState.showCompassCheckDialog = false
         timer.setTimer(forWhen: time) {
-
             Task {
                 do {
                     if await self.uiState.showCompassCheckDialog {
@@ -190,9 +236,11 @@ extension TaskManagerViewModel {
             }
         }
     }
-
+    
     func deleteNotifications() {
         timer.cancelTimer()
         uiState.showCompassCheckDialog = false
     }
 }
+
+

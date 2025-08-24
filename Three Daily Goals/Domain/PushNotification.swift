@@ -15,10 +15,10 @@ extension PushNotificationDelegate: @unchecked Sendable {}
 private var delegate: PushNotificationDelegate? = nil
 
 class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
-    let model: TaskManagerViewModel
+    let compassCheckManager: CompassCheckManager
 
-    init(model: TaskManagerViewModel) {
-        self.model = model
+    init(compassCheckManager: CompassCheckManager) {
+        self.compassCheckManager = compassCheckManager
     }
 
     func userNotificationCenter(
@@ -31,7 +31,7 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
             Task {
-                await model.startCompassCheckNow()
+                await compassCheckManager.startCompassCheckNow()
             }
         default:
             break
@@ -41,10 +41,10 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     }
 }
 
-func scheduleSystemPushNotification(timing: DateComponents, model: TaskManagerViewModel) {
+func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) {
     let notificationCenter = UNUserNotificationCenter.current()
     if delegate == nil {
-        delegate = PushNotificationDelegate(model: model)
+        delegate = PushNotificationDelegate(compassCheckManager: model)
         notificationCenter.delegate = delegate
     }
 

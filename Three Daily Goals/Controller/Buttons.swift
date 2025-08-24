@@ -172,7 +172,7 @@ extension TaskManagerViewModel {
     }
 
     var compassCheckButton: some View {
-        Button(action: startCompassCheckNow) {
+        Button(action: self.compassCheckManager.startCompassCheckNow) {
             Label("Compass Check", systemImage: imgCompassCheck)
                 // .symbolRenderingMode(.palette)
                 .foregroundStyle(.gray, preferences.accentColor)

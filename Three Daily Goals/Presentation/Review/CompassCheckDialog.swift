@@ -26,28 +26,30 @@ struct CompassCheckDialog: View {
             HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(preferences.accentColor)
                 Spacer()
-                Button(role: .cancel, action: model.cancelCompassCheck) {
+                Button(role: .cancel, action: model.compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
-                Button(action: model.moveStateForward) {
-                    Text(model.moveStateForwardText)
+                Button(action: model.compassCheckManager.moveStateForward) {
+                    Text(model.compassCheckManager.moveStateForwardText)
                 }.buttonStyle(.borderedProminent)
             }
             Spacer()
 
-            switch model.stateOfCompassCheck {
-            case .inform:
+            switch model.compassCheckManager.state.rawValue {
+            case "inform":
                 CompassCheckInformView()
-            case .currentPriorities:
+            case "currentPriorities":
                 CompassCheckCurrentPriorities()
-            case .pending:
+            case "pending":
                 CompassCheckPendingResponses()
-            case .review:
+            case "review":
                 CompassCheckNextPriorities()
-            case .dueDate:
+            case "dueDate":
                 CompassCheckDueDate()
-            case .plan:
+            case "plan":
                 CompassCheckPlanDay(date: getCompassCheckInterval().end)
+            default:
+                CompassCheckInformView()
             }
             Spacer()
         }.padding(4).frame(minHeight: 350, idealHeight: 600)

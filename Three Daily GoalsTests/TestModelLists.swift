@@ -121,19 +121,19 @@ struct TestModelLists {
             return result
         })
 
-        #expect(model.dueDateSoon.count == 1)
-        #expect(model.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
+        #expect(model.compassCheckManager.dueDateSoon.count == 1)
+        #expect(model.compassCheckManager.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
 
-        model.moveStateForward()
-        #expect(model.dueDateSoon.count == 1)
+        model.compassCheckManager.moveStateForward()
+        #expect(model.compassCheckManager.dueDateSoon.count == 1)
 
-        model.moveStateForward()
-        #expect(model.stateOfCompassCheck == .review)
-        #expect(model.dueDateSoon.count == 1)
-        model.moveStateForward()
-        #expect(model.dueDateSoon.count == 1)
-        model.moveStateForward()
-        #expect(model.dueDateSoon.count == 1)
+        model.compassCheckManager.moveStateForward()
+        #expect(model.compassCheckManager.state.rawValue == "review")
+        #expect(model.compassCheckManager.dueDateSoon.count == 1)
+        model.compassCheckManager.moveStateForward()
+        #expect(model.compassCheckManager.dueDateSoon.count == 1)
+        model.compassCheckManager.moveStateForward()
+        #expect(model.compassCheckManager.dueDateSoon.count == 1)
 
     }
 }

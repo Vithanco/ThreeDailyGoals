@@ -62,7 +62,7 @@ struct CompassCheckPreferencesView: View {
                     displayedComponents: .hourAndMinute
                 ).frame(maxWidth: 258).padding(5)
                 Button("Set Compass Check Time") {
-                    model.setupCompassCheckNotification()
+                    model.compassCheckManager.setupCompassCheckNotification()
                 }.buttonStyle(.bordered).padding(5)
 
                 //                Spacer()
@@ -70,7 +70,7 @@ struct CompassCheckPreferencesView: View {
                 Text("or")
 
                 Button("No Notifications Please", role: .destructive) {
-                    model.deleteNotifications()
+                    model.compassCheckManager.deleteNotifications()
                 }.buttonStyle(.bordered).padding(5)
             }
             Spacer(minLength: 10)

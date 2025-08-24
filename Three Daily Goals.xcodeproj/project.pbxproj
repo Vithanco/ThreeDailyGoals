@@ -89,8 +89,8 @@
 		7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
+		7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */; };
 		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
-		7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -278,8 +278,8 @@
 		7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerNullable.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
+		7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckManager.swift; sourceTree = "<group>"; };
 		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
-		7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerViewModelReviewSpecific.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -618,6 +618,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */,
 				7F160E882E5AE6DF006ABEEE /* DataManager.swift */,
 				7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */,
 				7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */,
@@ -708,7 +709,6 @@
 				7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */,
 				E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */,
 				E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */,
-				7FC89D242BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift */,
 				7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */,
 			);
 			path = Review;
@@ -1066,6 +1066,7 @@
 				E597A48B2B848CD600BCD061 /* JSONDoc.swift in Sources */,
 				7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */,
 				7FE813842E5444E100CEA462 /* SchemaV3_5.swift in Sources */,
+				7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */,
 				7F7FE5FD2E43926700DA3DC0 /* TagRelated.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
@@ -1081,7 +1082,6 @@
 				E53AF7AE2B66244F00C24F78 /* Preferences.swift in Sources */,
 				7FE1FDFE2E42B1060016C181 /* InnerTaskItemView.swift in Sources */,
 				7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */,
-				7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */,
 				E516288D2B75504E0030B10A /* PreviewScreenshot.swift in Sources */,
 				7F21928E2E54B70A00B9E6BB /* AttachmentRow.swift in Sources */,
 				E5E8B3962B7744E0003300C3 /* CompactMainView.swift in Sources */,

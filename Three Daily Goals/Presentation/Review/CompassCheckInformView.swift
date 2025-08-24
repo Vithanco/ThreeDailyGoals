@@ -25,7 +25,7 @@ struct CompassCheckInformView: View {
                 "The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work."
             )
             .multilineTextAlignment(.leading)
-            Button(action: model.waitABit) {
+            Button(action: model.compassCheckManager.waitABit) {
                 Text("Remind me in 5 min")
             }.buttonStyle(.bordered)
         }.frame(maxWidth: 320, maxHeight: 400)

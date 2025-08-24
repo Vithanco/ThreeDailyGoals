@@ -63,8 +63,8 @@ struct CompassCheckNextPriorities: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfCompassCheck = .review
-    return CompassCheckNextPriorities()
+    // model.stateOfCompassCheck = .review
+    CompassCheckNextPriorities()
         .environment(model)
         .environment(dummyPreferences())
 }

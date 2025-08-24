@@ -24,8 +24,8 @@ struct CompassCheckPendingResponses: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.stateOfCompassCheck = .pending
-    return CompassCheckPendingResponses()
+    // model.stateOfCompassCheck = .pending
+    CompassCheckPendingResponses()
         .environment(model)
         .environment(dummyPreferences())
 }
