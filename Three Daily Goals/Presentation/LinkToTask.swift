@@ -35,5 +35,5 @@ struct LinkToTask: View {
     //@Previewable
     @State var model = dummyViewModel()
 
-    return LinkToTask(model: model, item: model.items.first ?? TaskItem(), list: .open)
+    LinkToTask(model: model, item: model.dataManager.items.first ?? TaskItem(), list: .open)
 }

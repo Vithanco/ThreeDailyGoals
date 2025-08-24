@@ -40,11 +40,11 @@ struct TaskItemView: View {
     let model = dummyViewModel()
 
     #if os(macOS)
-        return TaskItemView(model: model, item: model.items.first()!).frame(width: 600, height: 600)
+        return TaskItemView(model: model, item: model.dataManager.items.first()!).frame(width: 600, height: 600)
             .environment(dummyPreferences())
     #endif
     #if os(iOS)
-        return TaskItemView(model: model, item: model.items.first()!)
+        return TaskItemView(model: model, item: model.dataManager.items.first()!)
             .environment(dummyPreferences())
     #endif
 }

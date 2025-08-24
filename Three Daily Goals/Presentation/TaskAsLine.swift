@@ -72,5 +72,5 @@ struct TaskAsLine: View {
 
 #Preview {
     let model: TaskManagerViewModel = dummyViewModel()
-    return TaskAsLine(item: model.items.first!, model: model)
+    TaskAsLine(item: model.dataManager.items.first!, model: model)
 }

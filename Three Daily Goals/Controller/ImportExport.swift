@@ -22,7 +22,7 @@ extension TaskManagerViewModel {
             // Create an instance of JSONEncoder
             let encoder = JSONEncoder()
             // Convert your array into JSON data
-            let data = try encoder.encode(items)
+            let data = try encoder.encode(dataManager.items)
 
             // Write the data to the file
             try data.write(to: url)

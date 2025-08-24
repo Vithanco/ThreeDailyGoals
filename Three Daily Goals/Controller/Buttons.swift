@@ -113,7 +113,7 @@ extension TaskManagerViewModel {
     var exportButton: some View {
         Button(
             action: {
-                self.jsonExportDoc = JSONWriteOnlyDoc(content: self.items)
+                self.jsonExportDoc = JSONWriteOnlyDoc(content: self.dataManager.items)
                 self.showExportDialog = true
             },
             label: {
@@ -138,7 +138,7 @@ extension TaskManagerViewModel {
             action: {
                 var msg = ""
                 for s in TaskItemState.allCases {
-                    msg += "\n\(s.description.capitalized): \(self.lists[s]!.count)"
+                    msg += "\n\(s.description.capitalized): \(self.dataManager.lists[s]!.count)"
                 }
                 // msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
                 //  debugPrint(msg)

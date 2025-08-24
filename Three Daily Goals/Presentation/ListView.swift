@@ -16,6 +16,8 @@ extension ListHeader {
 
 struct ListView: View {
     @Environment(UIStateManager.self) private var uiState
+    @Environment(DataManager.self) private var dataManager
+    @Environment(CloudPreferences.self) private var preferences
     @State var whichList: TaskItemState?
     @Bindable var model: TaskManagerViewModel
 
@@ -25,14 +27,14 @@ struct ListView: View {
     }
 
     var list: TaskItemState {
-        return whichList ?? (model.whichList == .priority ? .open : model.whichList)
+        return whichList ?? (uiState.whichList == .priority ? .open : uiState.whichList)
     }
 
     var body: some View {
         let filterFunc: (TaskItem) -> Bool =
             uiState.selectedTags.isEmpty
             ? { _ in true } : { $0.tags.contains(where: uiState.selectedTags.contains) }
-        let itemList = model.list(which: list).filter(filterFunc)
+        let itemList = dataManager.list(which: list).filter(filterFunc)
         let headers = list.subHeaders
         VStack {
             SimpleListView(
@@ -43,13 +45,13 @@ struct ListView: View {
             .background(Color.background)
             .dropDestination(for: String.self) {
                 items, _ in
-                for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
-                    model.move(task: item, to: list)
+                for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                    dataManager.move(task: item, to: list)
                 }
                 return true
             }
             Spacer()
-            let tags = model.list(which: whichList ?? model.whichList).tags.asArray
+            let tags = dataManager.list(which: whichList ?? uiState.whichList).tags.asArray
             if !tags.isEmpty {
                 TagEditList(
                     tags: Binding(
@@ -63,7 +65,7 @@ struct ListView: View {
                     tagView: { text, isSelected in
                         TagCapsule(text)
                             .tagCapsuleStyle(
-                                isSelected ? selectedTagStyle(accentColor: model.accentColor) : missingTagStyle)
+                                isSelected ? selectedTagStyle(accentColor: preferences.accentColor) : missingTagStyle)
                     }
                 ).frame(maxWidth: 300, idealHeight: 15, maxHeight: 50).background(Color.background).padding(
                     5)
@@ -76,4 +78,6 @@ struct ListView: View {
 #Preview {
     ListView(whichList: .dead, model: dummyViewModel())
         .environment(UIStateManager.testManager())
+        .environment(DataManager.testManager())
+        .environment(dummyPreferences())
 }

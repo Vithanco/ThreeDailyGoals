@@ -10,6 +10,7 @@
 		7F13D03A2DF490B80036ACCB /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F13D0392DF490B80036ACCB /* TagKit */; };
 		7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
 		7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */; };
+		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
 		7F20773F2E57C1FD0030314A /* TaskManagerViewModel+Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */; };
 		7F2077412E57C2BA0030314A /* ByteRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2077402E57C2B60030314A /* ByteRelated.swift */; };
@@ -252,6 +253,7 @@
 /* Begin PBXFileReference section */
 		7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_3.swift; sourceTree = "<group>"; };
 		7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStateManager.swift; sourceTree = "<group>"; };
+		7F160E882E5AE6DF006ABEEE /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskManagerViewModel+Attachment.swift"; sourceTree = "<group>"; };
@@ -616,6 +618,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7F160E882E5AE6DF006ABEEE /* DataManager.swift */,
 				7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */,
 				7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */,
 				7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */,
@@ -1077,6 +1080,7 @@
 				E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */,
 				E53AF7AE2B66244F00C24F78 /* Preferences.swift in Sources */,
 				7FE1FDFE2E42B1060016C181 /* InnerTaskItemView.swift in Sources */,
+				7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */,
 				7FC89D252BF9FECC00FBA363 /* TaskManagerViewModelReviewSpecific.swift in Sources */,
 				E516288D2B75504E0030B10A /* PreviewScreenshot.swift in Sources */,
 				7F21928E2E54B70A00B9E6BB /* AttachmentRow.swift in Sources */,

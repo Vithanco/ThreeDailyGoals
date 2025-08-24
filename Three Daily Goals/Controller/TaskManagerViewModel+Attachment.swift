@@ -10,7 +10,7 @@ import SwiftData
 
 extension TaskManagerViewModel {
     func purgeableItems(at date: Date = Date()) -> [TaskItem] {
-        let dueTasks = try? modelContext.fetch(
+        let dueTasks = try? dataManager.modelContext.fetch(
             FetchDescriptor<TaskItem>(predicate: #Predicate { task in
                 task.attachments?.contains {
                     !$0.isPurged && $0.nextPurgePrompt != nil && $0.nextPurgePrompt! <= date
@@ -25,12 +25,12 @@ extension TaskManagerViewModel {
     }
 
     func totalStoredBytesAll() -> Int {
-        (try? modelContext.fetch(FetchDescriptor<TaskItem>()))?
+        (try? dataManager.modelContext.fetch(FetchDescriptor<TaskItem>()))?
             .reduce(0) { $0 + $1.totalStoredBytes } ?? 0
     }
 
     func totalOriginalBytesAll() -> Int {
-        (try? modelContext.fetch(FetchDescriptor<TaskItem>()))?
+        (try? dataManager.modelContext.fetch(FetchDescriptor<TaskItem>()))?
             .reduce(0) { $0 + $1.totalOriginalBytes } ?? 0
     }
 }

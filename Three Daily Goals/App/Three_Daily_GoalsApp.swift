@@ -62,6 +62,7 @@ struct Three_Daily_GoalsApp: App {
         .environment(calendarManager)
         .environment(model.preferences)
         .environment(model.uiState)
+        .environment(model.dataManager)
         .commands {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport) {

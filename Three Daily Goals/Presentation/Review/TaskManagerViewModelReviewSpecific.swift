@@ -12,7 +12,7 @@ extension TaskManagerViewModel {
 
     var dueDateSoon: [TaskItem] {
         let due = getDate(inDays: 3)
-        let open = self.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
+        let open = self.dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
         //        let pending = self.list(which: .pendingResponse).filter({$0.dueUntil(date: due)})
         //        open.append(contentsOf: pending)
         return open.sorted()
