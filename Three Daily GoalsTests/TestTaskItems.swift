@@ -73,7 +73,7 @@ struct TestTaskItems {
         }
         #expect(task.canBeTouched)
         #expect(task.changed < getDate(daysPrior: 30))
-        model.touch(task: task)
+        model.dataManager.touchAndUpdateUndoStatus(task: task)
         #expect(task.changed > getDate(daysPrior: 1))
     }
 
@@ -89,7 +89,7 @@ struct TestTaskItems {
         }
         #expect(task.canBeTouched)
         let date = task.changed
-        model.touch(task: task)
+        model.dataManager.touchAndUpdateUndoStatus(task: task)
         #expect(date != task.changed)
     }
 
@@ -99,10 +99,10 @@ struct TestTaskItems {
         let model = dummyViewModel(loader: { return [] })
 
         #expect(model.dataManager.items.count == 0)
-        model.addItem(item: TaskItem(title: ""))
+        model.dataManager.addItem(item: TaskItem(title: ""))
         #expect(model.dataManager.items.count == 0)
 
-        model.addItem(item: TaskItem(title: emptyTaskTitle))
+        model.dataManager.addItem(item: TaskItem(title: emptyTaskTitle))
     }
 
     @MainActor
@@ -111,7 +111,7 @@ struct TestTaskItems {
         let model = dummyViewModel(loader: { return [] })
         let newTask = TaskItem(title: "", details: "something")
         #expect(model.dataManager.items.count == 0)
-        model.addItem(item: newTask)
+        model.dataManager.addItem(item: newTask)
         #expect(model.dataManager.items.count == 1)
 
     }

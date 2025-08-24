@@ -104,7 +104,7 @@ struct Three_Daily_GoalsApp: App {
         let reviewTask = TaskItem()
         reviewTask.title = "review" + url.lastPathComponent
         reviewTask.url = url.absoluteString
-        model.addItem(item: reviewTask)
+        model.dataManager.addItem(item: reviewTask)
         model.uiState.infoMessage = "Review Task added from \(url)"
         model.uiState.showInfoMessage = true
     }

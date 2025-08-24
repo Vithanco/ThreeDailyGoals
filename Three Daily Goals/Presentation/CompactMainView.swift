@@ -11,13 +11,11 @@ struct CompactMainView: View {
     @Environment(TaskManagerViewModel.self) private var model
 
     var body: some View {
-        NavigationStack {
+        @Bindable var model = model
+        return NavigationStack {
             LeftSideView().background(Color.background)
-                .navigationDestination(isPresented: Binding(
-                    get: { model.showItem },
-                    set: { model.showItem = $0 }
-                )) {
-                    if let item = model.selectedItem {
+                .navigationDestination(isPresented: $model.uiState.showItem) {
+                    if let item = model.uiState.selectedItem {
                         TaskItemView(item: item)
                     }
                 }

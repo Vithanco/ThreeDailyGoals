@@ -30,7 +30,7 @@ struct TaskItemView: View {
         }
         .itemToolbar(item: item)
         .onAppear(perform: {
-            model.updateUndoRedoStatus()
+            dataManager.updateUndoRedoStatus()
             isTitleFocused = true
         })
     }

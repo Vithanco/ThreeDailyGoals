@@ -29,7 +29,7 @@ struct RegularMainView: View {
                             Color.red))
                 #endif
         } detail: {
-            if let detail = model.selectedItem {
+            if let detail = model.uiState.selectedItem {
                 TaskItemView(item: detail).frame(minWidth: 300)
             } else {
                 Text("Select an item").frame(minWidth: 300)

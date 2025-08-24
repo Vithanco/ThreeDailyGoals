@@ -115,6 +115,26 @@ final class DataManager {
         save()
     }
     
+    /// Add a new task with specified parameters
+    @discardableResult func addItem(
+        title: String = emptyTaskTitle,
+        details: String = emptyTaskDetails,
+        changedDate: Date = Date.now,
+        state: TaskItemState = .open
+    ) -> TaskItem {
+        let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
+        addExistingTask(newItem)
+        return newItem
+    }
+    
+    /// Add an existing task item
+    func addItem(item: TaskItem) {
+        if item.isEmpty {
+            return
+        }
+        addExistingTask(item)
+    }
+    
     /// Delete a task
     func deleteTask(_ task: TaskItem) {
         // Remove from lists
@@ -133,6 +153,20 @@ final class DataManager {
         // Delete from database
         modelContext.delete(task)
         save()
+    }
+    
+    /// Delete a task with undo grouping
+    func delete(task: TaskItem) {
+        beginUndoGrouping()
+        deleteTask(task)
+        endUndoGrouping()
+    }
+    
+    /// Delete a task with undo grouping and UI updates
+    func deleteWithUIUpdate(task: TaskItem, uiState: UIStateManager) {
+        delete(task: task)
+        updateUndoRedoStatus()
+        uiState.selectedItem = list(which: uiState.whichList).first
     }
     
     /// Delete multiple tasks
@@ -181,6 +215,12 @@ final class DataManager {
     func touch(task: TaskItem) {
         task.touch()
         save()
+    }
+    
+    /// Touch a task and update undo status
+    func touchAndUpdateUndoStatus(task: TaskItem) {
+        touch(task: task)
+        updateUndoRedoStatus()
     }
     
     /// Remove a task from the data manager
@@ -236,6 +276,28 @@ final class DataManager {
         createTask(title: lastMonth2.title, state: lastMonth2.state)
         createTask(title: older1.title, state: older1.state)
         createTask(title: older2.title, state: older2.state)
+    }
+    
+    /// Add samples and merge data
+    func addSamples() {
+        createSampleData()
+        mergeDataFromCentralStorage()
+    }
+    
+    /// Add item and return the saved version from database
+    func addAndFindItem(
+        title: String = emptyTaskTitle,
+        details: String = emptyTaskDetails,
+        changedDate: Date = Date.now,
+        state: TaskItemState = .open
+    ) -> TaskItem {
+        let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
+        // Find the saved item in the database to ensure we're selecting the correct object
+        if let savedItem = findTask(withUuidString: newItem.uuid.uuidString) {
+            return savedItem
+        } else {
+            return newItem
+        }
     }
     
 
@@ -403,7 +465,7 @@ final class DataManager {
     }
     
     /// Sort a specific list by its state's criteria
-    private func sortList(_ state: TaskItemState) {
+    func sortList(_ state: TaskItemState) {
         lists[state]?.sort { task1, task2 in
             if state == .closed || state == .dead {
                 return task1.changed > task2.changed // Most recent first

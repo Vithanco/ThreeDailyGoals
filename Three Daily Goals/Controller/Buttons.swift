@@ -87,7 +87,9 @@ extension TaskManagerViewModel {
         return Button(
             role: .destructive,
             action: {
-                self.delete(task: item)
+                withAnimation {
+                    self.dataManager.deleteWithUIUpdate(task: item, uiState: self.uiState)
+                }
             }
         ) {
             Label("Delete", systemImage: "trash").help("Delete this task for good.")
@@ -124,7 +126,7 @@ extension TaskManagerViewModel {
         Button(
             action: {
                 self.jsonExportDoc = JSONWriteOnlyDoc(content: self.dataManager.items)
-                self.showExportDialog = true
+                self.uiState.showExportDialog = true
             },
             label: {
                 Label("Export Tasks", systemImage: "square.and.arrow.up.on.square.fill")
@@ -135,7 +137,7 @@ extension TaskManagerViewModel {
     var importButton: some View {
         Button(
             action: {
-                self.showImportDialog = true
+                self.uiState.showImportDialog = true
             },
             label: {
                 Label("Import Tasks", systemImage: "square.and.arrow.down.on.square.fill")
@@ -163,7 +165,7 @@ extension TaskManagerViewModel {
     }
 
     var addNewItemButton: some View {
-        Button(action: addNewItem) {
+        Button(action: { self.uiState.addNewItem() }) {
             Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks")
                 .accessibilityIdentifier("addTaskButton")
         }

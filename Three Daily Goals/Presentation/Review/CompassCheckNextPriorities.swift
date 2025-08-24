@@ -52,7 +52,7 @@ struct CompassCheckNextPriorities: View {
                         "Add Task",
                         action: {
                             presentAlert = false
-                            model.addItem(title: newTaskName)
+                            model.dataManager.addItem(title: newTaskName)
                         })
                 },
                 message: {

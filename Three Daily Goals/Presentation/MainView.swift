@@ -73,10 +73,7 @@ struct MainView: View {
             }.padding(10)
         }
         .fileExporter(
-            isPresented: Binding(
-                get: { uiState.showExportDialog },
-                set: { uiState.showExportDialog = $0 }
-            ),
+            isPresented: $uiState.showExportDialog,
             document: model.jsonExportDoc,
             contentTypes: [UTType.json],
             onCompletion: { result in
@@ -89,10 +86,7 @@ struct MainView: View {
             }
         )
         .fileImporter(
-            isPresented: Binding(
-                get: { uiState.showImportDialog },
-                set: { uiState.showImportDialog = $0 }
-            ),
+            isPresented: $uiState.showImportDialog,
             allowedContentTypes: [UTType.json],
             onCompletion: { result in
                 switch result {

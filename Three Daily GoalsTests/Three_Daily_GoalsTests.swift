@@ -49,7 +49,7 @@ struct Three_Daily_GoalsTests {
         let item = model.addAndSelect()
         //        #expect(item.comments!.count, 0, "No comments yet")
         //        #expect(0,try context.fetchCount(descriptor))
-        model.touch(task: item)
+        model.dataManager.touchAndUpdateUndoStatus(task: item)
         model.dataManager.endUndoGrouping()
         //        #expect(item.comments!.count, 1, "touch leads to comment")
         //        #expect(1,try context.fetchCount(descriptor))
@@ -77,7 +77,7 @@ struct Three_Daily_GoalsTests {
         //        #expect(1,try context.fetchCount(descriptor))
 
         //delete
-        model.delete(task: item)
+        model.dataManager.deleteWithUIUpdate(task: item, uiState: model.uiState)
         XCTAssertTrue(model.canUndo)
         XCTAssertTrue(!model.canRedo)
         let find2 = model.dataManager.findTask(withUuidString: item.id)

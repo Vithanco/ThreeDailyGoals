@@ -103,6 +103,22 @@ final class UIStateManager {
     func showPreferences() {
         showSettingsDialog = true
     }
+    
+    /// Select a task item (platform-specific)
+    func select(_ newItem: TaskItem) {
+        #if os(macOS)
+        select(which: newItem.state, item: newItem)
+        #endif
+        #if os(iOS)
+        selectedItem = newItem
+        showItem = true
+        #endif
+    }
+    
+    /// Show the new item dialog
+    func addNewItem() {
+        showNewItemNameDialog = true
+    }
 }
 
 // MARK: - Convenience Initializers

@@ -121,7 +121,7 @@ extension TaskManagerViewModel {
             }
         }
 
-        updateUndoRedoStatus()
+        dataManager.updateUndoRedoStatus()
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
     }
 
@@ -169,7 +169,7 @@ extension TaskManagerViewModel {
         if isTesting {
             return
         }
-        if uiState.showInfoMessage || showExportDialog || showImportDialog || uiState.showSettingsDialog || uiState.showNewItemNameDialog {
+        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog || uiState.showNewItemNameDialog {
             waitABit()
         }
         let time = when ?? nextRegularCompassCheckTime

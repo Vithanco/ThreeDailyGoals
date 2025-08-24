@@ -54,16 +54,6 @@ final class TaskManagerViewModel {
     var stateOfCompassCheck: DialogState = .inform
 
     // Import/Export
-    public var showImportDialog: Bool {
-        get { uiState.showImportDialog }
-        set { uiState.showImportDialog = newValue }
-    }
-    
-    public var showExportDialog: Bool {
-        get { uiState.showExportDialog }
-        set { uiState.showExportDialog = newValue }
-    }
-    
     var jsonExportDoc: JSONWriteOnlyDoc?
 
     var preferences: CloudPreferences
@@ -72,25 +62,6 @@ final class TaskManagerViewModel {
 
     var accentColor: Color {
         return preferences.accentColor
-    }
-
-
-
-    /// used in Content view of NavigationSplitView
-    var whichList: TaskItemState {
-        get { uiState.whichList }
-        set { uiState.whichList = newValue }
-    }
-
-    /// used in Detail View of NavigationSplitView
-    var selectedItem: TaskItem? {
-        get { uiState.selectedItem }
-        set { uiState.selectedItem = newValue }
-    }
-
-    var showItem: Bool {
-        get { uiState.showItem }
-        set { uiState.showItem = newValue }
     }
     var canUndo = false
     var canRedo = false
@@ -112,8 +83,8 @@ final class TaskManagerViewModel {
 
 
 
-    func finishDialog() {
-        uiState.finishDialog()
+    public var isProductionEnvironment: Bool {
+        return CKContainer.isProductionEnvironment
     }
 
     init(modelContext: Storage, preferences: CloudPreferences, uiState: UIStateManager, isTesting: Bool = false) {
@@ -124,7 +95,7 @@ final class TaskManagerViewModel {
         
         // Load initial data
         dataManager.loadData()
-        showItem = false
+        uiState.showItem = false
         dataManager.mergeDataFromCentralStorage()
 
         Task { [weak self] in
@@ -138,12 +109,12 @@ final class TaskManagerViewModel {
                         if event.type == .import && event.endDate != nil && event.succeeded {
                             logger.debug("CloudKit import succeeded, processing changes")
                             if !dataManager.hasChanges {
-                                mergeDataFromCentralStorage()
+                                dataManager.mergeDataFromCentralStorage()
                             } else {
                                 do {
                                     try dataManager.save()
                                     logger.debug("Saved pending changes, now merging from central storage")
-                                    mergeDataFromCentralStorage()
+                                    dataManager.mergeDataFromCentralStorage()
                                 } catch {
                                     logger.error("Failed to save pending changes: \(error)")
                                 }
@@ -162,12 +133,10 @@ final class TaskManagerViewModel {
         preferences.onChange = onPreferencesChange
         setupCompassCheckNotification()
     }
+
+
     
-    func addSamples() -> Self {
-        dataManager.createSampleData()
-        dataManager.mergeDataFromCentralStorage()
-        return self
-    }
+
 
     //    func clear() {
     //        try? modelContext.delete(model: TaskItem.self)
@@ -175,54 +144,9 @@ final class TaskManagerViewModel {
     //        fetchData()
     //    }
     //
-    fileprivate     func sortList(_ t: TaskItemState) {
-        dataManager.lists[t]?.sort(by: t.sorter)
-    }
 
 
 
-    @MainActor
-    func mergeDataFromCentralStorage() {
-        dataManager.mergeDataFromCentralStorage()
-        updateUndoRedoStatus()
-    }
-
-    @discardableResult func addItem(
-        title: String = emptyTaskTitle,
-        details: String = emptyTaskDetails,
-        changedDate: Date = Date.now,
-        state: TaskItemState = .open
-    ) -> TaskItem {
-        let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
-        addItem(item: newItem)
-        return newItem
-    }
-
-    public var isProductionEnvironment: Bool {
-        return CKContainer.isProductionEnvironment
-    }
-
-    func addItem(item: TaskItem) {
-        if item.isEmpty {
-            return
-        }
-        dataManager.addExistingTask(item)
-        updateUndoRedoStatus()
-    }
-
-    fileprivate func select(_ newItem: TaskItem) {
-        #if os(macOS)
-        uiState.select(which: newItem.state, item: newItem)
-        #endif
-        #if os(iOS)
-            selectedItem = newItem
-            showItem = true
-        #endif
-    }
-
-    func addNewItem() {
-        uiState.showNewItemNameDialog = true
-    }
 
     @discardableResult func addAndSelect(
         title: String = emptyTaskTitle,
@@ -230,47 +154,16 @@ final class TaskManagerViewModel {
         changedDate: Date = Date.now,
         state: TaskItemState = .open
     ) -> TaskItem {
-        let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
-        // Find the saved item in the database to ensure we're selecting the correct object
-        if let savedItem = dataManager.findTask(withUuidString: newItem.uuid.uuidString) {
-            select(savedItem)
-            return savedItem
-        } else {
-            select(newItem)
-            return newItem
-        }
+        let item = dataManager.addAndFindItem(title: title, details: details, changedDate: changedDate, state: state)
+        uiState.select(item)
+        return item
     }
 
 
 
 
 
-    @MainActor
-    func updateUndoRedoStatus() {
-        dataManager.updateUndoRedoStatus()
-        canUndo = dataManager.canUndo
-        canRedo = dataManager.canRedo
 
-        let next = nextRegularCompassCheckTime
-        let _ = preferences.didCompassCheckToday ? "Done" : stdOnlyTimeFormat.format(next)
-    }
-
-
-
-    func touch(task: TaskItem) {
-        dataManager.touch(task: task)
-        updateUndoRedoStatus()
-    }
-
-    func delete(task: TaskItem) {
-        withAnimation {
-            dataManager.beginUndoGrouping()
-            dataManager.deleteTask(task)
-            dataManager.endUndoGrouping()
-            updateUndoRedoStatus()
-            selectedItem = currentList.first
-        }
-    }
 
     /// updating priorities to key value store, so that we show them in the Widget
     fileprivate func updatePriorities() {
@@ -296,16 +189,10 @@ final class TaskManagerViewModel {
         // Update the task state using DataManager
         dataManager.move(task: task, to: to)
         
-        // Update local lists for UI consistency
-        dataManager.lists[task.state]?.removeObject(task)
-        dataManager.lists[to]?.append(task)
-        sortList(to)
-
         // Did it touch priorities (in or out)? If so, update priorities
         if to == .priority || moveFromPriority {
             updatePriorities()
         }
-        updateUndoRedoStatus()
     }
 
 
@@ -313,7 +200,7 @@ final class TaskManagerViewModel {
 
 extension TaskManagerViewModel {
     var currentList: [TaskItem] {
-        return dataManager.list(which: whichList)
+        return dataManager.list(which: uiState.whichList)
     }
 }
 

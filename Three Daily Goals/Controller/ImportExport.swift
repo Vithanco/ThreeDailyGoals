@@ -48,7 +48,7 @@ extension TaskManagerViewModel {
                         choices.append(Choice(existing: existing, new: item))
                     }
                 } else {
-                    addItem(item: item)
+                    dataManager.addItem(item: item)
                 }
             }
             self.uiState.selectDuringImport = choices
@@ -85,7 +85,7 @@ struct SelectVersions: View {
     func alwaysUseNew() {
         for i in index...choices.count - 1 {
             model.dataManager.remove(task: choices[i].existing)
-            model.addItem(item: choices[i].new)
+            model.dataManager.addItem(item: choices[i].new)
         }
         done()
     }
@@ -128,7 +128,7 @@ struct SelectVersions: View {
                         showAttachmentImport: false)
                     Button("Use new") {
                         model.dataManager.remove(task: currentChoice.existing)
-                        model.addItem(item: currentChoice.new)
+                        model.dataManager.addItem(item: currentChoice.new)
                         nextChoice()
                     }
                     Button("Always use new", role: .destructive) {
