@@ -24,7 +24,7 @@ struct SingleView<Content: View>: View {
 }
 
 struct MainView: View {
-
+    @Environment(UIStateManager.self) private var uiState
     @State var model: TaskManagerViewModel
 
     init(model: TaskManagerViewModel) {
@@ -41,43 +41,64 @@ struct MainView: View {
         }
         .background(Color.background)
         #if os(iOS)
-            .fullScreenCover(isPresented: $model.showCompassCheckDialog) {
+            .fullScreenCover(isPresented: Binding(
+                get: { uiState.showCompassCheckDialog },
+                set: { uiState.showCompassCheckDialog = $0 }
+            )) {
                 CompassCheckDialog(model: model)
             }
         #else
-            .sheet(isPresented: $model.showCompassCheckDialog) {
+            .sheet(isPresented: Binding(
+                get: { uiState.showCompassCheckDialog },
+                set: { uiState.showCompassCheckDialog = $0 }
+            )) {
                 CompassCheckDialog(model: model)
             }
         #endif
-        .sheet(isPresented: $model.showSettingsDialog) {
+        .sheet(isPresented: Binding(
+            get: { uiState.showSettingsDialog },
+            set: { uiState.showSettingsDialog = $0 }
+        )) {
             PreferencesView(model: model)
         }
-        .sheet(isPresented: $model.showSelectDuringImportDialog) {
-            SelectVersions(choices: model.selectDuringImport, model: model)
+        .sheet(isPresented: Binding(
+            get: { uiState.showSelectDuringImportDialog },
+            set: { uiState.showSelectDuringImportDialog = $0 }
+        )) {
+            SelectVersions(choices: uiState.selectDuringImport, model: model)
         }
-        .sheet(isPresented: $model.showNewItemNameDialog) {
+        .sheet(isPresented: Binding(
+            get: { uiState.showNewItemNameDialog },
+            set: { uiState.showNewItemNameDialog = $0 }
+        )) {
             NewItemDialog(model: model)
         }
         .sheet(
-            isPresented: $model.showInfoMessage,
+            isPresented: Binding(
+                get: { uiState.showInfoMessage },
+                set: { uiState.showInfoMessage = $0 }
+            ),
             content: {
                 VStack {
                     GroupBox {
                         HStack(alignment: .center) {
                             Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
                                 model.accentColor)
-                            Text(model.infoMessage).padding(5)
+                            Text(uiState.infoMessage).padding(5)
                         }
                     }.padding(5)
                     Button("OK") {
-                        model.showInfoMessage = false
+                        uiState.showInfoMessage = false
                     }
                 }.padding(10)
 
             }
         )
         .fileExporter(
-            isPresented: $model.showExportDialog,
+            isPresented: Binding(
+                get: { uiState.showExportDialog },
+                set: { uiState.showExportDialog = $0 }
+            ),
             document: model.jsonExportDoc,
             contentTypes: [UTType.json],
             onCompletion: { result in
@@ -90,7 +111,10 @@ struct MainView: View {
             }
         )
         .fileImporter(
-            isPresented: $model.showImportDialog,
+            isPresented: Binding(
+                get: { uiState.showImportDialog },
+                set: { uiState.showImportDialog = $0 }
+            ),
             allowedContentTypes: [UTType.json],
             onCompletion: { result in
                 switch result {
@@ -113,9 +137,11 @@ struct MainView: View {
 
 #Preview {
     let model = dummyViewModel()
-    model.infoMessage = " hall "
-    model.showInfoMessage = true
+    let uiState = UIStateManager.testManager()
+    uiState.infoMessage = " hall "
+    uiState.showInfoMessage = true
     return MainView(model: model)
+        .environment(uiState)
         #if os(macOS)
             .frame(width: 1000, height: 600)
         #endif

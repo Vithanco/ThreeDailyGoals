@@ -15,6 +15,7 @@ extension ListHeader {
 }
 
 struct ListView: View {
+    @Environment(UIStateManager.self) private var uiState
     @State var whichList: TaskItemState?
     @Bindable var model: TaskManagerViewModel
 
@@ -29,8 +30,8 @@ struct ListView: View {
 
     var body: some View {
         let filterFunc: (TaskItem) -> Bool =
-            model.selectedTags.isEmpty
-            ? { _ in true } : { $0.tags.contains(where: model.selectedTags.contains) }
+            uiState.selectedTags.isEmpty
+            ? { _ in true } : { $0.tags.contains(where: uiState.selectedTags.contains) }
         let itemList = model.list(which: list).filter(filterFunc)
         let headers = list.subHeaders
         VStack {
@@ -51,7 +52,10 @@ struct ListView: View {
             let tags = model.list(which: whichList ?? model.whichList).tags.asArray
             if !tags.isEmpty {
                 TagEditList(
-                    tags: $model.selectedTags,
+                    tags: Binding(
+                        get: { uiState.selectedTags },
+                        set: { uiState.selectedTags = $0 }
+                    ),
                     additionalTags: tags,
                     container: .vstack,
                     horizontalSpacing: 1,
@@ -71,4 +75,5 @@ struct ListView: View {
 
 #Preview {
     ListView(whichList: .dead, model: dummyViewModel())
+        .environment(UIStateManager.testManager())
 }

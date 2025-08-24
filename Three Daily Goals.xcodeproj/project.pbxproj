@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7F13D03A2DF490B80036ACCB /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F13D0392DF490B80036ACCB /* TagKit */; };
 		7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
+		7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
 		7F20773F2E57C1FD0030314A /* TaskManagerViewModel+Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */; };
 		7F2077412E57C2BA0030314A /* ByteRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2077402E57C2B60030314A /* ByteRelated.swift */; };
@@ -250,6 +251,7 @@
 
 /* Begin PBXFileReference section */
 		7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_3.swift; sourceTree = "<group>"; };
+		7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStateManager.swift; sourceTree = "<group>"; };
 		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
 		7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskManagerViewModel+Attachment.swift"; sourceTree = "<group>"; };
@@ -614,6 +616,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */,
 				7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */,
 				7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */,
 				7FE38F0D2C33083300C9A798 /* Events */,
@@ -1065,6 +1068,7 @@
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
 				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
+				7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */,
 				7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */,
 				E5DAFE962B5197B000A68857 /* LoggingRelated.swift in Sources */,
 				7FA581002B97AB4400803614 /* DatePickerNullable.swift in Sources */,

@@ -56,30 +56,45 @@ final class TaskManagerViewModel {
     var stateOfCompassCheck: DialogState = .inform
 
     // Import/Export
-    public var showImportDialog: Bool = false
-    public var showExportDialog: Bool = false
+    public var showImportDialog: Bool {
+        get { uiState.showImportDialog }
+        set { uiState.showImportDialog = newValue }
+    }
+    
+    public var showExportDialog: Bool {
+        get { uiState.showExportDialog }
+        set { uiState.showExportDialog = newValue }
+    }
+    
     var jsonExportDoc: JSONWriteOnlyDoc?
 
     var preferences: CloudPreferences
+    var uiState: UIStateManager
 
     var accentColor: Color {
         return preferences.accentColor
     }
 
     func select(which: TaskItemState, item: TaskItem?) {
-        withAnimation {
-            whichList = which
-            selectedItem = item
-        }
+        uiState.select(which: which, item: item)
     }
 
     /// used in Content view of NavigationSplitView
-    var whichList = TaskItemState.open
+    var whichList: TaskItemState {
+        get { uiState.whichList }
+        set { uiState.whichList = newValue }
+    }
 
     /// used in Detail View of NavigationSplitView
-    var selectedItem: TaskItem?
+    var selectedItem: TaskItem? {
+        get { uiState.selectedItem }
+        set { uiState.selectedItem = newValue }
+    }
 
-    var showItem: Bool
+    var showItem: Bool {
+        get { uiState.showItem }
+        set { uiState.showItem = newValue }
+    }
     var canUndo = false
     var canRedo = false
 
@@ -94,28 +109,62 @@ final class TaskManagerViewModel {
         #endif
     }
 
-    var showCompassCheckDialog: Bool = false
-    var showSettingsDialog: Bool = false
-    var showMissingCompassCheckAlert: Bool = false
-    var showSelectDuringImportDialog: Bool = false
-    var showNewItemNameDialog: Bool = false
-    var selectDuringImport: [Choice] = []
+    var showCompassCheckDialog: Bool {
+        get { uiState.showCompassCheckDialog }
+        set { uiState.showCompassCheckDialog = newValue }
+    }
+    
+    var showSettingsDialog: Bool {
+        get { uiState.showSettingsDialog }
+        set { uiState.showSettingsDialog = newValue }
+    }
+    
+    var showMissingCompassCheckAlert: Bool {
+        get { uiState.showMissingCompassCheckAlert }
+        set { uiState.showMissingCompassCheckAlert = newValue }
+    }
+    
+    var showSelectDuringImportDialog: Bool {
+        get { uiState.showSelectDuringImportDialog }
+        set { uiState.showSelectDuringImportDialog = newValue }
+    }
+    
+    var showNewItemNameDialog: Bool {
+        get { uiState.showNewItemNameDialog }
+        set { uiState.showNewItemNameDialog = newValue }
+    }
+    
+    var selectDuringImport: [Choice] {
+        get { uiState.selectDuringImport }
+        set { uiState.selectDuringImport = newValue }
+    }
 
     var lists: [TaskItemState: [TaskItem]] = [:]
 
     // for user messages
-    var showInfoMessage: Bool = false
-    var infoMessage: String = "(invalid)"
+    var showInfoMessage: Bool {
+        get { uiState.showInfoMessage }
+        set { uiState.showInfoMessage = newValue }
+    }
+    
+    var infoMessage: String {
+        get { uiState.infoMessage }
+        set { uiState.infoMessage = newValue }
+    }
 
-    var selectedTags: [String] = []
+    var selectedTags: [String] {
+        get { uiState.selectedTags }
+        set { uiState.selectedTags = newValue }
+    }
 
     func finishDialog() {
-        showInfoMessage = false
+        uiState.finishDialog()
     }
 
     init(modelContext: Storage, preferences: CloudPreferences, isTesting: Bool = false) {
         self.modelContext = modelContext
         self.preferences = preferences
+        self.uiState = UIStateManager()
         self.isTesting = isTesting
         showItem = false
         for c in TaskItemState.allCases {
