@@ -9,11 +9,12 @@ import SwiftUI
 
 struct NewItemDialog: View {
 
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(UIStateManager.self) private var uiState
     @FocusState var isTitleFocused: Bool
 
     func dismiss() {
-        model.showNewItemNameDialog = false
+        uiState.showNewItemNameDialog = false
     }
 
     func addTask() {
@@ -24,8 +25,7 @@ struct NewItemDialog: View {
 
     @State var title: String = emptyTaskTitle
 
-    public init(model: TaskManagerViewModel) {
-        self.model = model
+    public init() {
         self.isTitleFocused = true
     }
 
@@ -61,5 +61,6 @@ struct NewItemDialog: View {
 }
 
 #Preview {
-    NewItemDialog(model: dummyViewModel())
+    NewItemDialog()
+        .environment(dummyViewModel())
 }

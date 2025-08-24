@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct CompassCheckPendingResponses: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
         VStack {
-            Text("Can you close some tasks you wait on?").font(.title2).foregroundStyle(model.accentColor)
+            Text("Can you close some tasks you wait on?").font(.title2).foregroundStyle(preferences.accentColor)
             Spacer()
             Text(
                 "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."
             )
-            ListView(whichList: .pendingResponse, model: model)
+            ListView(whichList: .pendingResponse)
         }.frame(minHeight: 300, idealHeight: 800, maxHeight: .infinity)
     }
 }
@@ -25,5 +25,7 @@ struct CompassCheckPendingResponses: View {
 #Preview {
     let model = dummyViewModel()
     model.stateOfCompassCheck = .pending
-    return CompassCheckPendingResponses(model: model)
+    return CompassCheckPendingResponses()
+        .environment(model)
+        .environment(dummyPreferences())
 }

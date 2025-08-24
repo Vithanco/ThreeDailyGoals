@@ -13,21 +13,22 @@ struct SimpleListView: View {
     let showHeaders: Bool
     let section: TaskSection
     let id: String
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
         List {
             Section(
                 header: VStack(alignment: .leading) {
                     HStack {
-                        section.asText.foregroundStyle(model.accentColor).listRowSeparator(.hidden)
+                        section.asText.foregroundStyle(preferences.accentColor).listRowSeparator(.hidden)
                             .accessibilityIdentifier("ListView" + id)
                     }
                 }
             ) {
                 if itemList.isEmpty {
                     Spacer(minLength: 20)
-                    Text("(No items found)").foregroundStyle(model.accentColor).frame(maxWidth: .infinity)
+                    Text("(No items found)").foregroundStyle(preferences.accentColor).frame(maxWidth: .infinity)
                     Spacer(minLength: 20)
                 } else {
                     if !showHeaders {
@@ -43,11 +44,11 @@ struct SimpleListView: View {
                         if partialList.count > 0 {
                             if showHeaders {
                                 header.asText
-                                    .foregroundStyle(model.accentColor)
+                                    .foregroundStyle(preferences.accentColor)
                                     .listRowSeparator(.hidden)
                             }
                             ForEach(partialList) { item in
-                                LinkToTask(model: model, item: item, list: item.state)
+                                LinkToTask(item: item, list: item.state)
                                     .listRowSeparator(
                                         !showHeaders && allItems.first?.id == item.id ? .hidden : .visible
                                     )
@@ -55,7 +56,7 @@ struct SimpleListView: View {
                         }
                     }
                     if itemList.count > 10 {
-                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(model.accentColor)
+                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(preferences.accentColor)
                             .listRowSeparator(.hidden)
                     }
                 }
@@ -72,7 +73,7 @@ struct SimpleListView: View {
         headers: ListHeader.defaultListHeaders,
         showHeaders: true,
         section: secGraveyard,
-        id: "yeah",
-        model: dummy
+        id: "yeah"
     )
+        .environment(dummy)
 }

@@ -1,11 +1,10 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  Three Daily Goals
 //
-//  Created by Klaus Kneupner on 05/12/2023.
+//  Created by Klaus Kneupner on 19/12/2023.
 //
 
-import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import os
@@ -24,19 +23,16 @@ struct SingleView<Content: View>: View {
 }
 
 struct MainView: View {
+    @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
-    @State var model: TaskManagerViewModel
-
-    init(model: TaskManagerViewModel) {
-        self._model = State(wrappedValue: model)
-    }
+    @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
         SingleView {
             if isLargeDevice {
-                RegularMainView(model: model).frame(minWidth: 1000, minHeight: 600)
+                RegularMainView().frame(minWidth: 1000, minHeight: 600)
             } else {
-                CompactMainView(model: model).frame(maxWidth: .infinity, maxHeight: .infinity)
+                CompactMainView().frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .background(Color.background)
@@ -45,33 +41,33 @@ struct MainView: View {
                 get: { uiState.showCompassCheckDialog },
                 set: { uiState.showCompassCheckDialog = $0 }
             )) {
-                CompassCheckDialog(model: model)
+                CompassCheckDialog()
             }
         #else
             .sheet(isPresented: Binding(
                 get: { uiState.showCompassCheckDialog },
                 set: { uiState.showCompassCheckDialog = $0 }
             )) {
-                CompassCheckDialog(model: model)
+                CompassCheckDialog()
             }
         #endif
         .sheet(isPresented: Binding(
             get: { uiState.showSettingsDialog },
             set: { uiState.showSettingsDialog = $0 }
         )) {
-            PreferencesView(model: model)
+            PreferencesView()
         }
         .sheet(isPresented: Binding(
             get: { uiState.showSelectDuringImportDialog },
             set: { uiState.showSelectDuringImportDialog = $0 }
         )) {
-            SelectVersions(choices: uiState.selectDuringImport, model: model)
+            SelectVersions(choices: uiState.selectDuringImport)
         }
         .sheet(isPresented: Binding(
             get: { uiState.showNewItemNameDialog },
             set: { uiState.showNewItemNameDialog = $0 }
         )) {
-            NewItemDialog(model: model)
+            NewItemDialog()
         }
         .sheet(
             isPresented: Binding(
@@ -83,7 +79,7 @@ struct MainView: View {
                     GroupBox {
                         HStack(alignment: .center) {
                             Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
-                                model.accentColor)
+                                preferences.accentColor)
                             Text(uiState.infoMessage).padding(5)
                         }
                     }.padding(5)
@@ -131,19 +127,10 @@ struct MainView: View {
                 }
             }
         )
-
     }
 }
 
 #Preview {
-    let model = dummyViewModel()
-    let uiState = UIStateManager.testManager()
-    uiState.infoMessage = " hall "
-    uiState.showInfoMessage = true
-    return MainView(model: model)
-        .environment(uiState)
-        #if os(macOS)
-            .frame(width: 1000, height: 600)
-        #endif
-
+    MainView()
+        .environment(dummyViewModel())
 }

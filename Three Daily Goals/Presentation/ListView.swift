@@ -18,12 +18,11 @@ struct ListView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(TaskManagerViewModel.self) private var model
     @State var whichList: TaskItemState?
-    @Bindable var model: TaskManagerViewModel
 
-    init(whichList: TaskItemState? = nil, model: TaskManagerViewModel) {
+    init(whichList: TaskItemState? = nil) {
         self.whichList = whichList
-        self.model = model
     }
 
     var list: TaskItemState {
@@ -39,7 +38,7 @@ struct ListView: View {
         VStack {
             SimpleListView(
                 itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section,
-                id: list.getListAccessibilityIdentifier, model: model
+                id: list.getListAccessibilityIdentifier
             )
             .frame(minHeight: 145, maxHeight: .infinity)
             .background(Color.background)
@@ -76,8 +75,9 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView(whichList: .dead, model: dummyViewModel())
+    ListView(whichList: .dead)
         .environment(UIStateManager.testManager())
         .environment(DataManager.testManager())
         .environment(dummyPreferences())
+        .environment(dummyViewModel())
 }

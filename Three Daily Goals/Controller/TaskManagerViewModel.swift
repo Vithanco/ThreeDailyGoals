@@ -74,9 +74,7 @@ final class TaskManagerViewModel {
         return preferences.accentColor
     }
 
-    func select(which: TaskItemState, item: TaskItem?) {
-        uiState.select(which: which, item: item)
-    }
+
 
     /// used in Content view of NavigationSplitView
     var whichList: TaskItemState {
@@ -325,7 +323,7 @@ final class TaskManagerViewModel {
 
     fileprivate func select(_ newItem: TaskItem) {
         #if os(macOS)
-            select(which: newItem.state, item: newItem)
+        uiState.select(which: newItem.state, item: newItem)
         #endif
         #if os(iOS)
             selectedItem = newItem

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StreakView: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
     
     var body: some View {
         Text("\(Image(systemName: imgStreak)) \(preferences.streakText)").foregroundStyle(Color.red)
@@ -18,12 +18,12 @@ struct StreakView: View {
 
 struct FullStreakView: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
     
     var body: some View {
         GroupBox {
             HStack {
-                StreakView(model: model)
+                StreakView()
                 model.compassCheckButton
             }
         }
@@ -31,6 +31,7 @@ struct FullStreakView: View {
 }
 
 #Preview {
-    StreakView(model: dummyViewModel())
+    StreakView()
+        .environment(dummyViewModel())
         .environment(dummyPreferences())
 }

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CompassCheckNextPriorities: View {
-
-    @Bindable var model: TaskManagerViewModel
+    @Environment(CloudPreferences.self) private var preferences
+    @Environment(TaskManagerViewModel.self) private var model
 
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
@@ -20,10 +20,10 @@ struct CompassCheckNextPriorities: View {
 
                 Text(
                     "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
-                ).font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
+                ).font(.title2).foregroundStyle(preferences.accentColor).multilineTextAlignment(.center)
                 HStack {
-                    ListView(whichList: .priority, model: model).frame(minHeight: 300)
-                    ListView(whichList: .open, model: model)
+                    ListView(whichList: .priority).frame(minHeight: 300)
+                    ListView(whichList: .open)
                 }
 
             #endif
@@ -32,9 +32,9 @@ struct CompassCheckNextPriorities: View {
                     "Choose Next Priorities. Swipe left to move to Priorites \(Image(systemName: TaskItemState.priority.imageName))"
                 )
                 .font(.title2)
-                .foregroundStyle(model.accentColor)
+                .foregroundStyle(preferences.accentColor)
                 .multilineTextAlignment(.center)
-                ListView(whichList: .open, model: model)
+                ListView(whichList: .open)
                     .frame(minHeight: 300)
 
             #endif
@@ -64,5 +64,7 @@ struct CompassCheckNextPriorities: View {
 #Preview {
     let model = dummyViewModel()
     model.stateOfCompassCheck = .review
-    return CompassCheckNextPriorities(model: model)
+    return CompassCheckNextPriorities()
+        .environment(model)
+        .environment(dummyPreferences())
 }

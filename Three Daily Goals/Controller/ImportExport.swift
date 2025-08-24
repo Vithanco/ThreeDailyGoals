@@ -67,7 +67,9 @@ extension TaskManagerViewModel {
 struct SelectVersions: View {
     let choices: [Choice]
     @State var index: Int = 0
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(UIStateManager.self) private var uiState
+    @Environment(CloudPreferences.self) private var preferences
 
     func nextChoice() {
         index += 1
@@ -77,7 +79,7 @@ struct SelectVersions: View {
     }
 
     func done() {
-        model.showSelectDuringImportDialog = false
+        uiState.showSelectDuringImportDialog = false
     }
 
     func alwaysUseNew() {
@@ -105,8 +107,8 @@ struct SelectVersions: View {
                 VStack {
                     Text("Existing Version")
                     InnerTaskItemView(
-                        accentColor: model.accentColor, item: currentChoice.existing, allTags: [],
-                        selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
+                        accentColor: preferences.accentColor, item: currentChoice.existing, allTags: [],
+                        selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
                         missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use existing") {
@@ -120,8 +122,8 @@ struct SelectVersions: View {
                 VStack {
                     Text("Imported Version")
                     InnerTaskItemView(
-                        accentColor: model.accentColor, item: currentChoice.new, allTags: [],
-                        selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
+                        accentColor: preferences.accentColor, item: currentChoice.new, allTags: [],
+                        selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
                         missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use new") {

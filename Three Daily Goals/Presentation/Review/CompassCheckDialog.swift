@@ -16,14 +16,15 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 
 struct CompassCheckDialog: View {
 
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
     //    @State private var sheetHeight: CGFloat = .zero
 
     var body: some View {
         VStack {
 
             HStack {
-                Text("Daily Compass Check").font(.title).foregroundStyle(model.accentColor)
+                Text("Daily Compass Check").font(.title).foregroundStyle(preferences.accentColor)
                 Spacer()
                 Button(role: .cancel, action: model.cancelCompassCheck) {
                     Text("Cancel")
@@ -36,17 +37,17 @@ struct CompassCheckDialog: View {
 
             switch model.stateOfCompassCheck {
             case .inform:
-                CompassCheckInformView(model: model)
+                CompassCheckInformView()
             case .currentPriorities:
-                CompassCheckCurrentPriorities(model: model)
+                CompassCheckCurrentPriorities()
             case .pending:
-                CompassCheckPendingResponses(model: model)
+                CompassCheckPendingResponses()
             case .review:
-                CompassCheckNextPriorities(model: model)
+                CompassCheckNextPriorities()
             case .dueDate:
-                CompassCheckDueDate(model: model)
+                CompassCheckDueDate()
             case .plan:
-                CompassCheckPlanDay(model: model, date: getCompassCheckInterval().end)
+                CompassCheckPlanDay(date: getCompassCheckInterval().end)
             }
             Spacer()
         }.padding(4).frame(minHeight: 350, idealHeight: 600)
@@ -63,7 +64,6 @@ struct CompassCheckDialog: View {
 }
 
 #Preview {
-    let model = dummyViewModel()
-    model.stateOfCompassCheck = .review
-    return CompassCheckDialog(model: model)
+    CompassCheckDialog()
+        .environment(dummyViewModel())
 }

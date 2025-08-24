@@ -48,7 +48,7 @@ struct Three_Daily_GoalsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView(model: model)
+            MainView()
                 .navigationTitle("Three Daily Goals")
                 .onDisappear {
                     terminateApp()
@@ -86,7 +86,7 @@ struct Three_Daily_GoalsApp: App {
         }
         #if os(macOS)  // see Toolbar for iOS way
             Settings {
-                PreferencesView(model: model).frame(width: 450)
+                PreferencesView().frame(width: 450)
             }
         #endif
     }

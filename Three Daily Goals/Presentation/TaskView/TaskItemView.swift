@@ -10,7 +10,8 @@ import SwiftUI
 
 struct TaskItemView: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Bindable var model: TaskManagerViewModel
+    @Environment(DataManager.self) private var dataManager
+    @Environment(TaskManagerViewModel.self) private var model
     @Bindable var item: TaskItem
     @FocusState private var isTitleFocused: Bool
 
@@ -19,7 +20,7 @@ struct TaskItemView: View {
             InnerTaskItemView(
                 accentColor: preferences.accentColor,
                 item: item,
-                allTags: model.activeTags.asArray,
+                allTags: dataManager.activeTags.asArray,
                 selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
                 missingTagStyle: missingTagStyle,
                 showAttachmentImport: true
@@ -27,7 +28,7 @@ struct TaskItemView: View {
             
             AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .itemToolbar(model: model, item: item)
+        .itemToolbar(item: item)
         .onAppear(perform: {
             model.updateUndoRedoStatus()
             isTitleFocused = true
@@ -40,11 +41,15 @@ struct TaskItemView: View {
     let model = dummyViewModel()
 
     #if os(macOS)
-        return TaskItemView(model: model, item: model.dataManager.items.first()!).frame(width: 600, height: 600)
+        return TaskItemView(item: model.dataManager.items.first()!).frame(width: 600, height: 600)
             .environment(dummyPreferences())
+            .environment(DataManager.testManager())
+            .environment(model)
     #endif
     #if os(iOS)
-        return TaskItemView(model: model, item: model.dataManager.items.first()!)
+        return TaskItemView(item: model.dataManager.items.first()!)
             .environment(dummyPreferences())
+            .environment(DataManager.testManager())
+            .environment(model)
     #endif
 }

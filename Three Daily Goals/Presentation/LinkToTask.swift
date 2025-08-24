@@ -8,20 +8,20 @@
 import SwiftUI
 
 struct LinkToTask: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(UIStateManager.self) private var uiState
     @Bindable var item: TaskItem
     let list: TaskItemState
 
     var body: some View {
         if isLargeDevice {
-            TaskAsLine(item: item, model: model).onTapGesture {
-                model.select(which: list, item: item)
+            TaskAsLine(item: item).onTapGesture {
+                uiState.select(which: list, item: item)
             }.accessibilityIdentifier("linkToTask" + item.title)
         } else {
             ZStack {
-                TaskAsLine(item: item, model: model)
+                TaskAsLine(item: item)
                     .accessibilityIdentifier(item.id.description)
-                NavigationLink(destination: TaskItemView(model: model, item: item)) {
+                NavigationLink(destination: TaskItemView(item: item)) {
                     EmptyView()
                 }
                 .opacity(0)
@@ -35,5 +35,8 @@ struct LinkToTask: View {
     //@Previewable
     @State var model = dummyViewModel()
 
-    LinkToTask(model: model, item: model.dataManager.items.first ?? TaskItem(), list: .open)
+    LinkToTask(item: model.dataManager.items.first ?? TaskItem(), list: .open)
+        .environment(UIStateManager.testManager())
+        .environment(DataManager.testManager())
+        .environment(dummyPreferences())
 }

@@ -2,18 +2,19 @@
 //  LeftSideView.swift
 //  Three Daily Goals
 //
-//  Created by Klaus Kneupner on 07/01/2024.
+//  Created by Klaus Kneupner on 19/12/2023.
 //
 
 import SwiftUI
 
 struct LeftSideView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+
     var body: some View {
         VStack {
             #if os(iOS)
-                FullStreakView(model: model).frame(maxWidth: .infinity, alignment: .center)
-                    .standardToolbar(model: model, include: !isLargeDevice)
+                FullStreakView().frame(maxWidth: .infinity, alignment: .center)
+                    .standardToolbar(include: !isLargeDevice)
                 if isLargeDevice {
                     HStack {
                         Spacer()
@@ -32,14 +33,14 @@ struct LeftSideView: View {
                     }
                 }
             #endif
-            ListView(whichList: .priority, model: model)
+            ListView(whichList: .priority)
                 .padding(5)
             Spacer()
             VStack {
-                LinkToList(whichList: .open, model: model)
-                LinkToList(whichList: .pendingResponse, model: model)
-                LinkToList(whichList: .closed, model: model)
-                LinkToList(whichList: .dead, model: model)
+                LinkToList(whichList: .open)
+                LinkToList(whichList: .pendingResponse)
+                LinkToList(whichList: .closed)
+                LinkToList(whichList: .dead)
             }
             .padding(5)
             .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
@@ -49,5 +50,6 @@ struct LeftSideView: View {
 }
 
 #Preview {
-    LeftSideView(model: dummyViewModel())
+    LeftSideView()
+        .environment(dummyViewModel())
 }

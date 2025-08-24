@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TaskPreferencesView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
         VStack {
@@ -21,9 +22,12 @@ struct TaskPreferencesView: View {
                 Spacer()
                 Text("Expire after")
                 Stepper(
-                    value: $model.preferences.expiryAfter, in: 30...1040, step: 10,
+                    value: Binding(
+                        get: { preferences.expiryAfter },
+                        set: { preferences.expiryAfter = $0 }
+                    ), in: 30...1040, step: 10,
                     label: {
-                        Text("  " + model.preferences.expiryAfterString).foregroundColor(model.accentColor)
+                        Text("  " + preferences.expiryAfterString).foregroundColor(preferences.accentColor)
                     })
                 Text(" days.")
                 Spacer()
@@ -35,5 +39,6 @@ struct TaskPreferencesView: View {
 }
 
 #Preview {
-    TaskPreferencesView(model: dummyViewModel())
+    TaskPreferencesView()
+        .environment(dummyViewModel())
 }

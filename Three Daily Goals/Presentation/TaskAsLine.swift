@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct TaskAsLine: View {
+    @Environment(CloudPreferences.self) private var preferences
+    @Environment(DataManager.self) private var dataManager
+    @Environment(TaskManagerViewModel.self) private var model
     let item: TaskItem
-    @Bindable var model: TaskManagerViewModel
 
     var accentColor: Color {
-        return model.accentColor
+        return preferences.accentColor
     }
 
     var text: some View {
@@ -62,15 +64,9 @@ struct TaskAsLine: View {
     }
 }
 
-//struct TaskAsLineHelper : View {
-//    @State var
-//
-//    var body: some View {
-//        TaskAsLine(item: model.items.first!, model: model)
-//    }
-//}
-
 #Preview {
-    let model: TaskManagerViewModel = dummyViewModel()
-    TaskAsLine(item: model.dataManager.items.first!, model: model)
+    TaskAsLine(item: DataManager.testManager().items.first!)
+        .environment(DataManager.testManager())
+        .environment(dummyPreferences())
+        .environment(dummyViewModel())
 }

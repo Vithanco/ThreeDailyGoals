@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct CompassCheckPreferencesView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
 
     var lastCompassCheck: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
-        return dateFormatter.string(from: model.preferences.lastCompassCheck)
+        return dateFormatter.string(from: preferences.lastCompassCheck)
     }
 
     var body: some View {
@@ -33,10 +34,10 @@ struct CompassCheckPreferencesView: View {
             GroupBox {
                 HStack {
                     Text("Last Compass Check was:")
-                    Text(lastCompassCheck).foregroundColor(model.accentColor)
+                    Text(lastCompassCheck).foregroundColor(preferences.accentColor)
                 }.padding(5)
 
-                StreakView(model: model).padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
+                StreakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
 
                 Text("Current Compass Check Interval").bold()
                 HStack {
@@ -49,12 +50,15 @@ struct CompassCheckPreferencesView: View {
                 }
                 HStack {
                     Text("Done for this period: ")
-                    Text(model.preferences.didCompassCheckToday ? "yes" : "no")
+                    Text(preferences.didCompassCheckToday ? "yes" : "no")
                 }
             }
             GroupBox {
                 DatePicker(
-                    "Time of Compass Check Notification", selection: $model.preferences.compassCheckTime,
+                    "Time of Compass Check Notification", selection: Binding(
+                        get: { preferences.compassCheckTime },
+                        set: { preferences.compassCheckTime = $0 }
+                    ),
                     displayedComponents: .hourAndMinute
                 ).frame(maxWidth: 258).padding(5)
                 Button("Set Compass Check Time") {
@@ -76,5 +80,6 @@ struct CompassCheckPreferencesView: View {
 }
 
 #Preview {
-    CompassCheckPreferencesView(model: dummyViewModel())
+    CompassCheckPreferencesView()
+        .environment(dummyViewModel())
 }

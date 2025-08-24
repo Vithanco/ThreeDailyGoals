@@ -10,14 +10,15 @@ import SwiftUI
 
 private struct ListLabel: View {
     let whichList: TaskItemState
-    @Bindable var model: TaskManagerViewModel
+    @Environment(DataManager.self) private var dataManager
+    @Environment(CloudPreferences.self) private var preferences
 
     var name: Text {
         return whichList.section.asText
     }
 
     var count: Text {
-        return Text(model.list(which: whichList).count.description)
+        return Text(dataManager.list(which: whichList).count.description)
     }
 
     var body: some View {
@@ -30,34 +31,36 @@ private struct ListLabel: View {
         }.accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
             .dropDestination(for: String.self) {
                 items, location in
-                for item in items.compactMap({ model.findTask(withUuidString: $0) }) {
-                    model.move(task: item, to: whichList)
+                for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                    dataManager.move(task: item, to: whichList)
                 }
                 return true
             }
-            .foregroundStyle(model.accentColor)
+            .foregroundStyle(preferences.accentColor)
             .frame(maxWidth: .infinity)
     }
 }
 
 struct LinkToList: View {
     @State var whichList: TaskItemState
-    @Bindable var model: TaskManagerViewModel
+    @Environment(UIStateManager.self) private var uiState
+    @Environment(DataManager.self) private var dataManager
+    @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
         SingleView {
             if isLargeDevice {
-                ListLabel(whichList: whichList, model: model)
+                ListLabel(whichList: whichList)
                     .onTapGesture {
-                        model.select(which: whichList, item: model.list(which: whichList).first)
+                        uiState.select(which: whichList, item: dataManager.list(which: whichList).first)
                     }
             } else {
                 NavigationLink {
-                    ListView(whichList: whichList, model: model)
-                        .standardToolbar(model: model, include: !isLargeDevice)
+                    ListView(whichList: whichList)
+                        .standardToolbar(include: !isLargeDevice)
                 } label: {
-                    ListLabel(whichList: whichList, model: model)
-                        .foregroundStyle(model.accentColor)
+                    ListLabel(whichList: whichList)
+                        .foregroundStyle(preferences.accentColor)
                 }
             }
         }
@@ -65,5 +68,8 @@ struct LinkToList: View {
 }
 
 #Preview {
-    LinkToList(whichList: .open, model: dummyViewModel())
+    LinkToList(whichList: .open)
+        .environment(UIStateManager.testManager())
+        .environment(DataManager.testManager())
+        .environment(dummyPreferences())
 }

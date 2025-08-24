@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
     @State var time: Date = Date.now
 
     var body: some View {
         //        VStack{
         TabView {
-            CompassCheckPreferencesView(model: model)
+            CompassCheckPreferencesView()
                 .tabItem {
                     Label("Compass Check", systemImage: imgCompassCheck)
                 }
 
-            AppearancePreferencesView(model: model)
+            AppearancePreferencesView()
                 .tabItem {
                     Label("Appearance", systemImage: imAppearance)
                 }
 
-            TaskPreferencesView(model: model)
+            TaskPreferencesView()
                 .tabItem {
                     Label("Tasks", systemImage: "hand.raised")
                 }
-            TagsPreferencesView(model: model)
+            TagsPreferencesView()
                 .tabItem {
                     Label("Tags", systemImage: "tag.circle.fill")
                 }
@@ -44,5 +44,6 @@ struct PreferencesView: View {
 }
 
 #Preview {
-    PreferencesView(model: dummyViewModel())
+    PreferencesView()
+        .environment(dummyViewModel())
 }

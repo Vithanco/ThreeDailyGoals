@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct CompactMainView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
 
     var body: some View {
         NavigationStack {
-            LeftSideView(model: model).background(Color.background)
-                .navigationDestination(isPresented: $model.showItem) {
+            LeftSideView().background(Color.background)
+                .navigationDestination(isPresented: Binding(
+                    get: { model.showItem },
+                    set: { model.showItem = $0 }
+                )) {
                     if let item = model.selectedItem {
-                        TaskItemView(model: model, item: item)
+                        TaskItemView(item: item)
                     }
                 }
-                .mainToolbar(model: model)
+                .mainToolbar()
                 .toolbar {
                     ToolbarItem {
                         model.addNewItemButton
@@ -29,5 +32,6 @@ struct CompactMainView: View {
     }
 }
 #Preview {
-    CompactMainView(model: dummyViewModel())
+    CompactMainView()
+        .environment(dummyViewModel())
 }

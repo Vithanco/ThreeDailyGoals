@@ -11,7 +11,8 @@ import TagKit
 struct EditTag: View {
     @Binding var currentTagName: String
     @Binding var changeTo: String
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
 
     var displayCurrentTagName: String {
         if currentTagName == "private" {
@@ -49,7 +50,8 @@ struct EditTag: View {
 }
 
 struct TagsPreferencesView: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
     @State var tag: String = ""
     @State var changeTo: String = ""
     var body: some View {
@@ -60,7 +62,7 @@ struct TagsPreferencesView: View {
                         tags: model.allTags.asArray,
                         tagView: { text in
                             return TagCapsule(text)
-                                .tagCapsuleStyle(selectedTagStyle(accentColor: model.accentColor))
+                                .tagCapsuleStyle(selectedTagStyle(accentColor: preferences.accentColor))
                                 .onTapGesture(perform: {
                                     tag = text
                                     changeTo = text
@@ -69,12 +71,13 @@ struct TagsPreferencesView: View {
                     Spacer()
                 }
                 Spacer()
-                EditTag(currentTagName: $tag, changeTo: $changeTo, model: model)
+                EditTag(currentTagName: $tag, changeTo: $changeTo)
             }
         }.padding(10).frame(maxWidth: 400)
     }
 }
 
 #Preview {
-    TagsPreferencesView(model: dummyViewModel())
+    TagsPreferencesView()
+        .environment(dummyViewModel())
 }

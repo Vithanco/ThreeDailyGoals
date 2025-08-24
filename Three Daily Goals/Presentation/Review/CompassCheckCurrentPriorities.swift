@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct CompassCheckCurrentPriorities: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
 
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
@@ -16,10 +17,10 @@ struct CompassCheckCurrentPriorities: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Current Priority Tasks").font(.title2).foregroundStyle(model.accentColor).padding(5)
+                Text("Current Priority Tasks").font(.title2).foregroundStyle(preferences.accentColor).padding(5)
                 Text("Slide tasks to the left to close them.")
                 Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
-                ListView(whichList: .priority, model: model)
+                ListView(whichList: .priority)
             }.frame(minHeight: 300, idealHeight: 500)
             Button(action: { presentAlert = true }) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks.")
@@ -45,7 +46,6 @@ struct CompassCheckCurrentPriorities: View {
 }
 
 #Preview {
-    let model = dummyViewModel()
-    model.stateOfCompassCheck = .currentPriorities
-    return CompassCheckCurrentPriorities(model: model)
+    CompassCheckCurrentPriorities()
+        .environment(dummyViewModel())
 }

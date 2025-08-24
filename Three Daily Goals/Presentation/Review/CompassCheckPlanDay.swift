@@ -16,13 +16,13 @@ extension TaskItem {
 }
 
 struct CompassCheckPlanDay: View {
-    @Bindable var model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CloudPreferences.self) private var preferences
     let eventMgr = EventManager()
     @State var events: [any CalendarEventRepresentable]
     @State var date: Date
 
-    init(model: TaskManagerViewModel, date: Date) {
-        self.model = model
+    init(date: Date) {
         self._events = State(initialValue: eventMgr.events)
         self._date = State(initialValue: date)
     }
@@ -32,7 +32,7 @@ struct CompassCheckPlanDay: View {
             Text("This is under development and not yet working.").font(.title)
             Text(
                 "Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
-            ).font(.title2).foregroundStyle(model.accentColor).multilineTextAlignment(.center)
+            ).font(.title2).foregroundStyle(preferences.accentColor).multilineTextAlignment(.center)
             HStack {
                 SimpleCalendarView(
                     events: $events,
@@ -45,8 +45,7 @@ struct CompassCheckPlanDay: View {
                     headers: [ListHeader.all],
                     showHeaders: false,
                     section: secToday,
-                    id: TaskItemState.priority.getListAccessibilityIdentifier,
-                    model: model
+                    id: TaskItemState.priority.getListAccessibilityIdentifier
                 )
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {
@@ -67,9 +66,6 @@ struct CompassCheckPlanDay: View {
 
     // return Text ("in total: \(events.count)")
     let date = Date.today
-    let model = dummyViewModel()
-    if let first = model.priorityTasks.first {
-        model.move(task: first, to: .priority)
-    }
-    return CompassCheckPlanDay(model: model, date: date)
+    return CompassCheckPlanDay(date: date)
+        .environment(dummyViewModel())
 }

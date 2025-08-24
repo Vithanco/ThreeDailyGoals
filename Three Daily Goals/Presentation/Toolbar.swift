@@ -2,14 +2,13 @@
 //  Toolbar.swift
 //  Three Daily Goals
 //
-//  Created by Klaus Kneupner on 08/01/2024.
+//  Created by Klaus Kneupner on 19/12/2023.
 //
 
-import Foundation
 import SwiftUI
 
-struct MainToolbarContent: ToolbarContent {
-    let model: TaskManagerViewModel
+struct StandardToolbarContent: ToolbarContent {
+    @Environment(TaskManagerViewModel.self) private var model
 
     var body: some ToolbarContent {
         ToolbarItem {
@@ -27,8 +26,8 @@ struct MainToolbarContent: ToolbarContent {
     }
 }
 
-struct StandardToolbarContent: ToolbarContent {
-    let model: TaskManagerViewModel
+struct MainToolbarContent: ToolbarContent {
+    @Environment(TaskManagerViewModel.self) private var model
 
     var body: some ToolbarContent {
         ToolbarItem {
@@ -47,7 +46,7 @@ struct StandardToolbarContent: ToolbarContent {
 }
 
 struct ItemToolbarContent: ToolbarContent {
-    let model: TaskManagerViewModel
+    @Environment(TaskManagerViewModel.self) private var model
     let item: TaskItem
 
     var body: some ToolbarContent {
@@ -86,7 +85,6 @@ struct ItemToolbarContent: ToolbarContent {
 }
 
 struct StandardToolbarModifier: ViewModifier {
-    @Bindable var model: TaskManagerViewModel
     let include: Bool
 
     func body(content: Content) -> some View {
@@ -94,14 +92,13 @@ struct StandardToolbarModifier: ViewModifier {
             content
             .toolbar {
                 if include {
-                    StandardToolbarContent(model: model)
+                    StandardToolbarContent()
                 }
             }
     }
 }
 
 struct ItemToolbarModifier: ViewModifier {
-    @Bindable var model: TaskManagerViewModel
     let item: TaskItem
     let include: Bool
 
@@ -110,14 +107,13 @@ struct ItemToolbarModifier: ViewModifier {
             content
             .toolbar {
                 if include {
-                    ItemToolbarContent(model: model, item: item)
+                    ItemToolbarContent(item: item)
                 }
             }
     }
 }
 
 struct MainToolbarModifier: ViewModifier {
-    @Bindable var model: TaskManagerViewModel
     let include: Bool
 
     func body(content: Content) -> some View {
@@ -125,7 +121,7 @@ struct MainToolbarModifier: ViewModifier {
             content
             .toolbar {
                 if include {
-                    MainToolbarContent(model: model)
+                    MainToolbarContent()
                 }
             }
     }
@@ -134,16 +130,16 @@ struct MainToolbarModifier: ViewModifier {
 extension View {
 
     /// include parameter was necessary in order to prevent flooding of the same toolbar on all views when shown on an iPad
-    func standardToolbar(model: TaskManagerViewModel, include: Bool = true) -> some View {
-        return self.modifier(StandardToolbarModifier(model: model, include: include))
+    func standardToolbar(include: Bool = true) -> some View {
+        return self.modifier(StandardToolbarModifier(include: include))
     }
 
-    func itemToolbar(model: TaskManagerViewModel, item: TaskItem, include: Bool = true) -> some View {
-        return self.modifier(ItemToolbarModifier(model: model, item: item, include: include))
+    func itemToolbar(item: TaskItem, include: Bool = true) -> some View {
+        return self.modifier(ItemToolbarModifier(item: item, include: include))
     }
 
-    func mainToolbar(model: TaskManagerViewModel, include: Bool = true) -> some View {
-        return self.modifier(MainToolbarModifier(model: model, include: include))
+    func mainToolbar(include: Bool = true) -> some View {
+        return self.modifier(MainToolbarModifier(include: include))
     }
 
 }
