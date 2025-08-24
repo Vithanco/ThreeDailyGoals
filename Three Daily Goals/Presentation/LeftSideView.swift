@@ -27,7 +27,7 @@ struct LeftSideView: View {
                         items,
                         location in
                         for item in items.compactMap({ model.dataManager.findTask(withUuidString: $0) }) {
-                            model.move(task: item, to: .open)
+                            model.dataManager.moveWithPriorityTracking(task: item, to: .open)
                         }
                         return true
                     }

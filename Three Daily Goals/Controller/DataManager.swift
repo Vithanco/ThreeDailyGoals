@@ -12,7 +12,7 @@ import os
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
-    category: String(describing: DataManager.self)
+    category: "DataManager"
 )
 
 @MainActor
@@ -20,6 +20,7 @@ private let logger = Logger(
 final class DataManager {
     
     let modelContext: Storage
+    var priorityUpdater: PriorityUpdater?
     
     // Core data properties
     var items = [TaskItem]()
@@ -106,7 +107,7 @@ final class DataManager {
     }
     
     /// Move a task to a different state with priority tracking
-    func moveWithPriorityTracking(task: TaskItem, to state: TaskItemState, onPriorityChange: @escaping () -> Void) {
+    func moveWithPriorityTracking(task: TaskItem, to state: TaskItemState) {
         if task.state == state {
             return  // nothing to be done
         }
@@ -115,9 +116,9 @@ final class DataManager {
         // Update the task state
         move(task: task, to: state)
         
-        // Did it touch priorities (in or out)? If so, call the callback
+        // Did it touch priorities (in or out)? If so, update priorities
         if state == .priority || moveFromPriority {
-            onPriorityChange()
+            priorityUpdater?.updatePriorities()
         }
     }
     

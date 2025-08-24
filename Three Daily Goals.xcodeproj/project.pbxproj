@@ -90,6 +90,11 @@
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */; };
+		7FB357532E5B5010004581B7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357502E5B5010004581B7 /* CloudKitManager.swift */; };
+		7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357562E5B5020004581B7 /* PriorityUpdater.swift */; };
+	
+		
+		7FB357552E5B5010004581B7 /* OsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357522E5B5010004581B7 /* OsRelated.swift */; };
 		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
@@ -279,6 +284,11 @@
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckManager.swift; sourceTree = "<group>"; };
+		7FB357502E5B5010004581B7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		7FB357562E5B5020004581B7 /* PriorityUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityUpdater.swift; sourceTree = "<group>"; };
+	
+		
+		7FB357522E5B5010004581B7 /* OsRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsRelated.swift; sourceTree = "<group>"; };
 		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
@@ -619,6 +629,10 @@
 			isa = PBXGroup;
 			children = (
 				7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */,
+				7FB357502E5B5010004581B7 /* CloudKitManager.swift */,
+				7FB357562E5B5020004581B7 /* PriorityUpdater.swift */,
+
+
 				7F160E882E5AE6DF006ABEEE /* DataManager.swift */,
 				7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */,
 				7F20773E2E57C1F10030314A /* TaskManagerViewModel+Attachment.swift */,
@@ -685,6 +699,7 @@
 				7F2077482E59776E0030314A /* ImageRelated.swift */,
 				7F2077402E57C2B60030314A /* ByteRelated.swift */,
 				7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */,
+				7FB357522E5B5010004581B7 /* OsRelated.swift */,
 				E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */,
 				E5E1F47B2B30632000E83A21 /* DateRelated.swift */,
 				E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */,
@@ -1067,6 +1082,11 @@
 				7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */,
 				7FE813842E5444E100CEA462 /* SchemaV3_5.swift in Sources */,
 				7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */,
+				7FB357532E5B5010004581B7 /* CloudKitManager.swift in Sources */,
+				7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */,
+
+
+				7FB357552E5B5010004581B7 /* OsRelated.swift in Sources */,
 				7F7FE5FD2E43926700DA3DC0 /* TagRelated.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,

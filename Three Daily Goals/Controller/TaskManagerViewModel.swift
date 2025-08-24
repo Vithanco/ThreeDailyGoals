@@ -25,11 +25,7 @@ struct Choice {
 
 
 
-enum SupportedOS {
-    case iOS
-    case macOS
-    case ipadOS
-}
+
 
 //extension Notification: @unchecked Sendable {}
 
@@ -181,9 +177,7 @@ final class TaskManagerViewModel {
     }
 
     func move(task: TaskItem, to: TaskItemState) {
-        dataManager.moveWithPriorityTracking(task: task, to: to) {
-            self.updatePriorities()
-        }
+        dataManager.moveWithPriorityTracking(task: task, to: to)
     }
 
 

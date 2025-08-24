@@ -16,9 +16,9 @@ extension TaskManagerViewModel {
     func toggleButton(item: TaskItem) -> some View {
         return Button(action: {
             if item.state == .priority {
-                self.move(task: item, to: .open)
+                self.dataManager.moveWithPriorityTracking(task: item, to: .open)
             } else {
-                self.move(task: item, to: .priority)
+                self.dataManager.moveWithPriorityTracking(task: item, to: .priority)
             }
         }) {
             Label(
@@ -32,7 +32,7 @@ extension TaskManagerViewModel {
 
     func closeButton(item: TaskItem) -> some View {
         return Button(action: {
-            self.move(task: item, to: .closed)
+            self.dataManager.moveWithPriorityTracking(task: item, to: .closed)
         }) {
             Label("Close", systemImage: TaskItemState.closed.imageName).help("Close the task")
         }.accessibilityIdentifier("closeButton").disabled(!item.canBeClosed)
@@ -40,7 +40,7 @@ extension TaskManagerViewModel {
 
     func killButton(item: TaskItem) -> some View {
         return Button(action: {
-            self.move(task: item, to: .dead)
+            self.dataManager.moveWithPriorityTracking(task: item, to: .dead)
         }) {
             Label("Kill", systemImage: TaskItemState.dead.imageName).help(
                 "Move the task to the Graveyard")
@@ -49,7 +49,7 @@ extension TaskManagerViewModel {
 
     func openButton(item: TaskItem) -> some View {
         return Button(action: {
-            self.move(task: item, to: .open)
+            self.dataManager.moveWithPriorityTracking(task: item, to: .open)
         }) {
             Label("Open", systemImage: TaskItemState.open.imageName).help("Open this task again")
         }.accessibilityIdentifier("openButton").disabled(!item.canBeMovedToOpen)
@@ -57,7 +57,7 @@ extension TaskManagerViewModel {
 
     func waitForResponseButton(item: TaskItem) -> some View {
         return Button(action: {
-            self.move(task: item, to: .pendingResponse)
+            self.dataManager.moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
             Label("Pending a Response", systemImage: TaskItemState.pendingResponse.imageName).help(
                 "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
@@ -76,7 +76,7 @@ extension TaskManagerViewModel {
 
     func priorityButton(item: TaskItem) -> some View {
         return Button(action: {
-            self.move(task: item, to: .priority)
+            self.dataManager.moveWithPriorityTracking(task: item, to: .priority)
         }) {
             Image(systemName: imgToday).frame(width: 8, height: 8).help(
                 "Make this task a priority for today")

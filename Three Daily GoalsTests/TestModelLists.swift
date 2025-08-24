@@ -40,7 +40,7 @@ struct TestModelLists {
         let item = model.dataManager.items.first!
 
         func move(from: TaskItemState, to: TaskItemState) {
-            model.move(task: item, to: to)
+            model.dataManager.moveWithPriorityTracking(task: item, to: to)
             #expect(item.state == to)
                     #expect(model.dataManager.list(which: to).contains(item))
         #expect(!model.dataManager.list(which: from).contains(item))
