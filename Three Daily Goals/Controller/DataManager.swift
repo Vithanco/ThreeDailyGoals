@@ -176,6 +176,69 @@ final class DataManager {
         save()
     }
     
+    /// Touch a task (update its changed date)
+    func touch(task: TaskItem) {
+        task.touch()
+        save()
+    }
+    
+    /// Remove a task from the data manager
+    func remove(task: TaskItem) {
+        items.removeObject(task)
+        lists[task.state]?.removeObject(task)
+        deleteTask(task)
+    }
+    
+    /// Remove a task by ID
+    func removeItem(withID: String) {
+        if let item = items.first(where: { $0.id == withID }) {
+            remove(task: item)
+        }
+    }
+    
+    /// Kill old tasks that are older than the specified number of days
+    @discardableResult func killOldTasks(expireAfter: Int? = nil, preferences: CloudPreferences) -> Int {
+        var result = 0
+        let expiryDays = expireAfter ?? preferences.expiryAfter
+        let expireData = getDate(daysPrior: expiryDays)
+        result += killOldTasks(expiryDate: expireData, whichList: .open)
+        result += killOldTasks(expiryDate: expireData, whichList: .priority)
+        result += killOldTasks(expiryDate: expireData, whichList: .pendingResponse)
+        logger.info("killed \(result) tasks")
+        return result
+    }
+    
+    /// Kill old tasks in a specific list that are older than the expiry date
+    func killOldTasks(expiryDate: Date, whichList: TaskItemState) -> Int {
+        let theList = list(which: whichList)
+        var result = 0
+        for task in theList where task.changed < expiryDate {
+            move(task: task, to: .dead)
+            result += 1
+        }
+        return result
+    }
+    
+    /// Create sample data for testing/development
+    func createSampleData() {
+        let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
+        let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
+        let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
+        let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
+        let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
+        let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
+        
+        move(task: lastWeek1, to: .priority)
+        createTask(title: lastWeek1.title, state: lastWeek1.state)
+        createTask(title: lastWeek2.title, state: lastWeek2.state)
+        createTask(title: lastMonth1.title, state: lastMonth1.state)
+        createTask(title: lastMonth2.title, state: lastMonth2.state)
+        createTask(title: older1.title, state: older1.state)
+        createTask(title: older2.title, state: older2.state)
+    }
+    
+
+    
     /// Archive completed tasks older than specified days
     func archiveCompletedTasks(olderThan days: Int) {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
@@ -262,6 +325,64 @@ final class DataManager {
         } catch {
             logger.error("Failed to load tasks: \(error)")
         }
+    }
+    
+    /// Merge data from central storage (CloudKit)
+    func mergeDataFromCentralStorage() {
+        processPendingChanges()
+        do {
+            let descriptor = FetchDescriptor<TaskItem>(sortBy: [
+                SortDescriptor(\.changed, order: .forward)
+            ])
+            let fetchedItems = try modelContext.fetch(descriptor)
+            let (added, updated) = mergeItems(fetchedItems)
+
+            logger.info(
+                "fetched \(fetchedItems.count) tasks from central store, added \(added), updated \(updated)")
+            // Organize lists after merging
+            organizeLists()
+            ensureEveryItemHasAUniqueUuid()
+
+        } catch {
+            logger.error("Fetch failed: \(error)")
+        }
+    }
+    
+    /// Merge fetched items with existing items
+    private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
+        var seenIDs = Set<UUID>()
+        let adjustedItems = fetchedItems.map { item -> TaskItem in
+            if seenIDs.contains(item.uuid) {
+                let newItem = item
+                newItem.uuid = UUID()
+                return newItem
+            }
+            seenIDs.insert(item.uuid)
+            return item
+        }
+        
+        var addedCount = 0
+        var updatedCount = 0
+
+        // Create a dictionary of existing items by ID for quick lookup
+        var existingItemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+
+        for fetchedItem in adjustedItems {
+            if let existingItem = existingItemsById[fetchedItem.id] {
+                // Item exists, check if it needs updating
+                if fetchedItem.changed > existingItem.changed {
+                    existingItem.updateFrom(fetchedItem)
+                    updatedCount = updatedCount + 1
+                }
+            } else {
+                // New item, add it
+                items.append(fetchedItem)
+                existingItemsById[fetchedItem.id] = fetchedItem
+                addedCount = addedCount + 1
+            }
+        }
+        
+        return (addedCount, updatedCount)
     }
     
     /// Organize items into lists by state
@@ -440,6 +561,55 @@ final class DataManager {
             task.tags = Array(remainingTags)
         }
         save()
+    }
+    
+    // MARK: - Tag Management
+    
+    /// Get statistics for a specific tag across all states
+    func statsForTags(tag: String) -> [TaskItemState: Int] {
+        var result: [TaskItemState: Int] = [:]
+        for state in TaskItemState.allCases {
+            result[state] = statsForTags(tag: tag, which: state)
+        }
+        return result
+    }
+    
+    /// Get count of tasks with a specific tag in a specific state
+    func statsForTags(tag: String, which state: TaskItemState) -> Int {
+        let list = self.list(which: state)
+        var result = 0
+        for item in list where item.tags.contains(tag) {
+            result += 1
+        }
+        return result
+    }
+    
+    /// Exchange one tag for another across all tasks
+    func exchangeTag(from: String, to: String) {
+        for item in items {
+            item.tags = item.tags.map { $0 == from ? to : $0 }
+        }
+        save()
+    }
+    
+    /// Delete a specific tag from all tasks
+    func delete(tag: String) {
+        if tag.isEmpty {
+            return
+        }
+        for item in items {
+            item.tags = item.tags.filter { $0 != tag }
+        }
+        save()
+    }
+    
+    /// Get all tags used across all tasks
+    var allTags: Set<String> {
+        var result = Set<String>()
+        for task in items where !task.tags.isEmpty {
+            result.formUnion(task.tags)
+        }
+        return result
     }
 }
 

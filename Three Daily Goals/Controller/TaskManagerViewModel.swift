@@ -164,20 +164,7 @@ final class TaskManagerViewModel {
     }
     
     func addSamples() -> Self {
-        let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
-        let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
-        let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
-        let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
-        let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
-        let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
-        move(task: lastWeek1, to: .priority)
-        dataManager.createTask(title: lastWeek1.title, state: lastWeek1.state)
-        dataManager.createTask(title: lastWeek2.title, state: lastWeek2.state)
-        dataManager.createTask(title: lastMonth1.title, state: lastMonth1.state)
-        dataManager.createTask(title: lastMonth2.title, state: lastMonth2.state)
-        dataManager.createTask(title: older1.title, state: older1.state)
-        dataManager.createTask(title: older2.title, state: older2.state)
-
+        dataManager.createSampleData()
         callFetch()
         return self
     }
@@ -192,68 +179,12 @@ final class TaskManagerViewModel {
         dataManager.lists[t]?.sort(by: t.sorter)
     }
 
-    fileprivate func ensureEveryItemHasAUniqueUuid() {
-        var _: Set<UUID> = []
-        // This is now handled by DataManager
-        dataManager.loadData()
-    }
+
 
     @MainActor
     func mergeDataFromCentralStorage() {
-        dataManager.processPendingChanges()
-        do {
-            let descriptor = FetchDescriptor<TaskItem>(sortBy: [
-                SortDescriptor(\.changed, order: .forward)
-            ])
-            let fetchedItems = try dataManager.modelContext.fetch(descriptor)
-            let (added, updated) = mergeItems(fetchedItems)
-
-            logger.info(
-                "fetched \(fetchedItems.count) tasks from central store, added \(added), updated \(updated)")
-            // This is now handled by DataManager
-            dataManager.organizeLists()
-            ensureEveryItemHasAUniqueUuid()
-            updateUndoRedoStatus()
-
-        } catch {
-            print("Fetch failed")
-        }
-    }
-
-    private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
-        var seenIDs = Set<UUID>()
-        let adjustedItems = fetchedItems.map { item -> TaskItem in
-            if seenIDs.contains(item.uuid) {
-                let newItem = item
-                newItem.uuid = UUID()
-                return newItem
-            }
-            seenIDs.insert(item.uuid)
-            return item
-        }
-        
-        var addedCount = 0
-        var updatedCount = 0
-
-        // Create a dictionary of existing items by ID for quick lookup
-        var existingItemsById = Dictionary(uniqueKeysWithValues: dataManager.items.map { ($0.id, $0) })
-
-        for fetchedItem in adjustedItems {
-            if let existingItem = existingItemsById[fetchedItem.id] {
-                // Item exists, check if it needs updating
-                if fetchedItem.changed > existingItem.changed {
-                    existingItem.updateFrom(fetchedItem)
-                    updatedCount = updatedCount + 1
-                }
-            } else {
-                // New item, add it
-                dataManager.items.append(fetchedItem)
-                existingItemsById[fetchedItem.id] = fetchedItem
-                addedCount = addedCount + 1
-            }
-        }
-        
-        return (addedCount, updatedCount)
+        dataManager.mergeDataFromCentralStorage()
+        updateUndoRedoStatus()
     }
 
     @discardableResult func addItem(
@@ -346,12 +277,14 @@ final class TaskManagerViewModel {
         return dataManager.findTask(withUuidString: withID)
     }
 
+
+
     func findTask(withUuidString: String) -> TaskItem? {
         return dataManager.findTask(withUuidString: withUuidString)
     }
 
     func touch(task: TaskItem) {
-        task.touch()
+        dataManager.touch(task: task)
         updateUndoRedoStatus()
     }
 
@@ -405,41 +338,12 @@ final class TaskManagerViewModel {
         preferences.resetAccentColor()
     }
 
-    @discardableResult func killOldTasks(expireAfter: Int? = nil) -> Int {
-        var result = 0
-        let expiryDays = expireAfter ?? preferences.expiryAfter
-        let expireData = getDate(daysPrior: expiryDays)
-        result += killOldTasks(expiryDate: expireData, whichList: .open)
-        result += killOldTasks(expiryDate: expireData, whichList: .priority)
-        result += killOldTasks(expiryDate: expireData, whichList: .pendingResponse)
-        logger.info("killed \(result) tasks")
-        return result
-    }
-
-    func killOldTasks(expiryDate: Date, whichList: TaskItemState) -> Int {
-        let theList = list(which: whichList)
-        var result = 0
-        for task in theList where task.changed < expiryDate {
-            move(task: task, to: .dead)
-            result += 1
-        }
-        return result
-    }
-
     func remove(item: TaskItem) {
-        dataManager.items.removeObject(item)
-        dataManager.lists[item.state]?.removeObject(item)
-        dataManager.deleteTask(item)
+        dataManager.remove(task: item)
     }
 
     func showPreferences() {
         uiState.showSettingsDialog = true
-    }
-
-    func removeItem(withID: String) {
-        if let item = dataManager.items.first(where: { $0.id == withID }) {
-            remove(item: item)
-        }
     }
 }
 
@@ -522,43 +426,24 @@ extension TaskManagerViewModel {
     }
     
     var allTags: Set<String> {
-        var result = Set<String>()
-        for t in dataManager.items where !t.tags.isEmpty {
-            result.formUnion(t.tags)
-        }
+        var result = dataManager.allTags
         result.formUnion(["work", "private"])
         return result
     }
 
     func statsForTags(tag: String) -> [TaskItemState: Int] {
-        var result: [TaskItemState: Int] = [:]
-        for t in TaskItemState.allCases {
-            result[t] = statsForTags(tag: tag, which: t)
-        }
-        return result
+        return dataManager.statsForTags(tag: tag)
     }
 
     func statsForTags(tag: String, which: TaskItemState) -> Int {
-        let list = self.list(which: which)
-        var result = 0
-        for item in list where item.tags.contains(tag) {
-            result += 1
-        }
-        return result
+        return dataManager.statsForTags(tag: tag, which: which)
     }
 
     func exchangeTag(from: String, to: String) {
-        for item in dataManager.items {
-            item.tags = item.tags.map { $0 == from ? to : $0 }
-        }
+        dataManager.exchangeTag(from: from, to: to)
     }
 
     func delete(tag: String) {
-        if tag.isEmpty {
-            return
-        }
-        for item in dataManager.items {
-            item.tags = item.tags.filter { $0 != tag }
-        }
+        dataManager.delete(tag: tag)
     }
 }

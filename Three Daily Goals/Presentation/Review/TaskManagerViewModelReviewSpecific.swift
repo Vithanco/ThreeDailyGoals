@@ -122,7 +122,7 @@ extension TaskManagerViewModel {
         }
 
         updateUndoRedoStatus()
-        killOldTasks()
+        dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
     }
 
     func waitABit() {
