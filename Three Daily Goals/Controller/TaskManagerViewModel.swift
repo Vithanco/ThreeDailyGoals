@@ -67,11 +67,13 @@ final class TaskManagerViewModel {
 func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil)
     -> TaskManagerViewModel
 {
-    let appManager = AppManager.createForTesting(loader: loader, preferences: preferences)
+    // Note: This function is kept for backward compatibility with tests and previews
+    // In the future, these should be updated to use setupApp(isTesting: true) directly
+    let appComponents = setupApp(isTesting: true)
     return TaskManagerViewModel(
-        modelContext: appManager.modelContext, 
-        preferences: appManager.preferences, 
-        uiState: appManager.uiState,
+        modelContext: appComponents.modelContext, 
+        preferences: appComponents.preferences, 
+        uiState: appComponents.uiState,
         isTesting: true)
 }
 
