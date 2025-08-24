@@ -137,7 +137,9 @@ struct TestReview {
         pref.lastCompassCheck = getCompassCheckInterval().start.addingTimeInterval(1)
         #expect(model.preferences.didCompassCheckToday)
 
-        pref.lastCompassCheck = m25
+        // Set lastCompassCheck to a time outside the current compass check interval
+        let currentInterval = getCompassCheckInterval()
+        pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600) // 1 hour before interval
         #expect(!model.preferences.didCompassCheckToday)
         #expect(!pref.lastCompassCheck.isToday)
     }
@@ -153,7 +155,9 @@ struct TestReview {
         let model = dummyViewModel(preferences: dummyPreferences())
         let pref = model.preferences
 
-        pref.lastCompassCheck = m24
+        // Set lastCompassCheck to a time within the current compass check interval
+        let currentInterval = getCompassCheckInterval()
+        pref.lastCompassCheck = currentInterval.start.addingTimeInterval(1)
         #expect(pref.didCompassCheckToday)
         #expect(model.preferences.didCompassCheckToday)
 
@@ -165,7 +169,9 @@ struct TestReview {
         let model = dummyViewModel(preferences: dummyPreferences())
         let pref = model.preferences
 
-        pref.lastCompassCheck = m25
+        // Set lastCompassCheck to a time outside the current compass check interval
+        let currentInterval = getCompassCheckInterval()
+        pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600) // 1 hour before interval
         #expect(!pref.didCompassCheckToday)
 
         #expect(pref.daysOfCompassCheck == 42)
