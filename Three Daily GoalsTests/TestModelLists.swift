@@ -27,7 +27,7 @@ struct TestModelLists {
     @Test
     func testNewItem() throws {
         let model = dummyViewModel()
-        let new = model.addAndSelect()
+        let new = model.dataManager.addAndSelect()
         #expect(new.state == .open)
     }
 

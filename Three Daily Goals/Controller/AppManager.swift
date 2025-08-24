@@ -1,38 +1,24 @@
-//
-//  ContentViewModel.swift
-//  Three Daily Goals
-//
-//  Created by Klaus Kneupner on 29/12/2023.
-//
-
-import CloudKit
-import CoreData
 import Foundation
-import SwiftData
 import SwiftUI
-import TagKit
+import SwiftData
 
 @MainActor
 @Observable
-final class TaskManagerViewModel {
-    var isTesting: Bool = false
-
-    // Import/Export
-    var jsonExportDoc: JSONWriteOnlyDoc?
-
-    var preferences: CloudPreferences
-    var uiState: UIStateManager
-    var dataManager: DataManager
-    var compassCheckManager: CompassCheckManager!
-    var cloudKitManager: CloudKitManager!
+final class AppManager {
+    let modelContext: Storage
+    let preferences: CloudPreferences
+    let uiState: UIStateManager
+    let dataManager: DataManager
+    let cloudKitManager: CloudKitManager
+    let compassCheckManager: CompassCheckManager
     
-
-
     init(modelContext: Storage, preferences: CloudPreferences, uiState: UIStateManager, isTesting: Bool = false) {
+        self.modelContext = modelContext
         self.preferences = preferences
         self.uiState = uiState
+        
+        // Initialize DataManager
         self.dataManager = DataManager(modelContext: modelContext)
-        self.isTesting = isTesting
         
         // Load initial data
         dataManager.loadData()
@@ -45,35 +31,21 @@ final class TaskManagerViewModel {
         // Set up dependency injection for priority updates
         dataManager.priorityUpdater = cloudKitManager
         
-        // Set up dependency injection for item selection
-        dataManager.itemSelector = uiState
-        
         // Initialize CompassCheckManager
         self.compassCheckManager = CompassCheckManager(dataManager: dataManager, uiState: uiState, preferences: preferences, isTesting: isTesting)
         
+        // Set up preferences change handler
         preferences.onChange = compassCheckManager.onPreferencesChange
         compassCheckManager.setupCompassCheckNotification()
     }
-
-
-
-
-
-
-
+    
+    // Factory method for testing
+    static func createForTesting(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppManager {
+        let testStorage = loader == nil ? TestStorage() : TestStorage(loader: loader!)
+        return AppManager(
+            modelContext: testStorage, 
+            preferences: preferences ?? dummyPreferences(), 
+            uiState: UIStateManager(),
+            isTesting: true)
+    }
 }
-
-@MainActor
-func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil)
-    -> TaskManagerViewModel
-{
-    let appManager = AppManager.createForTesting(loader: loader, preferences: preferences)
-    return TaskManagerViewModel(
-        modelContext: appManager.modelContext, 
-        preferences: appManager.preferences, 
-        uiState: appManager.uiState,
-        isTesting: true)
-}
-
-
-

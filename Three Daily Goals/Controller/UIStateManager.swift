@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class UIStateManager {
+final class UIStateManager: @preconcurrency ItemSelector {
     
     // MARK: - Navigation State
     

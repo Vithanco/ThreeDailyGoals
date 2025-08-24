@@ -94,7 +94,7 @@ struct MainView: View {
                     // Ensure we have permission to access the file
                     let gotAccess = url.startAccessingSecurityScopedResource()
                     if gotAccess {
-                        // TODO: Implement import functionality
+                        model.importTasks(url: url)
                         // Remember to release the file access when done
                         url.stopAccessingSecurityScopedResource()
                     }

@@ -33,7 +33,7 @@ struct TestReview {
         model.compassCheckManager.moveStateForward()
         #expect(model.compassCheckManager.state.rawValue == "review")
         model.compassCheckManager.moveStateForward()
-        if model.os == .macOS {
+        if OsRelated.currentOS == .macOS {
             #expect(model.compassCheckManager.state.rawValue == "plan")
             model.compassCheckManager.moveStateForward()
         }

@@ -16,8 +16,7 @@ struct Three_Daily_GoalsApp: App {
 
     var container: ModelContainer
     let calendarManager = CalendarManager()
-    @State var model: TaskManagerViewModel
-    let uiState = UIStateManager()
+    @State var appComponents: AppComponents
 
     init() {
         var enableTesting = false
@@ -29,23 +28,15 @@ struct Three_Daily_GoalsApp: App {
                 enableTesting = true
             }
         #endif
-        self.container = sharedModelContainer(inMemory: enableTesting, withCloud: true)  // enableTesting -> inMemory
-        if enableTesting {
-            self._model = State(wrappedValue: dummyViewModel())
-        } else {
-            self._model = State(
-                wrappedValue: TaskManagerViewModel(
-                    modelContext: container.mainContext, 
-                    preferences: CloudPreferences(testData: false),
-                    uiState: uiState,
-                    isTesting: false))  // enableTesting -> testData
-        }
+        self.container = sharedModelContainer(inMemory: enableTesting, withCloud: true)
+        
+        // Set up app components
+        self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
 
         guard calendarManager.hasCalendarAccess else {
             debugPrint("No calendar access available")
             return
         }
-
     }
 
     var body: some Scene {
@@ -61,28 +52,28 @@ struct Three_Daily_GoalsApp: App {
                 }
         }
         .modelContainer(container)
-        .environment(model)
         .environment(calendarManager)
-        .environment(model.preferences)
-        .environment(uiState)
-        .environment(model.dataManager)
+        .environment(appComponents.preferences)
+        .environment(appComponents.uiState)
+        .environment(appComponents.dataManager)
         .commands {
+            let commands = AppCommands(appComponents: appComponents)
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport) {
-                model.exportButton
-                model.importButton
-                model.statsDialog
+                commands.exportButton
+                commands.importButton
+                commands.statsDialog
             }
             CommandGroup(replacing: .undoRedo) {
-                model.undoButton
-                model.redoButton
+                commands.undoButton
+                commands.redoButton
             }
             CommandGroup(replacing: .newItem) {
-                model.addNewItemButton
+                commands.addNewItemButton
                     .keyboardShortcut("n", modifiers: [.command])
             }
             CommandMenu("Three Daily Goals") {
-                model.compassCheckButton
+                commands.compassCheckButton
                     .keyboardShortcut("r", modifiers: [.command])
             }
         }
@@ -104,9 +95,9 @@ struct Three_Daily_GoalsApp: App {
         let reviewTask = TaskItem()
         reviewTask.title = "review" + url.lastPathComponent
         reviewTask.url = url.absoluteString
-        model.dataManager.addItem(item: reviewTask)
-        model.uiState.infoMessage = "Review Task added from \(url)"
-        model.uiState.showInfoMessage = true
+        appComponents.dataManager.addItem(item: reviewTask)
+        appComponents.uiState.infoMessage = "Review Task added from \(url)"
+        appComponents.uiState.showInfoMessage = true
     }
 
 }

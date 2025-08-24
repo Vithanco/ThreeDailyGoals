@@ -21,6 +21,7 @@ final class DataManager {
     
     let modelContext: Storage
     var priorityUpdater: PriorityUpdater?
+    var itemSelector: ItemSelector?
     
     // Core data properties
     var items = [TaskItem]()
@@ -321,6 +322,23 @@ final class DataManager {
         } else {
             return newItem
         }
+    }
+    
+    /// Call fetch to update data
+    func callFetch() {
+        mergeDataFromCentralStorage()
+    }
+    
+    /// Add a new task and select it
+    @discardableResult func addAndSelect(
+        title: String = emptyTaskTitle,
+        details: String = emptyTaskDetails,
+        changedDate: Date = Date.now,
+        state: TaskItemState = .open
+    ) -> TaskItem {
+        let item = addAndFindItem(title: title, details: details, changedDate: changedDate, state: state)
+        itemSelector?.select(item)
+        return item
     }
     
 

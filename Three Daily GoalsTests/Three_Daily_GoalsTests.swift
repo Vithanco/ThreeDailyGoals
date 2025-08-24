@@ -46,7 +46,7 @@ struct Three_Daily_GoalsTests {
         XCTAssertTrue(!model.canUndo)
         XCTAssertTrue(!model.canRedo)
         model.dataManager.beginUndoGrouping()
-        let item = model.addAndSelect()
+        let item = model.dataManager.addAndSelect()
         //        #expect(item.comments!.count, 0, "No comments yet")
         //        #expect(0,try context.fetchCount(descriptor))
         model.dataManager.touchAndUpdateUndoStatus(task: item)
@@ -97,8 +97,8 @@ struct Three_Daily_GoalsTests {
 
     //  @Test
     func testTaskITemID() throws {
-        let task1 = model.addAndSelect()
-        let task2 = model.addAndSelect()
+        let task1 = model.dataManager.addAndSelect()
+        let task2 = model.dataManager.addAndSelect()
         XCTAssertTrue(task1.id != task2.id)
 
         let id1 = task1.id

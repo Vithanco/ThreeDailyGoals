@@ -105,7 +105,7 @@ extension TaskManagerViewModel {
         }) {
             Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help(
                 "undo an action")
-        }.disabled(!canUndo)
+        }.disabled(!dataManager.canUndo)
             .keyboardShortcut("z", modifiers: [.command])
     }
 
@@ -118,7 +118,7 @@ extension TaskManagerViewModel {
         }) {
             Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help(
                 "redo an action")
-        }.disabled(!canRedo)
+        }.disabled(!dataManager.canRedo)
             .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
 

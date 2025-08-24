@@ -43,7 +43,7 @@ struct LeftSideView: View {
                 LinkToList(whichList: .dead)
             }
             .padding(5)
-            .background(model.isProductionEnvironment ? Color.clear : Color.yellow)
+                            .background(model.cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
