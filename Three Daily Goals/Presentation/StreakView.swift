@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct StreakView: View {
+    @Environment(CloudPreferences.self) private var preferences
     @Bindable var model: TaskManagerViewModel
+    
     var body: some View {
-        Text("\(Image(systemName: imgStreak)) \(model.preferences.streakText)").foregroundStyle(Color.red)
+        Text("\(Image(systemName: imgStreak)) \(preferences.streakText)").foregroundStyle(Color.red)
     }
 }
 
 struct FullStreakView: View {
+    @Environment(CloudPreferences.self) private var preferences
     @Bindable var model: TaskManagerViewModel
+    
     var body: some View {
         GroupBox {
             HStack {
@@ -28,4 +32,5 @@ struct FullStreakView: View {
 
 #Preview {
     StreakView(model: dummyViewModel())
+        .environment(dummyPreferences())
 }

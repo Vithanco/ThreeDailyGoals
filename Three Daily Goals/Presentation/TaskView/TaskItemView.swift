@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct TaskItemView: View {
+    @Environment(CloudPreferences.self) private var preferences
     @Bindable var model: TaskManagerViewModel
     @Bindable var item: TaskItem
     @FocusState private var isTitleFocused: Bool
@@ -16,10 +17,10 @@ struct TaskItemView: View {
     var body: some View {
         VStack {
             InnerTaskItemView(
-                accentColor: model.accentColor,
+                accentColor: preferences.accentColor,
                 item: item,
                 allTags: model.activeTags.asArray,
-                selectedTagStyle: selectedTagStyle(accentColor: model.accentColor),
+                selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
                 missingTagStyle: missingTagStyle,
                 showAttachmentImport: true
             )
@@ -40,8 +41,10 @@ struct TaskItemView: View {
 
     #if os(macOS)
         return TaskItemView(model: model, item: model.items.first()!).frame(width: 600, height: 600)
+            .environment(dummyPreferences())
     #endif
     #if os(iOS)
         return TaskItemView(model: model, item: model.items.first()!)
+            .environment(dummyPreferences())
     #endif
 }
