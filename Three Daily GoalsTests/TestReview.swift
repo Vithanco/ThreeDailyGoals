@@ -44,10 +44,10 @@ struct TestReview {
         }
         #expect(model.dueDateSoon.isEmpty)
 
-        #expect(!model.showCompassCheckDialog)
+        #expect(!model.uiState.showCompassCheckDialog)
         model.startCompassCheckNow()
 
-        #expect(model.showCompassCheckDialog)
+        #expect(model.uiState.showCompassCheckDialog)
         #expect(model.stateOfCompassCheck == .inform)
 
         #expect(model.dueDateSoon.isEmpty)
@@ -69,10 +69,10 @@ struct TestReview {
         model.moveStateForward()
         #expect(model.stateOfCompassCheck == .inform)
         #expect(pref.daysOfCompassCheck == 1)
-        #expect(!model.showCompassCheckDialog)
+        #expect(!model.uiState.showCompassCheckDialog)
 
         model.startCompassCheckNow()
-        #expect(model.showCompassCheckDialog)
+        #expect(model.uiState.showCompassCheckDialog)
         #expect(model.stateOfCompassCheck == .inform)
         #expect(model.list(which: .priority).count == 0)
         model.moveStateForward()

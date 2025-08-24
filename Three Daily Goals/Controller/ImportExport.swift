@@ -26,12 +26,12 @@ extension TaskManagerViewModel {
 
             // Write the data to the file
             try data.write(to: url)
-            self.infoMessage = "The tasks were exported and saved as JSON to \(url)"
+            self.uiState.infoMessage = "The tasks were exported and saved as JSON to \(url)"
         } catch {
-            self.infoMessage = "The tasks weren't exported because: \(error)"
+            self.uiState.infoMessage = "The tasks weren't exported because: \(error)"
         }
-        logger.info("\(self.infoMessage)")
-        self.showInfoMessage = true
+        logger.info("\(self.uiState.infoMessage)")
+        self.uiState.showInfoMessage = true
     }
 
     /// url contains the URL of the chosen file.
@@ -51,16 +51,16 @@ extension TaskManagerViewModel {
                     addItem(item: item)
                 }
             }
-            self.selectDuringImport = choices
-            showSelectDuringImportDialog = true
-            self.infoMessage = "\(jsonData.count) tasks were imported."
+            self.uiState.selectDuringImport = choices
+            self.uiState.showSelectDuringImportDialog = true
+            self.uiState.infoMessage = "\(jsonData.count) tasks were imported."
         } catch {
-            self.infoMessage = "The tasks weren't imported because :\(error)"
+            self.uiState.infoMessage = "The tasks weren't imported because :\(error)"
         }
 
         endUndoGrouping()
-        logger.info("\(self.infoMessage)")
-        self.showInfoMessage = true
+        logger.info("\(self.uiState.infoMessage)")
+        self.uiState.showInfoMessage = true
     }
 }
 

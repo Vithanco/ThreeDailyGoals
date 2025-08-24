@@ -21,7 +21,10 @@ struct Three_Daily_GoalsTests {
     init() {
         context = sharedModelContainer(inMemory: true, withCloud: false).mainContext
         model = TaskManagerViewModel(
-            modelContext: context, preferences: CloudPreferences(testData: true), isTesting: true)
+            modelContext: context, 
+            preferences: CloudPreferences(testData: true), 
+            uiState: UIStateManager(),
+            isTesting: true)
     }
 
     // @Test

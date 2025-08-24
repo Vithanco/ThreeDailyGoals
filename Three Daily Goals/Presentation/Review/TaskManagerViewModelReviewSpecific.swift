@@ -79,12 +79,12 @@ extension TaskManagerViewModel {
     }
 
     func cancelCompassCheck() {
-        showCompassCheckDialog = false
+        uiState.showCompassCheckDialog = false
         stateOfCompassCheck = .inform
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
-        showCompassCheckDialog = false
+        uiState.showCompassCheckDialog = false
         stateOfCompassCheck = .inform
         debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
         debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
@@ -141,9 +141,9 @@ extension TaskManagerViewModel {
 
     func startCompassCheckNow() {
         preferences.setStreakText()
-        if !showCompassCheckDialog && stateOfCompassCheck == .inform {
+        if !uiState.showCompassCheckDialog && stateOfCompassCheck == .inform {
             debugPrint("start compass check \(Date.now)")
-            showCompassCheckDialog = true
+            uiState.showCompassCheckDialog = true
         }
     }
 
@@ -163,23 +163,23 @@ extension TaskManagerViewModel {
 
     func setupCompassCheckNotification(when: Date? = nil) {
         scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
-        if showCompassCheckDialog {
+        if uiState.showCompassCheckDialog {
             return
         }
         if isTesting {
             return
         }
-        if showInfoMessage || showExportDialog || showImportDialog || showSettingsDialog || showNewItemNameDialog {
+        if uiState.showInfoMessage || showExportDialog || showImportDialog || uiState.showSettingsDialog || uiState.showNewItemNameDialog {
             waitABit()
         }
         let time = when ?? nextRegularCompassCheckTime
 
-        showCompassCheckDialog = false
+        uiState.showCompassCheckDialog = false
         timer.setTimer(forWhen: time) {
 
             Task {
                 do {
-                    if await self.showCompassCheckDialog {
+                    if await self.uiState.showCompassCheckDialog {
                         return
                     }
                     if await !self.preferences.didCompassCheckToday {
@@ -193,6 +193,6 @@ extension TaskManagerViewModel {
 
     func deleteNotifications() {
         timer.cancelTimer()
-        showCompassCheckDialog = false
+        uiState.showCompassCheckDialog = false
     }
 }

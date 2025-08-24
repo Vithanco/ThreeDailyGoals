@@ -35,7 +35,9 @@ struct Three_Daily_GoalsApp: App {
         } else {
             self._model = State(
                 wrappedValue: TaskManagerViewModel(
-                    modelContext: container.mainContext, preferences: CloudPreferences(testData: false),
+                    modelContext: container.mainContext, 
+                    preferences: CloudPreferences(testData: false),
+                    uiState: uiState,
                     isTesting: false))  // enableTesting -> testData
         }
 
@@ -103,8 +105,8 @@ struct Three_Daily_GoalsApp: App {
         reviewTask.title = "review" + url.lastPathComponent
         reviewTask.url = url.absoluteString
         model.addItem(item: reviewTask)
-        model.infoMessage = "Review Task added from \(url)"
-        model.showInfoMessage = true
+        model.uiState.infoMessage = "Review Task added from \(url)"
+        model.uiState.showInfoMessage = true
     }
 
 }

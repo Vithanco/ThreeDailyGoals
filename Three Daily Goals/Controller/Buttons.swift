@@ -142,8 +142,8 @@ extension TaskManagerViewModel {
                 }
                 // msg += "\nTotal: \(self.items.count)\nProduction-DB: \(self.isProductionEnvironment)"
                 //  debugPrint(msg)
-                self.infoMessage = msg
-                self.showInfoMessage = true
+                self.uiState.infoMessage = msg
+                self.uiState.showInfoMessage = true
             },
             label: {
                 Label("Task Statistic", systemImage: "chart.bar.fill")

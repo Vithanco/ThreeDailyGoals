@@ -101,12 +101,17 @@ final class DataManager {
     /// Create a new task
     func createTask(title: String, state: TaskItemState = .open) -> TaskItem {
         let task = TaskItem(title: title, state: state)
+        addExistingTask(task)
+        return task
+    }
+    
+    /// Add an existing task to the data manager
+    func addExistingTask(_ task: TaskItem) {
         modelContext.insert(task)
         items.append(task)
         lists[task.state]?.append(task)
         sortList(task.state)
         save()
-        return task
     }
     
     /// Delete a task

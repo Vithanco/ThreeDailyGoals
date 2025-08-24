@@ -26,9 +26,13 @@ struct MainView: View {
     @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
+    
+
 
     var body: some View {
-        SingleView {
+        @Bindable var uiState = uiState
+        
+        return SingleView {
             if isLargeDevice {
                 RegularMainView().frame(minWidth: 1000, minHeight: 600)
             } else {
@@ -37,59 +41,37 @@ struct MainView: View {
         }
         .background(Color.background)
         #if os(iOS)
-            .fullScreenCover(isPresented: Binding(
-                get: { uiState.showCompassCheckDialog },
-                set: { uiState.showCompassCheckDialog = $0 }
-            )) {
+            .fullScreenCover(isPresented: $uiState.showCompassCheckDialog) {
                 CompassCheckDialog()
             }
         #else
-            .sheet(isPresented: Binding(
-                get: { uiState.showCompassCheckDialog },
-                set: { uiState.showCompassCheckDialog = $0 }
-            )) {
+            .sheet(isPresented: $uiState.showCompassCheckDialog) {
                 CompassCheckDialog()
             }
         #endif
-        .sheet(isPresented: Binding(
-            get: { uiState.showSettingsDialog },
-            set: { uiState.showSettingsDialog = $0 }
-        )) {
+        .sheet(isPresented: $uiState.showSettingsDialog) {
             PreferencesView()
         }
-        .sheet(isPresented: Binding(
-            get: { uiState.showSelectDuringImportDialog },
-            set: { uiState.showSelectDuringImportDialog = $0 }
-        )) {
+        .sheet(isPresented: $uiState.showSelectDuringImportDialog) {
             SelectVersions(choices: uiState.selectDuringImport)
         }
-        .sheet(isPresented: Binding(
-            get: { uiState.showNewItemNameDialog },
-            set: { uiState.showNewItemNameDialog = $0 }
-        )) {
+        .sheet(isPresented: $uiState.showNewItemNameDialog) {
             NewItemDialog()
         }
-        .sheet(
-            isPresented: Binding(
-                get: { uiState.showInfoMessage },
-                set: { uiState.showInfoMessage = $0 }
-            ),
-            content: {
-                VStack {
-                    GroupBox {
-                        HStack(alignment: .center) {
-                            Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
-                                preferences.accentColor)
-                            Text(uiState.infoMessage).padding(5)
-                        }
-                    }.padding(5)
-                    Button("OK") {
-                        uiState.showInfoMessage = false
+        .sheet(isPresented: $uiState.showInfoMessage) {
+            VStack {
+                GroupBox {
+                    HStack(alignment: .center) {
+                        Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
+                            preferences.accentColor)
+                        Text(uiState.infoMessage).padding(5)
                     }
-                }.padding(10)
-
-            }
-        )
+                }.padding(5)
+                Button("OK") {
+                    uiState.showInfoMessage = false
+                }
+            }.padding(10)
+        }
         .fileExporter(
             isPresented: Binding(
                 get: { uiState.showExportDialog },

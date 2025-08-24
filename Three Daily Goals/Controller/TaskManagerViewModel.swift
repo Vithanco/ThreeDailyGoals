@@ -106,61 +106,19 @@ final class TaskManagerViewModel {
         #endif
     }
 
-    var showCompassCheckDialog: Bool {
-        get { uiState.showCompassCheckDialog }
-        set { uiState.showCompassCheckDialog = newValue }
-    }
-    
-    var showSettingsDialog: Bool {
-        get { uiState.showSettingsDialog }
-        set { uiState.showSettingsDialog = newValue }
-    }
-    
-    var showMissingCompassCheckAlert: Bool {
-        get { uiState.showMissingCompassCheckAlert }
-        set { uiState.showMissingCompassCheckAlert = newValue }
-    }
-    
-    var showSelectDuringImportDialog: Bool {
-        get { uiState.showSelectDuringImportDialog }
-        set { uiState.showSelectDuringImportDialog = newValue }
-    }
-    
-    var showNewItemNameDialog: Bool {
-        get { uiState.showNewItemNameDialog }
-        set { uiState.showNewItemNameDialog = newValue }
-    }
-    
-    var selectDuringImport: [Choice] {
-        get { uiState.selectDuringImport }
-        set { uiState.selectDuringImport = newValue }
-    }
 
 
 
-    // for user messages
-    var showInfoMessage: Bool {
-        get { uiState.showInfoMessage }
-        set { uiState.showInfoMessage = newValue }
-    }
-    
-    var infoMessage: String {
-        get { uiState.infoMessage }
-        set { uiState.infoMessage = newValue }
-    }
 
-    var selectedTags: [String] {
-        get { uiState.selectedTags }
-        set { uiState.selectedTags = newValue }
-    }
+
 
     func finishDialog() {
         uiState.finishDialog()
     }
 
-    init(modelContext: Storage, preferences: CloudPreferences, isTesting: Bool = false) {
+    init(modelContext: Storage, preferences: CloudPreferences, uiState: UIStateManager, isTesting: Bool = false) {
         self.preferences = preferences
-        self.uiState = UIStateManager()
+        self.uiState = uiState
         self.dataManager = DataManager(modelContext: modelContext)
         self.isTesting = isTesting
         
@@ -317,7 +275,7 @@ final class TaskManagerViewModel {
         if item.isEmpty {
             return
         }
-        dataManager.createTask(title: item.title, state: item.state)
+        dataManager.addExistingTask(item)
         updateUndoRedoStatus()
     }
 
@@ -332,7 +290,7 @@ final class TaskManagerViewModel {
     }
 
     func addNewItem() {
-        showNewItemNameDialog = true
+        uiState.showNewItemNameDialog = true
     }
 
     @discardableResult func addAndSelect(
@@ -342,8 +300,14 @@ final class TaskManagerViewModel {
         state: TaskItemState = .open
     ) -> TaskItem {
         let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
-        select(newItem)
-        return newItem
+        // Find the saved item in the database to ensure we're selecting the correct object
+        if let savedItem = dataManager.findTask(withUuidString: newItem.uuid.uuidString) {
+            select(savedItem)
+            return savedItem
+        } else {
+            select(newItem)
+            return newItem
+        }
     }
 
     @MainActor
@@ -469,7 +433,7 @@ final class TaskManagerViewModel {
     }
 
     func showPreferences() {
-        showSettingsDialog = true
+        uiState.showSettingsDialog = true
     }
 
     func removeItem(withID: String) {
@@ -519,7 +483,10 @@ func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPrefere
 {
     let testStorage = loader == nil ? TestStorage() : TestStorage(loader: loader!)
     return TaskManagerViewModel(
-        modelContext: testStorage, preferences: preferences ?? dummyPreferences(), isTesting: true)
+        modelContext: testStorage, 
+        preferences: preferences ?? dummyPreferences(), 
+        uiState: UIStateManager(),
+        isTesting: true)
 }
 
 extension Sequence where Element: TaskItem {
