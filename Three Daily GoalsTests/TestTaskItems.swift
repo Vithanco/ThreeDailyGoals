@@ -41,7 +41,7 @@ struct TestTaskItems {
     func testListSorting() throws {
         #expect(TaskItemState.open.subHeaders != TaskItemState.closed.subHeaders)
         let dummyM = dummyViewModel(loader: { return self.loader(whichList: .open) })
-        let itemList = dummyM.list(which: .open)
+        let itemList = dummyM.dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
         let partialLists: [[TaskItem]] = headers.map({ $0.filter(items: itemList) })
         #expect(Array(partialLists.joined()) == itemList)
@@ -68,7 +68,7 @@ struct TestTaskItems {
         let pref = CloudPreferences(store: store)
         let model = dummyViewModel(preferences: pref)
 
-        guard let task = model.list(which: .dead).first else {
+        guard let task = model.dataManager.list(which: .dead).first else {
             throw TestError.taskNotFound
         }
         #expect(task.canBeTouched)
@@ -84,7 +84,7 @@ struct TestTaskItems {
         let pref = CloudPreferences(store: store)
         let model = dummyViewModel(preferences: pref)
 
-        guard let task = model.list(which: .open).first else {
+        guard let task = model.dataManager.list(which: .open).first else {
             throw TestError.taskNotFound
         }
         #expect(task.canBeTouched)

@@ -24,7 +24,7 @@ struct AppearancePreferencesView: View {
                 Spacer()
             }
             Button("Use System Accent Color") {
-                model.resetAccentColor()
+                model.preferences.resetAccentColor()
             }
             Spacer()
         }.padding(10).frame(maxWidth: 400)

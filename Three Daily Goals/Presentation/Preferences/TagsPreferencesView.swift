@@ -29,19 +29,19 @@ struct EditTag: View {
                 ForEach(TaskItemState.allCases) { state in
                     HStack {
                         Text(state.description + ":").bold()
-                        Text("\(model.statsForTags(tag: currentTagName, which: state))")
+                        Text("\(model.dataManager.statsForTags(tag: currentTagName, which: state))")
                     }
                 }
 
                 TextField("New Name", text: $changeTo)
                 Button("Change Name") {
-                    model.exchangeTag(from: currentTagName, to: changeTo)
+                    model.dataManager.exchangeTag(from: currentTagName, to: changeTo)
                 }.buttonStyle(.bordered)
 
             }
             Spacer()
             Button("Delete this tag", role: .destructive) {
-                model.delete(tag: currentTagName)
+                model.dataManager.delete(tag: currentTagName)
             }.buttonStyle(.bordered)
                 .disabled(currentTagName == "private" || currentTagName == "work")
         }
@@ -59,7 +59,7 @@ struct TagsPreferencesView: View {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
                     TagList(
-                        tags: model.allTags.asArray,
+                        tags: model.dataManager.allTags.asArray,
                         tagView: { text in
                             return TagCapsule(text)
                                 .tagCapsuleStyle(selectedTagStyle(accentColor: preferences.accentColor))

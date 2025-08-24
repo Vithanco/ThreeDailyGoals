@@ -70,7 +70,7 @@ struct TestListHeaders {
         var splitted = split(headers: lhs, itemList: model.dataManager.items)
         #expect(splitted.reduced == model.dataManager.items.count)
 
-        let graveyard: [TaskItem] = model.list(which: .dead)
+        let graveyard: [TaskItem] = model.dataManager.list(which: .dead)
         splitted = split(headers: lhs, itemList: graveyard)
         #expect(splitted.reduced == graveyard.count)
     }

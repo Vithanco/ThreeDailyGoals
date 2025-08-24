@@ -41,9 +41,9 @@ extension TaskManagerViewModel {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             let jsonData = try decoder.decode([TaskItem].self, from: data)
-            beginUndoGrouping()
+            dataManager.beginUndoGrouping()
             for item in jsonData {
-                if let existing = findTask(withID: item.id) {
+                if let existing = dataManager.findTask(withUuidString: item.id) {
                     if !deepEqual(existing, item) {
                         choices.append(Choice(existing: existing, new: item))
                     }
@@ -58,7 +58,7 @@ extension TaskManagerViewModel {
             self.uiState.infoMessage = "The tasks weren't imported because :\(error)"
         }
 
-        endUndoGrouping()
+        dataManager.endUndoGrouping()
         logger.info("\(self.uiState.infoMessage)")
         self.uiState.showInfoMessage = true
     }
@@ -84,7 +84,7 @@ struct SelectVersions: View {
 
     func alwaysUseNew() {
         for i in index...choices.count - 1 {
-            model.remove(item: choices[i].existing)
+            model.dataManager.remove(task: choices[i].existing)
             model.addItem(item: choices[i].new)
         }
         done()
@@ -127,7 +127,7 @@ struct SelectVersions: View {
                         missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use new") {
-                        model.remove(item: currentChoice.existing)
+                        model.dataManager.remove(task: currentChoice.existing)
                         model.addItem(item: currentChoice.new)
                         nextChoice()
                     }

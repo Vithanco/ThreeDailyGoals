@@ -56,6 +56,7 @@ final class DataManager {
         for t in items where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
         }
+        result.formUnion(["work", "private"])
         return result
     }
     
@@ -427,12 +428,13 @@ final class DataManager {
             "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
     }
     
-    /// Save changes to persistent store
+    /// Save changes to the database
     func save() {
         do {
             try modelContext.save()
+            logger.debug("Successfully saved changes to database")
         } catch {
-            logger.error("Failed to save context: \(error)")
+            logger.error("Failed to save changes: \(error)")
         }
     }
     
@@ -442,55 +444,52 @@ final class DataManager {
         // This is useful after background updates or external changes
     }
     
-    // MARK: - Batch Operations
+    // MARK: - Undo Management
     
-    /// Move multiple tasks to the same state
-    func batchMove(_ tasks: [TaskItem], to state: TaskItemState) {
-        for task in tasks {
-            task.state = state
-        }
-        save()
-    }
-    
-    // MARK: - Undo/Redo Operations
-    
-    /// Check if undo is available
-    var canUndo: Bool {
-        return modelContext.canUndo
-    }
-    
-    /// Check if redo is available
-    var canRedo: Bool {
-        return modelContext.canRedo
-    }
-    
-    /// Perform undo operation
-    func undo() {
-        modelContext.processPendingChanges()
-        modelContext.undo()
-        modelContext.processPendingChanges()
-    }
-    
-    /// Perform redo operation
-    func redo() {
-        modelContext.processPendingChanges()
-        modelContext.redo()
-        modelContext.processPendingChanges()
+    /// Check if undo manager is available
+    var hasUndoManager: Bool {
+        return modelContext.undoManager != nil
     }
     
     /// Begin undo grouping
     func beginUndoGrouping() {
-        modelContext.beginUndoGrouping()
+        modelContext.undoManager?.beginUndoGrouping()
     }
     
     /// End undo grouping
     func endUndoGrouping() {
-        modelContext.endUndoGrouping()
+        modelContext.undoManager?.endUndoGrouping()
+    }
+    
+    /// Undo the last operation
+    func undo() {
+        modelContext.undoManager?.undo()
+    }
+    
+    /// Redo the last undone operation
+    func redo() {
+        modelContext.undoManager?.redo()
+    }
+    
+    /// Check if undo is available
+    var canUndo: Bool {
+        return modelContext.undoManager?.canUndo ?? false
+    }
+    
+    /// Check if redo is available
+    var canRedo: Bool {
+        return modelContext.undoManager?.canRedo ?? false
     }
     
     /// Process pending changes
     func processPendingChanges() {
         modelContext.processPendingChanges()
+    }
+    
+    /// Update undo/redo status (data only)
+    func updateUndoRedoStatus() {
+        processPendingChanges()
+        processPendingChanges()
     }
     
     /// Check if there are unsaved changes
@@ -565,6 +564,16 @@ final class DataManager {
     
     // MARK: - Tag Management
     
+    /// Get all tags from tasks
+    var allTags: Set<String> {
+        var result = Set<String>()
+        for task in items where !task.tags.isEmpty {
+            result.formUnion(task.tags)
+        }
+        result.formUnion(["work", "private"])
+        return result
+    }
+    
     /// Get statistics for a specific tag across all states
     func statsForTags(tag: String) -> [TaskItemState: Int] {
         var result: [TaskItemState: Int] = [:]
@@ -601,15 +610,6 @@ final class DataManager {
             item.tags = item.tags.filter { $0 != tag }
         }
         save()
-    }
-    
-    /// Get all tags used across all tasks
-    var allTags: Set<String> {
-        var result = Set<String>()
-        for task in items where !task.tags.isEmpty {
-            result.formUnion(task.tags)
-        }
-        return result
     }
 }
 

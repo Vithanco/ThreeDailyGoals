@@ -98,6 +98,11 @@ final class UIStateManager {
         infoMessage = message
         showInfoMessage = true
     }
+    
+    /// Show preferences dialog
+    func showPreferences() {
+        showSettingsDialog = true
+    }
 }
 
 // MARK: - Convenience Initializers

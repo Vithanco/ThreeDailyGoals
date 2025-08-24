@@ -19,7 +19,7 @@ extension TaskManagerViewModel {
     }
 
     func moveAllPrioritiesToOpen() {
-        for p in list(which: .priority) {
+        for p in dataManager.list(which: .priority) {
             move(task: p, to: .open)
         }
     }
@@ -29,14 +29,14 @@ extension TaskManagerViewModel {
         //   assert(showReviewDialog)
         switch stateOfCompassCheck {
         case .inform:
-            if list(which: .priority).isEmpty {
+            if dataManager.list(which: .priority).isEmpty {
                 fallthrough
             } else {
                 stateOfCompassCheck = .currentPriorities
             }
         case .currentPriorities:
             moveAllPrioritiesToOpen()
-            if list(which: .pendingResponse).isEmpty {
+            if dataManager.list(which: .pendingResponse).isEmpty {
                 fallthrough
             } else {
                 stateOfCompassCheck = .pending
@@ -130,7 +130,7 @@ extension TaskManagerViewModel {
     }
 
     var priorityTasks: [TaskItem] {
-        return list(which: .priority)
+        return dataManager.list(which: .priority)
     }
 
     func onPreferencesChange() {

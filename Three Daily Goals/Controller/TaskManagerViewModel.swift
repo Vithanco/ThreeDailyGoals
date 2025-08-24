@@ -125,7 +125,7 @@ final class TaskManagerViewModel {
         // Load initial data
         dataManager.loadData()
         showItem = false
-        callFetch()
+        dataManager.mergeDataFromCentralStorage()
 
         Task { [weak self] in
             let center = NotificationCenter.default
@@ -165,7 +165,7 @@ final class TaskManagerViewModel {
     
     func addSamples() -> Self {
         dataManager.createSampleData()
-        callFetch()
+        dataManager.mergeDataFromCentralStorage()
         return self
     }
 
@@ -241,31 +241,13 @@ final class TaskManagerViewModel {
         }
     }
 
-    @MainActor
-    fileprivate func callFetch() {
-        mergeDataFromCentralStorage()
-    }
 
-    @MainActor
-    func undo() {
-        withAnimation {
-            dataManager.undo()
-            callFetch()
-        }
-    }
 
-    @MainActor
-    func redo() {
-        withAnimation {
-            dataManager.redo()
-            callFetch()
-        }
-    }
+
 
     @MainActor
     func updateUndoRedoStatus() {
-        dataManager.processPendingChanges()
-        dataManager.processPendingChanges()
+        dataManager.updateUndoRedoStatus()
         canUndo = dataManager.canUndo
         canRedo = dataManager.canRedo
 
@@ -273,15 +255,7 @@ final class TaskManagerViewModel {
         let _ = preferences.didCompassCheckToday ? "Done" : stdOnlyTimeFormat.format(next)
     }
 
-    func findTask(withID: String) -> TaskItem? {
-        return dataManager.findTask(withUuidString: withID)
-    }
 
-
-
-    func findTask(withUuidString: String) -> TaskItem? {
-        return dataManager.findTask(withUuidString: withUuidString)
-    }
 
     func touch(task: TaskItem) {
         dataManager.touch(task: task)
@@ -334,50 +308,12 @@ final class TaskManagerViewModel {
         updateUndoRedoStatus()
     }
 
-    func resetAccentColor() {
-        preferences.resetAccentColor()
-    }
 
-    func remove(item: TaskItem) {
-        dataManager.remove(task: item)
-    }
-
-    func showPreferences() {
-        uiState.showSettingsDialog = true
-    }
 }
 
 extension TaskManagerViewModel {
-    func list(which: TaskItemState) -> [TaskItem] {
-        return dataManager.list(which: which)
-    }
-
     var currentList: [TaskItem] {
-        return list(which: whichList)
-    }
-}
-
-//
-// extension TaskManagerViewModel {
-//    internal var undoManager: UndoManager? {
-//        return modelContext.undoManager
-//    }
-// }
-
-extension TaskManagerViewModel {
-    // for testing purposes
-    var hasUndoManager: Bool {
-        return dataManager.modelContext.undoManager != nil
-    }
-
-    func beginUndoGrouping() {
-        dataManager.beginUndoGrouping()
-        updateUndoRedoStatus()
-    }
-
-    func endUndoGrouping() {
-        dataManager.endUndoGrouping()
-        updateUndoRedoStatus()
+        return dataManager.list(which: whichList)
     }
 }
 
@@ -393,57 +329,5 @@ func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPrefere
         isTesting: true)
 }
 
-extension Sequence where Element: TaskItem {
-    var tags: Set<String> {
-        var result = Set<String>()
-        for t in self {
-            result.formUnion(t.tags)
-        }
-        for t in result where t.isEmpty {
-            result.remove(t)
-        }
-        return result
-    }
-
-    var activeTags: Set<String> {
-        var result = Set<String>()
-        for t in self where !t.tags.isEmpty && t.isActive {
-            result.formUnion(t.tags)
-        }
-        result.formUnion(["work", "private"])
-        return result
-    }
-
-}
-
-extension TaskManagerViewModel {
 
 
-    var activeTags: Set<String> {
-        var result = dataManager.activeTags
-        result.formUnion(["work", "private"])
-        return result
-    }
-    
-    var allTags: Set<String> {
-        var result = dataManager.allTags
-        result.formUnion(["work", "private"])
-        return result
-    }
-
-    func statsForTags(tag: String) -> [TaskItemState: Int] {
-        return dataManager.statsForTags(tag: tag)
-    }
-
-    func statsForTags(tag: String, which: TaskItemState) -> Int {
-        return dataManager.statsForTags(tag: tag, which: which)
-    }
-
-    func exchangeTag(from: String, to: String) {
-        dataManager.exchangeTag(from: from, to: to)
-    }
-
-    func delete(tag: String) {
-        dataManager.delete(tag: tag)
-    }
-}

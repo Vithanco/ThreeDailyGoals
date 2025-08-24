@@ -95,7 +95,12 @@ extension TaskManagerViewModel {
     }
 
     var undoButton: some View {
-        Button(action: undo) {
+        Button(action: {
+            withAnimation {
+                self.dataManager.undo()
+                self.dataManager.mergeDataFromCentralStorage()
+            }
+        }) {
             Label("Undo", systemImage: imgUndo).accessibilityIdentifier("undoButton").help(
                 "undo an action")
         }.disabled(!canUndo)
@@ -103,7 +108,12 @@ extension TaskManagerViewModel {
     }
 
     var redoButton: some View {
-        Button(action: redo) {
+        Button(action: {
+            withAnimation {
+                self.dataManager.redo()
+                self.dataManager.mergeDataFromCentralStorage()
+            }
+        }) {
             Label("Redo", systemImage: imgRedo).accessibilityIdentifier("redoButton").help(
                 "redo an action")
         }.disabled(!canRedo)
@@ -169,7 +179,7 @@ extension TaskManagerViewModel {
     }
 
     var preferencesButton: some View {
-        Button(action: showPreferences) {
+        Button(action: { self.uiState.showPreferences() }) {
             Label("Preferences", systemImage: imgPreferences).accessibilityIdentifier(
                 "showPreferencesButton"
             ).help(

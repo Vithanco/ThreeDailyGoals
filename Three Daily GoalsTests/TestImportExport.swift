@@ -60,18 +60,18 @@ struct TestImportExport {
         guard let first = model.dataManager.items.first else {
             #expect(false); return
         }
-        #expect(first == model.findTask(withID: first.id))
+        #expect(first == model.dataManager.findTask(withUuidString: first.id))
         let newModel = dummyViewModel(loader: { return [] })
         #expect(0 == newModel.dataManager.items.count)
         newModel.importTasks(url: url)
 
-        #expect(first == newModel.findTask(withID: first.id))
+        #expect(first == newModel.dataManager.findTask(withUuidString: first.id))
         #expect(model.dataManager.items.count == newModel.dataManager.items.count)
         #expect(178 == newModel.dataManager.items.count)
         for item in model.dataManager.items {
             debugPrint(item)
-            #expect(model.findTask(withID: item.id) != nil)
-            guard let newItem = newModel.findTask(withID: item.id) else {
+                    #expect(model.dataManager.findTask(withUuidString: item.id) != nil)
+        guard let newItem = newModel.dataManager.findTask(withUuidString: item.id) else {
                 #expect (false)
                 return
             }

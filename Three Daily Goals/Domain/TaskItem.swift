@@ -365,3 +365,25 @@ extension TaskItem: Transferable {
 //                CodableRepresentation(contentType: .taskItem)
 //            }
 //}
+extension Sequence where Element: TaskItem {
+    var tags: Set<String> {
+        var result = Set<String>()
+        for t in self {
+            result.formUnion(t.tags)
+        }
+        for t in result where t.isEmpty {
+            result.remove(t)
+        }
+        return result
+    }
+
+    var activeTags: Set<String> {
+        var result = Set<String>()
+        for t in self where !t.tags.isEmpty && t.isActive {
+            result.formUnion(t.tags)
+        }
+        result.formUnion(["work", "private"])
+        return result
+    }
+
+}

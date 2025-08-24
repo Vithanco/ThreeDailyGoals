@@ -37,40 +37,40 @@ struct Three_Daily_GoalsTests {
 
     //  @Test
     func testTaskUndo() async throws {
-        while !model.hasUndoManager {
+        while !model.dataManager.hasUndoManager {
             await Task.yield()
         }
 
         //        let descriptor = FetchDescriptor<Comment>()
-        XCTAssertTrue(model.hasUndoManager)
+        XCTAssertTrue(model.dataManager.hasUndoManager)
         XCTAssertTrue(!model.canUndo)
         XCTAssertTrue(!model.canRedo)
-        model.beginUndoGrouping()
+        model.dataManager.beginUndoGrouping()
         let item = model.addAndSelect()
         //        #expect(item.comments!.count, 0, "No comments yet")
         //        #expect(0,try context.fetchCount(descriptor))
         model.touch(task: item)
-        model.endUndoGrouping()
+        model.dataManager.endUndoGrouping()
         //        #expect(item.comments!.count, 1, "touch leads to comment")
         //        #expect(1,try context.fetchCount(descriptor))
 
         XCTAssertTrue(model.canUndo)
         //        #expect(model.canUndo, model.undo)
         XCTAssertTrue(!model.canRedo)
-        XCTAssertTrue(item == model.findTask(withID: item.id))
+        XCTAssertTrue(item == model.dataManager.findTask(withUuidString: item.id))
         while model.canUndo {
-            model.undo()
+            model.dataManager.undo()
         }
         XCTAssertTrue(!model.canUndo)
         XCTAssertTrue(model.canRedo)
-        XCTAssertTrue(model.findTask(withID: item.id) == nil, "item was deleted")
+        XCTAssertTrue(model.dataManager.findTask(withUuidString: item.id) == nil, "item was deleted")
         //        #expect(0,try context.fetchCount(descriptor))
         while model.canRedo {
-            model.redo()
+            model.dataManager.redo()
         }
         XCTAssertTrue(model.canUndo)
         XCTAssertTrue(!model.canRedo)
-        let find = model.findTask(withID: item.id)
+        let find = model.dataManager.findTask(withUuidString: item.id)
         XCTAssertTrue(find != nil)
         XCTAssertTrue(item == find)
         //        #expect(find!.comments!.count, 1, "Comment should be recreated, too")
@@ -80,17 +80,17 @@ struct Three_Daily_GoalsTests {
         model.delete(task: item)
         XCTAssertTrue(model.canUndo)
         XCTAssertTrue(!model.canRedo)
-        let find2 = model.findTask(withID: item.id)
+        let find2 = model.dataManager.findTask(withUuidString: item.id)
         XCTAssertTrue(find2 == nil)
         //        #expect(0,try context.fetchCount(descriptor))
         //        while model.canUndo {
-        model.undo()
+        model.dataManager.undo()
         //        }
         XCTAssertTrue(model.canUndo)
         XCTAssertTrue(model.canRedo)
 
-        let find3 = model.findTask(withID: item.id)
-        XCTAssertTrue(find3 == model.findTask(withID: item.id))
+        let find3 = model.dataManager.findTask(withUuidString: item.id)
+        XCTAssertTrue(find3 == model.dataManager.findTask(withUuidString: item.id))
         //        #expect(find3!.comments!.count, 1)
         //        #expect(1,try context.fetchCount(descriptor))
     }
@@ -104,9 +104,9 @@ struct Three_Daily_GoalsTests {
         let id1 = task1.id
         let id2 = task2.id
 
-        XCTAssertTrue(task1 == model.findTask(withID: id1))
-        XCTAssertTrue(task2 == model.findTask(withID: id2))
-        XCTAssertTrue(model.findTask(withUuidString: UUID().uuidString) == nil)
+        XCTAssertTrue(task1 == model.dataManager.findTask(withUuidString: id1))
+        XCTAssertTrue(task2 == model.dataManager.findTask(withUuidString: id2))
+        XCTAssertTrue(model.dataManager.findTask(withUuidString: UUID().uuidString) == nil)
     }
 
     //    func testPerformanceExample() throws {

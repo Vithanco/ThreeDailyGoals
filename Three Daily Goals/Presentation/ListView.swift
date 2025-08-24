@@ -50,7 +50,8 @@ struct ListView: View {
                 return true
             }
             Spacer()
-            let tags = dataManager.list(which: whichList ?? uiState.whichList).tags.asArray
+            let taskItems: [TaskItem] = dataManager.list(which: whichList ?? uiState.whichList)
+            let tags = Set(taskItems.flatMap { $0.tags }).asArray
             if !tags.isEmpty {
                 TagEditList(
                     tags: Binding(

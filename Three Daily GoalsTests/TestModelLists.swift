@@ -42,12 +42,12 @@ struct TestModelLists {
         func move(from: TaskItemState, to: TaskItemState) {
             model.move(task: item, to: to)
             #expect(item.state == to)
-            #expect(model.list(which: to).contains(item))
-            #expect(!model.list(which: from).contains(item))
+                    #expect(model.dataManager.list(which: to).contains(item))
+        #expect(!model.dataManager.list(which: from).contains(item))
         }
 
         #expect(item.state == TaskItemState.open)
-        #expect(model.list(which: .open).contains(item))
+        #expect(model.dataManager.list(which: .open).contains(item))
 
         move(from: .open, to: .closed)
         move(from: .closed, to: .pendingResponse)
@@ -65,45 +65,45 @@ struct TestModelLists {
 
         let model = dummyViewModel()
         #expect(model.dataManager.items.count == 178)
-        #expect(model.allTags.contains("private"))
-        #expect(model.allTags.contains("work"))
-        #expect(model.activeTags.contains("private"))
-        #expect(model.activeTags.contains("work"))
+        #expect(model.dataManager.allTags.contains("private"))
+        #expect(model.dataManager.allTags.contains("work"))
+        #expect(model.dataManager.activeTags.contains("private"))
+        #expect(model.dataManager.activeTags.contains("work"))
 
-        #expect(model.list(which: .open).first != nil)
-        if let first = model.list(which: .open).first {
-            #expect(model.list(which: .open).contains(first))
+        #expect(model.dataManager.list(which: .open).first != nil)
+        if let first = model.dataManager.list(which: .open).first {
+            #expect(model.dataManager.list(which: .open).contains(first))
             #expect(model.dataManager.items.contains(first))
             first.addTag(testTag)
             #expect(first.tags.contains(testTag))
             #expect(first.isActive)
             #expect(first.state == .open)
         }
-        #expect(model.list(which: .open).tags.contains(testTag))
-        #expect(model.list(which: .open).activeTags.contains(testTag))
+        #expect(model.dataManager.list(which: .open).tags.contains(testTag))
+        #expect(model.dataManager.list(which: .open).activeTags.contains(testTag))
 
-        #expect(model.activeTags.contains(testTag))
-        #expect(model.allTags.contains(testTag))
+        #expect(model.dataManager.activeTags.contains(testTag))
+        #expect(model.dataManager.allTags.contains(testTag))
 
-        let deadTask = model.list(which: .dead).first!
+        let deadTask = model.dataManager.list(which: .dead).first!
         #expect(!deadTask.isActive)
         deadTask.addTag(testTag2)
 
-        let stats = model.statsForTags(tag: testTag2)
+        let stats = model.dataManager.statsForTags(tag: testTag2)
         #expect(stats.total == 1, "\(stats.debugDescription)")
 
-        #expect(!model.activeTags.contains(testTag2))
-        #expect(model.allTags.contains(testTag2))
+        #expect(!model.dataManager.activeTags.contains(testTag2))
+        #expect(model.dataManager.allTags.contains(testTag2))
 
-        model.delete(tag: testTag2)
+        model.dataManager.delete(tag: testTag2)
 
-        #expect(!model.activeTags.contains(testTag2))
-        #expect(!model.allTags.contains(testTag2))
+        #expect(!model.dataManager.activeTags.contains(testTag2))
+        #expect(!model.dataManager.allTags.contains(testTag2))
 
-        model.delete(tag: "private")
+        model.dataManager.delete(tag: "private")
 
-        #expect(model.allTags.contains("private"))
-        #expect(model.activeTags.contains("private"))
+        #expect(model.dataManager.allTags.contains("private"))
+        #expect(model.dataManager.activeTags.contains("private"))
     }
 
     @MainActor
