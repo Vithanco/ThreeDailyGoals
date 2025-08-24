@@ -17,6 +17,7 @@ struct Three_Daily_GoalsApp: App {
     var container: ModelContainer
     let calendarManager = CalendarManager()
     @State var model: TaskManagerViewModel
+    let uiState = UIStateManager()
 
     init() {
         var enableTesting = false
@@ -61,7 +62,7 @@ struct Three_Daily_GoalsApp: App {
         .environment(model)
         .environment(calendarManager)
         .environment(model.preferences)
-        .environment(model.uiState)
+        .environment(uiState)
         .environment(model.dataManager)
         .commands {
             // Add a CommandMenu for saving tasks
