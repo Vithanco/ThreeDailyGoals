@@ -19,14 +19,14 @@ struct ListView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TaskManagerViewModel.self) private var model
-    @State var whichList: TaskItemState?
+    let whichList: TaskItemState?
 
     init(whichList: TaskItemState? = nil) {
         self.whichList = whichList
     }
 
     var list: TaskItemState {
-        return whichList ?? (uiState.whichList == .priority ? .open : uiState.whichList)
+        return whichList ?? uiState.whichList
     }
 
     var body: some View {
@@ -50,7 +50,7 @@ struct ListView: View {
                 return true
             }
             Spacer()
-            let taskItems: [TaskItem] = dataManager.list(which: whichList ?? uiState.whichList)
+            let taskItems: [TaskItem] = dataManager.list(which: list)
             let tags = Set(taskItems.flatMap { $0.tags }).asArray
             if !tags.isEmpty {
                 TagEditList(
