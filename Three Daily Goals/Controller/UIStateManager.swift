@@ -127,7 +127,7 @@ final class UIStateManager: @preconcurrency ItemSelector {
         Button(action: { [self] in
             addNewItem()
         }) {
-            Label("Add New Task", systemImage: "plus")
+            Label("Add New Task", systemImage: imgAddItem)
                 .help("Add a new task")
         }
     }
@@ -137,7 +137,7 @@ final class UIStateManager: @preconcurrency ItemSelector {
         Button(action: { [self] in
             showExportDialog = true
         }) {
-            Label("Export Tasks", systemImage: "square.and.arrow.up")
+            Label("Export Tasks", systemImage: imgExport)
                 .help("Export tasks to JSON")
         }
     }
@@ -147,7 +147,7 @@ final class UIStateManager: @preconcurrency ItemSelector {
         Button(action: { [self] in
             showImportDialog = true
         }) {
-            Label("Import Tasks", systemImage: "square.and.arrow.down")
+            Label("Import Tasks", systemImage: imgImport)
                 .help("Import tasks from JSON")
         }
     }
@@ -157,7 +157,7 @@ final class UIStateManager: @preconcurrency ItemSelector {
         Button(action: { [self] in
             showInfoMessage = true
         }) {
-            Label("Show Statistics", systemImage: "chart.bar")
+            Label("Show Statistics", systemImage: imgStats)
                 .help("Show task statistics")
         }
     }

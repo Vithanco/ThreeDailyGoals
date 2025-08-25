@@ -89,7 +89,7 @@ struct TestReview {
     @MainActor
     @Test
     func testIncreaseStreak() throws {
-        let model = dummyViewModel()
+        let model = dummyViewModel(preferences: dummyPreferences())
         let pref = model.preferences
 
         #expect(pref.daysOfCompassCheck == 42)

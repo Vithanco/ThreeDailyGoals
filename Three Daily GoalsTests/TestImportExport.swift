@@ -58,21 +58,23 @@ struct TestImportExport {
         model.dataManager.exportTasks(url: url, uiState: model.uiState)
         #expect(model.dataManager.items.count == count)
         guard let first = model.dataManager.items.first else {
-            #expect(false); return
+            #expect(Bool(false)); return
         }
         #expect(first == model.dataManager.findTask(withUuidString: first.id))
-        let newModel = dummyViewModel(loader: { return [] })
-        #expect(0 == newModel.dataManager.items.count)
-        newModel.dataManager.importTasks(url: url, uiState: newModel.uiState)
+        let newModel = dummyViewModel(loader: { return [] }).dataManager
+        #expect(0 == newModel.items.count)
+        newModel.importTasks(url: url, uiState: model.uiState)
 
-        #expect(first == newModel.dataManager.findTask(withUuidString: first.id))
-        #expect(model.dataManager.items.count == newModel.dataManager.items.count)
-        #expect(178 == newModel.dataManager.items.count)
+        #expect(newModel.items.count > 0)
+        #expect(model.dataManager.items.count == newModel.items.count)
+        #expect(178 == newModel.items.count)
         for item in model.dataManager.items {
-            debugPrint(item)
+            
                     #expect(model.dataManager.findTask(withUuidString: item.id) != nil)
-        guard let newItem = newModel.dataManager.findTask(withUuidString: item.id) else {
-                #expect (false)
+        guard let newItem = newModel.findTask(withUuidString: item.id) else {
+                debugPrint(item)
+                debugPrint(item.uuid)
+                #expect (Bool(false))
                 return
             }
             #expect(item == newItem)
@@ -83,7 +85,11 @@ struct TestImportExport {
             if let comments = item.comments {
                 #expect(item.comments!.count == newItem.comments!.count)
                 for comment in comments {
-                    let newComment = newItem.comments!.first(where: { $0.id == comment.id })!
+                    guard let newComment = newItem.comments?.first else {
+                        #expect(Bool(false), "\(newItem)")
+                        return
+                    }
+                    #expect(newComment.id == comment.id)
                     #expect(comment.text == newComment.text)
                     #expect(comment.created == newComment.created)
                 }

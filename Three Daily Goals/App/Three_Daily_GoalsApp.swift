@@ -56,6 +56,7 @@ struct Three_Daily_GoalsApp: App {
         .environment(appComponents.preferences)
         .environment(appComponents.uiState)
         .environment(appComponents.dataManager)
+        .environment(appComponents.compassCheckManager)
         .environment(TaskManagerViewModel(
             modelContext: appComponents.modelContext,
             preferences: appComponents.preferences,

@@ -249,7 +249,7 @@ final class CompassCheckManager {
         Button(action: { [self] in
             startCompassCheckNow()
         }) {
-            Label("Compass Check", systemImage: "location.north")
+            Label("Compass Check", systemImage: imgCompassCheck)
                 .help("Start compass check")
         }
     }

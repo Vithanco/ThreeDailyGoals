@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct StandardToolbarContent: ToolbarContent {
+struct MainToolbarContent: ToolbarContent {
     @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
 
@@ -29,7 +29,7 @@ struct StandardToolbarContent: ToolbarContent {
     }
 }
 
-struct MainToolbarContent: ToolbarContent {
+struct StandardToolbarContent: ToolbarContent {
     @Environment(TaskManagerViewModel.self) private var model
     @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState

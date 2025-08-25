@@ -78,20 +78,13 @@ final class DataManager {
     
     /// Find a task by UUID string
     func findTask(withUuidString uuidString: String) -> TaskItem? {
-        guard let uuid = UUID(uuidString: uuidString) else { return nil }
-        
-        let descriptor = FetchDescriptor<TaskItem>(
-            predicate: #Predicate<TaskItem> { task in
-                task.uuid == uuid
+
+        for item in items {
+            if item.id == uuidString {
+                return item
             }
-        )
-        
-        do {
-            return try modelContext.fetch(descriptor).first
-        } catch {
-            logger.error("Failed to find task with UUID \(uuidString): \(error)")
-            return nil
         }
+        return nil
     }
     
     /// Move a task to a different state
@@ -778,7 +771,7 @@ final class DataManager {
                 callFetch()
             }
         }) {
-            Label("Undo", systemImage: "arrow.uturn.backward")
+            Label("Undo", systemImage: imgUndo)
                 .accessibilityIdentifier("undoButton")
                 .help("undo an action")
         }
@@ -794,7 +787,7 @@ final class DataManager {
                 callFetch()
             }
         }) {
-            Label("Redo", systemImage: "arrow.uturn.forward")
+            Label("Redo", systemImage: imgRedo)
                 .accessibilityIdentifier("redoButton")
                 .help("redo an action")
         }

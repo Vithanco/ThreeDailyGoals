@@ -69,7 +69,7 @@ func dummyViewModel(loader: TestStorage.Loader? = nil, preferences: CloudPrefere
 {
     // Note: This function is kept for backward compatibility with tests and previews
     // In the future, these should be updated to use setupApp(isTesting: true) directly
-    let appComponents = setupApp(isTesting: true)
+    let appComponents = setupApp(isTesting: true, loader: loader, preferences: preferences)
     return TaskManagerViewModel(
         modelContext: appComponents.modelContext, 
         preferences: appComponents.preferences, 

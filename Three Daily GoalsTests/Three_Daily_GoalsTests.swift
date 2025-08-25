@@ -43,8 +43,8 @@ struct Three_Daily_GoalsTests {
 
         //        let descriptor = FetchDescriptor<Comment>()
         XCTAssertTrue(model.dataManager.hasUndoManager)
-        XCTAssertTrue(!model.canUndo)
-        XCTAssertTrue(!model.canRedo)
+        XCTAssertTrue(!model.dataManager.canUndo)
+        XCTAssertTrue(!model.dataManager.canRedo)
         model.dataManager.beginUndoGrouping()
         let item = model.dataManager.addAndSelect()
         //        #expect(item.comments!.count, 0, "No comments yet")
@@ -54,22 +54,22 @@ struct Three_Daily_GoalsTests {
         //        #expect(item.comments!.count, 1, "touch leads to comment")
         //        #expect(1,try context.fetchCount(descriptor))
 
-        XCTAssertTrue(model.canUndo)
+        XCTAssertTrue(model.dataManager.canUndo)
         //        #expect(model.canUndo, model.undo)
-        XCTAssertTrue(!model.canRedo)
+        XCTAssertTrue(!model.dataManager.canRedo)
         XCTAssertTrue(item == model.dataManager.findTask(withUuidString: item.id))
-        while model.canUndo {
+        while model.dataManager.canUndo {
             model.dataManager.undo()
         }
-        XCTAssertTrue(!model.canUndo)
-        XCTAssertTrue(model.canRedo)
+        XCTAssertTrue(!model.dataManager.canUndo)
+        XCTAssertTrue(model.dataManager.canRedo)
         XCTAssertTrue(model.dataManager.findTask(withUuidString: item.id) == nil, "item was deleted")
         //        #expect(0,try context.fetchCount(descriptor))
-        while model.canRedo {
+        while model.dataManager.canRedo {
             model.dataManager.redo()
         }
-        XCTAssertTrue(model.canUndo)
-        XCTAssertTrue(!model.canRedo)
+        XCTAssertTrue(model.dataManager.canUndo)
+        XCTAssertTrue(!model.dataManager.canRedo)
         let find = model.dataManager.findTask(withUuidString: item.id)
         XCTAssertTrue(find != nil)
         XCTAssertTrue(item == find)
@@ -78,16 +78,16 @@ struct Three_Daily_GoalsTests {
 
         //delete
         model.dataManager.deleteWithUIUpdate(task: item, uiState: model.uiState)
-        XCTAssertTrue(model.canUndo)
-        XCTAssertTrue(!model.canRedo)
+        XCTAssertTrue(model.dataManager.canUndo)
+        XCTAssertTrue(!model.dataManager.canRedo)
         let find2 = model.dataManager.findTask(withUuidString: item.id)
         XCTAssertTrue(find2 == nil)
         //        #expect(0,try context.fetchCount(descriptor))
         //        while model.canUndo {
         model.dataManager.undo()
         //        }
-        XCTAssertTrue(model.canUndo)
-        XCTAssertTrue(model.canRedo)
+        XCTAssertTrue(model.dataManager.canUndo)
+        XCTAssertTrue(model.dataManager.canRedo)
 
         let find3 = model.dataManager.findTask(withUuidString: item.id)
         XCTAssertTrue(find3 == model.dataManager.findTask(withUuidString: item.id))

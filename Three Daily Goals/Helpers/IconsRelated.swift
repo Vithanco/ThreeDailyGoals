@@ -39,6 +39,10 @@ let imgCheckedBox = "checkmark.square.fill"
 let imgUncheckedBox = "square"
 let imgStreak = "flame.fill"
 let imgAttachment = "paperclip"
+
+let imgExport = "square.and.arrow.up.on.square.fill"
+let imgImport = "square.and.arrow.down.on.square.fill"
+let imgStats = "chart.bar.fill"
 //
 //
 //enum AppIconProvider {

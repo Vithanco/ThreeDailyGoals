@@ -17,9 +17,9 @@ struct AppComponents {
 /// - Parameter isTesting: If true, creates a test setup with dummy data
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-func setupApp(isTesting: Bool = false) -> AppComponents {
+func setupApp(isTesting: Bool = false, loader: TestStorage.Loader? = nil,preferences: CloudPreferences? = nil) -> AppComponents {
     if isTesting {
-        return setupTestApp()
+        return setupTestApp(loader: loader, preferences: preferences)
     } else {
         return setupProductionApp()
     }
@@ -80,12 +80,12 @@ private func setupProductionApp() -> AppComponents {
 
 /// Set up the app for testing
 @MainActor
-private func setupTestApp() -> AppComponents {
+private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents {
     // Create test storage
-    let testStorage = TestStorage()
-    
+    let testStorage = (loader == nil) ? TestStorage() : TestStorage(loader: loader!)
+
     // Create test preferences
-    let preferences = CloudPreferences(store: TestPreferences())
+    let preferences = (preferences == nil) ?  CloudPreferences(store: TestPreferences()) : preferences!
     
     // Create UI state manager
     let uiState = UIStateManager()
