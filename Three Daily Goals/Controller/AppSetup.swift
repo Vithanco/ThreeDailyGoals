@@ -4,6 +4,7 @@ import SwiftData
 
 /// Struct containing all app components and managers
 struct AppComponents {
+    let modelContainer: ModelContainer
     let modelContext: Storage
     let preferences: CloudPreferences
     let uiState: UIStateManager
@@ -17,7 +18,7 @@ struct AppComponents {
 /// - Parameter isTesting: If true, creates a test setup with dummy data
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-func setupApp(isTesting: Bool = false, loader: TestStorage.Loader? = nil,preferences: CloudPreferences? = nil) -> AppComponents {
+func setupApp(isTesting: Bool, loader: TestStorage.Loader? = nil,preferences: CloudPreferences? = nil) -> AppComponents {
     if isTesting {
         return setupTestApp(loader: loader, preferences: preferences)
     } else {
@@ -68,6 +69,7 @@ private func setupProductionApp() -> AppComponents {
     compassCheckManager.setupCompassCheckNotification()
     
     return AppComponents(
+        modelContainer: container,
         modelContext: modelContext,
         preferences: preferences,
         uiState: uiState,
@@ -78,20 +80,39 @@ private func setupProductionApp() -> AppComponents {
     )
 }
 
+@MainActor
+private func testPreferences() -> CloudPreferences  {
+    let store : KeyValueStorage = TestPreferences()
+    store.set(18, forKey: .compassCheckTimeHour)
+    store.set(0, forKey: .compassCheckTimeMinute)
+    let result = CloudPreferences(store: store)
+    result.daysOfCompassCheck = 42
+    return result
+}
+
 /// Set up the app for testing
 @MainActor
 private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents {
-    // Create test storage
-    let testStorage = (loader == nil) ? TestStorage() : TestStorage(loader: loader!)
+    // Create test container
+    let container = sharedModelContainer(inMemory: true, withCloud: false)
+    let modelContext = ModelContext(container)
+    
+    // For testing, we always use TestStorage - either with custom loader or default data
+    let finalModelContext: Storage
+    if let loader = loader {
+        finalModelContext = TestStorage(loader: loader)
+    } else {
+        finalModelContext = TestStorage() // Use default test data with 178 items
+    }
 
     // Create test preferences
-    let preferences = (preferences == nil) ?  CloudPreferences(store: TestPreferences()) : preferences!
+    let preferences = (preferences == nil) ? testPreferences() : preferences!
     
     // Create UI state manager
     let uiState = UIStateManager()
     
     // Create data manager
-    let dataManager = DataManager(modelContext: testStorage)
+    let dataManager = DataManager(modelContext: finalModelContext)
     
     // Load initial data
     dataManager.loadData()
@@ -120,7 +141,8 @@ private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudP
     compassCheckManager.setupCompassCheckNotification()
     
     return AppComponents(
-        modelContext: testStorage,
+        modelContainer: container,
+        modelContext: modelContext,
         preferences: preferences,
         uiState: uiState,
         dataManager: dataManager,

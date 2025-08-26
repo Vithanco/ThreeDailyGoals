@@ -14,6 +14,7 @@ import TagKit
 
 @MainActor
 @Observable
+@available(*, deprecated, message: "use the different managers instead.")
 final class TaskManagerViewModel {
     var isTesting: Bool = false
 

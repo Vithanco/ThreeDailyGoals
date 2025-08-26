@@ -4,6 +4,7 @@ import SwiftData
 
 @MainActor
 @Observable
+//TODO what did ChatGPT do here? This has to go
 final class CloudKitManager: @preconcurrency PriorityUpdater {
     let dataManager: DataManager
     let preferences: CloudPreferences
@@ -16,6 +17,7 @@ final class CloudKitManager: @preconcurrency PriorityUpdater {
     var isProductionEnvironment: Bool {
         return CKContainer.isProductionEnvironment
     }
+
     
     func updatePriorities() {
         if let prioTasks = dataManager.lists[.priority] {

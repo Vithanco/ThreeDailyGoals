@@ -37,14 +37,7 @@ struct TaskItemView: View {
 }
 
 
-func touchButton(item: TaskItem) -> some View {
-        return Button(action: {
-            item.touch()
-        }) {
-            Label("Touch", systemImage: imgTouch).help(
-                "'Touch' the task - when you did something with it.")
-        }.accessibilityIdentifier("touchButton")
-    }
+
 
 #Preview {
     //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)

@@ -14,17 +14,11 @@ import XCTest
 //@Suite
 @MainActor
 struct Three_Daily_GoalsTests {
-
-    var model: TaskManagerViewModel!
-    var context: ModelContext!
+    
+    var model: AppComponents
 
     init() {
-        context = sharedModelContainer(inMemory: true, withCloud: false).mainContext
-        model = TaskManagerViewModel(
-            modelContext: context, 
-            preferences: CloudPreferences(testData: true), 
-            uiState: UIStateManager(),
-            isTesting: true)
+        model = setupApp(isTesting: true)
     }
 
     // @Test

@@ -66,26 +66,26 @@ struct ItemToolbarContent: ToolbarContent {
             }
         #endif
         ToolbarItem {
-            model.toggleButton(item: item)
+            dataManager.toggleButton(item: item)
         }
         if item.canBeClosed {
             ToolbarItem {
-                model.closeButton(item: item)
+                dataManager.closeButton(item: item)
             }
         }
         if item.canBeMovedToOpen {
             ToolbarItem {
-                model.openButton(item: item)
+                dataManager.openButton(item: item)
             }
         }
         if item.canBeMovedToPendingResponse {
             ToolbarItem {
-                model.waitForResponseButton(item: item)
+                dataManager.waitForResponseButton(item: item)
             }
         }
         if item.canBeTouched {
             ToolbarItem {
-                model.touchButton(item: item)
+                dataManager.touchButton(item: item)
             }
         }
     }

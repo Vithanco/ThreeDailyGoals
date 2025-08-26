@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CompassCheckPreferencesView: View {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(CompassCheckManager.self) private var compassCheckManager
 
     var lastCompassCheck: String {
         let dateFormatter = DateFormatter()
@@ -62,7 +62,7 @@ struct CompassCheckPreferencesView: View {
                     displayedComponents: .hourAndMinute
                 ).frame(maxWidth: 258).padding(5)
                 Button("Set Compass Check Time") {
-                    model.compassCheckManager.setupCompassCheckNotification()
+                    compassCheckManager.setupCompassCheckNotification()
                 }.buttonStyle(.bordered).padding(5)
 
                 //                Spacer()
@@ -70,7 +70,7 @@ struct CompassCheckPreferencesView: View {
                 Text("or")
 
                 Button("No Notifications Please", role: .destructive) {
-                    model.compassCheckManager.deleteNotifications()
+                    compassCheckManager.deleteNotifications()
                 }.buttonStyle(.bordered).padding(5)
             }
             Spacer(minLength: 10)
@@ -80,6 +80,8 @@ struct CompassCheckPreferencesView: View {
 }
 
 #Preview {
-    CompassCheckPreferencesView()
-        .environment(dummyViewModel())
+    let appComponents = setupApp(isTesting: true)
+    return CompassCheckPreferencesView()
+        .environment(appComponents.preferences)
+        .environment(appComponents.compassCheckManager)
 }

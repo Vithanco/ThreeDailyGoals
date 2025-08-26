@@ -49,9 +49,9 @@ struct SimpleListView: View {
                             }
                             ForEach(partialList) { item in
                                 LinkToTask(item: item, list: item.state)
-                                    .listRowSeparator(
-                                        !showHeaders && allItems.first?.id == item.id ? .hidden : .visible
-                                    )
+                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                    .listRowBackground(Color.clear)
                             }
                         }
                     }
@@ -61,7 +61,9 @@ struct SimpleListView: View {
                     }
                 }
             }
-        }.accessibilityIdentifier("scrollView_\(id)")
+        }
+        .listStyle(PlainListStyle())
+        .accessibilityIdentifier("scrollView_\(id)")
     }
 
 }

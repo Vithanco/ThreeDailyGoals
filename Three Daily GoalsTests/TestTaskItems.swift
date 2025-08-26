@@ -40,8 +40,9 @@ struct TestTaskItems {
     @Test
     func testListSorting() throws {
         #expect(TaskItemState.open.subHeaders != TaskItemState.closed.subHeaders)
-        let dummyM = dummyViewModel(loader: { return self.loader(whichList: .open) })
-        let itemList = dummyM.dataManager.list(which: .open)
+        let appComponents = setupApp(isTesting: true, loader: { return self.loader(whichList: .open) })
+        let dataManager = appComponents.dataManager
+        let itemList = dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
         let partialLists: [[TaskItem]] = headers.map({ $0.filter(items: itemList) })
         #expect(Array(partialLists.joined()) == itemList)
@@ -64,55 +65,54 @@ struct TestTaskItems {
     @MainActor
     @Test
     func testTouch() throws {
-        let store = TestPreferences()
-        let pref = CloudPreferences(store: store)
-        let model = dummyViewModel(preferences: pref)
+        let appComponents = setupApp(isTesting: true)
+        let dataManager = appComponents.dataManager
 
-        guard let task = model.dataManager.list(which: .dead).first else {
+        guard let task = dataManager.list(which: .dead).first else {
             throw TestError.taskNotFound
         }
         #expect(task.canBeTouched)
         #expect(task.changed < getDate(daysPrior: 30))
-        model.dataManager.touchAndUpdateUndoStatus(task: task)
+        dataManager.touchAndUpdateUndoStatus(task: task)
         #expect(task.changed > getDate(daysPrior: 1))
     }
 
     @MainActor
     @Test
     func testTouch2() throws {
-        let store = TestPreferences()
-        let pref = CloudPreferences(store: store)
-        let model = dummyViewModel(preferences: pref)
+        let appComponents = setupApp(isTesting: true)
+        let dataManager = appComponents.dataManager
 
-        guard let task = model.dataManager.list(which: .open).first else {
+        guard let task = dataManager.list(which: .open).first else {
             throw TestError.taskNotFound
         }
         #expect(task.canBeTouched)
         let date = task.changed
-        model.dataManager.touchAndUpdateUndoStatus(task: task)
+        dataManager.touchAndUpdateUndoStatus(task: task)
         #expect(date != task.changed)
     }
 
     @MainActor
     @Test
     func dontAddEmptyTask() throws {
-        let model = dummyViewModel(loader: { return [] })
+        let appComponents = setupApp(isTesting: true, loader: { return [] })
+        let dataManager = appComponents.dataManager
 
-        #expect(model.dataManager.items.count == 0)
-        model.dataManager.addItem(item: TaskItem(title: ""))
-        #expect(model.dataManager.items.count == 0)
+        #expect(dataManager.items.count == 0)
+        dataManager.addItem(item: TaskItem(title: ""))
+        #expect(dataManager.items.count == 0)
 
-        model.dataManager.addItem(item: TaskItem(title: emptyTaskTitle))
+        dataManager.addItem(item: TaskItem(title: emptyTaskTitle))
     }
 
     @MainActor
     @Test
     func addTaskWithDetails() throws {
-        let model = dummyViewModel(loader: { return [] })
+        let appComponents = setupApp(isTesting: true, loader: { return [] })
+        let dataManager = appComponents.dataManager
         let newTask = TaskItem(title: "", details: "something")
-        #expect(model.dataManager.items.count == 0)
-        model.dataManager.addItem(item: newTask)
-        #expect(model.dataManager.items.count == 1)
-
+        #expect(dataManager.items.count == 0)
+        dataManager.addItem(item: newTask)
+        #expect(dataManager.items.count == 1)
     }
 }

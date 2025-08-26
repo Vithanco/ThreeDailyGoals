@@ -794,6 +794,142 @@ final class DataManager {
         .disabled(!canRedo)
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
+    
+    // MARK: - Task Operation Buttons
+    
+    /// Toggle priority button for task items
+    func toggleButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            if item.state == .priority {
+                moveWithPriorityTracking(task: item, to: .open)
+            } else {
+                moveWithPriorityTracking(task: item, to: .priority)
+            }
+        }) {
+            Label(
+                "Toggle Priority",
+                systemImage: item.state == .priority
+                    ? TaskItemState.open.imageName : TaskItemState.priority.imageName
+            )
+            .help("Add to/ remove from today's priorities")
+        }
+        .accessibilityIdentifier("toggleButton")
+    }
+    
+    /// Close button for task items
+    func closeButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            moveWithPriorityTracking(task: item, to: .closed)
+        }) {
+            Label("Close", systemImage: TaskItemState.closed.imageName)
+                .help("Close the task")
+        }
+        .accessibilityIdentifier("closeButton")
+        .disabled(!item.canBeClosed)
+    }
+    
+    /// Kill button for task items
+    func killButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            moveWithPriorityTracking(task: item, to: .dead)
+        }) {
+            Label("Kill", systemImage: TaskItemState.dead.imageName)
+                .help("Move the task to the Graveyard")
+        }
+        .accessibilityIdentifier("killButton")
+        .disabled(!item.canBeClosed)
+    }
+    
+    /// Open button for task items
+    func openButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            moveWithPriorityTracking(task: item, to: .open)
+        }) {
+            Label("Open", systemImage: TaskItemState.open.imageName)
+                .help("Open this task again")
+        }
+        .accessibilityIdentifier("openButton")
+        .disabled(!item.canBeMovedToOpen)
+    }
+    
+    /// Wait for response button for task items
+    func waitForResponseButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            moveWithPriorityTracking(task: item, to: .pendingResponse)
+        }) {
+            Label("Pending a Response", systemImage: TaskItemState.pendingResponse.imageName)
+                .help("Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar.")
+        }
+        .accessibilityIdentifier("openButton")
+        .disabled(!item.canBeMovedToOpen)
+    }
+    
+    /// Priority button for task items
+    func priorityButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            moveWithPriorityTracking(task: item, to: .priority)
+        }) {
+            Image(systemName: imgToday)
+                .frame(width: 8, height: 8)
+                .help("Make this task a priority for today")
+        }
+        .accessibilityIdentifier("prioritiseButton")
+    }
+    
+    /// Delete button for task items
+    func deleteButton(item: TaskItem, uiState: UIStateManager) -> some View {
+        Button(role: .destructive, action: { [self] in
+            withAnimation {
+                deleteWithUIUpdate(task: item, uiState: uiState)
+            }
+        }) {
+            Label("Delete", systemImage: "trash")
+                .help("Delete this task for good.")
+        }
+        .accessibilityIdentifier("deleteButton")
+    }
+    
+    /// Touch button for task items
+    func touchButton(item: TaskItem) -> some View {
+        Button(action: { [self] in
+            touchAndUpdateUndoStatus(task: item)
+        }) {
+            Label("Touch", systemImage: "hand.tap")
+                .help("Touch this task to update its timestamp")
+        }
+        .accessibilityIdentifier("touchButton")
+    }
+    
+    // MARK: - Attachment Management
+    
+    /// Get tasks with purgeable attachments at a given date
+    func purgeableItems(at date: Date = Date()) -> [TaskItem] {
+        let dueTasks = try? modelContext.fetch(
+            FetchDescriptor<TaskItem>(predicate: #Predicate { task in
+                task.attachments?.contains {
+                    !$0.isPurged && $0.nextPurgePrompt != nil && $0.nextPurgePrompt! <= date
+                } ?? false
+            })
+        )
+        return dueTasks ?? []
+    }
+
+    /// Calculate total purgeable stored bytes for all tasks at a given date
+    func purgeableStoredBytesAll(at date: Date = Date()) -> Int {
+        purgeableItems().reduce(0) { $0 + $1.purgeableStoredBytes(at: date) }
+    }
+
+    /// Calculate total stored bytes for all tasks
+    func totalStoredBytesAll() -> Int {
+        (try? modelContext.fetch(FetchDescriptor<TaskItem>()))?
+            .reduce(0) { $0 + $1.totalStoredBytes } ?? 0
+    }
+
+    /// Calculate total original bytes for all tasks
+    func totalOriginalBytesAll() -> Int {
+        (try? modelContext.fetch(FetchDescriptor<TaskItem>()))?
+            .reduce(0) { $0 + $1.totalOriginalBytes } ?? 0
+    }
 }
 
 // MARK: - Test Helper

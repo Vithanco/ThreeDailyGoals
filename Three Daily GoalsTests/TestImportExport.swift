@@ -51,7 +51,7 @@ struct TestImportExport {
     @MainActor
     @Test
     func testFile() throws {
-        let model = dummyViewModel()
+        let model = setupApp(isTesting: true)
         let count = model.dataManager.items.count
         #expect(count > 0)
         let url = getDocumentsDirectory().appendingPathComponent("taskItems-test.json")

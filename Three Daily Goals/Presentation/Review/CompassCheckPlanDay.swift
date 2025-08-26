@@ -16,8 +16,9 @@ extension TaskItem {
 }
 
 struct CompassCheckPlanDay: View {
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(CompassCheckManager.self) private var compassCheckManager
     let eventMgr = EventManager()
     @State var events: [any CalendarEventRepresentable]
     @State var date: Date
@@ -41,7 +42,7 @@ struct CompassCheckPlanDay: View {
                     dateSelectionStyle: .selectedDates([date])
                 )
                 SimpleListView(
-                    itemList: model.compassCheckManager.priorityTasks,
+                    itemList: compassCheckManager.priorityTasks,
                     headers: [ListHeader.all],
                     showHeaders: false,
                     section: secToday,
@@ -50,7 +51,7 @@ struct CompassCheckPlanDay: View {
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {
                     items, _ in
-                    for _ in items.compactMap({ model.dataManager.findTask(withUuidString: $0) }) {
+                    for _ in items.compactMap({dataManager.findTask(withUuidString: $0) }) {
                         return true
                     }
                     return true

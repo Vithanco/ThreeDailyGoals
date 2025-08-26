@@ -9,7 +9,6 @@ import SwiftUI
 
 struct StreakView: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Environment(TaskManagerViewModel.self) private var model
     
     var body: some View {
         Text("\(Image(systemName: imgStreak)) \(preferences.streakText)").foregroundStyle(Color.red)
@@ -17,8 +16,6 @@ struct StreakView: View {
 }
 
 struct FullStreakView: View {
-    @Environment(CloudPreferences.self) private var preferences
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(CompassCheckManager.self) private var compassCheckManager
     
     var body: some View {

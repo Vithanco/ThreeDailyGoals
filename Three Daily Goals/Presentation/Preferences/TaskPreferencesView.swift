@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TaskPreferencesView: View {
-    @Environment(TaskManagerViewModel.self) private var model
+
     @Environment(CloudPreferences.self) private var preferences
 
     var body: some View {
@@ -39,6 +39,7 @@ struct TaskPreferencesView: View {
 }
 
 #Preview {
-    TaskPreferencesView()
-        .environment(dummyViewModel())
+    let appComponents = setupApp(isTesting: true)
+    return TaskPreferencesView()
+        .environment(appComponents.preferences)
 }

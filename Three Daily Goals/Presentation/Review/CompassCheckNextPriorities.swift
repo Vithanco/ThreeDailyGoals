@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CompassCheckNextPriorities: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
 
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
@@ -52,7 +52,7 @@ struct CompassCheckNextPriorities: View {
                         "Add Task",
                         action: {
                             presentAlert = false
-                            model.dataManager.addItem(title: newTaskName)
+                            dataManager.addItem(title: newTaskName)
                         })
                 },
                 message: {

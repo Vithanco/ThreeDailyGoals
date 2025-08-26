@@ -36,7 +36,7 @@ struct TestListHeaders {
     @Test
     func TestFilter() throws {
 
-        let model = dummyViewModel()
+        let model = setupApp(isTesting: true)
         #expect(model.dataManager.items.count == 178)
         let lhs = ListHeader.defaultListHeaders
         let result = lhs.map({ $0.filter(items: model.dataManager.items) })

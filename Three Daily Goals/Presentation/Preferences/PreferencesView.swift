@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @Environment(TaskManagerViewModel.self) private var model
     @State var time: Date = Date.now
 
     var body: some View {
@@ -44,6 +43,10 @@ struct PreferencesView: View {
 }
 
 #Preview {
-    PreferencesView()
-        .environment(dummyViewModel())
+    let appComponents = setupApp(isTesting: true)
+    return PreferencesView()
+        .environment(appComponents.preferences)
+        .environment(appComponents.dataManager)
+        .environment(appComponents.uiState)
+        .environment(appComponents.compassCheckManager)
 }

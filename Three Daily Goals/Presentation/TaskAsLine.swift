@@ -10,7 +10,7 @@ import SwiftUI
 struct TaskAsLine: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(UIStateManager.self) private var uiState
     let item: TaskItem
 
     var accentColor: Color {
@@ -29,36 +29,43 @@ struct TaskAsLine: View {
 
     var body: some View {
         HStack {
-
             text
             Spacer()
             if hasDue {
                 Text(item.due!.timeRemaining).italic().foregroundStyle(Color.gray)
             }
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.secondaryBackground)
+        .cornerRadius(10)
+        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.tertiaryBackground, lineWidth: 0.5)
+        )
         .contentShape(Rectangle())
         #if os(macOS)
             .draggable(item.id)
         #endif
         .swipeActions(edge: .leading) {
-
             if item.canBeMovedToOpen {
-                model.openButton(item: item)
+                dataManager.openButton(item: item)
             }
             if item.canBeMadePriority {
-                model.priorityButton(item: item)
+                dataManager.priorityButton(item: item)
             }
         }
         .swipeActions(edge: .trailing) {
             if item.canBeMovedToPendingResponse {
-                model.waitForResponseButton(item: item)
+                dataManager.waitForResponseButton(item: item)
             }
             if item.canBeClosed {
-                model.killButton(item: item)
-                model.closeButton(item: item)
+                dataManager.killButton(item: item)
+                dataManager.closeButton(item: item)
             }
             if item.canBeDeleted {
-                model.deleteButton(item: item)
+                dataManager.deleteButton(item: item, uiState: uiState)
             }
         }
     }
@@ -68,5 +75,5 @@ struct TaskAsLine: View {
     TaskAsLine(item: DataManager.testManager().items.first!)
         .environment(DataManager.testManager())
         .environment(dummyPreferences())
-        .environment(dummyViewModel())
+        .environment(UIStateManager())
 }

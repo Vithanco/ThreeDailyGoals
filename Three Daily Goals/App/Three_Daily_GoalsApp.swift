@@ -14,7 +14,6 @@ import os
 @main
 struct Three_Daily_GoalsApp: App {
 
-    var container: ModelContainer
     let calendarManager = CalendarManager()
     @State var appComponents: AppComponents
 
@@ -28,11 +27,11 @@ struct Three_Daily_GoalsApp: App {
                 enableTesting = true
             }
         #endif
-        self.container = sharedModelContainer(inMemory: enableTesting, withCloud: true)
         
         // Set up app components
         self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
 
+        assert(appComponents.preferences != nil)
         guard calendarManager.hasCalendarAccess else {
             debugPrint("No calendar access available")
             return
@@ -51,11 +50,12 @@ struct Three_Daily_GoalsApp: App {
                     createTaskFrom(url: url)
                 }
         }
-        .modelContainer(container)
+        .modelContainer(appComponents.modelContainer)
         .environment(calendarManager)
         .environment(appComponents.preferences)
         .environment(appComponents.uiState)
         .environment(appComponents.dataManager)
+        .environment(appComponents.cloudKitManager)
         .environment(appComponents.compassCheckManager)
         .environment(TaskManagerViewModel(
             modelContext: appComponents.modelContext,
@@ -86,12 +86,17 @@ struct Three_Daily_GoalsApp: App {
         #if os(macOS)  // see Toolbar for iOS way
             Settings {
                 PreferencesView().frame(width: 450)
+                    .environment(appComponents.preferences)
+                    .environment(appComponents.dataManager)
+                    .environment(appComponents.uiState)
+                    .environment(appComponents.cloudKitManager)
+                    .environment(appComponents.compassCheckManager)
             }
         #endif
     }
 
     @MainActor private func terminateApp() {
-        container.mainContext.processPendingChanges()
+        appComponents.modelContainer.mainContext.processPendingChanges()
         #if os(macOS)
             NSApplication.shared.terminate(self)
         #endif

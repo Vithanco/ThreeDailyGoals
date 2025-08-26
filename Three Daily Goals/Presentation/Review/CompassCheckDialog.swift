@@ -16,7 +16,7 @@ struct InnerHeightPreferenceKey: PreferenceKey {
 
 struct CompassCheckDialog: View {
 
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(CloudPreferences.self) private var preferences
     //    @State private var sheetHeight: CGFloat = .zero
 
@@ -26,16 +26,16 @@ struct CompassCheckDialog: View {
             HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(preferences.accentColor)
                 Spacer()
-                Button(role: .cancel, action: model.compassCheckManager.cancelCompassCheck) {
+                Button(role: .cancel, action: compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
-                Button(action: model.compassCheckManager.moveStateForward) {
-                    Text(model.compassCheckManager.moveStateForwardText)
+                Button(action: compassCheckManager.moveStateForward) {
+                    Text(compassCheckManager.moveStateForwardText)
                 }.buttonStyle(.borderedProminent)
             }
             Spacer()
 
-            switch model.compassCheckManager.state.rawValue {
+            switch compassCheckManager.state.rawValue {
             case "inform":
                 CompassCheckInformView()
             case "currentPriorities":
@@ -66,6 +66,8 @@ struct CompassCheckDialog: View {
 }
 
 #Preview {
-    CompassCheckDialog()
-        .environment(dummyViewModel())
+    let appComponents = setupApp(isTesting: true)
+    return CompassCheckDialog()
+        .environment(appComponents.preferences)
+        .environment(appComponents.compassCheckManager)
 }

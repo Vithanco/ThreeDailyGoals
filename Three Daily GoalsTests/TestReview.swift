@@ -15,132 +15,155 @@ struct TestReview {
 
     @Test
     func testNoStreak() throws {
-        let store = TestPreferences()
-        let pref = CloudPreferences(store: store)
-        let model = dummyViewModel(preferences: pref)
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
+        let dataManager = appComponents.dataManager
+        let uiState = appComponents.uiState
+        let compassCheckManager = appComponents.compassCheckManager
+        
         pref.lastCompassCheck = Date(timeIntervalSinceNow: -Seconds.twoDays)
 
-        model.compassCheckManager.startCompassCheckNow()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.dataManager.list(which: .priority).count == 1)
-        #expect(model.compassCheckManager.state.rawValue == "currentPriorities")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.dataManager.list(which: .priority).count == 0)
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "dueDate")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
+        compassCheckManager.startCompassCheckNow()
+        #expect(compassCheckManager.state.rawValue == "inform")
+        compassCheckManager.moveStateForward()
+        #expect(dataManager.list(which: .priority).count == 1)
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        compassCheckManager.moveStateForward()
+        #expect(dataManager.list(which: .priority).count == 0)
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "dueDate")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
         if OsRelated.currentOS == .macOS {
-            #expect(model.compassCheckManager.state.rawValue == "plan")
-            model.compassCheckManager.moveStateForward()
+            #expect(compassCheckManager.state.rawValue == "plan")
+            compassCheckManager.moveStateForward()
         }
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.state.rawValue == "inform")
         #expect(pref.daysOfCompassCheck == 1)
-        for t in model.dataManager.items {
+        for t in dataManager.items {
             t.dueDate = nil
         }
-        #expect(model.compassCheckManager.dueDateSoon.isEmpty)
+        #expect(compassCheckManager.dueDateSoon.isEmpty)
 
-        #expect(!model.uiState.showCompassCheckDialog)
-        model.compassCheckManager.startCompassCheckNow()
+        #expect(!uiState.showCompassCheckDialog)
+        compassCheckManager.startCompassCheckNow()
 
-        #expect(model.uiState.showCompassCheckDialog)
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        #expect(uiState.showCompassCheckDialog)
+        #expect(compassCheckManager.state.rawValue == "inform")
 
-        #expect(model.compassCheckManager.dueDateSoon.isEmpty)
-        debugPrint(model.dataManager.list(which: .priority).map { $0.title })
-        #expect(model.dataManager.list(which: .priority).count == 2)
-        model.compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.dueDateSoon.isEmpty)
+        debugPrint(dataManager.list(which: .priority).map { $0.title })
+        #expect(dataManager.list(which: .priority).count == 2)
+        compassCheckManager.moveStateForward()
 
-        #expect(model.compassCheckManager.dueDateSoon.isEmpty)
-        #expect(model.compassCheckManager.state.rawValue == "currentPriorities")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.dueDateSoon.isEmpty)
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "pending")
 
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        #expect(model.compassCheckManager.dueDateSoon.isEmpty)
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "plan")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.dueDateSoon.isEmpty)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "inform")
         #expect(pref.daysOfCompassCheck == 1)
-        #expect(!model.uiState.showCompassCheckDialog)
+        #expect(!uiState.showCompassCheckDialog)
 
-        model.compassCheckManager.startCompassCheckNow()
-        #expect(model.uiState.showCompassCheckDialog)
-        #expect(model.compassCheckManager.state.rawValue == "inform")
-        #expect(model.dataManager.list(which: .priority).count == 0)
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "plan")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        compassCheckManager.startCompassCheckNow()
+        #expect(uiState.showCompassCheckDialog)
+        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(dataManager.list(which: .priority).count == 0)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "inform")
         #expect(pref.daysOfCompassCheck == 1)
     }
 
     @MainActor
     @Test
     func testIncreaseStreak() throws {
-        let model = dummyViewModel(preferences: dummyPreferences())
-        let pref = model.preferences
+        debugPrint("Starting testIncreaseStreak")
+        let appComponents = setupApp(isTesting: true)
+        debugPrint("setupApp completed")
+        let pref = appComponents.preferences
+        debugPrint("got preferences")
+        let dataManager = appComponents.dataManager
+        let uiState = appComponents.uiState
+        let compassCheckManager = appComponents.compassCheckManager
 
+        debugPrint("daysOfCompassCheck: \(pref.daysOfCompassCheck)")
         #expect(pref.daysOfCompassCheck == 42)
-        pref.lastCompassCheck = getDate(daysPrior: 1)
+        debugPrint("Setting lastCompassCheck")
+        pref.lastCompassCheck = Date.now.addingTimeInterval(-24 * 60 * 60) // 1 day ago
+        debugPrint("lastCompassCheck set to: \(pref.lastCompassCheck)")
 
-        model.compassCheckManager.startCompassCheckNow()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "currentPriorities")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "dueDate")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "plan")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        debugPrint("Starting compass check")
+        compassCheckManager.startCompassCheckNow()
+        debugPrint("State after startCompassCheckNow: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "inform")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after first moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after second moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after third moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "dueDate")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after fourth moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after fifth moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
+        debugPrint("State after sixth moveStateForward: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "inform")
+        debugPrint("Final daysOfCompassCheck: \(pref.daysOfCompassCheck)")
         #expect(pref.daysOfCompassCheck == 43)
 
-        model.compassCheckManager.startCompassCheckNow()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "currentPriorities")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "dueDate")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "plan")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
+        debugPrint("Starting second compass check")
+        compassCheckManager.startCompassCheckNow()
+        debugPrint("State after second startCompassCheckNow: \(compassCheckManager.state.rawValue)")
+        #expect(compassCheckManager.state.rawValue == "inform")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "dueDate")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "inform")
         #expect(pref.daysOfCompassCheck == 43)
     }
 
     @MainActor
     @Test
     func testReviewInterval() throws {
-        let model = dummyViewModel()
-        let pref = model.preferences
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
 
         pref.lastCompassCheck = getCompassCheckInterval().start.addingTimeInterval(1)
-        #expect(model.preferences.didCompassCheckToday)
+        #expect(pref.didCompassCheckToday)
 
         // Set lastCompassCheck to a time outside the current compass check interval
         let currentInterval = getCompassCheckInterval()
         pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600) // 1 hour before interval
-        #expect(!model.preferences.didCompassCheckToday)
+        #expect(!pref.didCompassCheckToday)
         #expect(!pref.lastCompassCheck.isToday)
     }
 
@@ -151,23 +174,37 @@ struct TestReview {
 
     @MainActor
     @Test
+    func testSetupApp() throws {
+        debugPrint("Testing setupApp")
+        let appComponents = setupApp(isTesting: true)
+        debugPrint("setupApp worked")
+        let pref = appComponents.preferences
+        debugPrint("preferences: \(pref.daysOfCompassCheck)")
+        #expect(pref.daysOfCompassCheck == 42)
+    }
+
+    @MainActor
+    @Test
     func testdidCompassCheckToday() throws {
-        let model = dummyViewModel(preferences: dummyPreferences())
-        let pref = model.preferences
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
 
         // Set lastCompassCheck to a time within the current compass check interval
         let currentInterval = getCompassCheckInterval()
         pref.lastCompassCheck = currentInterval.start.addingTimeInterval(1)
         #expect(pref.didCompassCheckToday)
-        #expect(model.preferences.didCompassCheckToday)
+        #expect(pref.didCompassCheckToday)
 
     }
 
     @MainActor
     @Test
     func testReview() {
-        let model = dummyViewModel(preferences: dummyPreferences())
-        let pref = model.preferences
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
+        let dataManager = appComponents.dataManager
+        let uiState = appComponents.uiState
+        let compassCheckManager = appComponents.compassCheckManager
 
         // Set lastCompassCheck to a time outside the current compass check interval
         let currentInterval = getCompassCheckInterval()
@@ -175,21 +212,21 @@ struct TestReview {
         #expect(!pref.didCompassCheckToday)
 
         #expect(pref.daysOfCompassCheck == 42)
-        model.compassCheckManager.startCompassCheckNow()
-        #expect(model.compassCheckManager.state.rawValue == "inform")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.dataManager.list(which: .priority).count == 1)
-        #expect(model.compassCheckManager.state.rawValue == "currentPriorities")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.dataManager.list(which: .priority).count == 0)
-        #expect(model.compassCheckManager.state.rawValue == "pending")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "dueDate")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
-        model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "plan")
-        model.compassCheckManager.moveStateForward()
+        compassCheckManager.startCompassCheckNow()
+        #expect(compassCheckManager.state.rawValue == "inform")
+        compassCheckManager.moveStateForward()
+        #expect(dataManager.list(which: .priority).count == 1)
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        compassCheckManager.moveStateForward()
+        #expect(dataManager.list(which: .priority).count == 0)
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "dueDate")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
         #expect(pref.daysOfCompassCheck == 43)
     }
 }

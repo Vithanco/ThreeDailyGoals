@@ -35,7 +35,7 @@ struct TestModelLists {
     @Test
     func testLists() throws {
 
-        let model = dummyViewModel()
+        let model = setupApp(isTesting: true)
         #expect(178 == model.dataManager.items.count)
         let item = model.dataManager.items.first!
 
@@ -63,7 +63,7 @@ struct TestModelLists {
         let testTag2 = "aTestTag346"
         #expect(testTag != testTag2)
 
-        let model = dummyViewModel()
+        let model = setupApp(isTesting: true)
         #expect(model.dataManager.items.count == 178)
         #expect(model.dataManager.allTags.contains("private"))
         #expect(model.dataManager.allTags.contains("work"))
@@ -109,7 +109,7 @@ struct TestModelLists {
     @MainActor
     @Test
     func testDueDate() async throws {
-        let model = dummyViewModel(loader: {
+        let model = setupApp(isTesting: true,  loader: {
             var result: [TaskItem] = []
             let theGoal = result.add(
                 title: "Read 'The Goal' by Goldratt",

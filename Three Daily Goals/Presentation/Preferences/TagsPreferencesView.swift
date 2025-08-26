@@ -11,8 +11,8 @@ import TagKit
 struct EditTag: View {
     @Binding var currentTagName: String
     @Binding var changeTo: String
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(DataManager.self) private var dataManager
 
     var displayCurrentTagName: String {
         if currentTagName == "private" {
@@ -29,19 +29,19 @@ struct EditTag: View {
                 ForEach(TaskItemState.allCases) { state in
                     HStack {
                         Text(state.description + ":").bold()
-                        Text("\(model.dataManager.statsForTags(tag: currentTagName, which: state))")
+                        Text("\(dataManager.statsForTags(tag: currentTagName, which: state))")
                     }
                 }
 
                 TextField("New Name", text: $changeTo)
                 Button("Change Name") {
-                    model.dataManager.exchangeTag(from: currentTagName, to: changeTo)
+                    dataManager.exchangeTag(from: currentTagName, to: changeTo)
                 }.buttonStyle(.bordered)
 
             }
             Spacer()
             Button("Delete this tag", role: .destructive) {
-                model.dataManager.delete(tag: currentTagName)
+                dataManager.delete(tag: currentTagName)
             }.buttonStyle(.bordered)
                 .disabled(currentTagName == "private" || currentTagName == "work")
         }
@@ -50,7 +50,7 @@ struct EditTag: View {
 }
 
 struct TagsPreferencesView: View {
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @State var tag: String = ""
     @State var changeTo: String = ""
@@ -59,7 +59,7 @@ struct TagsPreferencesView: View {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
                     TagList(
-                        tags: model.dataManager.allTags.asArray,
+                        tags: dataManager.allTags.asArray,
                         tagView: { text in
                             return TagCapsule(text)
                                 .tagCapsuleStyle(selectedTagStyle(accentColor: preferences.accentColor))
@@ -78,6 +78,8 @@ struct TagsPreferencesView: View {
 }
 
 #Preview {
-    TagsPreferencesView()
-        .environment(dummyViewModel())
+    let appComponents = setupApp(isTesting: true)
+    return TagsPreferencesView()
+        .environment(appComponents.preferences)
+        .environment(appComponents.dataManager)
 }
