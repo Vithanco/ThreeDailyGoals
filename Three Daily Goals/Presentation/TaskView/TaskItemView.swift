@@ -11,7 +11,6 @@ import SwiftUI
 struct TaskItemView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
-    @Environment(TaskManagerViewModel.self) private var model
     @Bindable var item: TaskItem
     @FocusState private var isTitleFocused: Bool
 
@@ -27,6 +26,23 @@ struct TaskItemView: View {
             )
             
             AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
+            Spacer()
+
+                        HStack {
+                            Spacer()
+                            LabeledContent {
+                                Text(item.created, format: stdOnlyDateFormat)
+                            } label: {
+                                Text("Created:").bold().foregroundColor(Color.secondaryColor)
+                            }
+                            Spacer()
+                            LabeledContent {
+                                Text(item.changed.timeAgoDisplay())
+                            } label: {
+                                Text("Changed:").bold().foregroundColor(Color.secondaryColor)
+                            }
+                            Spacer()
+                        }.padding(.bottom, 8)
         }
         .itemToolbar(item: item)
         .onAppear(perform: {

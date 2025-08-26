@@ -126,20 +126,6 @@ struct InnerTaskItemView: View {
                 }.frame(maxHeight: 70)
             }
 
-            Spacer()
-
-            HStack {
-                LabeledContent {
-                    Text(item.created, format: stdOnlyDateFormat)
-                } label: {
-                    Text("Created:").bold().foregroundColor(Color.secondaryColor)
-                }
-                LabeledContent {
-                    Text(item.changed.timeAgoDisplay())
-                } label: {
-                    Text("Changed:").bold().foregroundColor(Color.secondaryColor)
-                }
-            }
         }
         .background(Color.background)
         .padding()
