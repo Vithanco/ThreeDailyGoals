@@ -11,6 +11,7 @@ struct TaskAsLine: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState
+    @Environment(\.colorScheme) private var colorScheme
     let item: TaskItem
 
     var accentColor: Color {
@@ -26,6 +27,16 @@ struct TaskAsLine: View {
     var hasDue: Bool {
         return item.due != nil && item.isOpenOrPriority
     }
+    
+    // Adaptive background color for light/dark mode
+    private var cardBackground: Color {
+        colorScheme == .dark ? Color.neutral800 : Color.neutral50
+    }
+    
+    // Adaptive border color for light/dark mode
+    private var cardBorder: Color {
+        colorScheme == .dark ? Color.neutral700 : Color.neutral200
+    }
 
     var body: some View {
         HStack {
@@ -37,12 +48,12 @@ struct TaskAsLine: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color.secondaryBackground)
+        .background(cardBackground)
         .cornerRadius(10)
-        .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .shadow(color: .black.opacity(0.03), radius: 1, x: 0, y: 1)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.tertiaryBackground, lineWidth: 0.5)
+                .stroke(cardBorder, lineWidth: 0.5)
         )
         .contentShape(Rectangle())
         #if os(macOS)

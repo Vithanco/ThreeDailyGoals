@@ -19,6 +19,7 @@ struct InnerTaskItemView: View {
     let missingTagStyle: TagCapsuleStyle
     @Environment(\.modelContext) private var modelContext
     let showAttachmentImport: Bool
+    @Environment(\.colorScheme) var colorScheme
 
     private var attachmentButton: some View {
         Button {
@@ -31,105 +32,133 @@ struct InnerTaskItemView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 16) {
+            // Header section
             HStack {
                 StateView(state: item.state, accentColor: accentColor)
                 Text("Task").font(.title).foregroundStyle(accentColor)
                 Spacer()
             }
+            .padding(.bottom, 8)
 
-            LabeledContent {
-                TextField("titleField", text: $item.title).accessibilityIdentifier("titleField")
-                    .bold().frame(idealHeight: 13)
-            } label: {
-                Text("Title:").bold().foregroundColor(Color.secondaryColor)
-            }
-
-            //        Details
-            LabeledContent {
-                TextField("Details", text: $item.details, axis: .vertical)
-                    #if os(macOS)
-                        .textFieldStyle(.squareBorder)
-                    #endif
-                    .frame(minHeight: 30, idealHeight: 30)
-            } label: {
-                Text("Details:").bold().foregroundColor(Color.secondaryColor)
-            }
-
-            //        URL
-            LabeledContent {
-                HStack {
-                    TextField("URL", text: $item.url, axis: .vertical)
-                        #if os(macOS)
-                            .textFieldStyle(.squareBorder)
-                        #endif
-                        .frame(idealHeight: 30).frame(minHeight: 30)
-                    if let link = URL(string: item.url) {
-                        Link("Open", destination: link)
-                    }
+            // Main content section with proper spacing
+            VStack(alignment: .leading, spacing: 12) {
+                // Title field
+                LabeledContent {
+                    TextField("titleField", text: $item.title)
+                        .accessibilityIdentifier("titleField")
+                        .bold()
+                        .frame(idealHeight: 13)
+                        .textFieldStyle(.roundedBorder)
+                } label: {
+                    Text("Title:").bold().foregroundColor(Color.secondaryColor)
                 }
-            } label: {
-                Text("URL:").bold().foregroundColor(Color.secondaryColor)
+
+                // Details field
+                LabeledContent {
+                    TextField("Details", text: $item.details, axis: .vertical)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(minHeight: 30, idealHeight: 30)
+                } label: {
+                    Text("Details:").bold().foregroundColor(Color.secondaryColor)
+                }
+
+                // URL field
+                LabeledContent {
+                    HStack {
+                        TextField("URL", text: $item.url, axis: .vertical)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(idealHeight: 30)
+                            .frame(minHeight: 30)
+                        if let link = URL(string: item.url) {
+                            Link("Open", destination: link)
+                                .foregroundColor(accentColor)
+                        }
+                    }
+                } label: {
+                    Text("URL:").bold().foregroundColor(Color.secondaryColor)
+                }
+
+                // Due date field
+                LabeledContent {
+                    DatePickerNullable(selected: $item.due, defaultDate: getDate(inDays: 7))
+                } label: {
+                    Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
+                }
             }
 
-            LabeledContent {
-                DatePickerNullable(selected: $item.due, defaultDate: getDate(inDays: 7))
-            } label: {
-                Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
-            }
-
+            // Attachments section
             GroupBox {
-                HStack {
-                    Text("Attachments").font(.headline)
-                    Spacer()
-                    if showAttachmentImport {
-                        attachmentButton
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Attachments").font(.headline)
+                        Spacer()
+                        if showAttachmentImport {
+                            attachmentButton
+                        }
                     }
-                }
-                .padding(.bottom, 4)
 
-                let atts = item.attachments ?? []
-                let _ = print("📎 Task '\(item.title)' has \(atts.count) attachments")
-                if atts.isEmpty {
-                    Text("No attachments yet").foregroundStyle(.secondary)
-                        .accessibilityIdentifier("noAttachmentsMessage")
-                } else {
-                    ForEach(atts) { att in
-                        AttachmentRow(
-                            attachment: att,
-                            onDelete: showAttachmentImport
-                                ? {
-                                    deleteAttachment(att)
-                                } : nil
-                        )
+                    let atts = item.attachments ?? []
+                    let _ = print("📎 Task '\(item.title)' has \(atts.count) attachments")
+                    if atts.isEmpty {
+                        Text("No attachments yet").foregroundStyle(.secondary)
+                            .accessibilityIdentifier("noAttachmentsMessage")
+                    } else {
+                        ForEach(atts) { att in
+                            AttachmentRow(
+                                attachment: att,
+                                onDelete: showAttachmentImport
+                                    ? {
+                                        deleteAttachment(att)
+                                    } : nil
+                            )
+                        }
                     }
                 }
             }
             .accessibilityIdentifier("attachmentsGroupBox")
 
+            // Labels section
             GroupBox {
-                HStack {
-                    Text("Add new Label:")
-                    TagTextField(text: $buildTag, placeholder: "Tag Me").onSubmit({
-                        item.addTag(buildTag)
-                    })
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Add new Label:")
+                        TagTextField(text: $buildTag, placeholder: "Tag Me").onSubmit({
+                            item.addTag(buildTag)
+                        })
+                    }
+                    TagEditList(
+                        tags: Binding(
+                            get: { item.tags },
+                            set: { item.tags = $0 }
+                        ),
+                        additionalTags: allTags,
+                        container: .vstack
+                    ) { text, isTag in
+                        TagCapsule(text)
+                            .tagCapsuleStyle(isTag ? selectedTagStyle : missingTagStyle)
+                    }.frame(maxHeight: 70)
                 }
-                TagEditList(
-                    tags: Binding(
-                        get: { item.tags },
-                        set: { item.tags = $0 }
-                    ),
-                    additionalTags: allTags,
-                    container: .vstack
-                ) { text, isTag in
-                    TagCapsule(text)
-                        .tagCapsuleStyle(isTag ? selectedTagStyle : missingTagStyle)
-                }.frame(maxHeight: 70)
             }
-
         }
-        .background(Color.background)
-        .padding()
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
+                .shadow(
+                    color: colorScheme == .dark ? .black.opacity(0.3) : .black.opacity(0.08),
+                    radius: colorScheme == .dark ? 8 : 6,
+                    x: 0,
+                    y: colorScheme == .dark ? 4 : 2
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    colorScheme == .dark ? Color.neutral700 : Color.neutral200,
+                    lineWidth: 1
+                )
+        )
 
         .fileImporter(
             isPresented: $showAttachmentImporter,

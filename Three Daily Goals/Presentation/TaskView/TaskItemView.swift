@@ -11,11 +11,13 @@ import SwiftUI
 struct TaskItemView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
+    @Environment(\.colorScheme) private var colorScheme
     @Bindable var item: TaskItem
     @FocusState private var isTitleFocused: Bool
 
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
+            // Main task content with enhanced card styling
             InnerTaskItemView(
                 accentColor: preferences.accentColor,
                 item: item,
@@ -25,25 +27,30 @@ struct TaskItemView: View {
                 showAttachmentImport: true
             )
 
-            AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
-            Spacer()
+            // Comments section with metadata - same width as task content
+            AllCommentsView(item: item)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
+                        .shadow(
+                            color: colorScheme == .dark ? .black.opacity(0.3) : .black.opacity(0.08),
+                            radius: colorScheme == .dark ? 8 : 6,
+                            x: 0,
+                            y: colorScheme == .dark ? 4 : 2
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            colorScheme == .dark ? Color.neutral700 : Color.neutral200,
+                            lineWidth: 1
+                        )
+                )
 
-            HStack {
-                Spacer()
-                LabeledContent {
-                    Text(item.created, format: stdOnlyDateFormat)
-                } label: {
-                    Text("Created:").bold().foregroundColor(Color.secondaryColor)
-                }
-                Spacer()
-                LabeledContent {
-                    Text(item.changed.timeAgoDisplay())
-                } label: {
-                    Text("Changed:").bold().foregroundColor(Color.secondaryColor)
-                }
-                Spacer()
-            }.padding(.bottom, 8)
+            Spacer()
         }
+        .padding(.horizontal, 16)
         .itemToolbar(item: item)
         .onAppear(perform: {
             dataManager.updateUndoRedoStatus()
