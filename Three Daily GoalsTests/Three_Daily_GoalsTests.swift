@@ -14,7 +14,7 @@ import XCTest
 //@Suite
 @MainActor
 struct Three_Daily_GoalsTests {
-    
+
     var model: AppComponents
 
     init() {

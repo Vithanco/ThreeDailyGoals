@@ -24,25 +24,25 @@ struct TaskItemView: View {
                 missingTagStyle: missingTagStyle,
                 showAttachmentImport: true
             )
-            
+
             AllCommentsView(item: item).frame(maxWidth: .infinity, maxHeight: .infinity)
             Spacer()
 
-                        HStack {
-                            Spacer()
-                            LabeledContent {
-                                Text(item.created, format: stdOnlyDateFormat)
-                            } label: {
-                                Text("Created:").bold().foregroundColor(Color.secondaryColor)
-                            }
-                            Spacer()
-                            LabeledContent {
-                                Text(item.changed.timeAgoDisplay())
-                            } label: {
-                                Text("Changed:").bold().foregroundColor(Color.secondaryColor)
-                            }
-                            Spacer()
-                        }.padding(.bottom, 8)
+            HStack {
+                Spacer()
+                LabeledContent {
+                    Text(item.created, format: stdOnlyDateFormat)
+                } label: {
+                    Text("Created:").bold().foregroundColor(Color.secondaryColor)
+                }
+                Spacer()
+                LabeledContent {
+                    Text(item.changed.timeAgoDisplay())
+                } label: {
+                    Text("Changed:").bold().foregroundColor(Color.secondaryColor)
+                }
+                Spacer()
+            }.padding(.bottom, 8)
         }
         .itemToolbar(item: item)
         .onAppear(perform: {
@@ -51,9 +51,6 @@ struct TaskItemView: View {
         })
     }
 }
-
-
-
 
 #Preview {
     //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)

@@ -27,12 +27,10 @@ struct MainView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
-    
-
 
     var body: some View {
         @Bindable var uiState = uiState
-        
+
         return SingleView {
             if isLargeDevice {
                 RegularMainView().frame(minWidth: 1000, minHeight: 600)

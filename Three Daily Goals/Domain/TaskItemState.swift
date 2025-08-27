@@ -109,11 +109,11 @@ extension TaskItemState {
         case .dead: return .deadColor
         }
     }
-    
+
     var stateColorLight: Color {
         return stateColor.opacity(0.1)
     }
-    
+
     var stateColorMedium: Color {
         return stateColor.opacity(0.3)
     }

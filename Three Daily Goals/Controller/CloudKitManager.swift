@@ -8,17 +8,16 @@ import SwiftData
 final class CloudKitManager: @preconcurrency PriorityUpdater {
     let dataManager: DataManager
     let preferences: CloudPreferences
-    
+
     init(dataManager: DataManager, preferences: CloudPreferences) {
         self.dataManager = dataManager
         self.preferences = preferences
     }
-    
+
     var isProductionEnvironment: Bool {
         return CKContainer.isProductionEnvironment
     }
 
-    
     func updatePriorities() {
         if let prioTasks = dataManager.lists[.priority] {
             let prios = prioTasks.count

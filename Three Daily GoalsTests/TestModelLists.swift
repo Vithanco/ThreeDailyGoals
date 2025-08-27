@@ -42,8 +42,8 @@ struct TestModelLists {
         func move(from: TaskItemState, to: TaskItemState) {
             model.dataManager.moveWithPriorityTracking(task: item, to: to)
             #expect(item.state == to)
-                    #expect(model.dataManager.list(which: to).contains(item))
-        #expect(!model.dataManager.list(which: from).contains(item))
+            #expect(model.dataManager.list(which: to).contains(item))
+            #expect(!model.dataManager.list(which: from).contains(item))
         }
 
         #expect(item.state == TaskItemState.open)
@@ -109,17 +109,19 @@ struct TestModelLists {
     @MainActor
     @Test
     func testDueDate() async throws {
-        let model = setupApp(isTesting: true,  loader: {
-            var result: [TaskItem] = []
-            let theGoal = result.add(
-                title: "Read 'The Goal' by Goldratt",
-                changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
-            theGoal.details =
-                "It is the book that introduced the fundamentals for 'Theory of Constraints'"
-            theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-            theGoal.dueDate = getDate(inDays: 2)
-            return result
-        })
+        let model = setupApp(
+            isTesting: true,
+            loader: {
+                var result: [TaskItem] = []
+                let theGoal = result.add(
+                    title: "Read 'The Goal' by Goldratt",
+                    changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+                theGoal.details =
+                    "It is the book that introduced the fundamentals for 'Theory of Constraints'"
+                theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
+                theGoal.dueDate = getDate(inDays: 2)
+                return result
+            })
 
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         #expect(model.compassCheckManager.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")

@@ -1,3 +1,4 @@
+import SwiftData
 //
 //  InnerTaskItemView.swift
 //  Three Daily Goals
@@ -7,7 +8,6 @@
 import SwiftUI
 import TagKit
 import UniformTypeIdentifiers
-import SwiftData
 
 struct InnerTaskItemView: View {
     let accentColor: Color
@@ -40,7 +40,7 @@ struct InnerTaskItemView: View {
 
             LabeledContent {
                 TextField("titleField", text: $item.title).accessibilityIdentifier("titleField")
-                .bold().frame(idealHeight: 13)
+                    .bold().frame(idealHeight: 13)
             } label: {
                 Text("Title:").bold().foregroundColor(Color.secondaryColor)
             }
@@ -77,7 +77,7 @@ struct InnerTaskItemView: View {
             } label: {
                 Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
             }
-            
+
             GroupBox {
                 HStack {
                     Text("Attachments").font(.headline)
@@ -97,9 +97,10 @@ struct InnerTaskItemView: View {
                     ForEach(atts) { att in
                         AttachmentRow(
                             attachment: att,
-                            onDelete: showAttachmentImport ? {
-                                deleteAttachment(att)
-                            } : nil
+                            onDelete: showAttachmentImport
+                                ? {
+                                    deleteAttachment(att)
+                                } : nil
                         )
                     }
                 }
@@ -132,11 +133,11 @@ struct InnerTaskItemView: View {
 
         .fileImporter(
             isPresented: $showAttachmentImporter,
-            allowedContentTypes: [.item], // anything
+            allowedContentTypes: [.item],  // anything
             allowsMultipleSelection: true
         ) { result in
             guard case .success(let urls) = result else { return }
-            
+
             for url in urls {
                 // Start accessing the security-scoped resource
                 let accessing = url.startAccessingSecurityScopedResource()
@@ -145,10 +146,11 @@ struct InnerTaskItemView: View {
                         url.stopAccessingSecurityScopedResource()
                     }
                 }
-                
+
                 do {
-                    let type = try url.resourceValues(forKeys: [.contentTypeKey]).contentType
-                              ?? UTType(filenameExtension: url.pathExtension) ?? .data
+                    let type =
+                        try url.resourceValues(forKeys: [.contentTypeKey]).contentType
+                        ?? UTType(filenameExtension: url.pathExtension) ?? .data
                     let attachment = try addAttachment(
                         fileURL: url,
                         type: type,
@@ -164,21 +166,21 @@ struct InnerTaskItemView: View {
                 }
             }
         }
-        .opacity(showAttachmentImport ? 1 : 0) // Hide fileImporter when not needed
+        .opacity(showAttachmentImport ? 1 : 0)  // Hide fileImporter when not needed
     }
-    
+
     private func deleteAttachment(_ attachment: Attachment) {
         let filename = attachment.filename
-        
+
         // Remove the attachment from the task
         item.attachments?.removeAll { $0.id == attachment.id }
-        
+
         // Delete the attachment from the model context
         modelContext.delete(attachment)
-        
+
         // Add a comment about the deletion
         item.addComment(text: "Removed attachment: \(filename)")
-        
+
         // Save the changes
         do {
             try modelContext.save()

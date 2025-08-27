@@ -5,10 +5,10 @@
 //  Created by Klaus Kneupner on 28/01/2024.
 //
 
+import CloudKit
 import Foundation
 import SwiftData
 import SwiftUI
-import CloudKit
 import os
 
 private let logger = Logger(
@@ -260,7 +260,6 @@ extension CloudPreferences {
     func setPriority(nr: Int, value: String) {
         store.set(value, forKey: nrToCloudKey(nr: nr))
     }
-    
 
 }
 
@@ -296,5 +295,3 @@ func dummyPreferences() -> CloudPreferences {
     store.set(00, forKey: .compassCheckTimeMinute)
     return result
 }
-
-

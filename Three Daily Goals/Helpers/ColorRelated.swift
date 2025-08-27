@@ -14,23 +14,23 @@ import SwiftUI
 
 extension Color {
     // MARK: - Primary Brand Colors (Orange-based)
-    public static let primaryOrange = Color(hex: "#FF6B35")      // Vibrant orange
-    public static let primaryOrangeLight = Color(hex: "#FF8A65") // Lighter orange
+    public static let primaryOrange = Color(hex: "#FF6B35")  // Vibrant orange
+    public static let primaryOrangeLight = Color(hex: "#FF8A65")  // Lighter orange
     public static let primaryOrangeDark = Color(hex: "#E55A2B")  // Darker orange
-    
+
     // MARK: - Semantic Task State Colors
-    public static let priorityColor = Color(hex: "#FF6B35")      // Orange for priority
-    public static let openColor = Color(hex: "#2196F3")          // Blue for open tasks
-    public static let pendingColor = Color(hex: "#FFC107")       // Amber for pending
-    public static let closedColor = Color(hex: "#4CAF50")        // Green for closed
-    public static let deadColor = Color(hex: "#9E9E9E")          // Gray for dead/archived
-    
+    public static let priorityColor = Color(hex: "#FF6B35")  // Orange for priority
+    public static let openColor = Color(hex: "#2196F3")  // Blue for open tasks
+    public static let pendingColor = Color(hex: "#FFC107")  // Amber for pending
+    public static let closedColor = Color(hex: "#4CAF50")  // Green for closed
+    public static let deadColor = Color(hex: "#9E9E9E")  // Gray for dead/archived
+
     // MARK: - Status Colors
-    public static let successColor = Color(hex: "#4CAF50")       // Green for success
-    public static let warningColor = Color(hex: "#FF9800")       // Orange for warnings
-    public static let errorColor = Color(hex: "#F44336")         // Red for errors
-    public static let infoColor = Color(hex: "#2196F3")          // Blue for info
-    
+    public static let successColor = Color(hex: "#4CAF50")  // Green for success
+    public static let warningColor = Color(hex: "#FF9800")  // Orange for warnings
+    public static let errorColor = Color(hex: "#F44336")  // Red for errors
+    public static let infoColor = Color(hex: "#2196F3")  // Blue for info
+
     // MARK: - Neutral Colors
     public static let neutral50 = Color(hex: "#FAFAFA")
     public static let neutral100 = Color(hex: "#F5F5F5")
@@ -42,7 +42,7 @@ extension Color {
     public static let neutral700 = Color(hex: "#616161")
     public static let neutral800 = Color(hex: "#424242")
     public static let neutral900 = Color(hex: "#212121")
-    
+
     // MARK: - Legacy Support
     public static let mainColor = Color(
         red: 234.0 / 255.0, green: 88.0 / 255.0, blue: 12.0 / 255.0, opacity: 1.0)
@@ -68,7 +68,7 @@ struct AppColorTheme {
     let surface: Color
     let text: Color
     let textSecondary: Color
-    
+
     static let orange = AppColorTheme(
         primary: .primaryOrange,
         secondary: .primaryOrangeLight,
@@ -78,7 +78,7 @@ struct AppColorTheme {
         text: .primary,
         textSecondary: .secondary
     )
-    
+
     static let blue = AppColorTheme(
         primary: .openColor,
         secondary: Color(hex: "#64B5F6"),
@@ -88,7 +88,7 @@ struct AppColorTheme {
         text: .primary,
         textSecondary: .secondary
     )
-    
+
     static let green = AppColorTheme(
         primary: .closedColor,
         secondary: Color(hex: "#81C784"),

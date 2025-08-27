@@ -14,7 +14,8 @@ struct MainToolbarContent: ToolbarContent {
     var body: some ToolbarContent {
         ToolbarItem {
             Button(action: { uiState.showPreferences() }) {
-                Label("Preferences", systemImage: "gear").accessibilityIdentifier("showPreferencesButton").help("Show Preferences Dialog")
+                Label("Preferences", systemImage: "gear").accessibilityIdentifier("showPreferencesButton").help(
+                    "Show Preferences Dialog")
             }
         }
         ToolbarItem {

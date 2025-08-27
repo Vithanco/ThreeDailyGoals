@@ -55,7 +55,8 @@ struct CompassCheckPreferencesView: View {
             }
             GroupBox {
                 DatePicker(
-                    "Time of Compass Check Notification", selection: Binding(
+                    "Time of Compass Check Notification",
+                    selection: Binding(
                         get: { preferences.compassCheckTime },
                         set: { preferences.compassCheckTime = $0 }
                     ),

@@ -9,6 +9,7 @@ import Foundation
 @preconcurrency import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
+
 //--------------------------------------------------------------------------------
 // ⚠️⛔️ new version -- please read ⛔️⚠️
 // First, change app to be connected to iCloud development (entitlements File, change com.apple.developer.icloud-container-environment)
@@ -19,17 +20,17 @@ import UniformTypeIdentifiers
 
 public enum SchemaV3_5: VersionedSchema {
     public static let versionIdentifier = Schema.Version(3, 5, 0)
-    
+
     public static var models: [any PersistentModel.Type] {
         [TaskItem.self, Comment.self, Attachment.self]
     }
-    
+
     @Model
     public final class TaskItem: Codable, Sendable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
-        
+
         var _title: String = emptyTaskTitle
         var _details: String = emptyTaskDetails
         var _state: TaskItemState = TaskItemState.open
@@ -43,17 +44,17 @@ public enum SchemaV3_5: VersionedSchema {
         var eventId: String? = nil
         var allTagsString: String = ""
         var estimatedMinutes: Int = 0
-        
+
         //future potential additions:
         //Eisenhower Matrix (Important, Urgent),
         //Priority (1-10)
         //ImageData
-        
+
         init() {
             self.uuid = UUID()
             self.eventId = nil
         }
-        
+
         init(
             title: String = emptyTaskTitle,
             details: String = emptyTaskDetails,
@@ -74,14 +75,14 @@ public enum SchemaV3_5: VersionedSchema {
             self.eventId = nil
             self.estimatedMinutes = estimatedMinutes
         }
-        
+
         // MARK: Codable
-        
+
         enum CodingKeys: CodingKey {
             case created, changed, closed, title, details, state, url, comments, dueDate, tags, uuid,
-                 eventId, estimatedMinutes
+                eventId, estimatedMinutes
         }
-        
+
         public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
@@ -102,10 +103,10 @@ public enum SchemaV3_5: VersionedSchema {
             self.eventId = try? container.decode(String?.self, forKey: .eventId)
             self.estimatedMinutes = try container.decode(Int.self, forKey: .estimatedMinutes)
         }
-        
+
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            
+
             try container.encode(closed, forKey: .closed)
             try container.encode(_title, forKey: .title)
             try container.encode(_details, forKey: .details)
@@ -121,38 +122,38 @@ public enum SchemaV3_5: VersionedSchema {
             try container.encode(estimatedMinutes, forKey: .estimatedMinutes)
         }
     }
-    
+
     @Model
     public final class Comment: Codable, Sendable {
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""
         var taskItem: TaskItem? = nil
-        
+
         init(text: String, taskItem: TaskItem) {
             self.text = text
             self.taskItem = taskItem
         }
-        
+
         init(old: SchemaV3_3.Comment) {
             self.text = old.text
             self.created = old.created
             self.changed = old.created
         }
-        
+
         // MARK: Codable
-        
+
         enum CodingKeys: CodingKey {
             case created, changed, text
         }
-        
+
         public required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.created = try container.decode(Date.self, forKey: .created)
             self.changed = try container.decode(Date.self, forKey: .changed)
             self.text = try container.decode(String.self, forKey: .text)
         }
-        
+
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(created, forKey: .created)
@@ -160,30 +161,30 @@ public enum SchemaV3_5: VersionedSchema {
             try container.encode(text, forKey: .text)
         }
     }
-    
+
     @Model
     public final class Attachment {
         @Attribute(.externalStorage) var blob: Data?
         var thumbnail: Data?
-        
+
         var filename: String = ""
         var utiIdentifier: String?
         var byteSize: Int = 0
-        
+
         var caption: String?
         var sortIndex: Int = 0
-        
+
         var createdAt: Date = Date.now
-        
+
         var isPurged: Bool = false
         var purgedAt: Date?
         var nextPurgePrompt: Date?
-        
+
         var taskItem: TaskItem?
-        
+
         @Transient var type: UTType? { utiIdentifier.flatMap(UTType.init) }
-        
-        public init () {
+
+        public init() {
             createdAt = .now
             filename = ""
             byteSize = 0
@@ -193,5 +194,3 @@ public enum SchemaV3_5: VersionedSchema {
     }
 
 }
-
-

@@ -1,40 +1,43 @@
-import SwiftData
 import Foundation
+import SwiftData
 import UniformTypeIdentifiers
 
 public typealias Attachment = SchemaLatest.Attachment
 
 enum AttachmentError: LocalizedError {
     case fileTooLarge(fileSize: Int, maxSize: Int)
-    
+
     var errorDescription: String? {
         switch self {
         case .fileTooLarge(let fileSize, let maxSize):
             let fileSizeMB = Double(fileSize) / (1024 * 1024)
             let maxSizeMB = Double(maxSize) / (1024 * 1024)
-            return "File is too large (\(String(format: "%.1f", fileSizeMB))MB). Maximum size is \(String(format: "%.1f", maxSizeMB))MB."
+            return
+                "File is too large (\(String(format: "%.1f", fileSizeMB))MB). Maximum size is \(String(format: "%.1f", maxSizeMB))MB."
         }
     }
 }
 
 // MARK: - Attachment Configuration
-private let defaultMaxAttachmentSizeBytes = 20 * 1024 * 1024 // 20MB
+private let defaultMaxAttachmentSizeBytes = 20 * 1024 * 1024  // 20MB
 
-func addAttachment(fileURL: URL,
-                   type: UTType,
-                   to taskItem: TaskItem,
-                   sortIndex: Int? = nil,
-                   caption: String? = nil,
-                   maxSizeBytes: Int = defaultMaxAttachmentSizeBytes,
-                   in context: ModelContext) throws -> Attachment {
+func addAttachment(
+    fileURL: URL,
+    type: UTType,
+    to taskItem: TaskItem,
+    sortIndex: Int? = nil,
+    caption: String? = nil,
+    maxSizeBytes: Int = defaultMaxAttachmentSizeBytes,
+    in context: ModelContext
+) throws -> Attachment {
     let rv = try fileURL.resourceValues(forKeys: [.fileSizeKey, .localizedNameKey])
-    
+
     // Check file size before loading into memory
     let fileSize = rv.fileSize ?? 0
     if fileSize > maxSizeBytes {
         throw AttachmentError.fileTooLarge(fileSize: fileSize, maxSize: maxSizeBytes)
     }
-    
+
     let data = try Data(contentsOf: fileURL, options: .mappedIfSafe)
 
     let att = Attachment()
@@ -49,7 +52,7 @@ func addAttachment(fileURL: URL,
     att.isPurged = false
     att.purgedAt = nil
     att.taskItem = taskItem
-    
+
     // Add attachment to task item's attachments array
     if taskItem.attachments == nil {
         taskItem.attachments = []
@@ -69,19 +72,17 @@ extension Attachment {
         self.nextPurgePrompt = nil
         try context.save()
     }
-    
+
     func scheduleNextPurgePrompt(months: Int, in context: ModelContext) throws {
         self.nextPurgePrompt = Calendar.current.date(byAdding: .month, value: months, to: .now)
         try context.save()
     }
-    
+
     func isDueForPurge(at date: Date = .now) -> Bool {
         guard !isPurged else { return false }
         guard let nextPurgePrompt = nextPurgePrompt else { return false }
         return nextPurgePrompt.compare(date) != .orderedDescending
     }
-    
+
     var storedBytes: Int { blob?.count ?? 0 }
 }
-
-

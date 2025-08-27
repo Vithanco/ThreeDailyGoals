@@ -96,11 +96,11 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
             print("Migration from V3.3 to V3.4 completed successfully.")
         }
     )
-    
+
     static let migrateV3_4toV3_5 = MigrationStage.lightweight(
-            fromVersion: SchemaV3_4.self,
-            toVersion: SchemaV3_5.self
-        )
+        fromVersion: SchemaV3_4.self,
+        toVersion: SchemaV3_5.self
+    )
 
     static var stages: [MigrationStage] {
         [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4, migrateV3_4toV3_5]

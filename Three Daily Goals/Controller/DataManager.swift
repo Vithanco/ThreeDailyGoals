@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 import SwiftData
+import SwiftUI
 import os
 
 /// Struct for import conflict resolution
@@ -24,26 +24,26 @@ private let logger = Logger(
 @MainActor
 @Observable
 final class DataManager {
-    
+
     let modelContext: Storage
     var priorityUpdater: PriorityUpdater?
     var itemSelector: ItemSelector?
-    
+
     // Core data properties
     var items = [TaskItem]()
     var lists: [TaskItemState: [TaskItem]] = [:]
-    
+
     init(modelContext: Storage) {
         self.modelContext = modelContext
-        
+
         // Initialize lists for all states
         for state in TaskItemState.allCases {
             lists[state] = []
         }
     }
-    
+
     // MARK: - Data Access
-    
+
     /// Get all tasks for a specific state
     func list(which state: TaskItemState) -> [TaskItem] {
         guard let result = lists[state] else {
@@ -52,18 +52,18 @@ final class DataManager {
         }
         return result
     }
-    
+
     /// Get all tasks
     var allTasks: [TaskItem] {
         return items
     }
-    
+
     /// Get current list based on UI state (delegates to TaskManagerViewModel)
     var currentList: [TaskItem] {
         // This will be overridden by TaskManagerViewModel to provide the actual current list
         return []
     }
-    
+
     /// Get all active tags across all tasks
     var activeTags: Set<String> {
         var result = Set<String>()
@@ -73,62 +73,60 @@ final class DataManager {
         result.formUnion(["work", "private"])
         return result
     }
-    
+
     // MARK: - Task Operations
-    
+
     /// Find a task by UUID string
     func findTask(withUuidString uuidString: String) -> TaskItem? {
 
-        for item in items {
-            if item.id == uuidString {
-                return item
-            }
+        for item in items where item.id == uuidString {
+            return item
         }
         return nil
     }
-    
+
     /// Move a task to a different state
     func move(task: TaskItem, to state: TaskItemState) {
         if task.state == state {
             return  // nothing to be done
         }
-        
+
         // Remove from old list
         lists[task.state]?.removeObject(task)
-        
+
         // Update task state
         task.state = state
-        
+
         // Add to new list
         lists[state]?.append(task)
         sortList(state)
-        
+
         save()
     }
-    
+
     /// Move a task to a different state with priority tracking
     func moveWithPriorityTracking(task: TaskItem, to state: TaskItemState) {
         if task.state == state {
             return  // nothing to be done
         }
         let moveFromPriority = task.state == .priority
-        
+
         // Update the task state
         move(task: task, to: state)
-        
+
         // Did it touch priorities (in or out)? If so, update priorities
         if state == .priority || moveFromPriority {
             priorityUpdater?.updatePriorities()
         }
     }
-    
+
     /// Create a new task
     func createTask(title: String, state: TaskItemState = .open) -> TaskItem {
         let task = TaskItem(title: title, state: state)
         addExistingTask(task)
         return task
     }
-    
+
     /// Add an existing task to the data manager
     func addExistingTask(_ task: TaskItem) {
         modelContext.insert(task)
@@ -137,7 +135,7 @@ final class DataManager {
         sortList(task.state)
         save()
     }
-    
+
     /// Add a new task with specified parameters
     @discardableResult func addItem(
         title: String = emptyTaskTitle,
@@ -149,7 +147,7 @@ final class DataManager {
         addExistingTask(newItem)
         return newItem
     }
-    
+
     /// Add an existing task item
     func addItem(item: TaskItem) {
         if item.isEmpty {
@@ -157,41 +155,41 @@ final class DataManager {
         }
         addExistingTask(item)
     }
-    
+
     /// Delete a task
     func deleteTask(_ task: TaskItem) {
         // Remove from lists
         lists[task.state]?.removeObject(task)
-        
+
         // Remove from items array
         if let index = items.firstIndex(of: task) {
             items.remove(at: index)
         }
-        
+
         // Delete comments first
         for c in task.comments ?? [] {
             modelContext.delete(c)
         }
-        
+
         // Delete from database
         modelContext.delete(task)
         save()
     }
-    
+
     /// Delete a task with undo grouping
     func delete(task: TaskItem) {
         beginUndoGrouping()
         deleteTask(task)
         endUndoGrouping()
     }
-    
+
     /// Delete a task with undo grouping and UI updates
     func deleteWithUIUpdate(task: TaskItem, uiState: UIStateManager) {
         delete(task: task)
         updateUndoRedoStatus()
         uiState.selectedItem = list(which: uiState.whichList).first
     }
-    
+
     /// Delete multiple tasks
     func deleteTasks(_ tasks: [TaskItem]) {
         for task in tasks {
@@ -199,14 +197,14 @@ final class DataManager {
         }
         save()
     }
-    
+
     /// Duplicate a task
     func duplicateTask(_ task: TaskItem) -> TaskItem {
         let newTask = TaskItem(
             title: task.title,
             state: task.state
         )
-        
+
         // Copy comments
         if let comments = task.comments {
             for comment in comments {
@@ -214,12 +212,12 @@ final class DataManager {
                 newTask.comments?.append(newComment)
             }
         }
-        
+
         modelContext.insert(newTask)
         save()
         return newTask
     }
-    
+
     /// Toggle task completion
     func toggleCompletion(for task: TaskItem) {
         switch task.state {
@@ -233,33 +231,33 @@ final class DataManager {
         }
         save()
     }
-    
+
     /// Touch a task (update its changed date)
     func touch(task: TaskItem) {
         task.touch()
         save()
     }
-    
+
     /// Touch a task and update undo status
     func touchAndUpdateUndoStatus(task: TaskItem) {
         touch(task: task)
         updateUndoRedoStatus()
     }
-    
+
     /// Remove a task from the data manager
     func remove(task: TaskItem) {
         items.removeObject(task)
         lists[task.state]?.removeObject(task)
         deleteTask(task)
     }
-    
+
     /// Remove a task by ID
     func removeItem(withID: String) {
         if let item = items.first(where: { $0.id == withID }) {
             remove(task: item)
         }
     }
-    
+
     /// Kill old tasks that are older than the specified number of days
     @discardableResult func killOldTasks(expireAfter: Int? = nil, preferences: CloudPreferences) -> Int {
         var result = 0
@@ -271,7 +269,7 @@ final class DataManager {
         logger.info("killed \(result) tasks")
         return result
     }
-    
+
     /// Kill old tasks in a specific list that are older than the expiry date
     func killOldTasks(expiryDate: Date, whichList: TaskItemState) -> Int {
         let theList = list(which: whichList)
@@ -282,7 +280,7 @@ final class DataManager {
         }
         return result
     }
-    
+
     /// Create sample data for testing/development
     func createSampleData() {
         let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
@@ -291,7 +289,7 @@ final class DataManager {
         let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
         let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
         let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
-        
+
         move(task: lastWeek1, to: .priority)
         createTask(title: lastWeek1.title, state: lastWeek1.state)
         createTask(title: lastWeek2.title, state: lastWeek2.state)
@@ -300,13 +298,13 @@ final class DataManager {
         createTask(title: older1.title, state: older1.state)
         createTask(title: older2.title, state: older2.state)
     }
-    
+
     /// Add samples and merge data
     func addSamples() {
         createSampleData()
         mergeDataFromCentralStorage()
     }
-    
+
     /// Add item and return the saved version from database
     func addAndFindItem(
         title: String = emptyTaskTitle,
@@ -316,18 +314,17 @@ final class DataManager {
     ) -> TaskItem {
         let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
         // Find the saved item in the database to ensure we're selecting the correct object
-        if let savedItem = findTask(withUuidString: newItem.uuid.uuidString) {
-            return savedItem
-        } else {
+        guard let savedItem = findTask(withUuidString: newItem.uuid.uuidString) else {
             return newItem
         }
+        return savedItem
     }
-    
+
     /// Call fetch to update data
     func callFetch() {
         mergeDataFromCentralStorage()
     }
-    
+
     /// Add a new task and select it
     @discardableResult func addAndSelect(
         title: String = emptyTaskTitle,
@@ -339,84 +336,82 @@ final class DataManager {
         itemSelector?.select(item)
         return item
     }
-    
 
-    
     /// Archive completed tasks older than specified days
     func archiveCompletedTasks(olderThan days: Int) {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
-        
+
         // Get all closed tasks and filter them in memory since the predicate is complex
         let closedTasks = list(which: .closed)
         let tasksToArchive = closedTasks.filter { task in
             guard let closed = task.closed else { return false }
             return closed < cutoffDate
         }
-        
+
         for task in tasksToArchive {
             task.state = .dead
         }
         save()
         logger.info("Archived \(tasksToArchive.count) completed tasks older than \(days) days")
     }
-    
+
     // MARK: - Filtering and Searching
-    
+
     /// Filter tasks by tags
     func tasks(in state: TaskItemState, withTags tags: [String]) -> [TaskItem] {
         if tags.isEmpty {
             return list(which: state)
         }
-        
+
         return list(which: state).filter { task in
             task.tags.contains { tags.contains($0) }
         }
     }
-    
+
     /// Search tasks by title
     func searchTasks(query: String) -> [TaskItem] {
         guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return allTasks
         }
-        
+
         let lowercaseQuery = query.lowercased()
         return allTasks.filter { task in
             task.title.lowercased().contains(lowercaseQuery)
         }
     }
-    
+
     // MARK: - Statistics
-    
+
     /// Get task counts by state
     var taskCounts: [TaskItemState: Int] {
         var counts: [TaskItemState: Int] = [:]
-        
+
         for state in TaskItemState.allCases {
             counts[state] = list(which: state).count
         }
-        
+
         return counts
     }
-    
+
     /// Get completion rate for a date range
     func completionRate(from startDate: Date, to endDate: Date) -> Double {
         let completedTasks = allTasks.filter { task in
             guard let closed = task.closed else { return false }
             return closed >= startDate && closed <= endDate
         }
-        
+
         let totalTasks = allTasks.filter { task in
             task.created >= startDate && task.created <= endDate
         }
-        
+
         guard totalTasks.count > 0 else { return 0.0 }
         return Double(completedTasks.count) / Double(totalTasks.count)
     }
-    
+
     // MARK: - Data Persistence
-    
+
     // MARK: - Data Management
-    
+
     /// Load all tasks from the database and organize them into lists
     func loadData() {
         let descriptor = FetchDescriptor<TaskItem>()
@@ -429,7 +424,7 @@ final class DataManager {
             logger.error("Failed to load tasks: \(error)")
         }
     }
-    
+
     /// Merge data from central storage (CloudKit)
     func mergeDataFromCentralStorage() {
         processPendingChanges()
@@ -450,7 +445,7 @@ final class DataManager {
             logger.error("Fetch failed: \(error)")
         }
     }
-    
+
     /// Merge fetched items with existing items
     private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
         var seenIDs = Set<UUID>()
@@ -463,7 +458,7 @@ final class DataManager {
             seenIDs.insert(item.uuid)
             return item
         }
-        
+
         var addedCount = 0
         var updatedCount = 0
 
@@ -484,10 +479,10 @@ final class DataManager {
                 addedCount = addedCount + 1
             }
         }
-        
+
         return (addedCount, updatedCount)
     }
-    
+
     /// Organize items into lists by state
     func organizeLists() {
         // Clear all lists
@@ -503,18 +498,17 @@ final class DataManager {
             sortList(state)
         }
     }
-    
+
     /// Sort a specific list by its state's criteria
     func sortList(_ state: TaskItemState) {
         lists[state]?.sort { task1, task2 in
-            if state == .closed || state == .dead {
-                return task1.changed > task2.changed // Most recent first
-            } else {
-                return task1.changed < task2.changed // Oldest first
+            guard state == .closed || state == .dead else {
+                return task1.changed < task2.changed  // Oldest first
             }
+            return task1.changed > task2.changed  // Most recent first
         }
     }
-    
+
     /// Ensure every item has a unique UUID
     private func ensureEveryItemHasAUniqueUuid() {
         var allUuids: Set<UUID> = []
@@ -529,7 +523,7 @@ final class DataManager {
             Set(items.map(\.uuid)).count == items.count,
             "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
     }
-    
+
     /// Save changes to the database
     func save() {
         do {
@@ -539,68 +533,68 @@ final class DataManager {
             logger.error("Failed to save changes: \(error)")
         }
     }
-    
+
     /// Refresh data from persistent store
     func refresh() {
         // SwiftData automatically refreshes, but we can trigger explicit refresh if needed
         // This is useful after background updates or external changes
     }
-    
+
     // MARK: - Undo Management
-    
+
     /// Check if undo manager is available
     var hasUndoManager: Bool {
         return modelContext.undoManager != nil
     }
-    
+
     /// Begin undo grouping
     func beginUndoGrouping() {
         modelContext.undoManager?.beginUndoGrouping()
     }
-    
+
     /// End undo grouping
     func endUndoGrouping() {
         modelContext.undoManager?.endUndoGrouping()
     }
-    
+
     /// Undo the last operation
     func undo() {
         modelContext.undoManager?.undo()
     }
-    
+
     /// Redo the last undone operation
     func redo() {
         modelContext.undoManager?.redo()
     }
-    
+
     /// Check if undo is available
     var canUndo: Bool {
         return modelContext.undoManager?.canUndo ?? false
     }
-    
+
     /// Check if redo is available
     var canRedo: Bool {
         return modelContext.undoManager?.canRedo ?? false
     }
-    
+
     /// Process pending changes
     func processPendingChanges() {
         modelContext.processPendingChanges()
     }
-    
+
     /// Update undo/redo status (data only)
     func updateUndoRedoStatus() {
         processPendingChanges()
         processPendingChanges()
     }
-    
+
     /// Check if there are unsaved changes
     var hasChanges: Bool {
         return modelContext.hasChanges
     }
-    
+
     // MARK: - Test Data Operations
-    
+
     /// Create test data for development/testing
     func createTestData() {
         let lastWeek1 = TaskItem(title: "Last Week 1", state: .closed)
@@ -609,26 +603,26 @@ final class DataManager {
         let lastMonth2 = TaskItem(title: "Last Month 2", state: .closed)
         let older1 = TaskItem(title: "Older 1", state: .closed)
         let older2 = TaskItem(title: "Older 2", state: .closed)
-        
+
         modelContext.insert(lastWeek1)
         modelContext.insert(lastWeek2)
         modelContext.insert(lastMonth1)
         modelContext.insert(lastMonth2)
         modelContext.insert(older1)
         modelContext.insert(older2)
-        
+
         try? modelContext.save()
     }
-    
+
     /// Clear all data (for testing)
     func clearAllData() {
         // Uncomment when needed for testing
         // try? modelContext.delete(model: TaskItem.self)
         // try? modelContext.save()
     }
-    
+
     // MARK: - Attachment Operations
-    
+
     /// Get due tasks for attachment processing
     func getDueTasks() -> [TaskItem]? {
         // Get all open tasks and filter them in memory since the predicate is complex
@@ -638,12 +632,12 @@ final class DataManager {
             return due < Date()
         }
     }
-    
+
     /// Get all tasks for attachment processing
     func getAllTasksForAttachments() -> [TaskItem]? {
         return try? modelContext.fetch(FetchDescriptor<TaskItem>())
     }
-    
+
     /// Add tags to multiple tasks
     func batchAddTags(_ tags: [String], to tasks: [TaskItem]) {
         for task in tasks {
@@ -653,7 +647,7 @@ final class DataManager {
         }
         save()
     }
-    
+
     /// Remove tags from multiple tasks
     func batchRemoveTags(_ tags: [String], from tasks: [TaskItem]) {
         for task in tasks {
@@ -663,9 +657,9 @@ final class DataManager {
         }
         save()
     }
-    
+
     // MARK: - Tag Management
-    
+
     /// Get all tags from tasks
     var allTags: Set<String> {
         var result = Set<String>()
@@ -675,7 +669,7 @@ final class DataManager {
         result.formUnion(["work", "private"])
         return result
     }
-    
+
     /// Get statistics for a specific tag across all states
     func statsForTags(tag: String) -> [TaskItemState: Int] {
         var result: [TaskItemState: Int] = [:]
@@ -684,7 +678,7 @@ final class DataManager {
         }
         return result
     }
-    
+
     /// Get count of tasks with a specific tag in a specific state
     func statsForTags(tag: String, which state: TaskItemState) -> Int {
         let list = self.list(which: state)
@@ -694,7 +688,7 @@ final class DataManager {
         }
         return result
     }
-    
+
     /// Exchange one tag for another across all tasks
     func exchangeTag(from: String, to: String) {
         for item in items {
@@ -702,7 +696,7 @@ final class DataManager {
         }
         save()
     }
-    
+
     /// Delete a specific tag from all tasks
     func delete(tag: String) {
         if tag.isEmpty {
@@ -713,9 +707,9 @@ final class DataManager {
         }
         save()
     }
-    
+
     // MARK: - Import/Export
-    
+
     /// Export tasks to JSON file
     func exportTasks(url: URL, uiState: UIStateManager) {
         do {
@@ -760,9 +754,9 @@ final class DataManager {
         endUndoGrouping()
         uiState.showInfoMessage = true
     }
-    
+
     // MARK: - Command Buttons
-    
+
     /// Undo button for app commands
     var undoButton: some View {
         Button(action: { [self] in
@@ -778,7 +772,7 @@ final class DataManager {
         .disabled(!canUndo)
         .keyboardShortcut("z", modifiers: [.command])
     }
-    
+
     /// Redo button for app commands
     var redoButton: some View {
         Button(action: { [self] in
@@ -794,9 +788,9 @@ final class DataManager {
         .disabled(!canRedo)
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
-    
+
     // MARK: - Task Operation Buttons
-    
+
     /// Toggle priority button for task items
     func toggleButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -815,7 +809,7 @@ final class DataManager {
         }
         .accessibilityIdentifier("toggleButton")
     }
-    
+
     /// Close button for task items
     func closeButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -827,7 +821,7 @@ final class DataManager {
         .accessibilityIdentifier("closeButton")
         .disabled(!item.canBeClosed)
     }
-    
+
     /// Kill button for task items
     func killButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -839,7 +833,7 @@ final class DataManager {
         .accessibilityIdentifier("killButton")
         .disabled(!item.canBeClosed)
     }
-    
+
     /// Open button for task items
     func openButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -851,19 +845,21 @@ final class DataManager {
         .accessibilityIdentifier("openButton")
         .disabled(!item.canBeMovedToOpen)
     }
-    
+
     /// Wait for response button for task items
     func waitForResponseButton(item: TaskItem) -> some View {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
             Label("Pending a Response", systemImage: TaskItemState.pendingResponse.imageName)
-                .help("Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar.")
+                .help(
+                    "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
+                )
         }
         .accessibilityIdentifier("openButton")
         .disabled(!item.canBeMovedToOpen)
     }
-    
+
     /// Priority button for task items
     func priorityButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -875,20 +871,23 @@ final class DataManager {
         }
         .accessibilityIdentifier("prioritiseButton")
     }
-    
+
     /// Delete button for task items
     func deleteButton(item: TaskItem, uiState: UIStateManager) -> some View {
-        Button(role: .destructive, action: { [self] in
-            withAnimation {
-                deleteWithUIUpdate(task: item, uiState: uiState)
+        Button(
+            role: .destructive,
+            action: { [self] in
+                withAnimation {
+                    deleteWithUIUpdate(task: item, uiState: uiState)
+                }
             }
-        }) {
+        ) {
             Label("Delete", systemImage: "trash")
                 .help("Delete this task for good.")
         }
         .accessibilityIdentifier("deleteButton")
     }
-    
+
     /// Touch button for task items
     func touchButton(item: TaskItem) -> some View {
         Button(action: { [self] in
@@ -899,17 +898,18 @@ final class DataManager {
         }
         .accessibilityIdentifier("touchButton")
     }
-    
+
     // MARK: - Attachment Management
-    
+
     /// Get tasks with purgeable attachments at a given date
     func purgeableItems(at date: Date = Date()) -> [TaskItem] {
         let dueTasks = try? modelContext.fetch(
-            FetchDescriptor<TaskItem>(predicate: #Predicate { task in
-                task.attachments?.contains {
-                    !$0.isPurged && $0.nextPurgePrompt != nil && $0.nextPurgePrompt! <= date
-                } ?? false
-            })
+            FetchDescriptor<TaskItem>(
+                predicate: #Predicate { task in
+                    task.attachments?.contains {
+                        !$0.isPurged && $0.nextPurgePrompt != nil && $0.nextPurgePrompt! <= date
+                    } ?? false
+                })
         )
         return dueTasks ?? []
     }

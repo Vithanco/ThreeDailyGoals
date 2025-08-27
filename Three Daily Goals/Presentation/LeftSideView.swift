@@ -27,7 +27,7 @@ struct LeftSideView: View {
                     .dropDestination(for: String.self) {
                         items,
                         location in
-                        for item in items.compactMap({dataManager.findTask(withUuidString: $0) }) {
+                        for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
                             model.dataManager.moveWithPriorityTracking(task: item, to: .open)
                         }
                         return true
@@ -44,7 +44,7 @@ struct LeftSideView: View {
                 LinkToList(whichList: .dead)
             }
             .padding(5)
-                            .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow)
+            .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

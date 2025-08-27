@@ -25,7 +25,7 @@ struct StateView: View {
 // MARK: - Enhanced State View with Color-Coded System
 struct EnhancedStateView: View {
     let state: TaskItemState
-    
+
     // Enhanced icons with better visual distinction
     private var stateIcon: String {
         switch state {
@@ -36,7 +36,7 @@ struct EnhancedStateView: View {
         case .dead: return "xmark.circle.fill"
         }
     }
-    
+
     var body: some View {
         HStack(spacing: 8) {
             // Enhanced icon with background
@@ -48,7 +48,7 @@ struct EnhancedStateView: View {
                     Circle()
                         .fill(state.stateColorLight)
                 )
-            
+
             // State text with improved typography
             Text(state.section.text)
                 .font(.system(size: 14, weight: .semibold))
@@ -70,13 +70,13 @@ struct EnhancedStateView: View {
 // MARK: - Compact State Badge
 struct StateBadge: View {
     let state: TaskItemState
-    
+
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: state.stateColor == .priorityColor ? "star.fill" : "circle.fill")
                 .font(.system(size: 8))
                 .foregroundColor(state.stateColor)
-            
+
             Text(state.description)
                 .font(.caption2)
                 .fontWeight(.medium)
@@ -104,7 +104,7 @@ struct StateBadge: View {
             EnhancedStateView(state: .closed)
             EnhancedStateView(state: .dead)
         }
-        
+
         HStack(spacing: 8) {
             StateBadge(state: .priority)
             StateBadge(state: .open)

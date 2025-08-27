@@ -18,7 +18,7 @@ struct OsRelated {
             return .macOS
         #endif
     }
-    
+
     private static var isLargeDevice: Bool {
         // This would need to be implemented based on your existing logic
         // For now, returning false as placeholder

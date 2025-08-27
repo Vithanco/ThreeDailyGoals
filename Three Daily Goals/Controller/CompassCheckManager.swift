@@ -25,23 +25,23 @@ final class CompassCheckManager {
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CompassCheckManager.self)
     )
-    
+
     private var notificationTask: Task<Void, Never>? {
         willSet {
             notificationTask?.cancel()
         }
     }
-    
+
     let timer: CompassCheckTimer = .init()
     var isTesting: Bool = false
-    
+
     var state: CompassCheckState = .inform
-    
+
     // Dependencies
     private let dataManager: DataManager
     private let uiState: UIStateManager
     private let preferences: CloudPreferences
-    
+
     var os: SupportedOS {
         #if os(iOS)
             if isLargeDevice {
@@ -52,28 +52,28 @@ final class CompassCheckManager {
             return .macOS
         #endif
     }
-    
+
     init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, isTesting: Bool = false) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
         self.isTesting = isTesting
     }
-    
+
     // MARK: - Compass Check Logic
-    
+
     var dueDateSoon: [TaskItem] {
         let due = getDate(inDays: 3)
         let open = self.dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
         return open.sorted()
     }
-    
+
     func moveAllPrioritiesToOpen() {
         for p in dataManager.list(which: .priority) {
             dataManager.move(task: p, to: .open)
         }
     }
-    
+
     func moveStateForward() {
         switch state {
         case .inform:
@@ -112,7 +112,7 @@ final class CompassCheckManager {
         }
         debugPrint("new state is: \(state)")
     }
-    
+
     var moveStateForwardText: String {
         if os == .iOS {
             if state == .review {
@@ -125,12 +125,12 @@ final class CompassCheckManager {
         }
         return "Next"
     }
-    
+
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
         state = .inform
     }
-    
+
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
         state = .inform
@@ -171,21 +171,21 @@ final class CompassCheckManager {
         dataManager.updateUndoRedoStatus()
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
     }
-    
+
     func waitABit() {
         setupCompassCheckNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
     }
-    
+
     var priorityTasks: [TaskItem] {
         return dataManager.list(which: .priority)
     }
-    
+
     func onPreferencesChange() {
         if preferences.didCompassCheckToday && state == .inform {
             endCompassCheck(didFinishCompassCheck: false)
         }
     }
-    
+
     func startCompassCheckNow() {
         preferences.setStreakText()
         if !uiState.showCompassCheckDialog && state == .inform {
@@ -193,7 +193,7 @@ final class CompassCheckManager {
             uiState.showCompassCheckDialog = true
         }
     }
-    
+
     var nextRegularCompassCheckTime: Date {
         var result = self.preferences.compassCheckTime
         if getCal().isDate(preferences.lastCompassCheck, inSameDayAs: result) {
@@ -207,7 +207,7 @@ final class CompassCheckManager {
         }
         return result
     }
-    
+
     func setupCompassCheckNotification(when: Date? = nil) {
         scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
         if uiState.showCompassCheckDialog {
@@ -216,7 +216,9 @@ final class CompassCheckManager {
         if isTesting {
             return
         }
-        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog || uiState.showNewItemNameDialog {
+        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog
+            || uiState.showNewItemNameDialog
+        {
             waitABit()
         }
         let time = when ?? nextRegularCompassCheckTime
@@ -236,14 +238,14 @@ final class CompassCheckManager {
             }
         }
     }
-    
+
     func deleteNotifications() {
         timer.cancelTimer()
         uiState.showCompassCheckDialog = false
     }
-    
+
     // MARK: - Command Buttons
-    
+
     /// Compass check button for app commands
     var compassCheckButton: some View {
         Button(action: { [self] in

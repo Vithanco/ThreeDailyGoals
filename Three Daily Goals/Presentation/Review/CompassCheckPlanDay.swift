@@ -51,7 +51,7 @@ struct CompassCheckPlanDay: View {
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {
                     items, _ in
-                    for _ in items.compactMap({dataManager.findTask(withUuidString: $0) }) {
+                    for _ in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
                         return true
                     }
                     return true

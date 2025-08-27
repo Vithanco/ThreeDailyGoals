@@ -71,11 +71,11 @@ struct SimpleListView: View {
 #Preview {
     let dummy = dummyViewModel()
     return SimpleListView(
-                    itemList: dummy.dataManager.list(which: .dead),
+        itemList: dummy.dataManager.list(which: .dead),
         headers: ListHeader.defaultListHeaders,
         showHeaders: true,
         section: secGraveyard,
         id: "yeah"
     )
-        .environment(dummy)
+    .environment(dummy)
 }
