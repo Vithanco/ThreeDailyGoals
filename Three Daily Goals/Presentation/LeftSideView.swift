@@ -10,12 +10,19 @@ import SwiftUI
 struct LeftSideView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudKitManager.self) private var cloudKitManager
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
         VStack(spacing: 0) {
+            // Streak view for both iOS and macOS (moved above Today's Goals)
+            FullStreakView().frame(maxWidth: .infinity, alignment: .center)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                #if os(iOS)
+                .standardToolbar(include: !isLargeDevice)
+                #endif
+            
             #if os(iOS)
-                FullStreakView().frame(maxWidth: .infinity, alignment: .center)
-                    .standardToolbar(include: !isLargeDevice)
                 if isLargeDevice {
                     HStack {
                         Spacer()
@@ -35,8 +42,24 @@ struct LeftSideView: View {
                 }
             #endif
             
-            // Priority list (main content area)
+            // Priority list (main content area) with rounded styling
             ListView(whichList: .priority)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
+                        .shadow(
+                            color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.03),
+                            radius: 2,
+                            x: 0,
+                            y: 1
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 0.5)
+                )
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
             

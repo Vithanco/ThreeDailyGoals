@@ -101,6 +101,7 @@ final class CloudPreferences {
     init(store: KeyValueStorage, onChange: OnChange? = nil) {
         self.store = store
         self.onChange = onChange
+        setStreakText() // Ensure streak text is initialized
     }
 
     convenience init(testData: Bool, onChange: OnChange? = nil) {
@@ -112,7 +113,6 @@ final class CloudPreferences {
             NotificationCenter.default.addObserver(
                 forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self,
                 queue: nil, using: ubiquitousKeyValueStoreDidChange)
-            setStreakText()
 
             // initiate the store with a proper time
             if store.string(forKey: .lastCompassCheckString) == nil {
