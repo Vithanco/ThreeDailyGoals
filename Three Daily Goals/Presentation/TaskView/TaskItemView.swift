@@ -16,41 +16,47 @@ struct TaskItemView: View {
     @FocusState private var isTitleFocused: Bool
 
     var body: some View {
-        VStack(spacing: 20) {
-            // Main task content with enhanced card styling
-            InnerTaskItemView(
-                accentColor: preferences.accentColor,
-                item: item,
-                allTags: dataManager.activeTags.asArray,
-                selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
-                missingTagStyle: missingTagStyle,
-                showAttachmentImport: true
-            )
-
-            // Comments section with metadata - same width as task content
-            AllCommentsView(item: item)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
-                        .shadow(
-                            color: colorScheme == .dark ? .black.opacity(0.3) : .black.opacity(0.08),
-                            radius: colorScheme == .dark ? 8 : 6,
-                            x: 0,
-                            y: colorScheme == .dark ? 4 : 2
-                        )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(
-                            colorScheme == .dark ? Color.neutral700 : Color.neutral200,
-                            lineWidth: 1
-                        )
-                )
-
-            Spacer()
+        ScrollView {
+            Group {
+                #if os(iOS)
+                // iOS: Stacked vertical layout for narrow screens
+                VStack(spacing: 20) {
+                    // Main task content with enhanced card styling
+                    InnerTaskItemView(
+                        accentColor: preferences.accentColor,
+                        item: item,
+                        allTags: dataManager.activeTags.asArray,
+                        selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
+                        missingTagStyle: missingTagStyle,
+                        showAttachmentImport: true
+                    )
+                    
+                    // History section
+                    AllCommentsView(item: item)
+                }
+                #else
+                // macOS: Side-by-side layout for wide screens
+                HStack(alignment: .top, spacing: 20) {
+                    // Main task content with enhanced card styling
+                    InnerTaskItemView(
+                        accentColor: preferences.accentColor,
+                        item: item,
+                        allTags: dataManager.activeTags.asArray,
+                        selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
+                        missingTagStyle: missingTagStyle,
+                        showAttachmentImport: true
+                    )
+                    .frame(maxWidth: .infinity)
+                    
+                    // History section
+                    AllCommentsView(item: item)
+                        .frame(maxWidth: .infinity)
+                }
+                #endif
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
         }
-        .padding(.horizontal, 16)
         .itemToolbar(item: item)
         .onAppear(perform: {
             dataManager.updateUndoRedoStatus()
@@ -60,19 +66,12 @@ struct TaskItemView: View {
 }
 
 #Preview {
-    //    TaskItemView(item: TaskItem()).frame(width: 600, height: 300)
-    let model = dummyViewModel()
-
-    #if os(macOS)
-        return TaskItemView(item: model.dataManager.items.first()!).frame(width: 600, height: 600)
-            .environment(dummyPreferences())
-            .environment(DataManager.testManager())
-            .environment(model)
-    #endif
-    #if os(iOS)
-        return TaskItemView(item: model.dataManager.items.first()!)
-            .environment(dummyPreferences())
-            .environment(DataManager.testManager())
-            .environment(model)
-    #endif
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: TaskItem.self, configurations: config)
+    
+    let item = TaskItem(title: "Sample Task", state: .open)
+    
+    return TaskItemView(item: item)
+        .modelContainer(container)
+        .environment(dummyViewModel())
 }

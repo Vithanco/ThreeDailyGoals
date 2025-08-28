@@ -24,67 +24,70 @@ struct AllCommentsView: View {
                         "Add some comment to the history of this task")
                 }.accessibilityIdentifier("addCommentButton")
             }
-            .padding(.horizontal)
-            .padding(.top)
             
-            // Comments list
-            if let comments = item.comments, comments.count > 0 {
-                List {
-                    ForEach(comments.sorted()) { comment in
-                        CommentView(comment: comment).frame(maxWidth: .infinity)
-                    }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                }
-                .listStyle(PlainListStyle())
-            } else {
-                Text("No comments yet")
-                    .foregroundStyle(.secondary)
-                    .padding()
-            }
-            
-            // Task metadata section
+            // Enhanced Last Updated section
             VStack(alignment: .leading, spacing: 8) {
-                Divider()
-                    .padding(.horizontal)
-                
                 HStack {
-                    Spacer()
-                    VStack(spacing: 4) {
-                        LabeledContent {
-                            Text(item.created, format: stdOnlyDateFormat)
-                                .foregroundStyle(.secondary)
-                        } label: {
-                            Text("Created:").bold().foregroundColor(Color.secondaryColor)
-                        }
-                        
-                        LabeledContent {
-                            Text(item.changed.timeAgoDisplay())
-                                .foregroundStyle(.secondary)
-                        } label: {
-                            Text("Updated:").bold().foregroundColor(Color.secondaryColor)
-                        }
-                    }
+                    Image(systemName: "clock.arrow.circlepath")
+                        .foregroundColor(.blue)
+                        .font(.system(size: 14, weight: .medium))
+                    Text("Last Updated")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.primary)
                     Spacer()
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 8)
+                Text(item.changed.formatted(date: .abbreviated, time: .shortened))
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 22)
             }
-
-        }.alert(
-            "Add Comment", isPresented: $presentAlert,
-            actions: {
-                TextField("Comment Text", text: $newComment)
-
-                Button("Cancel", role: .cancel, action: { presentAlert = false })
-                Button(
-                    "Add",
-                    action: {
-                        presentAlert = false
-                        item.addComment(text: newComment)
-                    })
-            },
-            message: {
-                Text("Please enter new Comment")
-            })
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color.blue.opacity(0.05))
+            .cornerRadius(8)
+            
+            // Comments section
+            if let comments = item.comments, !comments.isEmpty {
+                ForEach(comments.sorted(by: { $0.created > $1.created })) { comment in
+                    CommentView(comment: comment)
+                }
+            } else {
+                Text("No history yet").foregroundColor(.secondary).italic()
+            }
+            
+            // Enhanced Created section
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "calendar.badge.plus")
+                        .foregroundColor(.green)
+                        .font(.system(size: 14, weight: .medium))
+                    Text("Created")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                Text(item.created.formatted(date: .abbreviated, time: .shortened))
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 22)
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(Color.green.opacity(0.05))
+            .cornerRadius(8)
+        }
+        .alert("Add Comment", isPresented: $presentAlert) {
+            TextField("Comment", text: $newComment)
+            Button("Cancel", role: .cancel) { }
+            Button("Add") {
+                if !newComment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    item.addComment(text: newComment.trimmingCharacters(in: .whitespacesAndNewlines))
+                    newComment = ""
+                }
+            }
+        } message: {
+            Text("Add a comment to the history of this task")
+        }
     }
 }
 
