@@ -5,6 +5,14 @@
 //  Created by Klaus Kneupner on 19/12/2023.
 //
 
+// MARK: - List Icons
+let imgListPriority = "star.fill"
+let imgListOpen = "circle"
+let imgListPendingResponse = "clock"
+let imgListClosed = "checkmark.circle.fill"
+let imgListGraveyard = "archivebox"
+
+// MARK: - Legacy Icons (keeping for backward compatibility)
 let imgOpen = "figure.walk.circle.fill"
 let imgClosed = "flag.checkered.2.crossed"
 let imgGraveyard = "heart.slash.fill"
@@ -14,18 +22,15 @@ let imgDated = "clock.fill"
 let imgInformation = "info.square.fill"
 //let imgMagnifyingGlass = "magnifyingglass.circle.fill"
 let imgCompassCheck = "safari"
-//let compassCheck = Image(systemName: "safari")
-//    .symbolRenderingMode(.palette)
-//    .foregroundStyle(.gray,.accentColor )
+//let compassCheck = Image(systemName: imgCompassCheck)
+let imgStreak = "flame.fill"
+let imgToday = "sun.max.fill"
 
-let imAppearance = "paintpalette"
-let imgAddItem = "plus.app.fill"  // "plus"
-let imgPreferences = "gearshape"
-
-let imgToday = "exclamationmark.square.fill"
 let imgPriority1 = "1.circle.fill"
 let imgPriority2 = "2.circle.fill"
 let imgPriority3 = "3.circle.fill"
+let imgPriority4 = "4.circle.fill"
+let imgPriority5 = "5.circle.fill"
 let imgPriorityX = "x.circle.fill"
 
 let imgCloseTask = "xmark.circle.fill"
@@ -37,8 +42,12 @@ let imgRedo = "arrow.uturn.forward.circle.fill"
 
 let imgCheckedBox = "checkmark.square.fill"
 let imgUncheckedBox = "square"
-let imgStreak = "flame.fill"
 let imgAttachment = "paperclip"
+
+// MARK: - UI Icons
+let imAppearance = "paintpalette"
+let imgAddItem = "plus.app.fill"
+let imgPreferences = "gearshape"
 
 let imgExport = "square.and.arrow.up.on.square.fill"
 let imgImport = "square.and.arrow.down.on.square.fill"

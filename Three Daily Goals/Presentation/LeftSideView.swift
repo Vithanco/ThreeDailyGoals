@@ -12,7 +12,7 @@ struct LeftSideView: View {
     @Environment(CloudKitManager.self) private var cloudKitManager
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             #if os(iOS)
                 FullStreakView().frame(maxWidth: .infinity, alignment: .center)
                     .standardToolbar(include: !isLargeDevice)
@@ -34,17 +34,39 @@ struct LeftSideView: View {
                     }
                 }
             #endif
+            
+            // Priority list (main content area)
             ListView(whichList: .priority)
-                .padding(5)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+            
             Spacer()
-            VStack {
-                LinkToList(whichList: .open)
-                LinkToList(whichList: .pendingResponse)
-                LinkToList(whichList: .closed)
-                LinkToList(whichList: .dead)
+            
+            // List selector section
+            VStack(spacing: 8) {
+                // Section header
+                HStack {
+                    Text("Lists")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(.uppercase)
+                        .tracking(0.5)
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 8)
+                
+                // List items
+                VStack(spacing: 6) {
+                    LinkToList(whichList: .open)
+                    LinkToList(whichList: .pendingResponse)
+                    LinkToList(whichList: .closed)
+                    LinkToList(whichList: .dead)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
             }
-            .padding(5)
-            .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow)
+            .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

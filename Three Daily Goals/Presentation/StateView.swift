@@ -9,7 +9,7 @@ import SwiftUI
 
 extension TaskSection {
     var asText: Text {
-        return Text("\(Image(systemName: image)) \(text)").font(.title)
+        return Text(text).font(.title)
     }
 }
 
