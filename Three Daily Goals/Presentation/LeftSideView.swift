@@ -93,7 +93,7 @@ struct LeftSideView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)
-        .frame(minWidth: 400, idealWidth: 600, maxWidth: 1000) // Ensure minimum width for comfortable reading
+        .frame(minWidth: 400, idealWidth: 500, maxWidth: 1000) // Ensure minimum width for comfortable reading
         #endif
     }
 }

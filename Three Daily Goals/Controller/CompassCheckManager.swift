@@ -253,11 +253,13 @@ final class CompassCheckManager {
 
     /// Compass check button for app commands
     var compassCheckButton: some View {
-        Button(action: { [self] in
-            startCompassCheckNow()
-        }) {
-            Label("Compass Check", systemImage: imgCompassCheck)
+        Button(action: { self.startCompassCheckNow() }) {
+            Label("Compass Check", systemImage: imgCompassCheckStart)
+                .foregroundStyle(TaskItemState.priority.color)
+                .font(.system(size: 18, weight: .medium))
                 .help("Start compass check")
         }
+        .buttonStyle(.plain)
+        .frame(height: 24)
     }
 }

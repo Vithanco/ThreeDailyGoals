@@ -40,6 +40,17 @@ extension TaskItemState {
         case .open, .pendingResponse, .priority: return true
         }
     }
+    
+    // List-specific colors
+    var color: Color {
+        switch self {
+        case .priority: return .orange
+        case .open: return .blue
+        case .pendingResponse: return .yellow
+        case .closed: return .green
+        case .dead: return .gray
+        }
+    }
 
     var imageName: String {
         switch self {
@@ -100,21 +111,12 @@ extension TaskItemState {
 
 // MARK: - Task State Color Extensions
 extension TaskItemState {
-    var stateColor: Color {
-        switch self {
-        case .priority: return .priorityColor
-        case .open: return .openColor
-        case .pendingResponse: return .pendingColor
-        case .closed: return .closedColor
-        case .dead: return .deadColor
-        }
-    }
 
     var stateColorLight: Color {
-        return stateColor.opacity(0.1)
+        return color.opacity(0.1)
     }
 
     var stateColorMedium: Color {
-        return stateColor.opacity(0.3)
+        return color.opacity(0.3)
     }
 }

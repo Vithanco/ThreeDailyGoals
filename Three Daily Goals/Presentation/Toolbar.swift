@@ -66,9 +66,6 @@ struct ItemToolbarContent: ToolbarContent {
                 dataManager.redoButton
             }
         #endif
-        ToolbarItem {
-            dataManager.toggleButton(item: item)
-        }
         if item.canBeClosed {
             ToolbarItem {
                 dataManager.closeButton(item: item)

@@ -12,22 +12,42 @@ struct CompassCheckInformView: View {
     @Environment(CompassCheckManager.self) private var compassCheckManager
 
     var body: some View {
-        VStack(spacing: 5) {
-            GroupBox(label: Text("Current Streak").foregroundStyle(preferences.accentColor)) {
-                StreakView().padding(5).border(Color.gray)
+        VStack(spacing: 16) {
+            // Enhanced streak display
+            VStack(spacing: 8) {
+                Text("Current Streak")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(preferences.accentColor)
+                
+                FullStreakView()
+                    .padding(.horizontal, 8)
             }
+            
             Spacer(minLength: 10)
-            Text("It is about time to do a Compass Check and review your tasks").font(.title2)
+            
+            Text("It is about time to do a Compass Check and review your tasks")
+                .font(.title2)
                 .foregroundStyle(preferences.accentColor)
                 .frame(maxWidth: 300, maxHeight: .infinity)
+                .multilineTextAlignment(.center)
+            
             Text(
                 "The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work."
             )
-            .multilineTextAlignment(.leading)
+            .font(.system(size: 14, weight: .medium))
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 16)
+            
             Button(action: compassCheckManager.waitABit) {
                 Text("Remind me in 5 min")
-            }.buttonStyle(.bordered)
-        }.frame(maxWidth: 320, maxHeight: 400)
+                    .font(.system(size: 14, weight: .medium))
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+        .frame(maxWidth: 320, maxHeight: 400)
+        .padding(16)
     }
 }
 

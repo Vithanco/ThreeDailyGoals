@@ -10,7 +10,6 @@ import TagKit
 import UniformTypeIdentifiers
 
 struct InnerTaskItemView: View {
-    let accentColor: Color
     @Bindable var item: TaskItem
     let allTags: [String]
     @State var buildTag: String = ""
@@ -35,8 +34,8 @@ struct InnerTaskItemView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header section
             HStack {
-                StateView(state: item.state, accentColor: accentColor)
-                Text("Task").font(.title).foregroundStyle(accentColor)
+                StateView(state: item.state, accentColor: item.state.color)
+                Text("Task").font(.title).foregroundStyle(item.state.color)
                 Spacer()
             }
             .padding(.bottom, 8)
@@ -72,7 +71,7 @@ struct InnerTaskItemView: View {
                             .frame(minHeight: 30)
                         if let link = URL(string: item.url) {
                             Link("Open", destination: link)
-                                .foregroundColor(accentColor)
+                                .foregroundColor(item.state.color)
                         }
                     }
                 } label: {

@@ -41,7 +41,7 @@ struct EnhancedStateView: View {
         HStack(spacing: 8) {
             // Enhanced icon with background
             Image(systemName: stateIcon)
-                .foregroundColor(state.stateColor)
+                .foregroundColor(state.color)
                 .font(.system(size: 16, weight: .medium))
                 .frame(width: 24, height: 24)
                 .background(
@@ -52,7 +52,7 @@ struct EnhancedStateView: View {
             // State text with improved typography
             Text(state.section.text)
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(state.stateColor)
+                .foregroundColor(state.color)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
@@ -73,14 +73,14 @@ struct StateBadge: View {
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: state.stateColor == .priorityColor ? "star.fill" : "circle.fill")
+            Image(systemName: state.color == .priorityColor ? "star.fill" : "circle.fill")
                 .font(.system(size: 8))
-                .foregroundColor(state.stateColor)
+                .foregroundColor(state.color)
 
             Text(state.description)
                 .font(.caption2)
                 .fontWeight(.medium)
-                .foregroundColor(state.stateColor)
+                .foregroundColor(state.color)
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 2)

@@ -133,7 +133,7 @@ struct StateColorRow: View {
     var body: some View {
         HStack {
             Circle()
-                .fill(state.stateColor)
+                .fill(state.color)
                 .frame(width: 16, height: 16)
 
             Text(label)
@@ -141,7 +141,7 @@ struct StateColorRow: View {
 
             Spacer()
 
-            Text(state.stateColor.toHex ?? "#000000")
+            Text(state.color.toHex ?? "#000000")
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .monospacedDigit()

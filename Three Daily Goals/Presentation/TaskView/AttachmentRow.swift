@@ -11,8 +11,9 @@ struct AttachmentRow: View {
     let onDelete: (() -> Void)?
     #if os(iOS)
         @State private var showingPreview = false
+#endif
         @State private var showingDeleteConfirmation = false
-    #endif
+
 
     var body: some View {
         HStack(spacing: 12) {
@@ -44,11 +45,7 @@ struct AttachmentRow: View {
                 #endif
                 if let onDelete = onDelete {
                     Button("Delete") {
-                        #if os(iOS)
                             showingDeleteConfirmation = true
-                        #else
-                            onDelete()
-                        #endif
                     }
                     .foregroundColor(.red)
                 }
@@ -61,6 +58,7 @@ struct AttachmentRow: View {
             .sheet(isPresented: $showingPreview) {
                 AttachmentPreviewSheet(attachment: attachment)
             }
+#endif
             .confirmationDialog(
                 "Delete Attachment",
                 isPresented: $showingDeleteConfirmation,
@@ -73,7 +71,7 @@ struct AttachmentRow: View {
             } message: {
                 Text("Are you sure you want to delete '\(attachment.filename)'? This action cannot be undone.")
             }
-        #endif
+
     }
 
     @ViewBuilder

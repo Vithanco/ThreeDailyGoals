@@ -90,10 +90,9 @@ struct ShareExtensionView: View {
                 Spacer()
 
                 InnerTaskItemView(
-                    accentColor: pref.accentColor,
                     item: item,
                     allTags: [],
-                    selectedTagStyle: selectedTagStyle(accentColor: pref.accentColor),
+                    selectedTagStyle: selectedTagStyle(accentColor: item.state.color),
                     missingTagStyle: missingTagStyle,
                     showAttachmentImport: false
                 )

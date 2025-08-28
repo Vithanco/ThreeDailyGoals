@@ -62,13 +62,23 @@ struct WPriorities: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(Image(systemName: imgStreak)) Streak: \(preferences.daysOfCompassCheck)").font(
-                .title2
-            ).foregroundStyle(Color.red)
+            HStack(spacing: 4) {
+                Image(systemName: imgStreakActive)
+                    .foregroundStyle(Color.orange)
+                    .font(.system(size: 16, weight: .medium))
+                Text("Streak: \(preferences.daysOfCompassCheck)")
+                    .font(.title2)
+                    .foregroundStyle(Color.primary)
+            }
             Section(
-                header: Text("today: \(preferences.didCompassCheckToday ? "✅" : "⏳")").font(.subheadline)
-                    .foregroundStyle(
-                        preferences.accentColor)
+                header: HStack(spacing: 4) {
+                    Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                        .font(.system(size: 12, weight: .medium))
+                    Text(preferences.didCompassCheckToday ? "Done" : "Pending")
+                        .font(.subheadline)
+                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                }
             ) {
                 AWPriority(item: preferences.getPriority(nr: 1))
                 AWPriority(item: preferences.getPriority(nr: 2))

@@ -72,7 +72,7 @@ protocol Taggable {
 }
 
 extension TaskItem: Taggable {
-
+    
     func updateFrom(_ other: TaskItem) {
         if other.uuid != self.uuid {
             logger.error("UUID mismatch during import: \(other.uuid) != \(self.uuid) for  \(self.title) ")

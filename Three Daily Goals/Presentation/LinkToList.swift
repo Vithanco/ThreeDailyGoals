@@ -25,24 +25,12 @@ private struct ListLabel: View {
     
     // Enhanced list icons using the new semantic icons
     private var listIcon: String {
-        switch whichList {
-        case .priority: return imgListPriority
-        case .open: return imgListOpen
-        case .pendingResponse: return imgListPendingResponse
-        case .closed: return imgListClosed
-        case .dead: return imgListGraveyard
-        }
+        return whichList.imageName
     }
     
     // List-specific colors
     private var listColor: Color {
-        switch whichList {
-        case .priority: return .orange
-        case .open: return .blue
-        case .pendingResponse: return .yellow
-        case .closed: return .green
-        case .dead: return .gray
-        }
+        return whichList.color
     }
     
     // Check if this list is currently selected

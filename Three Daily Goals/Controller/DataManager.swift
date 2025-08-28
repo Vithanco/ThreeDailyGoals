@@ -791,24 +791,24 @@ final class DataManager {
 
     // MARK: - Task Operation Buttons
 
-    /// Toggle priority button for task items
-    func toggleButton(item: TaskItem) -> some View {
-        Button(action: { [self] in
-            if item.state == .priority {
-                moveWithPriorityTracking(task: item, to: .open)
-            } else {
-                moveWithPriorityTracking(task: item, to: .priority)
-            }
-        }) {
-            Label(
-                "Toggle Priority",
-                systemImage: item.state == .priority
-                    ? TaskItemState.open.imageName : TaskItemState.priority.imageName
-            )
-            .help("Add to/ remove from today's priorities")
-        }
-        .accessibilityIdentifier("toggleButton")
-    }
+//    /// Toggle priority button for task items
+//    func toggleButton(item: TaskItem) -> some View {
+//        Button(action: { [self] in
+//            if item.state == .priority {
+//                moveWithPriorityTracking(task: item, to: .open)
+//            } else {
+//                moveWithPriorityTracking(task: item, to: .priority)
+//            }
+//        }) {
+//            Label(
+//                "Toggle Priority",
+//                systemImage: item.state == .priority
+//                    ? TaskItemState.open.imageName : TaskItemState.priority.imageName
+//            )
+//            .help("Add to/ remove from today's priorities")
+//        }
+//        .accessibilityIdentifier("toggleButton")
+//    }
 
     /// Close button for task items
     func closeButton(item: TaskItem) -> some View {
@@ -893,7 +893,7 @@ final class DataManager {
         Button(action: { [self] in
             touchAndUpdateUndoStatus(task: item)
         }) {
-            Label("Touch", systemImage: "hand.tap")
+            Label("Touch", systemImage:imgTouch)
                 .help("Touch this task to update its timestamp")
         }
         .accessibilityIdentifier("touchButton")
