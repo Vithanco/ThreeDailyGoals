@@ -92,6 +92,9 @@ struct LeftSideView: View {
             .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        #if os(macOS)
+        .frame(minWidth: 400, idealWidth: 600, maxWidth: 1000) // Ensure minimum width for comfortable reading
+        #endif
     }
 }
 

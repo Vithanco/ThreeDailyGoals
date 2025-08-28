@@ -13,7 +13,6 @@ struct SimpleListView: View {
     let showHeaders: Bool
     let section: TaskSection
     let id: String
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(CloudPreferences.self) private var preferences
 
     // Get the list color based on the section
@@ -43,14 +42,15 @@ struct SimpleListView: View {
                         section.asText
                             .foregroundStyle(listColor)
                             .font(.system(size: 14, weight: .semibold))
-                            .listRowSeparator(.hidden)
                             .accessibilityIdentifier("ListView" + id)
                     }
                 }
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
             ) {
                 if itemList.isEmpty {
                     Text("(No items found)")
-                        .foregroundStyle(preferences.accentColor)
+                        .foregroundStyle(listColor)
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -80,23 +80,28 @@ struct SimpleListView: View {
                                         .font(.system(size: 13, weight: .medium))
                                         .listRowSeparator(.hidden)
                                 }
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
                             }
                             ForEach(partialList) { item in
                                 LinkToTask(item: item, list: item.state)
                                     .listRowSeparator(.hidden)
-                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                                     .listRowBackground(Color.clear)
+                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
                             }
                         }
                     }
                     if itemList.count > 10 {
-                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(preferences.accentColor)
+                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(listColor)
                             .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
                     }
                 }
             }
         }
-        .listStyle(PlainListStyle())
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .listRowSeparator(.hidden)
         .accessibilityIdentifier("scrollView_\(id)")
     }
 

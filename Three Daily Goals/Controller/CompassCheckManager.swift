@@ -170,6 +170,7 @@ final class CompassCheckManager {
 
         dataManager.updateUndoRedoStatus()
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
+        setupCompassCheckNotification()
     }
 
     func waitABit() {
@@ -208,8 +209,7 @@ final class CompassCheckManager {
         return result
     }
 
-    func setupCompassCheckNotification(when: Date? = nil) {
-        scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+    fileprivate func onCCNotification() {
         if uiState.showCompassCheckDialog {
             return
         }
@@ -221,19 +221,24 @@ final class CompassCheckManager {
         {
             waitABit()
         }
+        if self.uiState.showCompassCheckDialog {
+            return
+        }
+        if !self.preferences.didCompassCheckToday {
+            self.startCompassCheckNow()
+        }
+    }
+    
+    func setupCompassCheckNotification(when: Date? = nil) {
+        scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+
         let time = when ?? nextRegularCompassCheckTime
 
         uiState.showCompassCheckDialog = false
         timer.setTimer(forWhen: time) {
             Task {
                 do {
-                    if await self.uiState.showCompassCheckDialog {
-                        return
-                    }
-                    if await !self.preferences.didCompassCheckToday {
-                        await self.startCompassCheckNow()
-                    }
-                    await self.setupCompassCheckNotification()
+                    await self.onCCNotification()
                 }
             }
         }
