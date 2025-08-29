@@ -34,8 +34,8 @@ struct InnerTaskItemView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header section
             HStack {
-                StateView(state: item.state, accentColor: item.state.color)
-                Text("Task").font(.title).foregroundStyle(item.state.color)
+                StateView(state: item.state)
+                Text("Task").font(.title).foregroundStyle(item.color)
                 Spacer()
             }
             .padding(.bottom, 8)
@@ -71,7 +71,7 @@ struct InnerTaskItemView: View {
                             .frame(minHeight: 30)
                         if let link = URL(string: item.url) {
                             Link("Open", destination: link)
-                                .foregroundColor(item.state.color)
+                                .foregroundColor(item.color)
                         }
                     }
                 } label: {

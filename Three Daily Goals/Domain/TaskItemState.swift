@@ -120,3 +120,9 @@ extension TaskItemState {
         return color.opacity(0.3)
     }
 }
+
+extension TaskItem {
+    var color: Color {
+        return self.state.color
+    }
+}

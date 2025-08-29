@@ -8,30 +8,12 @@
 import Foundation
 import SwiftUI
 
-//
-//let mainColor = Color(red: 234.0/255.0, green: 88.0/255.0, blue: 12.0/255.0, opacity: 1.0)
-//let secondaryColor = Color(red: 255.0/255.0, green: 128.0/255.0, blue: 0/255.0, opacity: 1.0)
-
 extension Color {
     // MARK: - Primary Brand Colors (Orange-based)
-    public static let primaryOrange = Color(hex: "#FF6B35")  // Vibrant orange
-    public static let primaryOrangeLight = Color(hex: "#FF8A65")  // Lighter orange
-    public static let primaryOrangeDark = Color(hex: "#E55A2B")  // Darker orange
 
-    // MARK: - Semantic Task State Colors
-    public static let priorityColor = Color(hex: "#FF6B35")  // Orange for priority
-    public static let openColor = Color(hex: "#2196F3")  // Blue for open tasks
-    public static let pendingColor = Color(hex: "#FFC107")  // Amber for pending
-    public static let closedColor = Color(hex: "#4CAF50")  // Green for closed
-    public static let deadColor = Color(hex: "#9E9E9E")  // Gray for dead/archived
 
-    // MARK: - Status Colors
-    public static let successColor = Color(hex: "#4CAF50")  // Green for success
-    public static let warningColor = Color(hex: "#FF9800")  // Orange for warnings
-    public static let errorColor = Color(hex: "#F44336")  // Red for errors
-    public static let infoColor = Color(hex: "#2196F3")  // Blue for info
-
-    // MARK: - Neutral Colors
+   
+    // MARK: - Neutral Colors (only those actually used)
     public static let neutral50 = Color(hex: "#FAFAFA")
     public static let neutral100 = Color(hex: "#F5F5F5")
     public static let neutral200 = Color(hex: "#EEEEEE")
@@ -41,7 +23,6 @@ extension Color {
     public static let neutral600 = Color(hex: "#757575")
     public static let neutral700 = Color(hex: "#616161")
     public static let neutral800 = Color(hex: "#424242")
-    public static let neutral900 = Color(hex: "#212121")
 
     // MARK: - Legacy Support
     public static let mainColor = Color(
@@ -66,47 +47,6 @@ extension Color {
 
 }
 
-// MARK: - Color Theme System
-struct AppColorTheme {
-    let primary: Color
-    let secondary: Color
-    let accent: Color
-    let background: Color
-    let surface: Color
-    let text: Color
-    let textSecondary: Color
-
-    static let orange = AppColorTheme(
-        primary: .primaryOrange,
-        secondary: .primaryOrangeLight,
-        accent: .primaryOrangeDark,
-        background: .background,
-        surface: .secondaryBackground,
-        text: .primary,
-        textSecondary: .secondary
-    )
-
-    static let blue = AppColorTheme(
-        primary: .openColor,
-        secondary: Color(hex: "#64B5F6"),
-        accent: Color(hex: "#1976D2"),
-        background: .background,
-        surface: .secondaryBackground,
-        text: .primary,
-        textSecondary: .secondary
-    )
-
-    static let green = AppColorTheme(
-        primary: .closedColor,
-        secondary: Color(hex: "#81C784"),
-        accent: Color(hex: "#388E3C"),
-        background: .background,
-        surface: .secondaryBackground,
-        text: .primary,
-        textSecondary: .secondary
-    )
-}
-
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
 // Make Color codable. This includes support for transparency.
@@ -122,18 +62,6 @@ extension Color {
             blue: Double(rgba.b),
             opacity: Double(rgba.alpha))
     }
-    //
-    //    public init(from decoder: Decoder) throws {
-    //        let container = try decoder.singleValueContainer()
-    //        let hex = try container.decode(String.self)
-    //
-    //        self.init(hex: hex)
-    //    }
-    //
-    //    public func encode(to encoder: Encoder) throws {
-    //        var container = encoder.singleValueContainer()
-    //        try container.encode(toHex)
-    //    }
 
     var toHex: String? {
         return toHex()
