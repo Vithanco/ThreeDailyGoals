@@ -72,5 +72,4 @@ struct TaskItemView: View {
     
     return TaskItemView(item: item)
         .modelContainer(container)
-        .environment(dummyViewModel())
 }

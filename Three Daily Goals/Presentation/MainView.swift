@@ -23,7 +23,6 @@ struct SingleView<Content: View>: View {
 }
 
 struct MainView: View {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
@@ -73,7 +72,7 @@ struct MainView: View {
         }
         .fileExporter(
             isPresented: $uiState.showExportDialog,
-            document: model.jsonExportDoc,
+            document: dataManager.jsonExportDoc,
             contentTypes: [UTType.json],
             onCompletion: { result in
                 switch result {
@@ -105,7 +104,7 @@ struct MainView: View {
     }
 }
 
-#Preview {
-    MainView()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    MainView()
+//        .environment(dummyViewModel())
+//}

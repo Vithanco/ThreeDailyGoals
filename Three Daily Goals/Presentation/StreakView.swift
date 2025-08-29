@@ -55,6 +55,5 @@ struct FullStreakView: View {
 
 #Preview {
     StreakView()
-        .environment(dummyViewModel())
         .environment(dummyPreferences())
 }

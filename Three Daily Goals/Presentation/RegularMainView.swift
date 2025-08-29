@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RegularMainView: View {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(UIStateManager.self) private var uiState
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
@@ -24,7 +24,7 @@ struct RegularMainView: View {
                 .navigationSplitViewColumnWidth(min: 400, ideal: 600)
                 .navigationTitle("Three Daily Goals")
         } detail: {
-            if let detail = model.uiState.selectedItem {
+            if let detail = uiState.selectedItem {
                 TaskItemView(item: detail).frame(minWidth: 300)
             } else {
                 Text("Select an item").frame(minWidth: 300)
@@ -34,7 +34,7 @@ struct RegularMainView: View {
     }
 }
 
-#Preview {
-    RegularMainView()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    RegularMainView()
+//        .environment(dummyViewModel())
+//}

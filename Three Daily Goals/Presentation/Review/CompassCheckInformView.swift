@@ -51,7 +51,7 @@ struct CompassCheckInformView: View {
     }
 }
 
-#Preview {
-    CompassCheckInformView()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    CompassCheckInformView()
+//        .environment(dummyViewModel())
+//}

@@ -45,7 +45,7 @@ struct CompassCheckCurrentPriorities: View {
     }
 }
 
-#Preview {
-    CompassCheckCurrentPriorities()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    CompassCheckCurrentPriorities()
+//        .environment(dummyViewModel())
+//}

@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct CompactMainView: View {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
 
     var body: some View {
-        @Bindable var model = model
+        @Bindable var uiState = uiState
         return NavigationStack {
             LeftSideView().background(Color.background)
-                .navigationDestination(isPresented: $model.uiState.showItem) {
-                    if let item = model.uiState.selectedItem {
+                .navigationDestination(isPresented: $uiState.showItem) {
+                    if let item = uiState.selectedItem {
                         TaskItemView(item: item)
                     }
                 }
@@ -30,7 +29,7 @@ struct CompactMainView: View {
 
     }
 }
-#Preview {
-    CompactMainView()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    CompactMainView()
+//        .environment(dummyViewModel())
+//}

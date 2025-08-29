@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CompassCheckDueDate: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Environment(TaskManagerViewModel.self) private var model
+    @Environment(CompassCheckManager.self) private var compassCheckManager
 
     var body: some View {
         VStack {
@@ -21,13 +21,13 @@ struct CompassCheckDueDate: View {
                 "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."
             )
             SimpleListView(
-                itemList: model.compassCheckManager.dueDateSoon, headers: [ListHeader.all], showHeaders: false,
+                itemList: compassCheckManager.dueDateSoon, headers: [ListHeader.all], showHeaders: false,
                 section: secDueSoon, id: "dueSoonList")
         }.frame(minHeight: 300, idealHeight: 800, maxHeight: .infinity)
     }
 }
 
-#Preview {
-    CompassCheckDueDate()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    CompassCheckDueDate()
+//        .environment(dummyViewModel())
+//}

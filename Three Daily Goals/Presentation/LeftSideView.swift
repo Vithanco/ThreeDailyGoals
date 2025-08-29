@@ -98,7 +98,6 @@ struct LeftSideView: View {
     }
 }
 
-#Preview {
-    LeftSideView()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    LeftSideView()
+//}

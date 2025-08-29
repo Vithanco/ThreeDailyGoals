@@ -28,6 +28,7 @@ final class DataManager {
     let modelContext: Storage
     var priorityUpdater: PriorityUpdater?
     var itemSelector: ItemSelector?
+    var jsonExportDoc: JSONWriteOnlyDoc?
 
     // Core data properties
     var items = [TaskItem]()

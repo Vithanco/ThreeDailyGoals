@@ -57,14 +57,6 @@ struct Three_Daily_GoalsApp: App {
         .environment(appComponents.dataManager)
         .environment(appComponents.cloudKitManager)
         .environment(appComponents.compassCheckManager)
-        .environment(
-            TaskManagerViewModel(
-                modelContext: appComponents.modelContext,
-                preferences: appComponents.preferences,
-                uiState: appComponents.uiState,
-                isTesting: appComponents.isTesting
-            )
-        )
         .commands {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport) {

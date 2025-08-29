@@ -31,12 +31,10 @@ struct LinkToTask: View {
     }
 }
 
-#Preview {
-    //@Previewable
-    @State var model = dummyViewModel()
-
-    LinkToTask(item: model.dataManager.items.first ?? TaskItem(), list: .open)
-        .environment(UIStateManager.testManager())
-        .environment(DataManager.testManager())
-        .environment(dummyPreferences())
-}
+//#Preview {
+//
+//    LinkToTask(item: model.dataManager.items.first ?? TaskItem(), list: .open)
+//        .environment(UIStateManager.testManager())
+//        .environment(DataManager.testManager())
+//        .environment(dummyPreferences())
+//}

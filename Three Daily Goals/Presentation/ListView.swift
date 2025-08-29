@@ -18,7 +18,6 @@ struct ListView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
-    @Environment(TaskManagerViewModel.self) private var model
     let whichList: TaskItemState?
 
     init(whichList: TaskItemState? = nil) {
@@ -42,6 +41,7 @@ struct ListView: View {
             )
             .frame(minHeight: 145, maxHeight: .infinity)
             .background(Color.background)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             .dropDestination(for: String.self) {
                 items, _ in
                 for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
@@ -67,8 +67,26 @@ struct ListView: View {
                             .tagCapsuleStyle(
                                 isSelected ? selectedTagStyle(accentColor: preferences.accentColor) : missingTagStyle)
                     }
-                ).frame(maxWidth: 300, idealHeight: 15, maxHeight: 50).background(Color.background).padding(
-                    5)
+                )
+                .frame(maxWidth: .infinity, idealHeight: 15, maxHeight: 50)
+                .padding(.horizontal, 0)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.background)
+                        .shadow(
+                            color: Color.black.opacity(0.03),
+                            radius: 2,
+                            x: 0,
+                            y: 1
+                        )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.neutral200, lineWidth: 0.5)
+                )
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
             }
 
         }
@@ -80,5 +98,4 @@ struct ListView: View {
         .environment(UIStateManager.testManager())
         .environment(DataManager.testManager())
         .environment(dummyPreferences())
-        .environment(dummyViewModel())
 }

@@ -102,19 +102,18 @@ struct SimpleListView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .listRowSeparator(.hidden)
+        .background(Color.clear)
         .accessibilityIdentifier("scrollView_\(id)")
     }
 
 }
-
-#Preview {
-    let dummy = dummyViewModel()
-    return SimpleListView(
-        itemList: dummy.dataManager.list(which: .dead),
-        headers: ListHeader.defaultListHeaders,
-        showHeaders: true,
-        section: secGraveyard,
-        id: "yeah"
-    )
-    .environment(dummy)
-}
+//
+//#Preview {
+//    return SimpleListView(
+//        itemList: dummy.dataManager.list(which: .dead),
+//        headers: ListHeader.defaultListHeaders,
+//        showHeaders: true,
+//        section: secGraveyard,
+//        id: "yeah"
+//    )
+//}

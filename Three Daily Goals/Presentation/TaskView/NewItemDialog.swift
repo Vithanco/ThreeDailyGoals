@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct NewItemDialog: View {
-
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
+    @Environment(DataManager.self) private var dataManager
     @FocusState var isTitleFocused: Bool
 
     func dismiss() {
@@ -18,7 +17,7 @@ struct NewItemDialog: View {
     }
 
     func addTask() {
-        model.dataManager.addAndSelect(title: title.trimmingCharacters(in: .whitespacesAndNewlines))
+        dataManager.addAndSelect(title: title.trimmingCharacters(in: .whitespacesAndNewlines))
         title = emptyTaskTitle
         dismiss()
     }
@@ -60,7 +59,7 @@ struct NewItemDialog: View {
     }
 }
 
-#Preview {
-    NewItemDialog()
-        .environment(dummyViewModel())
-}
+//#Preview {
+//    NewItemDialog()
+//        .environment(dummyViewModel())
+//}

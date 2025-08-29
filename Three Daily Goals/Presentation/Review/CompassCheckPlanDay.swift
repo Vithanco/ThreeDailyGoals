@@ -68,5 +68,4 @@ struct CompassCheckPlanDay: View {
     // return Text ("in total: \(events.count)")
     let date = Date.today
     return CompassCheckPlanDay(date: date)
-        .environment(dummyViewModel())
 }

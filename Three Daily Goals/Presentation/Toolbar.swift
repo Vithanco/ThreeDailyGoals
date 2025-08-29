@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainToolbarContent: ToolbarContent {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(UIStateManager.self) private var uiState
 
     var body: some ToolbarContent {
@@ -31,7 +30,6 @@ struct MainToolbarContent: ToolbarContent {
 }
 
 struct StandardToolbarContent: ToolbarContent {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState
     @Environment(CompassCheckManager.self) private var compassCheckManager
@@ -53,7 +51,6 @@ struct StandardToolbarContent: ToolbarContent {
 }
 
 struct ItemToolbarContent: ToolbarContent {
-    @Environment(TaskManagerViewModel.self) private var model
     @Environment(DataManager.self) private var dataManager
     let item: TaskItem
 
