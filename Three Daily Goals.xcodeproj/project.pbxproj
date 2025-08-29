@@ -116,7 +116,6 @@
 		7FE813872E54682E00CEA462 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813852E54682B00CEA462 /* Attachment.swift */; };
 		7FE813882E54682E00CEA462 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813852E54682B00CEA462 /* Attachment.swift */; };
 		E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */; };
-		E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */; };
 		E511428C2B340FB500AB6E05 /* FilesRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511428B2B340FB500AB6E05 /* FilesRelated.swift */; };
 		E51142922B342E3C00AB6E05 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142752B33768300AB6E05 /* WidgetKit.framework */; };
 		E51142932B342E3C00AB6E05 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142772B33768300AB6E05 /* SwiftUI.framework */; };
@@ -297,7 +296,6 @@
 		7FE813832E5444E100CEA462 /* SchemaV3_5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_5.swift; sourceTree = "<group>"; };
 		7FE813852E54682B00CEA462 /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreferencesView.swift; sourceTree = "<group>"; };
-		E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreferencesView.swift; sourceTree = "<group>"; };
 		E51142752B33768300AB6E05 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
 		E51142772B33768300AB6E05 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
 		E511428B2B340FB500AB6E05 /* FilesRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesRelated.swift; sourceTree = "<group>"; };
@@ -519,7 +517,6 @@
 				E5278A392B658FB90020C83D /* PreferencesView.swift */,
 				E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */,
 				E50117DA2B6C228D00B2C25A /* TaskPreferencesView.swift */,
-				E50117DC2B6C22B500B2C25A /* AppearancePreferencesView.swift */,
 				7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */,
 			);
 			path = Preferences;
@@ -1125,7 +1122,6 @@
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
 				E51142AA2B345B7B00AB6E05 /* Storage.swift in Sources */,
 				E5E8B3942B77442F003300C3 /* RegularMainView.swift in Sources */,
-				E50117DD2B6C22B500B2C25A /* AppearancePreferencesView.swift in Sources */,
 				E5B003122B32382C00A90F8D /* StringRelated.swift in Sources */,
 				7F5930BB2D3607AE0055D6F8 /* NewItemDialog.swift in Sources */,
 				E5ADEDD72B3190B300F0EA9C /* IconsRelated.swift in Sources */,

@@ -181,19 +181,7 @@ extension CloudPreferences {
     }
 
     var accentColor: Color {
-        get {
-            if let mainColorString = store.self.string(forKey: .accentColorString) {
-                return Color(hex: mainColorString)
-            }
-            return Color.accentColor
-        }
-        set {
-            if let string = newValue.toHex {
-                store.set(string, forKey: .accentColorString)
-            } else {
-                store.set(nil, forKey: .accentColorString)
-            }
-        }
+        return Color.priority
     }
 
     var longestStreak: Int {

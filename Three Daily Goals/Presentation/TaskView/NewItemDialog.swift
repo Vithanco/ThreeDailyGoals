@@ -30,7 +30,7 @@ struct NewItemDialog: View {
 
     var body: some View {
         VStack {
-            Text("Add a new task").bold().foregroundColor(Color.accentColor)
+            Text("Add a new task").bold().foregroundColor(TaskItemState.open.color)
             LabeledContent {
                 TextField("titleField", text: $title, axis: .vertical).accessibilityIdentifier("titleField")
                     .bold()

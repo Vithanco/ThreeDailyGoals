@@ -24,7 +24,7 @@ struct SimpleListView: View {
         case "Closed": return .green
         case "Graveyard": return .gray
         case "Due Soon": return .orange
-        default: return preferences.accentColor
+        default: return .orange
         }
     }
 

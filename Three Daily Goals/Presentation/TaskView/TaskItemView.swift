@@ -23,10 +23,9 @@ struct TaskItemView: View {
                 VStack(spacing: 20) {
                     // Main task content with enhanced card styling
                     InnerTaskItemView(
-                        accentColor: preferences.accentColor,
                         item: item,
                         allTags: dataManager.activeTags.asArray,
-                        selectedTagStyle: selectedTagStyle(accentColor: preferences.accentColor),
+                        selectedTagStyle: selectedTagStyle(accentColor: item.state.color),
                         missingTagStyle: missingTagStyle,
                         showAttachmentImport: true
                     )

@@ -57,6 +57,13 @@ extension Color {
         static let secondaryBackground = Color(UIColor.secondarySystemBackground)
         static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
     #endif
+    
+    public static let priority = Color.orange
+    public static let open = Color.blue
+    public static let pendingResponse = Color.yellow
+    public static let closed = Color.green
+    public static let dead = Color.gray
+
 }
 
 // MARK: - Color Theme System

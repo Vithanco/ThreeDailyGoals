@@ -34,7 +34,7 @@ struct CompassCheckPreferencesView: View {
             GroupBox {
                 HStack {
                     Text("Last Compass Check was:")
-                    Text(lastCompassCheck).foregroundColor(preferences.accentColor)
+                    Text(lastCompassCheck).foregroundColor(TaskItemState.priority.color)
                 }.padding(5)
 
                 StreakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))

@@ -17,12 +17,6 @@ struct PreferencesView: View {
                 .tabItem {
                     Label("Compass Check", systemImage: imgCompassCheck)
                 }
-
-            AppearancePreferencesView()
-                .tabItem {
-                    Label("Appearance", systemImage: imAppearance)
-                }
-
             TaskPreferencesView()
                 .tabItem {
                     Label("Tasks", systemImage: "hand.raised")

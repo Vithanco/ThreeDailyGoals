@@ -20,7 +20,7 @@ struct CompassCheckNextPriorities: View {
 
                 Text(
                     "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
-                ).font(.title2).foregroundStyle(preferences.accentColor).multilineTextAlignment(.center)
+                ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
                 HStack {
                     ListView(whichList: .priority).frame(minHeight: 300)
                     ListView(whichList: .open)
