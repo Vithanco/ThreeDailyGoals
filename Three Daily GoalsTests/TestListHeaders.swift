@@ -65,7 +65,7 @@ struct TestListHeaders {
 
     @Test
     func testSplitting() throws {
-        let model = dummyViewModel()
+        let model = setupApp(isTesting: true)
         let lhs = ListHeader.defaultListHeaders
         var splitted = split(headers: lhs, itemList: model.dataManager.items)
         #expect(splitted.reduced == model.dataManager.items.count)
