@@ -1,5 +1,5 @@
 //
-//  TaskListView.swift
+//  ListView.swift
 //  Three Daily Goals
 //
 //  Created by Klaus Kneupner on 19/12/2023.
@@ -18,6 +18,7 @@ struct ListView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(\.colorScheme) private var colorScheme
     let whichList: TaskItemState?
 
     init(whichList: TaskItemState? = nil) {
@@ -26,6 +27,16 @@ struct ListView: View {
 
     var list: TaskItemState {
         return whichList ?? uiState.whichList
+    }
+    
+    // Adaptive background color for tag container
+    private var tagContainerBackground: Color {
+        colorScheme == .dark ? Color.neutral700 : Color.neutral300
+    }
+    
+    // Adaptive border color for tag container
+    private var tagContainerBorder: Color {
+        colorScheme == .dark ? Color.neutral600 : Color.neutral200
     }
 
     var body: some View {
@@ -70,11 +81,11 @@ struct ListView: View {
                     }
                 )
                 .frame(maxWidth: .infinity, idealHeight: 15, maxHeight: 50)
-                .padding(.horizontal, 0)
-                .padding(.vertical, 8)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.background)
+                        .fill(tagContainerBackground)
                         .shadow(
                             color: Color.black.opacity(0.03),
                             radius: 2,
@@ -84,9 +95,9 @@ struct ListView: View {
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.neutral200, lineWidth: 0.5)
+                        .stroke(tagContainerBorder, lineWidth: 0.5)
                 )
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 8)
                 .padding(.vertical, 8)
             }
 

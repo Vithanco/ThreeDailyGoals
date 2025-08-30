@@ -42,8 +42,7 @@ struct LeftSideView: View {
                 }
             #endif
             
-            // Priority list (main content area) with rounded styling
-
+            // Priority list (main content area) - removed background styling
             SimpleListView.priorityView(dataManager: dataManager)
                 .dropDestination(for: String.self) {
                     items, _ in
@@ -54,22 +53,6 @@ struct LeftSideView: View {
                 }
             
             .frame(minHeight: 145, maxHeight: .infinity)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
-                    .shadow(
-                        color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.03),
-                        radius: 2,
-                        x: 0,
-                        y: 1
-                    )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 0.5)
-            )
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
             

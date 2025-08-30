@@ -33,6 +33,18 @@ struct StreakView: View {
 struct FullStreakView: View {
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(\.colorScheme) private var colorScheme
+
+    // Adaptive background color for streak view
+    private var streakBackground: Color {
+        colorScheme == .dark ? Color.neutral800 : Color.neutral50
+    }
+    
+    // Adaptive border color for streak view
+    private var streakBorder: Color {
+        colorScheme == .dark ? Color.neutral700 : Color.neutral200
+    }
+    
 
     var body: some View {
         GroupBox {
@@ -53,9 +65,16 @@ struct FullStreakView: View {
                                 .help("Start compass check")
                         }
                         .buttonStyle(.plain)
-                        .frame(height: 24)
+                        .frame(height: 20)
             }
         }
+        .background(streakBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(streakBorder, lineWidth: 0.5)
+        )
+        .shadow(color: .black.opacity(0.02), radius: 1, x: 0, y: 1)
     }
 }
 

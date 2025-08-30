@@ -56,14 +56,6 @@ struct SimpleListView: View {
                         .listRowBackground(Color.clear)
                         .padding(.vertical, 20)
                 } else {
-                    if !showHeaders {
-                        Spacer().frame(height: 10)
-                    }
-
-                    let allItems = headers.flatMap { header in
-                        header.filter(items: itemList)
-                    }
-
                     ForEach(headers) { header in
                         let partialList = header.filter(items: itemList)
                         if partialList.count > 0 {
@@ -92,9 +84,15 @@ struct SimpleListView: View {
                         }
                     }
                     if itemList.count > 10 {
-                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(color)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.clear)
+                        HStack(spacing: 8) {
+                            Image(systemName: section.image)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(color)
+                                .frame(width: 16, height: 16)
+                            Text("\(itemList.count) tasks").font(.callout).foregroundStyle(color)
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                        }
                     }
                 }
             }
