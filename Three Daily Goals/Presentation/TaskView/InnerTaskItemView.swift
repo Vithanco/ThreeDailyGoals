@@ -19,6 +19,7 @@ struct InnerTaskItemView: View {
     @Environment(\.modelContext) private var modelContext
     let showAttachmentImport: Bool
     @Environment(\.colorScheme) var colorScheme
+    @FocusState private var isTitleFocused: Bool
 
     private var attachmentButton: some View {
         Button {
@@ -49,6 +50,7 @@ struct InnerTaskItemView: View {
                         .bold()
                         .frame(idealHeight: 13)
                         .textFieldStyle(.roundedBorder)
+                        .focused($isTitleFocused)
                 } label: {
                     Text("Title:").bold().foregroundColor(Color.secondary)
                 }
@@ -139,6 +141,9 @@ struct InnerTaskItemView: View {
                     }.frame(maxHeight: 70)
                 }
             }
+        }
+        .onAppear {
+            isTitleFocused = true
         }
         .padding(20)
         .background(

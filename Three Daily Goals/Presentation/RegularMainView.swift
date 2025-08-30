@@ -13,7 +13,9 @@ struct RegularMainView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
+        @Bindable var uiState = uiState
+        
+        return NavigationSplitView(columnVisibility: $columnVisibility) {
             LeftSideView().background(Color.background).frame(maxHeight: .infinity)
                 .navigationSplitViewColumnWidth(min: 300, ideal: 450)
                 .mainToolbar()

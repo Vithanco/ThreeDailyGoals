@@ -13,7 +13,6 @@ struct TaskItemView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(\.colorScheme) private var colorScheme
     @Bindable var item: TaskItem
-    @FocusState private var isTitleFocused: Bool
 
     var body: some View {
         ScrollView {
@@ -78,7 +77,6 @@ struct TaskItemView: View {
         .itemToolbar(item: item)
         .onAppear(perform: {
             dataManager.updateUndoRedoStatus()
-            isTitleFocused = true
         })
     }
 }

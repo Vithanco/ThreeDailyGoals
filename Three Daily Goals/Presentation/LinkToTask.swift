@@ -14,9 +14,13 @@ struct LinkToTask: View {
 
     var body: some View {
         if isLargeDevice {
-            TaskAsLine(item: item).onTapGesture {
+            Button(action: {
                 uiState.select(which: list, item: item)
-            }.accessibilityIdentifier("linkToTask" + item.title)
+            }) {
+                TaskAsLine(item: item)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .accessibilityIdentifier("linkToTask" + item.title)
         } else {
             ZStack {
                 TaskAsLine(item: item)
