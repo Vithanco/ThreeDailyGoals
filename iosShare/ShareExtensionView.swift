@@ -12,6 +12,9 @@ import UniformTypeIdentifiers
 
 struct ShareExtensionView: View {
     @State private var item: TaskItem = .init()
+    @State private var isFileAttachment: Bool = false
+    @State private var originalFileURL: URL?
+    @State private var originalContentType: UTType?
     @Environment(CloudPreferences.self) private var pref: CloudPreferences
     @Environment(\.modelContext) var model
 
@@ -36,13 +39,12 @@ struct ShareExtensionView: View {
     init(fileURL: URL, contentType: UTType) {
         // Create a task item for the shared file
         self.item.title = "Review File"
-
-        // Store the file URL and content type for later attachment
-        self.item.url = fileURL.absoluteString
         self.item.details = "Shared file: \(fileURL.lastPathComponent)"
 
-        // Note: The actual attachment will be handled when the user clicks "Add to Three Daily Goals"
-        // because we need access to the ModelContext which is provided by the .modelContainer modifier
+        // Store file info for later attachment
+        self.originalFileURL = fileURL
+        self.originalContentType = contentType
+        self.isFileAttachment = true
     }
 
     init() {
@@ -55,13 +57,11 @@ struct ShareExtensionView: View {
                     debugPrint("Number: \(allItems.count)")
 
                     // If this is a file attachment, add it to the task
-                    if let fileURL = URL(string: item.url), !item.url.isEmpty && item.details.hasPrefix("Shared file:")
-                    {
+                    if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType {
                         do {
-                            let type = try fileURL.resourceValues(forKeys: [.contentTypeKey]).contentType ?? .data
                             _ = try addAttachment(
                                 fileURL: fileURL,
-                                type: type,
+                                type: contentType,
                                 to: item,
                                 sortIndex: 0,
                                 in: model
@@ -74,9 +74,7 @@ struct ShareExtensionView: View {
                     model.insert(item)
 
                     do {
-                        debugPrint(item)
                         try model.save()
-                        debugPrint("Number: \(allItems.count)")
                     } catch {
                         debugPrint(error)
                     }
@@ -87,15 +85,13 @@ struct ShareExtensionView: View {
                 }
                 .buttonStyle(.borderedProminent)
 
-                Spacer()
-
                 InnerTaskItemView(
                     item: item,
                     allTags: [],
                     selectedTagStyle: selectedTagStyle(accentColor: item.color),
                     missingTagStyle: missingTagStyle,
                     showAttachmentImport: false
-                )
+                ).frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
 
             }
             .padding()
@@ -111,5 +107,26 @@ struct ShareExtensionView: View {
     // so we can close the whole extension
     func close() {
         NotificationCenter.default.post(name: NSNotification.Name("close"), object: nil)
+    }
+}
+
+// MARK: - Tag Style Helpers (copied from main app since share extension doesn't have access)
+extension ShareExtensionView {
+    func selectedTagStyle(accentColor: Color) -> TagCapsuleStyle {
+        TagCapsuleStyle(
+            foregroundColor: accentColor.readableTextColor,
+            backgroundColor: accentColor,
+            border: .none,
+            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
+        )
+    }
+
+    var missingTagStyle: TagCapsuleStyle {
+        TagCapsuleStyle(
+            foregroundColor: .white,
+            backgroundColor: .gray,
+            border: .none,
+            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
+        )
     }
 }

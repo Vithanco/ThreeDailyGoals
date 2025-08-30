@@ -17,7 +17,7 @@ struct AllCommentsView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with Add Comment button
             HStack {
-                Text("History:").bold().foregroundColor(Color.secondaryColor)
+                Text("History:").bold().foregroundColor(Color.secondary)
                 Spacer()
                 Button(action: { presentAlert = true }) {
                     Label("Add Comment", systemImage: "plus.circle.fill").help(

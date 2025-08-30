@@ -36,6 +36,7 @@ struct ListView: View {
         let headers = list.subHeaders
         VStack {
             SimpleListView(
+                color: list.color,
                 itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section,
                 id: list.getListAccessibilityIdentifier
             )

@@ -50,7 +50,7 @@ struct InnerTaskItemView: View {
                         .frame(idealHeight: 13)
                         .textFieldStyle(.roundedBorder)
                 } label: {
-                    Text("Title:").bold().foregroundColor(Color.secondaryColor)
+                    Text("Title:").bold().foregroundColor(Color.secondary)
                 }
 
                 // Details field
@@ -59,7 +59,7 @@ struct InnerTaskItemView: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(minHeight: 30, idealHeight: 30)
                 } label: {
-                    Text("Details:").bold().foregroundColor(Color.secondaryColor)
+                    Text("Details:").bold().foregroundColor(Color.secondary)
                 }
 
                 // URL field
@@ -75,14 +75,14 @@ struct InnerTaskItemView: View {
                         }
                     }
                 } label: {
-                    Text("URL:").bold().foregroundColor(Color.secondaryColor)
+                    Text("URL:").bold().foregroundColor(Color.secondary)
                 }
 
                 // Due date field
                 LabeledContent {
                     DatePickerNullable(selected: $item.due, defaultDate: getDate(inDays: 7))
                 } label: {
-                    Text("Due Date:").bold().foregroundColor(Color.secondaryColor)
+                    Text("Due Date:").bold().foregroundColor(Color.secondary)
                 }
             }
 

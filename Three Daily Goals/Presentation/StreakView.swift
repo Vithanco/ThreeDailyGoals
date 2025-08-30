@@ -12,20 +12,20 @@ struct StreakView: View {
 
     var body: some View {
         HStack(spacing: 6) {
+            Text("\(preferences.daysOfCompassCheck)")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.black)
             Image(systemName: imgStreakActive)
                 .foregroundStyle(Color.priority)
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
-            Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(Color.black)
+            Text("Today:")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(.black)
             Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
-            Text(preferences.didCompassCheckToday ? "Done" : "Pending")
-                .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
         }
     }
 }

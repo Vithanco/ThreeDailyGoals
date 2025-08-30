@@ -14,15 +14,17 @@ import SwiftUI
 
 @main
 struct ShareApp: App {
-    private let container = sharedModelContainer(inMemory: false, withCloud: false)
-    @State private var preferences = CloudPreferences(testData: false)
+    //    private let container = sharedModelContainer(inMemory: false, withCloud: false)
+    //    @State private var preferences = CloudPreferences(testData: false)
 
     var body: some Scene {
         WindowGroup {
-            ShareExtensionView()
-                .environment(preferences)
+            // This is just a placeholder - the actual ShareViewController
+            // will be instantiated by the system based on Info.plist configuration
+            Text("Share Extension")
+            //                .environment(preferences)
         }
-        .modelContainer(container)
+        //        .modelContainer(container)
         #if os(macOS)
             .windowResizability(.contentSize)
         #endif

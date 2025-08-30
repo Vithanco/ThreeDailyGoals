@@ -6,25 +6,16 @@
 //
 
 // MARK: - List Icons
-let imgListPriority = "star.fill"
-let imgListOpen = "circle"
-let imgListPendingResponse = "clock"
-let imgListClosed = "checkmark.circle.fill"
-let imgListGraveyard = "archivebox"
-
-// MARK: - Legacy Icons (keeping for backward compatibility)
-let imgOpen = imgListOpen
-let imgClosed = imgListClosed
-let imgGraveyard = imgListPendingResponse
-let imgPendingResponse = imgListPendingResponse
+let imgOpen = "circle"
+let imgClosed = "checkmark.circle.fill"
+let imgGraveyard = "archivebox"
+let imgPendingResponse = "clock"
 let imgDueSoon = "calendar"
 let imgDated = "clock.fill"
 let imgInformation = "info.square.fill"
-//let imgMagnifyingGlass = "magnifyingglass.circle.fill"
 let imgCompassCheck = "compass.drawing"
-//let compassCheck = Image(systemName: imgCompassCheck)
 let imgStreak = "flame"
-let imgToday = imgListPriority
+let imgPriority = "star.fill"
 
 // MARK: - Streak and Compass Check Icons
 let imgStreakActive = "flame.fill"
@@ -32,26 +23,14 @@ let imgCompassCheckDone = "checkmark.circle.fill"
 let imgCompassCheckPending = "clock.circle"
 let imgCompassCheckStart = "safari"
 
-let imgPriority1 = "1.circle.fill"
-let imgPriority2 = "2.circle.fill"
-let imgPriority3 = "3.circle.fill"
-let imgPriority4 = "4.circle.fill"
-let imgPriority5 = "5.circle.fill"
-let imgPriorityX = "x.circle.fill"
-
-let imgCloseTask = "xmark.circle.fill"
 let imgReopenTask = imgOpen  //arrow.uturn.forward.circle.fill
 let imgTouch = "hand.tap"
 
 let imgUndo = "arrow.uturn.backward.circle.fill"
 let imgRedo = "arrow.uturn.forward.circle.fill"
-
-let imgCheckedBox = imgListClosed
-let imgUncheckedBox = imgListOpen
 let imgAttachment = "paperclip"
 
 // MARK: - UI Icons
-let imAppearance = "paintpalette"
 let imgAddItem = "plus.app.fill"
 let imgPreferences = "gearshape"
 

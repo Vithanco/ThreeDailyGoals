@@ -21,6 +21,7 @@ struct CompassCheckDueDate: View {
                 "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."
             )
             SimpleListView(
+                color: Color.dueSoon,
                 itemList: compassCheckManager.dueDateSoon, headers: [ListHeader.all], showHeaders: false,
                 section: secDueSoon, id: "dueSoonList")
         }.frame(minHeight: 300, idealHeight: 800, maxHeight: .infinity)

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -14,8 +15,8 @@ import UniformTypeIdentifiers
 
 public class ShareViewController: BaseViewController {
 
-    private lazy var preferences = CloudPreferences(testData: false)
-    private lazy var container = sharedModelContainer(inMemory: false, withCloud: true)
+    private let container = sharedModelContainer(inMemory: false, withCloud: false)
+    private let preferences = CloudPreferences(testData: false)
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +40,8 @@ public class ShareViewController: BaseViewController {
                     return
                 }
                 await MainActor.run {
-                    let root = ShareFlow.makeView(for: payload, preferences: preferences, container: container)
-                    self.presentRoot(root)
+                    let shareView = self.createShareView(for: payload)
+                    self.presentRoot(shareView)
                 }
             } catch {
                 await MainActor.run { self.close() }
@@ -49,8 +50,25 @@ public class ShareViewController: BaseViewController {
     }
 
     @MainActor
+    private func createShareView(for payload: SharePayload) -> ShareExtensionView {
+        switch payload {
+        case .text(let text):
+            return ShareExtensionView(text: text)
+        case .url(let url):
+            return ShareExtensionView(url: url)
+        case .attachment(let fileURL, let contentType):
+            return ShareExtensionView(fileURL: fileURL, contentType: contentType)
+        }
+    }
+
+    @MainActor
     private func presentRoot<Content: View>(_ content: Content) {
-        let host = HostingController(rootView: content)
+        let host = HostingController(
+            rootView:
+                content
+                .modelContainer(container)
+                .environment(preferences)
+        )
         addChild(host)
         view.addSubview(host.view)
 

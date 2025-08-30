@@ -24,11 +24,6 @@ extension Color {
     public static let neutral700 = Color(hex: "#616161")
     public static let neutral800 = Color(hex: "#424242")
 
-    // MARK: - Legacy Support
-    public static let mainColor = Color(
-        red: 234.0 / 255.0, green: 88.0 / 255.0, blue: 12.0 / 255.0, opacity: 1.0)
-    public static let secondaryColor = Color.secondary
-
     #if os(macOS)
         static let background = Color(NSColor.windowBackgroundColor)
         static let secondaryBackground = Color(NSColor.underPageBackgroundColor)
@@ -44,7 +39,9 @@ extension Color {
     public static let pendingResponse = Color.yellow
     public static let closed = Color(red: 0.49, green: 0.89, blue: 0.53)
     public static let dead = Color.gray
-
+    
+    static let dueSoon = Color.red
+    
 }
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193

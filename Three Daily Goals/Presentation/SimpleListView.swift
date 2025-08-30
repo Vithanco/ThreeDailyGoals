@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SimpleListView: View {
+    let color: Color
     let itemList: [TaskItem]
     let headers: [ListHeader]
     let showHeaders: Bool
@@ -15,21 +16,10 @@ struct SimpleListView: View {
     let id: String
     @Environment(CloudPreferences.self) private var preferences
 
-    // Get the list color based on the section
-    private var listColor: Color {
-        switch section.text {
-        case "Today's Goals": return .orange
-        case "Open": return .blue
-        case "Pending Response": return .yellow
-        case "Closed": return .green
-        case "Graveyard": return .gray
-        case "Due Soon": return .orange
-        default: return .orange
-        }
-    }
-    
+   
     public static func priorityView(dataManager: DataManager) ->  SimpleListView {
         return SimpleListView(
+            color: .priority,
             itemList: dataManager.list(which: .priority),
             headers: TaskItemState.priority.subHeaders,
             showHeaders: false, // Don't show headers for priority list
@@ -46,11 +36,11 @@ struct SimpleListView: View {
                         // Section icon with color
                         Image(systemName: section.image)
                             .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(listColor)
+                            .foregroundColor(color)
                             .frame(width: 20, height: 20)
                         
                         section.asText
-                            .foregroundStyle(listColor)
+                            .foregroundStyle(color)
                             .font(.system(size: 14, weight: .semibold))
                             .accessibilityIdentifier("ListView" + id)
                     }
@@ -60,7 +50,7 @@ struct SimpleListView: View {
             ) {
                 if itemList.isEmpty {
                     Text("(No items found)")
-                        .foregroundStyle(listColor)
+                        .foregroundStyle(color)
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -82,11 +72,11 @@ struct SimpleListView: View {
                                     // Header icon with color
                                     Image(systemName: section.image)
                                         .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(listColor)
+                                        .foregroundColor(color)
                                         .frame(width: 16, height: 16)
                                     
                                     header.asText
-                                        .foregroundStyle(listColor)
+                                        .foregroundStyle(color)
                                         .font(.system(size: 13, weight: .medium))
                                         .listRowSeparator(.hidden)
                                 }
@@ -102,7 +92,7 @@ struct SimpleListView: View {
                         }
                     }
                     if itemList.count > 10 {
-                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(listColor)
+                        Text("\(itemList.count) tasks").font(.callout).foregroundStyle(color)
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                     }

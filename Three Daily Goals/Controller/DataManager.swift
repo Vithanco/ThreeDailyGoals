@@ -818,9 +818,9 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .closed)
         }) {
-            Label("Close", systemImage: TaskItemState.closed.imageName)
-                .help("Close the task")
+            Label("Close", systemImage: imgClosed)
         }
+        .help("Close the task")
         .accessibilityIdentifier("closeButton")
         .disabled(!item.canBeClosed)
     }
@@ -830,9 +830,10 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .dead)
         }) {
-            Label("Kill", systemImage: TaskItemState.dead.imageName)
-                .help("Move the task to the Graveyard")
+            Label("Kill", systemImage: imgGraveyard)
+                
         }
+        .help("Move the task to the Graveyard")
         .accessibilityIdentifier("killButton")
         .disabled(!item.canBeClosed)
     }
@@ -842,9 +843,10 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .open)
         }) {
-            Label("Open", systemImage: TaskItemState.open.imageName)
-                .help("Open this task again")
+            Label("Open", systemImage: imgOpen)
+                
         }
+        .help("Open this task again")
         .accessibilityIdentifier("openButton")
         .disabled(!item.canBeMovedToOpen)
     }
@@ -854,7 +856,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
-            Label("Pending a Response", systemImage: TaskItemState.pendingResponse.imageName)
+            Label("Pending a Response", systemImage: imgPendingResponse)
                 .help(
                     "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
                 )
@@ -868,7 +870,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .priority)
         }) {
-            Image(systemName: imgToday)
+            Image(systemName: imgPriority)
                 .frame(width: 8, height: 8)
                 .help("Make this task a priority for today")
         }

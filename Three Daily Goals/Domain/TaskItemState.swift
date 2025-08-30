@@ -58,7 +58,7 @@ extension TaskItemState {
         case .dead: return imgGraveyard
         case .open: return imgOpen
         case .pendingResponse: return imgPendingResponse
-        case .priority: return imgToday
+        case .priority: return imgPriority
         }
     }
 

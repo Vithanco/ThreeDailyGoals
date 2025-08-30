@@ -61,19 +61,19 @@ struct TaskAsLine: View {
         #endif
         .swipeActions(edge: .leading) {
             if item.canBeMovedToOpen {
-                dataManager.openButton(item: item)
+                dataManager.openButton(item: item).tint(TaskItemState.open.color)
             }
             if item.canBeMadePriority {
-                dataManager.priorityButton(item: item)
+                dataManager.priorityButton(item: item).tint(TaskItemState.priority.color)
             }
         }
         .swipeActions(edge: .trailing) {
             if item.canBeMovedToPendingResponse {
-                dataManager.waitForResponseButton(item: item)
+                dataManager.waitForResponseButton(item: item).tint(TaskItemState.pendingResponse.color)
             }
             if item.canBeClosed {
-                dataManager.killButton(item: item)
-                dataManager.closeButton(item: item)
+                dataManager.killButton(item: item).tint(TaskItemState.dead.color)
+                dataManager.closeButton(item: item).tint(TaskItemState.closed.color)
             }
             if item.canBeDeleted {
                 dataManager.deleteButton(item: item, uiState: uiState)

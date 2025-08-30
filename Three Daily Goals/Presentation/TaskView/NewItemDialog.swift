@@ -40,13 +40,13 @@ struct NewItemDialog: View {
                         addTask()
                     }
             } label: {
-                Text("Title:").bold().foregroundColor(Color.secondaryColor)
+                Text("Title:").bold().foregroundColor(Color.secondary)
             }
             Spacer()
 
             HStack {
                 Button(role: .destructive, action: dismiss) {
-                    Text("Cancel").foregroundColor(Color.secondaryColor)
+                    Text("Cancel").foregroundColor(Color.secondary)
                 }
                 Spacer()
                 Button(action: addTask) {

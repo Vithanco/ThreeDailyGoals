@@ -42,6 +42,7 @@ struct CompassCheckPlanDay: View {
                     dateSelectionStyle: .selectedDates([date])
                 )
                 SimpleListView(
+                    color: .priority,
                     itemList: compassCheckManager.priorityTasks,
                     headers: [ListHeader.all],
                     showHeaders: false,

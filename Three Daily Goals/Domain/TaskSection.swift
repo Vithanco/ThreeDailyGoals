@@ -12,11 +12,11 @@ public struct TaskSection: Observable, Sendable {
     let image: String
 }
 
-let secToday = TaskSection(text: "Today's Goals", image: imgListPriority)
-let secOpen = TaskSection(text: "Open", image: imgListOpen)
-let secClosed = TaskSection(text: "Closed", image: imgListClosed)
-let secGraveyard = TaskSection(text: "Graveyard", image: imgListGraveyard)
-let secPending = TaskSection(text: "Pending Response", image: imgListPendingResponse)
+let secToday = TaskSection(text: "Today's Goals", image: imgPriority)
+let secOpen = TaskSection(text: "Open", image: imgOpen)
+let secClosed = TaskSection(text: "Closed", image: imgClosed)
+let secGraveyard = TaskSection(text: "Graveyard", image: imgGraveyard)
+let secPending = TaskSection(text: "Pending Response", image: imgPendingResponse)
 let secDueSoon = TaskSection(text: "Due Soon", image: imgDueSoon)
 
 extension TaskSection: Identifiable {
