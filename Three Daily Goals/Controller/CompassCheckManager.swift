@@ -256,10 +256,7 @@ final class CompassCheckManager {
         Button(action: { self.startCompassCheckNow() }) {
             Label("Compass Check", systemImage: imgCompassCheckStart)
                 .foregroundStyle(TaskItemState.priority.color)
-                .font(.system(size: 18, weight: .medium))
                 .help("Start compass check")
         }
-        .buttonStyle(.plain)
-        .frame(height: 24)
     }
 }

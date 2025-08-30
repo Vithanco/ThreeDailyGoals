@@ -19,7 +19,7 @@ struct CompassCheckInformView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(preferences.accentColor)
                 
-                FullStreakView()
+                StreakView()
                     .padding(.horizontal, 8)
             }
             

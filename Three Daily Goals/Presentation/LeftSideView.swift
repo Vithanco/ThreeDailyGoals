@@ -43,25 +43,35 @@ struct LeftSideView: View {
             #endif
             
             // Priority list (main content area) with rounded styling
-            ListView(whichList: .priority)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
-                        .shadow(
-                            color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.03),
-                            radius: 2,
-                            x: 0,
-                            y: 1
-                        )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 0.5)
-                )
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+
+            SimpleListView.priorityView(dataManager: dataManager)
+                .dropDestination(for: String.self) {
+                    items, _ in
+                    for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                        dataManager.moveWithPriorityTracking(task: item, to: .priority)
+                    }
+                    return true
+                }
+            
+            .frame(minHeight: 145, maxHeight: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
+                    .shadow(
+                        color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.03),
+                        radius: 2,
+                        x: 0,
+                        y: 1
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 0.5)
+            )
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
             
             Spacer()
             
@@ -93,7 +103,7 @@ struct LeftSideView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)
-        .frame(minWidth: 400, idealWidth: 500, maxWidth: 1000) // Ensure minimum width for comfortable reading
+        .frame(minWidth: 300, idealWidth: 500, maxWidth: 1000) // Ensure minimum width for comfortable reading
         #endif
     }
 }

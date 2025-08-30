@@ -44,11 +44,11 @@ extension TaskItemState {
     // List-specific colors
     var color: Color {
         switch self {
-        case .priority: return .orange
-        case .open: return .blue
-        case .pendingResponse: return .yellow
-        case .closed: return .green
-        case .dead: return .gray
+        case .priority: return Color.priority
+        case .open: return Color.open
+        case .pendingResponse: return Color.pendingResponse
+        case .closed: return Color.closed
+        case .dead: return Color.dead
         }
     }
 

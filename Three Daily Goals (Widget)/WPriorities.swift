@@ -73,7 +73,7 @@ struct WPriorities: View {
             Section(
                 header: HStack(spacing: 4) {
                     Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
-                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                        .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.priority)
                         .font(.system(size: 12, weight: .medium))
                     Text(preferences.didCompassCheckToday ? "Done" : "Pending")
                         .font(.subheadline)

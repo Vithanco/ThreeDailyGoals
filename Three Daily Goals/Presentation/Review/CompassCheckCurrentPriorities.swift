@@ -20,7 +20,7 @@ struct CompassCheckCurrentPriorities: View {
                 Text("Current Priority Tasks").font(.title2).foregroundStyle(TaskItemState.priority.color).padding(5)
                 Text("Slide tasks to the left to close them.")
                 Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
-                ListView(whichList: .priority)
+                SimpleListView.priorityView(dataManager: dataManager)
             }.frame(minHeight: 300, idealHeight: 500)
             Button(action: { presentAlert = true }) {
                 Label("Add Task", systemImage: imgAddItem).help("Add new task to list of open tasks.")

@@ -26,8 +26,17 @@ func createAttachmentTempFile(
     fileExtension: String? = nil,
     uniqueIdentifier: String
 ) -> URL? {
+    // Check if data is empty
+    guard !data.isEmpty else {
+        print("Cannot create temporary file: data is empty")
+        return nil
+    }
+    
     // Extract extension from filename if not provided
     let ext = fileExtension ?? URL(fileURLWithPath: filename).pathExtension
+    
+    // If we still don't have an extension, try to infer it from the filename
+    let finalExt = ext.isEmpty ? URL(fileURLWithPath: filename).pathExtension : ext
 
     // Create a short, safe unique identifier using hash of the original identifier
     let hash = uniqueIdentifier.hashValue
@@ -43,12 +52,12 @@ func createAttachmentTempFile(
     #if os(iOS)
         // On iOS, use the app's documents directory for better file access
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = documentsPath.appendingPathComponent(uniqueName).appendingPathExtension(ext)
+        let url = documentsPath.appendingPathComponent(uniqueName).appendingPathExtension(finalExt)
     #else
         // On macOS, use temporary directory
         let url = URL(fileURLWithPath: NSTemporaryDirectory())
             .appendingPathComponent(uniqueName)
-            .appendingPathExtension(ext)
+            .appendingPathExtension(finalExt)
     #endif
 
     do {
@@ -58,6 +67,38 @@ func createAttachmentTempFile(
         return url
     } catch {
         print("Failed to create temporary file: \(error)")
+        return nil
+    }
+}
+
+/// Creates a simple temporary file as a fallback when the main function fails
+/// - Parameters:
+///   - data: The file data to write
+///   - filename: The original filename
+/// - Returns: A URL where the file can be written, or nil if creation fails
+func createSimpleTempFile(data: Data, filename: String) -> URL? {
+    // Extract extension from filename
+    let ext = URL(fileURLWithPath: filename).pathExtension
+    
+    // Create a simple unique filename
+    let uniqueName = "attachment_\(UUID().uuidString)"
+    let finalName = ext.isEmpty ? uniqueName : "\(uniqueName).\(ext)"
+    
+    #if os(iOS)
+        // On iOS, use the app's documents directory for better file access
+        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let url = documentsPath.appendingPathComponent(finalName)
+    #else
+        // On macOS, use temporary directory
+        let url = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent(finalName)
+    #endif
+
+    do {
+        try data.write(to: url, options: .atomic)
+        return url
+    } catch {
+        print("Failed to create simple temporary file: \(error)")
         return nil
     }
 }

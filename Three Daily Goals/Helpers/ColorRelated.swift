@@ -42,7 +42,7 @@ extension Color {
     public static let priority = Color.orange
     public static let open = Color.blue
     public static let pendingResponse = Color.yellow
-    public static let closed = Color.green
+    public static let closed = Color(red: 0.49, green: 0.89, blue: 0.53)
     public static let dead = Color.gray
 
 }

@@ -19,6 +19,13 @@ struct StreakView: View {
             Text("\(preferences.daysOfCompassCheck)")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Color.primary)
+            Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                .font(.system(size: 18, weight: .medium))
+                .frame(width: 24, height: 24)
+            Text(preferences.didCompassCheckToday ? "Done" : "Pending")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
         }
     }
 }
@@ -33,21 +40,20 @@ struct FullStreakView: View {
                 // Streak display
                 StreakView()
                 
-                // Compass check status
-                HStack(spacing: 6) {
-                    Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
-                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
-                        .font(.system(size: 18, weight: .medium))
-                        .frame(width: 24, height: 24)
-                    Text(preferences.didCompassCheckToday ? "Done" : "Pending")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
-                }
-                
                 Spacer()
                 
-                // Compass check button
-                compassCheckManager.compassCheckButton
+                Button(action: { compassCheckManager.startCompassCheckNow() }) {
+                            Label("Compass Check", systemImage: imgCompassCheckStart)
+                                .foregroundStyle(.white)
+                                .font(.system(size: 14, weight: .medium))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(TaskItemState.priority.color)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .help("Start compass check")
+                        }
+                        .buttonStyle(.plain)
+                        .frame(height: 24)
             }
         }
     }

@@ -21,7 +21,7 @@ struct RegularMainView: View {
             SingleView {
                 ListView().background(Color.background)
             }.background(Color.background)
-                .navigationSplitViewColumnWidth(min: 400, ideal: 600)
+                .navigationSplitViewColumnWidth(min: 300, ideal: 450)
                 .navigationTitle("Three Daily Goals")
         } detail: {
             if let detail = uiState.selectedItem {

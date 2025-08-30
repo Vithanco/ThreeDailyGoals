@@ -27,6 +27,16 @@ struct SimpleListView: View {
         default: return .orange
         }
     }
+    
+    public static func priorityView(dataManager: DataManager) ->  SimpleListView {
+        return SimpleListView(
+            itemList: dataManager.list(which: .priority),
+            headers: TaskItemState.priority.subHeaders,
+            showHeaders: false, // Don't show headers for priority list
+            section: TaskItemState.priority.section,
+            id: TaskItemState.priority.getListAccessibilityIdentifier
+        )
+    }
 
     var body: some View {
         List {

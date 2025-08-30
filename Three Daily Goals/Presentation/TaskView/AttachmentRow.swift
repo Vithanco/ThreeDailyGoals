@@ -26,15 +26,38 @@ struct AttachmentRow: View {
             Spacer()
             if !attachment.isPurged {
                 #if os(macOS)
-                    if let url = createAttachmentTempFile(
+                    // Try to create a temporary file for opening
+                    let tempURL = createAttachmentTempFile(
                         data: attachment.blob ?? Data(),
                         filename: attachment.filename,
                         fileExtension: attachment.type?.preferredFilenameExtension,
                         uniqueIdentifier: String(describing: attachment.id)
-                    ) {
+                    )
+                    
+                    if let url = tempURL {
                         ShareLink(item: url)
                         Button("Open") {
                             NSWorkspace.shared.open(url)
+                        }
+                    } else {
+                        // Fallback: if we can't create a temp file, still show share button with data
+                        ShareLink(item: attachment.blob ?? Data(), preview: SharePreview(attachment.filename))
+                        Button("Open") {
+                            // Try to create a simple temp file as fallback
+                            if let data = attachment.blob, !data.isEmpty {
+                                let fallbackURL = createSimpleTempFile(data: data, filename: attachment.filename)
+                                if let url = fallbackURL {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }
+                        }
+                        .disabled(attachment.blob?.isEmpty ?? true)
+                        .onAppear {
+                            // Debug logging moved to onAppear
+                            print("⚠️ Failed to create temp file for attachment: \(attachment.filename)")
+                            print("   - Blob size: \(attachment.blob?.count ?? 0)")
+                            print("   - Type: \(attachment.type?.identifier ?? "nil")")
+                            print("   - Preferred extension: \(attachment.type?.preferredFilenameExtension ?? "nil")")
                         }
                     }
                 #else
