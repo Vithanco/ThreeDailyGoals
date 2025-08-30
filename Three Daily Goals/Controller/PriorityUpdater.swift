@@ -1,6 +1,6 @@
 import Foundation
 
-@preconcurrency
+
 protocol PriorityUpdater {
-    func updatePriorities()
+    func updatePriorities(prioTasks: [TaskItem])
 }

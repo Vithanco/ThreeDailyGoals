@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LeftSideView: View {
     @Environment(DataManager.self) private var dataManager
-    @Environment(CloudKitManager.self) private var cloudKitManager
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
@@ -82,7 +81,7 @@ struct LeftSideView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
             }
-            .background(cloudKitManager.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
+            .background(dataManager.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)

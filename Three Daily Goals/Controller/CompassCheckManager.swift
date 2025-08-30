@@ -216,9 +216,7 @@ final class CompassCheckManager {
         if isTesting {
             return
         }
-        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog
-            || uiState.showNewItemNameDialog
-        {
+        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog {
             waitABit()
         }
         if self.uiState.showCompassCheckDialog {

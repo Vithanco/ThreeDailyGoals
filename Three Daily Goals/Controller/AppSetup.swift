@@ -9,7 +9,6 @@ struct AppComponents {
     let preferences: CloudPreferences
     let uiState: UIStateManager
     let dataManager: DataManager
-    let cloudKitManager: CloudKitManager
     let compassCheckManager: CompassCheckManager
     let isTesting: Bool
 }
@@ -26,6 +25,22 @@ func setupApp(isTesting: Bool, loader: TestStorage.Loader? = nil, preferences: C
     return setupTestApp(loader: loader, preferences: preferences)
 }
 
+
+extension CloudPreferences : @MainActor PriorityUpdater {
+    func updatePriorities(prioTasks: [TaskItem]) {
+        let prios = prioTasks.count
+        for i in 0..<prios {
+            setPriority(nr: i + 1, value: prioTasks[i].title)
+        }
+        if prios < 5 {
+            for i in prios...4 {
+                setPriority(nr: i + 1, value: "")
+            }
+        }
+    }
+}
+
+
 /// Set up the app for production use
 @MainActor
 private func setupProductionApp() -> AppComponents {
@@ -41,17 +56,16 @@ private func setupProductionApp() -> AppComponents {
 
     // Create data manager
     let dataManager = DataManager(modelContext: modelContext)
+    
+    uiState.newItemProducer = dataManager
 
     // Load initial data
     dataManager.loadData()
     uiState.showItem = false
     dataManager.mergeDataFromCentralStorage()
 
-    // Create CloudKit manager with dependency injection
-    let cloudKitManager = CloudKitManager(dataManager: dataManager, preferences: preferences)
-
     // Set up dependency injection for priority updates
-    dataManager.priorityUpdater = cloudKitManager
+    dataManager.priorityUpdater = preferences
 
     // Set up dependency injection for item selection
     dataManager.itemSelector = uiState
@@ -74,7 +88,6 @@ private func setupProductionApp() -> AppComponents {
         preferences: preferences,
         uiState: uiState,
         dataManager: dataManager,
-        cloudKitManager: cloudKitManager,
         compassCheckManager: compassCheckManager,
         isTesting: false
     )
@@ -118,12 +131,11 @@ private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudP
     dataManager.loadData()
     uiState.showItem = false
     dataManager.mergeDataFromCentralStorage()
-
-    // Create CloudKit manager with dependency injection
-    let cloudKitManager = CloudKitManager(dataManager: dataManager, preferences: preferences)
+    
+    uiState.newItemProducer = dataManager
 
     // Set up dependency injection for priority updates
-    dataManager.priorityUpdater = cloudKitManager
+    dataManager.priorityUpdater = preferences
 
     // Set up dependency injection for item selection
     dataManager.itemSelector = uiState
@@ -146,7 +158,6 @@ private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudP
         preferences: preferences,
         uiState: uiState,
         dataManager: dataManager,
-        cloudKitManager: cloudKitManager,
         compassCheckManager: compassCheckManager,
         isTesting: true
     )

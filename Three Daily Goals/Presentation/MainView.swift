@@ -53,9 +53,6 @@ struct MainView: View {
         .sheet(isPresented: $uiState.showSelectDuringImportDialog) {
             SelectVersions(choices: uiState.selectDuringImport)
         }
-        .sheet(isPresented: $uiState.showNewItemNameDialog) {
-            NewItemDialog()
-        }
         .sheet(isPresented: $uiState.showInfoMessage) {
             VStack {
                 GroupBox {

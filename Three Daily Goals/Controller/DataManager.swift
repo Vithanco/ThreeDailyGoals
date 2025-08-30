@@ -792,26 +792,9 @@ final class DataManager {
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
 
-    // MARK: - Task Operation Buttons
-
-//    /// Toggle priority button for task items
-//    func toggleButton(item: TaskItem) -> some View {
-//        Button(action: { [self] in
-//            if item.state == .priority {
-//                moveWithPriorityTracking(task: item, to: .open)
-//            } else {
-//                moveWithPriorityTracking(task: item, to: .priority)
-//            }
-//        }) {
-//            Label(
-//                "Toggle Priority",
-//                systemImage: item.state == .priority
-//                    ? TaskItemState.open.imageName : TaskItemState.priority.imageName
-//            )
-//            .help("Add to/ remove from today's priorities")
-//        }
-//        .accessibilityIdentifier("toggleButton")
-//    }
+    var isProductionEnvironment: Bool {
+        return CKContainer.isProductionEnvironment
+    }
 
     /// Close button for task items
     func closeButton(item: TaskItem) -> some View {
@@ -945,5 +928,26 @@ extension DataManager {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: TaskItem.self, configurations: config)
         return DataManager(modelContext: container.mainContext)
+    }
+}
+
+extension DataManager : NewItemProducer {
+    func produceNewItem() -> TaskItem {
+        var result = TaskItem()
+        modelContext.insert(result)
+        return result
+    }
+}
+
+
+extension CKContainer {
+
+    public static var isProductionEnvironment: Bool {
+        let container = CKContainer.default()
+        if let containerID = container.value(forKey: "containerID") as? NSObject {
+            debugPrint("containerID: \(containerID)")
+            return containerID.description.contains("Production")
+        }
+        return false
     }
 }

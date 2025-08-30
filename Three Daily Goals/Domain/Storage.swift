@@ -208,19 +208,4 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContai
     }
 }
 
-extension CKContainer {
-    //    public var isProductionEnvironment: Bool {
-    //        let containerID = self.value(forKey: "containerID") as! NSObject  // CKContainerID
-    //        debugPrint("containerID: \(containerID)")
-    //        return containerID.value(forKey: "environment")! as! CLongLong == 1
-    //    }
 
-    public static var isProductionEnvironment: Bool {
-        let container = CKContainer.default()
-        if let containerID = container.value(forKey: "containerID") as? NSObject {
-            debugPrint("containerID: \(containerID)")
-            return containerID.description.contains("Production")
-        }
-        return false
-    }
-}

@@ -10,12 +10,14 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class UIStateManager: @preconcurrency ItemSelector {
+final class UIStateManager: ItemSelector {
 
     // MARK: - Navigation State
 
     /// Currently selected task item (for detail view)
     var selectedItem: TaskItem?
+    
+    var newItemProducer : NewItemProducer? = nil
 
     /// Currently selected list type
     var whichList: TaskItemState = .open
@@ -30,9 +32,6 @@ final class UIStateManager: @preconcurrency ItemSelector {
 
     /// Show settings/preferences dialog
     var showSettingsDialog: Bool = false
-
-    /// Show new item name dialog
-    var showNewItemNameDialog: Bool = false
 
     /// Show import dialog
     var showImportDialog: Bool = false
@@ -85,7 +84,6 @@ final class UIStateManager: @preconcurrency ItemSelector {
     func clearAllDialogs() {
         showCompassCheckDialog = false
         showSettingsDialog = false
-        showNewItemNameDialog = false
         showImportDialog = false
         showExportDialog = false
         showSelectDuringImportDialog = false
@@ -117,20 +115,22 @@ final class UIStateManager: @preconcurrency ItemSelector {
 
     /// Show the new item dialog
     func addNewItem() {
-        showNewItemNameDialog = true
+        if let newItem = newItemProducer?.produceNewItem() {
+            select(newItem)
+        }
     }
 
     // MARK: - Command Buttons
 
     /// Add new item button for app commands
-    var addNewItemButton: some View {
-        Button(action: { [self] in
-            addNewItem()
-        }) {
-            Label("Add New Task", systemImage: imgAddItem)
-                .help("Add a new task")
+        var addNewItemButton: some View {
+            Button(action: { [self] in
+                addNewItem()
+            }) {
+                Label("Add New Task", systemImage: imgAddItem)
+                    .help("Add a new task")
+            }
         }
-    }
 
     /// Export button for app commands
     var exportButton: some View {
