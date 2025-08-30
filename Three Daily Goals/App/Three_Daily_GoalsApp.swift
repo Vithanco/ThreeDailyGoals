@@ -55,7 +55,6 @@ struct Three_Daily_GoalsApp: App {
         .environment(appComponents.preferences)
         .environment(appComponents.uiState)
         .environment(appComponents.dataManager)
-        .environment(appComponents.cloudKitManager)
         .environment(appComponents.compassCheckManager)
         .commands {
             // Add a CommandMenu for saving tasks
@@ -83,7 +82,6 @@ struct Three_Daily_GoalsApp: App {
                     .environment(appComponents.preferences)
                     .environment(appComponents.dataManager)
                     .environment(appComponents.uiState)
-                    .environment(appComponents.cloudKitManager)
                     .environment(appComponents.compassCheckManager)
             }
         #endif

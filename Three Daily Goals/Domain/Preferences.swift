@@ -128,6 +128,10 @@ final class CloudPreferences {
             onChange()
         }
     }
+    
+    var isProductionEnvironment: Bool {
+            return CKContainer.isProductionEnvironment
+        }
 
 }
 
@@ -273,6 +277,19 @@ class TestPreferences: KeyValueStorage {
         values[aKey.rawValue] = aString
     }
 }
+
+extension CKContainer {
+
+    public static var isProductionEnvironment: Bool {
+        let container = CKContainer.default()
+        if let containerID = container.value(forKey: "containerID") as? NSObject {
+            debugPrint("containerID: \(containerID)")
+            return containerID.description.contains("Production")
+        }
+        return false
+    }
+}
+
 
 @MainActor
 func dummyPreferences() -> CloudPreferences {

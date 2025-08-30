@@ -119,7 +119,7 @@ final class DataManager {
 
         // Did it touch priorities (in or out)? If so, update priorities
         if state == .priority || moveFromPriority {
-            priorityUpdater?.updatePriorities()
+            priorityUpdater?.updatePriorities(prioTasks: list(which: .priority))
         }
     }
 
@@ -792,9 +792,7 @@ final class DataManager {
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
 
-    var isProductionEnvironment: Bool {
-        return CKContainer.isProductionEnvironment
-    }
+
 
     /// Close button for task items
     func closeButton(item: TaskItem) -> some View {
@@ -931,23 +929,12 @@ extension DataManager {
     }
 }
 
-extension DataManager : NewItemProducer {
-    func produceNewItem() -> TaskItem {
-        var result = TaskItem()
+extension DataManager : @MainActor NewItemProducer {
+    func produceNewItem() -> TaskItem? {
+        let result = TaskItem()
         modelContext.insert(result)
         return result
     }
 }
 
 
-extension CKContainer {
-
-    public static var isProductionEnvironment: Bool {
-        let container = CKContainer.default()
-        if let containerID = container.value(forKey: "containerID") as? NSObject {
-            debugPrint("containerID: \(containerID)")
-            return containerID.description.contains("Production")
-        }
-        return false
-    }
-}
