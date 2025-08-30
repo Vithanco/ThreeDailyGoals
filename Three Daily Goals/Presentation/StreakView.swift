@@ -13,19 +13,19 @@ struct StreakView: View {
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: imgStreakActive)
-                .foregroundStyle(Color.orange)
+                .foregroundStyle(Color.priority)
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
             Text("\(preferences.daysOfCompassCheck)")
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(Color.primary)
+                .foregroundStyle(Color.black)
             Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
-                .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
             Text(preferences.didCompassCheckToday ? "Done" : "Pending")
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
+                .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
         }
     }
 }
@@ -48,7 +48,7 @@ struct FullStreakView: View {
                                 .font(.system(size: 14, weight: .medium))
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
-                                .background(TaskItemState.priority.color)
+                                .background(Color.priority)
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
                                 .help("Start compass check")
                         }

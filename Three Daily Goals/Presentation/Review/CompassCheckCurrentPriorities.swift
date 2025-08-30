@@ -17,7 +17,7 @@ struct CompassCheckCurrentPriorities: View {
     var body: some View {
         VStack {
             VStack {
-                Text("Current Priority Tasks").font(.title2).foregroundStyle(TaskItemState.priority.color).padding(5)
+                Text("Current Priority Tasks").font(.title2).foregroundStyle(Color.priority).padding(5)
                 Text("Slide tasks to the left to close them.")
                 Text("All non-closed tasks will be moved to open list. You can re-prioritise them later.")
                 SimpleListView.priorityView(dataManager: dataManager)

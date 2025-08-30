@@ -27,7 +27,7 @@ struct TaskPreferencesView: View {
                         set: { preferences.expiryAfter = $0 }
                     ), in: 30...1040, step: 10,
                     label: {
-                        Text("  " + preferences.expiryAfterString).foregroundColor(TaskItemState.priority.color)
+                        Text("  " + preferences.expiryAfterString).foregroundColor(Color.priority)
                     })
                 Text(" days.")
                 Spacer()

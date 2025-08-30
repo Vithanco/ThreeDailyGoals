@@ -255,7 +255,7 @@ final class CompassCheckManager {
     var compassCheckButton: some View {
         Button(action: { self.startCompassCheckNow() }) {
             Label("Compass Check", systemImage: imgCompassCheckStart)
-                .foregroundStyle(TaskItemState.priority.color)
+                .foregroundStyle(Color.priority)
                 .help("Start compass check")
         }
     }

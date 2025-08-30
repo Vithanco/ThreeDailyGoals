@@ -34,19 +34,37 @@ struct AWPriority: View {
     }
 }
 
+// Widget-specific streak view that doesn't rely on external dependencies
+struct WStreakView: View {
+    let preferences: CloudPreferences
+    
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "flame.fill")
+                .foregroundStyle(Color.priority)
+                .font(.system(size: 18, weight: .medium))
+                .frame(width: 24, height: 24)
+            Text("\(preferences.daysOfCompassCheck)")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Color.black)
+            Text("Today")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(Color.black) //preferences.didCompassCheckToday ? Color.closed : Color.open)
+            Image(systemName: preferences.didCompassCheckToday ? "checkmark.circle.fill" : "clock.circle")
+                .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
+                .font(.system(size: 18, weight: .medium))
+                .frame(width: 24, height: 24)
+           
+        }
+    }
+}
+
 struct WPriorities: View {
     let preferences: CloudPreferences
     @Environment(\.widgetFamily) var widgetFamily: WidgetFamily
 
     var headingText: String {
-        switch widgetFamily {
-        case .systemSmall: return "Today"
-        case .systemMedium: return "Today's Priorities"
-        case .systemLarge: return "Today's \(self.nrPriorities) Priorities"
-        case .systemExtraLarge: return "Today's \(self.nrPriorities) Priorities"
-        default:
-            return "Today's Priorities"
-        }
+        return "Goals"
     }
 
     var nrPriorities: Int {
@@ -61,25 +79,16 @@ struct WPriorities: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack(spacing: 4) {
-                Image(systemName: imgStreakActive)
-                    .foregroundStyle(Color.orange)
-                    .font(.system(size: 16, weight: .medium))
-                Text("Streak: \(preferences.daysOfCompassCheck)")
-                    .font(.title2)
+        VStack(alignment: .leading, spacing: 8) {
+            // Use widget-specific streak view
+            WStreakView(preferences: preferences)
+            
+            // Priorities section
+            VStack(alignment: .leading, spacing: 4) {
+                Text(headingText)
+                    .font(.headline)
                     .foregroundStyle(Color.primary)
-            }
-            Section(
-                header: HStack(spacing: 4) {
-                    Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
-                        .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.priority)
-                        .font(.system(size: 12, weight: .medium))
-                    Text(preferences.didCompassCheckToday ? "Done" : "Pending")
-                        .font(.subheadline)
-                        .foregroundStyle(preferences.didCompassCheckToday ? Color.green : Color.orange)
-                }
-            ) {
+                
                 AWPriority(item: preferences.getPriority(nr: 1))
                 AWPriority(item: preferences.getPriority(nr: 2))
                 AWPriority(item: preferences.getPriority(nr: 3))
@@ -95,5 +104,5 @@ struct WPriorities: View {
 }
 
 #Preview {
-    WPriorities(preferences: dummyPreferences())
+    WPriorities(preferences: CloudPreferences(testData: true))
 }
