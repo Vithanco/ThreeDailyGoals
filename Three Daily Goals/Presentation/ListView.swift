@@ -80,9 +80,9 @@ struct ListView: View {
                                 isSelected ? selectedTagStyle(accentColor: preferences.accentColor) : missingTagStyle)
                     }
                 )
-                .frame(maxWidth: .infinity, idealHeight: 15, maxHeight: 50)
-                .padding(.horizontal, 4)
-                .padding(.vertical, 4)
+                .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 80)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(tagContainerBackground)
@@ -97,8 +97,6 @@ struct ListView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(tagContainerBorder, lineWidth: 0.5)
                 )
-                .padding(.horizontal, 8)
-                .padding(.vertical, 8)
             }
 
         }

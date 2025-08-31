@@ -51,10 +51,7 @@ struct LeftSideView: View {
                     }
                     return true
                 }
-            
-            .frame(minHeight: 145, maxHeight: .infinity)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+                .frame(minHeight: 145, maxHeight: .infinity)
             
             Spacer()
             
@@ -69,8 +66,6 @@ struct LeftSideView: View {
                         .tracking(0.5)
                     Spacer()
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
                 
                 // List items
                 VStack(spacing: 6) {
@@ -79,14 +74,14 @@ struct LeftSideView: View {
                     LinkToList(whichList: .closed)
                     LinkToList(whichList: .dead)
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
             }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
             .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)
-        .frame(minWidth: 300, idealWidth: 500, maxWidth: 1000) // Ensure minimum width for comfortable reading
+        .frame(minWidth: 350, idealWidth: 500, maxWidth: 1000) // Ensure minimum width for comfortable reading
         #endif
     }
 }
