@@ -29,7 +29,7 @@ struct AllCommentsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "clock.arrow.circlepath")
-                        .foregroundColor(.blue)
+                        .foregroundColor(item.color)
                         .font(.system(size: 14, weight: .medium))
                     Text("Last Updated")
                         .font(.system(size: 14, weight: .semibold))
@@ -43,7 +43,7 @@ struct AllCommentsView: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
-            .background(Color.blue.opacity(0.05))
+            .background(item.color.opacity(0.05))
             .cornerRadius(8)
             
             // Comments section
@@ -59,7 +59,7 @@ struct AllCommentsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "calendar.badge.plus")
-                        .foregroundColor(.green)
+                        .foregroundColor(.open)
                         .font(.system(size: 14, weight: .medium))
                     Text("Created")
                         .font(.system(size: 14, weight: .semibold))
@@ -73,7 +73,7 @@ struct AllCommentsView: View {
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 12)
-            .background(Color.green.opacity(0.05))
+            .background(Color.open.opacity(0.05))
             .cornerRadius(8)
         }
         .alert("Add Comment", isPresented: $presentAlert) {

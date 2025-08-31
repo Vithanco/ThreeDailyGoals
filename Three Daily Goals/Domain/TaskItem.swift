@@ -99,8 +99,10 @@ extension TaskItem {
             return _title
         }
         set {
-            _title = newValue
-            changed = Date.now
+            if newValue != _title {
+                _title = newValue
+                changed = Date.now
+            }
         }
     }
 
@@ -110,8 +112,10 @@ extension TaskItem {
             return _details
         }
         set {
-            _details = newValue
-            changed = Date.now
+            if newValue != _details {
+                _details = newValue
+                changed = Date.now
+            }
         }
     }
 
@@ -121,8 +125,10 @@ extension TaskItem {
             return self.dueDate
         }
         set {
-            self.dueDate = newValue
-            changed = Date.now
+            if newValue != self.dueDate {
+                self.dueDate = newValue
+                changed = Date.now
+            }
         }
     }
 
@@ -132,8 +138,10 @@ extension TaskItem {
             return _url
         }
         set {
-            _url = newValue
-            changed = Date.now
+            if newValue != _url {
+                _url = newValue
+                changed = Date.now
+            }
         }
     }
 

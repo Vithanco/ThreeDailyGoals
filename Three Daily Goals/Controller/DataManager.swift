@@ -810,7 +810,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .closed)
         }) {
-            Label("Close", systemImage: imgClosed)
+            Label("Close", systemImage: imgClosed).foregroundColor(TaskItemState.closed.color)
         }
         .help("Close the task")
         .accessibilityIdentifier("closeButton")
@@ -822,7 +822,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .dead)
         }) {
-            Label("Kill", systemImage: imgGraveyard)
+            Label("Kill", systemImage: imgGraveyard).foregroundColor(TaskItemState.dead.color)
                 
         }
         .help("Move the task to the Graveyard")
@@ -835,7 +835,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .open)
         }) {
-            Label("Open", systemImage: imgOpen)
+            Label("Open", systemImage: imgOpen).foregroundColor(TaskItemState.open.color)
                 
         }
         .help("Open this task again")
@@ -848,7 +848,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
-            Label("Pending a Response", systemImage: imgPendingResponse)
+            Label("Pending a Response", systemImage: imgPendingResponse).foregroundColor(TaskItemState.pendingResponse.color)
                 .help(
                     "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
                 )
@@ -862,7 +862,7 @@ final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .priority)
         }) {
-            Image(systemName: imgPriority)
+            Image(systemName: imgPriority).foregroundColor(TaskItemState.priority.color)
                 .frame(width: 8, height: 8)
                 .help("Make this task a priority for today")
         }
