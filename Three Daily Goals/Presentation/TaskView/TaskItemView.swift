@@ -33,40 +33,38 @@ struct TaskItemView: View {
                     AllCommentsView(item: item)
                 }
                 #else
-                // macOS: Responsive layout that adapts to available space
-                GeometryReader { geometry in
-                    if geometry.size.width > 800 {
-                        // Wide layout: side-by-side for larger windows
-                        HStack(alignment: .top, spacing: 20) {
-                            // Main task content with enhanced card styling
-                            InnerTaskItemView(
-                                item: item,
-                                allTags: dataManager.activeTags.asArray,
-                                selectedTagStyle: selectedTagStyle(accentColor: item.color),
-                                missingTagStyle: missingTagStyle,
-                                showAttachmentImport: true
-                            )
+                // macOS: Responsive layout using ViewThatFits
+                ViewThatFits {
+                    // Try side-by-side layout first
+                    HStack(alignment: .top, spacing: 20) {
+                        // Main task content with enhanced card styling
+                        InnerTaskItemView(
+                            item: item,
+                            allTags: dataManager.activeTags.asArray,
+                            selectedTagStyle: selectedTagStyle(accentColor: item.color),
+                            missingTagStyle: missingTagStyle,
+                            showAttachmentImport: true
+                        )
+                        .frame(maxWidth: .infinity)
+                        
+                        // History section
+                        AllCommentsView(item: item)
                             .frame(maxWidth: .infinity)
-                            
-                            // History section
-                            AllCommentsView(item: item)
-                                .frame(maxWidth: .infinity)
-                        }
-                    } else {
-                        // Narrow layout: stacked vertically for smaller windows
-                        VStack(spacing: 20) {
-                            // Main task content with enhanced card styling
-                            InnerTaskItemView(
-                                item: item,
-                                allTags: dataManager.activeTags.asArray,
-                                selectedTagStyle: selectedTagStyle(accentColor: item.color),
-                                missingTagStyle: missingTagStyle,
-                                showAttachmentImport: true
-                            )
-                            
-                            // History section
-                            AllCommentsView(item: item)
-                        }
+                    }
+                    
+                    // Fallback to stacked layout if side-by-side doesn't fit
+                    VStack(spacing: 20) {
+                        // Main task content with enhanced card styling
+                        InnerTaskItemView(
+                            item: item,
+                            allTags: dataManager.activeTags.asArray,
+                            selectedTagStyle: selectedTagStyle(accentColor: item.color),
+                            missingTagStyle: missingTagStyle,
+                            showAttachmentImport: true
+                        )
+                        
+                        // History section
+                        AllCommentsView(item: item)
                     }
                 }
                 #endif

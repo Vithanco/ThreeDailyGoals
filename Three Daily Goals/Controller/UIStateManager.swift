@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class UIStateManager: ItemSelector {
+final class UIStateManager: @preconcurrency ItemSelector {
 
     // MARK: - Navigation State
 
@@ -73,6 +73,7 @@ final class UIStateManager: ItemSelector {
     }
 
     /// Select a task item and optionally its list
+    @MainActor
     func select(which: TaskItemState, item: TaskItem?) {
         withAnimation {
             whichList = which
@@ -103,6 +104,7 @@ final class UIStateManager: ItemSelector {
     }
 
     /// Select a task item (platform-specific)
+    @MainActor
     func select(_ newItem: TaskItem) {
         #if os(macOS)
             select(which: newItem.state, item: newItem)
