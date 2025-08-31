@@ -17,19 +17,19 @@ struct RegularMainView: View {
         
         return NavigationSplitView(columnVisibility: $columnVisibility) {
             LeftSideView().background(Color.background).frame(maxHeight: .infinity)
-                .navigationSplitViewColumnWidth(min: 300, ideal: 450)
+                .navigationSplitViewColumnWidth(min: 300, ideal: 400)
                 .mainToolbar()
         } content: {
             SingleView {
                 ListView().background(Color.background)
             }.background(Color.background)
-                .navigationSplitViewColumnWidth(min: 300, ideal: 450)
+                .navigationSplitViewColumnWidth(min: 400, ideal: 500)
                 .navigationTitle("Three Daily Goals")
         } detail: {
             if let detail = uiState.selectedItem {
-                TaskItemView(item: detail).frame(minWidth: 300)
+                TaskItemView(item: detail).frame(minWidth: 400)
             } else {
-                Text("Select an item").frame(minWidth: 300)
+                Text("Select an item").frame(minWidth: 400)
             }
         }.navigationSplitViewStyle(.balanced)
             .standardToolbar()

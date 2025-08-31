@@ -56,12 +56,14 @@ struct InnerTaskItemView: View {
                 }
 
                 // Details field
-                LabeledContent {
-                    TextField("Details", text: $item.details, axis: .vertical)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(minHeight: 30, idealHeight: 30)
-                } label: {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("Details:").bold().foregroundColor(Color.secondary)
+                    TextEditor(text: $item.details)
+                        .frame(minHeight: 90, maxHeight: 450) // 3x to 15x height (30 * 3 = 90, 30 * 15 = 450)
+                        .padding(8)
+                        .background(Color(.secondarySystemFill))
+                        .cornerRadius(8)
+                        .allowsHitTesting(true)
                 }
 
                 // URL field

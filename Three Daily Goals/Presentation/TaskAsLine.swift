@@ -46,7 +46,7 @@ struct TaskAsLine: View {
                 Text(item.due!.timeRemaining).italic().foregroundStyle(Color.gray)
             }
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 8)
         .padding(.vertical, 8)
         .background(cardBackground)
         .cornerRadius(10)

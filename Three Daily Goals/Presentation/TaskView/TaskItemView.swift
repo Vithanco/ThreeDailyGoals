@@ -62,10 +62,13 @@ struct TaskItemView: View {
                             missingTagStyle: missingTagStyle,
                             showAttachmentImport: true
                         )
+                        .frame(maxWidth: .infinity)
                         
                         // History section
                         AllCommentsView(item: item)
+                        .frame(maxWidth: .infinity)
                     }
+                    .frame(maxWidth: .infinity)
                 }
                 #endif
             }
