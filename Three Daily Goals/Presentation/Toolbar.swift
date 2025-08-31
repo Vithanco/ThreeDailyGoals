@@ -53,6 +53,8 @@ struct StandardToolbarContent: ToolbarContent {
 struct ItemToolbarContent: ToolbarContent {
     @Environment(DataManager.self) private var dataManager
     let item: TaskItem
+    @State private var showTouchAlert = false
+    @State private var touchDescription = ""
 
     var body: some ToolbarContent {
         #if os(iOS)
@@ -80,7 +82,7 @@ struct ItemToolbarContent: ToolbarContent {
         }
         if item.canBeTouched {
             ToolbarItem {
-                dataManager.touchButton(item: item)
+                dataManager.touchWithDescriptionButton(item: item, presentAlert: $showTouchAlert, description: $touchDescription)
             }
         }
     }

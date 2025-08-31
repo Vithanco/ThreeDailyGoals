@@ -9,11 +9,6 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    // MARK: - Primary Brand Colors (Orange-based)
-
-
-   
-    // MARK: - Neutral Colors (only those actually used)
     public static let neutral50 = Color(hex: "#FAFAFA")
     public static let neutral100 = Color(hex: "#F5F5F5")
     public static let neutral200 = Color(hex: "#EEEEEE")
@@ -37,7 +32,7 @@ extension Color {
     public static let priority = Color.orange
     public static let open = Color.blue
     public static let pendingResponse = Color.yellow
-    public static let closed = Color(red: 0.49, green: 0.89, blue: 0.53)
+    public static let closed = Color.green.opacity(0.7)
     public static let dead = Color.gray
     
     static let dueSoon = Color.red

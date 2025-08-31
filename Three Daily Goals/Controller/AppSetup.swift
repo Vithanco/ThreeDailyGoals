@@ -26,7 +26,7 @@ func setupApp(isTesting: Bool, loader: TestStorage.Loader? = nil, preferences: C
 }
 
 
-extension CloudPreferences : @MainActor PriorityUpdater {
+extension CloudPreferences : @preconcurrency PriorityUpdater {
     func updatePriorities(prioTasks: [TaskItem]) {
         let prios = prioTasks.count
         for i in 0..<prios {

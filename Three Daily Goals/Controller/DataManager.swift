@@ -246,6 +246,17 @@ final class DataManager {
         touch(task: task)
         updateUndoRedoStatus()
     }
+    
+    /// Touch a task with a description and update undo status
+    func touchWithDescriptionAndUpdateUndoStatus(task: TaskItem, description: String) {
+        if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            task.setChangedDate(.now)
+            task.addComment(text: description.trimmingCharacters(in: .whitespacesAndNewlines))
+        } else {
+            touch(task: task)
+        }
+        updateUndoRedoStatus()
+    }
 
     /// Remove a task from the data manager
     func remove(task: TaskItem) {
@@ -884,6 +895,27 @@ final class DataManager {
         }
         .accessibilityIdentifier("touchButton")
     }
+    
+    /// Touch button with description prompt for task items
+    func touchWithDescriptionButton(item: TaskItem, presentAlert: Binding<Bool>, description: Binding<String>) -> some View {
+        Button(action: { [self] in
+            presentAlert.wrappedValue = true
+        }) {
+            Label("Touch", systemImage:imgTouch)
+                .help("Touch this task and add a description of what was done")
+        }
+        .accessibilityIdentifier("touchWithDescriptionButton")
+        .alert("What did you do?", isPresented: presentAlert) {
+            TextField("Description of what was done", text: description)
+            Button("Cancel", role: .cancel) { }
+            Button("Touch") {
+                self.touchWithDescriptionAndUpdateUndoStatus(task: item, description: description.wrappedValue)
+                description.wrappedValue = ""
+            }
+        } message: {
+            Text("Please provide a short description of what you accomplished with this task")
+        }
+    }
 
     // MARK: - Attachment Management
 
@@ -929,7 +961,7 @@ extension DataManager {
     }
 }
 
-extension DataManager : @MainActor NewItemProducer {
+extension DataManager : @preconcurrency NewItemProducer {
     func produceNewItem() -> TaskItem? {
         let result = TaskItem()
         modelContext.insert(result)
