@@ -153,7 +153,7 @@ extension TaskItem {
         set {
             if newValue != state {
                 changed = Date.now
-                addComment(text: "Changed state to: \(newValue)")
+                addComment(text: "Changed state to: \(newValue)", icon: imgStateChange)
                 _state = newValue
                 if newValue == .closed {
                     closed = Date.now
@@ -177,8 +177,8 @@ extension TaskItem {
             let tags: [String] = self.tags
             if newValue != tags {
                 changed = Date.now
-                newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)") })
-                tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)") })
+                            newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)", icon: imgTag) })
+            tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)", icon: imgTag) })
                 allTagsString = newValue.filter({ !$0.isEmpty }).joined(separator: ",")
             }
         }
@@ -190,7 +190,7 @@ extension TaskItem {
             tags.append(newTag)
             changed = Date.now
             self.tags = tags
-            addComment(text: "Added tag: \(newTag)")
+            addComment(text: "Added tag: \(newTag)", icon: imgTag)
         }
         assert(tags.contains(newTag))
     }
@@ -201,7 +201,7 @@ extension TaskItem {
             tags.removeObject(oldTag)
             changed = Date.now
             self.tags = tags
-            addComment(text: "Removed tag: \(oldTag)")
+            addComment(text: "Removed tag: \(oldTag)", icon: imgTag)
         }
         assert(!tags.contains(oldTag))
     }
@@ -263,12 +263,12 @@ extension TaskItem {
         return state == .pendingResponse
     }
 
-    @discardableResult func addComment(text: String) -> TaskItem {
+    @discardableResult func addComment(text: String, icon: String? = nil, state: TaskItemState? = nil) -> TaskItem {
         if comments == nil {
             comments = [Comment]()
         }
 
-        let aComment = Comment(text: text, taskItem: self)
+        let aComment = Comment(text: text, taskItem: self, icon: icon, state: state)
         if let mc = self.modelContext {
             mc.insert(aComment)
         }
@@ -280,27 +280,27 @@ extension TaskItem {
     func closeTask() {
         if state != .closed {
             state = .closed
-            addComment(text: "closed this task on \(Date.now)")
+            addComment(text: "closed this task on \(Date.now)", icon: imgClosed, state: .closed)
         }
     }
 
     func reOpenTask() {
         if state != .open {
             state = .open
-            addComment(text: "Reopened this Task.")
+            addComment(text: "Reopened this Task.", icon: imgOpen, state: .open)
         }
     }
     func graveyard() {
         if state != .dead {
             state = .dead
-            addComment(text: "Moved task to the Graveyard of not needed tasks.")
+            addComment(text: "Moved task to the Graveyard of not needed tasks.", icon: imgGraveyard, state: .dead)
         }
     }
 
     func makePriority() {
         if state != .priority {
             state = .priority
-            addComment(text: "Turned into a priority.")
+            addComment(text: "Turned into a priority.", icon: imgPriority, state: .priority)
         }
     }
 
@@ -313,8 +313,7 @@ extension TaskItem {
 
     func touch() {
         if state == .open {
-            setChangedDate(.now)
-            addComment(text: "You 'touched' this task.")
+            addComment(text: "You 'touched' this task.", icon: imgTouch)
         } else {
             reOpenTask()
         }
@@ -328,7 +327,7 @@ extension TaskItem {
     func pending() {
         if state != .pendingResponse {
             state = .pendingResponse
-            addComment(text: "You did your part. Closure is pending a response.")
+            addComment(text: "You did your part. Closure is pending a response.", icon: imgPendingResponse, state: .pendingResponse)
         }
     }
 

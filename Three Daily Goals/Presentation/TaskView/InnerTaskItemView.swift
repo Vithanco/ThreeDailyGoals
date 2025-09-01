@@ -194,7 +194,7 @@ struct InnerTaskItemView: View {
                         in: modelContext
                     )
                     // Add a comment about the attachment
-                    item.addComment(text: "Added attachment: \(attachment.filename)")
+                    item.addComment(text: "Added attachment: \(attachment.filename)", icon: imgAttachment)
                 } catch {
                     // TODO: surface an error toast if you have one
                     print("Add attachment failed:", error)
@@ -214,7 +214,7 @@ struct InnerTaskItemView: View {
         modelContext.delete(attachment)
 
         // Add a comment about the deletion
-        item.addComment(text: "Removed attachment: \(filename)")
+                    item.addComment(text: "Removed attachment: \(filename)", icon: imgAttachment)
 
         // Save the changes
         do {

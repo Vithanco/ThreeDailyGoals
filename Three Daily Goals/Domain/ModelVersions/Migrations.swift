@@ -7,11 +7,11 @@ import Foundation
 //
 @preconcurrency import SwiftData
 
-public typealias SchemaLatest = SchemaV3_5
+public typealias SchemaLatest = SchemaV3_6
 
 enum TDGMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV3_1.self, SchemaV3_2.self, SchemaV3_3.self, SchemaV3_4.self, SchemaV3_5.self]
+        [SchemaV3_1.self, SchemaV3_2.self, SchemaV3_3.self, SchemaV3_4.self, SchemaV3_5.self, SchemaV3_6.self]
     }
 
     static let migrateV3_1toV3_2 = MigrationStage.lightweight(
@@ -101,8 +101,13 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
         fromVersion: SchemaV3_4.self,
         toVersion: SchemaV3_5.self
     )
+    
+    static let migrateV3_5toV3_6 = MigrationStage.lightweight(
+            fromVersion: SchemaV3_5.self,
+            toVersion: SchemaV3_6.self
+        )
 
     static var stages: [MigrationStage] {
-        [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4, migrateV3_4toV3_5]
+        [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4, migrateV3_4toV3_5, migrateV3_5toV3_6]
     }
 }

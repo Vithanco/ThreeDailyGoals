@@ -161,7 +161,7 @@ final class TestAttachments: XCTestCase {
         let filename = attachment.filename
         taskItem.attachments?.removeAll { $0.id == attachment.id }
         context.delete(attachment)
-        taskItem.addComment(text: "Removed attachment: \(filename)")
+        taskItem.addComment(text: "Removed attachment: \(filename)", icon: imgAttachment)
         try context.save()
 
         // Verify deletion

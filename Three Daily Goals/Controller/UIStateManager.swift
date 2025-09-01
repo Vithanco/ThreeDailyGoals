@@ -132,6 +132,7 @@ final class UIStateManager: @preconcurrency ItemSelector {
                 Label("Add New Task", systemImage: imgAddItem)
                     .help("Add a new task")
             }
+            .accessibilityIdentifier("addTaskButton")
         }
 
     /// Export button for app commands

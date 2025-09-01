@@ -211,7 +211,7 @@ final class DataManager {
         // Copy comments
         if let comments = task.comments {
             for comment in comments {
-                let newComment = Comment(text: comment.text, taskItem: newTask)
+                let newComment = Comment(text: comment.text, taskItem: newTask, icon: comment.icon, state: comment.state)
                 newTask.comments?.append(newComment)
             }
         }
@@ -235,25 +235,23 @@ final class DataManager {
         save()
     }
 
-    /// Touch a task (update its changed date)
-    func touch(task: TaskItem) {
-        task.touch()
-        save()
-    }
-
-    /// Touch a task and update undo status
-    func touchAndUpdateUndoStatus(task: TaskItem) {
-        touch(task: task)
-        updateUndoRedoStatus()
-    }
+//    /// Touch a task (update its changed date)
+//    func touch(task: TaskItem) {
+//        task.touch()
+//        save()
+//    }
+//
+//    /// Touch a task and update undo status
+//    func touchAndUpdateUndoStatus(task: TaskItem) {
+//        touch(task: task)
+//        updateUndoRedoStatus()
+//    }
     
     /// Touch a task with a description and update undo status
     func touchWithDescriptionAndUpdateUndoStatus(task: TaskItem, description: String) {
         if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             task.setChangedDate(.now)
-            task.addComment(text: description.trimmingCharacters(in: .whitespacesAndNewlines))
-        } else {
-            touch(task: task)
+            task.addComment(text: description.trimmingCharacters(in: .whitespacesAndNewlines),icon: task.state.imageName, state: task.state)
         }
         updateUndoRedoStatus()
     }
@@ -784,6 +782,7 @@ final class DataManager {
                 .help("undo an action")
         }
         .disabled(!canUndo)
+        .opacity(canUndo ? 1.0 : 0.5) // Make disabled buttons visible but dimmed
         .keyboardShortcut("z", modifiers: [.command])
     }
 
@@ -800,6 +799,7 @@ final class DataManager {
                 .help("redo an action")
         }
         .disabled(!canRedo)
+        .opacity(canRedo ? 1.0 : 0.5) // Make disabled buttons visible but dimmed
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
 
@@ -883,17 +883,6 @@ final class DataManager {
                 .help("Delete this task for good.")
         }
         .accessibilityIdentifier("deleteButton")
-    }
-
-    /// Touch button for task items
-    func touchButton(item: TaskItem) -> some View {
-        Button(action: { [self] in
-            touchAndUpdateUndoStatus(task: item)
-        }) {
-            Label("Touch", systemImage:imgTouch)
-                .help("Touch this task to update its timestamp")
-        }
-        .accessibilityIdentifier("touchButton")
     }
     
     /// Touch button with description prompt for task items

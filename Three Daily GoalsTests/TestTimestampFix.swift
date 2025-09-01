@@ -126,4 +126,40 @@ final class TestTimestampFix: XCTestCase {
         // Verify timestamp hasn't changed
         XCTAssertEqual(task.changed, initialTimestamp, "Setting same tags should not update timestamp")
     }
+    
+    func testCommentWithIconAndState() throws {
+        // Create a test task
+        let task = TaskItem(title: "Test Task", state: .open)
+        dataManager.modelContext.insert(task)
+        
+        // Add a comment with icon and state
+        task.addComment(text: "Test comment with icon", icon: imgTouch, state: .open)
+        
+        // Verify the comment was added with correct properties
+        XCTAssertEqual(task.comments?.count, 1, "Comment should be added")
+        
+        if let comment = task.comments?.first {
+            XCTAssertEqual(comment.text, "Test comment with icon", "Comment text should match")
+            XCTAssertEqual(comment.icon, imgTouch, "Comment icon should match")
+            XCTAssertEqual(comment.state, .open, "Comment state should match")
+        }
+    }
+    
+    func testCommentWithoutIconAndState() throws {
+        // Create a test task
+        let task = TaskItem(title: "Test Task", state: .open)
+        dataManager.modelContext.insert(task)
+        
+        // Add a comment without icon and state
+        task.addComment(text: "Test comment without icon")
+        
+        // Verify the comment was added with nil properties
+        XCTAssertEqual(task.comments?.count, 1, "Comment should be added")
+        
+        if let comment = task.comments?.first {
+            XCTAssertEqual(comment.text, "Test comment without icon", "Comment text should match")
+            XCTAssertNil(comment.icon, "Comment icon should be nil")
+            XCTAssertNil(comment.state, "Comment state should be nil")
+        }
+    }
 }

@@ -150,9 +150,7 @@ final class AttachmentUITests: XCTestCase {
         titleField.doubleTap()
         titleField.clearText()
         titleField.typeText(title)
-
-        let submit = findFirst(string: "addTaskWithTitleButton", whereToLook: app.buttons)
-        submit.tap()
+        // Task is saved automatically when title is edited - no need for submit button
 
         #if os(iOS)
             let back = findFirst(string: "Back", whereToLook: app.buttons)

@@ -47,11 +47,15 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         // Check if the app is running
         XCTAssertTrue(app.state == .runningForeground, "App should be running in foreground")
 
-        // Check for add task button - it should be visible in both compact and regular views
+        // Navigate to a list view to ensure the standard toolbar is visible
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
+
+        // Check for add task button - it should be visible in the standard toolbar
         let addTaskButton = app.buttons["addTaskButton"]
         XCTAssertTrue(addTaskButton.exists, "Add Task button should be visible")
 
-        // Check for compass check button - it should be visible in both compact and regular views
+        // Check for compass check button - it should be visible in the standard toolbar
         let compassCheckButton = app.buttons["compassCheckButton"]
         XCTAssertTrue(compassCheckButton.exists, "Compass Check button should be visible")
 
@@ -61,8 +65,9 @@ func ensureExists(text: String, inApp: XCUIApplication) {
             let undoButton = app.buttons["undoButton"]
             let redoButton = app.buttons["redoButton"]
 
-            // At least one of them should exist
-            XCTAssertTrue(undoButton.exists || redoButton.exists, "At least one of undo/redo buttons should be visible")
+            // Both buttons should exist (they may be disabled when there's nothing to undo/redo)
+            XCTAssertTrue(undoButton.exists, "Undo button should be visible (may be disabled)")
+            XCTAssertTrue(redoButton.exists, "Redo button should be visible (may be disabled)")
         #endif
         #if os(macOS)
             XCTAssertTrue(app.menuItems["Redo"].exists)
@@ -103,8 +108,9 @@ func ensureExists(text: String, inApp: XCUIApplication) {
             let undoCount = whereToLook.matching(identifier: "undoButton").count
             let redoCount = whereToLook.matching(identifier: "redoButton").count
 
-            // At least one of them should exist
-            XCTAssertTrue(undoCount > 0 || redoCount > 0, "At least one of undo/redo buttons should be visible")
+            // Both buttons should exist (they may be disabled when there's nothing to undo/redo)
+            XCTAssertTrue(undoCount > 0, "Undo button should be visible (may be disabled)")
+            XCTAssertTrue(redoCount > 0, "Redo button should be visible (may be disabled)")
         #endif
     }
 
@@ -135,8 +141,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         title.doubleTap()
         title.clearText()
         title.typeText(testString)
-        let submit = findFirst(string: "addTaskWithTitleButton", whereToLook: app.buttons)
-        submit.tap()
+        // Task is saved automatically when title is edited - no need for submit button
 
         #if os(iOS)
             let back = findFirst(string: "Back", whereToLook: app.buttons)

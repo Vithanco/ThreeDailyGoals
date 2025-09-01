@@ -256,5 +256,6 @@ final class CompassCheckManager {
                 .foregroundStyle(Color.priority)
                 .help("Start compass check")
         }
+        .accessibilityIdentifier("compassCheckButton")
     }
 }

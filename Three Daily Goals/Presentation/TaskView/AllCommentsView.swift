@@ -75,6 +75,8 @@ struct AllCommentsView: View {
             .padding(.horizontal, 12)
             .background(Color.open.opacity(0.05))
             .cornerRadius(8)
+
+            Spacer()
         }
         .alert("Add Comment", isPresented: $presentAlert) {
             TextField("Comment", text: $newComment)

@@ -57,7 +57,7 @@ struct TaskItemView: View {
                         // Main task content with enhanced card styling
                         InnerTaskItemView(
                             item: item,
-                            allTags: dataManager.activeTags.asArray,
+                            allTags: dataManager.allTags.asArray,
                             selectedTagStyle: selectedTagStyle(accentColor: item.color),
                             missingTagStyle: missingTagStyle,
                             showAttachmentImport: true
