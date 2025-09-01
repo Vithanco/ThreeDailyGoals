@@ -114,7 +114,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
     @MainActor
     func testScrolling() async throws {
         let app = launchTestApp()
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
         let openList = findFirst(
             string: "scrollView_open_List", whereToLook: app.descendants(matching: .any))
@@ -127,7 +127,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         let testString = "test title 45#"
         //
         let app = launchTestApp()
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)

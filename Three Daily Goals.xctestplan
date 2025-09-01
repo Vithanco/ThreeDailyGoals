@@ -4,7 +4,11 @@
       "id" : "FF568883-C654-4E06-AA78-82670CCF84B4",
       "name" : "Test Scheme Action",
       "options" : {
-
+        "targetForVariableExpansion" : {
+          "containerPath" : "container:Three Daily Goals.xcodeproj",
+          "identifier" : "E561D6D72B1F54A6003BE36F",
+          "name" : "Three Daily Goals"
+        }
       }
     }
   ],
@@ -14,10 +18,13 @@
       "identifier" : "E561D6D72B1F54A6003BE36F",
       "name" : "Three Daily Goals"
     },
-    "testExecutionOrdering" : "random"
+    "testExecutionOrdering" : "random",
+    "testExecutionTimeAllowance" : 300,
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {
+      "isEnabled" : true,
       "target" : {
         "containerPath" : "container:Three Daily Goals.xcodeproj",
         "identifier" : "E561D6F52B1F54A9003BE36F",
@@ -25,6 +32,7 @@
       }
     },
     {
+      "isEnabled" : true,
       "target" : {
         "containerPath" : "container:Three Daily Goals.xcodeproj",
         "identifier" : "E561D6EB2B1F54A9003BE36F",

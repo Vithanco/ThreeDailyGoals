@@ -28,7 +28,7 @@ final class AttachmentUITests: XCTestCase {
 
         // Use an existing task instead of trying to create a new one
         let testTaskTitle = "Tax Declaration, in 2 days"
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
@@ -58,7 +58,7 @@ final class AttachmentUITests: XCTestCase {
 
         // Use an existing task instead of trying to create a new one
         let testTaskTitle = "toRead"
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         // Open the task
@@ -81,7 +81,7 @@ final class AttachmentUITests: XCTestCase {
 
         // Use an existing task instead of trying to create a new one
         let testTaskTitle = "Try out Concept Maps"
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
@@ -102,9 +102,13 @@ final class AttachmentUITests: XCTestCase {
     func testAttachmentSectionInTaskView() async throws {
         let app = launchTestApp()
 
+        // Debug: Print all static texts to see what's available
+        let allStaticTexts = app.staticTexts.allElementsBoundByIndex
+        print("🔍 Available static texts: \(allStaticTexts.map { $0.label })")
+        
         // Use an existing task instead of trying to create a new one
         let testTaskTitle = "Read 'The Goal' by Goldratt, in 2 days"
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
@@ -124,7 +128,7 @@ final class AttachmentUITests: XCTestCase {
 
         // Use an existing task instead of trying to create a new one
         let testTaskTitle = "Read about Systems Thinking"
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
@@ -138,7 +142,7 @@ final class AttachmentUITests: XCTestCase {
     // MARK: - Helper Methods
 
     private func createTestTask(app: XCUIApplication, title: String) async throws {
-        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
