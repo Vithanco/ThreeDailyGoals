@@ -73,7 +73,7 @@ struct TestTaskItems {
         }
         #expect(task.canBeTouched)
         #expect(task.changed < getDate(daysPrior: 30))
-        dataManager.touchAndUpdateUndoStatus(task: task)
+        dataManager.touchWithDescriptionAndUpdateUndoStatus(task: task, description: "Test touch")
         #expect(task.changed > getDate(daysPrior: 1))
     }
 
@@ -88,7 +88,7 @@ struct TestTaskItems {
         }
         #expect(task.canBeTouched)
         let date = task.changed
-        dataManager.touchAndUpdateUndoStatus(task: task)
+        dataManager.touchWithDescriptionAndUpdateUndoStatus(task: task, description: "Test touch")
         #expect(date != task.changed)
     }
 

@@ -43,7 +43,7 @@ struct Three_Daily_GoalsTests {
         let item = model.dataManager.addAndSelect()
         //        #expect(item.comments!.count, 0, "No comments yet")
         //        #expect(0,try context.fetchCount(descriptor))
-        model.dataManager.touchAndUpdateUndoStatus(task: item)
+        model.dataManager.touchWithDescriptionAndUpdateUndoStatus(task: item, description: "Test touch")
         model.dataManager.endUndoGrouping()
         //        #expect(item.comments!.count, 1, "touch leads to comment")
         //        #expect(1,try context.fetchCount(descriptor))

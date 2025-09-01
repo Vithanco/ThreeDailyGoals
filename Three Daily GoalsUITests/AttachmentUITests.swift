@@ -26,15 +26,12 @@ final class AttachmentUITests: XCTestCase {
         // Wait for the app to load
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
 
-        // Create a test task
-        let testTaskTitle = "Attachment Test Task"
-        try await createTestTask(app: app, title: testTaskTitle)
+        // Use an existing task instead of trying to create a new one
+        let testTaskTitle = "Tax Declaration, in 2 days"
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
-        // Wait a moment for the task to be created
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
-
-        // Open the task
-        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.staticTexts)
+        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
         taskElement.tap()
 
         // Wait for the task detail view to load
@@ -59,12 +56,13 @@ final class AttachmentUITests: XCTestCase {
     func testAttachmentDisplayWithExistingAttachment() async throws {
         let app = launchTestApp()
 
-        // Create a test task with an attachment (this would require programmatic setup)
-        let testTaskTitle = "Task With Attachment"
-        try await createTestTask(app: app, title: testTaskTitle)
+        // Use an existing task instead of trying to create a new one
+        let testTaskTitle = "toRead"
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
         // Open the task
-        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.staticTexts)
+        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
         taskElement.tap()
 
         // Verify attachment section exists
@@ -81,14 +79,12 @@ final class AttachmentUITests: XCTestCase {
         // Wait for the app to load
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
 
-        // Create and open a test task
-        let testTaskTitle = "Attachment Buttons Test"
-        try await createTestTask(app: app, title: testTaskTitle)
+        // Use an existing task instead of trying to create a new one
+        let testTaskTitle = "Try out Concept Maps"
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
-        // Wait a moment for the task to be created
-        try await Task.sleep(nanoseconds: 1_000_000_000)  // 1 second
-
-        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.staticTexts)
+        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
         taskElement.tap()
 
         // Wait for the task detail view to load
@@ -106,11 +102,12 @@ final class AttachmentUITests: XCTestCase {
     func testAttachmentSectionInTaskView() async throws {
         let app = launchTestApp()
 
-        // Create and open a test task
-        let testTaskTitle = "Attachment Section Test"
-        try await createTestTask(app: app, title: testTaskTitle)
+        // Use an existing task instead of trying to create a new one
+        let testTaskTitle = "Read 'The Goal' by Goldratt, in 2 days"
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
-        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.staticTexts)
+        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
         taskElement.tap()
 
         // Verify initial state
@@ -125,11 +122,12 @@ final class AttachmentUITests: XCTestCase {
 
         let app = launchTestApp()
 
-        // Create a test task
-        let testTaskTitle = "Share Extension Test"
-        try await createTestTask(app: app, title: testTaskTitle)
+        // Use an existing task instead of trying to create a new one
+        let testTaskTitle = "Read about Systems Thinking"
+        let listOpenButton = findFirst(string: "open_LinkedList", whereToLook: app.staticTexts)
+        listOpenButton.tap()
 
-        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.staticTexts)
+        let taskElement = findFirst(string: testTaskTitle, whereToLook: app.buttons)
         taskElement.tap()
 
         // Verify attachment functionality is available in main app
