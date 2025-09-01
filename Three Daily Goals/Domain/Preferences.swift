@@ -96,12 +96,10 @@ final class CloudPreferences {
     var store: KeyValueStorage
     typealias OnChange = () -> Void
     var onChange: OnChange?
-    var streakText = ""
 
     init(store: KeyValueStorage, onChange: OnChange? = nil) {
         self.store = store
         self.onChange = onChange
-        setStreakText() // Ensure streak text is initialized
     }
 
     convenience init(testData: Bool, onChange: OnChange? = nil) {
@@ -123,7 +121,6 @@ final class CloudPreferences {
     }
 
     func ubiquitousKeyValueStoreDidChange(notification: Notification) {
-        setStreakText()
         if let onChange = onChange {
             onChange()
         }
@@ -137,20 +134,15 @@ final class CloudPreferences {
 
 extension CloudPreferences {
 
-    func setStreakText() {
-        streakText = "Streak: \(daysOfCompassCheck), today: \(didCompassCheckToday ? "✅" : "⏳")"
-    }
-
     var daysOfCompassCheck: Int {
         get {
             let result = self.store.int(forKey: .daysOfCompassCheck)
-            debugPrint("read daysOfCompassCheck: \(result)")
-            return result
+            debugPrint("read daysOfCompassCheck: \(result), isStreakBroken: \(isStreakBroken)")
+            return isStreakBroken ? 0: result
         }
         set {
             debugPrint("write new daysOfCompassCheck: \(newValue)")
             store.set(newValue, forKey: .daysOfCompassCheck)
-            setStreakText()
         }
     }
 
@@ -164,6 +156,20 @@ extension CloudPreferences {
 
     var didCompassCheckToday: Bool {
         return getCompassCheckInterval().contains(lastCompassCheck)
+    }
+    
+    private var didCompassCheckLastInterval: Bool {
+        return getCompassCheckInterval(forDate: getDate(inDays: -1)).contains(lastCompassCheck)
+    }
+    
+    var isStreakBroken: Bool {
+        if didCompassCheckToday{
+            return true
+        }
+        if didCompassCheckLastInterval{
+            return true
+        }
+        return false
     }
 
     var compassCheckTime: Date {
@@ -182,10 +188,6 @@ extension CloudPreferences {
         return DateComponents(
             calendar: getCal(), hour: self.store.int(forKey: .compassCheckTimeHour),
             minute: self.store.int(forKey: .compassCheckTimeMinute))
-    }
-
-    var accentColor: Color {
-        return Color.priority
     }
 
     var longestStreak: Int {

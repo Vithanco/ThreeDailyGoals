@@ -17,7 +17,7 @@ struct CompassCheckInformView: View {
             VStack(spacing: 8) {
                 Text("Current Streak")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(preferences.accentColor)
+                    .foregroundStyle(Color.priority)
                 
                 StreakView()
                     .padding(.horizontal, 8)
@@ -27,7 +27,7 @@ struct CompassCheckInformView: View {
             
             Text("It is about time to do a Compass Check and review your tasks")
                 .font(.title2)
-                .foregroundStyle(preferences.accentColor)
+                .foregroundStyle(Color.priority)
                 .frame(maxWidth: 300, maxHeight: .infinity)
                 .multilineTextAlignment(.center)
             

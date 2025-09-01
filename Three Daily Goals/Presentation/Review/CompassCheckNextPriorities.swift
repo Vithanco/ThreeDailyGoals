@@ -32,7 +32,7 @@ struct CompassCheckNextPriorities: View {
                     "Choose Next Priorities. Swipe left to move to Priorites \(Image(systemName: TaskItemState.priority.imageName))"
                 )
                 .font(.title2)
-                .foregroundStyle(preferences.accentColor)
+                .foregroundStyle(Color.priority)
                 .multilineTextAlignment(.center)
                 ListView(whichList: .open)
                     .frame(minHeight: 300)

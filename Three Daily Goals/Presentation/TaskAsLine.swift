@@ -14,13 +14,9 @@ struct TaskAsLine: View {
     @Environment(\.colorScheme) private var colorScheme
     let item: TaskItem
 
-    var accentColor: Color {
-        return preferences.accentColor
-    }
-
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
-            .strikethrough(item.isClosed, color: accentColor)
+          //  .strikethrough(item.isClosed, color: .closed)
             .draggable(item.id)
     }
 
@@ -37,6 +33,11 @@ struct TaskAsLine: View {
     private var cardBorder: Color {
         colorScheme == .dark ? Color.neutral700 : Color.neutral200
     }
+    
+    // Enhanced shadow color for better visibility
+    private var cardShadow: Color {
+        colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.08)
+    }
 
     var body: some View {
         HStack {
@@ -50,10 +51,10 @@ struct TaskAsLine: View {
         .padding(.vertical, 8)
         .background(cardBackground)
         .cornerRadius(10)
-        .shadow(color: .black.opacity(0.03), radius: 1, x: 0, y: 1)
+        .shadow(color: cardShadow, radius: 3, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(cardBorder, lineWidth: 0.5)
+                .stroke(cardBorder, lineWidth: 1.0)
         )
         .contentShape(Rectangle())
         #if os(macOS)

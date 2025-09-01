@@ -38,6 +38,11 @@ struct ListView: View {
     private var tagContainerBorder: Color {
         colorScheme == .dark ? Color.neutral600 : Color.neutral200
     }
+    
+    // Enhanced list background for better task box visibility
+    private var listBackground: Color {
+        colorScheme == .dark ? Color.neutral800.opacity(0.3) : Color.neutral50.opacity(0.8)
+    }
 
     var body: some View {
         let filterFunc: (TaskItem) -> Bool =
@@ -52,8 +57,13 @@ struct ListView: View {
                 id: list.getListAccessibilityIdentifier
             )
             .frame(minHeight: 145, maxHeight: .infinity)
-            .background(Color.background)
+            .background(listBackground)
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 1)
+            )
+            .shadow(color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.05), radius: 2, x: 0, y: 1)
             .dropDestination(for: String.self) {
                 items, _ in
                 for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
@@ -77,7 +87,7 @@ struct ListView: View {
                     tagView: { text, isSelected in
                         TagCapsule(text)
                             .tagCapsuleStyle(
-                                isSelected ? selectedTagStyle(accentColor: preferences.accentColor) : missingTagStyle)
+                                isSelected ? selectedTagStyle(accentColor: Color.priority) : missingTagStyle)
                     }
                 )
                 .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 80)
@@ -87,15 +97,15 @@ struct ListView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(tagContainerBackground)
                         .shadow(
-                            color: Color.black.opacity(0.03),
-                            radius: 2,
+                            color: colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.08),
+                            radius: 3,
                             x: 0,
-                            y: 1
+                            y: 2
                         )
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(tagContainerBorder, lineWidth: 0.5)
+                        .stroke(tagContainerBorder, lineWidth: 1.0)
                 )
             }
 

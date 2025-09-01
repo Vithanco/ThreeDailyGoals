@@ -62,7 +62,7 @@ struct TagsPreferencesView: View {
                         tags: dataManager.allTags.asArray,
                         tagView: { text in
                             return TagCapsule(text)
-                                .tagCapsuleStyle(selectedTagStyle(accentColor: preferences.accentColor))
+                                .tagCapsuleStyle(selectedTagStyle(accentColor:Color.priority))
                                 .onTapGesture(perform: {
                                     tag = text
                                     changeTo = text

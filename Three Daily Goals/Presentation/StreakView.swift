@@ -14,8 +14,8 @@ struct StreakView: View {
         HStack(spacing: 6) {
             Text("\(preferences.daysOfCompassCheck)")
                 .font(.system(size: 16, weight: .semibold))
-            Image(systemName: imgStreakActive)
-                .foregroundStyle(Color.priority)
+            Image(systemName: preferences.isStreakBroken  ?imgStreakBroken:  imgStreakActive)
+                .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
             Text("Today:")
@@ -46,21 +46,19 @@ struct FullStreakView: View {
 
     var body: some View {
         GroupBox {
-            HStack(spacing: 16) {
+            VStack(spacing: 8) {
                 // Streak display
                 StreakView()
                 
-                Spacer()
-                
                 Button(action: { compassCheckManager.startCompassCheckNow() }) {
-                            Label("Compass Check", systemImage: imgCompassCheckStart)
+                            Label("Start Compass Check Now", systemImage: imgCompassCheckStart)
                                 .foregroundStyle(.white)
                                 .font(.system(size: 14, weight: .medium))
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
                                 .background(Color.priority)
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
-                                .help("Start compass check")
+                                .help("Start Compass Check now")
                         }
                         .buttonStyle(.plain)
                         .frame(height: 20)

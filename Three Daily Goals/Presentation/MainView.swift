@@ -57,8 +57,9 @@ struct MainView: View {
             VStack {
                 GroupBox {
                     HStack(alignment: .center) {
-                        Image(systemName: imgInformation).frame(width: 32, height: 32).foregroundStyle(
-                            preferences.accentColor)
+                        Image(systemName: imgInformation)
+                            .frame(width: 32, height: 32)
+                            .foregroundStyle(Color.priority)
                         Text(uiState.infoMessage).padding(5)
                     }
                 }.padding(5)

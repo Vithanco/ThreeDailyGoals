@@ -15,7 +15,7 @@ struct CompassCheckDueDate: View {
         VStack {
             Text("These Tasks are close to their due Dates. They will now be moved to Priority").font(
                 .title2
-            ).foregroundStyle(preferences.accentColor)
+            ).foregroundStyle(Color.priority)
             Spacer()
             Text(
                 "Swipe left in order to close them, or move them back to Open Tasks (you can prioritise them in the next step)."

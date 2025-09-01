@@ -19,6 +19,7 @@ let imgPriority = "star.fill"
 
 // MARK: - Streak and Compass Check Icons
 let imgStreakActive = "flame.fill"
+let imgStreakBroken = "cloud.heavyrain.circle.fill"
 let imgCompassCheckDone = "checkmark.circle.fill"
 let imgCompassCheckPending = "clock.circle"
 let imgCompassCheckStart = "safari"

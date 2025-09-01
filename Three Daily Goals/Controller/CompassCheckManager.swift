@@ -188,7 +188,6 @@ final class CompassCheckManager {
     }
 
     func startCompassCheckNow() {
-        preferences.setStreakText()
         if !uiState.showCompassCheckDialog && state == .inform {
             debugPrint("start compass check \(Date.now)")
             uiState.showCompassCheckDialog = true

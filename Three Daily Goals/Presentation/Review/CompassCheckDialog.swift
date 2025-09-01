@@ -24,7 +24,7 @@ struct CompassCheckDialog: View {
         VStack {
 
             HStack {
-                Text("Daily Compass Check").font(.title).foregroundStyle(preferences.accentColor)
+                Text("Daily Compass Check").font(.title).foregroundStyle(Color.priority)
                 Spacer()
                 Button(role: .cancel, action: compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")

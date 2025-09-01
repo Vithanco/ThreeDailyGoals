@@ -68,7 +68,7 @@ struct LeftSideView: View {
                 }
                 
                 // List items
-                VStack(spacing: 6) {
+                VStack(spacing: 8) {
                     LinkToList(whichList: .open)
                     LinkToList(whichList: .pendingResponse)
                     LinkToList(whichList: .closed)
