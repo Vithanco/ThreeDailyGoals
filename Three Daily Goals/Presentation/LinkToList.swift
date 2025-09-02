@@ -123,8 +123,9 @@ struct LinkToList: View {
 }
 
 #Preview {
+    var appComp = setupApp(isTesting: true)
     LinkToList(whichList: .open)
-        .environment(UIStateManager.testManager())
-        .environment(DataManager.testManager())
-        .environment(dummyPreferences())
+            .environment(appComp.uiState)
+            .environment(appComp.dataManager)
+            .environment(appComp.preferences)
 }

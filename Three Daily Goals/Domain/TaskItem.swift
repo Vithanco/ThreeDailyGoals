@@ -177,8 +177,8 @@ extension TaskItem {
             let tags: [String] = self.tags
             if newValue != tags {
                 changed = Date.now
-                            newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)", icon: imgTag) })
-            tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)", icon: imgTag) })
+                newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)", icon: imgTag) })
+                tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)", icon: imgTag) })
                 allTagsString = newValue.filter({ !$0.isEmpty }).joined(separator: ",")
             }
         }
@@ -190,7 +190,6 @@ extension TaskItem {
             tags.append(newTag)
             changed = Date.now
             self.tags = tags
-            addComment(text: "Added tag: \(newTag)", icon: imgTag)
         }
         assert(tags.contains(newTag))
     }
@@ -201,7 +200,6 @@ extension TaskItem {
             tags.removeObject(oldTag)
             changed = Date.now
             self.tags = tags
-            addComment(text: "Removed tag: \(oldTag)", icon: imgTag)
         }
         assert(!tags.contains(oldTag))
     }
@@ -337,6 +335,25 @@ extension TaskItem {
     var totalStoredBytes: Int { attachments?.reduce(0) { $0 + $1.storedBytes } ?? 0 }  // current storage
     var totalOriginalBytes: Int { attachments?.reduce(0) { $0 + $1.byteSize } ?? 0 }  // original sizes
 
+    var isUnchanged: Bool {
+        return isTitleEmpty && isDetailsEmpty &&  url.isEmpty && !hasAttachments
+    }
+    
+    var isTitleEmpty: Bool {
+        return title.isEmpty || title == emptyTaskTitle
+    }
+    
+    var isDetailsEmpty: Bool {
+        return details.isEmpty || details == emptyTaskDetails
+    }
+    
+    var hasAttachments: Bool {
+        if let attachments = attachments {
+            return !attachments.isEmpty
+        }
+        return false
+    }
+    
 }
 extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
 

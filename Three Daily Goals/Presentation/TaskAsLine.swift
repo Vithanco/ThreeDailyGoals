@@ -84,8 +84,9 @@ struct TaskAsLine: View {
 }
 
 #Preview {
-    TaskAsLine(item: DataManager.testManager().items.first!)
-        .environment(DataManager.testManager())
-        .environment(dummyPreferences())
-        .environment(UIStateManager())
+    var appComp = setupApp(isTesting: true)
+    TaskAsLine(item: appComp.dataManager.items.first!)
+            .environment(appComp.uiState)
+            .environment(appComp.dataManager)
+            .environment(appComp.preferences)
 }

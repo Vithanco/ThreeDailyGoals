@@ -114,8 +114,9 @@ struct ListView: View {
 }
 
 #Preview {
+    var appComp = setupApp(isTesting: true)
     ListView(whichList: .dead)
-        .environment(UIStateManager.testManager())
-        .environment(DataManager.testManager())
-        .environment(dummyPreferences())
+        .environment(appComp.uiState)
+        .environment(appComp.dataManager)
+        .environment(appComp.preferences)
 }

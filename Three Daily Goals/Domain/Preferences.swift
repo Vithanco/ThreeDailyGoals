@@ -162,14 +162,12 @@ extension CloudPreferences {
         return getCompassCheckInterval(forDate: getDate(inDays: -1)).contains(lastCompassCheck)
     }
     
+    var isStreakActive: Bool {
+        return didCompassCheckToday || didCompassCheckLastInterval
+    }
+    
     var isStreakBroken: Bool {
-        if didCompassCheckToday{
-            return true
-        }
-        if didCompassCheckLastInterval{
-            return true
-        }
-        return false
+        return !isStreakActive
     }
 
     var compassCheckTime: Date {

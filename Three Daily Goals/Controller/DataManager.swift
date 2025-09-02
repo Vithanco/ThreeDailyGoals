@@ -249,10 +249,18 @@ final class DataManager {
     
     /// Touch a task with a description and update undo status
     func touchWithDescriptionAndUpdateUndoStatus(task: TaskItem, description: String) {
-        if !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        let trimmedDescription = description.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if !trimmedDescription.isEmpty {
+            // Use the provided description
             task.setChangedDate(.now)
-            task.addComment(text: description.trimmingCharacters(in: .whitespacesAndNewlines),icon: task.state.imageName, state: task.state)
+            task.addComment(text: trimmedDescription, icon: task.state.imageName, state: task.state)
+        } else {
+            // Use default touch message for empty/whitespace descriptions
+            task.setChangedDate(.now)
+            task.addComment(text: "You 'touched' this task.", icon: task.state.imageName, state: task.state)
         }
+        
         updateUndoRedoStatus()
     }
 
@@ -939,18 +947,17 @@ final class DataManager {
     }
 }
 
-// MARK: - Test Helper
-
-extension DataManager {
-    static func testManager() -> DataManager {
-        // Create in-memory model container for testing
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: TaskItem.self, configurations: config)
-        return DataManager(modelContext: container.mainContext)
-    }
-}
 
 extension DataManager : @preconcurrency NewItemProducer {
+    func removeItem(_ item: TaskItem) {
+        if (item.isUnchanged) {
+            debugPrint("is unchanged")
+            modelContext.delete(item)
+        } else {
+            debugPrint("it was changed")
+        }
+    }
+
     func produceNewItem() -> TaskItem? {
         let result = TaskItem()
         modelContext.insert(result)

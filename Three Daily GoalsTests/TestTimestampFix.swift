@@ -5,21 +5,17 @@
 //  Created by Assistant on 31/08/2025.
 //
 
-import XCTest
+import Testing
+import Foundation
 @testable import Three_Daily_Goals
 
-final class TestTimestampFix: XCTestCase {
+@Suite
+@MainActor
+struct TestTimestampFix {
     
-    var dataManager: DataManager!
+    var dataManager: DataManager = setupApp(isTesting: true).dataManager
     
-    override func setUpWithError() throws {
-        dataManager = DataManager.testManager()
-    }
-    
-    override func tearDownWithError() throws {
-        dataManager = nil
-    }
-    
+    @Test
     func testTaskSelectionDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
@@ -38,9 +34,10 @@ final class TestTimestampFix: XCTestCase {
         let _ = task.color
         
         // Verify timestamp hasn't changed
-        XCTAssertEqual(task.changed, initialTimestamp, "Task selection should not update timestamp")
+        #expect(task.changed == initialTimestamp) //, "Task selection should not update timestamp")
     }
     
+    @Test
     func testSettingSameValuesDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
@@ -57,9 +54,10 @@ final class TestTimestampFix: XCTestCase {
         task.state = .open  // Same value
         
         // Verify timestamp hasn't changed
-        XCTAssertEqual(task.changed, initialTimestamp, "Setting same values should not update timestamp")
+        #expect(task.changed == initialTimestamp, "Setting same values should not update timestamp")
     }
     
+    @Test
     func testActualChangesDoUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
@@ -76,9 +74,10 @@ final class TestTimestampFix: XCTestCase {
         task.state = .closed
         
         // Verify timestamp has been updated
-        XCTAssertGreaterThan(task.changed, initialTimestamp, "Actual changes should update timestamp")
+        #expect(task.changed > initialTimestamp, "Actual changes should update timestamp")
     }
     
+    @Test
     func testColorPropertyAccessDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
@@ -93,9 +92,10 @@ final class TestTimestampFix: XCTestCase {
         let _ = task.color
         
         // Verify timestamp hasn't changed
-        XCTAssertEqual(task.changed, initialTimestamp, "Accessing color property should not update timestamp")
+        #expect(task.changed == initialTimestamp, "Accessing color property should not update timestamp")
     }
     
+    @Test
     func testStateChangeWithSameValueDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
@@ -108,9 +108,10 @@ final class TestTimestampFix: XCTestCase {
         task.state = .open  // Same value
         
         // Verify timestamp hasn't changed
-        XCTAssertEqual(task.changed, initialTimestamp, "Setting same state should not update timestamp")
+        #expect(task.changed == initialTimestamp, "Setting same state should not update timestamp")
     }
     
+    @Test
     func testTagsChangeWithSameValueDoesNotUpdateTimestamp() throws {
         // Create a test task with tags
         let task = TaskItem(title: "Test Task", state: .open)
@@ -124,9 +125,10 @@ final class TestTimestampFix: XCTestCase {
         task.tags = ["work", "important"]  // Same values
         
         // Verify timestamp hasn't changed
-        XCTAssertEqual(task.changed, initialTimestamp, "Setting same tags should not update timestamp")
+        #expect(task.changed == initialTimestamp, "Setting same tags should not update timestamp")
     }
     
+    @Test
     func testCommentWithIconAndState() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
@@ -136,15 +138,16 @@ final class TestTimestampFix: XCTestCase {
         task.addComment(text: "Test comment with icon", icon: imgTouch, state: .open)
         
         // Verify the comment was added with correct properties
-        XCTAssertEqual(task.comments?.count, 1, "Comment should be added")
+        #expect(task.comments?.count == 1, "Comment should be added")
         
         if let comment = task.comments?.first {
-            XCTAssertEqual(comment.text, "Test comment with icon", "Comment text should match")
-            XCTAssertEqual(comment.icon, imgTouch, "Comment icon should match")
-            XCTAssertEqual(comment.state, .open, "Comment state should match")
+            #expect(comment.text == "Test comment with icon", "Comment text should match")
+            #expect(comment.icon == imgTouch, "Comment icon should match")
+            #expect(comment.state == .open, "Comment state should match")
         }
     }
     
+    @Test
     func testCommentWithoutIconAndState() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
@@ -154,12 +157,12 @@ final class TestTimestampFix: XCTestCase {
         task.addComment(text: "Test comment without icon")
         
         // Verify the comment was added with nil properties
-        XCTAssertEqual(task.comments?.count, 1, "Comment should be added")
+        #expect(task.comments?.count == 1, "Comment should be added")
         
         if let comment = task.comments?.first {
-            XCTAssertEqual(comment.text, "Test comment without icon", "Comment text should match")
-            XCTAssertNil(comment.icon, "Comment icon should be nil")
-            XCTAssertNil(comment.state, "Comment state should be nil")
+            #expect(comment.text == "Test comment without icon", "Comment text should match")
+            #expect(comment.icon == nil, "Comment icon should be nil")
+            #expect(comment.state == nil, "Comment state should be nil")
         }
     }
 }

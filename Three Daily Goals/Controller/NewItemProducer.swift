@@ -8,4 +8,5 @@
 
 public protocol NewItemProducer {
     func produceNewItem() -> TaskItem?
+    func removeItem(_ item: TaskItem)
 }

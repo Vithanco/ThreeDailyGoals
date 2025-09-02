@@ -106,6 +106,13 @@ final class UIStateManager: @preconcurrency ItemSelector {
     /// Select a task item (platform-specific)
     @MainActor
     func select(_ newItem: TaskItem) {
+        if newItem == selectedItem {
+            return
+        }
+        if let oldItem = selectedItem, oldItem.isUnchanged {
+            newItemProducer?.removeItem(oldItem)
+            selectedItem = nil
+        }
         #if os(macOS)
             select(which: newItem.state, item: newItem)
         #endif
