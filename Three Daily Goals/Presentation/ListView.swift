@@ -19,6 +19,7 @@ struct ListView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
     let whichList: TaskItemState?
 
     init(whichList: TaskItemState? = nil) {

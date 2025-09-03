@@ -16,7 +16,7 @@ import UniformTypeIdentifiers
 public class ShareViewController: BaseViewController {
 
     private let container = sharedModelContainer(inMemory: false, withCloud: false)
-    private let preferences = CloudPreferences(testData: false)
+    private let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
 
     public override func viewDidLoad() {
         super.viewDidLoad()

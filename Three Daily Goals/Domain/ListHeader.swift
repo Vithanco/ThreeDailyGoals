@@ -11,32 +11,37 @@ public struct ListHeader: Identifiable, Equatable, Sendable {
     let name: String
     let timeFrom: Int
     let timeTo: Int
-    let fromDate: Date
-    let toDate: Date
 
     public var id: String {
         name
     }
 
-    func filter(item: TaskItem) -> Bool {
-        return item.changed > fromDate && item.changed <= toDate
-    }
+
 
     init(name: String, timeFrom: Int, timeTo: Int) {
         self.name = name
         self.timeTo = timeTo
         self.timeFrom = timeFrom
-        self.fromDate = getDate(daysPrior: timeFrom)
-        self.toDate = timeTo == 0 ? getDate(inDays: 1000) : getDate(daysPrior: timeTo)
-        assert(fromDate < toDate, "fromDate \(fromDate) must be earlier than toDate \(toDate)")
+        assert(timeFrom > timeTo || timeTo == 0, "timeFrom \(timeFrom) must be greater than timeTo \(timeTo) unless timeTo is 0")
     }
 
-    func filter(items: [TaskItem]) -> [TaskItem] {
+    func filter(items: [TaskItem], timeProvider: TimeProvider) -> [TaskItem] {
+        // Calculate dates once
+        let fromDate = timeProvider.getDate(daysPrior: timeFrom)
+        let toDate = timeTo == 0 ? timeProvider.getDate(inDays: 1000) : timeProvider.getDate(daysPrior: timeTo)
+        
+        // Use the same dates for all items
+        let filteredItems = items.filter { item in
+            item.changed > fromDate && item.changed <= toDate
+        }
+        
+        // Sort the filtered items
         var sorter: TaskSorter = TaskItemState.youngestFirst
-        if let first = items.first {
+        if let first = filteredItems.first {
             sorter = first.state.sorter
         }
-        return items.filter(filter).sorted(by: sorter)
+        
+        return filteredItems.sorted(by: sorter)
     }
 
     static let lhToday = ListHeader(name: "Last 24h", timeFrom: 1, timeTo: 0)

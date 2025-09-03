@@ -165,5 +165,5 @@ struct WPriorities: View {
 }
 
 #Preview {
-    WPriorities(preferences: CloudPreferences(testData: true))
+    WPriorities(preferences: CloudPreferences(testData: true, timeProvider: RealTimeProvider()))
 }

@@ -26,6 +26,7 @@ private let logger = Logger(
 final class DataManager {
 
     let modelContext: Storage
+    let timeProvider: TimeProvider
     var priorityUpdater: PriorityUpdater?
     var itemSelector: ItemSelector?
     var jsonExportDoc: JSONWriteOnlyDoc? {
@@ -36,8 +37,9 @@ final class DataManager {
     var items = [TaskItem]()
     var lists: [TaskItemState: [TaskItem]] = [:]
 
-    init(modelContext: Storage) {
+    init(modelContext: Storage, timeProvider: TimeProvider) {
         self.modelContext = modelContext
+        self.timeProvider = timeProvider
 
         // Initialize lists for all states
         for state in TaskItemState.allCases {
@@ -143,10 +145,11 @@ final class DataManager {
     @discardableResult func addItem(
         title: String = emptyTaskTitle,
         details: String = emptyTaskDetails,
-        changedDate: Date = Date.now,
+        changedDate: Date? = nil,
         state: TaskItemState = .open
     ) -> TaskItem {
-        let newItem = TaskItem(title: title, details: details, changedDate: changedDate, state: state)
+        let finalChangedDate = changedDate ?? timeProvider.now
+        let newItem = TaskItem(title: title, details: details, changedDate: finalChangedDate, state: state)
         addExistingTask(newItem)
         return newItem
     }
@@ -282,7 +285,7 @@ final class DataManager {
     @discardableResult func killOldTasks(expireAfter: Int? = nil, preferences: CloudPreferences) -> Int {
         var result = 0
         let expiryDays = expireAfter ?? preferences.expiryAfter
-        let expireData = getDate(daysPrior: expiryDays)
+        let expireData = timeProvider.getDate(daysPrior: expiryDays)
         result += killOldTasks(expiryDate: expireData, whichList: .open)
         result += killOldTasks(expiryDate: expireData, whichList: .priority)
         result += killOldTasks(expiryDate: expireData, whichList: .pendingResponse)
@@ -303,12 +306,12 @@ final class DataManager {
 
     /// Create sample data for testing/development
     func createSampleData() {
-        let lastWeek1 = TaskItem(title: "3 days ago", changedDate: getDate(daysPrior: 3))
-        let lastWeek2 = TaskItem(title: "5 days ago", changedDate: getDate(daysPrior: 5))
-        let lastMonth1 = TaskItem(title: "11 days ago", changedDate: getDate(daysPrior: 11))
-        let lastMonth2 = TaskItem(title: "22 days ago", changedDate: getDate(daysPrior: 22))
-        let older1 = TaskItem(title: "31 days ago", changedDate: getDate(daysPrior: 31))
-        let older2 = TaskItem(title: "101 days ago", changedDate: getDate(daysPrior: 101))
+        let lastWeek1 = TaskItem(title: "3 days ago", changedDate: timeProvider.getDate(daysPrior: 3))
+        let lastWeek2 = TaskItem(title: "5 days ago", changedDate: timeProvider.getDate(daysPrior: 5))
+        let lastMonth1 = TaskItem(title: "11 days ago", changedDate: timeProvider.getDate(daysPrior: 11))
+        let lastMonth2 = TaskItem(title: "22 days ago", changedDate: timeProvider.getDate(daysPrior: 22))
+        let older1 = TaskItem(title: "31 days ago", changedDate: timeProvider.getDate(daysPrior: 31))
+        let older2 = TaskItem(title: "101 days ago", changedDate: timeProvider.getDate(daysPrior: 101))
 
         move(task: lastWeek1, to: .priority)
         createTask(title: lastWeek1.title, state: lastWeek1.state)
@@ -329,10 +332,11 @@ final class DataManager {
     func addAndFindItem(
         title: String = emptyTaskTitle,
         details: String = emptyTaskDetails,
-        changedDate: Date = Date.now,
+        changedDate: Date? = nil,
         state: TaskItemState = .open
     ) -> TaskItem {
-        let newItem = addItem(title: title, details: details, changedDate: changedDate, state: state)
+        let finalChangedDate = changedDate ?? timeProvider.now
+        let newItem = addItem(title: title, details: details, changedDate: finalChangedDate, state: state)
         // Find the saved item in the database to ensure we're selecting the correct object
         guard let savedItem = findTask(withUuidString: newItem.uuid.uuidString) else {
             return newItem
@@ -953,6 +957,11 @@ extension DataManager : @preconcurrency NewItemProducer {
         if (item.isUnchanged) {
             debugPrint("is unchanged")
             modelContext.delete(item)
+            do {
+                try modelContext.save()
+            }catch {
+                debugPrint(error)
+            }
         } else {
             debugPrint("it was changed")
         }

@@ -41,6 +41,7 @@ final class CompassCheckManager {
     private let dataManager: DataManager
     private let uiState: UIStateManager
     private let preferences: CloudPreferences
+    private let timeProvider: TimeProvider
 
     var os: SupportedOS {
         #if os(iOS)
@@ -53,17 +54,18 @@ final class CompassCheckManager {
         #endif
     }
 
-    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, isTesting: Bool = false) {
+    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, isTesting: Bool = false) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
+        self.timeProvider = timeProvider
         self.isTesting = isTesting
     }
 
     // MARK: - Compass Check Logic
 
     var dueDateSoon: [TaskItem] {
-        let due = getDate(inDays: 3)
+        let due = timeProvider.getDate(inDays: 3)
         let open = self.dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
         return open.sorted()
     }
@@ -136,14 +138,14 @@ final class CompassCheckManager {
         state = .inform
         debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
         debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
-        debugPrint("current interval: \(getCompassCheckInterval())")
+        debugPrint("current interval: \(timeProvider.getCompassCheckInterval())")
         debugPrint("next check will be notified at: \(preferences.nextCompassCheckTime)")
         let didCCAlreadyHappenInCurrentInterval = preferences.didCompassCheckToday
 
         // setting last review date
         if didFinishCompassCheck {
             if !didCCAlreadyHappenInCurrentInterval {
-                let secondsOfLastCCBeforeCurrentInterval: TimeInterval = getCompassCheckInterval().start
+                let secondsOfLastCCBeforeCurrentInterval: TimeInterval = timeProvider.getCompassCheckInterval().start
                     .timeIntervalSince(preferences.lastCompassCheck)
                 debugPrint("secondsOfLastCCBeforeCurrentInterval: \(secondsOfLastCCBeforeCurrentInterval)")
                 debugPrint("smaller than a day?: \(secondsOfLastCCBeforeCurrentInterval < Seconds.fullDay)")
@@ -161,7 +163,7 @@ final class CompassCheckManager {
                     "current streak: \(preferences.daysOfCompassCheck), longest: \(preferences.longestStreak)"
                 )
                 debugPrint("----- set date -----")
-                preferences.lastCompassCheck = Date.now
+                preferences.lastCompassCheck = timeProvider.now
                 debugPrint("lastCompassCheck: \(preferences.lastCompassCheck)")
                 debugPrint("next interval: \(preferences.nextCompassCheckTime)")
                 debugPrint("did check: \(preferences.didCompassCheckToday)")
@@ -174,7 +176,7 @@ final class CompassCheckManager {
     }
 
     func waitABit() {
-        setupCompassCheckNotification(when: Date.now.addingTimeInterval(Seconds.fiveMin))
+        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
     }
 
     var priorityTasks: [TaskItem] {
@@ -189,20 +191,20 @@ final class CompassCheckManager {
 
     func startCompassCheckNow() {
         if !uiState.showCompassCheckDialog && state == .inform {
-            debugPrint("start compass check \(Date.now)")
+            debugPrint("start compass check \(timeProvider.now)")
             uiState.showCompassCheckDialog = true
         }
     }
 
     var nextRegularCompassCheckTime: Date {
         var result = self.preferences.compassCheckTime
-        if getCal().isDate(preferences.lastCompassCheck, inSameDayAs: result) {
+        if timeProvider.isDate(preferences.lastCompassCheck, inSameDayAs: result) {
             // review happened today, let's do it tomorrow
             result = addADay(result)
         } else {  // today's review missing
-            if result < Date.now {
+            if result < timeProvider.now {
                 //regular time passed by, now just do it in 5 minutes to allow app to fully load
-                return Date.now.addingTimeInterval(Seconds.oneMin)
+                return timeProvider.now.addingTimeInterval(Seconds.oneMin)
             }
         }
         return result

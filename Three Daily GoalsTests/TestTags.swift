@@ -197,6 +197,7 @@ struct TestTags {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
         dataManager.modelContext.insert(task)
+        #expect(task.comments?.count == 0, "Task should have exactly zero comments initially")
         
         // When: Adding tags with whitespace
         task.tags = ["  valid  ", "", "   ", "\t\n", "another"]

@@ -39,7 +39,7 @@ struct TestListHeaders {
         let model = setupApp(isTesting: true)
         #expect(model.dataManager.items.count == 178)
         let lhs = ListHeader.defaultListHeaders
-        let result = lhs.map({ $0.filter(items: model.dataManager.items) })
+        let result = lhs.map({ $0.filter(items: model.dataManager.items, timeProvider: model.timeProvider) })
         #expect(result.count == 10)
         #expect(result[0].count == 0)
         #expect(result[1].count == 0)
@@ -53,10 +53,10 @@ struct TestListHeaders {
         #expect(result[9].count == 6)
     }
 
-    func split(headers: [ListHeader], itemList: [TaskItem]) -> [PartialList] {
+    func split(headers: [ListHeader], itemList: [TaskItem], timeProvider: TimeProvider) -> [PartialList] {
         var result = [PartialList]()
         for lh in headers {
-            result.append(PartialList(header: lh, list: lh.filter(items: itemList)))
+            result.append(PartialList(header: lh, list: lh.filter(items: itemList, timeProvider: timeProvider)))
         }
 
         assert(itemList.count == result.reduced)
@@ -67,11 +67,11 @@ struct TestListHeaders {
     func testSplitting() throws {
         let model = setupApp(isTesting: true)
         let lhs = ListHeader.defaultListHeaders
-        var splitted = split(headers: lhs, itemList: model.dataManager.items)
+        var splitted = split(headers: lhs, itemList: model.dataManager.items, timeProvider: model.timeProvider)
         #expect(splitted.reduced == model.dataManager.items.count)
 
         let graveyard: [TaskItem] = model.dataManager.list(which: .dead)
-        splitted = split(headers: lhs, itemList: graveyard)
+        splitted = split(headers: lhs, itemList: graveyard, timeProvider: model.timeProvider)
         #expect(splitted.reduced == graveyard.count)
     }
 }

@@ -56,6 +56,7 @@ struct Three_Daily_GoalsApp: App {
         .environment(appComponents.uiState)
         .environment(appComponents.dataManager)
         .environment(appComponents.compassCheckManager)
+        .environment(appComponents.timeProviderWrapper)
         .commands {
             // Add a CommandMenu for saving tasks
             CommandGroup(after: .importExport) {
@@ -82,7 +83,8 @@ struct Three_Daily_GoalsApp: App {
                     .environment(appComponents.preferences)
                     .environment(appComponents.dataManager)
                     .environment(appComponents.uiState)
-                    .environment(appComponents.compassCheckManager)
+                                    .environment(appComponents.compassCheckManager)
+                .environment(appComponents.timeProviderWrapper)
             }
         #endif
     }

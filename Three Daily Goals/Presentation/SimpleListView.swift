@@ -28,6 +28,8 @@ struct SimpleListView: View {
         )
     }
 
+    @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
+    
     var body: some View {
         List {
             Section(
@@ -57,7 +59,7 @@ struct SimpleListView: View {
                         .padding(.vertical, 20)
                 } else {
                     ForEach(headers) { header in
-                        let partialList = header.filter(items: itemList)
+                        let partialList = header.filter(items: itemList, timeProvider: timeProviderWrapper.timeProvider)
                         if partialList.count > 0 {
                             if showHeaders {
                                 HStack(spacing: 8) {

@@ -10,21 +10,106 @@ struct AppComponents {
     let uiState: UIStateManager
     let dataManager: DataManager
     let compassCheckManager: CompassCheckManager
+    let timeProvider: TimeProvider
+    let timeProviderWrapper: TimeProviderWrapper
     let isTesting: Bool
 }
 
 /// Set up the app with all necessary components
 /// - Parameter isTesting: If true, creates a test setup with dummy data
+/// - Parameter timeProvider: Optional TimeProvider. If nil, creates RealTimeProvider for production or MockTimeProvider for testing
+/// - Parameter loader: Optional test data loader
+/// - Parameter preferences: Optional custom preferences for testing
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-func setupApp(isTesting: Bool, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents
-{
-    guard isTesting else {
-        return setupProductionApp()
+func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents {
+    
+    // MARK: - Step 1: Create TimeProvider (needed by everything)
+    let finalTimeProvider = timeProvider ?? (isTesting ? MockTimeProvider(fixedNow: Date.now) : RealTimeProvider())
+    
+    // MARK: - Step 2: Create Storage Layer
+    let container: ModelContainer
+    let modelContext: ModelContext
+    let finalModelContext: Storage
+    
+    if isTesting {
+        // Test setup
+        container = sharedModelContainer(inMemory: true, withCloud: false)
+        modelContext = ModelContext(container)
+        
+        // Use TestStorage with custom loader or default data
+        if let loader = loader {
+            finalModelContext = TestStorage(loader: loader, timeProvider: finalTimeProvider)
+        } else {
+            finalModelContext = TestStorage(timeProvider: finalTimeProvider)  // Use default test data with 178 items
+        }
+    } else {
+        // Production setup
+        container = sharedModelContainer(inMemory: false, withCloud: true)
+        modelContext = ModelContext(container)
+        finalModelContext = modelContext
     }
-    return setupTestApp(loader: loader, preferences: preferences)
+    
+    // MARK: - Step 3: Create CloudPreferences
+    let finalPreferences: CloudPreferences
+    if let customPreferences = preferences {
+        finalPreferences = customPreferences
+    } else if isTesting {
+        // Create test preferences with time provider
+        let store: KeyValueStorage = TestPreferences()
+        store.set(18, forKey: .compassCheckTimeHour)
+        store.set(0, forKey: .compassCheckTimeMinute)
+        finalPreferences = CloudPreferences(store: store, timeProvider: finalTimeProvider)
+        finalPreferences.daysOfCompassCheck = 42
+    } else {
+        // Create production preferences with time provider
+        finalPreferences = CloudPreferences(store: NSUbiquitousKeyValueStore.default, timeProvider: finalTimeProvider)
+    }
+    
+    // MARK: - Step 4: Create UI State Manager
+    let uiState = UIStateManager()
+    
+    // MARK: - Step 5: Create Data Manager
+    let dataManager = DataManager(modelContext: finalModelContext, timeProvider: finalTimeProvider)
+    
+    // MARK: - Step 6: Create Compass Check Manager
+    let compassCheckManager = CompassCheckManager(
+        dataManager: dataManager,
+        uiState: uiState,
+        preferences: finalPreferences,
+        timeProvider: finalTimeProvider,
+        isTesting: isTesting
+    )
+    
+    // MARK: - Step 7: Set up Cross-Component Dependencies
+    uiState.newItemProducer = dataManager
+    dataManager.priorityUpdater = finalPreferences
+    dataManager.itemSelector = uiState
+    finalPreferences.onChange = compassCheckManager.onPreferencesChange
+    
+    // MARK: - Step 8: Initialize Data and Setup
+    dataManager.loadData()
+    uiState.showItem = false
+    dataManager.mergeDataFromCentralStorage()
+    
+    if !isTesting {
+        // Only set up notifications for production
+        compassCheckManager.setupCompassCheckNotification()
+    }
+    
+    // MARK: - Step 9: Return Complete App Components
+    return AppComponents(
+        modelContainer: container,
+        modelContext: finalModelContext,
+        preferences: finalPreferences,
+        uiState: uiState,
+        dataManager: dataManager,
+        compassCheckManager: compassCheckManager,
+        timeProvider: finalTimeProvider,
+        timeProviderWrapper: TimeProviderWrapper(finalTimeProvider),
+        isTesting: isTesting
+    )
 }
-
 
 extension CloudPreferences : @preconcurrency PriorityUpdater {
     func updatePriorities(prioTasks: [TaskItem]) {
@@ -38,127 +123,4 @@ extension CloudPreferences : @preconcurrency PriorityUpdater {
             }
         }
     }
-}
-
-
-/// Set up the app for production use
-@MainActor
-private func setupProductionApp() -> AppComponents {
-    // Create production storage
-    let container = sharedModelContainer(inMemory: false, withCloud: true)
-    let modelContext = ModelContext(container)
-
-    // Create production preferences
-    let preferences = CloudPreferences(store: NSUbiquitousKeyValueStore.default)
-
-    // Create UI state manager
-    let uiState = UIStateManager()
-
-    // Create data manager
-    let dataManager = DataManager(modelContext: modelContext)
-    
-    uiState.newItemProducer = dataManager
-
-    // Load initial data
-    dataManager.loadData()
-    uiState.showItem = false
-    dataManager.mergeDataFromCentralStorage()
-
-    // Set up dependency injection for priority updates
-    dataManager.priorityUpdater = preferences
-
-    // Set up dependency injection for item selection
-    dataManager.itemSelector = uiState
-
-    // Create CompassCheck manager
-    let compassCheckManager = CompassCheckManager(
-        dataManager: dataManager,
-        uiState: uiState,
-        preferences: preferences,
-        isTesting: false
-    )
-
-    // Set up preferences change handler
-    preferences.onChange = compassCheckManager.onPreferencesChange
-    compassCheckManager.setupCompassCheckNotification()
-
-    return AppComponents(
-        modelContainer: container,
-        modelContext: modelContext,
-        preferences: preferences,
-        uiState: uiState,
-        dataManager: dataManager,
-        compassCheckManager: compassCheckManager,
-        isTesting: false
-    )
-}
-
-@MainActor
-private func testPreferences() -> CloudPreferences {
-    let store: KeyValueStorage = TestPreferences()
-    store.set(18, forKey: .compassCheckTimeHour)
-    store.set(0, forKey: .compassCheckTimeMinute)
-    let result = CloudPreferences(store: store)
-    result.daysOfCompassCheck = 42
-    return result
-}
-
-/// Set up the app for testing
-@MainActor
-private func setupTestApp(loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents {
-    // Create test container
-    let container = sharedModelContainer(inMemory: true, withCloud: false)
-    let modelContext = ModelContext(container)
-
-    // For testing, we always use TestStorage - either with custom loader or default data
-    let finalModelContext: Storage
-    if let loader = loader {
-        finalModelContext = TestStorage(loader: loader)
-    } else {
-        finalModelContext = TestStorage()  // Use default test data with 178 items
-    }
-
-    // Create test preferences
-    let preferences = (preferences == nil) ? testPreferences() : preferences!
-
-    // Create UI state manager
-    let uiState = UIStateManager()
-
-    // Create data manager
-    let dataManager = DataManager(modelContext: finalModelContext)
-
-    // Load initial data
-    dataManager.loadData()
-    uiState.showItem = false
-    dataManager.mergeDataFromCentralStorage()
-    
-    uiState.newItemProducer = dataManager
-
-    // Set up dependency injection for priority updates
-    dataManager.priorityUpdater = preferences
-
-    // Set up dependency injection for item selection
-    dataManager.itemSelector = uiState
-
-    // Create CompassCheck manager
-    let compassCheckManager = CompassCheckManager(
-        dataManager: dataManager,
-        uiState: uiState,
-        preferences: preferences,
-        isTesting: true
-    )
-
-    // Set up preferences change handler
-    preferences.onChange = compassCheckManager.onPreferencesChange
-    compassCheckManager.setupCompassCheckNotification()
-
-    return AppComponents(
-        modelContainer: container,
-        modelContext: modelContext,
-        preferences: preferences,
-        uiState: uiState,
-        dataManager: dataManager,
-        compassCheckManager: compassCheckManager,
-        isTesting: true
-    )
 }

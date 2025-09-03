@@ -94,19 +94,21 @@ extension NSUbiquitousKeyValueStore: KeyValueStorage {
 @Observable
 final class CloudPreferences {
     var store: KeyValueStorage
+    let timeProvider: TimeProvider
     typealias OnChange = () -> Void
     var onChange: OnChange?
 
-    init(store: KeyValueStorage, onChange: OnChange? = nil) {
+    init(store: KeyValueStorage, timeProvider: TimeProvider, onChange: OnChange? = nil) {
         self.store = store
+        self.timeProvider = timeProvider
         self.onChange = onChange
     }
 
-    convenience init(testData: Bool, onChange: OnChange? = nil) {
+    convenience init(testData: Bool, timeProvider: TimeProvider, onChange: OnChange? = nil) {
         if testData {
-            self.init(store: TestPreferences(), onChange: onChange)
+            self.init(store: TestPreferences(), timeProvider: timeProvider, onChange: onChange)
         } else {
-            self.init(store: NSUbiquitousKeyValueStore.default, onChange: onChange)
+            self.init(store: NSUbiquitousKeyValueStore.default, timeProvider: timeProvider, onChange: onChange)
 
             NotificationCenter.default.addObserver(
                 forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self,
@@ -148,18 +150,25 @@ extension CloudPreferences {
 
     var nextCompassCheckTime: Date {
         var result = compassCheckTime
-        if result < Date.now {
+        if result < timeProvider.now {
             result = addADay(result)
         }
         return result
     }
 
     var didCompassCheckToday: Bool {
-        return getCompassCheckInterval().contains(lastCompassCheck)
+        return timeProvider.getCompassCheckInterval().contains(lastCompassCheck)
     }
     
     private var didCompassCheckLastInterval: Bool {
-        return getCompassCheckInterval(forDate: getDate(inDays: -1)).contains(lastCompassCheck)
+        // Get the current interval
+        let currentInterval = timeProvider.getCompassCheckInterval()
+        
+        // Calculate the previous interval by going back 24 hours from the start of current interval
+        let previousIntervalStart = timeProvider.calendar.date(byAdding: .day, value: -1, to: currentInterval.start) ?? currentInterval.start
+        let previousInterval = DateInterval(start: previousIntervalStart, end: currentInterval.start)
+        
+        return previousInterval.contains(lastCompassCheck)
     }
     
     var isStreakActive: Bool {
@@ -167,14 +176,15 @@ extension CloudPreferences {
     }
     
     var isStreakBroken: Bool {
-        return !isStreakActive
+        var isActive = isStreakActive
+        return !isActive
     }
 
     var compassCheckTime: Date {
         get {
             let compassCheckTimeHour = self.store.int(forKey: .compassCheckTimeHour)
             let compassCheckTimeMinute = self.store.int(forKey: .compassCheckTimeMinute)
-            return todayAt(hour: compassCheckTimeHour, min: compassCheckTimeMinute)
+            return timeProvider.todayAt(hour: compassCheckTimeHour, min: compassCheckTimeMinute)
         }
         set {
             self.store.set(newValue.hour, forKey: .compassCheckTimeHour)
@@ -184,7 +194,7 @@ extension CloudPreferences {
 
     var compassCheckTimeComponents: DateComponents {
         return DateComponents(
-            calendar: getCal(), hour: self.store.int(forKey: .compassCheckTimeHour),
+            calendar: timeProvider.calendar, hour: self.store.int(forKey: .compassCheckTimeHour),
             minute: self.store.int(forKey: .compassCheckTimeMinute))
     }
 
@@ -226,8 +236,8 @@ extension CloudPreferences {
             {
                 return result
             }
-            store.set(cloudDateFormatter.string(from: Date.now), forKey: .lastCompassCheckString)
-            return Date.now
+            store.set(cloudDateFormatter.string(from: timeProvider.now), forKey: .lastCompassCheckString)
+            return timeProvider.now
         }
         set {
             store.set(cloudDateFormatter.string(from: newValue), forKey: .lastCompassCheckString)
@@ -294,7 +304,7 @@ extension CKContainer {
 @MainActor
 func dummyPreferences() -> CloudPreferences {
     let store = TestPreferences()
-    let result = CloudPreferences(store: store)
+    let result = CloudPreferences(store: store, timeProvider: RealTimeProvider())
     result.daysOfCompassCheck = 42
     store.set(18, forKey: .compassCheckTimeHour)
     store.set(00, forKey: .compassCheckTimeMinute)

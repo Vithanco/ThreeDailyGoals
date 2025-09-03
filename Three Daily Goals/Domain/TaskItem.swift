@@ -171,15 +171,32 @@ extension TaskItem {
     @Transient
     var tags: [String] {
         get {
-            return allTagsString.components(separatedBy: ",").filter({ !$0.isEmpty })
+            return allTagsString.components(separatedBy: ",")
+                .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         }
         set {
-            let tags: [String] = self.tags
-            if newValue != tags {
+            let oldTags: [String] = self.tags
+            
+            // Filter out empty and whitespace-only strings, and trim whitespace from valid tags
+            let filteredTags = newValue
+                .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+            
+            if filteredTags != oldTags {
                 changed = Date.now
-                newValue.filter { !tags.contains($0) }.forEach({ addComment(text: "Added tag: \($0)", icon: imgTag) })
-                tags.filter { !newValue.contains($0) }.forEach({ addComment(text: "Removed tag: \($0)", icon: imgTag) })
-                allTagsString = newValue.filter({ !$0.isEmpty }).joined(separator: ",")
+                
+                // Add comments for new tags
+                filteredTags.filter { !oldTags.contains($0) }.forEach { 
+                    addComment(text: "Added tag: \($0)", icon: imgTag) 
+                }
+                
+                // Add comments for removed tags
+                oldTags.filter { !filteredTags.contains($0) }.forEach { 
+                    addComment(text: "Removed tag: \($0)", icon: imgTag) 
+                }
+                
+                allTagsString = filteredTags.joined(separator: ",")
             }
         }
     }

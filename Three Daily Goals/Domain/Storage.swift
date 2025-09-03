@@ -87,53 +87,54 @@ class TestStorage: Storage {
         return false
     }
 
-    typealias Loader = (() -> [TaskItem])
+    typealias Loader = ((TimeProvider) -> [TaskItem])
 
     var undoManager: UndoManager? = nil
     var items: [TaskItem]
-    init() {
+    
+    init(timeProvider: TimeProvider) {
         var result: [TaskItem] = []
         let theGoal = result.add(
             title: "Read 'The Goal' by Goldratt",
-            changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+            changedDate: timeProvider.now.addingTimeInterval(-1 * Seconds.fiveMin))
         theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
         theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-        theGoal.dueDate = getDate(inDays: 2)
+        theGoal.dueDate = timeProvider.getDate(inDays: 2)
         result.add(
-            title: "Try out Concept Maps", changedDate: getDate(daysPrior: 3), state: .priority,
+            title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
             tags: ["CMaps"])
         result.add(
-            title: "Read about Systems Thinking", changedDate: getDate(daysPrior: 5), tags: ["toRead"])
+            title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead"])
         result.add(
             title: "Transfer tasks from old task manager into this one",
-            changedDate: getDate(daysPrior: 11), state: .open)
+            changedDate: timeProvider.getDate(daysPrior: 11), state: .open)
         let lastMonth2 = result.add(
             title: "Read about Structured Visual Thinking",
-            changedDate: getDate(daysPrior: 22),
+            changedDate: timeProvider.getDate(daysPrior: 22),
             state: .open,
             tags: ["toRead"]
         )
         lastMonth2.url = "https://vithanco.com"
         result.add(
-            title: "Contact Vithanco Author regarding new map style", changedDate: getDate(daysPrior: 3),
+            title: "Contact Vithanco Author regarding new map style", changedDate: timeProvider.getDate(daysPrior: 3),
             state: .pendingResponse)
-        result.add(title: "Read this", changedDate: getDate(daysPrior: 31), state: .dead)
+        result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead)
         result.add(
-            title: "Read this about Agile vs Waterfall", changedDate: getDate(daysPrior: 101),
+            title: "Read this about Agile vs Waterfall", changedDate: timeProvider.getDate(daysPrior: 101),
             state: .dead)
         result.add(
-            title: "Request Parking Permission", changedDate: getDate(inDays: 3), state: .pendingResponse)
+            title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse)
         result.add(
-            title: "Tax Declaration", changedDate: getDate(inDays: 30), state: .open,
-            dueDate: getDate(inDays: 2))
+            title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
+            dueDate: timeProvider.getDate(inDays: 2))
         for i in 32..<200 {
-            result.add(title: "Dead Task \(i)", changedDate: getDate(daysPrior: i), state: .dead)
+            result.add(title: "Dead Task \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: .dead)
         }
         items = result
     }
 
-    init(loader: @escaping Loader) {
-        items = loader()
+    init(loader: @escaping Loader, timeProvider: TimeProvider) {
+        items = loader(timeProvider)
     }
 
     func insert<T>(_ model: T) where T: PersistentModel {

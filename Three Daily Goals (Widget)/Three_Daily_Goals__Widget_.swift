@@ -47,7 +47,7 @@ struct Three_Daily_Goals__Widget_EntryView: View {
     var entry: PriorityEntry
 
     var body: some View {
-        WPriorities(preferences: CloudPreferences(testData: false))
+        WPriorities(preferences: CloudPreferences(testData: false, timeProvider: RealTimeProvider()))
     }
 }
 

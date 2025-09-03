@@ -28,10 +28,10 @@ struct TestTaskItems {
         //        #expect(task.comments!.count,1)
     }
 
-    func loader(whichList: TaskItemState) -> [TaskItem] {
+    func loader(timeProvider: TimeProvider, whichList: TaskItemState) -> [TaskItem] {
         var result: [TaskItem] = []
         for i in stride(from: 1, to: 100, by: 5) {
-            result.add(title: "day \(i)", changedDate: getDate(daysPrior: i), state: whichList)
+            result.add(title: "day \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: whichList)
         }
         return result
     }
@@ -40,11 +40,11 @@ struct TestTaskItems {
     @Test
     func testListSorting() throws {
         #expect(TaskItemState.open.subHeaders != TaskItemState.closed.subHeaders)
-        let appComponents = setupApp(isTesting: true, loader: { return self.loader(whichList: .open) })
+        let appComponents = setupApp(isTesting: true, loader: { tp in return self.loader(timeProvider: tp, whichList: .open) })
         let dataManager = appComponents.dataManager
         let itemList = dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
-        let partialLists: [[TaskItem]] = headers.map({ $0.filter(items: itemList) })
+        let partialLists: [[TaskItem]] = headers.map({ $0.filter(items: itemList, timeProvider: appComponents.timeProvider) })
         #expect(Array(partialLists.joined()) == itemList)
     }
 
@@ -95,7 +95,7 @@ struct TestTaskItems {
     @MainActor
     @Test
     func dontAddEmptyTask() throws {
-        let appComponents = setupApp(isTesting: true, loader: { return [] })
+        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
         let dataManager = appComponents.dataManager
 
         #expect(dataManager.items.count == 0)
@@ -108,7 +108,7 @@ struct TestTaskItems {
     @MainActor
     @Test
     func addTaskWithDetails() throws {
-        let appComponents = setupApp(isTesting: true, loader: { return [] })
+        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
         let dataManager = appComponents.dataManager
         let newTask = TaskItem(title: "", details: "something")
         #expect(dataManager.items.count == 0)

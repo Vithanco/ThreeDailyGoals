@@ -17,7 +17,7 @@ struct PreferencesTests {
     @MainActor
     func testDates() throws {
         let tester = TestPreferences()
-        let preferences = CloudPreferences(store: tester)
+        let preferences = CloudPreferences(store: tester, timeProvider: RealTimeProvider())
         var date = todayAt(hour: 23, min: 59)
         debugPrint("Date is : \(date.formatted())")
         #expect(getCal().component(.second, from: date) == 0)

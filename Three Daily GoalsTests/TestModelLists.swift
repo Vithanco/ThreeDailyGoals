@@ -111,7 +111,7 @@ struct TestModelLists {
     func testDueDate() async throws {
         let model = setupApp(
             isTesting: true,
-            loader: {
+            loader: { tp in
                 var result: [TaskItem] = []
                 let theGoal = result.add(
                     title: "Read 'The Goal' by Goldratt",
@@ -119,7 +119,7 @@ struct TestModelLists {
                 theGoal.details =
                     "It is the book that introduced the fundamentals for 'Theory of Constraints'"
                 theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-                theGoal.dueDate = getDate(inDays: 2)
+                theGoal.dueDate = tp.getDate(inDays: 2)
                 return result
             })
 

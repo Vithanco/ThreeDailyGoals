@@ -32,7 +32,7 @@ struct TestDailyCompassCheckTime {
     @MainActor
     func testTime() throws {
         let tester = TestPreferences()
-        let preferences = CloudPreferences(store: tester)
+        let preferences = CloudPreferences(store: tester, timeProvider: RealTimeProvider())
         let date = getCal().date(from: DateComponents(hour: 15, minute: 08))!
         preferences.compassCheckTime = date
         #expect(tester.int(forKey: CloudKey.compassCheckTimeHour) == 15)
