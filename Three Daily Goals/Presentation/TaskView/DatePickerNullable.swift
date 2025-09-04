@@ -13,10 +13,13 @@ struct DatePickerNullable: View {
 
     var body: some View {
         HStack {
-            if let date = Binding($selected) {
+            if let selectedDate = selected {
                 DatePicker(
                     "",
-                    selection: date,
+                    selection: Binding(
+                        get: { selectedDate },
+                        set: { selected = $0 }
+                    ),
                     displayedComponents: [.date]
                 )
                 #if os(macOS)

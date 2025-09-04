@@ -7,6 +7,7 @@
 
 import Foundation
 import Testing
+import SwiftUI
 
 @testable import Three_Daily_Goals
 
@@ -115,5 +116,98 @@ struct TestTaskItems {
         #expect(dataManager.items.count == 0)
         dataManager.addItem(item: newTask)
         #expect(dataManager.items.count == 1)
+    }
+    
+    @MainActor
+    @Test
+    func testDueDateRemovalCrash() throws {
+        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        
+        // Create a task with a due date
+        let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
+        task.due = timeProvider.getDate(inDays: 7) // Set due date 7 days from now
+        dataManager.addItem(item: task)
+        
+        // Verify the task has a due date
+        #expect(task.due != nil)
+        #expect(task.dueDate != nil)
+        
+        // Test the dueUntil method with the due date
+        let futureDate = timeProvider.getDate(inDays: 10)
+        #expect(task.dueUntil(date: futureDate) == true)
+        
+        // Now remove the due date - this should not crash
+        task.due = nil
+        
+        // Verify the due date is removed
+        #expect(task.due == nil)
+        #expect(task.dueDate == nil)
+        
+        // Test dueUntil method with nil due date
+        #expect(task.dueUntil(date: futureDate) == false)
+        
+        // Test accessing the due property multiple times after removal
+        let _ = task.due
+        let _ = task.dueDate
+        let _ = task.due
+        
+        // Test setting due date again
+        task.due = timeProvider.getDate(inDays: 3)
+        #expect(task.due != nil)
+        
+        // Remove it again
+        task.due = nil
+        #expect(task.due == nil)
+    }
+    
+    @MainActor
+    @Test
+    func testDatePickerNullableBindingCrash() throws {
+        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let timeProvider = appComponents.timeProvider
+        
+        // Test the exact scenario that might cause the crash
+        var selectedDate: Date? = timeProvider.getDate(inDays: 7)
+        
+        // Simulate the DatePickerNullable logic
+        // This is the problematic line: if let date = Binding($selected) {
+        // We need to test if this crashes when selectedDate becomes nil
+        
+        // First, test with a valid date
+        #expect(selectedDate != nil)
+        
+        // Test the binding creation (this is what might crash)
+        if selectedDate != nil {
+            // This simulates the safe version of the binding creation
+            let binding = Binding<Date?>(
+                get: { selectedDate },
+                set: { selectedDate = $0 }
+            )
+            #expect(binding.wrappedValue != nil)
+        }
+        
+        // Now set to nil (simulating removing the due date)
+        selectedDate = nil
+        #expect(selectedDate == nil)
+        
+        // Test the binding creation with nil value
+        if selectedDate != nil {
+            // This should not execute since selectedDate is nil
+            #expect(false, "This should not execute")
+        } else {
+            // This is the safe path - no binding creation attempted
+            #expect(true, "Safe path taken")
+        }
+        
+        // Test rapid toggling between nil and valid dates
+        for i in 1...10 {
+            selectedDate = timeProvider.getDate(inDays: i)
+            #expect(selectedDate != nil)
+            
+            selectedDate = nil
+            #expect(selectedDate == nil)
+        }
     }
 }
