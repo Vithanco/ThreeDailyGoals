@@ -44,10 +44,4 @@ extension Date {
         return timeAgoFormatter.localizedString(for: self, relativeTo: Date())
     }
 
-    var timeRemaining: String {
-        // This still uses Calendar.current but it's just for formatting, not core logic
-        // TODO: Consider moving this to TimeProvider if it becomes more complex
-        let endOfDay = Calendar.current.startOfDay(for: self).addingTimeInterval(Seconds.fullDay)
-        return timeAgoFormatter.string(for: endOfDay) ?? ""
-    }
 }

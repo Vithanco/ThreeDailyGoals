@@ -143,6 +143,11 @@ extension TimeProvider {
     func minute(of date: Date) -> Int {
         return calendar.component(.minute, from: date)
     }
+    
+    func timeRemaining(for date: Date) -> String {
+        let endOfDay = calendar.startOfDay(for: date).addingTimeInterval(Seconds.fullDay)
+        return timeAgoFormatter.string(for: endOfDay) ?? ""
+    }
 }
 
 // MARK: - Production Implementation

@@ -11,6 +11,7 @@ struct TaskAsLine: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState
+    @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     @Environment(\.colorScheme) private var colorScheme
     let item: TaskItem
 
@@ -44,7 +45,7 @@ struct TaskAsLine: View {
             text
             Spacer()
             if hasDue {
-                Text(item.due!.timeRemaining).italic().foregroundStyle(Color.gray)
+                Text(timeProviderWrapper.timeProvider.timeRemaining(for: item.due!)).italic().foregroundStyle(Color.gray)
             }
         }
         .padding(.horizontal, 8)
