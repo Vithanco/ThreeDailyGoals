@@ -264,11 +264,12 @@ final class TestAttachments: XCTestCase {
         XCTAssertNil(attachment.nextPurgePrompt)
 
         // Schedule purge for 3 months from now
-        try attachment.scheduleNextPurgePrompt(months: 3, in: context)
+        let timeProvider = RealTimeProvider()
+        try attachment.scheduleNextPurgePrompt(months: 3, in: context, timeProvider: timeProvider)
 
         XCTAssertNotNil(attachment.nextPurgePrompt)
 
-        let expectedDate = Calendar.current.date(byAdding: .month, value: 3, to: .now)!
+        let expectedDate = timeProvider.date(byAdding: .month, value: 3, to: timeProvider.now)!
         let tolerance: TimeInterval = 60  // 1 minute tolerance
         XCTAssertEqual(
             attachment.nextPurgePrompt?.timeIntervalSince1970 ?? 0, expectedDate.timeIntervalSince1970,

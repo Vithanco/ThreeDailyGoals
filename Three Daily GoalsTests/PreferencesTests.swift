@@ -18,11 +18,12 @@ struct PreferencesTests {
     func testDates() throws {
         let tester = TestPreferences()
         let preferences = CloudPreferences(store: tester, timeProvider: RealTimeProvider())
-        var date = todayAt(hour: 23, min: 59)
+        let timeProvider = RealTimeProvider()
+        var date = timeProvider.todayAt(hour: 23, min: 59)
         debugPrint("Date is : \(date.formatted())")
-        #expect(getCal().component(.second, from: date) == 0)
-        #expect(getCal().component(.minute, from: date) == 59)
-        #expect(getCal().component(.hour, from: date) == 23)
+        #expect(timeProvider.component(.second, from: date) == 0)
+        #expect(timeProvider.component(.minute, from: date) == 59)
+        #expect(timeProvider.component(.hour, from: date) == 23)
 
         preferences.compassCheckTime = date
         #expect(preferences.compassCheckTime == date)
@@ -33,13 +34,13 @@ struct PreferencesTests {
             "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
         )
         #expect(newDate > Date.now)
-        #expect(newDate != Date.today)
+        #expect(newDate != timeProvider.today)
         #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        #expect(23 == newDate.hour)
-        #expect(59 == newDate.min)
-        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
+        #expect(23 == timeProvider.hour(of: newDate))
+        #expect(59 == timeProvider.minute(of: newDate))
+        #expect(timeProvider.isToday(newDate) || timeProvider.isDateInTomorrow(newDate))
 
-        date = todayAt(hour: 0, min: 1)
+        date = timeProvider.todayAt(hour: 0, min: 1)
         preferences.compassCheckTime = date
         #expect(tester.int(forKey: .compassCheckTimeHour) == 0)
         #expect(tester.int(forKey: .compassCheckTimeMinute) == 1)
@@ -49,11 +50,11 @@ struct PreferencesTests {
         )
         #expect(newDate > Date.now)
         #expect(preferences.compassCheckTime < Date.now)
-        #expect(newDate != Date.today)
+        #expect(newDate != timeProvider.today)
         #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        #expect(0 == getCal().component(.hour, from: newDate))
-        #expect(1 == getCal().component(.minute, from: newDate))
-        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
+        #expect(0 == timeProvider.component(.hour, from: newDate))
+        #expect(1 == timeProvider.component(.minute, from: newDate))
+        #expect(timeProvider.isToday(newDate) || timeProvider.isDateInTomorrow(newDate))
 
         date = Date.now
         preferences.lastCompassCheck = date
@@ -62,9 +63,9 @@ struct PreferencesTests {
             "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
         )
         #expect(newDate > Date.now)
-        #expect(newDate != Date.today)
+        #expect(newDate != timeProvider.today)
         #expect(newDate <= Date.now.addingTimeInterval(Seconds.fullDay))
-        #expect(newDate.isToday || getCal().isDateInTomorrow(newDate))
+        #expect(timeProvider.isToday(newDate) || timeProvider.isDateInTomorrow(newDate))
     }
 
 }

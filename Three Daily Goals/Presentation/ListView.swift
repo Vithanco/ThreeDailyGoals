@@ -91,7 +91,7 @@ struct ListView: View {
                                 isSelected ? selectedTagStyle(accentColor: Color.priority) : missingTagStyle)
                     }
                 )
-                .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 80)
+                .frame(maxWidth: 400, minHeight: 30, maxHeight: 80)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 8)
                 .background(

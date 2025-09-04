@@ -200,7 +200,7 @@ final class CompassCheckManager {
         var result = self.preferences.compassCheckTime
         if timeProvider.isDate(preferences.lastCompassCheck, inSameDayAs: result) {
             // review happened today, let's do it tomorrow
-            result = addADay(result)
+            result = timeProvider.addADay(result)
         } else {  // today's review missing
             if result < timeProvider.now {
                 //regular time passed by, now just do it in 5 minutes to allow app to fully load

@@ -19,13 +19,20 @@ struct CompassCheckPlanDay: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
-    let eventMgr = EventManager()
-    @State var events: [any CalendarEventRepresentable]
+    @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
+    @State var eventMgr: EventManager?
+    @State var events: [any CalendarEventRepresentable] = []
     @State var date: Date
 
     init(date: Date) {
-        self._events = State(initialValue: eventMgr.events)
         self._date = State(initialValue: date)
+    }
+    
+    private func setupEventManager() {
+        if eventMgr == nil {
+            eventMgr = EventManager(timeProvider: timeProviderWrapper.timeProvider)
+            events = eventMgr?.events ?? []
+        }
     }
 
     var body: some View {
@@ -59,6 +66,9 @@ struct CompassCheckPlanDay: View {
                 }
             }
         }
+        .onAppear {
+            setupEventManager()
+        }
     }
 
     func onSelection(event: any CalendarEventRepresentable) {}
@@ -67,6 +77,7 @@ struct CompassCheckPlanDay: View {
 #Preview {
 
     // return Text ("in total: \(events.count)")
-    let date = Date.today
+    let timeProvider = RealTimeProvider()
+    let date = timeProvider.today
     return CompassCheckPlanDay(date: date)
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CompassCheckPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
+    @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
 
     var lastCompassCheck: String {
         let dateFormatter = DateFormatter()
@@ -42,11 +43,11 @@ struct CompassCheckPreferencesView: View {
                 Text("Current Compass Check Interval").bold()
                 HStack {
                     Text("Started:")
-                    Text(getCompassCheckInterval().start.timeAgoDisplay())
+                    Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().start.timeAgoDisplay())
                 }
                 HStack {
                     Text("Ends:")
-                    Text(getCompassCheckInterval().end.timeAgoDisplay())
+                    Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().end.timeAgoDisplay())
                 }
                 HStack {
                     Text("Done for this period: ")

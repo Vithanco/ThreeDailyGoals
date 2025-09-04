@@ -73,8 +73,8 @@ extension Attachment {
         try context.save()
     }
 
-    func scheduleNextPurgePrompt(months: Int, in context: ModelContext) throws {
-        self.nextPurgePrompt = Calendar.current.date(byAdding: .month, value: months, to: .now)
+    func scheduleNextPurgePrompt(months: Int, in context: ModelContext, timeProvider: TimeProvider) throws {
+        self.nextPurgePrompt = timeProvider.date(byAdding: .month, value: months, to: timeProvider.now)
         try context.save()
     }
 

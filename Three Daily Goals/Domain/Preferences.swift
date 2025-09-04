@@ -151,7 +151,7 @@ extension CloudPreferences {
     var nextCompassCheckTime: Date {
         var result = compassCheckTime
         if result < timeProvider.now {
-            result = addADay(result)
+            result = timeProvider.addADay(result)
         }
         return result
     }
@@ -187,8 +187,8 @@ extension CloudPreferences {
             return timeProvider.todayAt(hour: compassCheckTimeHour, min: compassCheckTimeMinute)
         }
         set {
-            self.store.set(newValue.hour, forKey: .compassCheckTimeHour)
-            self.store.set(newValue.min, forKey: .compassCheckTimeMinute)
+            self.store.set(timeProvider.hour(of: newValue), forKey: .compassCheckTimeHour)
+            self.store.set(timeProvider.minute(of: newValue), forKey: .compassCheckTimeMinute)
         }
     }
 

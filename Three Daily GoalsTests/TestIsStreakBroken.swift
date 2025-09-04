@@ -18,7 +18,8 @@ struct TestIsStreakBroken {
     
     init() {
         // Create a mock time provider with a fixed time (10:00 AM) for deterministic tests
-        let fixedDate = Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 10, minute: 0, second: 0))!
+        let realTimeProvider = RealTimeProvider()
+        let fixedDate = realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 10, minute: 0, second: 0))!
         timeProvider = MockTimeProvider(fixedNow: fixedDate)
         
         preferences = CloudPreferences(testData: true, timeProvider: timeProvider)
@@ -198,7 +199,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsTodayMorning_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was this morning
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was this morning at 9:00 AM
@@ -218,7 +220,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayAfternoon_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was yesterday afternoon
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was yesterday at 3:00 PM
@@ -236,7 +239,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsTwoDaysAgo_ReturnsFalse() throws {
         // Given: Current time is afternoon (2:00 PM), last check was two days ago
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was two days ago at 10:00 AM
@@ -254,7 +258,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsJustBeforeNoonToday_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was just before noon today
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was just before noon today (11:59 AM)
@@ -272,7 +277,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsExactlyAtNoonToday_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was exactly at noon today
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was exactly at noon today (12:00 PM)
@@ -290,7 +296,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsJustAfterNoonToday_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was just after noon today
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was just after noon today (12:01 PM)
@@ -308,7 +315,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayMorning_ReturnsFalse() throws {
         // Given: Current time is afternoon (2:00 PM), last check was yesterday morning
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was yesterday morning at 8:00 AM
@@ -327,7 +335,8 @@ struct TestIsStreakBroken {
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayEvening_ReturnsTrue() throws {
         // Given: Current time is afternoon (2:00 PM), last check was yesterday evening
-        let afternoonTimeProvider = MockTimeProvider(fixedNow: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
+        let realTimeProvider = RealTimeProvider()
+        let afternoonTimeProvider = MockTimeProvider(fixedNow: realTimeProvider.date(from: DateComponents(year: 2025, month: 1, day: 15, hour: 14, minute: 0, second: 0))!)
         let afternoonPreferences = CloudPreferences(testData: true, timeProvider: afternoonTimeProvider)
         
         // Last check was yesterday evening at 8:00 PM

@@ -72,9 +72,10 @@ struct TestTaskItems {
             throw TestError.taskNotFound
         }
         #expect(task.canBeTouched)
-        #expect(task.changed < getDate(daysPrior: 30))
+        let timeProvider = RealTimeProvider()
+        #expect(task.changed < timeProvider.getDate(daysPrior: 30))
         dataManager.touchWithDescriptionAndUpdateUndoStatus(task: task, description: "Test touch")
-        #expect(task.changed > getDate(daysPrior: 1))
+        #expect(task.changed > timeProvider.getDate(daysPrior: 1))
     }
 
     @MainActor

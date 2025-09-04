@@ -163,7 +163,8 @@ struct TestReview {
         debugPrint("Compass check time hour: \(pref.compassCheckTimeComponents.hour ?? -1)")
         debugPrint("Compass check time minute: \(pref.compassCheckTimeComponents.minute ?? -1)")
 
-        let interval = getCompassCheckInterval()
+        let timeProvider = RealTimeProvider()
+        let interval = timeProvider.getCompassCheckInterval()
         debugPrint("Current interval: \(interval)")
         debugPrint("Interval start: \(interval.start)")
         debugPrint("Interval end: \(interval.end)")
@@ -171,7 +172,7 @@ struct TestReview {
 
         debugPrint("Last compass check: \(pref.lastCompassCheck)")
         debugPrint("didCompassCheckToday: \(pref.didCompassCheckToday)")
-        debugPrint("lastCompassCheck.isToday: \(pref.lastCompassCheck.isToday)")
+        debugPrint("lastCompassCheck.isToday: \(timeProvider.isToday(pref.lastCompassCheck))")
 
         // Test setting to interval start + 1 second
         pref.lastCompassCheck = interval.start.addingTimeInterval(1)
@@ -202,7 +203,8 @@ struct TestReview {
         #expect(!pref.didCompassCheckToday, "Should be false when lastCompassCheck is yesterday")
         
         // Test 3: Verify that isToday is also false for yesterday
-        #expect(!pref.lastCompassCheck.isToday, "isToday should be false for yesterday")
+        let timeProvider = RealTimeProvider()
+        #expect(!timeProvider.isToday(pref.lastCompassCheck), "isToday should be false for yesterday")
     }
 
     let now: Date = "2024-06-02T03:48:00Z"
@@ -228,7 +230,8 @@ struct TestReview {
         let pref = appComponents.preferences
 
         // Set lastCompassCheck to a time within the current compass check interval
-        let currentInterval = getCompassCheckInterval()
+        let timeProvider = RealTimeProvider()
+        let currentInterval = timeProvider.getCompassCheckInterval()
         pref.lastCompassCheck = currentInterval.start.addingTimeInterval(1)
         #expect(pref.didCompassCheckToday)
         #expect(pref.didCompassCheckToday)
@@ -245,7 +248,8 @@ struct TestReview {
         let compassCheckManager = appComponents.compassCheckManager
 
         // Set lastCompassCheck to a time outside the current compass check interval
-        let currentInterval = getCompassCheckInterval()
+        let timeProvider = RealTimeProvider()
+        let currentInterval = timeProvider.getCompassCheckInterval()
         pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600)  // 1 hour before interval
         #expect(!pref.didCompassCheckToday)
 

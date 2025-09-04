@@ -33,12 +33,14 @@ final class EventManager {
     var calendar: Calendar
     var startDate: Date
     var endDate: Date
+    private let timeProvider: TimeProvider
 
-    init() {
-        calendar = getCal()
-        let today = getCal().startOfDay(for: Date.today)
+    init(timeProvider: TimeProvider) {
+        self.timeProvider = timeProvider
+        self.calendar = timeProvider.calendar
+        let today = timeProvider.startOfDay(for: timeProvider.now)
         startDate = today
-        endDate = getCal().date(byAdding: .day, value: 1, to: today)!
+        endDate = timeProvider.date(byAdding: .day, value: 1, to: today) ?? today
         requestCalendarAccess()
         events = fetchEvents()
     }

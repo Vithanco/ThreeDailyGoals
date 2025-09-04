@@ -47,5 +47,6 @@ struct DatePickerNullable: View {
 #Preview {
     @Previewable
     @State var date: Date?
-    return DatePickerNullable(selected: $date, defaultDate: getDate(inDays: 7))
+    let timeProvider = RealTimeProvider()
+    return DatePickerNullable(selected: $date, defaultDate: timeProvider.getDate(inDays: 7))
 }

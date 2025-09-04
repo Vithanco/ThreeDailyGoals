@@ -363,7 +363,7 @@ final class DataManager {
 
     /// Archive completed tasks older than specified days
     func archiveCompletedTasks(olderThan days: Int) {
-        let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
+        let cutoffDate = timeProvider.date(byAdding: .day, value: -days, to: timeProvider.now) ?? timeProvider.now
 
         // Get all closed tasks and filter them in memory since the predicate is complex
         let closedTasks = list(which: .closed)

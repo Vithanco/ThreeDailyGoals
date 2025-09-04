@@ -33,6 +33,19 @@ extension TimeProvider {
         return calendar.isDate(date1, inSameDayAs: date2)
     }
     
+    // Component extraction methods
+    func component(_ component: Calendar.Component, from date: Date) -> Int {
+        return calendar.component(component, from: date)
+    }
+    
+    func date(from components: DateComponents) -> Date? {
+        return calendar.date(from: components)
+    }
+    
+    func isDateInTomorrow(_ date: Date) -> Bool {
+        return calendar.isDateInTomorrow(date)
+    }
+    
     // The 4 core functions that need to be moved from DateRelated.swift
     func getDate(daysPrior: Int) -> Date {
         guard let exact = calendar.date(byAdding: .day, value: -1 * daysPrior, to: now) else {
@@ -103,6 +116,32 @@ extension TimeProvider {
     // Helper function for adding a day to a date
     func addADay(_ date: Date) -> Date {
         return calendar.date(byAdding: .day, value: 1, to: date) ?? date
+    }
+    
+    // Date extension methods moved from DateRelated.swift
+    func isToday(_ date: Date) -> Bool {
+        return startOfDay(for: date) == startOfDay(for: now)
+    }
+    
+    func beginOfReviewWindow(for date: Date) -> Date {
+        let inter = getCompassCheckInterval(forDate: date)
+        return inter.start
+    }
+    
+    var today: Date {
+        return startOfDay(for: now)
+    }
+    
+    func endOfDay(for date: Date) -> Date {
+        return startOfDay(for: date).addingTimeInterval(24 * 60 * 60)
+    }
+    
+    func hour(of date: Date) -> Int {
+        return calendar.component(.hour, from: date)
+    }
+    
+    func minute(of date: Date) -> Int {
+        return calendar.component(.minute, from: date)
     }
 }
 

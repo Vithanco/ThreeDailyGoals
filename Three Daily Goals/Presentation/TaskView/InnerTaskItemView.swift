@@ -17,6 +17,7 @@ struct InnerTaskItemView: View {
     let selectedTagStyle: TagCapsuleStyle
     let missingTagStyle: TagCapsuleStyle
     @Environment(\.modelContext) private var modelContext
+    @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     let showAttachmentImport: Bool
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var isTitleFocused: Bool
@@ -84,7 +85,7 @@ struct InnerTaskItemView: View {
 
                 // Due date field
                 LabeledContent {
-                    DatePickerNullable(selected: $item.due, defaultDate: getDate(inDays: 7))
+                    DatePickerNullable(selected: $item.due, defaultDate: timeProviderWrapper.timeProvider.getDate(inDays: 7))
                 } label: {
                     Text("Due Date:").bold().foregroundColor(Color.secondary)
                 }

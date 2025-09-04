@@ -18,6 +18,7 @@ struct CompassCheckDialog: View {
 
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     //    @State private var sheetHeight: CGFloat = .zero
 
     var body: some View {
@@ -47,7 +48,7 @@ struct CompassCheckDialog: View {
             case "dueDate":
                 CompassCheckDueDate()
             case "plan":
-                CompassCheckPlanDay(date: getCompassCheckInterval().end)
+                CompassCheckPlanDay(date: timeProviderWrapper.timeProvider.getCompassCheckInterval().end)
             default:
                 CompassCheckInformView()
             }
