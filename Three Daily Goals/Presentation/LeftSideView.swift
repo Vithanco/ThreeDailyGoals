@@ -13,6 +13,7 @@ struct LeftSideView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
+        
         VStack(spacing: 0) {
             // Streak view for both iOS and macOS (moved above Today's Goals)
             FullStreakView().frame(maxWidth: .infinity, alignment: .center)
@@ -55,6 +56,8 @@ struct LeftSideView: View {
             
             Spacer()
             
+            let paddingVertical = isLargeDevice ? 16.0 : 4.0
+            
             // List selector section
             VStack(spacing: 8) {
                 // Section header
@@ -76,7 +79,7 @@ struct LeftSideView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.vertical, paddingVertical)
             .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

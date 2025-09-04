@@ -37,6 +37,10 @@ private struct ListLabel: View {
     private var isSelected: Bool {
         return uiState.whichList == whichList
     }
+    
+    private var verticalPadding:CGFloat {
+        return isLargeDevice ? 12.0 : 4.0
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -65,7 +69,7 @@ private struct ListLabel: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.vertical, verticalPadding)
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)

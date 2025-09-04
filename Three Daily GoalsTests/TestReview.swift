@@ -190,7 +190,8 @@ struct TestReview {
     @MainActor
     @Test
     func testReviewInterval() throws {
-        let appComponents = setupApp(isTesting: true)
+        let timeProvider = RealTimeProvider()
+        let appComponents = setupApp(isTesting: true,timeProvider: timeProvider)
         let pref = appComponents.preferences
 
         // Test 1: Set lastCompassCheck to now (should be within current interval)
@@ -198,12 +199,12 @@ struct TestReview {
         #expect(pref.didCompassCheckToday, "Should be true when lastCompassCheck is now")
 
         // Test 2: Set lastCompassCheck to yesterday (should be outside current interval)
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date.now) ?? Date.now
+        let yesterday = timeProvider.date(byAdding: .day, value: -1, to: timeProvider.now) ?? timeProvider.now
         pref.lastCompassCheck = yesterday
         #expect(!pref.didCompassCheckToday, "Should be false when lastCompassCheck is yesterday")
         
         // Test 3: Verify that isToday is also false for yesterday
-        let timeProvider = RealTimeProvider()
+   
         #expect(!timeProvider.isToday(pref.lastCompassCheck), "isToday should be false for yesterday")
     }
 
