@@ -41,10 +41,10 @@ struct StandardToolbarContent: ToolbarContent {
         ToolbarItem {
             dataManager.redoButton
         }
-        ToolbarItem(placement: .principal) {
+        ToolbarItem {
             compassCheckManager.compassCheckButton
         }
-        ToolbarItem(placement: .principal) {
+        ToolbarItem {
             uiState.addNewItemButton
         }
     }
