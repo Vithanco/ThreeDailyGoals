@@ -18,18 +18,19 @@ struct Provider: AppIntentTimelineProvider {
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async
         -> PriorityEntry
     {
-        return PriorityEntry(date: Date(), configuration: configuration)
+        return PriorityEntry(date: Date(), configuration: ConfigurationAppIntent())
     }
 
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<
         PriorityEntry
     > {
         var entries: [PriorityEntry] = []
+        let timeProvider = RealTimeProvider()
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
+        let currentDate = timeProvider.now
         for hourOffset in 0..<5 {
-            let entryDate = getCal().date(byAdding: .hour, value: hourOffset, to: currentDate)!
+            let entryDate = timeProvider.date(byAdding: .hour, value: hourOffset, to: currentDate) ?? currentDate
             let entry = PriorityEntry(date: entryDate, configuration: configuration)
             entries.append(entry)
         }
