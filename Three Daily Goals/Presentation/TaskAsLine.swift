@@ -37,15 +37,15 @@ struct TaskAsLine: View {
     
     // Enhanced shadow color for better visibility
     private var cardShadow: Color {
-        colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.08)
+        colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.15)
     }
 
     var body: some View {
         HStack {
             text
             Spacer()
-            if hasDue {
-                Text(timeProviderWrapper.timeProvider.timeRemaining(for: item.due!)).italic().foregroundStyle(Color.gray)
+            if hasDue, let dueDate = item.due {
+                Text(timeProviderWrapper.timeProvider.timeRemaining(for: dueDate)).italic().foregroundStyle(Color.gray)
             }
         }
         .padding(.horizontal, 8)
