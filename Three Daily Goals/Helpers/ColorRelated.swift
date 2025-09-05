@@ -33,7 +33,7 @@ extension Color {
     public static let open = Color.blue
     public static let pendingResponse = Color.yellow
     public static let closed = Color.green.opacity(0.7)
-    public static let dead = Color.gray
+    public static let dead = Color.brown
     
     static let dueSoon = Color.red
     

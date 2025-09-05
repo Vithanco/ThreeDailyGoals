@@ -88,7 +88,7 @@ struct ListView: View {
                     tagView: { text, isSelected in
                         TagCapsule(text)
                             .tagCapsuleStyle(
-                                isSelected ? selectedTagStyle(accentColor: Color.priority) : missingTagStyle)
+                                isSelected ? selectedTagStyle(accentColor: list.color) : missingTagStyle)
                     }
                 )
                 .frame(maxWidth: 400, minHeight: 30, maxHeight: 80)
