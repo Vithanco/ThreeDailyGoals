@@ -956,12 +956,7 @@ extension DataManager :  NewItemProducer {
     func removeItem(_ item: TaskItem) {
         if (item.isUnchanged) {
             debugPrint("is unchanged")
-            modelContext.delete(item)
-            do {
-                try modelContext.save()
-            }catch {
-                debugPrint(error)
-            }
+            deleteTask(item)
         } else {
             debugPrint("it was changed")
         }
@@ -969,7 +964,7 @@ extension DataManager :  NewItemProducer {
 
     func produceNewItem() -> TaskItem? {
         let result = TaskItem()
-        modelContext.insert(result)
+        addExistingTask(result)
         return result
     }
 }
