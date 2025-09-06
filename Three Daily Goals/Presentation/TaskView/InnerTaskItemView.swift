@@ -6,7 +6,14 @@ import SwiftData
 //  Created by Klaus Kneupner on 05/08/2025.
 //
 import SwiftUI
-import TagKit
+
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0..<Swift.min($0 + size, count)])
+        }
+    }
+}
 import UniformTypeIdentifiers
 
 struct InnerTaskItemView: View {
@@ -14,8 +21,6 @@ struct InnerTaskItemView: View {
     let allTags: [String]
     @State var buildTag: String = ""
     @State var showAttachmentImporter: Bool = false
-    let selectedTagStyle: TagCapsuleStyle
-    let missingTagStyle: TagCapsuleStyle
     @Environment(\.modelContext) private var modelContext
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     let showAttachmentImport: Bool
@@ -127,21 +132,32 @@ struct InnerTaskItemView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Add new Label:")
-                        TagTextField(text: $buildTag, placeholder: "Tag Me").onSubmit({
-                            item.addTag(buildTag)
-                        })
+                        TextField("Tag Me", text: $buildTag)
+                            .textFieldStyle(.roundedBorder)
+                            .onSubmit({
+                                item.addTag(buildTag)
+                            })
                     }
-                    TagEditList(
-                        tags: Binding(
-                            get: { item.tags },
-                            set: { item.tags = $0 }
-                        ),
-                        additionalTags: allTags,
-                        container: .vstack
-                    ) { text, isTag in
-                        TagCapsule(text)
-                            .tagCapsuleStyle(isTag ? selectedTagStyle : missingTagStyle)
-                    }.frame(maxHeight: 70)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 6) {
+                            ForEach(allTags.sorted(), id: \.self) { text in
+                                let isTag = item.tags.contains(text)
+                                TagView(
+                                    text: text,
+                                    isSelected: isTag,
+                                    accentColor: item.color,
+                                    onTap: {
+                                        if isTag {
+                                            item.tags.removeAll { $0 == text }
+                                        } else {
+                                            item.tags.append(text)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    .frame(maxHeight: 80) // Reduced height
                 }
             }
         }

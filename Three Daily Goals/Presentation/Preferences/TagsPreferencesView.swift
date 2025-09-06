@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import TagKit
 
 struct EditTag: View {
     @Binding var currentTagName: String
@@ -58,16 +57,22 @@ struct TagsPreferencesView: View {
         VStack {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
-                    TagList(
-                        tags: dataManager.allTags.asArray,
-                        tagView: { text in
-                            return TagCapsule(text)
-                                .tagCapsuleStyle(selectedTagStyle(accentColor:Color.priority))
-                                .onTapGesture(perform: {
-                                    tag = text
-                                    changeTo = text
-                                })
-                        })
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 6) {
+                            ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
+                                TagView(
+                                    text: text,
+                                    isSelected: true, // All tags in preferences are "selected" for display
+                                    accentColor: Color.priority,
+                                    onTap: {
+                                        tag = text
+                                        changeTo = text
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    .frame(maxHeight: 150) // Reduced height for preferences
                     Spacer()
                 }
                 Spacer()

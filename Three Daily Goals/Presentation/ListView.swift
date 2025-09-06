@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import TagKit
 
 extension ListHeader {
     var asText: Text {
@@ -76,37 +75,13 @@ struct ListView: View {
             let taskItems: [TaskItem] = dataManager.list(which: list)
             let tags = Set(taskItems.flatMap { $0.tags }).asArray
             if !tags.isEmpty {
-                TagEditList(
-                    tags: Binding(
+                TagFilterView(
+                    tags: tags,
+                    selectedTags: Binding(
                         get: { uiState.selectedTags },
                         set: { uiState.selectedTags = $0 }
                     ),
-                    additionalTags: tags,
-                    container: .vstack,
-                    horizontalSpacing: 1,
-              //      verticalSpacing: 1,
-                    tagView: { text, isSelected in
-                        TagCapsule(text)
-                            .tagCapsuleStyle(
-                                isSelected ? selectedTagStyle(accentColor: list.color) : missingTagStyle)
-                    }
-                )
-                .frame(maxWidth: 400, minHeight: 30, maxHeight: 80)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 8)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(tagContainerBackground)
-                        .shadow(
-                            color: colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.08),
-                            radius: 3,
-                            x: 0,
-                            y: 2
-                        )
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(tagContainerBorder, lineWidth: 1.0)
+                    listColor: list.color
                 )
             }
 
