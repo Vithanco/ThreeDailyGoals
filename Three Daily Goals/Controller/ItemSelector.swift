@@ -1,6 +1,6 @@
 import Foundation
 
-@preconcurrency
+@MainActor
 protocol ItemSelector {
     func select(_ item: TaskItem)
 }

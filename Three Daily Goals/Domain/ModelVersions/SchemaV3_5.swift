@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import SwiftData
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -26,7 +26,7 @@ public enum SchemaV3_5: VersionedSchema {
     }
 
     @Model
-    public final class TaskItem: Codable, Sendable {
+    public final class TaskItem: Codable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
@@ -124,7 +124,7 @@ public enum SchemaV3_5: VersionedSchema {
     }
 
     @Model
-    public final class Comment: Codable, Sendable {
+    public final class Comment: Codable {
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""

@@ -952,7 +952,7 @@ final class DataManager {
 }
 
 
-extension DataManager : @preconcurrency NewItemProducer {
+extension DataManager :  NewItemProducer {
     func removeItem(_ item: TaskItem) {
         if (item.isUnchanged) {
             debugPrint("is unchanged")

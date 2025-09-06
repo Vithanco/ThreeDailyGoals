@@ -13,10 +13,8 @@ let stdDateTimeFormat = Date.FormatStyle(date: .numeric, time: .shortened)
 
 // getCal() function removed - use TimeProvider instead
 
-extension RelativeDateTimeFormatter: @unchecked Sendable {
 
-}
-let timeAgoFormatter = {
+nonisolated(unsafe) let timeAgoFormatter = {
     let result = RelativeDateTimeFormatter()
     result.unitsStyle = .full
     return result
@@ -40,7 +38,7 @@ enum Seconds {
 
 extension Date {
     // Only keep non-calendar related methods
-    func timeAgoDisplay() -> String {
+    @MainActor func timeAgoDisplay() -> String {
         return timeAgoFormatter.localizedString(for: self, relativeTo: Date())
     }
 

@@ -10,7 +10,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 // simple doc to save my JSON data
-struct JSONWriteOnlyDoc: FileDocument {
+struct JSONWriteOnlyDoc: FileDocument, @unchecked Sendable {
     static var readableContentTypes: [UTType] { [.json] }
 
     private var content: [TaskItem]

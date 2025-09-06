@@ -10,11 +10,8 @@ import UserNotifications
 
 let id = "3dg.dailyCompssCheck"
 
-extension PushNotificationDelegate: @unchecked Sendable {}
-
-private var delegate: PushNotificationDelegate? = nil
-
-class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
+@MainActor
+class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
     let compassCheckManager: CompassCheckManager
 
     init(compassCheckManager: CompassCheckManager) {
@@ -31,7 +28,7 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
             Task {
-                await compassCheckManager.startCompassCheckNow()
+                 compassCheckManager.startCompassCheckNow()
             }
         default:
             break
@@ -41,40 +38,47 @@ class PushNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     }
 }
 
-func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) {
-    let notificationCenter = UNUserNotificationCenter.current()
-    if delegate == nil {
-        delegate = PushNotificationDelegate(compassCheckManager: model)
-        notificationCenter.delegate = delegate
-    }
-
-    notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
-
-    notificationCenter.requestAuthorization(options: [.alert, .badge]) { granted, error in
-        if error != nil {
-            // Handle errors
-            return
+@MainActor
+final class PushNotificationManager {
+    private var delegate: PushNotificationDelegate?
+    private let notificationCenter = UNUserNotificationCenter.current()
+    
+    func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) {
+        // Ensure delegate is set up on the main actor
+        if delegate == nil {
+            delegate = PushNotificationDelegate(compassCheckManager: model)
+            notificationCenter.delegate = delegate
         }
 
-        guard granted else { return }
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
 
-        // Configure the content of the notification
-        let content = UNMutableNotificationContent()
-        content.title = "Time for the daily Compass Check!"
-        content.body = "Click here for starting the Compass Check"
+        notificationCenter.requestAuthorization(options: [.alert, .badge]) { granted, error in
+            if error != nil {
+                // Handle errors
+                return
+            }
 
-        // Configure the trigger
-        let trigger = UNCalendarNotificationTrigger(dateMatching: timing, repeats: true)
+            guard granted else { return }
 
-        // Create the notification request
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+            // Configure the content of the notification
+            let content = UNMutableNotificationContent()
+            content.title = "Time for the daily Compass Check!"
+            content.body = "Click here for starting the Compass Check"
 
-        // Schedule the notification
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.add(request) { error in
-            if let error = error {
-                print("Not able to add notification: \(error.localizedDescription)")
+            // Configure the trigger
+            let trigger = UNCalendarNotificationTrigger(dateMatching: timing, repeats: true)
+
+            // Create the notification request
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+
+            // Schedule the notification
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.add(request) { error in
+                if let error = error {
+                    print("Not able to add notification: \(error.localizedDescription)")
+                }
             }
         }
     }
 }
+

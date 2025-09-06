@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import SwiftData
+import SwiftData
 import SwiftUI
 
 //--------------------------------------------------------------------------------
@@ -16,7 +16,6 @@ import SwiftUI
 // ⚠️⛔️ everything else leads to issues - I just lost all tags because I did the migration first in production ⛔️⚠️
 // oh! and don't deploy to production before the app is approved
 //--------------------------------------------------------------------------------
-
 public enum SchemaV3_4: VersionedSchema {
     public static let versionIdentifier = Schema.Version(3, 4, 0)
 
@@ -25,7 +24,7 @@ public enum SchemaV3_4: VersionedSchema {
     }
 
     @Model
-    public final class TaskItem: Codable, Sendable {
+    public final class TaskItem: Codable {
         public internal(set) var created: Date = Date.now
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
@@ -122,7 +121,7 @@ public enum SchemaV3_4: VersionedSchema {
     }
 
     @Model
-    public final class Comment: Codable, Sendable {
+    public final class Comment: Codable {
         var created: Date = Date.now
         var changed: Date = Date.now
         var text: String = ""

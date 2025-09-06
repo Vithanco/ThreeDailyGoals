@@ -84,7 +84,7 @@ struct ListView: View {
                     additionalTags: tags,
                     container: .vstack,
                     horizontalSpacing: 1,
-                    verticalSpacing: 1,
+              //      verticalSpacing: 1,
                     tagView: { text, isSelected in
                         TagCapsule(text)
                             .tagCapsuleStyle(

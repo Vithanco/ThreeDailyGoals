@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
-@preconcurrency import TagKit
+import TagKit
 
-extension TagCapsuleStyle.Border: @unchecked Sendable {
+extension TagCapsuleStyle.Border {
     static let none: TagCapsuleStyle.Border = .init(
         color: .clear,
         width: 0

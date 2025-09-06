@@ -42,6 +42,7 @@ final class CompassCheckManager {
     private let uiState: UIStateManager
     private let preferences: CloudPreferences
     private let timeProvider: TimeProvider
+    private let pushNotificationManager: PushNotificationManager
 
     var os: SupportedOS {
         #if os(iOS)
@@ -54,11 +55,12 @@ final class CompassCheckManager {
         #endif
     }
 
-    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, isTesting: Bool = false) {
+    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, pushNotificationManager: PushNotificationManager, isTesting: Bool = false) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
         self.timeProvider = timeProvider
+        self.pushNotificationManager = pushNotificationManager
         self.isTesting = isTesting
     }
 
@@ -229,7 +231,7 @@ final class CompassCheckManager {
     }
     
     func setupCompassCheckNotification(when: Date? = nil) {
-        scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+        pushNotificationManager.scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
 
         let time = when ?? nextRegularCompassCheckTime
 

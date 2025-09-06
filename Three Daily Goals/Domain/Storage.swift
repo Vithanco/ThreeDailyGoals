@@ -38,29 +38,29 @@ protocol Storage {
     var hasChanges: Bool { get }
 }
 
-extension ModelContext: Storage {
-    func undo() {
+extension ModelContext: @MainActor Storage {
+    @MainActor func undo() {
         undoManager?.undo()
     }
 
-    func redo() {
+    @MainActor func redo() {
         undoManager?.redo()
     }
 
-    var canUndo: Bool {
+    @MainActor var canUndo: Bool {
         undoManager?.canUndo ?? false
     }
 
-    var canRedo: Bool {
+    @MainActor var canRedo: Bool {
         undoManager?.canRedo ?? false
     }
 
-    func beginUndoGrouping() {
+    @MainActor func beginUndoGrouping() {
         undoManager?.beginUndoGrouping()
         processPendingChanges()
     }
 
-    func endUndoGrouping() {
+    @MainActor func endUndoGrouping() {
         undoManager?.endUndoGrouping()
         processPendingChanges()
     }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import SwiftData
+import SwiftData
 import SwiftUI
 
 enum SchemaV3_2: VersionedSchema {

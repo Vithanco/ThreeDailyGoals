@@ -1,5 +1,5 @@
 //
-//  EventHelper.swift
+//  EventManager.swift
 //  Three Daily Goals
 //
 //  Created by Klaus Kneupner on 29/06/2024.
@@ -21,52 +21,53 @@ private let logger = Logger(
     category: String(describing: Three_Daily_GoalsApp.self)
 )
 
-extension EKEventStore: @unchecked Sendable {}
-
+@MainActor
 @Observable
 final class EventManager {
+    public private(set) var events: [TDGEvent] = []
+    public private(set) var state: CalendarAccess = .denied
 
-    public var events: [TDGEvent] = []
-    private let eventStore = EKEventStore()
-    public var state: CalendarAccess = .denied
-
-    var calendar: Calendar
-    var startDate: Date
-    var endDate: Date
+    private let eventService = EventService()
     private let timeProvider: TimeProvider
+    private var startDate: Date
+    private var endDate: Date
+    private var calendar: Calendar
 
     init(timeProvider: TimeProvider) {
         self.timeProvider = timeProvider
         self.calendar = timeProvider.calendar
         let today = timeProvider.startOfDay(for: timeProvider.now)
-        startDate = today
-        endDate = timeProvider.date(byAdding: .day, value: 1, to: today) ?? today
-        requestCalendarAccess()
-        events = fetchEvents()
+        self.startDate = today
+        self.endDate = timeProvider.date(byAdding: .day, value: 1, to: today) ?? today
+        
+        // Fire-and-forget: Start the async operation without waiting
+        Task {
+            await startAsync()
+        }
     }
 
-    func fetchEvents() -> [TDGEvent] {
-        let predicate = eventStore.predicateForEvents(
-            withStart: startDate, end: endDate, calendars: nil)
-        return eventStore.events(matching: predicate).map({ e in TDGEvent(base: e) })
-    }
-
-    private func requestCalendarAccess() {
-        Task { @MainActor in
-            do {
-                let granted = try await self.eventStore.requestFullAccessToEvents()
-                if granted {
-                    logger.info("Calendar access granted")
-                    self.state = .granted
-                } else {
-                    logger.warning("Calendar access denied")
-                    self.state = .denied
-                }
-            } catch {
-                let errorMessage = "Error requesting calendar access: \(error.localizedDescription)"
-                logger.error("\(errorMessage)")
-                self.state = .error(errorMessage)
+    /// Fire-and-forget async initialization
+    private func startAsync() async {
+        do {
+            let granted = try await eventService.requestCalendarAccess()
+            state = granted ? .granted : .denied
+            if granted { 
+                events = eventService.fetchEvents(startDate: startDate, endDate: endDate)
             }
+        } catch {
+            let msg = "Error requesting calendar access: \(error.localizedDescription)"
+            logger.error("\(msg)")
+            state = .error(msg)
+        }
+    }
+
+    func refresh(for range: Range<Date>? = nil) {
+        if let r = range {
+            startDate = r.lowerBound
+            endDate = r.upperBound
+        }
+        if case .granted = state { 
+            events = eventService.fetchEvents(startDate: startDate, endDate: endDate)
         }
     }
 }

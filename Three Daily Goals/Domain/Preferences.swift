@@ -111,28 +111,32 @@ final class CloudPreferences {
             self.init(store: NSUbiquitousKeyValueStore.default, timeProvider: timeProvider, onChange: onChange)
 
             NotificationCenter.default.addObserver(
-                forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: self,
-                queue: nil, using: ubiquitousKeyValueStoreDidChange)
+                self,
+                selector: #selector(handleICloudChange(_:)),
+                name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+                object: NSUbiquitousKeyValueStore.default
+            )
 
-            // initiate the store with a proper time
             if store.string(forKey: .lastCompassCheckString) == nil {
                 store.set(18, forKey: .compassCheckTimeHour)
-                store.set(00, forKey: .compassCheckTimeMinute)
+                store.set(0,  forKey: .compassCheckTimeMinute)
             }
         }
     }
 
-    func ubiquitousKeyValueStoreDidChange(notification: Notification) {
-        if let onChange = onChange {
-            onChange()
-        }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
-    
-    var isProductionEnvironment: Bool {
-            return CKContainer.isProductionEnvironment
-        }
 
+    @objc private func handleICloudChange(_ note: Notification) {
+        ubiquitousKeyValueStoreDidChange(notification: note)
+    }
+
+    func ubiquitousKeyValueStoreDidChange(notification: Notification) { onChange?() }
+
+    var isProductionEnvironment: Bool { CKContainer.isProductionEnvironment }
 }
+
 
 extension CloudPreferences {
 

@@ -10,6 +10,7 @@ struct AppComponents {
     let uiState: UIStateManager
     let dataManager: DataManager
     let compassCheckManager: CompassCheckManager
+    let pushNotificationManager: PushNotificationManager
     let timeProvider: TimeProvider
     let timeProviderWrapper: TimeProviderWrapper
     let isTesting: Bool
@@ -72,22 +73,26 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
     // MARK: - Step 5: Create Data Manager
     let dataManager = DataManager(modelContext: finalModelContext, timeProvider: finalTimeProvider)
     
-    // MARK: - Step 6: Create Compass Check Manager
+    // MARK: - Step 6: Create Push Notification Manager
+    let pushNotificationManager = PushNotificationManager()
+    
+    // MARK: - Step 7: Create Compass Check Manager
     let compassCheckManager = CompassCheckManager(
         dataManager: dataManager,
         uiState: uiState,
         preferences: finalPreferences,
         timeProvider: finalTimeProvider,
+        pushNotificationManager: pushNotificationManager,
         isTesting: isTesting
     )
     
-    // MARK: - Step 7: Set up Cross-Component Dependencies
+    // MARK: - Step 8: Set up Cross-Component Dependencies
     uiState.newItemProducer = dataManager
     dataManager.priorityUpdater = finalPreferences
     dataManager.itemSelector = uiState
     finalPreferences.onChange = compassCheckManager.onPreferencesChange
     
-    // MARK: - Step 8: Initialize Data and Setup
+    // MARK: - Step 9: Initialize Data and Setup
     dataManager.loadData()
     uiState.showItem = false
     dataManager.mergeDataFromCentralStorage()
@@ -97,7 +102,7 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
         compassCheckManager.setupCompassCheckNotification()
     }
     
-    // MARK: - Step 9: Return Complete App Components
+    // MARK: - Step 10: Return Complete App Components
     return AppComponents(
         modelContainer: container,
         modelContext: finalModelContext,
@@ -105,13 +110,14 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
         uiState: uiState,
         dataManager: dataManager,
         compassCheckManager: compassCheckManager,
+        pushNotificationManager: pushNotificationManager,
         timeProvider: finalTimeProvider,
         timeProviderWrapper: TimeProviderWrapper(finalTimeProvider),
         isTesting: isTesting
     )
 }
 
-extension CloudPreferences : @preconcurrency PriorityUpdater {
+extension CloudPreferences :  PriorityUpdater {
     func updatePriorities(prioTasks: [TaskItem]) {
         let prios = prioTasks.count
         for i in 0..<prios {
