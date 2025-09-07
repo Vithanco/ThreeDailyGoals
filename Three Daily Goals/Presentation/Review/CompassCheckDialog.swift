@@ -27,6 +27,15 @@ struct CompassCheckDialog: View {
             HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(Color.priority)
                 Spacer()
+                if compassCheckManager.state == .inform {
+                    Button(action: compassCheckManager.waitABit) {
+                        Text("Remind me in 5 min")
+                    }.buttonStyle(.bordered).frame(maxHeight: 30)
+                } else {
+                    Button(action: compassCheckManager.pauseCompassCheck) {
+                        Text("Pause for 5 min")
+                    }.buttonStyle(.bordered).frame(maxHeight: 30)
+                }
                 Button(role: .cancel, action: compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)

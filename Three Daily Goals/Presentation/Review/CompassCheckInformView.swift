@@ -38,13 +38,6 @@ struct CompassCheckInformView: View {
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 16)
-            
-            Button(action: compassCheckManager.waitABit) {
-                Text("Remind me in 5 min")
-                    .font(.system(size: 14, weight: .medium))
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
         }
         .frame(maxWidth: 320, maxHeight: 400)
         .padding(16)

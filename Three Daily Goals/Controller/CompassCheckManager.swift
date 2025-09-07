@@ -36,6 +36,10 @@ final class CompassCheckManager {
     var isTesting: Bool = false
 
     var state: CompassCheckState = .inform
+    
+    // Pause functionality
+    var isPaused: Bool = false
+    var pausedState: CompassCheckState = .inform
 
     // Dependencies
     private let dataManager: DataManager
@@ -133,11 +137,16 @@ final class CompassCheckManager {
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
         state = .inform
+        isPaused = false
+        pausedState = .inform
+        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.twoHours))
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
         state = .inform
+        isPaused = false
+        pausedState = .inform
         debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
         debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
         debugPrint("current interval: \(timeProvider.getCompassCheckInterval())")
@@ -179,6 +188,19 @@ final class CompassCheckManager {
 
     func waitABit() {
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
+    }
+    
+    func pauseCompassCheck() {
+        isPaused = true
+        pausedState = state
+        uiState.showCompassCheckDialog = false
+        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
+    }
+    
+    func resumeCompassCheck() {
+        isPaused = false
+        state = pausedState
+        uiState.showCompassCheckDialog = true
     }
 
     var priorityTasks: [TaskItem] {
@@ -225,6 +247,13 @@ final class CompassCheckManager {
         if self.uiState.showCompassCheckDialog {
             return
         }
+        
+        // Check if we're resuming from a paused state
+        if isPaused {
+            resumeCompassCheck()
+            return
+        }
+        
         if !self.preferences.didCompassCheckToday {
             self.startCompassCheckNow()
         }
@@ -232,14 +261,27 @@ final class CompassCheckManager {
     
     func setupCompassCheckNotification(when: Date? = nil) {
         pushNotificationManager.scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+        
+        // Schedule streak reminder notification if applicable
+        pushNotificationManager.scheduleStreakReminderNotification(preferences: preferences, timeProvider: timeProvider)
 
         let time = when ?? nextRegularCompassCheckTime
 
         uiState.showCompassCheckDialog = false
-        timer.setTimer(forWhen: time) {
-            Task {
-                do {
-                    await self.onCCNotification()
+        
+        // Don't set up timer if CompassCheck already happened in current interval
+        guard !preferences.didCompassCheckToday else { return }
+        
+        // Only set up timer if notifications are authorized
+        Task {
+            let isAuthorized = await pushNotificationManager.checkNotificationAuthorization()
+            if isAuthorized {
+                timer.setTimer(forWhen: time) {
+                    Task {
+                        do {
+                            await self.onCCNotification()
+                        }
+                    }
                 }
             }
         }

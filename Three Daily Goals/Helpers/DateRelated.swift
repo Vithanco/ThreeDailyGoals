@@ -28,6 +28,7 @@ enum Seconds {
     static let oneMin = 60.0 * 1.0
     static let fiveMin = 60.0 * 5.0
     static let oneHour = 60.0 * 60.0
+    static let twoHours = oneHour * 2.0
     static let fullDay = oneHour * 24.0
     static let twoDays = fullDay * 2.0
     static let thirtySixHours = oneHour * 36.0
