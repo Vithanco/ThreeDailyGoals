@@ -23,7 +23,7 @@ struct TagView: View {
     
     var body: some View {
         Text(text)
-            .padding(.horizontal, 6)
+            .padding(.horizontal, 2)
             .padding(.vertical, 3)
             .background(
                 RoundedRectangle(cornerRadius: 6)

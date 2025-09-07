@@ -21,7 +21,7 @@ struct TagFilterView: View {
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 6) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
                 ForEach(tags.sorted(), id: \.self) { text in
                     let isSelected = selectedTags.contains(text)
                     TagView(
