@@ -1,5 +1,5 @@
 {
-  "originHash" : "41bd9c6e9294264837d0c54024d849c65eab41f1eadaec558145e8fbb1b79af9",
+  "originHash" : "0386c51cd936a519e9cacc2456fdd353545384f9d53725ea6d9a1456d25c8a47",
   "pins" : [
     {
       "identity" : "simplecalendar",
@@ -8,15 +8,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "5ccc46fcaf41df91a526bfab9392c3ac47940a07"
-      }
-    },
-    {
-      "identity" : "tagkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vithanco/tagkit",
-      "state" : {
-        "branch" : "main",
-        "revision" : "216d44f039b32403f066664e7e60ac6852a3fa14"
       }
     }
   ],

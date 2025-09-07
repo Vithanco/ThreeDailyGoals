@@ -7,7 +7,6 @@
 
 import SwiftData
 import SwiftUI
-import TagKit
 import UniformTypeIdentifiers
 
 struct ShareExtensionView: View {
@@ -88,8 +87,6 @@ struct ShareExtensionView: View {
                 InnerTaskItemView(
                     item: item,
                     allTags: [],
-                    selectedTagStyle: selectedTagStyle(accentColor: item.color),
-                    missingTagStyle: missingTagStyle,
                     showAttachmentImport: false
                 ).frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
 
@@ -107,26 +104,5 @@ struct ShareExtensionView: View {
     // so we can close the whole extension
     func close() {
         NotificationCenter.default.post(name: NSNotification.Name("close"), object: nil)
-    }
-}
-
-// MARK: - Tag Style Helpers (copied from main app since share extension doesn't have access)
-extension ShareExtensionView {
-    func selectedTagStyle(accentColor: Color) -> TagCapsuleStyle {
-        TagCapsuleStyle(
-            foregroundColor: accentColor.readableTextColor,
-            backgroundColor: accentColor,
-            border: .none,
-            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
-        )
-    }
-
-    var missingTagStyle: TagCapsuleStyle {
-        TagCapsuleStyle(
-            foregroundColor: .white,
-            backgroundColor: .gray,
-            border: .none,
-            padding: .init(top: 1, leading: 3, bottom: 1, trailing: 3)
-        )
     }
 }

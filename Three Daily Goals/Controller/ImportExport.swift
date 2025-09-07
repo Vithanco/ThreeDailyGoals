@@ -60,8 +60,6 @@ struct SelectVersions: View {
                     Text("Existing Version")
                     InnerTaskItemView(
                         item: currentChoice.existing, allTags: [],
-                        selectedTagStyle: selectedTagStyle(accentColor: currentChoice.existing.state.color),
-                        missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use existing") {
                         nextChoice()
@@ -75,8 +73,6 @@ struct SelectVersions: View {
                     Text("Imported Version")
                     InnerTaskItemView(
                         item: currentChoice.new, allTags: [],
-                        selectedTagStyle: selectedTagStyle(accentColor:currentChoice.new.state.color),
-                        missingTagStyle: missingTagStyle,
                         showAttachmentImport: false)
                     Button("Use new") {
                         dataManager.remove(task: currentChoice.existing)

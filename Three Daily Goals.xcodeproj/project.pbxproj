@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7F13D03A2DF490B80036ACCB /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F13D0392DF490B80036ACCB /* TagKit */; };
 		7F13D03C2DF4B4640036ACCB /* SchemaV3_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F13D03B2DF4B4640036ACCB /* SchemaV3_3.swift */; };
 		7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */; };
 		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
@@ -51,7 +50,6 @@
 		7F2F0AA52E52E1C200461679 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* Storage.swift */; };
 		7F2F0AA62E52E1C200461679 /* TaskItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74352B43305600B3B890 /* TaskItemState.swift */; };
 		7F2F0AA72E52E1C200461679 /* ListHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7B02B6628A400C24F78 /* ListHeader.swift */; };
-		7F2F0AA82E52E1C200461679 /* TagRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */; };
 		7F2F0AA92E52E1C200461679 /* DateRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47B2B30632000E83A21 /* DateRelated.swift */; };
 		7F2F0AAA2E52E1C200461679 /* ColorRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1F47D2B30633B00E83A21 /* ColorRelated.swift */; };
 		7F2F0AAB2E52E1C200461679 /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
@@ -63,7 +61,6 @@
 		7F2F0AB22E52E2C600461679 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
 		7F2F0AB42E52E2FF00461679 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB32E52E2FF00461679 /* CloudKit.framework */; };
 		7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB52E52E30700461679 /* SwiftUI.framework */; };
-		7F2F0AB82E52E30D00461679 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7F2F0AB72E52E30D00461679 /* TagKit */; };
 		7F2F0AB92E52E34300461679 /* DatePickerNullable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA580FF2B97AB4400803614 /* DatePickerNullable.swift */; };
 		7F2FD1BB2E63829300F7BC2F /* NewItemProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */; };
 		7F2FD1C02E654D9C00F7BC2F /* SchemaV3_6.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2FD1BF2E654D9C00F7BC2F /* SchemaV3_6.swift */; };
@@ -72,6 +69,12 @@
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
 		7F5130D02C0C5FF200097437 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
+		7F71FD282E6C0C4D001B92F4 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD272E6C0C4D001B92F4 /* TagFilterView.swift */; };
+		7F71FD2A2E6C182B001B92F4 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD272E6C0C4D001B92F4 /* TagFilterView.swift */; };
+		7F71FD2B2E6C182B001B92F4 /* TagFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD272E6C0C4D001B92F4 /* TagFilterView.swift */; };
+		7F71FD2D2E6C1910001B92F4 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD2C2E6C1910001B92F4 /* TagView.swift */; };
+		7F71FD2E2E6C1910001B92F4 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD2C2E6C1910001B92F4 /* TagView.swift */; };
+		7F71FD2F2E6C1910001B92F4 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD2C2E6C1910001B92F4 /* TagView.swift */; };
 		7F76355F2D39E6D9000FE15A /* SchemaV3_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */; };
 		7F7FAAFF2E59F3EC00FE7C1A /* FilesRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511428B2B340FB500AB6E05 /* FilesRelated.swift */; };
 		7F7FE5ED2E438D7300DA3DC0 /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
@@ -87,8 +90,6 @@
 		7F7FE5F92E4391A700DA3DC0 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
 		7F7FE5FA2E4391BE00DA3DC0 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
 		7F7FE5FB2E4391D600DA3DC0 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590CE172B1FAD9000B16684 /* Comment.swift */; };
-		7F7FE5FD2E43926700DA3DC0 /* TagRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */; };
-		7F7FE5FF2E4392F900DA3DC0 /* TagRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */; };
 		7F7FE6002E43933E00DA3DC0 /* AllCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B22B7B506400E66FAD /* AllCommentsView.swift */; };
 		7F7FE6012E43935300DA3DC0 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A371932B2EDD5E00A310BA /* CommentView.swift */; };
 		7F7FE6022E43935300DA3DC1 /* FilesRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E511428B2B340FB500AB6E05 /* FilesRelated.swift */; };
@@ -116,7 +117,6 @@
 		7FE1FDF82E429D840016C181 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142A92B345B7B00AB6E05 /* Storage.swift */; };
 		7FE1FDFE2E42B1060016C181 /* InnerTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE1FDFD2E42B0FE0016C181 /* InnerTaskItemView.swift */; };
 		7FE1FDFF2E42B2CE0016C181 /* InnerTaskItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE1FDFD2E42B0FE0016C181 /* InnerTaskItemView.swift */; };
-		7FE1FE012E42B2E60016C181 /* TagKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7FE1FE002E42B2E60016C181 /* TagKit */; };
 		7FE1FE032E42B3060016C181 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE022E42B3060016C181 /* CloudKit.framework */; };
 		7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE042E42B3230016C181 /* SwiftUI.framework */; };
 		7FE1FE072E4330260016C181 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
@@ -288,8 +288,9 @@
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
 		7F71FD252E6BFEA8001B92F4 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
+		7F71FD272E6C0C4D001B92F4 /* TagFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFilterView.swift; sourceTree = "<group>"; };
+		7F71FD2C2E6C1910001B92F4 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		7F76355E2D39E6BC000FE15A /* SchemaV3_2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV3_2.swift; sourceTree = "<group>"; };
-		7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRelated.swift; sourceTree = "<group>"; };
 		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
 		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		7F94B2672B98B4ED00D2CDBD /* SchemaV3_1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_1.swift; sourceTree = "<group>"; };
@@ -427,7 +428,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */,
-				7F2F0AB82E52E30D00461679 /* TagKit in Frameworks */,
 				7F2F0AB42E52E2FF00461679 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,7 +436,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FE1FE012E42B2E60016C181 /* TagKit in Frameworks */,
 				7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */,
 				7FE1FE032E42B3060016C181 /* CloudKit.framework in Frameworks */,
 			);
@@ -457,7 +456,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7FA02AB12C18AABE00EC81CE /* SimpleCalendar in Frameworks */,
-				7F13D03A2DF490B80036ACCB /* TagKit in Frameworks */,
 				E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -680,6 +678,8 @@
 		E5E1F4762B30611700E83A21 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7F71FD2C2E6C1910001B92F4 /* TagView.swift */,
+				7F71FD272E6C0C4D001B92F4 /* TagFilterView.swift */,
 				E5B376B42B7B506F00E66FAD /* TaskView */,
 				E53C13122B6BECB400E51553 /* Preferences */,
 				E5FFC5BB2B6A715400C9D60B /* Review */,
@@ -713,7 +713,6 @@
 				7F19BFA52E67F3D600238C81 /* TimeProvider.swift */,
 				7F2077482E59776E0030314A /* ImageRelated.swift */,
 				7F2077402E57C2B60030314A /* ByteRelated.swift */,
-				7F7FE5FC2E43926400DA3DC0 /* TagRelated.swift */,
 				7FB357522E5B5010004581B7 /* OsRelated.swift */,
 				E5DE105A2B68F6D300381337 /* CompassCheckTimer.swift */,
 				E5E1F47B2B30632000E83A21 /* DateRelated.swift */,
@@ -764,7 +763,6 @@
 			);
 			name = macosShare;
 			packageProductDependencies = (
-				7F2F0AB72E52E30D00461679 /* TagKit */,
 			);
 			productName = macosShare;
 			productReference = 7F2F0A812E52DEB200461679 /* macosShare.appex */;
@@ -787,7 +785,6 @@
 			);
 			name = iosShare;
 			packageProductDependencies = (
-				7FE1FE002E42B2E60016C181 /* TagKit */,
 			);
 			productName = iosShare;
 			productReference = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */;
@@ -831,7 +828,6 @@
 			name = "Three Daily Goals";
 			packageProductDependencies = (
 				7FA02AB02C18AABE00EC81CE /* SimpleCalendar */,
-				7F13D0392DF490B80036ACCB /* TagKit */,
 			);
 			productName = "Three Daily Goals";
 			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
@@ -916,7 +912,6 @@
 			mainGroup = E561D6CF2B1F54A6003BE36F;
 			packageReferences = (
 				7FA02AAF2C18AABE00EC81CE /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
-				7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */,
 			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
@@ -1008,11 +1003,11 @@
 				7F2F0AA52E52E1C200461679 /* Storage.swift in Sources */,
 				7F2F0AA62E52E1C200461679 /* TaskItemState.swift in Sources */,
 				7F2F0AA72E52E1C200461679 /* ListHeader.swift in Sources */,
-				7F2F0AA82E52E1C200461679 /* TagRelated.swift in Sources */,
 				7F2F0AA92E52E1C200461679 /* DateRelated.swift in Sources */,
 				7F2F0AAA2E52E1C200461679 /* ColorRelated.swift in Sources */,
 				7F2F0AAB2E52E1C200461679 /* IconsRelated.swift in Sources */,
 				7F27E0812E5652FC007BC2BD /* SchemaV3_5.swift in Sources */,
+				7F71FD2F2E6C1910001B92F4 /* TagView.swift in Sources */,
 				7F2F0AAC2E52E1C200461679 /* StringRelated.swift in Sources */,
 				7F19BFA62E67F3DC00238C81 /* TimeProvider.swift in Sources */,
 				7F20774C2E59776E0030314A /* ImageRelated.swift in Sources */,
@@ -1020,6 +1015,7 @@
 				7F7FAAFF2E59F3EC00FE7C1A /* FilesRelated.swift in Sources */,
 				7F2F0AAE2E52E1C200461679 /* DoubleRelated.swift in Sources */,
 				7F2F0AAF2E52E1C200461679 /* ArrayRelated.swift in Sources */,
+				7F71FD2B2E6C182B001B92F4 /* TagFilterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,7 +1026,6 @@
 				7F7FE6022E43935300DA3DC1 /* FilesRelated.swift in Sources */,
 				7F7FE6012E43935300DA3DC0 /* CommentView.swift in Sources */,
 				7F7FE6002E43933E00DA3DC0 /* AllCommentsView.swift in Sources */,
-				7F7FE5FF2E4392F900DA3DC0 /* TagRelated.swift in Sources */,
 				7F2077492E59776E0030314A /* ImageRelated.swift in Sources */,
 				7F7FE5FB2E4391D600DA3DC0 /* Comment.swift in Sources */,
 				7FE813872E54682E00CEA462 /* Attachment.swift in Sources */,
@@ -1041,6 +1036,7 @@
 				7F7FE5F52E4390FB00DA3DC0 /* ColorRelated.swift in Sources */,
 				7F7FE5F42E438EE700DA3DC0 /* ListHeader.swift in Sources */,
 				7F7FE5F32E438ED400DA3DC0 /* TaskSection.swift in Sources */,
+				7F71FD2A2E6C182B001B92F4 /* TagFilterView.swift in Sources */,
 				7F7FE5F22E438EB900DA3DC0 /* IconsRelated.swift in Sources */,
 				7F7FE5F12E438EAB00DA3DC0 /* TaskItem.swift in Sources */,
 				7F2077432E57C2BA0030314A /* ByteRelated.swift in Sources */,
@@ -1053,6 +1049,7 @@
 				7FE1FDFF2E42B2CE0016C181 /* InnerTaskItemView.swift in Sources */,
 				7F27E0802E5652FC007BC2BD /* SchemaV3_5.swift in Sources */,
 				7FE1FDF42E429D840016C181 /* Migrations.swift in Sources */,
+				7F71FD2D2E6C1910001B92F4 /* TagView.swift in Sources */,
 				7FE1FDF52E429D840016C181 /* SchemaV3_1.swift in Sources */,
 				7FE1FDF62E429D840016C181 /* SchemaV3_2.swift in Sources */,
 				7FE1FDF72E429D840016C181 /* SchemaV3_3.swift in Sources */,
@@ -1105,10 +1102,10 @@
 				7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */,
 				7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */,
 				7FB357552E5B5010004581B7 /* OsRelated.swift in Sources */,
-				7F7FE5FD2E43926700DA3DC0 /* TagRelated.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
 				E53AF7B12B6628A400C24F78 /* ListHeader.swift in Sources */,
+				7F71FD282E6C0C4D001B92F4 /* TagFilterView.swift in Sources */,
 				7F94B2682B98B4ED00D2CDBD /* SchemaV3_1.swift in Sources */,
 				7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */,
 				7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */,
@@ -1135,6 +1132,7 @@
 				E597A4892B83D83D00BCD061 /* ImportExport.swift in Sources */,
 				E5D4FB772B749719002BB261 /* StreakView.swift in Sources */,
 				E50117DB2B6C228D00B2C25A /* TaskPreferencesView.swift in Sources */,
+				7F71FD2E2E6C1910001B92F4 /* TagView.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
 				E5ADEDD92B31956300F0EA9C /* TaskSection.swift in Sources */,
@@ -1909,14 +1907,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vithanco/tagkit";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		7FA02AAF2C18AABE00EC81CE /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Vithanco/SimpleCalendar";
@@ -1928,25 +1918,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7F13D0392DF490B80036ACCB /* TagKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */;
-			productName = TagKit;
-		};
-		7F2F0AB72E52E30D00461679 /* TagKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */;
-			productName = TagKit;
-		};
 		7FA02AB02C18AABE00EC81CE /* SimpleCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7FA02AAF2C18AABE00EC81CE /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
 			productName = SimpleCalendar;
-		};
-		7FE1FE002E42B2E60016C181 /* TagKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7F13D0382DF490B80036ACCB /* XCRemoteSwiftPackageReference "tagkit" */;
-			productName = TagKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
