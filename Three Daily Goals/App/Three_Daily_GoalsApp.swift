@@ -31,7 +31,6 @@ struct Three_Daily_GoalsApp: App {
         // Set up app components
         self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
 
-        assert(appComponents.preferences != nil)
         guard calendarManager.hasCalendarAccess else {
             debugPrint("No calendar access available")
             return

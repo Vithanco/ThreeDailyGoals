@@ -278,7 +278,6 @@ struct TestReview {
     func testCompassCheckPauseAndResume() {
         let appComponents = setupApp(isTesting: true)
         let pref = appComponents.preferences
-        let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         let compassCheckManager = appComponents.compassCheckManager
 
@@ -330,7 +329,6 @@ struct TestReview {
     func testCompassCheckPauseAtDifferentStates() {
         let appComponents = setupApp(isTesting: true)
         let pref = appComponents.preferences
-        let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         let compassCheckManager = appComponents.compassCheckManager
 
@@ -374,9 +372,9 @@ struct TestReview {
     }
 }
 
-extension Date: ExpressibleByExtendedGraphemeClusterLiteral {}
-extension Date: ExpressibleByUnicodeScalarLiteral {}
-extension Date: ExpressibleByStringLiteral {
+extension Date: @retroactive ExpressibleByExtendedGraphemeClusterLiteral {}
+extension Date: @retroactive ExpressibleByUnicodeScalarLiteral {}
+extension Date: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         let dateFormatter = ISO8601DateFormatter()
         guard let date = dateFormatter.date(from: value) else {

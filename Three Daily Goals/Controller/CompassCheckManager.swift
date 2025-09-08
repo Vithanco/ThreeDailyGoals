@@ -33,7 +33,6 @@ final class CompassCheckManager {
     }
 
     let timer: CompassCheckTimer = .init()
-    var isTesting: Bool = false
 
     var state: CompassCheckState = .inform
     
@@ -65,7 +64,6 @@ final class CompassCheckManager {
         self.preferences = preferences
         self.timeProvider = timeProvider
         self.pushNotificationManager = pushNotificationManager
-        self.isTesting = isTesting
     }
 
     // MARK: - Compass Check Logic
@@ -235,10 +233,6 @@ final class CompassCheckManager {
     }
 
     func onCCNotification() {
-        if isTesting {
-            return
-        }
-        
         // Check if we're resuming from a paused state first
         if isPaused {
             resumeCompassCheck()
