@@ -85,7 +85,7 @@ struct TaskAsLine: View {
 }
 
 #Preview {
-    var appComp = setupApp(isTesting: true)
+    let appComp = setupApp(isTesting: true)
     TaskAsLine(item: appComp.dataManager.items.first!)
             .environment(appComp.uiState)
             .environment(appComp.dataManager)

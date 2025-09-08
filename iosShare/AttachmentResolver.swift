@@ -82,7 +82,7 @@ enum AttachmentResolver {
                 }
                 if let s = item as? String {
                     c.resume(returning: s)
-                } else if let u = item as? URL, let s = try? String(contentsOf: u) {
+                } else if let u = item as? URL, let s = try? String(contentsOf: u, encoding: .utf8) {
                     c.resume(returning: s)
                 } else if let d = item as? Data, let s = String(data: d, encoding: .utf8) {
                     c.resume(returning: s)

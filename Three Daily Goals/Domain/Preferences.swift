@@ -180,7 +180,7 @@ extension CloudPreferences {
     }
     
     var isStreakBroken: Bool {
-        var isActive = isStreakActive
+        let isActive = isStreakActive
         return !isActive
     }
 

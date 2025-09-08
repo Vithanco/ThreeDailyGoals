@@ -61,7 +61,7 @@ struct TagFilterView: View {
 }
 
 #Preview {
-    @State var selectedTags = ["work", "private"]
+    @Previewable @State var selectedTags = ["work", "private"]
     let sampleTags = ["work", "private", "health", "movie", "obsidian", "3dg", "anna-lea", "vithanco"]
     
     return TagFilterView(

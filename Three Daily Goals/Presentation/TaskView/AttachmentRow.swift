@@ -66,7 +66,7 @@ struct AttachmentRow: View {
                         showingPreview = true
                     }
                 #endif
-                if let onDelete = onDelete {
+                if onDelete != nil {
                     Button("Delete") {
                             showingDeleteConfirmation = true
                     }

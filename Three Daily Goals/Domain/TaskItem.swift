@@ -388,11 +388,6 @@ extension TaskItem: Comparable {
     }
 }
 
-extension TaskItem: Transferable {
-    public static var transferRepresentation: some TransferRepresentation {
-        CodableRepresentation(contentType: .json)
-    }
-}
 
 //import UniformTypeIdentifiers
 //import SwiftUI

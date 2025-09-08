@@ -272,6 +272,106 @@ struct TestReview {
         compassCheckManager.moveStateForward()
         #expect(pref.daysOfCompassCheck == 43)
     }
+
+    @MainActor
+    @Test
+    func testCompassCheckPauseAndResume() {
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
+        let dataManager = appComponents.dataManager
+        let uiState = appComponents.uiState
+        let compassCheckManager = appComponents.compassCheckManager
+
+        // Set up initial state - compass check not done today
+        let timeProvider = RealTimeProvider()
+        let currentInterval = timeProvider.getCompassCheckInterval()
+        pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600)  // 1 hour before interval
+        #expect(!pref.didCompassCheckToday)
+
+        // Start compass check
+        compassCheckManager.startCompassCheckNow()
+        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(uiState.showCompassCheckDialog == true)
+        #expect(compassCheckManager.isPaused == false)
+
+        // Move to currentPriorities state
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.isPaused == false)
+
+        // Pause the compass check
+        compassCheckManager.pauseCompassCheck()
+        #expect(compassCheckManager.isPaused == true)
+        #expect(compassCheckManager.pausedState.rawValue == "currentPriorities")
+        #expect(uiState.showCompassCheckDialog == false)
+
+        // Simulate the notification timer firing (this should resume the compass check)
+        compassCheckManager.onCCNotification()
+        #expect(compassCheckManager.isPaused == false)
+        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(uiState.showCompassCheckDialog == true)
+
+        // Continue with the compass check flow
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "pending")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "dueDate")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "review")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "plan")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(pref.daysOfCompassCheck == 43)
+    }
+
+    @MainActor
+    @Test
+    func testCompassCheckPauseAtDifferentStates() {
+        let appComponents = setupApp(isTesting: true)
+        let pref = appComponents.preferences
+        let dataManager = appComponents.dataManager
+        let uiState = appComponents.uiState
+        let compassCheckManager = appComponents.compassCheckManager
+
+        // Set up initial state
+        let timeProvider = RealTimeProvider()
+        let currentInterval = timeProvider.getCompassCheckInterval()
+        pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600)
+        #expect(!pref.didCompassCheckToday)
+
+        // Test pausing at different states
+        let statesToTest: [CompassCheckState] = [.currentPriorities, .pending, .dueDate, .review]
+        
+        for stateToTest in statesToTest {
+            // Start fresh compass check
+            compassCheckManager.startCompassCheckNow()
+            #expect(compassCheckManager.state.rawValue == "inform")
+            
+            // Navigate to the state we want to test
+            while compassCheckManager.state != stateToTest {
+                compassCheckManager.moveStateForward()
+            }
+            #expect(compassCheckManager.state == stateToTest)
+            
+            // Pause at this state
+            compassCheckManager.pauseCompassCheck()
+            #expect(compassCheckManager.isPaused == true)
+            #expect(compassCheckManager.pausedState == stateToTest)
+            #expect(uiState.showCompassCheckDialog == false)
+            
+            // Resume and verify we're back at the same state
+            compassCheckManager.onCCNotification()
+            #expect(compassCheckManager.isPaused == false)
+            #expect(compassCheckManager.state == stateToTest)
+            #expect(uiState.showCompassCheckDialog == true)
+            
+            // Cancel to reset for next test
+            compassCheckManager.cancelCompassCheck()
+            #expect(compassCheckManager.state.rawValue == "inform")
+            #expect(compassCheckManager.isPaused == false)
+        }
+    }
 }
 
 extension Date: ExpressibleByExtendedGraphemeClusterLiteral {}

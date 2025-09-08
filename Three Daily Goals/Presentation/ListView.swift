@@ -90,7 +90,7 @@ struct ListView: View {
 }
 
 #Preview {
-    var appComp = setupApp(isTesting: true)
+    let appComp = setupApp(isTesting: true)
     ListView(whichList: .dead)
         .environment(appComp.uiState)
         .environment(appComp.dataManager)

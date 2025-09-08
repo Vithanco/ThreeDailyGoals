@@ -126,7 +126,7 @@ final class DataManager {
     }
 
     /// Create a new task
-    func createTask(title: String, state: TaskItemState = .open) -> TaskItem {
+    @discardableResult func createTask(title: String, state: TaskItemState = .open) -> TaskItem {
         let task = TaskItem(title: title, state: state)
         addExistingTask(task)
         return task
@@ -899,7 +899,7 @@ final class DataManager {
     
     /// Touch button with description prompt for task items
     func touchWithDescriptionButton(item: TaskItem, presentAlert: Binding<Bool>, description: Binding<String>) -> some View {
-        Button(action: { [self] in
+        Button(action: {
             presentAlert.wrappedValue = true
         }) {
             Label("Touch", systemImage:imgTouch)

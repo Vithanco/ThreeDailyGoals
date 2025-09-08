@@ -108,7 +108,6 @@ struct InnerTaskItemView: View {
                     }
 
                     let atts = item.attachments ?? []
-                    let _ = print("📎 Task '\(item.title)' has \(atts.count) attachments")
                     if atts.isEmpty {
                         Text("No attachments yet").foregroundStyle(.secondary)
                             .accessibilityIdentifier("noAttachmentsMessage")

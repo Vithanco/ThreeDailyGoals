@@ -127,7 +127,7 @@ struct LinkToList: View {
 }
 
 #Preview {
-    var appComp = setupApp(isTesting: true)
+    let appComp = setupApp(isTesting: true)
     LinkToList(whichList: .open)
             .environment(appComp.uiState)
             .environment(appComp.dataManager)

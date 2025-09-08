@@ -24,8 +24,6 @@ struct TaskItemView: View {
                     InnerTaskItemView(
                         item: item,
                         allTags: dataManager.activeTags.asArray,
-                        selectedTagStyle: selectedTagStyle(accentColor: item.color),
-                        missingTagStyle: missingTagStyle,
                         showAttachmentImport: true
                     )
                     

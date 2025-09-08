@@ -11,7 +11,6 @@ import XCTest
 
 @testable import Three_Daily_Goals
 
-@MainActor
 final class TestAttachments: XCTestCase {
 
     var container: ModelContainer!

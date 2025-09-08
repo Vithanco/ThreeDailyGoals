@@ -18,6 +18,7 @@ final class Three_Daily_GoalsUITestsLaunchTests: XCTestCase {
 
     }
 
+    @MainActor
     func testLaunch() throws {
 
         let app = launchTestApp()

@@ -234,23 +234,24 @@ final class CompassCheckManager {
         return result
     }
 
-    fileprivate func onCCNotification() {
-        if uiState.showCompassCheckDialog {
-            return
-        }
+    func onCCNotification() {
         if isTesting {
             return
         }
-        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog {
-            waitABit()
-        }
-        if self.uiState.showCompassCheckDialog {
+        
+        // Check if we're resuming from a paused state first
+        if isPaused {
+            resumeCompassCheck()
             return
         }
         
-        // Check if we're resuming from a paused state
-        if isPaused {
-            resumeCompassCheck()
+        // If compass check dialog is already showing, don't start another one
+        if uiState.showCompassCheckDialog {
+            return
+        }
+        
+        if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog {
+            waitABit()
             return
         }
         
@@ -260,10 +261,10 @@ final class CompassCheckManager {
     }
     
     func setupCompassCheckNotification(when: Date? = nil) {
-        pushNotificationManager.scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
-        
-        // Schedule streak reminder notification if applicable
-        pushNotificationManager.scheduleStreakReminderNotification(preferences: preferences, timeProvider: timeProvider)
+        Task {
+            await pushNotificationManager.scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
+            await pushNotificationManager.scheduleStreakReminderNotification(preferences: preferences, timeProvider: timeProvider)
+        }
 
         let time = when ?? nextRegularCompassCheckTime
 

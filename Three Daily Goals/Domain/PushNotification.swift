@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UserNotifications
+@preconcurrency import UserNotifications
 
 let id = "3dg.dailyCompssCheck"
 let streakReminderId = "3dg.streakReminder"
@@ -41,85 +41,69 @@ class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCent
 
 @MainActor
 final class PushNotificationManager {
+    // Use a computed accessor instead of a stored property
+    private var center: UNUserNotificationCenter { UNUserNotificationCenter.current() }
     private var delegate: PushNotificationDelegate?
-    private let notificationCenter = UNUserNotificationCenter.current()
-    
+
+    init() {}
+
     func checkNotificationAuthorization() async -> Bool {
-        let settings = await notificationCenter.notificationSettings()
+        let settings = await center.notificationSettings()
         return settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional
     }
-    
-    func scheduleStreakReminderNotification(preferences: CloudPreferences, timeProvider: TimeProvider) {
-        // Only schedule if streak > 3 and CompassCheck is missing
-        guard preferences.daysOfCompassCheck > 3 && !preferences.didCompassCheckToday else { 
-            // If conditions not met, remove any existing streak reminder
-            notificationCenter.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
-            return 
+
+    func scheduleStreakReminderNotification(preferences: CloudPreferences, timeProvider: TimeProvider) async {
+        guard preferences.daysOfCompassCheck > 3 && !preferences.didCompassCheckToday else {
+            center.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
+            return
         }
-        
-        // Remove any existing streak reminder
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
-        
-        // Create 11am trigger for today
+
+        center.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
+
         var components = DateComponents()
         components.hour = 11
         components.minute = 0
         components.calendar = timeProvider.calendar
-        
-        // Only schedule if 11am hasn't passed today
+
         let elevenAM = timeProvider.calendar.date(from: components) ?? timeProvider.now
         guard elevenAM > timeProvider.now else { return }
-        
+
         let content = UNMutableNotificationContent()
         content.title = "Keep Your Streak Alive! 🔥"
         content.body = "You have a \(preferences.daysOfCompassCheck)-day streak - don't break it now! Time for your Compass Check."
-        
+
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: streakReminderId, content: content, trigger: trigger)
-        
-        notificationCenter.add(request) { error in
-            if let error = error {
-                print("Not able to add streak reminder notification: \(error.localizedDescription)")
-            }
+
+        do {
+            try await center.add(request)   // stays on MainActor, no extra Task, no captured stored property
+        } catch {
+            print("Not able to add streak reminder notification: \(error.localizedDescription)")
         }
     }
-    
-    func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) {
-        // Ensure delegate is set up on the main actor
+
+    func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) async {
         if delegate == nil {
             delegate = PushNotificationDelegate(compassCheckManager: model)
-            notificationCenter.delegate = delegate
+            center.delegate = delegate
         }
 
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
+        center.removePendingNotificationRequests(withIdentifiers: [id])
 
-        notificationCenter.requestAuthorization(options: [.alert, .badge]) { granted, error in
-            if error != nil {
-                // Handle errors
-                return
-            }
-
+        do {
+            let granted = try await center.requestAuthorization(options: [.alert, .badge])
             guard granted else { return }
 
-            // Configure the content of the notification
             let content = UNMutableNotificationContent()
             content.title = "Time for the daily Compass Check!"
             content.body = "Click here for starting the Compass Check"
 
-            // Configure the trigger
             let trigger = UNCalendarNotificationTrigger(dateMatching: timing, repeats: true)
-
-            // Create the notification request
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
 
-            // Schedule the notification
-            let notificationCenter = UNUserNotificationCenter.current()
-            notificationCenter.add(request) { error in
-                if let error = error {
-                    print("Not able to add notification: \(error.localizedDescription)")
-                }
-            }
+            try await center.add(request)
+        } catch {
+            print("Authorization/scheduling failed: \(error.localizedDescription)")
         }
     }
 }
-

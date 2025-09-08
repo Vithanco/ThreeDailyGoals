@@ -81,7 +81,7 @@ class CalendarManager {
     // Check if calendar access is available
     var hasCalendarAccess: Bool {
         let status = EKEventStore.authorizationStatus(for: .event)
-        return status == .authorized || status == .fullAccess
+        return status == .writeOnly || status == .fullAccess
     }
 
     // Get the event store (only if access is granted)

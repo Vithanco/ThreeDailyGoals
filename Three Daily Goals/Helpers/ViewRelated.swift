@@ -12,6 +12,7 @@ import SwiftUI
     import UIKit
 #endif
 
+@MainActor
 var isLargeDevice: Bool {
     #if os(macOS)
         return true
