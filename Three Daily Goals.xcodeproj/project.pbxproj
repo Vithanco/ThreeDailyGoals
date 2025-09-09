@@ -106,6 +106,9 @@
 		7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357592E5B5040004581B7 /* ItemSelector.swift */; };
 		7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3575A2E5B5050004581B7 /* AppSetup.swift */; };
 		7FBF3A922DF54AB800D5093D /* SchemaV3_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */; };
+		7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */; };
+		7FC676A52E6F685B00C41568 /* DatabaseErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */; };
+		7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -303,6 +306,9 @@
 		7FB357592E5B5040004581B7 /* ItemSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelector.swift; sourceTree = "<group>"; };
 		7FB3575A2E5B5050004581B7 /* AppSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetup.swift; sourceTree = "<group>"; };
 		7FBF3A912DF54AB800D5093D /* SchemaV3_4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_4.swift; sourceTree = "<group>"; };
+		7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabaseErrors.swift; sourceTree = "<group>"; };
+		7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseErrorReporter.swift; sourceTree = "<group>"; };
+		7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckSynchronization.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -598,6 +604,8 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */,
+				7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */,
 				7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */,
 				7F19BF9C2E672BF800238C81 /* TestTags.swift */,
 				7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */,
@@ -643,6 +651,7 @@
 		E5B698F92B7C89170086C3EB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */,
 				7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */,
 				7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */,
 				7FB357562E5B5020004581B7 /* PriorityUpdater.swift */,
@@ -1144,6 +1153,7 @@
 				E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
 				E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */,
+				7FC676A52E6F685B00C41568 /* DatabaseErrorReporter.swift in Sources */,
 				E5E1F47C2B30632000E83A21 /* DateRelated.swift in Sources */,
 				E5DE105B2B68F6D300381337 /* CompassCheckTimer.swift in Sources */,
 				E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */,
@@ -1176,8 +1186,10 @@
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
 				7FECEC202E6613FB00E02234 /* TestTouchWithDescription.swift in Sources */,
 				7FECEC212E6613FB00E02234 /* TestIsStreakBroken.swift in Sources */,
+				7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */,
 				E597A4872B83D7B000BCD061 /* TestImportExport.swift in Sources */,
 				E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */,
+				7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,

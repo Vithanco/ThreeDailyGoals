@@ -30,7 +30,17 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
                 guard let jsonData = try? JSONEncoder().encode(oldTask),
                     let jsonString = String(data: jsonData, encoding: .utf8)
                 else {
-                    fatalError()
+                    // If we can't encode the old task, skip it and continue with migration
+                    // This prevents the app from crashing due to corrupted data
+                    let taskTitle = oldTask._title ?? "Unknown"
+                    print("Warning: Failed to encode TaskItem during migration, skipping: \(taskTitle)")
+                    
+                    // Report this data loss to the user
+                    reportMigrationIssue(
+                        "Some tasks could not be migrated and were skipped during the database update.",
+                        details: "Task: '\(taskTitle)' was skipped due to data corruption."
+                    )
+                    continue
                 }
                 print("Migrating TaskItem:\n\(jsonString)")
 

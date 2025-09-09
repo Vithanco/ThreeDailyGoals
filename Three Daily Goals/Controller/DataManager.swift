@@ -29,6 +29,7 @@ final class DataManager {
     let timeProvider: TimeProvider
     var priorityUpdater: PriorityUpdater?
     var itemSelector: ItemSelector?
+    var dataIssueReporter: DataIssueReporter?
     var jsonExportDoc: JSONWriteOnlyDoc? {
         return JSONWriteOnlyDoc(content: items)
     }
@@ -446,6 +447,7 @@ final class DataManager {
             logger.debug("Loaded \(self.items.count) tasks from database")
         } catch {
             logger.error("Failed to load tasks: \(error)")
+            reportDatabaseError(.containerCreationFailed(underlyingError: error))
         }
     }
 
@@ -467,6 +469,13 @@ final class DataManager {
 
         } catch {
             logger.error("Fetch failed: \(error)")
+            // For CloudKit sync failures, use the appropriate error type
+            if error.localizedDescription.lowercased().contains("cloudkit") || 
+               error.localizedDescription.lowercased().contains("sync") {
+                reportDatabaseError(.cloudKitSyncFailed(underlyingError: error))
+            } else {
+                reportDatabaseError(.containerCreationFailed(underlyingError: error))
+            }
         }
     }
 
@@ -555,7 +564,13 @@ final class DataManager {
             logger.debug("Successfully saved changes to database")
         } catch {
             logger.error("Failed to save changes: \(error)")
+            reportDatabaseError(.containerCreationFailed(underlyingError: error))
         }
+    }
+    
+    /// Report a database error to the user interface
+    private func reportDatabaseError(_ error: DatabaseError) {
+        dataIssueReporter?.reportDatabaseError(error)
     }
 
     /// Refresh data from persistent store

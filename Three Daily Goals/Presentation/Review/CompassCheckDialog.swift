@@ -41,6 +41,7 @@ struct CompassCheckDialog: View {
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
                 Button(action: compassCheckManager.moveStateForward) {
                     Text(compassCheckManager.moveStateForwardText)
+                        .foregroundStyle(.white)
                 }.buttonStyle(.borderedProminent)
             }
             Spacer()

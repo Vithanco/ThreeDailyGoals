@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class UIStateManager: ItemSelector {
+final class UIStateManager: ItemSelector, DataIssueReporter {
 
     // MARK: - Navigation State
 
@@ -46,6 +46,12 @@ final class UIStateManager: ItemSelector {
 
     /// Show missing compass check alert
     var showMissingCompassCheckAlert: Bool = false
+    
+    /// Show database error alert
+    var showDatabaseErrorAlert: Bool = false
+    
+    /// Current database error
+    var databaseError: DatabaseError?
 
     // MARK: - User Messages
 
@@ -89,6 +95,7 @@ final class UIStateManager: ItemSelector {
         showExportDialog = false
         showSelectDuringImportDialog = false
         showMissingCompassCheckAlert = false
+        showDatabaseErrorAlert = false
         showInfoMessage = false
     }
 
@@ -96,6 +103,29 @@ final class UIStateManager: ItemSelector {
     func showInfo(_ message: String) {
         infoMessage = message
         showInfoMessage = true
+    }
+    
+    /// Show a database error
+    func showDatabaseError(_ error: DatabaseError) {
+        databaseError = error
+        showDatabaseErrorAlert = true
+    }
+    
+    /// Report a database error (DataIssueReporter protocol)
+    func reportDatabaseError(_ error: DatabaseError) {
+        showDatabaseError(error)
+    }
+    
+    /// Report data loss to the user
+    func reportDataLoss(_ message: String, details: String?) {
+        let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
+        showInfo("⚠️ Data Loss Warning\n\n\(fullMessage)")
+    }
+    
+    /// Report migration issues to the user
+    func reportMigrationIssue(_ message: String, details: String?) {
+        let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
+        showInfo("⚠️ Migration Issue\n\n\(fullMessage)")
     }
 
     /// Show preferences dialog

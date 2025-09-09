@@ -31,6 +31,8 @@ final class CompassCheckManager {
             notificationTask?.cancel()
         }
     }
+    
+    private var syncCheckTimer: Timer?
 
     let timer: CompassCheckTimer = .init()
 
@@ -64,6 +66,10 @@ final class CompassCheckManager {
         self.preferences = preferences
         self.timeProvider = timeProvider
         self.pushNotificationManager = pushNotificationManager
+    }
+    
+    deinit {
+        stopSyncCheckTimer()
     }
 
     // MARK: - Compass Check Logic
@@ -145,6 +151,16 @@ final class CompassCheckManager {
         state = .inform
         isPaused = false
         pausedState = .inform
+        
+        // Cancel any pending notifications since CC is done
+        timer.cancelTimer()
+        stopSyncCheckTimer()
+        
+        // Cancel push notifications
+        Task {
+            await pushNotificationManager.cancelCompassCheckNotifications()
+        }
+        
         debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
         debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
         debugPrint("current interval: \(timeProvider.getCompassCheckInterval())")
@@ -206,9 +222,45 @@ final class CompassCheckManager {
     }
 
     func onPreferencesChange() {
-        if preferences.didCompassCheckToday && state == .inform {
-            endCompassCheck(didFinishCompassCheck: false)
+        // If compass check was completed on another device, close the dialog and reset state
+        if preferences.didCompassCheckToday {
+            if uiState.showCompassCheckDialog {
+                logger.info("Compass check completed on another device, closing dialog")
+                endCompassCheck(didFinishCompassCheck: false)
+            } else if state != .inform {
+                // Reset state if not showing dialog but state is not inform
+                logger.info("Compass check completed on another device, resetting state")
+                state = .inform
+                isPaused = false
+                pausedState = .inform
+                // Reschedule for next interval since CC was completed externally
+                setupCompassCheckNotification()
+            }
         }
+    }
+    
+    /// Check if compass check was completed on another device and update UI accordingly
+    func checkForExternalCompassCheckCompletion() {
+        if preferences.didCompassCheckToday && (uiState.showCompassCheckDialog || state != .inform) {
+            logger.info("Detected compass check completion on another device during periodic check")
+            onPreferencesChange()
+        }
+    }
+    
+    /// Start periodic sync check to detect external compass check completion
+    private func startSyncCheckTimer() {
+        syncCheckTimer?.invalidate()
+        syncCheckTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.checkForExternalCompassCheckCompletion()
+            }
+        }
+    }
+    
+    /// Stop the sync check timer
+    private func stopSyncCheckTimer() {
+        syncCheckTimer?.invalidate()
+        syncCheckTimer = nil
     }
 
     func startCompassCheckNow() {
@@ -264,6 +316,9 @@ final class CompassCheckManager {
 
         uiState.showCompassCheckDialog = false
         
+        // Start sync check timer to detect external compass check completion
+        startSyncCheckTimer()
+        
         // Don't set up timer if CompassCheck already happened in current interval
         guard !preferences.didCompassCheckToday else { return }
         
@@ -284,7 +339,13 @@ final class CompassCheckManager {
 
     func deleteNotifications() {
         timer.cancelTimer()
+        stopSyncCheckTimer()
         uiState.showCompassCheckDialog = false
+        
+        // Cancel push notifications
+        Task {
+            await pushNotificationManager.cancelCompassCheckNotifications()
+        }
     }
 
     // MARK: - Command Buttons

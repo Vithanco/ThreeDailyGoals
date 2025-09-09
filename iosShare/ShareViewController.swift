@@ -15,8 +15,27 @@ import UniformTypeIdentifiers
 
 public class ShareViewController: BaseViewController {
 
-    private let container = sharedModelContainer(inMemory: false, withCloud: false)
+    private let container: ModelContainer
     private let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
+
+    public init() {
+        // For share extensions, we'll use a simple in-memory container
+        // since we don't need CloudKit sync for share operations
+        switch sharedModelContainer(inMemory: true, withCloud: false) {
+        case .success(let container):
+            self.container = container
+        case .failure:
+            // Fallback to a basic container if there's an error
+            self.container = try! ModelContainer(
+                for: TaskItem.self, Attachment.self, Comment.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()

@@ -32,23 +32,46 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
     let container: ModelContainer
     let modelContext: ModelContext
     let finalModelContext: Storage
+    var databaseError: DatabaseError?
     
     if isTesting {
         // Test setup
-        container = sharedModelContainer(inMemory: true, withCloud: false)
-        modelContext = ModelContext(container)
-        
-        // Use TestStorage with custom loader or default data
-        if let loader = loader {
-            finalModelContext = TestStorage(loader: loader, timeProvider: finalTimeProvider)
-        } else {
-            finalModelContext = TestStorage(timeProvider: finalTimeProvider)  // Use default test data with 178 items
+        switch sharedModelContainer(inMemory: true, withCloud: false) {
+        case .success(let testContainer):
+            container = testContainer
+            modelContext = ModelContext(container)
+            
+            // Use TestStorage with custom loader or default data
+            if let loader = loader {
+                finalModelContext = TestStorage(loader: loader, timeProvider: finalTimeProvider)
+            } else {
+                finalModelContext = TestStorage(timeProvider: finalTimeProvider)  // Use default test data with 178 items
+            }
+        case .failure(let error):
+            // For testing, we can still use TestStorage even if container creation fails
+            container = try! ModelContainer(for: TaskItem.self, Attachment.self, Comment.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            modelContext = ModelContext(container)
+            finalModelContext = TestStorage(timeProvider: finalTimeProvider)
+            print("Warning: Database container creation failed in test mode: \(error)")
         }
     } else {
         // Production setup
-        container = sharedModelContainer(inMemory: false, withCloud: true)
-        modelContext = ModelContext(container)
-        finalModelContext = modelContext
+        switch sharedModelContainer(inMemory: false, withCloud: true) {
+        case .success(let prodContainer):
+            container = prodContainer
+            modelContext = ModelContext(container)
+            finalModelContext = modelContext
+        case .failure(let error):
+            // For production, we need to handle this gracefully
+            // Create a minimal container for basic functionality
+            container = try! ModelContainer(for: TaskItem.self, Attachment.self, Comment.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            modelContext = ModelContext(container)
+            finalModelContext = modelContext
+            
+            // We'll need to show the error to the user after UI is set up
+            // Store the error to be shown later
+            databaseError = error
+        }
     }
     
     // MARK: - Step 3: Create CloudPreferences
@@ -90,12 +113,24 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
     uiState.newItemProducer = dataManager
     dataManager.priorityUpdater = finalPreferences
     dataManager.itemSelector = uiState
+    dataManager.dataIssueReporter = uiState
     finalPreferences.onChange = compassCheckManager.onPreferencesChange
     
     // MARK: - Step 9: Initialize Data and Setup
     dataManager.loadData()
     uiState.showItem = false
     dataManager.mergeDataFromCentralStorage()
+    
+    // Show database error if one occurred during setup
+    if let error = databaseError {
+        uiState.showDatabaseError(error)
+    }
+    
+    // Show any migration issues that occurred during setup
+    let migrationIssues = getPendingMigrationIssues()
+    for issue in migrationIssues {
+        uiState.reportMigrationIssue(issue.message, details: issue.details)
+    }
     
     if !isTesting {
         // Only set up notifications for production

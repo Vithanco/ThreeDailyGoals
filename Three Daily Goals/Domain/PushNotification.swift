@@ -106,4 +106,9 @@ final class PushNotificationManager {
             print("Authorization/scheduling failed: \(error.localizedDescription)")
         }
     }
+    
+    /// Cancel all compass check related notifications
+    func cancelCompassCheckNotifications() async {
+        center.removePendingNotificationRequests(withIdentifiers: [id, streakReminderId])
+    }
 }

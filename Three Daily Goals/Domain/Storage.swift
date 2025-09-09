@@ -10,11 +10,91 @@ import CoreData
 import Foundation
 import SwiftData
 
+/// Custom error types for database operations
+public enum DatabaseError: LocalizedError {
+    case migrationFailed(underlyingError: Error)
+    case containerCreationFailed(underlyingError: Error)
+    case unsupportedSchemaVersion
+    case cloudKitSyncFailed(underlyingError: Error)
+    case dataCorruption
+    
+    public var errorDescription: String? {
+        switch self {
+        case .migrationFailed(let error):
+            return "Database migration failed: \(error.localizedDescription)"
+        case .containerCreationFailed(let error):
+            return "Failed to create database container: \(error.localizedDescription)"
+        case .unsupportedSchemaVersion:
+            return "Database schema version is not supported by this app version"
+        case .cloudKitSyncFailed(let error):
+            return "CloudKit synchronization failed: \(error.localizedDescription)"
+        case .dataCorruption:
+            return "Database data appears to be corrupted"
+        }
+    }
+    
+    public var recoverySuggestion: String? {
+        switch self {
+        case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion:
+            return "Please update the app to the latest version from the App Store to resolve this issue."
+        case .cloudKitSyncFailed:
+            return "Check your internet connection and try again. If the problem persists, please update the app."
+        case .dataCorruption:
+            return "Please update the app to the latest version. If the problem continues, contact support."
+        }
+    }
+    
+    var isUpgradeRequired: Bool {
+        switch self {
+        case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
+            return true
+        case .cloudKitSyncFailed:
+            return false
+        }
+    }
+    
+    var userFriendlyTitle: String {
+        switch self {
+        case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
+            return "App Update Required"
+        case .cloudKitSyncFailed:
+            return "Sync Error"
+        }
+    }
+    
+    var userFriendlyMessage: String {
+        switch self {
+        case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
+            return "Your app needs to be updated to work with the latest data format. Please update to the latest version from the App Store."
+        case .cloudKitSyncFailed:
+            return "There was a problem syncing your data. Please check your internet connection and try again."
+        }
+    }
+}
+
 typealias TaskSelector = ([TaskSection], [TaskItem], TaskItem?) -> Void
 typealias OnSelectItem = (TaskItem) -> Void
 
 @MainActor
 private var container: ModelContainer? = nil
+
+/// Global storage for migration issues that need to be reported to users
+@MainActor
+private var pendingMigrationIssues: [(message: String, details: String?)] = []
+
+/// Report a migration issue that will be shown to the user after app setup
+@MainActor
+func reportMigrationIssue(_ message: String, details: String? = nil) {
+    pendingMigrationIssues.append((message: message, details: details))
+}
+
+/// Get and clear all pending migration issues
+@MainActor
+func getPendingMigrationIssues() -> [(message: String, details: String?)] {
+    let issues = pendingMigrationIssues
+    pendingMigrationIssues.removeAll()
+    return issues
+}
 
 extension ModelContainer {
     var isInMemory: Bool {
@@ -38,7 +118,7 @@ protocol Storage {
     var hasChanges: Bool { get }
 }
 
-extension ModelContext: @MainActor Storage {
+extension ModelContext: @preconcurrency Storage {
     @MainActor func undo() {
         undoManager?.undo()
     }
@@ -183,9 +263,9 @@ class TestStorage: Storage {
 }
 
 @MainActor
-public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContainer {
+public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<ModelContainer, DatabaseError> {
     if let result = container, result.isInMemory == inMemory {
-        return result
+        return .success(result)
     }
 
     let schema = Schema(versionedSchema: SchemaLatest.self)
@@ -203,9 +283,17 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> ModelContai
         )
         result.mainContext.undoManager = UndoManager()
         container = result
-        return result
+        return .success(result)
     } catch {
-        fatalError("Could not create ModelContainer: \(error)")
+        // Check if this is a migration-related error
+        let errorString = error.localizedDescription.lowercased()
+        if errorString.contains("migration") || errorString.contains("schema") || errorString.contains("version") {
+            return .failure(.migrationFailed(underlyingError: error))
+        } else if errorString.contains("cloudkit") || errorString.contains("sync") {
+            return .failure(.cloudKitSyncFailed(underlyingError: error))
+        } else {
+            return .failure(.containerCreationFailed(underlyingError: error))
+        }
     }
 }
 

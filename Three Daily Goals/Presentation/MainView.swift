@@ -68,6 +68,34 @@ struct MainView: View {
                 }
             }.padding(10)
         }
+        .alert(
+            uiState.databaseError?.userFriendlyTitle ?? "Database Error",
+            isPresented: $uiState.showDatabaseErrorAlert
+        ) {
+            if let error = uiState.databaseError, error.isUpgradeRequired {
+                Button("Update App") {
+                    // Open App Store for app update
+                    if let url = URL(string: "https://apps.apple.com/app/three-daily-goals/id1234567890") {
+                        #if os(macOS)
+                        NSWorkspace.shared.open(url)
+                        #else
+                        UIApplication.shared.open(url)
+                        #endif
+                    }
+                }
+                Button("Later", role: .cancel) {
+                    uiState.showDatabaseErrorAlert = false
+                }
+            } else {
+                Button("OK") {
+                    uiState.showDatabaseErrorAlert = false
+                }
+            }
+        } message: {
+            if let error = uiState.databaseError {
+                Text(error.userFriendlyMessage)
+            }
+        }
         .fileExporter(
             isPresented: $uiState.showExportDialog,
             document: dataManager.jsonExportDoc,
