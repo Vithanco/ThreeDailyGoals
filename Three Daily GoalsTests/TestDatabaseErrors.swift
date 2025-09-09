@@ -8,6 +8,7 @@
 import XCTest
 @testable import Three_Daily_Goals
 
+@MainActor
 final class TestDatabaseErrors: XCTestCase {
 
     func testDatabaseErrorTypes() {

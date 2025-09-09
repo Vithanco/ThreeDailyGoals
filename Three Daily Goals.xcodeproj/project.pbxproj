@@ -109,6 +109,9 @@
 		7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */; };
 		7FC676A52E6F685B00C41568 /* DatabaseErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */; };
 		7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */; };
+		7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */; };
+		7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */; };
+		7FC676B92E706B7900C41568 /* CompassCheckStepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676AB2E706B7900C41568 /* CompassCheckStepManager.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -309,6 +312,9 @@
 		7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabaseErrors.swift; sourceTree = "<group>"; };
 		7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseErrorReporter.swift; sourceTree = "<group>"; };
 		7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckSynchronization.swift; sourceTree = "<group>"; };
+		7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckSteps.swift; sourceTree = "<group>"; };
+		7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckStep.swift; sourceTree = "<group>"; };
+		7FC676AB2E706B7900C41568 /* CompassCheckStepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckStepManager.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -425,6 +431,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7F2F0A822E52DEB200461679 /* macosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE813822E5431DB00CEA462 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = macosShare; sourceTree = "<group>"; };
+		7FC676B22E706B7900C41568 /* CompassCheckSteps */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CompassCheckSteps; sourceTree = "<group>"; };
 		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 7F2F0A932E52DF6200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -604,6 +611,7 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */,
 				7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */,
 				7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */,
 				7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */,
@@ -669,6 +677,9 @@
 		E5E1F4752B3060FD00E83A21 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */,
+				7FC676AB2E706B7900C41568 /* CompassCheckStepManager.swift */,
+				7FC676B22E706B7900C41568 /* CompassCheckSteps */,
 				7FE813852E54682B00CEA462 /* Attachment.swift */,
 				E57C31AF2B724B2700943EA1 /* PushNotification.swift */,
 				E50A29B52B6995BC002AC3BC /* ModelVersions */,
@@ -833,6 +844,9 @@
 				E51142A02B342E3F00AB6E05 /* PBXTargetDependency */,
 				7FE1FDE52E42845B0016C181 /* PBXTargetDependency */,
 				7F2F0A8C2E52DEB200461679 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7FC676B22E706B7900C41568 /* CompassCheckSteps */,
 			);
 			name = "Three Daily Goals";
 			packageProductDependencies = (
@@ -1150,6 +1164,8 @@
 				E53AF7A52B661BF900C24F78 /* Migrations.swift in Sources */,
 				E5E1F47E2B30633B00E83A21 /* ColorRelated.swift in Sources */,
 				E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */,
+				7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */,
+				7FC676B92E706B7900C41568 /* CompassCheckStepManager.swift in Sources */,
 				E561D6E02B1F54A6003BE36F /* TaskItem.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
 				E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */,
@@ -1184,6 +1200,7 @@
 				7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
+				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,
 				7FECEC202E6613FB00E02234 /* TestTouchWithDescription.swift in Sources */,
 				7FECEC212E6613FB00E02234 /* TestIsStreakBroken.swift in Sources */,
 				7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */,
@@ -1395,6 +1412,7 @@
 		E51142A32B342E3F00AB6E05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADDITIONAL_SDKS = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
@@ -1438,6 +1456,7 @@
 		E51142A42B342E3F00AB6E05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADDITIONAL_SDKS = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";

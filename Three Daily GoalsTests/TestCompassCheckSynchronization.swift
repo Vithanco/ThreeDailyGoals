@@ -197,7 +197,7 @@ struct TestCompassCheckSynchronization {
         #expect(compassCheckManager.state == .currentPriorities)
         
         // Close dialog manually
-        compassCheckManager.uiState.showCompassCheckDialog = false
+        appComponents.uiState.showCompassCheckDialog = false
         
         // Simulate external completion
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -409,7 +409,7 @@ struct TestCompassCheckSynchronization {
         #expect(compassCheckManager.state == .currentPriorities)
         
         // Close dialog to simulate the scenario where dialog is not showing
-        compassCheckManager.uiState.showCompassCheckDialog = false
+        appComponents.uiState.showCompassCheckDialog = false
         
         // Simulate external completion
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)

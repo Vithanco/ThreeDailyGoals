@@ -32,7 +32,7 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
                 else {
                     // If we can't encode the old task, skip it and continue with migration
                     // This prevents the app from crashing due to corrupted data
-                    let taskTitle = oldTask._title ?? "Unknown"
+                    let taskTitle = oldTask._title 
                     print("Warning: Failed to encode TaskItem during migration, skipping: \(taskTitle)")
                     
                     // Report this data loss to the user

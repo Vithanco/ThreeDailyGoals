@@ -46,8 +46,11 @@ final class CompassCheckManager {
     private let dataManager: DataManager
     private let uiState: UIStateManager
     private let preferences: CloudPreferences
-    private let timeProvider: TimeProvider
+    let timeProvider: TimeProvider
     private let pushNotificationManager: PushNotificationManager
+    
+    // Step management
+    private let stepManager: CompassCheckStepManager
 
     var os: SupportedOS {
         #if os(iOS)
@@ -60,14 +63,16 @@ final class CompassCheckManager {
         #endif
     }
 
-    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, pushNotificationManager: PushNotificationManager, isTesting: Bool = false) {
+    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, pushNotificationManager: PushNotificationManager, stepManager: CompassCheckStepManager? = nil, isTesting: Bool = false) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
         self.timeProvider = timeProvider
         self.pushNotificationManager = pushNotificationManager
+        self.stepManager = stepManager ?? CompassCheckStepManager(dataManager: dataManager, timeProvider: timeProvider)
     }
     
+    @MainActor
     deinit {
         stopSyncCheckTimer()
     }
@@ -87,55 +92,30 @@ final class CompassCheckManager {
     }
 
     func moveStateForward() {
-        switch state {
-        case .inform:
-            if dataManager.list(which: .priority).isEmpty {
-                fallthrough
-            } else {
-                state = .currentPriorities
-            }
-        case .currentPriorities:
-            moveAllPrioritiesToOpen()
-            if dataManager.list(which: .pendingResponse).isEmpty {
-                fallthrough
-            } else {
-                state = .pending
-            }
-        case .pending:
-            let dueSoon = dueDateSoon
-            if dueSoon.isEmpty {
-                fallthrough
-            } else {
-                state = .dueDate
-            }
-        case .dueDate:
-            for t in dueDateSoon {
-                dataManager.move(task: t, to: .priority)
-            }
-            state = .review
-        case .review:
-            if os == .iOS {
-                endCompassCheck(didFinishCompassCheck: true)
-            } else {
-                state = .plan
-            }
-        case .plan:
+        let nextState = stepManager.moveToNextStep(from: state, os: os)
+        
+        if nextState == state {
+            // We're at the end, finish the compass check
             endCompassCheck(didFinishCompassCheck: true)
+        } else {
+            state = nextState
         }
+        
         debugPrint("new state is: \(state)")
     }
 
     var moveStateForwardText: String {
-        if os == .iOS {
-            if state == .review {
-                return "Finish"
-            }
+        return stepManager.getButtonText(for: state, os: os)
+    }
+    
+    /// Get the current step's view
+    @ViewBuilder
+    func getCurrentStepView() -> some View {
+        if let step = stepManager.getCurrentStep(for: state) {
+            step.view(compassCheckManager: self)
         } else {
-            if state == .plan {
-                return "Finish"
-            }
+            AnyView(CompassCheckInformView())
         }
-        return "Next"
     }
 
     func cancelCompassCheck() {

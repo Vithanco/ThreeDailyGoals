@@ -46,22 +46,7 @@ struct CompassCheckDialog: View {
             }
             Spacer()
 
-            switch compassCheckManager.state.rawValue {
-            case "inform":
-                CompassCheckInformView()
-            case "currentPriorities":
-                CompassCheckCurrentPriorities()
-            case "pending":
-                CompassCheckPendingResponses()
-            case "review":
-                CompassCheckNextPriorities()
-            case "dueDate":
-                CompassCheckDueDate()
-            case "plan":
-                CompassCheckPlanDay(date: timeProviderWrapper.timeProvider.getCompassCheckInterval().end)
-            default:
-                CompassCheckInformView()
-            }
+            compassCheckManager.getCurrentStepView()
             Spacer()
         }.padding(4).frame(minHeight: 350, idealHeight: 600)
     }
