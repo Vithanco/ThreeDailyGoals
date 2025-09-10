@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PendingResponsesStep: CompassCheckStep {
-    let state: CompassCheckState = .pending
+    let id: String = "pending"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are pending response tasks

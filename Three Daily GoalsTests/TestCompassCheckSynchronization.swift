@@ -22,14 +22,6 @@ struct TestCompassCheckSynchronization {
         return MockTimeProvider(fixedNow: fixedNow)
     }
     
-    /// Creates test preferences that simulate external changes
-    private func createTestPreferences(timeProvider: TimeProvider) -> CloudPreferences {
-        let store = TestPreferences()
-        store.set(18, forKey: .compassCheckTimeHour)
-        store.set(0, forKey: .compassCheckTimeMinute)
-        return CloudPreferences(store: store, timeProvider: timeProvider)
-    }
-    
     /// Simulates external compass check completion by updating preferences
     private func simulateExternalCompassCheckCompletion(preferences: CloudPreferences, timeProvider: TimeProvider) {
         // Set lastCompassCheck to current time to simulate completion
@@ -42,9 +34,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testExternalCompletionClosesDialog() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -57,7 +49,7 @@ struct TestCompassCheckSynchronization {
         // Start compass check dialog
         compassCheckManager.startCompassCheckNow()
         #expect(uiState.showCompassCheckDialog == true)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         
         // Simulate external completion (e.g., on another device)
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -68,15 +60,15 @@ struct TestCompassCheckSynchronization {
         
         // Verify dialog is closed and state is reset
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
     }
     
     @Test
     func testExternalCompletionResetsStateWhenNotShowingDialog() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -89,7 +81,7 @@ struct TestCompassCheckSynchronization {
         // Start compass check and move to a different state
         compassCheckManager.startCompassCheckNow()
         compassCheckManager.moveStateForward() // Move to currentPriorities
-        #expect(compassCheckManager.state == .currentPriorities)
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         
         // Close dialog manually (simulating user closing it)
         uiState.showCompassCheckDialog = false
@@ -102,16 +94,16 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify state is reset even though dialog wasn't showing
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         #expect(uiState.showCompassCheckDialog == false)
     }
     
     @Test
     func testExternalCompletionDuringPausedState() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -127,7 +119,7 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.pauseCompassCheck()
         
         #expect(compassCheckManager.isPaused == true)
-        #expect(compassCheckManager.pausedState == .currentPriorities)
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
         
         // Simulate external completion
@@ -139,7 +131,7 @@ struct TestCompassCheckSynchronization {
         
         // Verify paused state is cleared
         #expect(compassCheckManager.isPaused == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(uiState.showCompassCheckDialog == false)
     }
     
@@ -147,9 +139,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testPeriodicSyncCheckDetectsExternalCompletion() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -162,7 +154,7 @@ struct TestCompassCheckSynchronization {
         // Start compass check dialog
         compassCheckManager.startCompassCheckNow()
         #expect(uiState.showCompassCheckDialog == true)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         
         // Simulate external completion
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -173,16 +165,16 @@ struct TestCompassCheckSynchronization {
         
         // Verify dialog is closed
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
     }
     
     // MARK: - Timer Rescheduling Tests
     
     @Test
     func testExternalCompletionReschedulesTimers() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         
@@ -194,7 +186,7 @@ struct TestCompassCheckSynchronization {
         // Start compass check and move to a state other than inform
         compassCheckManager.startCompassCheckNow()
         compassCheckManager.moveStateForward() // Move to currentPriorities
-        #expect(compassCheckManager.state == .currentPriorities)
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         
         // Close dialog manually
         appComponents.uiState.showCompassCheckDialog = false
@@ -207,7 +199,7 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify state is reset and timers are rescheduled
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         
         // The setupCompassCheckNotification() should have been called
@@ -219,9 +211,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testExternalCompletionCancelsNotifications() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         
@@ -232,7 +224,7 @@ struct TestCompassCheckSynchronization {
         
         // Start compass check
         compassCheckManager.startCompassCheckNow()
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         
         // Simulate external completion
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -242,7 +234,7 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify that endCompassCheck was called (which cancels notifications)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         
         // In a real test, we'd verify that push notifications were cancelled
@@ -253,11 +245,10 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testStreakViewUpdatesAfterExternalCompletion() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
-        
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
         let compassCheckManager = appComponents.compassCheckManager
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         // Set up initial state
         let currentInterval = timeProvider.getCompassCheckInterval()
@@ -269,7 +260,7 @@ struct TestCompassCheckSynchronization {
         
         // Start compass check
         compassCheckManager.startCompassCheckNow()
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         
         // Simulate external completion
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -291,9 +282,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testMultipleExternalCompletions() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -315,14 +306,14 @@ struct TestCompassCheckSynchronization {
         // Simulate second external completion (should be idempotent)
         compassCheckManager.onPreferencesChange()
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
     }
     
     @Test
     func testExternalCompletionWhenAlreadyCompleted() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -332,23 +323,23 @@ struct TestCompassCheckSynchronization {
         preferences.lastCompassCheck = currentInterval.start.addingTimeInterval(1)
         #expect(preferences.didCompassCheckToday == true)
         
-        // Try to start compass check (should not show dialog)
+        // Try to start compass check (should show dialog - multiple compass checks per day are allowed)
         compassCheckManager.startCompassCheckNow()
-        #expect(uiState.showCompassCheckDialog == false)
+        #expect(uiState.showCompassCheckDialog == true)
         
         // Trigger preferences change (should be no-op)
         compassCheckManager.onPreferencesChange()
-        #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(uiState.showCompassCheckDialog == true)
+        #expect(compassCheckManager.currentStep.id == "inform")
     }
     
     // MARK: - Integration Tests
     
     @Test
     func testFullSynchronizationScenario() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         let uiState = appComponents.uiState
@@ -363,11 +354,11 @@ struct TestCompassCheckSynchronization {
         // Start compass check and progress through states
         compassCheckManager.startCompassCheckNow()
         #expect(uiState.showCompassCheckDialog == true)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         
         compassCheckManager.moveStateForward() // currentPriorities
         compassCheckManager.moveStateForward() // pending
-        #expect(compassCheckManager.state == .pending)
+        #expect(compassCheckManager.currentStep.id == "pending")
         
         // Simulate external completion (e.g., user completed on iPhone)
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
@@ -379,7 +370,7 @@ struct TestCompassCheckSynchronization {
         
         // Verify complete state reset
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         #expect(preferences.didCompassCheckToday == true)
         #expect(preferences.daysOfCompassCheck == initialStreak + 1)
@@ -392,9 +383,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testTimerReschedulingAfterExternalCompletion() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         
@@ -406,7 +397,7 @@ struct TestCompassCheckSynchronization {
         // Start compass check and move to a non-inform state
         compassCheckManager.startCompassCheckNow()
         compassCheckManager.moveStateForward() // currentPriorities
-        #expect(compassCheckManager.state == .currentPriorities)
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         
         // Close dialog to simulate the scenario where dialog is not showing
         appComponents.uiState.showCompassCheckDialog = false
@@ -419,7 +410,7 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify state is reset
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         
         // The key test: verify that setupCompassCheckNotification() was called
@@ -430,9 +421,9 @@ struct TestCompassCheckSynchronization {
     
     @Test
     func testSyncTimerLifecycle() throws {
-        let timeProvider = createMockTimeProvider(fixedNow: Date())
-        let preferences = createTestPreferences(timeProvider: timeProvider)
-        let appComponents = setupApp(isTesting: true, timeProvider: timeProvider, preferences: preferences)
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
         
@@ -451,7 +442,7 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify state is clean
-        #expect(compassCheckManager.state == .inform)
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(compassCheckManager.isPaused == false)
         
         // The sync timer should be stopped when endCompassCheck is called

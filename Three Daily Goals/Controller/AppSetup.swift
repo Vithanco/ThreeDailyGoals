@@ -18,12 +18,13 @@ struct AppComponents {
 
 /// Set up the app with all necessary components
 /// - Parameter isTesting: If true, creates a test setup with dummy data
-/// - Parameter timeProvider: Optional TimeProvider. If nil, creates RealTimeProvider for production or MockTimeProvider for testing
+/// - Parameter timeProvider: TimeProvider to use. Defaults to RealTimeProvider for production or MockTimeProvider for testing
 /// - Parameter loader: Optional test data loader
 /// - Parameter preferences: Optional custom preferences for testing
+/// - Parameter customSteps: Optional custom CompassCheck steps. If nil, uses DEFAULT_STEPS
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil) -> AppComponents {
+func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
     
     // MARK: - Step 1: Create TimeProvider (needed by everything)
     let finalTimeProvider = timeProvider ?? (isTesting ? MockTimeProvider(fixedNow: Date.now) : RealTimeProvider())
@@ -90,6 +91,11 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
         finalPreferences = CloudPreferences(store: NSUbiquitousKeyValueStore.default, timeProvider: finalTimeProvider)
     }
     
+    // Always set test streak value when testing, regardless of whether custom preferences were provided
+    if isTesting {
+        finalPreferences.daysOfCompassCheck = 42
+    }
+    
     // MARK: - Step 4: Create UI State Manager
     let uiState = UIStateManager()
     
@@ -106,7 +112,7 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
         preferences: finalPreferences,
         timeProvider: finalTimeProvider,
         pushNotificationManager: pushNotificationManager,
-        isTesting: isTesting
+        customSteps: compassCheckSteps
     )
     
     // MARK: - Step 8: Set up Cross-Component Dependencies

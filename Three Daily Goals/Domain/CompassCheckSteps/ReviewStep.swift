@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ReviewStep: CompassCheckStep {
-    let state: CompassCheckState = .review
+    let id: String = "review"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Review step is always available - it's where users set new priorities

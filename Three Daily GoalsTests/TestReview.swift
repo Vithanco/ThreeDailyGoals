@@ -24,23 +24,23 @@ struct TestReview {
         pref.lastCompassCheck = Date(timeIntervalSinceNow: -Seconds.twoDays)
 
         compassCheckManager.startCompassCheckNow()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(dataManager.list(which: .priority).count == 1)
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         compassCheckManager.moveStateForward()
         #expect(dataManager.list(which: .priority).count == 0)
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "dueDate")
+        #expect(compassCheckManager.currentStep.id == "dueDate")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
         if OsRelated.currentOS == .macOS {
-            #expect(compassCheckManager.state.rawValue == "plan")
+            #expect(compassCheckManager.currentStep.id == "plan")
             compassCheckManager.moveStateForward()
         }
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 1)
         for t in dataManager.items {
             t.dueDate = nil
@@ -51,7 +51,7 @@ struct TestReview {
         compassCheckManager.startCompassCheckNow()
 
         #expect(uiState.showCompassCheckDialog)
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
 
         #expect(compassCheckManager.dueDateSoon.isEmpty)
         debugPrint(dataManager.list(which: .priority).map { $0.title })
@@ -59,33 +59,33 @@ struct TestReview {
         compassCheckManager.moveStateForward()
 
         #expect(compassCheckManager.dueDateSoon.isEmpty)
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
 
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         #expect(compassCheckManager.dueDateSoon.isEmpty)
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "plan")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 1)
         #expect(!uiState.showCompassCheckDialog)
 
         compassCheckManager.startCompassCheckNow()
         #expect(uiState.showCompassCheckDialog)
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(dataManager.list(which: .priority).count == 0)
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "plan")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 1)
     }
 
@@ -109,45 +109,45 @@ struct TestReview {
 
         debugPrint("Starting compass check")
         compassCheckManager.startCompassCheckNow()
-        debugPrint("State after startCompassCheckNow: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "inform")
+        debugPrint("State after startCompassCheckNow: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
-        debugPrint("State after first moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        debugPrint("State after first moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         compassCheckManager.moveStateForward()
-        debugPrint("State after second moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "pending")
+        debugPrint("State after second moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        debugPrint("State after third moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "dueDate")
+        debugPrint("State after third moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "dueDate")
         compassCheckManager.moveStateForward()
-        debugPrint("State after fourth moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "review")
+        debugPrint("State after fourth moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        debugPrint("State after fifth moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "plan")
+        debugPrint("State after fifth moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
-        debugPrint("State after sixth moveStateForward: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "inform")
+        debugPrint("State after sixth moveStateForward: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "inform")
         debugPrint("Final daysOfCompassCheck: \(pref.daysOfCompassCheck)")
         #expect(pref.daysOfCompassCheck == 43)
 
         debugPrint("Starting second compass check")
         compassCheckManager.startCompassCheckNow()
-        debugPrint("State after second startCompassCheckNow: \(compassCheckManager.state.rawValue)")
-        #expect(compassCheckManager.state.rawValue == "inform")
+        debugPrint("State after second startCompassCheckNow: \(compassCheckManager.currentStep.id)")
+        #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "dueDate")
+        #expect(compassCheckManager.currentStep.id == "dueDate")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "plan")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 43)
     }
 
@@ -256,19 +256,19 @@ struct TestReview {
 
         #expect(pref.daysOfCompassCheck == 42)
         compassCheckManager.startCompassCheckNow()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(dataManager.list(which: .priority).count == 1)
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         compassCheckManager.moveStateForward()
         #expect(dataManager.list(which: .priority).count == 0)
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "dueDate")
+        #expect(compassCheckManager.currentStep.id == "dueDate")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "plan")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
         #expect(pref.daysOfCompassCheck == 43)
     }
@@ -289,38 +289,38 @@ struct TestReview {
 
         // Start compass check
         compassCheckManager.startCompassCheckNow()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(uiState.showCompassCheckDialog == true)
         #expect(compassCheckManager.isPaused == false)
 
         // Move to currentPriorities state
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(compassCheckManager.isPaused == false)
 
         // Pause the compass check
         compassCheckManager.pauseCompassCheck()
         #expect(compassCheckManager.isPaused == true)
-        #expect(compassCheckManager.pausedState.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
 
         // Simulate the notification timer firing (this should resume the compass check)
         compassCheckManager.onCCNotification()
         #expect(compassCheckManager.isPaused == false)
-        #expect(compassCheckManager.state.rawValue == "currentPriorities")
+        #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == true)
 
         // Continue with the compass check flow
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "pending")
+        #expect(compassCheckManager.currentStep.id == "pending")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "dueDate")
+        #expect(compassCheckManager.currentStep.id == "dueDate")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "review")
+        #expect(compassCheckManager.currentStep.id == "review")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "plan")
+        #expect(compassCheckManager.currentStep.id == "plan")
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state.rawValue == "inform")
+        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 43)
     }
 
@@ -339,34 +339,34 @@ struct TestReview {
         #expect(!pref.didCompassCheckToday)
 
         // Test pausing at different states
-        let statesToTest: [CompassCheckState] = [.currentPriorities, .pending, .dueDate, .review]
+        let stepIdsToTest = ["currentPriorities", "pending", "dueDate", "review"]
         
-        for stateToTest in statesToTest {
+        for stepIdToTest in stepIdsToTest {
             // Start fresh compass check
             compassCheckManager.startCompassCheckNow()
-            #expect(compassCheckManager.state.rawValue == "inform")
+            #expect(compassCheckManager.currentStep.id == "inform")
             
             // Navigate to the state we want to test
-            while compassCheckManager.state != stateToTest {
+            while compassCheckManager.currentStep.id != stepIdToTest {
                 compassCheckManager.moveStateForward()
             }
-            #expect(compassCheckManager.state == stateToTest)
+            #expect(compassCheckManager.currentStep.id == stepIdToTest)
             
             // Pause at this state
             compassCheckManager.pauseCompassCheck()
             #expect(compassCheckManager.isPaused == true)
-            #expect(compassCheckManager.pausedState == stateToTest)
+            #expect(compassCheckManager.pausedStep.id == stepIdToTest)
             #expect(uiState.showCompassCheckDialog == false)
             
             // Resume and verify we're back at the same state
             compassCheckManager.onCCNotification()
             #expect(compassCheckManager.isPaused == false)
-            #expect(compassCheckManager.state == stateToTest)
+            #expect(compassCheckManager.currentStep.id == stepIdToTest)
             #expect(uiState.showCompassCheckDialog == true)
             
             // Cancel to reset for next test
             compassCheckManager.cancelCompassCheck()
-            #expect(compassCheckManager.state.rawValue == "inform")
+            #expect(compassCheckManager.currentStep.id == "inform")
             #expect(compassCheckManager.isPaused == false)
         }
     }

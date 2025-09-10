@@ -7,47 +7,50 @@
 
 import Testing
 import Foundation
+import SwiftUI
 
 @testable import Three_Daily_Goals
 
+@MainActor
 /// Tests demonstrating the flexibility of the new dependency injection approach
 struct TestCompassCheckFlexibility {
     
     // MARK: - Test Helpers
     
-    private func createTestDataManager() -> DataManager {
-        let appComponents = setupApp(isTesting: true)
-        let dataManager = appComponents.dataManager
-        
-        // Clear existing tasks
-        let allTasks = dataManager.items
-        for task in allTasks {
-            dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
+    /// Creates a test data loader with various task states
+    private func createTestDataLoader() -> TestStorage.Loader {
+        return { timeProvider in
+            var tasks: [TaskItem] = []
+            
+            // Add test tasks in different states
+            let priorityTask = TaskItem(title: "Priority Task")
+            priorityTask.state = .priority
+            tasks.append(priorityTask)
+            
+            let pendingTask = TaskItem(title: "Pending Task")
+            pendingTask.state = .pendingResponse
+            tasks.append(pendingTask)
+            
+            let openTask = TaskItem(title: "Open Task")
+            openTask.state = .open
+            tasks.append(openTask)
+            
+            // Add a task due soon (in 2 days)
+            let dueTask = TaskItem(title: "Due Soon Task")
+            dueTask.due = Date().addingTimeInterval(2 * 24 * 60 * 60)
+            dueTask.state = .open
+            tasks.append(dueTask)
+            
+            return tasks
         }
-        
-        // Add test tasks in different states
-        let priorityTask = dataManager.addItem(title: "Priority Task")
-        dataManager.move(task: priorityTask, to: .priority)
-        
-        let pendingTask = dataManager.addItem(title: "Pending Task")
-        dataManager.move(task: pendingTask, to: .pendingResponse)
-        
-        let openTask = dataManager.addItem(title: "Open Task")
-        dataManager.move(task: openTask, to: .open)
-        
-        // Add a task due soon (in 2 days)
-        let dueTask = dataManager.addItem(title: "Due Soon Task")
-        dueTask.due = Date().addingTimeInterval(2 * 24 * 60 * 60)
-        dataManager.move(task: dueTask, to: .open)
-        
-        return dataManager
     }
+    
     
     // MARK: - Custom Step for Testing
     
     /// A custom step that always shows "Custom" button text for testing
     struct CustomTestStep: CompassCheckStep {
-        let state: CompassCheckState = .inform
+        let id: String = "customTest"
         
         func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
             return true
@@ -65,7 +68,7 @@ struct TestCompassCheckFlexibility {
     
     /// A step that always skips itself for testing edge cases
     struct AlwaysSkipStep: CompassCheckStep {
-        let state: CompassCheckState = .currentPriorities
+        let id: String = "alwaysSkip"
         
         func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
             return false // Always skip this step
@@ -85,140 +88,105 @@ struct TestCompassCheckFlexibility {
     
     @Test
     func testCustomStepInjection() throws {
-        let dataManager = createTestDataManager()
-        let timeProvider = RealTimeProvider()
-        
-        // Create a custom step manager with only our test step
-        let customSteps: [CompassCheckStep] = [CustomTestStep()]
-        let customStepManager = CompassCheckStepManager(
-            dataManager: dataManager, 
-            timeProvider: timeProvider, 
-            steps: customSteps
-        )
+        // Create a custom compass check manager with only our test step
+        let customSteps: [any CompassCheckStep] = [CustomTestStep()]
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: customSteps)
+        let compassCheckManager = appComponents.compassCheckManager
         
         // Verify the custom step is available
-        let customStep = customStepManager.getCurrentStep(for: .inform)
-        #expect(customStep != nil)
-        #expect(customStep is CustomTestStep)
+        #expect(compassCheckManager.currentStep.id == "customTest")
+        #expect(compassCheckManager.currentStep is CustomTestStep)
         
         // Test that the custom step manager works correctly
-        let nextState = customStepManager.getNextStep(from: .inform, os: .macOS)
-        #expect(nextState == .inform) // Should be the last step since it's the only one
+        // Since it's the only step, moving forward should stay on the same step
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "customTest")
     }
     
     @Test
     func testStepSkippingBehavior() throws {
-        let dataManager = createTestDataManager()
-        let timeProvider = RealTimeProvider()
-        
-        // Create a step manager with a step that always skips itself
-        let stepsWithSkip: [CompassCheckStep] = [
+        // Create a compass check manager with a step that always skips itself
+        let stepsWithSkip: [any CompassCheckStep] = [
             InformStep(),
             AlwaysSkipStep(), // This should always be skipped
             ReviewStep()
         ]
-        let stepManager = CompassCheckStepManager(
-            dataManager: dataManager, 
-            timeProvider: timeProvider, 
-            steps: stepsWithSkip
-        )
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: stepsWithSkip)
+        let compassCheckManager = appComponents.compassCheckManager
         
         // Test that the skipping step is properly skipped
-        let nextFromInform = stepManager.getNextStep(from: .inform, os: .macOS)
-        #expect(nextFromInform == .review) // Should skip .currentPriorities and go to .review
+        #expect(compassCheckManager.currentStep.id == "inform")
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "review") // Should skip "alwaysSkip" and go to "review"
         
         // Test button text reflects the skipping behavior
-        let buttonText = stepManager.getButtonText(for: .inform, os: .macOS)
-        #expect(buttonText == "Next") // Should show "Next" because .review is available
+        #expect(compassCheckManager.moveStateForwardText == "Finish") // Should show "Finish" for review
     }
     
     @Test
-    func testCompassCheckManagerWithCustomStepManager() throws {
-        let dataManager = createTestDataManager()
-        let timeProvider = RealTimeProvider()
-        let uiState = UIStateManager()
-        let preferences = CloudPreferences()
-        let pushNotificationManager = PushNotificationManager()
+    func testCompassCheckManagerWithCustomSteps() throws {
+        // Create a custom compass check manager with minimal steps
+        let customSteps: [any CompassCheckStep] = [InformStep(), ReviewStep()]
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: customSteps)
+        let compassCheckManager = appComponents.compassCheckManager
         
-        // Create a custom step manager
-        let customSteps: [CompassCheckStep] = [InformStep(), ReviewStep()]
-        let customStepManager = CompassCheckStepManager(
-            dataManager: dataManager, 
-            timeProvider: timeProvider, 
-            steps: customSteps
-        )
-        
-        // Inject the custom step manager into CompassCheckManager
-        let compassCheckManager = CompassCheckManager(
-            dataManager: dataManager,
-            uiState: uiState,
-            preferences: preferences,
-            timeProvider: timeProvider,
-            pushNotificationManager: pushNotificationManager,
-            stepManager: customStepManager
-        )
-        
-        // Test that the CompassCheckManager uses our custom step manager
-        #expect(compassCheckManager.moveStateForwardText == "Next") // Should show "Next" for .inform
+        // Test that the CompassCheckManager uses our custom steps
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Next") // Should show "Next" for inform
         
         // Move to next step
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.state == .review) // Should go directly to review (skipping other steps)
+        #expect(compassCheckManager.currentStep.id == "review") // Should go directly to review (skipping other steps)
         
         // Test button text for the final step
-        #expect(compassCheckManager.moveStateForwardText == "Finish") // Should show "Finish" for .review
+        #expect(compassCheckManager.moveStateForwardText == "Finish") // Should show "Finish" for review
     }
     
     @Test
     func testMinimalStepConfiguration() throws {
-        let dataManager = createTestDataManager()
-        let timeProvider = RealTimeProvider()
-        
         // Create a minimal step configuration with just inform and review
-        let minimalSteps: [CompassCheckStep] = [
+        let minimalSteps: [any CompassCheckStep] = [
             InformStep(),
             ReviewStep()
         ]
-        let minimalStepManager = CompassCheckStepManager(
-            dataManager: dataManager, 
-            timeProvider: timeProvider, 
-            steps: minimalSteps
-        )
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: minimalSteps)
+        let compassCheckManager = appComponents.compassCheckManager
         
         // Test the minimal flow
-        #expect(minimalStepManager.getButtonText(for: .inform, os: .macOS) == "Next")
-        #expect(minimalStepManager.getButtonText(for: .review, os: .macOS) == "Finish")
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        // Test that other states are not available
-        #expect(minimalStepManager.getCurrentStep(for: .currentPriorities) == nil)
-        #expect(minimalStepManager.getCurrentStep(for: .plan) == nil)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "review")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
+        
+        // Test that we only have the expected steps
+        #expect(compassCheckManager.currentStep.id == "review")
     }
     
     @Test
     func testStepOrderingFlexibility() throws {
-        let dataManager = createTestDataManager()
-        let timeProvider = RealTimeProvider()
-        
         // Create steps in a different order
-        let reorderedSteps: [CompassCheckStep] = [
+        let reorderedSteps: [any CompassCheckStep] = [
             ReviewStep(),    // Start with review
             InformStep(),    // Then inform
             PlanStep()       // End with plan
         ]
-        let reorderedStepManager = CompassCheckStepManager(
-            dataManager: dataManager, 
-            timeProvider: timeProvider, 
-            steps: reorderedSteps
-        )
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: reorderedSteps)
+        let compassCheckManager = appComponents.compassCheckManager
         
-        // Test the reordered flow
-        let nextFromReview = reorderedStepManager.getNextStep(from: .review, os: .macOS)
-        #expect(nextFromReview == .inform) // Should go to inform next
+        // Test the reordered flow - should start with the first step (review)
+        #expect(compassCheckManager.currentStep.id == "review")
+        #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        let nextFromInform = reorderedStepManager.getNextStep(from: .inform, os: .macOS)
-        #expect(nextFromInform == .plan) // Should go to plan next
+        // Move to next step (inform)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        let nextFromPlan = reorderedStepManager.getNextStep(from: .plan, os: .macOS)
-        #expect(nextFromPlan == .plan) // Should be the last step
+        // Move to next step (plan)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "plan")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
 }

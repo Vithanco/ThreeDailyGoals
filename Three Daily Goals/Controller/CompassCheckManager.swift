@@ -9,18 +9,19 @@ import Foundation
 import SwiftUI
 import os
 
-enum CompassCheckState: String {
-    case inform
-    case currentPriorities
-    case pending
-    case dueDate
-    case review
-    case plan
-}
 
 @MainActor
 @Observable
 final class CompassCheckManager {
+    
+    public static let DEFAULT_STEPS: [any CompassCheckStep] = [
+        InformStep(),
+        CurrentPrioritiesStep(),
+        PendingResponsesStep(),
+        DueDateStep(),
+        ReviewStep(),
+        PlanStep()
+    ]
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,
         category: String(describing: CompassCheckManager.self)
@@ -36,11 +37,11 @@ final class CompassCheckManager {
 
     let timer: CompassCheckTimer = .init()
 
-    var state: CompassCheckState = .inform
+    var currentStep: any CompassCheckStep
     
     // Pause functionality
     var isPaused: Bool = false
-    var pausedState: CompassCheckState = .inform
+    var pausedStep: any CompassCheckStep
 
     // Dependencies
     private let dataManager: DataManager
@@ -50,7 +51,7 @@ final class CompassCheckManager {
     private let pushNotificationManager: PushNotificationManager
     
     // Step management
-    private let stepManager: CompassCheckStepManager
+    private let steps: [any CompassCheckStep]
 
     var os: SupportedOS {
         #if os(iOS)
@@ -63,13 +64,25 @@ final class CompassCheckManager {
         #endif
     }
 
-    init(dataManager: DataManager, uiState: UIStateManager, preferences: CloudPreferences, timeProvider: TimeProvider, pushNotificationManager: PushNotificationManager, stepManager: CompassCheckStepManager? = nil, isTesting: Bool = false) {
+    init(
+        dataManager: DataManager,
+        uiState: UIStateManager,
+        preferences: CloudPreferences,
+        timeProvider: TimeProvider,
+        pushNotificationManager: PushNotificationManager,
+        customSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS
+    ) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
         self.timeProvider = timeProvider
         self.pushNotificationManager = pushNotificationManager
-        self.stepManager = stepManager ?? CompassCheckStepManager(dataManager: dataManager, timeProvider: timeProvider)
+        self.steps = customSteps
+        
+        // Initialize currentStep and pausedStep to the first step
+        var currentStep = self.steps.first!
+        self.currentStep = currentStep
+        self.pausedStep = currentStep
     }
     
     @MainActor
@@ -92,45 +105,41 @@ final class CompassCheckManager {
     }
 
     func moveStateForward() {
-        let nextState = stepManager.moveToNextStep(from: state, os: os)
+        let nextStep = moveToNextStep(from: currentStep, os: os)
         
-        if nextState == state {
+        if nextStep == nil {
             // We're at the end, finish the compass check
             endCompassCheck(didFinishCompassCheck: true)
         } else {
-            state = nextState
+            currentStep = nextStep!
         }
         
-        debugPrint("new state is: \(state)")
+        debugPrint("new step is: \(type(of: currentStep))")
     }
 
     var moveStateForwardText: String {
-        return stepManager.getButtonText(for: state, os: os)
+        return getButtonText(for: currentStep, os: os)
     }
     
     /// Get the current step's view
     @ViewBuilder
     func getCurrentStepView() -> some View {
-        if let step = stepManager.getCurrentStep(for: state) {
-            step.view(compassCheckManager: self)
-        } else {
-            AnyView(CompassCheckInformView())
-        }
+        currentStep.view(compassCheckManager: self)
     }
 
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
-        state = .inform
+        currentStep = steps.first ?? InformStep()
         isPaused = false
-        pausedState = .inform
+        pausedStep = currentStep
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.twoHours))
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
-        state = .inform
+        currentStep = steps.first ?? InformStep()
         isPaused = false
-        pausedState = .inform
+        pausedStep = currentStep
         
         // Cancel any pending notifications since CC is done
         timer.cancelTimer()
@@ -178,6 +187,12 @@ final class CompassCheckManager {
         dataManager.updateUndoRedoStatus()
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
         setupCompassCheckNotification()
+        
+        // Force UI refresh to ensure StreakView updates after compass check completion
+        if didFinishCompassCheck {
+            // Manually trigger the onChange callback to ensure UI updates
+            preferences.onChange?()
+        }
     }
 
     func waitABit() {
@@ -186,14 +201,14 @@ final class CompassCheckManager {
     
     func pauseCompassCheck() {
         isPaused = true
-        pausedState = state
+        pausedStep = currentStep
         uiState.showCompassCheckDialog = false
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
     }
     
     func resumeCompassCheck() {
         isPaused = false
-        state = pausedState
+        currentStep = pausedStep
         uiState.showCompassCheckDialog = true
     }
 
@@ -207,12 +222,12 @@ final class CompassCheckManager {
             if uiState.showCompassCheckDialog {
                 logger.info("Compass check completed on another device, closing dialog")
                 endCompassCheck(didFinishCompassCheck: false)
-            } else if state != .inform {
-                // Reset state if not showing dialog but state is not inform
+            } else if currentStep.id != steps.first?.id {
+                // Reset state if not showing dialog but state is not the first step
                 logger.info("Compass check completed on another device, resetting state")
-                state = .inform
+                currentStep = steps.first ?? InformStep()
                 isPaused = false
-                pausedState = .inform
+                pausedStep = currentStep
                 // Reschedule for next interval since CC was completed externally
                 setupCompassCheckNotification()
             }
@@ -221,7 +236,7 @@ final class CompassCheckManager {
     
     /// Check if compass check was completed on another device and update UI accordingly
     func checkForExternalCompassCheckCompletion() {
-        if preferences.didCompassCheckToday && (uiState.showCompassCheckDialog || state != .inform) {
+        if preferences.didCompassCheckToday && (uiState.showCompassCheckDialog || currentStep.id != steps.first?.id) {
             logger.info("Detected compass check completion on another device during periodic check")
             onPreferencesChange()
         }
@@ -244,7 +259,7 @@ final class CompassCheckManager {
     }
 
     func startCompassCheckNow() {
-        if !uiState.showCompassCheckDialog && state == .inform {
+        if !uiState.showCompassCheckDialog && currentStep.id == steps.first?.id {
             debugPrint("start compass check \(timeProvider.now)")
             uiState.showCompassCheckDialog = true
         }
@@ -338,5 +353,52 @@ final class CompassCheckManager {
                 .help("Start compass check")
         }
         .accessibilityIdentifier("compassCheckButton")
+    }
+    
+    // MARK: - Step Management Methods
+    
+    /// Get the next step in the flow, skipping steps that should be skipped
+    private func getNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
+        let currentIndex = steps.firstIndex { $0.id == currentStep.id } ?? 0
+        
+        // Look for the next step that should not be skipped
+        for i in (currentIndex + 1)..<steps.count {
+            let step = steps[i]
+            
+            // Check if step should be skipped (includes platform-specific logic)
+            if !step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider) {
+                return step
+            }
+        }
+        
+        // If no next step found, we're at the end
+        return nil
+    }
+    
+    /// Execute the current step's onMoveToNext action and return the next step
+    private func moveToNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
+        // Execute the current step's action
+        currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        
+        // Find the next step
+        return getNextStep(from: currentStep, os: os)
+    }
+    
+    /// Get the button text for the current step
+    private func getButtonText(for currentStep: any CompassCheckStep, os: SupportedOS) -> String {
+        let nextStep = getNextStep(from: currentStep, os: os)
+        
+        // If this is the last step, show "Finish"
+        if nextStep == nil {
+            return "Finish"
+        }
+        
+        // For all other cases, show "Next"
+        return "Next"
+    }
+    
+    /// Check if the current step should be skipped
+    private func shouldSkipStep(_ step: any CompassCheckStep) -> Bool {
+        return step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider)
     }
 }

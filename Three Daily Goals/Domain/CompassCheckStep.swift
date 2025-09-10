@@ -10,9 +10,9 @@ import SwiftUI
 
 @MainActor
 /// Protocol defining the interface for Compass Check steps
-protocol CompassCheckStep {
-    /// The state this step represents
-    var state: CompassCheckState { get }
+protocol CompassCheckStep: Equatable {
+    /// Unique identifier for this step
+    var id: String { get }
     
     /// Whether the precondition for this step is fulfilled
     /// For example, if there are no priority tasks, we might skip the currentPriorities step

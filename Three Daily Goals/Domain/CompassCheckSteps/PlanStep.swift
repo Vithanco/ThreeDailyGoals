@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PlanStep: CompassCheckStep {
-    let state: CompassCheckState = .plan
+    let id: String = "plan"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Plan step is only available on macOS (not iOS)

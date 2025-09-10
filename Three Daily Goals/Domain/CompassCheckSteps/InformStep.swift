@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct InformStep: CompassCheckStep {
-    let state: CompassCheckState = .inform
+    let id: String = "inform"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Inform step is always available - it's the starting point

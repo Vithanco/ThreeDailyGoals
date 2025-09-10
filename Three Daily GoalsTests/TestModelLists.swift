@@ -130,7 +130,7 @@ struct TestModelLists {
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
 
         model.compassCheckManager.moveStateForward()
-        #expect(model.compassCheckManager.state.rawValue == "review")
+        #expect(model.compassCheckManager.currentStep.id == "review")
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         model.compassCheckManager.moveStateForward()
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
