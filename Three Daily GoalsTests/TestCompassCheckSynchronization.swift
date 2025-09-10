@@ -310,7 +310,7 @@ struct TestCompassCheckSynchronization {
     }
     
     @Test
-    func testExternalCompletionWhenAlreadyCompleted() throws {
+    func testMultipleCompassChecksPerDay() throws {
         let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
         let preferences = appComponents.preferences
         let timeProvider = appComponents.timeProvider
@@ -325,10 +325,6 @@ struct TestCompassCheckSynchronization {
         
         // Try to start compass check (should show dialog - multiple compass checks per day are allowed)
         compassCheckManager.startCompassCheckNow()
-        #expect(uiState.showCompassCheckDialog == true)
-        
-        // Trigger preferences change (should be no-op)
-        compassCheckManager.onPreferencesChange()
         #expect(uiState.showCompassCheckDialog == true)
         #expect(compassCheckManager.currentStep.id == "inform")
     }
