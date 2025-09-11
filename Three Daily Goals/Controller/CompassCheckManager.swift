@@ -188,11 +188,8 @@ final class CompassCheckManager {
         dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
         setupCompassCheckNotification()
         
-        // Force UI refresh to ensure StreakView updates after compass check completion
-        if didFinishCompassCheck {
-            // Manually trigger the onChange callback to ensure UI updates
-            preferences.onChange?()
-        }
+        // The @Observable mechanism in CloudPreferences will automatically trigger UI updates
+        // when the stored properties change, so no manual UI refresh is needed
     }
 
     func waitABit() {

@@ -97,11 +97,24 @@ final class CloudPreferences {
     let timeProvider: TimeProvider
     typealias OnChange = () -> Void
     var onChange: OnChange?
+    
+    // Stored properties that trigger @Observable notifications
+    private var _daysOfCompassCheck: Int = 0
+    private var _lastCompassCheck: Date = Date()
 
     init(store: KeyValueStorage, timeProvider: TimeProvider, onChange: OnChange? = nil) {
         self.store = store
         self.timeProvider = timeProvider
         self.onChange = onChange
+        
+        // Initialize stored properties from store
+        self._daysOfCompassCheck = store.int(forKey: .daysOfCompassCheck)
+        if let dateAsString = store.string(forKey: .lastCompassCheckString),
+           let date = cloudDateFormatter.date(from: dateAsString) {
+            self._lastCompassCheck = date
+        } else {
+            self._lastCompassCheck = timeProvider.now
+        }
     }
 
     convenience init(testData: Bool, timeProvider: TimeProvider, onChange: OnChange? = nil) {
@@ -132,7 +145,15 @@ final class CloudPreferences {
         ubiquitousKeyValueStoreDidChange(notification: note)
     }
 
-    func ubiquitousKeyValueStoreDidChange(notification: Notification) { onChange?() }
+    func ubiquitousKeyValueStoreDidChange(notification: Notification) { 
+        // Refresh stored properties when external changes occur
+        _daysOfCompassCheck = store.int(forKey: .daysOfCompassCheck)
+        if let dateAsString = store.string(forKey: .lastCompassCheckString),
+           let date = cloudDateFormatter.date(from: dateAsString) {
+            _lastCompassCheck = date
+        }
+        onChange?() 
+    }
 
     var isProductionEnvironment: Bool { CKContainer.isProductionEnvironment }
 }
@@ -142,12 +163,13 @@ extension CloudPreferences {
 
     var daysOfCompassCheck: Int {
         get {
-            let result = self.store.int(forKey: .daysOfCompassCheck)
+            let result = isStreakBroken ? 0 : _daysOfCompassCheck
             debugPrint("read daysOfCompassCheck: \(result), isStreakBroken: \(isStreakBroken)")
-            return isStreakBroken ? 0: result
+            return result
         }
         set {
             debugPrint("write new daysOfCompassCheck: \(newValue)")
+            _daysOfCompassCheck = newValue
             store.set(newValue, forKey: .daysOfCompassCheck)
         }
     }
@@ -235,15 +257,10 @@ extension CloudPreferences {
 
     var lastCompassCheck: Date {
         get {
-            if let dateAsString = store.string(forKey: .lastCompassCheckString),
-                let result = cloudDateFormatter.date(from: dateAsString)
-            {
-                return result
-            }
-            store.set(cloudDateFormatter.string(from: timeProvider.now), forKey: .lastCompassCheckString)
-            return timeProvider.now
+            return _lastCompassCheck
         }
         set {
+            _lastCompassCheck = newValue
             store.set(cloudDateFormatter.string(from: newValue), forKey: .lastCompassCheckString)
         }
     }
