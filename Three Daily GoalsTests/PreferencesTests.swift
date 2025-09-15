@@ -27,8 +27,8 @@ struct PreferencesTests {
 
         preferences.compassCheckTime = date
         #expect(preferences.compassCheckTime == date)
-        #expect(tester.int(forKey: .compassCheckTimeHour) == 23)
-        #expect(tester.int(forKey: .compassCheckTimeMinute) == 59)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeHour) == 23)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeMinute) == 59)
         var newDate = preferences.compassCheckTime
         debugPrint(
             "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"
@@ -42,8 +42,8 @@ struct PreferencesTests {
 
         date = timeProvider.todayAt(hour: 0, min: 1)
         preferences.compassCheckTime = date
-        #expect(tester.int(forKey: .compassCheckTimeHour) == 0)
-        #expect(tester.int(forKey: .compassCheckTimeMinute) == 1)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeHour) == 0)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeMinute) == 1)
         newDate = preferences.nextCompassCheckTime
         debugPrint(
             "Time is : \(stdOnlyTimeFormat.format(newDate)), date is: \(stdOnlyDateFormat.format(newDate))"

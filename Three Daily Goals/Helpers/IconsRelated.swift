@@ -13,7 +13,7 @@ let imgPendingResponse = "clock"
 let imgDueSoon = "calendar"
 let imgDated = "clock.fill"
 let imgInformation = "info.square.fill"
-let imgCompassCheck = "compass.drawing"
+let imgCompassCheck = "safari"
 let imgStreak = "flame"
 let imgPriority = "star.fill"
 
@@ -22,7 +22,6 @@ let imgStreakActive = "flame.fill"
 let imgStreakBroken = "cloud.heavyrain.circle.fill"
 let imgCompassCheckDone = "checkmark.circle.fill"
 let imgCompassCheckPending = "clock.circle"
-let imgCompassCheckStart = "safari"
 
 let imgReopenTask = imgOpen  //arrow.uturn.forward.circle.fill
 let imgTouch = "hand.tap"

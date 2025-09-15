@@ -11,6 +11,7 @@ import SwiftUI
 @MainActor
 struct CurrentPrioritiesStep: CompassCheckStep {
     let id: String = "currentPriorities"
+    let name: String = "Review Current Priorities"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are priority tasks to review

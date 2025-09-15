@@ -12,10 +12,17 @@ import Testing
 @Suite
 @MainActor
 struct TestReview {
+    
+    /// Helper function to create test preferences with plan step enabled
+    private func createTestPreferencesWithPlanEnabled() -> CloudPreferences {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        testPreferences.setCompassCheckStepEnabled(stepId: "plan", enabled: true)
+        return testPreferences
+    }
 
     @Test
     func testNoStreak() throws {
-        let appComponents = setupApp(isTesting: true)
+        let appComponents = setupApp(isTesting: true, preferences: createTestPreferencesWithPlanEnabled())
         let pref = appComponents.preferences
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
@@ -93,7 +100,7 @@ struct TestReview {
     @Test
     func testIncreaseStreak() throws {
         debugPrint("Starting testIncreaseStreak")
-        let appComponents = setupApp(isTesting: true)
+        let appComponents = setupApp(isTesting: true, preferences: createTestPreferencesWithPlanEnabled())
         debugPrint("setupApp completed")
         let pref = appComponents.preferences
         debugPrint("got preferences")
@@ -242,7 +249,7 @@ struct TestReview {
     @MainActor
     @Test
     func testReview() {
-        let appComponents = setupApp(isTesting: true)
+        let appComponents = setupApp(isTesting: true, preferences: createTestPreferencesWithPlanEnabled())
         let pref = appComponents.preferences
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
@@ -276,7 +283,7 @@ struct TestReview {
     @MainActor
     @Test
     func testCompassCheckPauseAndResume() {
-        let appComponents = setupApp(isTesting: true)
+        let appComponents = setupApp(isTesting: true, preferences: createTestPreferencesWithPlanEnabled())
         let pref = appComponents.preferences
         let uiState = appComponents.uiState
         let compassCheckManager = appComponents.compassCheckManager

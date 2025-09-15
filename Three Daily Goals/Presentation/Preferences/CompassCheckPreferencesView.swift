@@ -18,10 +18,24 @@ struct CompassCheckPreferencesView: View {
         dateFormatter.timeStyle = .short
         return dateFormatter.string(from: preferences.lastCompassCheck)
     }
+    
 
     var body: some View {
         VStack {
             Spacer()
+            
+            // Header with icon
+            HStack {
+                Image(systemName: imgCompassCheck)
+                    .foregroundColor(Color.priority)
+                    .font(.title2)
+                Text("Compass Check Preferences")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color.priority)
+            }
+            .padding(.bottom, 10)
+            
             Text(
                 "Daily Compass Checks are at the heart of Three Daily Goals. Choose when you want to plan your Daily Compass Check. In the morning? Or the evening before?"
             )
@@ -53,7 +67,7 @@ struct CompassCheckPreferencesView: View {
                     Text("Done for this period: ")
                     Text(preferences.didCompassCheckToday ? "yes" : "no")
                 }
-            }
+            }.frame(width: 390)
             GroupBox {
                 DatePicker(
                     "Time of Compass Check Notification",
@@ -62,21 +76,53 @@ struct CompassCheckPreferencesView: View {
                         set: { preferences.compassCheckTime = $0 }
                     ),
                     displayedComponents: .hourAndMinute
-                ).frame(maxWidth: 258).padding(5)
+                ).padding(5)
                 Button("Set Compass Check Time") {
                     compassCheckManager.setupCompassCheckNotification()
                 }.buttonStyle(.bordered).padding(5)
-
+                
                 //                Spacer()
                 //            }
                 Text("or")
-
+                
                 Button("No Notifications Please", role: .destructive) {
                     compassCheckManager.deleteNotifications()
                 }.buttonStyle(.bordered).padding(5)
-            }
+            }.frame(width: 390)
+            
+            GroupBox {
+                Text("Compass Check Steps").bold().padding(.bottom, 5)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(compassCheckManager.steps, id: \.id) { step in
+                        let isComingSoon = step.id == "plan"
+                        
+                        if isComingSoon {
+                            HStack {
+                                Toggle(step.name, isOn: Binding(
+                                    get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
+                                    set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
+                                ))
+                                Text("(Coming Soon)")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        } else {
+                            Toggle(step.name, isOn: Binding(
+                                get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
+                                set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
+                            ))
+                        }
+                    }
+                }
+                .padding(5)
+            }.frame(width: 390)
+            
             Spacer(minLength: 10)
-        }.fixedSize(horizontal: false, vertical: true).padding(10)
+        }
+        .frame(maxWidth: 400)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(10)
     }
 
 }

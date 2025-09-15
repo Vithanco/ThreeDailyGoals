@@ -51,7 +51,7 @@ final class CompassCheckManager {
     private let pushNotificationManager: PushNotificationManager
     
     // Step management
-    private let steps: [any CompassCheckStep]
+    let steps: [any CompassCheckStep]
 
     var os: SupportedOS {
         #if os(iOS)
@@ -70,19 +70,19 @@ final class CompassCheckManager {
         preferences: CloudPreferences,
         timeProvider: TimeProvider,
         pushNotificationManager: PushNotificationManager,
-        customSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS
+        steps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS
     ) {
         self.dataManager = dataManager
         self.uiState = uiState
         self.preferences = preferences
         self.timeProvider = timeProvider
         self.pushNotificationManager = pushNotificationManager
-        self.steps = customSteps
+        self.steps = steps
         
-        // Initialize currentStep and pausedStep to the first step
-        var currentStep = self.steps.first!
-        self.currentStep = currentStep
-        self.pausedStep = currentStep
+        // Initialize currentStep and pausedStep to the first enabled step
+        let firstEnabledStep = steps.first!
+        self.currentStep = firstEnabledStep
+        self.pausedStep = firstEnabledStep
     }
     
     @MainActor
@@ -129,7 +129,8 @@ final class CompassCheckManager {
 
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
-        currentStep = steps.first ?? InformStep()
+        let firstEnabledStep = steps.first { !shouldSkipStep($0) } ?? InformStep()
+        currentStep = firstEnabledStep
         isPaused = false
         pausedStep = currentStep
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.twoHours))
@@ -137,7 +138,8 @@ final class CompassCheckManager {
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
-        currentStep = steps.first ?? InformStep()
+        let firstEnabledStep = steps.first { !shouldSkipStep($0) } ?? InformStep()
+        currentStep = firstEnabledStep
         isPaused = false
         pausedStep = currentStep
         
@@ -345,7 +347,7 @@ final class CompassCheckManager {
     /// Compass check button for app commands
     var compassCheckButton: some View {
         Button(action: { self.startCompassCheckNow() }) {
-            Label("Compass Check", systemImage: imgCompassCheckStart)
+            Label("Compass Check", systemImage: imgCompassCheck)
                 .foregroundStyle(Color.priority)
                 .help("Start compass check")
         }
@@ -362,8 +364,8 @@ final class CompassCheckManager {
         for i in (currentIndex + 1)..<steps.count {
             let step = steps[i]
             
-            // Check if step should be skipped (includes platform-specific logic)
-            if !step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider) {
+            // Check if step should be skipped (includes user toggles and platform-specific logic)
+            if !shouldSkipStep(step) {
                 return step
             }
         }
@@ -396,6 +398,17 @@ final class CompassCheckManager {
     
     /// Check if the current step should be skipped
     private func shouldSkipStep(_ step: any CompassCheckStep) -> Bool {
+        // First check if the user has disabled this step
+        if !isStepEnabled(step) {
+            return true
+        }
+        
+        // Then check the step's own precondition logic
         return step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider)
+    }
+    
+    /// Check if a step is enabled by the user
+    private func isStepEnabled(_ step: any CompassCheckStep) -> Bool {
+        return preferences.isCompassCheckStepEnabled(stepId: step.id)
     }
 }

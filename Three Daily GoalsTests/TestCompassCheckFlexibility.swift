@@ -15,6 +15,13 @@ import SwiftUI
 /// Tests demonstrating the flexibility of the new dependency injection approach
 struct TestCompassCheckFlexibility {
     
+    /// Helper function to create test preferences with plan step enabled
+    private func createTestPreferencesWithPlanEnabled() -> CloudPreferences {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        testPreferences.setCompassCheckStepEnabled(stepId: "plan", enabled: true)
+        return testPreferences
+    }
+    
     // MARK: - Test Helpers
     
     /// Creates a test data loader with various task states
@@ -51,6 +58,7 @@ struct TestCompassCheckFlexibility {
     /// A custom step that always shows "Custom" button text for testing
     struct CustomTestStep: CompassCheckStep {
         let id: String = "customTest"
+        let name: String = "Custom Test Step"
         
         func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
             return true
@@ -69,6 +77,7 @@ struct TestCompassCheckFlexibility {
     /// A step that always skips itself for testing edge cases
     struct AlwaysSkipStep: CompassCheckStep {
         let id: String = "alwaysSkip"
+        let name: String = "Always Skip Step"
         
         func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
             return false // Always skip this step
@@ -172,7 +181,7 @@ struct TestCompassCheckFlexibility {
             InformStep(),    // Then inform
             PlanStep()       // End with plan
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: reorderedSteps)
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: reorderedSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the reordered flow - should start with the first step (review)

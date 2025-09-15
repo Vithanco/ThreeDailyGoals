@@ -127,6 +127,7 @@
 		7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE042E42B3230016C181 /* SwiftUI.framework */; };
 		7FE1FE072E4330260016C181 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
 		7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE38F0E2C33084100C9A798 /* TDGEvent.swift */; };
+		7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE589492E78346900D29CC8 /* TestDynamicStorageKeys.swift */; };
 		7FE813842E5444E100CEA462 /* SchemaV3_5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813832E5444E100CEA462 /* SchemaV3_5.swift */; };
 		7FE813862E54682E00CEA462 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813852E54682B00CEA462 /* Attachment.swift */; };
 		7FE813872E54682E00CEA462 /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE813852E54682B00CEA462 /* Attachment.swift */; };
@@ -322,6 +323,7 @@
 		7FE1FE022E42B3060016C181 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		7FE1FE042E42B3230016C181 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
 		7FE38F0E2C33084100C9A798 /* TDGEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDGEvent.swift; sourceTree = "<group>"; };
+		7FE589492E78346900D29CC8 /* TestDynamicStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDynamicStorageKeys.swift; sourceTree = "<group>"; };
 		7FE813832E5444E100CEA462 /* SchemaV3_5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaV3_5.swift; sourceTree = "<group>"; };
 		7FE813852E54682B00CEA462 /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIsStreakBroken.swift; sourceTree = "<group>"; };
@@ -611,6 +613,7 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FE589492E78346900D29CC8 /* TestDynamicStorageKeys.swift */,
 				7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */,
 				7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */,
 				7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */,
@@ -1211,6 +1214,7 @@
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,
+				7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */,
 				E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */,
 				7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */,
 			);

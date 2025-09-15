@@ -37,8 +37,8 @@ struct TestDailyCompassCheckTime {
         let timeProvider = RealTimeProvider()
         let date = timeProvider.date(from: DateComponents(hour: 15, minute: 08))!
         preferences.compassCheckTime = date
-        #expect(tester.int(forKey: CloudKey.compassCheckTimeHour) == 15)
-        #expect(tester.int(forKey: CloudKey.compassCheckTimeMinute) == 08)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeHour) == 15)
+        #expect(tester.int(forKey: StorageKeys.compassCheckTimeMinute) == 08)
 
     }
 

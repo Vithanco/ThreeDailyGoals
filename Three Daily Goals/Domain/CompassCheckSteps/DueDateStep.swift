@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DueDateStep: CompassCheckStep {
     let id: String = "dueDate"
+    let name: String = "Due Date Check"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are tasks due soon

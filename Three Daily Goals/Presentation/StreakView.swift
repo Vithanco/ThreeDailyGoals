@@ -51,7 +51,7 @@ struct FullStreakView: View {
                 StreakView()
                 
                 Button(action: { compassCheckManager.startCompassCheckNow() }) {
-                            Label("Start Compass Check Now", systemImage: imgCompassCheckStart)
+                            Label("Start Compass Check Now", systemImage: imgCompassCheck)
                                 .foregroundStyle(.white)
                                 .font(.system(size: 14, weight: .medium))
                                 .padding(.horizontal, 12)

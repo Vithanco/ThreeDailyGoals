@@ -82,13 +82,13 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
     } else if isTesting {
         // Create test preferences with time provider
         let store: KeyValueStorage = TestPreferences()
-        store.set(18, forKey: .compassCheckTimeHour)
-        store.set(0, forKey: .compassCheckTimeMinute)
+        store.set(18, forKey: StorageKeys.compassCheckTimeHour)
+        store.set(0, forKey: StorageKeys.compassCheckTimeMinute)
         finalPreferences = CloudPreferences(store: store, timeProvider: finalTimeProvider)
         finalPreferences.daysOfCompassCheck = 42
     } else {
         // Create production preferences with time provider
-        finalPreferences = CloudPreferences(store: NSUbiquitousKeyValueStore.default, timeProvider: finalTimeProvider)
+        finalPreferences = CloudPreferences(store: CloudKeyValueStore(store: NSUbiquitousKeyValueStore.default), timeProvider: finalTimeProvider)
     }
     
     // Always set test streak value when testing, regardless of whether custom preferences were provided
@@ -112,7 +112,7 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
         preferences: finalPreferences,
         timeProvider: finalTimeProvider,
         pushNotificationManager: pushNotificationManager,
-        customSteps: compassCheckSteps
+        steps: compassCheckSteps
     )
     
     // MARK: - Step 8: Set up Cross-Component Dependencies

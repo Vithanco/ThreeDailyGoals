@@ -15,6 +15,28 @@ import SwiftUI
 @MainActor
 struct TestCompassCheckSteps {
     
+    /// Helper function to create test preferences with plan step enabled
+    private func createTestPreferencesWithPlanEnabled() -> CloudPreferences {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        
+        // Debug: Check initial state
+        let initialPlanState = testPreferences.isCompassCheckStepEnabled(stepId: "plan")
+        print("DEBUG: Initial plan step state: \(initialPlanState)")
+        
+        // Enable the plan step
+        testPreferences.setCompassCheckStepEnabled(stepId: "plan", enabled: true)
+        
+        // Debug: Check state after enabling
+        let finalPlanState = testPreferences.isCompassCheckStepEnabled(stepId: "plan")
+        print("DEBUG: Final plan step state: \(finalPlanState)")
+        
+        // Verify the setup is working
+        assert(testPreferences.isCompassCheckStepEnabled(stepId: "plan") == true, "Plan step should be enabled in test setup")
+        assert(testPreferences.isCompassCheckStepEnabled(stepId: "inform") == true, "Inform step should be enabled by default")
+        
+        return testPreferences
+    }
+    
     // MARK: - Test Setup Helpers
     
     /// Creates a test data loader with various task states
@@ -213,7 +235,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testReviewStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = ReviewStep()
@@ -257,11 +279,44 @@ struct TestCompassCheckSteps {
         #expect(dataManager.items.count == initialTaskCount)
     }
     
+    // MARK: - Step Enablement Tests
+    
+    @Test
+    func testStepEnablementSystem() throws {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        
+        // Test default states
+        let informDefault = testPreferences.isCompassCheckStepEnabled(stepId: "inform")
+        let planDefault = testPreferences.isCompassCheckStepEnabled(stepId: "plan")
+        print("DEBUG: Default states - inform: \(informDefault), plan: \(planDefault)")
+        
+        #expect(informDefault == true)
+        #expect(planDefault == false) // Disabled by default
+        
+        // Test enabling a step
+        testPreferences.setCompassCheckStepEnabled(stepId: "plan", enabled: true)
+        let planAfterEnable = testPreferences.isCompassCheckStepEnabled(stepId: "plan")
+        print("DEBUG: Plan after enable: \(planAfterEnable)")
+        #expect(planAfterEnable == true)
+        
+        // Test disabling a step
+        testPreferences.setCompassCheckStepEnabled(stepId: "inform", enabled: false)
+        let informAfterDisable = testPreferences.isCompassCheckStepEnabled(stepId: "inform")
+        print("DEBUG: Inform after disable: \(informAfterDisable)")
+        #expect(informAfterDisable == false)
+        
+        // Test re-enabling
+        testPreferences.setCompassCheckStepEnabled(stepId: "inform", enabled: true)
+        let informAfterReEnable = testPreferences.isCompassCheckStepEnabled(stepId: "inform")
+        print("DEBUG: Inform after re-enable: \(informAfterReEnable)")
+        #expect(informAfterReEnable == true)
+    }
+    
     // MARK: - Step Manager Tests
     
     @Test
     func testStepManagerFlow() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test getting current step - we now work directly with step instances
@@ -307,7 +362,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createEmptyDataLoader(), compassCheckSteps: stepsWithControlledSkipping)
+        let appComponents = setupApp(isTesting: true, loader: createEmptyDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: stepsWithControlledSkipping)
         let compassCheckManager = appComponents.compassCheckManager
         
         // With no tasks, should skip directly from inform to review
@@ -394,7 +449,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testStepManagerButtonText() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test button text for different states
@@ -424,7 +479,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: simplifiedSteps)
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: simplifiedSteps)
         let compassCheckManager = appComponents.compassCheckManager
         let dataManager = appComponents.dataManager
         
@@ -602,6 +657,7 @@ struct TestCompassCheckSteps {
         // Create a custom PlanStep that simulates iOS behavior (always skips)
         struct iOSPlanStep: CompassCheckStep {
             let id: String = "plan"
+            let name: String = "iOS Plan Step"
             
             func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
                 return false // Always skip on iOS
@@ -675,7 +731,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep() // This should be included on macOS
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: macOSSteps)
+        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: macOSSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the actual macOS flow - should include PlanStep

@@ -14,6 +14,9 @@ protocol CompassCheckStep: Equatable {
     /// Unique identifier for this step
     var id: String { get }
     
+    /// Human-readable display name for this step
+    var name: String { get }
+    
     /// Whether the precondition for this step is fulfilled
     /// For example, if there are no priority tasks, we might skip the currentPriorities step
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool

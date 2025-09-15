@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ReviewStep: CompassCheckStep {
     let id: String = "review"
+    let name: String = "Set New Priorities"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Review step is always available - it's where users set new priorities

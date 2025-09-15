@@ -9,7 +9,9 @@ import Foundation
 import SwiftUI
 
 struct PlanStep: CompassCheckStep {
+
     let id: String = "plan"
+    let name: String = "Plan Day"
     
     func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Plan step is only available on macOS (not iOS)
@@ -29,3 +31,4 @@ struct PlanStep: CompassCheckStep {
         // No specific actions needed - planning happens in the view
     }
 }
+
