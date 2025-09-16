@@ -22,8 +22,15 @@ struct CompassCheckNextPriorities: View {
                     "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
                 ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
                 HStack {
-                    ListView(whichList: .priority).frame(minHeight: 300)
-                    ListView(whichList: .open)
+                    SimpleListView.priorityView(dataManager: dataManager).frame(minHeight: 300)
+                    SimpleListView(
+                        color: .open,
+                        itemList: dataManager.list(which: .open),
+                        headers: TaskItemState.open.subHeaders,
+                        showHeaders: true,
+                        section: TaskItemState.open.section,
+                        id: TaskItemState.open.getListAccessibilityIdentifier
+                    )
                 }
 
             #endif
@@ -34,8 +41,15 @@ struct CompassCheckNextPriorities: View {
                 .font(.title2)
                 .foregroundStyle(Color.priority)
                 .multilineTextAlignment(.center)
-                ListView(whichList: .open)
-                    .frame(minHeight: 300)
+                SimpleListView(
+                    color: .open,
+                    itemList: dataManager.list(which: .open),
+                    headers: TaskItemState.open.subHeaders,
+                    showHeaders: true,
+                    section: TaskItemState.open.section,
+                    id: TaskItemState.open.getListAccessibilityIdentifier
+                )
+                .frame(minHeight: 300)
 
             #endif
             Button(action: { presentAlert = true }) {
