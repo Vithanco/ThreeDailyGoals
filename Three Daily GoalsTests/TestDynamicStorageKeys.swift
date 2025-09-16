@@ -18,41 +18,41 @@ struct TestDynamicStorageKeys {
     @Test
     func testStorageKeysStructure() {
         // Test that StorageKeys provides the expected key structure
-        #expect(StorageKeys.daysOfCompassCheck == "daysOfCompassCheck")
-        #expect(StorageKeys.longestStreak == "longestStreak")
-        #expect(StorageKeys.accentColorString == "accentColorString")
-        #expect(StorageKeys.expiryAfter == "expiryAfter")
-        #expect(StorageKeys.lastCompassCheckString == "lastCompassCheckString")
+        #expect(StorageKeys.daysOfCompassCheck.id == "daysOfCompassCheck")
+        #expect(StorageKeys.longestStreak.id == "longestStreak")
+        #expect(StorageKeys.accentColorString.id == "accentColorString")
+        #expect(StorageKeys.expiryAfter.id == "expiryAfter")
+        #expect(StorageKeys.lastCompassCheckString.id == "lastCompassCheckString")
     }
     
     @Test
     func testCompassCheckTimeKeys() {
         // Test compass check time keys use simple structure
-        #expect(StorageKeys.compassCheckTimeHour == "compassCheckTimeHour")
-        #expect(StorageKeys.compassCheckTimeMinute == "compassCheckTimeMinute")
+        #expect(StorageKeys.compassCheckTimeHour.id == "compassCheckTimeHour")
+        #expect(StorageKeys.compassCheckTimeMinute.id == "compassCheckTimeMinute")
     }
     
     @Test
     func testPriorityKeyGeneration() {
         // Test dynamic priority key generation
-        #expect(StorageKeys.priority(1) == "priority1")
-        #expect(StorageKeys.priority(2) == "priority2")
-        #expect(StorageKeys.priority(3) == "priority3")
-        #expect(StorageKeys.priority(4) == "priority4")
-        #expect(StorageKeys.priority(5) == "priority5")
-        #expect(StorageKeys.priority(10) == "priority10") // Test beyond normal range
+        #expect(StorageKeys.priority(1).id == "priority1")
+        #expect(StorageKeys.priority(2).id == "priority2")
+        #expect(StorageKeys.priority(3).id == "priority3")
+        #expect(StorageKeys.priority(4).id == "priority4")
+        #expect(StorageKeys.priority(5).id == "priority5")
+        #expect(StorageKeys.priority(10).id == "priority10") // Test beyond normal range
     }
     
     @Test
     func testCompassCheckStepKeyGeneration() {
         // Test dynamic compass check step key generation
-        #expect(StorageKeys.compassCheckStep("inform") == "compassCheck.step.inform")
-        #expect(StorageKeys.compassCheckStep("currentPriorities") == "compassCheck.step.currentPriorities")
-        #expect(StorageKeys.compassCheckStep("pending") == "compassCheck.step.pending")
-        #expect(StorageKeys.compassCheckStep("dueDate") == "compassCheck.step.dueDate")
-        #expect(StorageKeys.compassCheckStep("review") == "compassCheck.step.review")
-        #expect(StorageKeys.compassCheckStep("plan") == "compassCheck.step.plan")
-        #expect(StorageKeys.compassCheckStep("customStep") == "compassCheck.step.customStep") // Test custom step
+        #expect(StorageKeys.compassCheckStep("inform").id == "compassCheck.step.inform")
+        #expect(StorageKeys.compassCheckStep("currentPriorities").id == "compassCheck.step.currentPriorities")
+        #expect(StorageKeys.compassCheckStep("pending").id == "compassCheck.step.pending")
+        #expect(StorageKeys.compassCheckStep("dueDate").id == "compassCheck.step.dueDate")
+        #expect(StorageKeys.compassCheckStep("review").id == "compassCheck.step.review")
+        #expect(StorageKeys.compassCheckStep("plan").id == "compassCheck.step.plan")
+        #expect(StorageKeys.compassCheckStep("customStep").id == "compassCheck.step.customStep") // Test custom step
     }
     
     // MARK: - Compass Check Step Toggle Tests

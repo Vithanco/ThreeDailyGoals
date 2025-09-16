@@ -24,50 +24,59 @@ let cloudDateFormatter: DateFormatter = {
 }()
 
 struct StorageKeys {
+    let id: String
+    
+    private init(_ id: String) {
+        self.id = id
+    }
+    
     // Core app keys
-    static let daysOfCompassCheck = "daysOfCompassCheck"
-    static let longestStreak = "longestStreak"
-    static let currentCompassCheckIntervalStart = "currentCompassCheckIntervalStart"
-    static let currentCompassCheckIntervalEnd = "currentCompassCheckIntervalEnd"
-    static let accentColorString = "accentColorString"
-    static let expiryAfter = "expiryAfter"
-    static let lastCompassCheckString = "lastCompassCheckString"
+    static let daysOfCompassCheck = StorageKeys("daysOfCompassCheck")
+    static let longestStreak = StorageKeys("longestStreak")
+    static let currentCompassCheckIntervalStart = StorageKeys("currentCompassCheckIntervalStart")
+    static let currentCompassCheckIntervalEnd = StorageKeys("currentCompassCheckIntervalEnd")
+    static let accentColorString = StorageKeys("accentColorString")
+    static let expiryAfter = StorageKeys("expiryAfter")
+    static let lastCompassCheckString = StorageKeys("lastCompassCheckString")
     
     // Compass check keys
-    static let compassCheckTimeHour = "compassCheckTimeHour"
-    static let compassCheckTimeMinute = "compassCheckTimeMinute"
+    static let compassCheckTimeHour = StorageKeys("compassCheckTimeHour")
+    static let compassCheckTimeMinute = StorageKeys("compassCheckTimeMinute")
     
     // Priority keys
-    static func priority(_ number: Int) -> String {
-        return "priority\(number)"
+    static func priority(_ number: Int) -> StorageKeys {
+        return StorageKeys("priority\(number)")
     }
     
     // Dynamic step keys
-    static func compassCheckStep(_ stepId: String) -> String {
-        return "compassCheck.step.\(stepId)"
+    static func compassCheckStep(_ stepId: String) -> StorageKeys {
+        return StorageKeys("compassCheck.step.\(stepId)")
     }
+    
+    // Step toggles key
+    static let compassCheckStepToggles = StorageKeys("compassCheckStepToggles")
 }
 
 protocol KeyValueStorage {
-    func int(forKey key: String) -> Int
-    func set(_ value: Int, forKey key: String)
+    func int(forKey key: StorageKeys) -> Int
+    func set(_ value: Int, forKey key: StorageKeys)
 
-    func string(forKey key: String) -> String?
-    func set(_ aString: String?, forKey key: String)
+    func string(forKey key: StorageKeys) -> String?
+    func set(_ aString: String?, forKey key: StorageKeys)
 
-    func date(forKey key: String) -> Date
-    func set(_ aDate: Date, forKey key: String)
+    func date(forKey key: StorageKeys) -> Date
+    func set(_ aDate: Date, forKey key: StorageKeys)
     
-    func bool(forKey key: String) -> Bool
-    func set(_ value: Bool, forKey key: String)
+    func bool(forKey key: StorageKeys) -> Bool
+    func set(_ value: Bool, forKey key: StorageKeys)
 }
 
 extension KeyValueStorage {
-    func string(forKey key: String, defaultValue: String) -> String {
+    func string(forKey key: StorageKeys, defaultValue: String) -> String {
         return string(forKey: key) ?? defaultValue
     }
 
-    func date(forKey key: String) -> Date {
+    func date(forKey key: StorageKeys) -> Date {
         if let dateAsString = string(forKey: key),
             let result = cloudDateFormatter.date(from: dateAsString)
         {
@@ -77,7 +86,7 @@ extension KeyValueStorage {
         return Date.now
     }
 
-    func set(_ aDate: Date, forKey key: String) {
+    func set(_ aDate: Date, forKey key: StorageKeys) {
         set(cloudDateFormatter.string(from: aDate), forKey: key)
     }
 }
@@ -90,28 +99,28 @@ class CloudKeyValueStore: KeyValueStorage {
         self.store = store
     }
     
-    func int(forKey key: String) -> Int {
-        return Int(store.longLong(forKey: key))
+    func int(forKey key: StorageKeys) -> Int {
+        return Int(store.longLong(forKey: key.id))
     }
     
-    func set(_ value: Int, forKey key: String) {
-        store.set(Int64(value), forKey: key)
+    func set(_ value: Int, forKey key: StorageKeys) {
+        store.set(Int64(value), forKey: key.id)
     }
 
-    func string(forKey key: String) -> String? {
-        return store.string(forKey: key)
+    func string(forKey key: StorageKeys) -> String? {
+        return store.string(forKey: key.id)
     }
 
-    func set(_ aString: String?, forKey key: String) {
-        store.set(aString, forKey: key)
+    func set(_ aString: String?, forKey key: StorageKeys) {
+        store.set(aString, forKey: key.id)
     }
     
-    func bool(forKey key: String) -> Bool {
-        return store.object(forKey: key) as? Bool ?? false
+    func bool(forKey key: StorageKeys) -> Bool {
+        return store.object(forKey: key.id) as? Bool ?? false
     }
     
-    func set(_ value: Bool, forKey key: String) {
-        store.set(value, forKey: key)
+    func set(_ value: Bool, forKey key: StorageKeys) {
+        store.set(value, forKey: key.id)
     }
 }
 
@@ -290,7 +299,7 @@ extension CloudPreferences {
         }
     }
 
-    fileprivate func nrToCloudKey(nr: Int) -> String {
+    fileprivate func nrToCloudKey(nr: Int) -> StorageKeys {
         return StorageKeys.priority(nr)
     }
 
@@ -307,11 +316,11 @@ extension CloudPreferences {
     /// Get the enabled state for a compass check step by its ID
     func isCompassCheckStepEnabled(stepId: String) -> Bool {
         // Use a dynamic approach: store step toggles in a single JSON object
-        let stepTogglesKey = "compassCheckStepToggles" // Dedicated key for step toggles
+        let stepTogglesKey = StorageKeys.compassCheckStepToggles
         
         // Get the stored step toggles JSON
         guard let togglesJson = store.string(forKey: stepTogglesKey),
-              let togglesData = togglesJson.data(using: .utf8),
+              let togglesData = togglesJson.data(using: String.Encoding.utf8),
               let toggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool] else {
             // No stored toggles, return default values
             return getDefaultEnabledForStep(stepId: stepId)
@@ -324,12 +333,12 @@ extension CloudPreferences {
     /// Set the enabled state for a compass check step by its ID
     func setCompassCheckStepEnabled(stepId: String, enabled: Bool) {
         // Use a dynamic approach: store step toggles in a single JSON object
-        let stepTogglesKey = "compassCheckStepToggles" // Dedicated key for step toggles
+        let stepTogglesKey = StorageKeys.compassCheckStepToggles
         
         // Get existing toggles
         var toggles: [String: Bool] = [:]
         if let togglesJson = store.string(forKey: stepTogglesKey),
-           let togglesData = togglesJson.data(using: .utf8),
+           let togglesData = togglesJson.data(using: String.Encoding.utf8),
            let existingToggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool] {
             toggles = existingToggles
         }
@@ -339,7 +348,7 @@ extension CloudPreferences {
         
         // Store back as JSON
         if let togglesData = try? JSONSerialization.data(withJSONObject: toggles),
-           let togglesJson = String(data: togglesData, encoding: .utf8) {
+           let togglesJson = String(data: togglesData, encoding: String.Encoding.utf8) {
             store.set(togglesJson, forKey: stepTogglesKey)
         }
     }
@@ -360,28 +369,28 @@ class TestPreferences: KeyValueStorage {
 
     var values: [String: String] = [:]
 
-    func int(forKey key: String) -> Int {
-        return Int(values[key] ?? "0") ?? 0
+    func int(forKey key: StorageKeys) -> Int {
+        return Int(values[key.id] ?? "0") ?? 0
     }
 
-    func set(_ value: Int, forKey key: String) {
-        values[key] = String(value)
+    func set(_ value: Int, forKey key: StorageKeys) {
+        values[key.id] = String(value)
     }
 
-    func string(forKey key: String) -> String? {
-        return values[key]
+    func string(forKey key: StorageKeys) -> String? {
+        return values[key.id]
     }
 
-    func set(_ aString: String?, forKey key: String) {
-        values[key] = aString
+    func set(_ aString: String?, forKey key: StorageKeys) {
+        values[key.id] = aString
     }
     
-    func bool(forKey key: String) -> Bool {
-        return values[key] == "true"
+    func bool(forKey key: StorageKeys) -> Bool {
+        return values[key.id] == "true"
     }
     
-    func set(_ value: Bool, forKey key: String) {
-        values[key] = value ? "true" : "false"
+    func set(_ value: Bool, forKey key: StorageKeys) {
+        values[key.id] = value ? "true" : "false"
     }
 }
 
