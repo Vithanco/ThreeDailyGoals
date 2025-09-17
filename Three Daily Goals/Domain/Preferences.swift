@@ -136,7 +136,7 @@ final class CloudPreferences {
     private var _daysOfCompassCheck: Int = 0
     private var _lastCompassCheck: Date = Date()
 
-    init(store: KeyValueStorage, timeProvider: TimeProvider, onChange: OnChange? = nil) {
+    init(store: KeyValueStorage, timeProvider: TimeProvider = RealTimeProvider(), onChange: OnChange? = nil) {
         self.store = store
         self.timeProvider = timeProvider
         self.onChange = onChange

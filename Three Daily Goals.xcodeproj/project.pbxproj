@@ -55,7 +55,6 @@
 		7F2F0AAB2E52E1C200461679 /* IconsRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD62B3190B300F0EA9C /* IconsRelated.swift */; };
 		7F2F0AAC2E52E1C200461679 /* StringRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B003112B32382C00A90F8D /* StringRelated.swift */; };
 		7F2F0AAD2E52E1C200461679 /* ViewRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203C2B38376F0002C709 /* ViewRelated.swift */; };
-		7F2F0AAE2E52E1C200461679 /* DoubleRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FF74382B45308800B3B890 /* DoubleRelated.swift */; };
 		7F2F0AAF2E52E1C200461679 /* ArrayRelated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ED903E2B46E44100CF0431 /* ArrayRelated.swift */; };
 		7F2F0AB12E52E22300461679 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53AF7AD2B66244F00C24F78 /* Preferences.swift */; };
 		7F2F0AB22E52E2C600461679 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A3718D2B2E2B0E00A310BA /* StateView.swift */; };
@@ -112,6 +111,11 @@
 		7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */; };
 		7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */; };
 		7FC676BC2E70B76200C41568 /* TestCompassCheckFlexibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */; };
+		7FC75D482E790233007A436A /* ShareExtensionTestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D412E790233007A436A /* ShareExtensionTestUtilities.swift */; };
+		7FC75D492E790233007A436A /* TestShareFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D452E790233007A436A /* TestShareFlow.swift */; };
+		7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */; };
+		7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D502E793946007A436A /* TestShareExtensionView.swift */; };
+		7FC75D532E793946007A436A /* TestShareExtensionHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -316,6 +320,11 @@
 		7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckSteps.swift; sourceTree = "<group>"; };
 		7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckStep.swift; sourceTree = "<group>"; };
 		7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckFlexibility.swift; sourceTree = "<group>"; };
+		7FC75D412E790233007A436A /* ShareExtensionTestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionTestUtilities.swift; sourceTree = "<group>"; };
+		7FC75D452E790233007A436A /* TestShareFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareFlow.swift; sourceTree = "<group>"; };
+		7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionHarness.swift; sourceTree = "<group>"; };
+		7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionIntegration.swift; sourceTree = "<group>"; };
+		7FC75D502E793946007A436A /* TestShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionView.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -415,6 +424,13 @@
 			);
 			target = 7F2F0A802E52DEB200461679 /* macosShare */;
 		};
+		7FC75D4C2E790C33007A436A /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AttachmentResolver.swift,
+			);
+			target = E561D6EB2B1F54A9003BE36F /* Three Daily GoalsTests */;
+		};
 		7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -434,7 +450,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7F2F0A822E52DEB200461679 /* macosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE813822E5431DB00CEA462 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = macosShare; sourceTree = "<group>"; };
 		7FC676B22E706B7900C41568 /* CompassCheckSteps */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CompassCheckSteps; sourceTree = "<group>"; };
-		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 7F2F0A932E52DF6200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
+		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FC75D4C2E790C33007A436A /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 7F2F0A932E52DF6200461679 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -613,6 +629,8 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FC75D412E790233007A436A /* ShareExtensionTestUtilities.swift */,
+				7FC75D452E790233007A436A /* TestShareFlow.swift */,
 				7FE589492E78346900D29CC8 /* TestDynamicStorageKeys.swift */,
 				7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */,
 				7FC676A82E706AB900C41568 /* TestCompassCheckSteps.swift */,
@@ -639,6 +657,9 @@
 		E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */ = {
 			isa = PBXGroup;
 			children = (
+				7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */,
+				7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */,
+				7FC75D502E793946007A436A /* TestShareExtensionView.swift */,
 				E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */,
 				E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */,
 				7F2F0A952E52DF9000461679 /* AttachmentUITests.swift */,
@@ -1039,7 +1060,6 @@
 				7F20774C2E59776E0030314A /* ImageRelated.swift in Sources */,
 				7F2F0AAD2E52E1C200461679 /* ViewRelated.swift in Sources */,
 				7F7FAAFF2E59F3EC00FE7C1A /* FilesRelated.swift in Sources */,
-				7F2F0AAE2E52E1C200461679 /* DoubleRelated.swift in Sources */,
 				7F2F0AAF2E52E1C200461679 /* ArrayRelated.swift in Sources */,
 				7F71FD2B2E6C182B001B92F4 /* TagFilterView.swift in Sources */,
 			);
@@ -1205,6 +1225,8 @@
 				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,
 				7FECEC202E6613FB00E02234 /* TestTouchWithDescription.swift in Sources */,
 				7FECEC212E6613FB00E02234 /* TestIsStreakBroken.swift in Sources */,
+				7FC75D482E790233007A436A /* ShareExtensionTestUtilities.swift in Sources */,
+				7FC75D492E790233007A436A /* TestShareFlow.swift in Sources */,
 				7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */,
 				E597A4872B83D7B000BCD061 /* TestImportExport.swift in Sources */,
 				E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */,
@@ -1232,6 +1254,9 @@
 				E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */,
 				7F2F0A972E52DFB000461679 /* AttachmentUITests.swift in Sources */,
 				E5B698FC2B7C95520086C3EB /* StringRelated.swift in Sources */,
+				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
+				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,
+				7FC75D532E793946007A436A /* TestShareExtensionHarness.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
 				7F2077442E57C2BA0030314A /* ByteRelated.swift in Sources */,
 			);
@@ -1795,7 +1820,7 @@
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1818,7 +1843,7 @@
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1840,7 +1865,7 @@
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1863,7 +1888,7 @@
 				DEVELOPMENT_TEAM = HN3M9PRAT4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = "${SHARED_MARKETING_VERSION}";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-GoalsUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
