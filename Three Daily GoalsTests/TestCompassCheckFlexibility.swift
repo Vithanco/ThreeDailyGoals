@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 @MainActor
 /// Tests demonstrating the flexibility of the new dependency injection approach

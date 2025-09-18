@@ -10,13 +10,15 @@ import SwiftData
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
 @testable import macosShare
+@testable import tdgCoreMain
+@testable import tdgCoreShare
 
 @MainActor
 class TestShareExtensionIntegration: XCTestCase {
     
     var container: ModelContainer!
     var context: ModelContext!
-    var preferences: Three_Daily_Goals.CloudPreferences!
+    var preferences: tdgCoreMain.CloudPreferences!
     
     override func setUpWithError() throws {
         // Create in-memory container for testing
@@ -25,7 +27,7 @@ class TestShareExtensionIntegration: XCTestCase {
         context = ModelContext(container)
         
         // Create test preferences
-        let testPreferences = Three_Daily_Goals.TestPreferences()
+        let testPreferences = tdgCoreMain.TestPreferences()
         preferences = CloudPreferences(store: testPreferences)
     }
     
@@ -212,7 +214,7 @@ class TestShareExtensionIntegration: XCTestCase {
     
     // MARK: - Helper Methods
     
-    private func processShareWorkflow(provider: NSItemProvider) async throws -> Three_Daily_Goals.TaskItem? {
+    private func processShareWorkflow(provider: NSItemProvider) async throws -> tdgCoreMain.TaskItem? {
         // Simulate the complete share extension workflow:
         // 1. Resolve payload from provider
         // 2. Create ShareExtensionView
@@ -273,117 +275,3 @@ class TestShareExtensionIntegration: XCTestCase {
 
 // MARK: - Mock NSItemProvider for UI Tests
 
-final class MockNSItemProvider: NSItemProvider {
-    var mockURL: URL?
-    var mockText: String?
-    var mockFileURL: URL?
-    var mockData: Data?
-    var mockError: Error?
-    
-    private var _registeredTypeIdentifiers: [String] = []
-    
-    override var registeredTypeIdentifiers: [String] {
-        get { 
-            return _registeredTypeIdentifiers
-        }
-        set { 
-            _registeredTypeIdentifiers = newValue
-        }
-    }
-    
-    override func hasItemConformingToTypeIdentifier(_ typeIdentifier: String) -> Bool {
-        return registeredTypeIdentifiers.contains(typeIdentifier)
-    }
-    
-    override func loadItem(forTypeIdentifier typeIdentifier: String, options: [AnyHashable : Any]? = nil, completionHandler: NSItemProvider.CompletionHandler?) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler?(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler?(nil, error)
-                return
-            }
-            
-            let result: NSSecureCoding?
-            switch typeIdentifier {
-            case UTType.url.identifier:
-                result = self.mockURL as NSSecureCoding?
-            case UTType.plainText.identifier, UTType.text.identifier:
-                result = self.mockText as NSSecureCoding?
-            case UTType.fileURL.identifier:
-                result = self.mockFileURL as NSSecureCoding?
-            case UTType.data.identifier:
-                result = self.mockData as NSSecureCoding?
-            default:
-                result = nil
-            }
-            
-            if let result = result {
-                completionHandler?(result, nil)
-            } else {
-                completionHandler?(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-    
-    func loadDataRepresentation(forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (Data?, Error?) -> Void) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler(nil, error)
-                return
-            }
-            
-            let result: Data?
-            switch typeIdentifier {
-            case UTType.plainText.identifier, UTType.text.identifier:
-                result = self.mockText?.data(using: .utf8)
-            case UTType.data.identifier:
-                result = self.mockData
-            default:
-                result = nil
-            }
-            
-            if let result = result {
-                completionHandler(result, nil)
-            } else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-    
-    override func loadFileRepresentation(forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (URL?, Error?) -> Void) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler(nil, error)
-                return
-            }
-            
-            let result: URL?
-            switch typeIdentifier {
-            case UTType.fileURL.identifier:
-                result = self.mockFileURL
-            default:
-                result = nil
-            }
-            
-            if result != nil {
-                completionHandler(result, nil)
-            } else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-}

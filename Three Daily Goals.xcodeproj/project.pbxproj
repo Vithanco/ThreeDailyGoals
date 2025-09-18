@@ -30,12 +30,13 @@
 		7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357562E5B5020004581B7 /* PriorityUpdater.swift */; };
 		7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357592E5B5040004581B7 /* ItemSelector.swift */; };
 		7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3575A2E5B5050004581B7 /* AppSetup.swift */; };
-		7FC635372E7B0C150033A1EF /* tdgCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635362E7B0C150033A1EF /* tdgCore */; };
-		7FC6353D2E7B0C350033A1EF /* tdgCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6353C2E7B0C350033A1EF /* tdgCore */; };
 		7FC6353F2E7B0C410033A1EF /* tdgCoreMain in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6353E2E7B0C410033A1EF /* tdgCoreMain */; };
 		7FC635412E7B0C480033A1EF /* tdgCoreWidget in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635402E7B0C480033A1EF /* tdgCoreWidget */; };
 		7FC635442E7B0C500033A1EF /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
 		7FC635462E7B0C500033A1EF /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635452E7B0C500033A1EF /* tdgCoreShare */; };
+		7FC635472E7B0C500033A1EF /* tdgCoreMain in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6353E2E7B0C410033A1EF /* tdgCoreMain */; };
+		7FC635482E7B0C500033A1EF /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
+		7FC635492E7B0C500033A1EF /* tdgCoreTest in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6354A2E7B0C500033A1EF /* tdgCoreTest */; };
 		7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */; };
 		7FC676A52E6F685B00C41568 /* DatabaseErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */; };
 		7FC676A72E7060B900C41568 /* TestCompassCheckSynchronization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */; };
@@ -54,6 +55,7 @@
 		7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE042E42B3230016C181 /* SwiftUI.framework */; };
 		7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE38F0E2C33084100C9A798 /* TDGEvent.swift */; };
 		7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE589492E78346900D29CC8 /* TestDynamicStorageKeys.swift */; };
+		7FE9B5372E7BEB3B0087BA66 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1D2E6613FB00E02234 /* TestTimestampFix.swift */; };
 		7FECEC202E6613FB00E02234 /* TestTouchWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1E2E6613FB00E02234 /* TestTouchWithDescription.swift */; };
 		7FECEC212E6613FB00E02234 /* TestIsStreakBroken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */; };
@@ -327,7 +329,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC635372E7B0C150033A1EF /* tdgCore in Frameworks */,
+				7FE9B5372E7BEB3B0087BA66 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,7 +337,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC6353D2E7B0C350033A1EF /* tdgCore in Frameworks */,
+				7FC635472E7B0C500033A1EF /* tdgCoreMain in Frameworks */,
+				7FC635482E7B0C500033A1EF /* tdgCoreShare in Frameworks */,
+				7FC635492E7B0C500033A1EF /* tdgCoreTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +701,11 @@
 				E561D6F82B1F54A9003BE36F /* PBXTargetDependency */,
 			);
 			name = "Three Daily GoalsUITests";
+			packageProductDependencies = (
+				7FC6353E2E7B0C410033A1EF /* tdgCoreMain */,
+				7FC635432E7B0C500033A1EF /* tdgCoreShare */,
+				7FC6354A2E7B0C500033A1EF /* tdgCoreTest */,
+			);
 			productName = "Three Daily GoalsUITests";
 			productReference = E561D6F62B1F54A9003BE36F /* Three Daily GoalsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -1477,6 +1486,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -1500,6 +1511,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals/Three_Daily_Goals.entitlements";
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Three Daily Goals/Three_Daily_Goals_macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -1657,16 +1670,6 @@
 			package = 7FA02AAF2C18AABE00EC81CE /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
 			productName = SimpleCalendar;
 		};
-		7FC635362E7B0C150033A1EF /* tdgCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */;
-			productName = tdgCore;
-		};
-		7FC6353C2E7B0C350033A1EF /* tdgCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */;
-			productName = tdgCore;
-		};
 		7FC6353E2E7B0C410033A1EF /* tdgCoreMain */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */;
@@ -1686,6 +1689,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */;
 			productName = tdgCoreShare;
+		};
+		7FC6354A2E7B0C500033A1EF /* tdgCoreTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */;
+			productName = tdgCoreTest;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

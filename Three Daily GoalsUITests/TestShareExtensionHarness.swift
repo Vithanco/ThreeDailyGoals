@@ -9,6 +9,9 @@ import XCTest
 import SwiftData
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
+@testable import tdgCoreShare
+import tdgCoreTest
 
 /// Comprehensive test harness demonstrating how to test share extensions
 /// This file shows how to use the test utilities and covers edge cases
@@ -151,7 +154,7 @@ class TestShareExtensionHarness: XCTestCase {
     func testShareExtensionPerformance() async throws {
         // Given: Multiple share operations for performance testing
         let operationCount = 50
-        var providers: [MockNSItemProvider] = []
+        var providers: [tdgCoreTest.MockNSItemProvider] = []
         
         for i in 0..<operationCount {
             let provider = ShareExtensionTestUtilities.createMockProvider(

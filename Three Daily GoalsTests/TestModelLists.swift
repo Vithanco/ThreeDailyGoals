@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 extension Dictionary where Value: Numeric {
     var total: Value {

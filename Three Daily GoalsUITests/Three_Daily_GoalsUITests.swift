@@ -8,6 +8,9 @@
 import XCTest
 
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
+@testable import tdgCoreShare
+import tdgCoreTest
 
 // this is not working for some reason see https://stackoverflow.com/questions/33755019/linker-error-when-accessing-application-module-in-ui-tests-in-xcode-7-1
 //@testable import Three_Daily_Goals

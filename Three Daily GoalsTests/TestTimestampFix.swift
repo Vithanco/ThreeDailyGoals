@@ -8,6 +8,7 @@
 import Testing
 import Foundation
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 @Suite
 @MainActor

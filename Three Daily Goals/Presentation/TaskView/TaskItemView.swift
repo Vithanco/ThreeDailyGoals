@@ -83,6 +83,6 @@ struct TaskItemView: View {
     
     let item = TaskItem(title: "Sample Task", state: .open)
     
-    return TaskItemView(item: item)
+    TaskItemView(item: item)
         .modelContainer(container)
 }

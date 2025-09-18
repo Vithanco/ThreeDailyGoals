@@ -10,6 +10,8 @@ import SwiftData
 import UniformTypeIdentifiers
 import Testing
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
+@testable import tdgCoreShare
 
 /// Test utilities and helpers for share extension testing
 struct ShareExtensionTestUtilities {
@@ -166,7 +168,7 @@ struct ShareExtensionTestUtilities {
     
     /// Asserts that an attachment was created correctly
     static func assertAttachmentCreated(
-        _ attachment: Three_Daily_Goals.Attachment,
+        _ attachment: tdgCoreMain.Attachment,
         expectedFilename: String,
         expectedUTI: String,
         expectedData: Data? = nil,

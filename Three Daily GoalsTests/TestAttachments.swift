@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 import XCTest
 
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 final class TestAttachments: XCTestCase {
 

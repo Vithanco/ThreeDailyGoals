@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 @MainActor
 final class TestDatabaseErrors: XCTestCase {

@@ -9,6 +9,8 @@ import Foundation
 import Testing
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
+@testable import tdgCoreShare
 @testable import macosShare
 
 @Suite

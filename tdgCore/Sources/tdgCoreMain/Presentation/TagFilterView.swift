@@ -7,24 +7,23 @@
 
 import SwiftUI
 
-
 public struct TagFilterView: View {
     let tags: [String]
     @Binding var selectedTags: [String]
     let listColor: Color
     @Environment(\.colorScheme) private var colorScheme
-    
+
     public init(tags: [String], selectedTags: Binding<[String]>, listColor: Color) {
         self.tags = tags
         self._selectedTags = selectedTags
         self.listColor = listColor
     }
-    
+
     // Adaptive background color for tag container
     private var tagContainerBackground: Color {
         colorScheme == .dark ? Color.neutral700 : Color.neutral300
     }
-    
+
     public var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
@@ -45,10 +44,10 @@ public struct TagFilterView: View {
                 }
             }
         }
-        .frame(maxHeight: 100) // Reduced height
-        .frame(maxWidth: .infinity) // Use full width
+        .frame(maxHeight: 100)  // Reduced height
+        .frame(maxWidth: .infinity)  // Use full width
         .padding(.horizontal, 8)
-        .padding(.vertical, 6) // Reduced vertical padding
+        .padding(.vertical, 6)  // Reduced vertical padding
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(tagContainerBackground.opacity(0.3))
@@ -69,8 +68,8 @@ public struct TagFilterView: View {
 #Preview {
     @Previewable @State var selectedTags = ["work", "private"]
     let sampleTags = ["work", "private", "health", "movie", "obsidian", "3dg", "anna-lea", "vithanco"]
-    
-    return TagFilterView(
+
+    TagFilterView(
         tags: sampleTags,
         selectedTags: $selectedTags,
         listColor: .blue

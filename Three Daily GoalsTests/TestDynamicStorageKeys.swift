@@ -1,5 +1,6 @@
 import Testing
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 /// Test cases for the new dynamic storage key system
 /// Tests the StorageKeys struct and dynamic compass check step management

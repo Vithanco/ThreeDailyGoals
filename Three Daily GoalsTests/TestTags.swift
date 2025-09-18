@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 @Suite
 @MainActor

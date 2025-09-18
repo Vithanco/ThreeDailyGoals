@@ -23,6 +23,10 @@ let package = Package(
             name: "tdgCoreShare",
             targets: ["tdgCoreShare"]
         ),
+        .library(
+            name: "tdgCoreTest",
+            targets: ["tdgCoreTest"]
+        ),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -44,6 +48,11 @@ let package = Package(
             name: "tdgCoreShare",
             dependencies: ["tdgCoreMain"],
             path: "Sources/tdgCoreShare"
+        ),
+        .target(
+            name: "tdgCoreTest",
+            dependencies: ["tdgCoreShare"],
+            path: "Sources/tdgCoreTest"
         ),
         .testTarget(
             name: "tdgCoreWidgetTests",

@@ -10,6 +10,7 @@ import Testing
 import SwiftUI
 
 @testable import Three_Daily_Goals
+@testable import tdgCoreMain
 
 enum TestError: Error {
     case taskNotFound
