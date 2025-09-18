@@ -9,8 +9,9 @@ import EventKit
 import SimpleCalendar
 import SwiftUI
 import os
+import tdgCoreMain
 
-enum CalendarAccess {
+public enum CalendarAccess {
     case granted
     case denied
     case error(String)
@@ -23,7 +24,7 @@ private let logger = Logger(
 
 @MainActor
 @Observable
-final class EventManager {
+public final class EventManager {
     public private(set) var events: [TDGEvent] = []
     public private(set) var state: CalendarAccess = .denied
 

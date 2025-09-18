@@ -10,17 +10,17 @@ import Foundation
 import SimpleCalendar
 import SwiftUI
 
-struct TDGEvent: CalendarEventRepresentable {
+public struct TDGEvent: CalendarEventRepresentable {
 
-    var id: String {
+    public var id: String {
         return base.calendarItemIdentifier
     }
 
-    var startDate: Date {
+    public var startDate: Date {
         return base.startDate
     }
 
-    var calendarActivity: any SimpleCalendar.CalendarActivityRepresentable {
+    public var calendarActivity: any SimpleCalendar.CalendarActivityRepresentable {
         let calendar = self.calendar
         return CalendarActivity(
             id: calendar.calendarIdentifier, title: base.title, description: base.description,
@@ -29,11 +29,11 @@ struct TDGEvent: CalendarEventRepresentable {
             duration: self.duration)
     }
 
-    var coordinates: CGRect? = nil
+    public var coordinates: CGRect? = nil
 
-    var column: Int = 0
+    public var column: Int = 0
 
-    var columnCount: Int = 0
+    public var columnCount: Int = 0
 
     let base: EKEvent
     var calendar: EKCalendar {

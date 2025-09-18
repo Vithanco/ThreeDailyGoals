@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 import os
+import tdgCoreMain
 
 
 @MainActor
 @Observable
-final class CompassCheckManager {
+public final class CompassCheckManager {
     
     public static let DEFAULT_STEPS: [any CompassCheckStep] = [
         InformStep(),

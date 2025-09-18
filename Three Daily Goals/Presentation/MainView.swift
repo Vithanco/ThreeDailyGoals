@@ -8,6 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import os
+import tdgCoreMain
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,

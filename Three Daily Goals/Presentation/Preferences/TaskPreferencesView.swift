@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct TaskPreferencesView: View {
+public struct TaskPreferencesView: View {
 
     @Environment(CloudPreferences.self) private var preferences
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Spacer()
             Text(
@@ -40,6 +41,6 @@ struct TaskPreferencesView: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    return TaskPreferencesView()
+    TaskPreferencesView()
         .environment(appComponents.preferences)
 }

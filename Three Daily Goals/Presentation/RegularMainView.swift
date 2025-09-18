@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 struct RegularMainView: View {
     @Environment(CloudPreferences.self) private var preferences

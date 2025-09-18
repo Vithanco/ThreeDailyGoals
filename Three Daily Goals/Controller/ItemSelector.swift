@@ -1,6 +1,7 @@
 import Foundation
+import tdgCoreMain
 
 @MainActor
-protocol ItemSelector {
+public protocol ItemSelector {
     func select(_ item: TaskItem)
 }

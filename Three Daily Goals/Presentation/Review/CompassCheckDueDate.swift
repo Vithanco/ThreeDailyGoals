@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckDueDate: View {
+public struct CompassCheckDueDate: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("These Tasks are close to their due Dates. They will now be moved to Priority").font(
                 .title2

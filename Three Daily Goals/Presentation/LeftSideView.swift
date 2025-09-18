@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 struct LeftSideView: View {
     @Environment(DataManager.self) private var dataManager

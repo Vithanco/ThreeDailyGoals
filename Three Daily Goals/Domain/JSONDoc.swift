@@ -8,10 +8,11 @@
 import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
+import tdgCoreMain
 
 // simple doc to save my JSON data
-struct JSONWriteOnlyDoc: FileDocument, @unchecked Sendable {
-    static var readableContentTypes: [UTType] { [.json] }
+public struct JSONWriteOnlyDoc: FileDocument, @unchecked Sendable {
+    public static var readableContentTypes: [UTType] { [.json] }
 
     private var content: [TaskItem]
     init(content: [TaskItem]) {
@@ -20,14 +21,14 @@ struct JSONWriteOnlyDoc: FileDocument, @unchecked Sendable {
 
     // simple wrapper, w/o WriteConfiguration multi types or
     // existing file selected handling (it is up to you)
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+    public func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let encoder = JSONEncoder()
         // Convert your array into JSON data
         let data = try encoder.encode(content)
         return FileWrapper(regularFileWithContents: data)
     }
 
-    init(configuration: ReadConfiguration) throws {
+    public init(configuration: ReadConfiguration) throws {
         assert(false)
         self.content = []
     }

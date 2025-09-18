@@ -10,13 +10,14 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import os
+import tdgCoreMain
 
 private let logger = Logger(
     subsystem: Bundle.main.bundleIdentifier!,
     category: String(describing: "ImportExport")
 )
 
-struct SelectVersions: View {
+public struct SelectVersions: View {
     let choices: [Choice]
     @State var index: Int = 0
     @Environment(DataManager.self) private var dataManager
@@ -52,7 +53,7 @@ struct SelectVersions: View {
     var remaining: Int {
         return choices.count - index
     }
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("Remaining Choices: \(remaining)")
             HStack {

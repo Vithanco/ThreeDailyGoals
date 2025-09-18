@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckCurrentPriorities: View {
+public struct CompassCheckCurrentPriorities: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
 
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
 
-    var body: some View {
+    public var body: some View {
         VStack {
             VStack {
                 Text("Current Priority Tasks").font(.title2).foregroundStyle(Color.priority).padding(5)

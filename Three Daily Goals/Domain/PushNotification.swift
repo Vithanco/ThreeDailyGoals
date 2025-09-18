@@ -6,20 +6,21 @@
 //
 
 import Foundation
+import tdgCoreMain
 @preconcurrency import UserNotifications
 
 let id = "3dg.dailyCompssCheck"
 let streakReminderId = "3dg.streakReminder"
 
 @MainActor
-class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
+public class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
     let compassCheckManager: CompassCheckManager
 
     init(compassCheckManager: CompassCheckManager) {
         self.compassCheckManager = compassCheckManager
     }
 
-    func userNotificationCenter(
+    public func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
@@ -40,7 +41,7 @@ class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificationCent
 }
 
 @MainActor
-final class PushNotificationManager {
+public final class PushNotificationManager {
     // Use a computed accessor instead of a stored property
     private var center: UNUserNotificationCenter { UNUserNotificationCenter.current() }
     private var delegate: PushNotificationDelegate?

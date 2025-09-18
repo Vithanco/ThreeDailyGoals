@@ -4,6 +4,7 @@
 //
 //  Created by Klaus Kneupner on 30/08/2025.
 //
+import tdgCoreMain
 
 @MainActor
 public protocol NewItemProducer {

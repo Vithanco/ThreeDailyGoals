@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import tdgCoreMain
 import SwiftUI
 
 @MainActor
 /// Protocol defining the interface for Compass Check steps
-protocol CompassCheckStep: Equatable {
+public protocol CompassCheckStep: Equatable {
     /// Unique identifier for this step
     var id: String { get }
     

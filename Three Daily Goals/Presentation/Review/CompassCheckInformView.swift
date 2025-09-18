@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckInformView: View {
+public struct CompassCheckInformView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             // Enhanced streak display
             VStack(spacing: 8) {

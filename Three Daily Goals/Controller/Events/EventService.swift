@@ -11,7 +11,7 @@ import os
 
 /// Non-isolated service for handling EventKit operations
 /// This class is not marked with @MainActor, so it can safely use EKEventStore
-final class EventService: @unchecked Sendable {
+public final class EventService: @unchecked Sendable {
     private let eventStore = EKEventStore()
     private let logger = Logger(
         subsystem: Bundle.main.bundleIdentifier!,

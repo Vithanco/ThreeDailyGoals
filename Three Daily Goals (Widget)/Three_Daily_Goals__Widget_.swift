@@ -8,6 +8,7 @@
 import SwiftData
 import SwiftUI
 import WidgetKit
+import tdgCoreWidget
 
 struct Provider: AppIntentTimelineProvider {
 

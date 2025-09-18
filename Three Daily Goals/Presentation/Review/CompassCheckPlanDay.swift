@@ -8,6 +8,7 @@
 import EventKit
 import SimpleCalendar
 import SwiftUI
+import tdgCoreMain
 
 extension TaskItem {
     //    var asEvent: TDGEvent {
@@ -15,7 +16,7 @@ extension TaskItem {
     //    }
 }
 
-struct CompassCheckPlanDay: View {
+public struct CompassCheckPlanDay: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
@@ -36,7 +37,7 @@ struct CompassCheckPlanDay: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("This is under development and not yet working.").font(.title)
             Text(
@@ -80,5 +81,5 @@ struct CompassCheckPlanDay: View {
     // return Text ("in total: \(events.count)")
     let timeProvider = RealTimeProvider()
     let date = timeProvider.today
-    return CompassCheckPlanDay(date: date)
+    CompassCheckPlanDay(date: date)
 }

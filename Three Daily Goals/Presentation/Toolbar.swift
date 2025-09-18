@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct MainToolbarContent: ToolbarContent {
+public struct MainToolbarContent: ToolbarContent {
     @Environment(UIStateManager.self) private var uiState
 
-    var body: some ToolbarContent {
+    public var body: some ToolbarContent {
         ToolbarItem {
             Button(action: { uiState.showPreferences() }) {
                 Label("Preferences", systemImage: "gear").accessibilityIdentifier("showPreferencesButton").help(
@@ -29,12 +30,12 @@ struct MainToolbarContent: ToolbarContent {
     }
 }
 
-struct StandardToolbarContent: ToolbarContent {
+public struct StandardToolbarContent: ToolbarContent {
     @Environment(DataManager.self) private var dataManager
     @Environment(UIStateManager.self) private var uiState
     @Environment(CompassCheckManager.self) private var compassCheckManager
 
-    var body: some ToolbarContent {
+    public var body: some ToolbarContent {
         ToolbarItem {
             dataManager.undoButton
         }
@@ -50,13 +51,13 @@ struct StandardToolbarContent: ToolbarContent {
     }
 }
 
-struct ItemToolbarContent: ToolbarContent {
+public struct ItemToolbarContent: ToolbarContent {
     @Environment(DataManager.self) private var dataManager
     let item: TaskItem
     @State private var showTouchAlert = false
     @State private var touchDescription = ""
 
-    var body: some ToolbarContent {
+    public var body: some ToolbarContent {
         #if os(iOS)
             ToolbarItem {
                 dataManager.undoButton

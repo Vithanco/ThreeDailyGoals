@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
 import os
+import tdgCoreMain
 
 @main
 struct Three_Daily_GoalsApp: App {

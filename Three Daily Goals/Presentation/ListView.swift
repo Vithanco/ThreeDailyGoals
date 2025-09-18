@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 extension ListHeader {
     var asText: Text {

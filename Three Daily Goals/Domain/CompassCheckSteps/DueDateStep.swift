@@ -8,26 +8,32 @@
 import Foundation
 import SwiftUI
 
-struct DueDateStep: CompassCheckStep {
-    let id: String = "dueDate"
-    let name: String = "Due Date Check"
+import tdgCoreMain
+
+public struct DueDateStep: CompassCheckStep {
+    public let id: String = "dueDate"
+    public let name: String = "Due Date Check"
     
-    func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are tasks due soon
         return !getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider).isEmpty
     }
     
     @ViewBuilder
-    func view(compassCheckManager: CompassCheckManager) -> AnyView {
+    public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckDueDate())
     }
     
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
         // Move all due soon tasks to priority
         let dueSoon = getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider)
         for task in dueSoon {
             dataManager.move(task: task, to: .priority)
         }
+    }
+    
+    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
     }
     
     // Helper method to get tasks due soon (moved from CompassCheckManager)

@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct EditTag: View {
+public struct EditTag: View {
     @Binding var currentTagName: String
     @Binding var changeTo: String
     @Environment(CloudPreferences.self) private var preferences
@@ -22,7 +23,7 @@ struct EditTag: View {
         }
         return currentTagName
     }
-    var body: some View {
+    public var body: some View {
         GroupBox(label: Text("Tag: \(displayCurrentTagName)").bold()) {
             VStack(alignment: .leading) {
                 ForEach(TaskItemState.allCases) { state in
@@ -48,12 +49,12 @@ struct EditTag: View {
     }
 }
 
-struct TagsPreferencesView: View {
+public struct TagsPreferencesView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @State var tag: String = ""
     @State var changeTo: String = ""
-    var body: some View {
+    public var body: some View {
         VStack {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
@@ -84,7 +85,7 @@ struct TagsPreferencesView: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    return TagsPreferencesView()
+    TagsPreferencesView()
         .environment(appComponents.preferences)
         .environment(appComponents.dataManager)
 }

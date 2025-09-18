@@ -7,13 +7,14 @@
 
 import Foundation
 import SwiftUI
+import tdgCoreMain
 
-struct PlanStep: CompassCheckStep {
+public struct PlanStep: CompassCheckStep {
 
-    let id: String = "plan"
-    let name: String = "Plan Day"
+    public let id: String = "plan"
+    public let name: String = "Plan Day"
     
-    func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Plan step is only available on macOS (not iOS)
         #if os(macOS)
         return true
@@ -23,12 +24,16 @@ struct PlanStep: CompassCheckStep {
     }
     
     @ViewBuilder
-    func view(compassCheckManager: CompassCheckManager) -> AnyView {
+    public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckPlanDay(date: compassCheckManager.timeProvider.getCompassCheckInterval().end))
     }
     
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
         // No specific actions needed - planning happens in the view
+    }
+    
+    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
     }
 }
 

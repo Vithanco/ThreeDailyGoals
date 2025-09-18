@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 struct SimpleListView: View {
     let color: Color

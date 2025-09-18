@@ -6,15 +6,16 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckNextPriorities: View {
+public struct CompassCheckNextPriorities: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
 
     @State private var presentAlert = false
     @State private var newTaskName: String = ""
 
-    var body: some View {
+    public var body: some View {
         VStack {
             #if os(macOS)
 

@@ -7,6 +7,7 @@
 
 import SwiftData
 import SwiftUI
+import tdgCoreMain
 
 struct TaskItemView: View {
     @Environment(CloudPreferences.self) private var preferences

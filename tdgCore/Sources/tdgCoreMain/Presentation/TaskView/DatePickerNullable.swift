@@ -1,0 +1,55 @@
+//
+//  NullableDatePicker.swift
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 05/03/2024.
+//
+
+import SwiftUI
+
+public struct DatePickerNullable: View {
+    @Binding var selected: Date?
+    let defaultDate: Date
+
+    public var body: some View {
+        HStack {
+            if let selectedDate = selected {
+                DatePicker(
+                    "",
+                    selection: Binding(
+                        get: { selectedDate },
+                        set: { selected = $0 }
+                    ),
+                    displayedComponents: [.date]
+                )
+                #if os(macOS)
+                    .datePickerStyle(.stepperField)
+                #endif
+                Button(action: {
+                    selected = nil
+                }) {
+                    Image(systemName: "xmark.circle").font(.title2)
+                }
+                .padding(.trailing)
+            } else {
+                Button(action: {
+                    selected = defaultDate
+                }) {
+                    HStack {
+                        Text("isn't set")
+                        Image(systemName: "plus.circle")
+                    }
+                }
+                .background(Color.clear)
+                Spacer()
+            }
+        }
+    }
+}
+
+#Preview {
+    @Previewable
+    @State var date: Date?
+    let timeProvider = RealTimeProvider()
+    return DatePickerNullable(selected: $date, defaultDate: timeProvider.getDate(inDays: 7))
+}

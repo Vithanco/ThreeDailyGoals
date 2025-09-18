@@ -8,9 +8,11 @@
 import Foundation
 import SwiftUI
 
+import tdgCoreMain
+
 @MainActor
 @Observable
-final class UIStateManager: ItemSelector, DataIssueReporter {
+public final class UIStateManager: ItemSelector, DataIssueReporter {
 
     // MARK: - Navigation State
 
@@ -112,18 +114,18 @@ final class UIStateManager: ItemSelector, DataIssueReporter {
     }
     
     /// Report a database error (DataIssueReporter protocol)
-    func reportDatabaseError(_ error: DatabaseError) {
+    public func reportDatabaseError(_ error: DatabaseError) {
         showDatabaseError(error)
     }
     
     /// Report data loss to the user
-    func reportDataLoss(_ message: String, details: String?) {
+    public func reportDataLoss(_ message: String, details: String?) {
         let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
         showInfo("⚠️ Data Loss Warning\n\n\(fullMessage)")
     }
     
     /// Report migration issues to the user
-    func reportMigrationIssue(_ message: String, details: String?) {
+    public func reportMigrationIssue(_ message: String, details: String?) {
         let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
         showInfo("⚠️ Migration Issue\n\n\(fullMessage)")
     }
@@ -135,7 +137,7 @@ final class UIStateManager: ItemSelector, DataIssueReporter {
 
     /// Select a task item (platform-specific)
     @MainActor
-    func select(_ newItem: TaskItem) {
+    public func select(_ newItem: TaskItem) {
         if newItem == selectedItem {
             return
         }

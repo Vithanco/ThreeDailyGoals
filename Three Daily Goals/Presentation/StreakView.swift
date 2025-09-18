@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 struct StreakView: View {
     @Environment(CloudPreferences.self) private var preferences

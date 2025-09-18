@@ -10,7 +10,7 @@ import Foundation
 
 @MainActor
 @Observable
-class CalendarManager {
+public class CalendarManager {
     private var eventStore: EKEventStore?
 
     init() {

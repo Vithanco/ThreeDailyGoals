@@ -8,25 +8,31 @@
 import Foundation
 import SwiftUI
 
+import tdgCoreMain
+
 @MainActor
-struct CurrentPrioritiesStep: CompassCheckStep {
-    let id: String = "currentPriorities"
-    let name: String = "Review Current Priorities"
+public struct CurrentPrioritiesStep: CompassCheckStep {
+    public let id: String = "currentPriorities"
+    public let name: String = "Review Current Priorities"
     
-    func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are priority tasks to review
         return !dataManager.list(which: .priority).isEmpty
     }
     
     @ViewBuilder
-    func view(compassCheckManager: CompassCheckManager) -> AnyView {
+    public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckCurrentPriorities())
     }
     
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
         // Move all priority tasks to open list
         for task in dataManager.list(which: .priority) {
             dataManager.move(task: task, to: .open)
         }
+    }
+    
+    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
     }
 }

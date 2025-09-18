@@ -1,6 +1,8 @@
 import Foundation
 
+import tdgCoreMain
+
 @MainActor
-protocol PriorityUpdater {
+public protocol PriorityUpdater {
     func updatePriorities(prioTasks: [TaskItem])
 }

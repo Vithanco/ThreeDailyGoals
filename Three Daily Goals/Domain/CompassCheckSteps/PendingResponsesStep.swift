@@ -7,22 +7,27 @@
 
 import Foundation
 import SwiftUI
+import tdgCoreMain
 
-struct PendingResponsesStep: CompassCheckStep {
-    let id: String = "pending"
-    let name: String = "Pending Responses"
+public struct PendingResponsesStep: CompassCheckStep {
+    public let id: String = "pending"
+    public let name: String = "Pending Responses"
     
-    func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are pending response tasks
         return !dataManager.list(which: .pendingResponse).isEmpty
     }
     
     @ViewBuilder
-    func view(compassCheckManager: CompassCheckManager) -> AnyView {
+    public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckPendingResponses())
     }
     
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
         // No specific actions needed - user can close tasks in the view
+    }
+    
+    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
     }
 }

@@ -6,22 +6,23 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct InnerHeightPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat = .zero
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+public struct InnerHeightPreferenceKey: PreferenceKey {
+    public static let defaultValue: CGFloat = .zero
+    public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
 }
 
-struct CompassCheckDialog: View {
+public struct CompassCheckDialog: View {
 
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     //    @State private var sheetHeight: CGFloat = .zero
 
-    var body: some View {
+    public var body: some View {
         VStack {
 
             HStack {
@@ -57,7 +58,7 @@ struct CompassCheckDialog: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    return CompassCheckDialog()
+    CompassCheckDialog()
         .environment(appComponents.preferences)
         .environment(appComponents.compassCheckManager)
 }

@@ -7,22 +7,27 @@
 
 import Foundation
 import SwiftUI
+import tdgCoreMain
 
-struct InformStep: CompassCheckStep {
-    let id: String = "inform"
-    let name: String = "Welcome & Information"
+public struct InformStep: CompassCheckStep {
+    public let id: String = "inform"
+    public let name: String = "Welcome & Information"
     
-    func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Inform step is always available - it's the starting point
         return true
     }
     
     @ViewBuilder
-    func view(compassCheckManager: CompassCheckManager) -> AnyView {
+    public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckInformView())
     }
     
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
         // No specific actions needed for inform step
+    }
+    
+    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
     }
 }

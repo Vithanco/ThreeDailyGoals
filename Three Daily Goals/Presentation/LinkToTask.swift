@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import tdgCoreMain
+
 struct LinkToTask: View {
     @Environment(UIStateManager.self) private var uiState
     @Bindable var item: TaskItem

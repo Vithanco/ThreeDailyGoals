@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckPreferencesView: View {
+public struct CompassCheckPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
@@ -20,7 +21,7 @@ struct CompassCheckPreferencesView: View {
     }
     
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Spacer()
             
@@ -129,7 +130,7 @@ struct CompassCheckPreferencesView: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    return CompassCheckPreferencesView()
+    CompassCheckPreferencesView()
         .environment(appComponents.preferences)
         .environment(appComponents.compassCheckManager)
 }

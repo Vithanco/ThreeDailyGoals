@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct CompassCheckPendingResponses: View {
+public struct CompassCheckPendingResponses: View {
     @Environment(CloudPreferences.self) private var preferences
 
-    var body: some View {
+    public var body: some View {
         VStack {
             Text("Can you close some tasks you wait on?").font(.title2).foregroundStyle(Color.priority)
             Spacer()

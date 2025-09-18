@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import WidgetKit
+import tdgCoreWidget
 
 struct AWPriority: View {
     var item: String

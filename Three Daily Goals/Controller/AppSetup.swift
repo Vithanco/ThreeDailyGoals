@@ -1,9 +1,10 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import tdgCoreMain
 
 /// Struct containing all app components and managers
-struct AppComponents {
+public struct AppComponents {
     let modelContainer: ModelContainer
     let modelContext: Storage
     let preferences: CloudPreferences
@@ -24,7 +25,7 @@ struct AppComponents {
 /// - Parameter customSteps: Optional custom CompassCheck steps. If nil, uses DEFAULT_STEPS
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
+public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
     
     // MARK: - Step 1: Create TimeProvider (needed by everything)
     let finalTimeProvider = timeProvider ?? (isTesting ? MockTimeProvider(fixedNow: Date.now) : RealTimeProvider())
@@ -159,7 +160,7 @@ func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestSt
 }
 
 extension CloudPreferences :  PriorityUpdater {
-    func updatePriorities(prioTasks: [TaskItem]) {
+    public func updatePriorities(prioTasks: [TaskItem]) {
         let prios = prioTasks.count
         for i in 0..<prios {
             setPriority(nr: i + 1, value: prioTasks[i].title)

@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
-struct PreferencesView: View {
+public struct PreferencesView: View {
     @State var time: Date = Date.now
 
-    var body: some View {
+    public var body: some View {
         //        VStack{
         TabView {
             CompassCheckPreferencesView()
@@ -38,7 +39,7 @@ struct PreferencesView: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    return PreferencesView()
+    PreferencesView()
         .environment(appComponents.preferences)
         .environment(appComponents.dataManager)
         .environment(appComponents.uiState)

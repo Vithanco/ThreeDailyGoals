@@ -9,9 +9,10 @@ import Foundation
 import SwiftData
 import SwiftUI
 import os
+import tdgCoreMain
 
 /// Struct for import conflict resolution
-struct Choice {
+public struct Choice {
     let existing: TaskItem
     let new: TaskItem
 }
@@ -23,7 +24,7 @@ private let logger = Logger(
 
 @MainActor
 @Observable
-final class DataManager {
+public final class DataManager {
 
     let modelContext: Storage
     let timeProvider: TimeProvider
@@ -968,7 +969,7 @@ final class DataManager {
 
 
 extension DataManager :  NewItemProducer {
-    func removeItem(_ item: TaskItem) {
+    public func removeItem(_ item: TaskItem) {
         if (item.isUnchanged) {
             debugPrint("is unchanged")
             deleteTask(item)
@@ -977,7 +978,7 @@ extension DataManager :  NewItemProducer {
         }
     }
 
-    func produceNewItem() -> TaskItem? {
+    public func produceNewItem() -> TaskItem? {
         let result = TaskItem()
         addExistingTask(result)
         return result
