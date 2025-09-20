@@ -42,5 +42,4 @@ public enum ShareFlow {
         return lower.hasPrefix("<!doctype html") || lower.hasPrefix("<html") || lower.contains("<head>")
             || lower.contains("<body>")
     }
-
 }

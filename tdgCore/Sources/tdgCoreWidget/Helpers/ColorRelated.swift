@@ -23,28 +23,32 @@ extension Color {
         public static let background = Color(NSColor.windowBackgroundColor)
         public static let secondaryBackground = Color(NSColor.underPageBackgroundColor)
         public static let tertiaryBackground = Color(NSColor.controlBackgroundColor)
-    #else
+    #elseif os(ios)
         public static let background = Color(UIColor.systemBackground)
         public static let secondaryBackground = Color(UIColor.secondarySystemBackground)
         public static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
+    #else
+        public static let background: Color = .clear
+        public static let secondaryBackground: Color = .clear
+        public static let tertiaryBackground: Color = .clear
     #endif
-    
+
     public static let priority = Color.orange
     public static let open = Color.blue
     public static let pendingResponse = Color.yellow
     public static let closed = Color.green.opacity(0.7)
     public static let dead = Color.brown
-    
+
     public static let dueSoon = Color.red
-    
+
 }
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
 // Make Color codable. This includes support for transparency.
 // See https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-public extension Color {
-    init(hex: String) {
+extension Color {
+    public init(hex: String) {
         let rgba = hex.toRGBA()
 
         self.init(
@@ -55,11 +59,11 @@ public extension Color {
             opacity: Double(rgba.alpha))
     }
 
-    var toHex: String? {
+    public var toHex: String? {
         return toHex()
     }
 
-    func toHex(alpha: Bool = false) -> String? {
+    public func toHex(alpha: Bool = false) -> String? {
         guard let components = cgColor?.components, components.count >= 3 else {
             return nil
         }
@@ -88,7 +92,7 @@ public extension Color {
             lroundf(a * 255))
     }
 
-    var readableTextColor: Color {
+    public var readableTextColor: Color {
         let components = self.cgColor?.components
         let brightness =
             (components?[0] ?? 0) * 299 + (components?[1] ?? 0) * 587 + (components?[2] ?? 0) * 114

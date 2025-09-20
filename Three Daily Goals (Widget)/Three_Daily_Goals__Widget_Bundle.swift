@@ -5,7 +5,6 @@
 //  Created by Klaus Kneupner on 21/12/2023.
 //
 
-import SwiftData
 import SwiftUI
 import WidgetKit
 

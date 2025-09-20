@@ -7,7 +7,6 @@
 
 import CloudKit
 import Foundation
-import SwiftData
 import SwiftUI
 import os
 
@@ -25,11 +24,11 @@ let cloudDateFormatter: DateFormatter = {
 
 public struct StorageKeys: Sendable {
     public let id: String
-    
+
     private init(_ id: String) {
         self.id = id
     }
-    
+
     // Core app keys
     public static let daysOfCompassCheck = StorageKeys("daysOfCompassCheck")
     public static let longestStreak = StorageKeys("longestStreak")
@@ -38,21 +37,21 @@ public struct StorageKeys: Sendable {
     public static let accentColorString = StorageKeys("accentColorString")
     public static let expiryAfter = StorageKeys("expiryAfter")
     public static let lastCompassCheckString = StorageKeys("lastCompassCheckString")
-    
+
     // Compass check keys
     public static let compassCheckTimeHour = StorageKeys("compassCheckTimeHour")
     public static let compassCheckTimeMinute = StorageKeys("compassCheckTimeMinute")
-    
+
     // Priority keys
     public static func priority(_ number: Int) -> StorageKeys {
         return StorageKeys("priority\(number)")
     }
-    
+
     // Dynamic step keys
     public static func compassCheckStep(_ stepId: String) -> StorageKeys {
         return StorageKeys("compassCheck.step.\(stepId)")
     }
-    
+
     // Step toggles key
     public static let compassCheckStepToggles = StorageKeys("compassCheckStepToggles")
 }
@@ -66,17 +65,17 @@ public protocol KeyValueStorage {
 
     func date(forKey key: StorageKeys) -> Date
     func set(_ aDate: Date, forKey key: StorageKeys)
-    
+
     func bool(forKey key: StorageKeys) -> Bool
     func set(_ value: Bool, forKey key: StorageKeys)
 }
 
-public extension KeyValueStorage {
-    func string(forKey key: StorageKeys, defaultValue: String) -> String {
+extension KeyValueStorage {
+    public func string(forKey key: StorageKeys, defaultValue: String) -> String {
         return string(forKey: key) ?? defaultValue
     }
 
-    func date(forKey key: StorageKeys) -> Date {
+    public func date(forKey key: StorageKeys) -> Date {
         if let dateAsString = string(forKey: key),
             let result = cloudDateFormatter.date(from: dateAsString)
         {
@@ -86,7 +85,7 @@ public extension KeyValueStorage {
         return Date.now
     }
 
-    func set(_ aDate: Date, forKey key: StorageKeys) {
+    public func set(_ aDate: Date, forKey key: StorageKeys) {
         set(cloudDateFormatter.string(from: aDate), forKey: key)
     }
 }
@@ -94,15 +93,15 @@ public extension KeyValueStorage {
 // Wrapper class to avoid infinite recursion
 public class CloudKeyValueStore: KeyValueStorage {
     private let store: NSUbiquitousKeyValueStore
-    
+
     public init(store: NSUbiquitousKeyValueStore) {
         self.store = store
     }
-    
+
     public func int(forKey key: StorageKeys) -> Int {
         return Int(store.longLong(forKey: key.id))
     }
-    
+
     public func set(_ value: Int, forKey key: StorageKeys) {
         store.set(Int64(value), forKey: key.id)
     }
@@ -114,11 +113,11 @@ public class CloudKeyValueStore: KeyValueStorage {
     public func set(_ aString: String?, forKey key: StorageKeys) {
         store.set(aString, forKey: key.id)
     }
-    
+
     public func bool(forKey key: StorageKeys) -> Bool {
         return store.object(forKey: key.id) as? Bool ?? false
     }
-    
+
     public func set(_ value: Bool, forKey key: StorageKeys) {
         store.set(value, forKey: key.id)
     }
@@ -131,7 +130,7 @@ final public class CloudPreferences {
     let timeProvider: TimeProvider
     public typealias OnChange = () -> Void
     public var onChange: OnChange?
-    
+
     // Stored properties that trigger @Observable notifications
     private var _daysOfCompassCheck: Int = 0
     private var _lastCompassCheck: Date = Date()
@@ -140,11 +139,12 @@ final public class CloudPreferences {
         self.store = store
         self.timeProvider = timeProvider
         self.onChange = onChange
-        
+
         // Initialize stored properties from store
         self._daysOfCompassCheck = store.int(forKey: StorageKeys.daysOfCompassCheck)
         if let dateAsString = store.string(forKey: StorageKeys.lastCompassCheckString),
-           let date = cloudDateFormatter.date(from: dateAsString) {
+            let date = cloudDateFormatter.date(from: dateAsString)
+        {
             self._lastCompassCheck = date
         } else {
             self._lastCompassCheck = timeProvider.now
@@ -155,7 +155,9 @@ final public class CloudPreferences {
         if testData {
             self.init(store: TestPreferences(), timeProvider: timeProvider, onChange: onChange)
         } else {
-            self.init(store: CloudKeyValueStore(store: NSUbiquitousKeyValueStore.default), timeProvider: timeProvider, onChange: onChange)
+            self.init(
+                store: CloudKeyValueStore(store: NSUbiquitousKeyValueStore.default), timeProvider: timeProvider,
+                onChange: onChange)
 
             NotificationCenter.default.addObserver(
                 self,
@@ -166,7 +168,7 @@ final public class CloudPreferences {
 
             if store.string(forKey: StorageKeys.lastCompassCheckString) == nil {
                 store.set(18, forKey: StorageKeys.compassCheckTimeHour)
-                store.set(0,  forKey: StorageKeys.compassCheckTimeMinute)
+                store.set(0, forKey: StorageKeys.compassCheckTimeMinute)
             }
         }
     }
@@ -179,23 +181,23 @@ final public class CloudPreferences {
         ubiquitousKeyValueStoreDidChange(notification: note)
     }
 
-    func ubiquitousKeyValueStoreDidChange(notification: Notification) { 
+    func ubiquitousKeyValueStoreDidChange(notification: Notification) {
         // Refresh stored properties when external changes occur
         _daysOfCompassCheck = store.int(forKey: StorageKeys.daysOfCompassCheck)
         if let dateAsString = store.string(forKey: StorageKeys.lastCompassCheckString),
-           let date = cloudDateFormatter.date(from: dateAsString) {
+            let date = cloudDateFormatter.date(from: dateAsString)
+        {
             _lastCompassCheck = date
         }
-        onChange?() 
+        onChange?()
     }
 
     public var isProductionEnvironment: Bool { CKContainer.isProductionEnvironment }
 }
 
+extension CloudPreferences {
 
-public extension CloudPreferences {
-
-    var daysOfCompassCheck: Int {
+    public var daysOfCompassCheck: Int {
         get {
             let result = isStreakBroken ? 0 : _daysOfCompassCheck
             debugPrint("read daysOfCompassCheck: \(result), isStreakBroken: \(isStreakBroken)")
@@ -208,7 +210,7 @@ public extension CloudPreferences {
         }
     }
 
-    var nextCompassCheckTime: Date {
+    public var nextCompassCheckTime: Date {
         var result = compassCheckTime
         if result < timeProvider.now {
             result = timeProvider.addADay(result)
@@ -216,31 +218,32 @@ public extension CloudPreferences {
         return result
     }
 
-    var didCompassCheckToday: Bool {
+    public var didCompassCheckToday: Bool {
         return timeProvider.getCompassCheckInterval().contains(lastCompassCheck)
     }
-    
+
     private var didCompassCheckLastInterval: Bool {
         // Get the current interval
         let currentInterval = timeProvider.getCompassCheckInterval()
-        
+
         // Calculate the previous interval by going back 24 hours from the start of current interval
-        let previousIntervalStart = timeProvider.calendar.date(byAdding: .day, value: -1, to: currentInterval.start) ?? currentInterval.start
+        let previousIntervalStart =
+            timeProvider.calendar.date(byAdding: .day, value: -1, to: currentInterval.start) ?? currentInterval.start
         let previousInterval = DateInterval(start: previousIntervalStart, end: currentInterval.start)
-        
+
         return previousInterval.contains(lastCompassCheck)
     }
-    
-    var isStreakActive: Bool {
+
+    public var isStreakActive: Bool {
         return didCompassCheckToday || didCompassCheckLastInterval
     }
-    
-    var isStreakBroken: Bool {
+
+    public var isStreakBroken: Bool {
         let isActive = isStreakActive
         return !isActive
     }
 
-    var compassCheckTime: Date {
+    public var compassCheckTime: Date {
         get {
             let compassCheckTimeHour = self.store.int(forKey: StorageKeys.compassCheckTimeHour)
             let compassCheckTimeMinute = self.store.int(forKey: StorageKeys.compassCheckTimeMinute)
@@ -252,13 +255,13 @@ public extension CloudPreferences {
         }
     }
 
-    var compassCheckTimeComponents: DateComponents {
+    public var compassCheckTimeComponents: DateComponents {
         return DateComponents(
             calendar: timeProvider.calendar, hour: self.store.int(forKey: StorageKeys.compassCheckTimeHour),
             minute: self.store.int(forKey: StorageKeys.compassCheckTimeMinute))
     }
 
-    var longestStreak: Int {
+    public var longestStreak: Int {
         get {
             return store.int(forKey: StorageKeys.longestStreak)
         }
@@ -267,11 +270,11 @@ public extension CloudPreferences {
         }
     }
 
-    func resetAccentColor() {
+    public func resetAccentColor() {
         store.set(nil, forKey: StorageKeys.accentColorString)
     }
 
-    var expiryAfter: Int {
+    public var expiryAfter: Int {
         get {
             let result = self.store.int(forKey: StorageKeys.expiryAfter)
             if result < 9 {  // default is 0, and that is an issue!
@@ -285,11 +288,11 @@ public extension CloudPreferences {
         }
     }
 
-    var expiryAfterString: String {
+    public var expiryAfterString: String {
         return expiryAfter.description
     }
 
-    var lastCompassCheck: Date {
+    public var lastCompassCheck: Date {
         get {
             return _lastCompassCheck
         }
@@ -303,74 +306,79 @@ public extension CloudPreferences {
         return StorageKeys.priority(nr)
     }
 
-    func getPriority(nr: Int) -> String {
-        return store.string(forKey: nrToCloudKey(nr: nr)) ?? ""
+    public func getPriority(nr: Int) -> String {
+        let key = nrToCloudKey(nr: nr)
+        let value = store.string(forKey: key) ?? ""
+        print("Widget: Getting priority \(nr) with key '\(key.id)': '\(value)'")
+        return value
     }
 
-    func setPriority(nr: Int, value: String) {
+    public func setPriority(nr: Int, value: String) {
         store.set(value, forKey: nrToCloudKey(nr: nr))
     }
-    
+
     // MARK: - Compass Check Step Toggles
-    
+
     /// Get the enabled state for a compass check step by its ID
-    func isCompassCheckStepEnabled(stepId: String) -> Bool {
+    public func isCompassCheckStepEnabled(stepId: String) -> Bool {
         // Use a dynamic approach: store step toggles in a single JSON object
         let stepTogglesKey = StorageKeys.compassCheckStepToggles
-        
+
         // Get the stored step toggles JSON
         guard let togglesJson = store.string(forKey: stepTogglesKey),
-              let togglesData = togglesJson.data(using: String.Encoding.utf8),
-              let toggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool] else {
+            let togglesData = togglesJson.data(using: String.Encoding.utf8),
+            let toggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool]
+        else {
             // No stored toggles, return default values
             return getDefaultEnabledForStep(stepId: stepId)
         }
-        
+
         // Return the stored value or default
         return toggles[stepId] ?? getDefaultEnabledForStep(stepId: stepId)
     }
-    
+
     /// Set the enabled state for a compass check step by its ID
-    func setCompassCheckStepEnabled(stepId: String, enabled: Bool) {
+    public func setCompassCheckStepEnabled(stepId: String, enabled: Bool) {
         // Use a dynamic approach: store step toggles in a single JSON object
         let stepTogglesKey = StorageKeys.compassCheckStepToggles
-        
+
         // Get existing toggles
         var toggles: [String: Bool] = [:]
         if let togglesJson = store.string(forKey: stepTogglesKey),
-           let togglesData = togglesJson.data(using: String.Encoding.utf8),
-           let existingToggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool] {
+            let togglesData = togglesJson.data(using: String.Encoding.utf8),
+            let existingToggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool]
+        {
             toggles = existingToggles
         }
-        
+
         // Update the specific step
         toggles[stepId] = enabled
-        
+
         // Store back as JSON
         if let togglesData = try? JSONSerialization.data(withJSONObject: toggles),
-           let togglesJson = String(data: togglesData, encoding: String.Encoding.utf8) {
+            let togglesJson = String(data: togglesData, encoding: String.Encoding.utf8)
+        {
             store.set(togglesJson, forKey: stepTogglesKey)
         }
     }
-    
+
     /// Get the default enabled state for a step
     private func getDefaultEnabledForStep(stepId: String) -> Bool {
         switch stepId {
         case "plan":
-            return false // "coming soon"
+            return false  // "coming soon"
         default:
-            return true // all other steps enabled by default
+            return true  // all other steps enabled by default
         }
     }
 
 }
 
-
 public class TestPreferences: KeyValueStorage {
 
     var values: [String: String]
-    
-    public init(values: [String : String] = [:]) {
+
+    public init(values: [String: String] = [:]) {
         self.values = values
     }
 
@@ -389,17 +397,17 @@ public class TestPreferences: KeyValueStorage {
     public func set(_ aString: String?, forKey key: StorageKeys) {
         values[key.id] = aString
     }
-    
+
     public func bool(forKey key: StorageKeys) -> Bool {
         return values[key.id] == "true"
     }
-    
+
     public func set(_ value: Bool, forKey key: StorageKeys) {
         values[key.id] = value ? "true" : "false"
     }
 }
 
-public extension CKContainer {
+extension CKContainer {
 
     public static var isProductionEnvironment: Bool {
         let container = CKContainer.default()
@@ -411,7 +419,6 @@ public extension CKContainer {
     }
 }
 
-
 @MainActor
 public func dummyPreferences() -> CloudPreferences {
     let store = TestPreferences()
@@ -421,4 +428,3 @@ public func dummyPreferences() -> CloudPreferences {
     store.set(00, forKey: StorageKeys.compassCheckTimeMinute)
     return result
 }
-

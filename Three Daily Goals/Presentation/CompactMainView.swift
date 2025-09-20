@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import tdgCoreMain
 
 struct CompactMainView: View {
     @Environment(UIStateManager.self) private var uiState

@@ -1,3 +1,10 @@
+//
+//  ImageRelated.swift
+//  Three Daily Goals
+//
+//  Created by Klaus Kneupner on 19/12/2023.
+//
+
 import Foundation
 import QuickLookThumbnailing
 import SwiftUI

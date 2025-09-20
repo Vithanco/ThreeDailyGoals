@@ -21,20 +21,6 @@
                ReferencedContainer = "container:Three Daily Goals.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E561D6D72B1F54A6003BE36F"
-               BuildableName = "Three Daily Goals.app"
-               BlueprintName = "Three Daily Goals"
-               ReferencedContainer = "container:Three Daily Goals.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

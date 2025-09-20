@@ -5,8 +5,10 @@ public enum SupportedOS {
     case iOS
     case macOS
     case ipadOS
+    case watchOS
 }
 
+@MainActor
 public struct OsRelated {
     public static var currentOS: SupportedOS {
         #if os(iOS)
@@ -16,6 +18,8 @@ public struct OsRelated {
             return .iOS
         #elseif os(macOS)
             return .macOS
+        #elseif os(watchOS)
+            return .watchOS
         #endif
     }
 }

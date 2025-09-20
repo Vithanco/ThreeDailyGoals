@@ -31,7 +31,19 @@ public final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
     }
 
     public override func hasItemConformingToTypeIdentifier(_ typeIdentifier: String) -> Bool {
-        return registeredTypeIdentifiers.contains(typeIdentifier)
+        if registeredTypeIdentifiers.contains(typeIdentifier) {
+            return true
+        }
+
+        for registeredType in registeredTypeIdentifiers {
+            if let utType = UTType(registeredType), let requestedType = UTType(typeIdentifier) {
+                if utType.conforms(to: requestedType) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     public override func loadItem(
@@ -57,29 +69,32 @@ public final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
             switch typeIdentifier {
             case UTType.url.identifier:
                 result = self.mockURL as NSSecureCoding?
-            case UTType.plainText.identifier, UTType.text.identifier:
+            case UTType.plainText.identifier, UTType.text.identifier, "public.utf8-plain-text":
                 result = self.mockText as NSSecureCoding?
             case UTType.fileURL.identifier:
                 result = self.mockFileURL as NSSecureCoding?
-            case UTType.data.identifier:
+            case UTType.data.identifier, UTType.item.identifier:
                 result = self.mockData as NSSecureCoding?
             default:
-                result = nil
+                if let utType = UTType(typeIdentifier), utType.conforms(to: .text) {
+                    result = self.mockText as NSSecureCoding?
+                } else {
+                    result = nil
+                }
             }
 
             if let result = result {
                 completionHandler?(result, nil)
             } else {
-                completionHandler?(
-                    nil,
-                    NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
+                // For unsupported types, return nil with no error (not an error condition)
+                completionHandler?(nil, nil)
             }
         }
     }
 
-    public func loadDataRepresentation(
-        forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (Data?, Error?) -> Void
-    ) {
+    public override func loadDataRepresentation(
+        forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (Data?, (any Error)?) -> Void
+    ) -> Progress {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else {
                 completionHandler(
@@ -96,27 +111,31 @@ public final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
 
             let result: Data?
             switch typeIdentifier {
-            case UTType.plainText.identifier, UTType.text.identifier:
+            case UTType.plainText.identifier, UTType.text.identifier, "public.utf8-plain-text":
                 result = self.mockText?.data(using: .utf8)
-            case UTType.data.identifier:
+            case UTType.data.identifier, UTType.item.identifier:
                 result = self.mockData
             default:
-                result = nil
+                if let utType = UTType(typeIdentifier), utType.conforms(to: .text) {
+                    result = self.mockText?.data(using: .utf8)
+                } else {
+                    result = nil
+                }
             }
 
             if let result = result {
                 completionHandler(result, nil)
             } else {
-                completionHandler(
-                    nil,
-                    NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
+                // For unsupported types, return nil with no error (not an error condition)
+                completionHandler(nil, nil)
             }
         }
+        return Progress()
     }
 
-    public func loadFileRepresentation(
-        forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (URL?, Error?) -> Void
-    ) {
+    public override func loadFileRepresentation(
+        forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (URL?, (any Error)?) -> Void
+    ) -> Progress {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else {
                 completionHandler(
@@ -135,6 +154,9 @@ public final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
             switch typeIdentifier {
             case UTType.fileURL.identifier:
                 result = self.mockFileURL
+            case UTType.movie.identifier, UTType.video.identifier, UTType.pdf.identifier, UTType.image.identifier,
+                UTType.html.identifier:
+                result = self.mockFileURL
             default:
                 result = nil
             }
@@ -142,11 +164,11 @@ public final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
             if let result = result {
                 completionHandler(result, nil)
             } else {
-                completionHandler(
-                    nil,
-                    NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
+                // For unsupported types, return nil with no error (not an error condition)
+                completionHandler(nil, nil)
             }
         }
+        return Progress()
     }
 }
 
@@ -311,25 +333,6 @@ public struct ShareExtensionTestUtilities {
         assert(
             (task.attachments?.count ?? 0) == expectedAttachmentCount, "Task should have expected number of attachments"
         )
-    }
-
-    /// Asserts that an attachment was created correctly
-    public static func assertAttachmentCreated(
-        _ attachment: tdgCoreMain.Attachment,
-        expectedFilename: String,
-        expectedUTI: String,
-        expectedData: Data? = nil,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) {
-        assert(attachment.filename == expectedFilename, "Attachment filename should match expected value")
-        assert(attachment.utiIdentifier == expectedUTI, "Attachment UTI should match expected value")
-
-        if let expectedData = expectedData {
-            assert(attachment.blob == expectedData, "Attachment data should match expected value")
-        } else {
-            assert(attachment.blob != nil, "Attachment should have blob data")
-        }
     }
 
     // MARK: - Cleanup Helpers

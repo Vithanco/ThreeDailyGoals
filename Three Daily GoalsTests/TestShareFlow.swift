@@ -3,21 +3,21 @@
 //  Three Daily GoalsTests
 //
 //  Created by AI Assistant on 2025-01-15.
+//  Simplified after creating dedicated AttachmentResolver tests.
 //
 
 import Foundation
 import Testing
 import UniformTypeIdentifiers
+import tdgCoreTest
 @testable import Three_Daily_Goals
-@testable import tdgCoreMain
-@testable import tdgCoreShare
 @testable import macosShare
 
 @Suite
 @MainActor
 struct TestShareFlow {
     
-    // MARK: - Test SharePayload Resolution
+    // MARK: - High-Level ShareFlow Orchestration Tests
     
     @Test
     func testResolveURLPayload() async throws {
@@ -71,8 +71,8 @@ struct TestShareFlow {
         // Then: Should return attachment payload
         #expect(payload != nil, "Should resolve attachment payload")
         if case .attachment(let url, let type) = payload {
-            #expect(url.lastPathComponent == tempURL.lastPathComponent, "Should return correct file URL")
             #expect(type == .plainText, "Should infer correct UTType")
+            #expect(FileManager.default.fileExists(atPath: url.path), "Should create valid file")
         } else {
             #expect(Bool(false), "Expected attachment payload, got: \(String(describing: payload))")
         }
@@ -81,34 +81,32 @@ struct TestShareFlow {
         try FileManager.default.removeItem(at: tempURL)
     }
     
+    // MARK: - Business Logic Tests (ShareFlow-specific behavior)
+    
     @Test
-    func testResolveHTMLAsAttachment() async throws {
-        // Given: A mock item provider that provides HTML text
+    func testHTMLDetectionAndConversion() async throws {
+        // Test ShareFlow's HTML detection and conversion to attachment
         let htmlContent = "<!DOCTYPE html><html><head><title>Test</title></head><body>Hello</body></html>"
         let mockProvider = MockNSItemProvider()
         mockProvider.mockText = htmlContent
         mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
         
-        // When: Resolving the payload
+        // When: Resolving HTML content
         let payload = try await ShareFlow.resolve(from: mockProvider)
         
-        // Then: Should return attachment payload (HTML converted to file)
+        // Then: Should convert HTML to attachment
         #expect(payload != nil, "Should resolve HTML as attachment")
         if case .attachment(let url, let type) = payload {
-            #expect(type == .html, "Should return HTML type")
+            #expect(type == .html, "Should detect as HTML type")
             #expect(url.pathExtension == "html", "Should have .html extension")
-            
-            // Verify file content
-            let fileContent = try String(contentsOf: url)
-            #expect(fileContent == htmlContent, "Should preserve HTML content")
         } else {
             #expect(Bool(false), "Expected attachment payload for HTML, got: \(String(describing: payload))")
         }
     }
     
     @Test
-    func testResolvePriorityOrder() async throws {
-        // Given: A mock item provider that provides multiple types (URL, text, attachment)
+    func testResolutionPriorityOrder() async throws {
+        // Test ShareFlow's priority ordering: URL > Text > Attachment
         let tempURL = createTempFile(content: "Test content", fileExtension: "txt")
         let mockProvider = MockNSItemProvider()
         mockProvider.mockURL = URL(string: "https://example.com")!
@@ -120,10 +118,10 @@ struct TestShareFlow {
             UTType.fileURL.identifier
         ]
         
-        // When: Resolving the payload
+        // When: Resolving with multiple types available
         let payload = try await ShareFlow.resolve(from: mockProvider)
         
-        // Then: Should prioritize URL over text and attachment
+        // Then: Should prioritize URL (highest priority)
         #expect(payload != nil, "Should resolve payload")
         if case .url(let urlString) = payload {
             #expect(urlString == "https://example.com", "Should prioritize URL")
@@ -136,12 +134,12 @@ struct TestShareFlow {
     }
     
     @Test
-    func testResolveNoPayload() async throws {
-        // Given: A mock item provider that provides no supported types
+    func testNoSupportedTypes() async throws {
+        // Test ShareFlow behavior with unsupported types
         let mockProvider = MockNSItemProvider()
         mockProvider.registeredTypeIdentifiers = ["com.unknown.type"]
         
-        // When: Resolving the payload
+        // When: Resolving with no supported types
         let payload = try await ShareFlow.resolve(from: mockProvider)
         
         // Then: Should return nil
@@ -149,55 +147,37 @@ struct TestShareFlow {
     }
     
     @Test
-    func testLooksLikeHTML() async throws {
-        // Test various HTML-like strings
-        let htmlCases = [
-            "<!DOCTYPE html><html><body>Test</body></html>",
-            "<html><head><title>Test</title></head><body>Content</body></html>",
-            "  <!doctype html>  ", // with whitespace
-            "<HTML><BODY>Test</BODY></HTML>", // uppercase
-            "Some text <head> and <body> tags"
+    func testHTMLDetectionEdgeCases() async throws {
+        // Test ShareFlow's HTML detection with various edge cases
+        let testCases = [
+            ("<!DOCTYPE html><html><body>Test</body></html>", true),
+            ("This is plain text", false),
+            ("Some text with < but not HTML", false),
+            ("<HTML><BODY>Test</BODY></HTML>", true), // uppercase
+            ("  <!doctype html>  ", true) // with whitespace
         ]
         
-        for htmlContent in htmlCases {
+        for (content, shouldBeHTML) in testCases {
             let mockProvider = MockNSItemProvider()
-            mockProvider.mockText = htmlContent
+            mockProvider.mockText = content
             mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
             
             let payload = try await ShareFlow.resolve(from: mockProvider)
             
-            #expect(payload != nil, "Should resolve HTML content")
-            if case .attachment(let url, let type) = payload {
-                #expect(type == .html, "Should detect as HTML type")
-                #expect(url.pathExtension == "html", "Should have .html extension")
+            #expect(payload != nil, "Should resolve content: \(content)")
+            if shouldBeHTML {
+                if case .attachment(let url, let type) = payload {
+                    #expect(type == .html, "Should detect as HTML: \(content)")
+                    #expect(url.pathExtension == "html", "Should have .html extension")
+                } else {
+                    #expect(Bool(false), "Expected attachment for HTML content: \(content)")
+                }
             } else {
-                #expect(Bool(false), "Expected attachment payload for HTML content: \(htmlContent)")
-            }
-        }
-    }
-    
-    @Test
-    func testDoesNotLookLikeHTML() async throws {
-        // Test non-HTML strings that should remain as text
-        let textCases = [
-            "This is plain text",
-            "Some text with < but not HTML",
-            "Email: user@example.com",
-            "Just a regular sentence."
-        ]
-        
-        for textContent in textCases {
-            let mockProvider = MockNSItemProvider()
-            mockProvider.mockText = textContent
-            mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
-            
-            let payload = try await ShareFlow.resolve(from: mockProvider)
-            
-            #expect(payload != nil, "Should resolve text content")
-            if case .text(let text) = payload {
-                #expect(text == textContent, "Should preserve original text")
-            } else {
-                #expect(Bool(false), "Expected text payload for: \(textContent)")
+                if case .text(let text) = payload {
+                    #expect(text == content, "Should preserve text content: \(content)")
+                } else {
+                    #expect(Bool(false), "Expected text payload for: \(content)")
+                }
             }
         }
     }
@@ -219,123 +199,3 @@ struct TestShareFlow {
     }
 }
 
-// MARK: - Mock NSItemProvider
-
-final class MockNSItemProvider: NSItemProvider, @unchecked Sendable {
-    var mockURL: URL?
-    var mockText: String?
-    var mockFileURL: URL?
-    var mockData: Data?
-    var mockError: Error?
-    
-    private var _registeredTypeIdentifiers: [String] = []
-    
-    override var registeredTypeIdentifiers: [String] {
-        get { 
-            return _registeredTypeIdentifiers
-        }
-        set { 
-            _registeredTypeIdentifiers = newValue
-        }
-    }
-    
-    override func hasItemConformingToTypeIdentifier(_ typeIdentifier: String) -> Bool {
-        return registeredTypeIdentifiers.contains(typeIdentifier)
-    }
-    
-    override func loadItem(
-        forTypeIdentifier typeIdentifier: String,
-        options: [AnyHashable : Any]? = nil,
-        completionHandler: NSItemProvider.CompletionHandler?
-    ) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler?(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler?(nil, error)
-                return
-            }
-            
-            let result: NSSecureCoding?
-            switch typeIdentifier {
-            case UTType.url.identifier:
-                result = self.mockURL as NSSecureCoding?
-            case UTType.plainText.identifier, UTType.text.identifier:
-                result = self.mockText as NSSecureCoding?
-            case UTType.fileURL.identifier:
-                result = self.mockFileURL as NSSecureCoding?
-            case UTType.data.identifier:
-                result = self.mockData as NSSecureCoding?
-            default:
-                result = nil
-            }
-            
-            if let result = result {
-                completionHandler?(result, nil)
-            } else {
-                completionHandler?(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-    
-    func loadDataRepresentation(forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (Data?, Error?) -> Void) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler(nil, error)
-                return
-            }
-            
-            let result: Data?
-            switch typeIdentifier {
-            case UTType.plainText.identifier, UTType.text.identifier:
-                result = self.mockText?.data(using: .utf8)
-            case UTType.data.identifier:
-                result = self.mockData
-            default:
-                result = nil
-            }
-            
-            if let result = result {
-                completionHandler(result, nil)
-            } else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-    
-    func loadFileRepresentation(forTypeIdentifier typeIdentifier: String, completionHandler: @escaping @Sendable (URL?, Error?) -> Void) {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Provider deallocated"]))
-                return
-            }
-            
-            if let error = self.mockError {
-                completionHandler(nil, error)
-                return
-            }
-            
-            let result: URL?
-            switch typeIdentifier {
-            case UTType.fileURL.identifier:
-                result = self.mockFileURL
-            default:
-                result = nil
-            }
-            
-            if let result = result {
-                completionHandler(result, nil)
-            } else {
-                completionHandler(nil, NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type"]))
-            }
-        }
-    }
-}

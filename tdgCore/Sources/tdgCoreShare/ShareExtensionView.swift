@@ -10,10 +10,10 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 public struct ShareExtensionView: View {
-    @State var item: TaskItem = .init()
-    @State var isFileAttachment: Bool = false
-    @State var originalFileURL: URL?
-    @State var originalContentType: UTType?
+    @State public var item: TaskItem = .init()
+    @State public var isFileAttachment: Bool = false
+    @State public var originalFileURL: URL?
+    @State public var originalContentType: UTType?
     @Environment(CloudPreferences.self) var pref: CloudPreferences
     @Environment(\.modelContext) var model
 

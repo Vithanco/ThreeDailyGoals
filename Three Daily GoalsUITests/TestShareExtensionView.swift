@@ -9,8 +9,7 @@ import XCTest
 import SwiftData
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
-@testable import tdgCoreMain
-@testable import tdgCoreShare
+import tdgCoreTest
 
 @MainActor
 class TestShareExtensionView: XCTestCase {

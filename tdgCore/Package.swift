@@ -8,6 +8,7 @@ let package = Package(
     platforms: [
         .iOS(.v17),
         .macOS(.v14),
+        .watchOS(.v11),
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -37,7 +38,8 @@ let package = Package(
         .target(
             name: "tdgCoreWidget",
             dependencies: [],
-            path: "Sources/tdgCoreWidget"
+            path: "Sources/tdgCoreWidget",
+            swiftSettings: []
         ),
         .target(
             name: "tdgCoreMain",

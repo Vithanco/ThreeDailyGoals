@@ -9,8 +9,6 @@ import XCTest
 import SwiftData
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
-@testable import tdgCoreMain
-@testable import tdgCoreShare
 import tdgCoreTest
 
 /// Comprehensive test harness demonstrating how to test share extensions

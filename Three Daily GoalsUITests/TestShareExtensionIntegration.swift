@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
 @testable import macosShare
 @testable import tdgCoreMain
-@testable import tdgCoreShare
+@testable import tdgCoreTest
 
 @MainActor
 class TestShareExtensionIntegration: XCTestCase {

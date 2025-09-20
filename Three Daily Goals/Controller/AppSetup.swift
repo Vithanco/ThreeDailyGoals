@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import SwiftUI
+import WidgetKit
 import tdgCoreMain
 
 /// Struct containing all app components and managers
@@ -170,5 +171,8 @@ extension CloudPreferences :  PriorityUpdater {
                 setPriority(nr: i + 1, value: "")
             }
         }
+        
+        // Refresh widget timeline when priorities change
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
