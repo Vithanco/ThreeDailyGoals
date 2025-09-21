@@ -50,6 +50,14 @@ struct WPriorities: View {
         let priorities = availablePriorities
         return !priorities.isEmpty && priorities.count <= config.maxPriorities
     }
+    
+    private var isSmallWidget: Bool {
+        #if os(watchOS)
+        return false // No systemSmall on watchOS
+        #else
+        return widgetFamily == .systemSmall
+        #endif
+    }
 
     var body: some View {
         #if os(watchOS)
@@ -77,11 +85,11 @@ struct WPriorities: View {
     // MARK: - Standard Layout
     @ViewBuilder
     private var standardLayout: some View {
-        VStack(alignment: .leading, spacing: widgetFamily == .systemSmall ? 3 : 6) {
+        VStack(alignment: .leading, spacing: isSmallWidget ? 3 : 6) {
             WidgetStreakView(preferences: preferences, config: config)
             
-            VStack(alignment: .leading, spacing: widgetFamily == .systemSmall ? 2 : 3) {
-                if widgetFamily != .systemSmall {
+            VStack(alignment: .leading, spacing: isSmallWidget ? 2 : 3) {
+                if !isSmallWidget {
                     headerView
                 }
                 
@@ -92,21 +100,21 @@ struct WPriorities: View {
                 }
             }
         }
-        .padding(.horizontal, widgetFamily == .systemSmall ? 0 : 4)
+        .padding(.horizontal, isSmallWidget ? 0 : 4)
         .cornerRadius(8)
     }
     
     @ViewBuilder
     private var headerView: some View {
-        HStack(spacing: widgetFamily == .systemSmall ? 4 : 6) {
+        HStack(spacing: isSmallWidget ? 4 : 6) {
             Image("AppLogo")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
+                .frame(width: isSmallWidget ? 16 : 18, height: isSmallWidget ? 16 : 18)
                 .opacity(0.8)
             
             Text("Goals")
-                .font(widgetFamily == .systemSmall ? .system(size: 15, weight: .semibold) : .headline)
+                .font(isSmallWidget ? .system(size: 15, weight: .semibold) : .headline)
                 .foregroundStyle(Color.primary)
         }
     }
@@ -121,9 +129,9 @@ struct WPriorities: View {
     @ViewBuilder
     private var summaryView: some View {
         Text(displayText)
-            .font(.system(size: widgetFamily == .systemSmall ? 11 : 13))
+            .font(.system(size: isSmallWidget ? 11 : 13))
             .foregroundStyle(Color.secondary)
-            .lineLimit(widgetFamily == .systemSmall ? 2 : 3)
+            .lineLimit(isSmallWidget ? 2 : 3)
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
     }

@@ -33,7 +33,7 @@ struct MainView: View {
 
         return SingleView {
             if isLargeDevice {
-                RegularMainView().frame(minWidth: 1000, minHeight: 600)
+                RegularMainView().frame(minWidth: 1200, minHeight: 600)
             } else {
                 CompactMainView().frame(maxWidth: .infinity, maxHeight: .infinity)
             }
