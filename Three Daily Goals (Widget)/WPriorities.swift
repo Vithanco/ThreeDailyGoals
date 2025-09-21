@@ -17,36 +17,34 @@ struct AWPriority: View {
 
     var font: Font {
         switch widgetFamily {
-        case .systemSmall: return .system(size: 12)
-        case .systemMedium: return .system(size: 14)
-        case .systemLarge: return .system(size: 20)
-        case .systemExtraLarge: return .system(size: 24)
+        case .systemSmall: return .system(size: 13)
+        case .systemMedium: return .system(size: 15)
+        case .systemLarge: return .system(size: 21)
+        case .systemExtraLarge: return .system(size: 25)
         #if os(watchOS)
-        case .accessoryRectangular: return .system(size: 10)
-        case .accessoryCircular: return .system(size: 8)
-        case .accessoryInline: return .system(size: 8)
+        case .accessoryRectangular: return .system(size: 11)
+        case .accessoryCircular: return .system(size: 9)
+        case .accessoryInline: return .system(size: 9)
         #endif
         default:
-            return .system(size: 12)
+            return .system(size: 13)
         }
     }
     
     var priorityIcon: String {
-        switch priorityNumber {
-        case 1: return "1.circle.fill"
-        case 2: return "2.circle.fill"
-        case 3: return "3.circle.fill"
-        case 4: return "4.circle.fill"
-        case 5: return "5.circle.fill"
-        default: return "x.circle.fill"
-        }
+        return imgPriority
     }
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: priorityIcon)
-                .foregroundStyle(Color.priority)
-                .font(.system(size: widgetFamily == .systemSmall ? 10 : 12))
+            ZStack {
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
+                Image(systemName: priorityIcon)
+                    .foregroundStyle(Color.priority)
+                    .font(.system(size: widgetFamily == .systemSmall ? 8 : 10))
+            }
             Text(item)
                 .font(self.font)
                 .lineLimit(2)
@@ -62,20 +60,20 @@ struct WStreakView: View {
     var body: some View {
         HStack(spacing: 3) {
             Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: widgetFamily == .systemSmall ? 15 : 17, weight: .semibold))
-                .foregroundStyle(Color.primary)
-            Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreak)
+                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .bold))
+                .foregroundStyle(Color.white)
+            Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
                 .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
-                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .medium))
-                .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
+                .font(.system(size: widgetFamily == .systemSmall ? 17 : 19, weight: .medium))
+                .frame(width: widgetFamily == .systemSmall ? 17 : 19, height: widgetFamily == .systemSmall ? 17 : 19)
             Text("Today")
-                .font(.system(size: widgetFamily == .systemSmall ? 15 : 17, weight: .medium))
-                .foregroundStyle(Color.primary)
+                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .semibold))
+                .foregroundStyle(Color.white)
                 .lineLimit(1)
-            Image(systemName: preferences.didCompassCheckToday ? imgClosed: imgOpen)
+            Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
-                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .medium))
-                .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
+                .font(.system(size: widgetFamily == .systemSmall ? 17 : 19, weight: .medium))
+                .frame(width: widgetFamily == .systemSmall ? 17 : 19, height: widgetFamily == .systemSmall ? 17 : 19)
         }
     }
 }
@@ -245,7 +243,7 @@ struct WPriorities: View {
                             .opacity(0.8)
                         
                         Text(headingText)
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(Color.primary)
                     }
                 }
@@ -258,7 +256,7 @@ struct WPriorities: View {
                 } else {
                     // Show summary text with more space
                     Text(displayText)
-                        .font(.system(size: widgetFamily == .systemSmall ? 10 : 12))
+                        .font(.system(size: widgetFamily == .systemSmall ? 11 : 13))
                         .foregroundStyle(Color.secondary)
                         .lineLimit(widgetFamily == .systemSmall ? 2 : 3)
                         .multilineTextAlignment(.leading)
@@ -266,8 +264,6 @@ struct WPriorities: View {
                 }
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
         .cornerRadius(8)
         #endif
     }
