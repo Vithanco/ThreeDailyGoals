@@ -313,6 +313,20 @@ struct TestCompassCheckSteps {
         #expect(informAfterReEnable == true)
     }
     
+    @Test
+    func testCalendarAccessWithPlanStepDisabled() throws {
+        // Test that calendar access is not requested when plan step is disabled
+        let calendarManager = CalendarManager()
+        let planStepEnabled = false
+        
+        // Calendar access should not be requested when plan step is disabled
+        #expect(calendarManager.shouldRequestCalendarAccess(planStepEnabled: planStepEnabled) == false)
+        
+        // Test with plan step enabled
+        let planStepEnabledTrue = true
+        #expect(calendarManager.shouldRequestCalendarAccess(planStepEnabled: planStepEnabledTrue) == true)
+    }
+    
     // MARK: - Step Manager Tests
     
     @Test

@@ -37,7 +37,11 @@ public struct CompassCheckDialog: View {
                 Button(action: compassCheckManager.moveStateForward) {
                     Text(compassCheckManager.moveStateForwardText)
                         .foregroundStyle(.white)
-                }.buttonStyle(.borderedProminent)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.priority)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                }.buttonStyle(.plain)
             }
             Spacer()
 

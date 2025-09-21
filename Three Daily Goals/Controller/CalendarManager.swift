@@ -14,7 +14,18 @@ public class CalendarManager {
     private var eventStore: EKEventStore?
 
     init() {
+        // Don't automatically request calendar access
+        // This will be done conditionally based on plan step enablement
+    }
+    
+    /// Initialize calendar access only if needed
+    func initializeIfNeeded() {
         setupCalendarAccess()
+    }
+    
+    /// Check if calendar access should be requested based on plan step enablement
+    func shouldRequestCalendarAccess(planStepEnabled: Bool) -> Bool {
+        return planStepEnabled
     }
 
     private func setupCalendarAccess() {

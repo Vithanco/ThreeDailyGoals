@@ -12,7 +12,7 @@ public struct CompassCheckPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
-
+    
     var lastCompassCheck: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -20,9 +20,9 @@ public struct CompassCheckPreferencesView: View {
         return dateFormatter.string(from: preferences.lastCompassCheck)
     }
     
-
+    
     public var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Spacer()
             
             // Header with icon
@@ -48,53 +48,72 @@ public struct CompassCheckPreferencesView: View {
             ).multilineTextAlignment(.center)
             Spacer().frame(height: 10)
             GroupBox {
-                HStack {
-                    Text("Last Compass Check was:")
-                    Text(lastCompassCheck).foregroundColor(Color.priority)
-                }.padding(5)
-
-                StreakView().padding(EdgeInsets(top: 5, leading: 5, bottom: 10, trailing: 5))
-
-                Text("Current Compass Check Interval").bold()
-                HStack {
-                    Text("Started:")
-                    Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().start.timeAgoDisplay())
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Last Compass Check was:")
+                        Spacer()
+                        Text(lastCompassCheck).foregroundColor(Color.priority)
+                    }
+                    
+                    StreakView()
+                    
+                    Text("Current Compass Check Interval").bold()
+                    HStack {
+                        Text("Started:")
+                        Spacer()
+                        Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().start.timeAgoDisplay())
+                    }
+                    HStack {
+                        Text("Ends:")
+                        Spacer()
+                        Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().end.timeAgoDisplay())
+                    }
+                    HStack {
+                        Text("Done for this period: ")
+                        Spacer()
+                        Text(preferences.didCompassCheckToday ? "yes" : "no")
+                    }
                 }
-                HStack {
-                    Text("Ends:")
-                    Text(timeProviderWrapper.timeProvider.getCompassCheckInterval().end.timeAgoDisplay())
-                }
-                HStack {
-                    Text("Done for this period: ")
-                    Text(preferences.didCompassCheckToday ? "yes" : "no")
-                }
-            }.frame(width: 390)
+                .padding(5)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             GroupBox {
-                DatePicker(
-                    "Time of Compass Check Notification",
-                    selection: Binding(
-                        get: { preferences.compassCheckTime },
-                        set: { preferences.compassCheckTime = $0 }
-                    ),
-                    displayedComponents: .hourAndMinute
-                ).padding(5)
-                Button("Set Compass Check Time") {
-                    compassCheckManager.setupCompassCheckNotification()
-                }.buttonStyle(.bordered).padding(5)
-                
-                //                Spacer()
-                //            }
-                Text("or")
-                
-                Button("No Notifications Please", role: .destructive) {
-                    compassCheckManager.deleteNotifications()
-                }.buttonStyle(.bordered).padding(5)
-            }.frame(width: 390)
+                VStack(alignment: .leading, spacing: 10) {
+                    DatePicker(
+                        "Time of Compass Check Notification",
+                        selection: Binding(
+                            get: { preferences.compassCheckTime },
+                            set: { preferences.compassCheckTime = $0 }
+                        ),
+                        displayedComponents: .hourAndMinute
+                    )
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Button("Set Compass Check Time") {
+                        compassCheckManager.setupCompassCheckNotification()
+                    }
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Text("or")
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Button("No Notifications Please", role: .destructive) {
+                        compassCheckManager.deleteNotifications()
+                    }
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .padding(5)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             GroupBox {
-                Text("Compass Check Steps").bold().padding(.bottom, 5)
-                
                 VStack(alignment: .leading, spacing: 8) {
+                    Text("Compass Check Steps")
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
                     ForEach(compassCheckManager.steps, id: \.id) { step in
                         let isComingSoon = step.id == "plan"
                         
@@ -117,15 +136,16 @@ public struct CompassCheckPreferencesView: View {
                     }
                 }
                 .padding(5)
-            }.frame(width: 390)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer(minLength: 10)
         }
-        .frame(maxWidth: 400)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .fixedSize(horizontal: false, vertical: true)
         .padding(10)
     }
-
+    
 }
 
 #Preview {

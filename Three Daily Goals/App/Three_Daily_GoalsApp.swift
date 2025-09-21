@@ -31,10 +31,11 @@ struct Three_Daily_GoalsApp: App {
 
         // Set up app components
         self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
-
-        guard calendarManager.hasCalendarAccess else {
-            debugPrint("No calendar access available")
-            return
+        
+        // Only initialize calendar access if the plan step is enabled
+        let planStepEnabled = appComponents.preferences.isCompassCheckStepEnabled(stepId: "plan")
+        if calendarManager.shouldRequestCalendarAccess(planStepEnabled: planStepEnabled) {
+            calendarManager.initializeIfNeeded()
         }
     }
 
