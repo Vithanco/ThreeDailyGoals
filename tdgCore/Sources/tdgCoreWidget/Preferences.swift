@@ -1,4 +1,3 @@
-//
 //  Preferences.swift
 //  Three Daily Goals
 //

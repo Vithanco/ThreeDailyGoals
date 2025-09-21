@@ -43,12 +43,13 @@ struct AWPriority: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(spacing: 4) {
             Image(systemName: priorityIcon)
                 .foregroundStyle(Color.priority)
-            HStack {
-                Text(item).font(self.font)
-            }
+                .font(.system(size: widgetFamily == .systemSmall ? 10 : 12))
+            Text(item)
+                .font(self.font)
+                .lineLimit(2)
         }
     }
 }
@@ -56,24 +57,25 @@ struct AWPriority: View {
 // Widget-specific streak view that doesn't rely on external dependencies
 struct WStreakView: View {
     let preferences: CloudPreferences
+    @Environment(\.widgetFamily) var widgetFamily: WidgetFamily
     
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 3) {
             Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(Color.black)
+                .font(.system(size: widgetFamily == .systemSmall ? 15 : 17, weight: .semibold))
+                .foregroundStyle(Color.primary)
             Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreak)
                 .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
-                .font(.system(size: 16, weight: .medium))
-                .frame(width: 20, height: 20)
+                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .medium))
+                .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
             Text("Today")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.black)
+                .font(.system(size: widgetFamily == .systemSmall ? 15 : 17, weight: .medium))
+                .foregroundStyle(Color.primary)
                 .lineLimit(1)
             Image(systemName: preferences.didCompassCheckToday ? imgClosed: imgOpen)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
-                .font(.system(size: 16, weight: .medium))
-                .frame(width: 20, height: 20)
+                .font(.system(size: widgetFamily == .systemSmall ? 16 : 18, weight: .medium))
+                .frame(width: widgetFamily == .systemSmall ? 16 : 18, height: widgetFamily == .systemSmall ? 16 : 18)
         }
     }
 }
@@ -88,12 +90,12 @@ struct WPriorities: View {
 
     var maxPriorities: Int {
         switch widgetFamily {
-        case .systemSmall: return 2
-        case .systemMedium: return 3
-        case .systemLarge: return 4
-        case .systemExtraLarge: return 5
+        case .systemSmall: return 3  // Increased to use space better
+        case .systemMedium: return 4
+        case .systemLarge: return 5
+        case .systemExtraLarge: return 6
         #if os(watchOS)
-        case .accessoryRectangular: return 2
+        case .accessoryRectangular: return 3
         case .accessoryCircular: return 1
         case .accessoryInline: return 1
         #endif
@@ -158,6 +160,7 @@ struct WPriorities: View {
             HStack {
                 Text("\(preferences.daysOfCompassCheck) days")
                     .font(.system(size: 8, weight: .medium))
+                    .foregroundStyle(Color.primary)
                 if !availablePriorities.isEmpty {
                     Text("• \(availablePriorities.first ?? "")")
                         .font(.system(size: 8))
@@ -171,6 +174,7 @@ struct WPriorities: View {
                 HStack {
                     Text("\(preferences.daysOfCompassCheck) days")
                         .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color.primary)
                     Spacer()
                     if preferences.didCompassCheckToday {
                         Image(systemName: "checkmark.circle.fill")
@@ -226,22 +230,24 @@ struct WPriorities: View {
         }
         #else
         // Standard layout for system widgets (iOS/macOS)
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 3) {
             // Use widget-specific streak view
             WStreakView(preferences: preferences)
             
-            // Priorities section with custom app logo
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 6) {
-                    Image("AppLogo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 18, height: 18)
-                        .opacity(0.8)
-                    
-                    Text(headingText)
-                        .font(.headline)
-                        .foregroundStyle(Color.primary)
+            // Priorities section - more compact
+            VStack(alignment: .leading, spacing: 2) {
+                if widgetFamily != .systemSmall {
+                    HStack(spacing: 4) {
+                        Image("AppLogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 16, height: 16)
+                            .opacity(0.8)
+                        
+                        Text(headingText)
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(Color.primary)
+                    }
                 }
                 
                 if shouldShowIndividualItems {
@@ -252,15 +258,16 @@ struct WPriorities: View {
                 } else {
                     // Show summary text with more space
                     Text(displayText)
-                        .font(.system(size: 13))
+                        .font(.system(size: widgetFamily == .systemSmall ? 10 : 12))
                         .foregroundStyle(Color.secondary)
-                        .lineLimit(3)
+                        .lineLimit(widgetFamily == .systemSmall ? 2 : 3)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
-        .padding(.horizontal, 4)
+        .padding(.horizontal, 3)
+        .padding(.vertical, 2)
         #endif
     }
 }

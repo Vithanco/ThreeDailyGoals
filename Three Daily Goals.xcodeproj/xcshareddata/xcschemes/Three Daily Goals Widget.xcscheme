@@ -54,15 +54,6 @@
             ReferencedContainer = "container:Three Daily Goals.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E561D6D72B1F54A6003BE36F"
-            BuildableName = "Three Daily Goals.app"
-            BlueprintName = "Three Daily Goals"
-            ReferencedContainer = "container:Three Daily Goals.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCWidgetKind"
