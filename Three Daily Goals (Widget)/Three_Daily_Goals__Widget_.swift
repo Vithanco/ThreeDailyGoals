@@ -102,7 +102,7 @@ struct Three_Daily_Goals__Widget_: Widget {
 
     func getView(entry: PriorityEntry) -> some View {
         return Three_Daily_Goals__Widget_EntryView(entry: entry)
-            .containerBackground(.fill.tertiary, for: .widget)
+            .containerBackground(Color.priority, for: .widget)
             .widgetURL(URL(string: "three-daily-goals://widget"))
     }
 
@@ -133,6 +133,19 @@ struct Three_Daily_Goals__Widget_: Widget {
         }())
     }
 }
+
+
+
+extension View {
+    @ViewBuilder func widgetBackground<T: View>(@ViewBuilder content: () -> T) -> some View {
+        if #available(iOS 17.0, *) {
+            containerBackground(for: .widget, content: content)
+        }else {
+            background(content())
+        }
+    }
+}
+
 
 
 #if os(watchOS)

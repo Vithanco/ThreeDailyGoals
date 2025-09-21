@@ -266,8 +266,9 @@ struct WPriorities: View {
                 }
             }
         }
-        .padding(.horizontal, 3)
-        .padding(.vertical, 2)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .cornerRadius(8)
         #endif
     }
 }
