@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import os
+import TipKit
 import tdgCoreMain
 
 
@@ -353,6 +354,7 @@ public final class CompassCheckManager {
                 .help("Start compass check")
         }
         .accessibilityIdentifier("compassCheckButton")
+        .popoverTip(CompassCheckTip())
     }
     
     // MARK: - Step Management Methods

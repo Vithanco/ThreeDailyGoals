@@ -11,6 +11,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import os
 import tdgCoreMain
+import TipKit
 
 @main
 struct Three_Daily_GoalsApp: App {
@@ -31,6 +32,9 @@ struct Three_Daily_GoalsApp: App {
 
         // Set up app components
         self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
+        
+        // Initialize TipKit
+        TipManager.shared.configureTips()
         
         // Only initialize calendar access if the plan step is enabled
         let planStepEnabled = appComponents.preferences.isCompassCheckStepEnabled(stepId: "plan")

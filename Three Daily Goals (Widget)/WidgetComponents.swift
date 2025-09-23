@@ -13,78 +13,96 @@ import tdgCoreWidget
 // MARK: - Widget Size Configuration
 struct WidgetSizeConfig {
     let maxPriorities: Int
-    let font: Font
     let fontSize: CGFloat
     let iconSize: CGFloat
-    let spacing: CGFloat
+    let horizontalPadding: CGFloat
+    let verticalSpacing: CGFloat
+    let itemSpacing: CGFloat
+    let showHeader: Bool
     
     static func forFamily(_ family: WidgetFamily) -> WidgetSizeConfig {
         switch family {
         case .systemSmall:
             return WidgetSizeConfig(
                 maxPriorities: 3,
-                font: .system(size: 13),
-                fontSize: 13,
-                iconSize: 16,
-                spacing: 4
+                fontSize: 16,
+                iconSize: 20,
+                horizontalPadding: 0,
+                verticalSpacing: 3,
+                itemSpacing: 2,
+                showHeader: false
             )
         case .systemMedium:
             return WidgetSizeConfig(
-                maxPriorities: 4,
-                font: .system(size: 15),
-                fontSize: 15,
-                iconSize: 18,
-                spacing: 6
+                maxPriorities: 5,
+                fontSize: 18,
+                iconSize: 22,
+                horizontalPadding: 2,
+                verticalSpacing: 6,
+                itemSpacing: 3,
+                showHeader: true
             )
         case .systemLarge:
             return WidgetSizeConfig(
-                maxPriorities: 5,
-                font: .system(size: 21),
-                fontSize: 21,
-                iconSize: 20,
-                spacing: 8
+                maxPriorities: 6,
+                fontSize: 24,
+                iconSize: 24,
+                horizontalPadding: 2,
+                verticalSpacing: 6,
+                itemSpacing: 3,
+                showHeader: true
             )
         case .systemExtraLarge:
             return WidgetSizeConfig(
-                maxPriorities: 6,
-                font: .system(size: 25),
-                fontSize: 25,
-                iconSize: 22,
-                spacing: 10
+                maxPriorities: 7,
+                fontSize: 28,
+                iconSize: 26,
+                horizontalPadding: 2,
+                verticalSpacing: 6,
+                itemSpacing: 3,
+                showHeader: true
             )
         #if os(watchOS)
         case .accessoryRectangular:
             return WidgetSizeConfig(
                 maxPriorities: 3,
-                font: .system(size: 11),
                 fontSize: 11,
                 iconSize: 14,
-                spacing: 2
+                horizontalPadding: 0,
+                verticalSpacing: 2,
+                itemSpacing: 1,
+                showHeader: false
             )
         case .accessoryCircular:
             return WidgetSizeConfig(
                 maxPriorities: 1,
-                font: .system(size: 9),
                 fontSize: 9,
                 iconSize: 12,
-                spacing: 1
+                horizontalPadding: 0,
+                verticalSpacing: 1,
+                itemSpacing: 1,
+                showHeader: false
             )
         case .accessoryInline:
             return WidgetSizeConfig(
                 maxPriorities: 1,
-                font: .system(size: 9),
                 fontSize: 9,
                 iconSize: 12,
-                spacing: 1
+                horizontalPadding: 0,
+                verticalSpacing: 1,
+                itemSpacing: 1,
+                showHeader: false
             )
         #endif
         default:
             return WidgetSizeConfig(
                 maxPriorities: 3,
-                font: .system(size: 13),
                 fontSize: 13,
                 iconSize: 16,
-                spacing: 4
+                horizontalPadding: 2,
+                verticalSpacing: 6,
+                itemSpacing: 3,
+                showHeader: true
             )
         }
     }
@@ -97,7 +115,7 @@ struct WidgetPriorityItem: View {
     let config: WidgetSizeConfig
     
     var body: some View {
-        HStack(spacing: config.spacing) {
+        HStack(spacing: config.itemSpacing) {
             ZStack {
                 Circle()
                     .fill(Color.white)
@@ -107,8 +125,9 @@ struct WidgetPriorityItem: View {
                     .font(.system(size: config.iconSize * 0.5))
             }
             Text(item)
-                .font(config.font)
+                .font(.system(size: config.fontSize))
                 .lineLimit(2)
+                .multilineTextAlignment(.leading)
         }
     }
 }
@@ -124,17 +143,22 @@ struct WidgetStreakView: View {
                 .font(.system(size: config.fontSize + 3, weight: .bold))
                 .foregroundStyle(Color.white)
             Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
-                .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
-                .font(.system(size: config.fontSize + 4, weight: .medium))
+                .foregroundStyle(Color.white)
+                .font(.system(size: config.fontSize + 3, weight: .medium))
                 .frame(width: config.iconSize + 1, height: config.iconSize + 1)
             Text("Today")
                 .font(.system(size: config.fontSize + 3, weight: .semibold))
                 .foregroundStyle(Color.white)
                 .lineLimit(1)
-            Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
-                .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
-                .font(.system(size: config.fontSize + 4, weight: .medium))
-                .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            ZStack {
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: config.iconSize + 4, height: config.iconSize + 4)
+                Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                    .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
+                    .font(.system(size: config.fontSize + 3, weight: .medium))
+                    .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            }
         }
     }
 }

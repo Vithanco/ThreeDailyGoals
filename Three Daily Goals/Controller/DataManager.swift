@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 import os
+import TipKit
 import tdgCoreMain
 
 /// Struct for import conflict resolution
@@ -895,6 +896,7 @@ public final class DataManager {
                 .help("Make this task a priority for today")
         }
         .accessibilityIdentifier("prioritiseButton")
+        .popoverTip(PriorityTip())
     }
 
     /// Delete button for task items

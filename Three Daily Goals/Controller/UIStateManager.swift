@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+import TipKit
 import tdgCoreMain
 
 @MainActor
@@ -172,6 +172,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
                     .help("Add a new task")
             }
             .accessibilityIdentifier("addTaskButton")
+            .popoverTip(AddFirstGoalTip())
         }
 
     /// Export button for app commands

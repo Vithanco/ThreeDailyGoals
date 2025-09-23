@@ -46,18 +46,14 @@ struct WPriorities: View {
         }
     }
     
-    private var shouldShowIndividualItems: Bool {
-        let priorities = availablePriorities
-        return !priorities.isEmpty && priorities.count <= config.maxPriorities
+    private var displayedPriorities: [String] {
+        return Array(availablePriorities.prefix(config.maxPriorities))
     }
     
-    private var isSmallWidget: Bool {
-        #if os(watchOS)
-        return false // No systemSmall on watchOS
-        #else
-        return widgetFamily == .systemSmall
-        #endif
+    private var remainingTasksCount: Int {
+        return max(0, availablePriorities.count - config.maxPriorities)
     }
+    
 
     var body: some View {
         #if os(watchOS)
@@ -85,55 +81,56 @@ struct WPriorities: View {
     // MARK: - Standard Layout
     @ViewBuilder
     private var standardLayout: some View {
-        VStack(alignment: .leading, spacing: isSmallWidget ? 3 : 6) {
+        VStack(alignment: .leading, spacing: config.verticalSpacing) {
             WidgetStreakView(preferences: preferences, config: config)
             
-            VStack(alignment: .leading, spacing: isSmallWidget ? 2 : 3) {
-                if !isSmallWidget {
+            VStack(alignment: .leading, spacing: config.itemSpacing) {
+                if config.showHeader {
                     headerView
                 }
                 
-                if shouldShowIndividualItems {
-                    individualItemsView
-                } else {
-                    summaryView
+                individualItemsView
+                
+                if remainingTasksCount > 0 {
+                    remainingTasksView
                 }
             }
         }
-        .padding(.horizontal, isSmallWidget ? 0 : 4)
-        .cornerRadius(8)
+        .padding(.horizontal, config.horizontalPadding)
     }
     
     @ViewBuilder
     private var headerView: some View {
-        HStack(spacing: isSmallWidget ? 4 : 6) {
-            Image("AppLogo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: isSmallWidget ? 16 : 18, height: isSmallWidget ? 16 : 18)
-                .opacity(0.8)
+        HStack(spacing: config.itemSpacing) {
+            ZStack {
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: config.iconSize + 4, height: config.iconSize + 4)
+                Image("AppLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: config.iconSize, height: config.iconSize)
+            }
             
             Text("Goals")
-                .font(isSmallWidget ? .system(size: 15, weight: .semibold) : .headline)
-                .foregroundStyle(Color.primary)
+                .font(.system(size: config.fontSize + 2, weight: .semibold))
+                .foregroundStyle(Color.white)
         }
     }
     
     @ViewBuilder
     private var individualItemsView: some View {
-        ForEach(Array(availablePriorities.enumerated()), id: \.offset) { index, priority in
+        ForEach(Array(displayedPriorities.enumerated()), id: \.offset) { index, priority in
             WidgetPriorityItem(item: priority, priorityNumber: index + 1, config: config)
         }
     }
     
     @ViewBuilder
-    private var summaryView: some View {
-        Text(displayText)
-            .font(.system(size: isSmallWidget ? 11 : 13))
+    private var remainingTasksView: some View {
+        Text("+ \(remainingTasksCount) tasks")
+            .font(.system(size: config.fontSize - 2))
             .foregroundStyle(Color.secondary)
-            .lineLimit(isSmallWidget ? 2 : 3)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(1)
     }
 }
 

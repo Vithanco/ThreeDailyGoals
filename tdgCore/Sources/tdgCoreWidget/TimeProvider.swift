@@ -15,52 +15,52 @@ public protocol TimeProvider {
 
 // MARK: - Protocol Extensions for Common Functionality
 
-public extension TimeProvider {
+extension TimeProvider {
     // Helper methods for common time operations
-    func date(byAdding component: Calendar.Component, value: Int, to date: Date) -> Date? {
+    public func date(byAdding component: Calendar.Component, value: Int, to date: Date) -> Date? {
         return calendar.date(byAdding: component, value: value, to: date)
     }
-    
-    func date(bySettingHour hour: Int, minute: Int, second: Int, of date: Date) -> Date? {
+
+    public func date(bySettingHour hour: Int, minute: Int, second: Int, of date: Date) -> Date? {
         return calendar.date(bySettingHour: hour, minute: minute, second: second, of: date)
     }
-    
-    func startOfDay(for date: Date) -> Date {
+
+    public func startOfDay(for date: Date) -> Date {
         return calendar.startOfDay(for: date)
     }
-    
-    func isDate(_ date1: Date, inSameDayAs date2: Date) -> Bool {
+
+    public func isDate(_ date1: Date, inSameDayAs date2: Date) -> Bool {
         return calendar.isDate(date1, inSameDayAs: date2)
     }
-    
+
     // Component extraction methods
-    func component(_ component: Calendar.Component, from date: Date) -> Int {
+    public func component(_ component: Calendar.Component, from date: Date) -> Int {
         return calendar.component(component, from: date)
     }
-    
-    func date(from components: DateComponents) -> Date? {
+
+    public func date(from components: DateComponents) -> Date? {
         return calendar.date(from: components)
     }
-    
-    func isDateInTomorrow(_ date: Date) -> Bool {
+
+    public func isDateInTomorrow(_ date: Date) -> Bool {
         return calendar.isDateInTomorrow(date)
     }
-    
+
     // The 4 core functions that need to be moved from DateRelated.swift
-    func getDate(daysPrior: Int) -> Date {
+    public func getDate(daysPrior: Int) -> Date {
         guard let exact = calendar.date(byAdding: .day, value: -1 * daysPrior, to: now) else {
             assert(false, "Could not create date \(daysPrior)")
             return now
         }
         return calendar.startOfDay(for: exact)
     }
-    
-    func getDate(inDays: Int) -> Date {
+
+    public func getDate(inDays: Int) -> Date {
         let exact = calendar.date(byAdding: .day, value: inDays, to: now) ?? now
         return calendar.startOfDay(for: exact)
     }
-    
-    func todayAt(hour: Int, min: Int) -> Date {
+
+    public func todayAt(hour: Int, min: Int) -> Date {
         var h = hour
         if hour < 0 {
             h = 0
@@ -73,80 +73,78 @@ public extension TimeProvider {
         } else if min > 59 {
             m = 59
         }
-        
+
         var components = calendar.dateComponents(
             [.year, .month, .day, .hour, .minute, .second], from: now)
-        
+
         components.minute = m
         components.hour = h
         components.second = 0
-        
+
         return calendar.date(from: components) ?? now
     }
-    
-    func getCompassCheckInterval(forDate: Date) -> DateInterval {
+
+    public func getCompassCheckInterval(forDate: Date) -> DateInterval {
         let hour = calendar.component(.hour, from: forDate)
-        
+
         // Create noon time for the given date
         var noonComponents = calendar.dateComponents([.year, .month, .day], from: forDate)
         noonComponents.hour = 12
         noonComponents.minute = 0
         noonComponents.second = 0
-        
+
         guard let noonTime = calendar.date(from: noonComponents) else {
             return DateInterval(start: now, duration: 0)
         }
-        
-        if hour < 12 {
-            // if AM: interval is from yesterday noon to today noon
-            let startDate = calendar.date(byAdding: .day, value: -1, to: noonTime) ?? noonTime
-            return DateInterval(start: startDate, end: noonTime)
-        } else {
+
+        guard hour < 12 else {
             // if PM: interval is from today noon to tomorrow noon
             let endDate = calendar.date(byAdding: .day, value: 1, to: noonTime) ?? noonTime
             return DateInterval(start: noonTime, end: endDate)
         }
+        // if AM: interval is from yesterday noon to today noon
+        let startDate = calendar.date(byAdding: .day, value: -1, to: noonTime) ?? noonTime
+        return DateInterval(start: startDate, end: noonTime)
     }
-    
+
     // Convenience method for current interval
-    func getCompassCheckInterval() -> DateInterval {
+    public func getCompassCheckInterval() -> DateInterval {
         return getCompassCheckInterval(forDate: now)
     }
-    
+
     // Helper function for adding a day to a date
-    func addADay(_ date: Date) -> Date {
+    public func addADay(_ date: Date) -> Date {
         return calendar.date(byAdding: .day, value: 1, to: date) ?? date
     }
-    
+
     // Date extension methods moved from DateRelated.swift
-    func isToday(_ date: Date) -> Bool {
+    public func isToday(_ date: Date) -> Bool {
         return startOfDay(for: date) == startOfDay(for: now)
     }
-    
-    func beginOfReviewWindow(for date: Date) -> Date {
+
+    public func beginOfReviewWindow(for date: Date) -> Date {
         let inter = getCompassCheckInterval(forDate: date)
         return inter.start
     }
-    
-    var today: Date {
+
+    public var today: Date {
         return startOfDay(for: now)
     }
-    
-    func endOfDay(for date: Date) -> Date {
+
+    public func endOfDay(for date: Date) -> Date {
         return startOfDay(for: date).addingTimeInterval(24 * 60 * 60)
     }
-    
-    func hour(of date: Date) -> Int {
+
+    public func hour(of date: Date) -> Int {
         return calendar.component(.hour, from: date)
     }
-    
-    func minute(of date: Date) -> Int {
+
+    public func minute(of date: Date) -> Int {
         return calendar.component(.minute, from: date)
     }
-    
-    func timeRemaining(for date: Date) -> String {
-        let endOfDay = calendar.startOfDay(for: date).addingTimeInterval(Seconds.fullDay)
-        return timeAgoFormatter.string(for: endOfDay) ?? ""
+
+    public func timeRemaining(for date: Date) -> String {
+        return timeAgoFormatter.string(for: date) ?? ""
     }
 }
 
@@ -166,12 +164,12 @@ public struct RealTimeProvider: TimeProvider {
 public struct MockTimeProvider: TimeProvider {
     public let fixedNow: Date
     public let testCalendar: Calendar
-    
+
     public init(fixedNow: Date, calendar: Calendar = Calendar.current) {
         self.fixedNow = fixedNow
         self.testCalendar = calendar
     }
-    
+
     public var now: Date { fixedNow }
     public var calendar: Calendar { testCalendar }
 }
@@ -181,7 +179,7 @@ public struct MockTimeProvider: TimeProvider {
 @Observable
 public class TimeProviderWrapper {
     public let timeProvider: TimeProvider
-    
+
     public init(_ timeProvider: TimeProvider) {
         self.timeProvider = timeProvider
     }

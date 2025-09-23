@@ -26,6 +26,12 @@ public struct PreferencesView: View {
                 .tabItem {
                     Label("Tags", systemImage: "tag.circle.fill")
                 }
+            #if DEBUG
+            DebugPreferencesView()
+                .tabItem {
+                    Label("Debug", systemImage: "wrench.and.screwdriver")
+                }
+            #endif
         }
         //#if os(iOS)
         //            Spacer()

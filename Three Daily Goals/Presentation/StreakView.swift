@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 import tdgCoreMain
 
 struct StreakView: View {
@@ -26,6 +27,7 @@ struct StreakView: View {
                 .font(.system(size: 18, weight: .medium))
                 .frame(width: 24, height: 24)
         }
+        .popoverTip(StreakTip())
     }
 }
 
