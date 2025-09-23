@@ -81,22 +81,40 @@ struct WPriorities: View {
     // MARK: - Standard Layout
     @ViewBuilder
     private var standardLayout: some View {
-        VStack(alignment: .leading, spacing: config.verticalSpacing) {
-            WidgetStreakView(preferences: preferences, config: config)
+        VStack(alignment: .leading, spacing: 0) {
+            // Header section - conditional styling based on widget size
+            VStack(alignment: .leading, spacing: config.verticalSpacing) {
+                WidgetStreakView(preferences: preferences, config: config, widgetFamily: widgetFamily)
+            }
+            .padding(.horizontal, shouldUseDarkHeader ? 12 : config.horizontalPadding)
+            .padding(.vertical, config.verticalSpacing)
+            .background(
+                shouldUseDarkHeader ? 
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(red: 0.8, green: 0.4, blue: 0.0)) : nil
+            )
             
+            // Content section with normal background
             VStack(alignment: .leading, spacing: config.itemSpacing) {
-                if config.showHeader {
-                    headerView
-                }
-                
                 individualItemsView
                 
                 if remainingTasksCount > 0 {
                     remainingTasksView
                 }
             }
+            .padding(.horizontal, config.horizontalPadding)
+            .padding(.vertical, config.verticalSpacing)
         }
-        .padding(.horizontal, config.horizontalPadding)
+    }
+    
+    // MARK: - Helper Properties
+    private var shouldUseDarkHeader: Bool {
+        switch widgetFamily {
+        case .systemMedium, .systemLarge, .systemExtraLarge:
+            return true
+        default:
+            return false
+        }
     }
     
     @ViewBuilder

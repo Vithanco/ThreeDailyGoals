@@ -136,8 +136,27 @@ struct WidgetPriorityItem: View {
 struct WidgetStreakView: View {
     let preferences: CloudPreferences
     let config: WidgetSizeConfig
+    let widgetFamily: WidgetFamily
     
     var body: some View {
+        if shouldUseEnhancedLayout {
+            enhancedLayout
+        } else {
+            simpleLayout
+        }
+    }
+    
+    private var shouldUseEnhancedLayout: Bool {
+        switch widgetFamily {
+        case .systemMedium, .systemLarge, .systemExtraLarge:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    @ViewBuilder
+    private var simpleLayout: some View {
         HStack(spacing: 3) {
             Text("\(preferences.daysOfCompassCheck)")
                 .font(.system(size: config.fontSize + 3, weight: .bold))
@@ -158,6 +177,46 @@ struct WidgetStreakView: View {
                     .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
                     .font(.system(size: config.fontSize + 3, weight: .medium))
                     .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var enhancedLayout: some View {
+        HStack(spacing: 3) {
+            // Streak section
+            HStack(spacing: 3) {
+                Text("\(preferences.daysOfCompassCheck) Day Streak")
+                    .font(.system(size: config.fontSize + 3, weight: .bold))
+                    .foregroundStyle(Color.white)
+                Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
+                    .foregroundStyle(Color.white)
+                    .font(.system(size: config.fontSize + 3, weight: .medium))
+                    .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            }
+            
+            // Vertical separator line
+            Rectangle()
+                .fill(Color.white.opacity(0.3))
+                .frame(width: 1, height: config.fontSize + 6)
+            
+            Spacer()
+            
+            // Today section
+            HStack(spacing: 3) {
+                Text("Today")
+                    .font(.system(size: config.fontSize + 3, weight: .semibold))
+                    .foregroundStyle(Color.white)
+                    .lineLimit(1)
+                ZStack {
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: config.iconSize + 4, height: config.iconSize + 4)
+                    Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                        .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
+                        .font(.system(size: config.fontSize + 3, weight: .medium))
+                        .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+                }
             }
         }
     }
