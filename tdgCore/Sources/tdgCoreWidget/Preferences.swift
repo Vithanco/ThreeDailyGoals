@@ -46,6 +46,11 @@ public struct StorageKeys: Sendable {
         return StorageKeys("priority\(number)")
     }
 
+    // Priority UUID keys
+    public static func priorityUUID(_ number: Int) -> StorageKeys {
+        return StorageKeys("priorityUUID\(number)")
+    }
+
     // Dynamic step keys
     public static func compassCheckStep(_ stepId: String) -> StorageKeys {
         return StorageKeys("compassCheck.step.\(stepId)")
@@ -314,6 +319,17 @@ extension CloudPreferences {
 
     public func setPriority(nr: Int, value: String) {
         store.set(value, forKey: nrToCloudKey(nr: nr))
+    }
+
+    public func getPriorityUUID(nr: Int) -> String {
+        let key = StorageKeys.priorityUUID(nr)
+        let value = store.string(forKey: key) ?? ""
+        print("Widget: Getting priority UUID \(nr) with key '\(key.id)': '\(value)'")
+        return value
+    }
+
+    public func setPriorityUUID(nr: Int, value: String) {
+        store.set(value, forKey: StorageKeys.priorityUUID(nr))
     }
 
     // MARK: - Compass Check Step Toggles

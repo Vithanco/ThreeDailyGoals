@@ -20,6 +20,7 @@
 		7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB52E52E30700461679 /* SwiftUI.framework */; };
 		7F2FD1BB2E63829300F7BC2F /* NewItemProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */; };
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
+		7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
 		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
@@ -181,6 +182,7 @@
 		7F2F0AB52E52E30700461679 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemProducer.swift; sourceTree = "<group>"; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
+		7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWidgetURLHandling.swift; sourceTree = "<group>"; };
 		7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimeRemaining.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */,
 				7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */,
 				7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */,
 				7FC75D452E790233007A436A /* TestShareFlow.swift */,
@@ -940,6 +943,7 @@
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,
 				7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */,
 				E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */,
+				7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */,
 				7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

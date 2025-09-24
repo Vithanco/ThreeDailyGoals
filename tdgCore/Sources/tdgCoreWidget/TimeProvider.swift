@@ -144,7 +144,7 @@ extension TimeProvider {
     }
 
     public func timeRemaining(for date: Date) -> String {
-        return timeAgoFormatter.string(for: date) ?? ""
+        return timeAgoFormatter.localizedString(for: date, relativeTo: now)
     }
 }
 

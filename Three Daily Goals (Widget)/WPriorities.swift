@@ -82,19 +82,20 @@ struct WPriorities: View {
     @ViewBuilder
     private var standardLayout: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Header section - conditional styling based on widget size
+            // Header section
             VStack(alignment: .leading, spacing: config.verticalSpacing) {
                 WidgetStreakView(preferences: preferences, config: config, widgetFamily: widgetFamily)
             }
-            .padding(.horizontal, shouldUseDarkHeader ? 12 : config.horizontalPadding)
+            .padding(.horizontal, config.horizontalPadding)
             .padding(.vertical, config.verticalSpacing)
-            .background(
-                shouldUseDarkHeader ? 
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 0.8, green: 0.4, blue: 0.0)) : nil
-            )
             
-            // Content section with normal background
+            // Separator line
+            Rectangle()
+                .fill(Color.white)
+                .frame(height: 1)
+                .frame(maxWidth: .infinity)
+            
+            // Content section
             VStack(alignment: .leading, spacing: config.itemSpacing) {
                 individualItemsView
                 
@@ -108,14 +109,6 @@ struct WPriorities: View {
     }
     
     // MARK: - Helper Properties
-    private var shouldUseDarkHeader: Bool {
-        switch widgetFamily {
-        case .systemMedium, .systemLarge, .systemExtraLarge:
-            return true
-        default:
-            return false
-        }
-    }
     
     @ViewBuilder
     private var headerView: some View {
@@ -139,7 +132,14 @@ struct WPriorities: View {
     @ViewBuilder
     private var individualItemsView: some View {
         ForEach(Array(displayedPriorities.enumerated()), id: \.offset) { index, priority in
-            WidgetPriorityItem(item: priority, priorityNumber: index + 1, config: config)
+            let priorityNumber = index + 1
+            let taskUUID = preferences.getPriorityUUID(nr: priorityNumber)
+            WidgetPriorityItem(
+                item: priority, 
+                priorityNumber: priorityNumber, 
+                config: config,
+                taskUUID: taskUUID.isEmpty ? nil : taskUUID
+            )
         }
     }
     

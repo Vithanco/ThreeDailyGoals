@@ -113,6 +113,7 @@ struct WidgetPriorityItem: View {
     let item: String
     let priorityNumber: Int
     let config: WidgetSizeConfig
+    let taskUUID: String?
     
     var body: some View {
         HStack(spacing: config.itemSpacing) {
@@ -129,6 +130,7 @@ struct WidgetPriorityItem: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
         }
+        .widgetURL(taskUUID != nil ? URL(string: "three-daily-goals://task/\(taskUUID!)") : nil)
     }
 }
 

@@ -165,10 +165,12 @@ extension CloudPreferences :  PriorityUpdater {
         let prios = prioTasks.count
         for i in 0..<prios {
             setPriority(nr: i + 1, value: prioTasks[i].title)
+            setPriorityUUID(nr: i + 1, value: prioTasks[i].id)
         }
         if prios < 5 {
             for i in prios...4 {
                 setPriority(nr: i + 1, value: "")
+                setPriorityUUID(nr: i + 1, value: "")
             }
         }
         

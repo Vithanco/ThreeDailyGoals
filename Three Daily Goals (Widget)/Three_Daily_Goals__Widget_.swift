@@ -103,7 +103,6 @@ struct Three_Daily_Goals__Widget_: Widget {
     func getView(entry: PriorityEntry) -> some View {
         return Three_Daily_Goals__Widget_EntryView(entry: entry)
             .containerBackground(Color.priority, for: .widget)
-            .widgetURL(URL(string: "three-daily-goals://widget"))
     }
 
     var body: some WidgetConfiguration {

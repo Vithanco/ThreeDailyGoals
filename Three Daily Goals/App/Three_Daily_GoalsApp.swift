@@ -51,8 +51,8 @@ struct Three_Daily_GoalsApp: App {
                     terminateApp()
                 }
                 .onOpenURL { url in
-                    // Parse the URL and create a task
-                    createTaskFrom(url: url)
+                    // Handle URL navigation and task creation
+                    handleURL(url: url)
                 }
         }
         .modelContainer(appComponents.modelContainer)
@@ -101,13 +101,29 @@ struct Three_Daily_GoalsApp: App {
         #endif
     }
 
-    @MainActor func createTaskFrom(url: URL) {
-        let reviewTask = TaskItem()
-        reviewTask.title = "review" + url.lastPathComponent
-        reviewTask.url = url.absoluteString
-        appComponents.dataManager.addItem(item: reviewTask)
-        appComponents.uiState.infoMessage = "Review Task added from \(url)"
-        appComponents.uiState.showInfoMessage = true
+    @MainActor func handleURL(url: URL) {
+        // Handle widget URLs - open specific task or just open app
+        if url.scheme == "three-daily-goals" {
+            if url.host == "task" {
+                // Extract UUID from path: three-daily-goals://task/{uuid}
+                if let taskUUID = url.pathComponents.last {
+                    if let task = appComponents.dataManager.findTask(withUuidString: taskUUID) {
+                        appComponents.uiState.select(task)
+                        return
+                    } else {
+                        appComponents.uiState.infoMessage = "Task not found: \(taskUUID)"
+                        appComponents.uiState.showInfoMessage = true
+                        return
+                    }
+                }
+            } else if url.host == "app" {
+                // Just open the app, no task creation
+                return
+            }
+        }
+        
+        // Unknown URL scheme - just open the app
+        // (Share extension handles task creation separately)
     }
 
 }
