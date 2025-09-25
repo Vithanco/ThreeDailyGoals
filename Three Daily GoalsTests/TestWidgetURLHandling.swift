@@ -69,8 +69,9 @@ struct TestWidgetURLHandling {
     
     @Test
     func testPriorityUUIDStorage() throws {
-        // Given: CloudPreferences instance
-        let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
+        // Given: Test app components with isolated storage
+        let appComponents = setupApp(isTesting: true)
+        let preferences = appComponents.preferences
         
         // When: Setting and getting priority UUIDs
         let testUUID1 = "11111111-1111-1111-1111-111111111111"
@@ -87,8 +88,9 @@ struct TestWidgetURLHandling {
     
     @Test
     func testPriorityUUIDWithEmptyValues() throws {
-        // Given: CloudPreferences instance
-        let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
+        // Given: Test app components with isolated storage
+        let appComponents = setupApp(isTesting: true)
+        let preferences = appComponents.preferences
         
         // When: Setting empty UUID
         preferences.setPriorityUUID(nr: 1, value: "")
@@ -162,8 +164,9 @@ struct TestWidgetURLHandling {
     
     @Test
     func testPriorityUUIDSyncWithPriorities() throws {
-        // Given: CloudPreferences and mock tasks
-        let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
+        // Given: Test app components with isolated storage
+        let appComponents = setupApp(isTesting: true)
+        let preferences = appComponents.preferences
         
         // Create mock tasks with known UUIDs
         let task1UUID = "11111111-1111-1111-1111-111111111111"

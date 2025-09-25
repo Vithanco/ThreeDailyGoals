@@ -21,6 +21,9 @@
 		7F2FD1BB2E63829300F7BC2F /* NewItemProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */; };
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
 		7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */; };
+		7F48FD2B2E84F50B0089827F /* TestSwipeButtonStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */; };
+		7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */; };
+		7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
 		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
@@ -183,6 +186,9 @@
 		7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemProducer.swift; sourceTree = "<group>"; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
 		7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWidgetURLHandling.swift; sourceTree = "<group>"; };
+		7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDeleteButtonVisibility.swift; sourceTree = "<group>"; };
+		7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeButtonStates.swift; sourceTree = "<group>"; };
+		7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeActions.swift; sourceTree = "<group>"; };
 		7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimeRemaining.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
@@ -469,6 +475,8 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */,
+				7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */,
 				7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */,
 				7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */,
 				7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */,
@@ -499,6 +507,7 @@
 		E561D6F92B1F54A9003BE36F /* Three Daily GoalsUITests */ = {
 			isa = PBXGroup;
 			children = (
+				7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */,
 				7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */,
 				7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */,
 				7FC75D502E793946007A436A /* TestShareExtensionView.swift */,
@@ -924,6 +933,8 @@
 			files = (
 				7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */,
 				7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */,
+				7F48FD2B2E84F50B0089827F /* TestSwipeButtonStates.swift in Sources */,
+				7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
 				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,
@@ -954,6 +965,7 @@
 			files = (
 				E561D6FD2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift in Sources */,
 				E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */,
+				7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */,
 				7F2F0A972E52DFB000461679 /* AttachmentUITests.swift in Sources */,
 				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,

@@ -882,8 +882,8 @@ public final class DataManager {
                     "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
                 )
         }
-        .accessibilityIdentifier("openButton")
-        .disabled(!item.canBeMovedToOpen)
+        .accessibilityIdentifier("pendingResponseButton")
+        .disabled(!item.canBeMovedToPendingResponse)
     }
 
     /// Priority button for task items
@@ -896,6 +896,7 @@ public final class DataManager {
                 .help("Make this task a priority for today")
         }
         .accessibilityIdentifier("prioritiseButton")
+        .disabled(!item.canBeMadePriority)
         .popoverTip(PriorityTip())
     }
 
@@ -913,6 +914,7 @@ public final class DataManager {
                 .help("Delete this task for good.")
         }
         .accessibilityIdentifier("deleteButton")
+        .disabled(!item.canBeDeleted)
     }
     
     /// Touch button with description prompt for task items
@@ -924,6 +926,7 @@ public final class DataManager {
                 .help("Touch this task and add a description of what was done")
         }
         .accessibilityIdentifier("touchWithDescriptionButton")
+        .disabled(!item.canBeTouched)
         .alert("What did you do?", isPresented: presentAlert) {
             TextField("Description of what was done", text: description)
             Button("Cancel", role: .cancel) { }
