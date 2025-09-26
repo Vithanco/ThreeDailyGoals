@@ -29,6 +29,13 @@
         "identifier" : "E561D6EB2B1F54A9003BE36F",
         "name" : "Three Daily GoalsTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Three Daily Goals.xcodeproj",
+        "identifier" : "E561D6F52B1F54A9003BE36F",
+        "name" : "Three Daily GoalsUITests"
+      }
     }
   ],
   "version" : 1

@@ -19,21 +19,36 @@ public enum SharePayload {
 public enum ShareFlow {
     public static func resolve(from provider: NSItemProvider) async throws -> SharePayload? {
         // URL first
-        if let url = try await AttachmentResolver.resolveURL(from: provider) {
-            return .url(url.absoluteString)
-        }
-        // Prefer attachments (now includes .html)
-        if let a = try await AttachmentResolver.resolveAttachment(from: provider) {
-            return .attachment(a.url, a.type)
-        }
-        // Text last — but if it *looks like HTML*, turn it into a file
-        if let t = try await AttachmentResolver.resolveText(from: provider) {
-            if looksLikeHTML(t) {
-                let url = try AttachmentResolver.writeTemp(data: Data(t.utf8), ext: "html")
-                return .attachment(url, .html)
+        do {
+            if let url = try await AttachmentResolver.resolveURL(from: provider) {
+                return .url(url.absoluteString)
             }
-            return .text(t)
+        } catch {
+            // URL resolution failed, continue to next step
         }
+
+        // Prefer attachments (now includes .html)
+        do {
+            if let a = try await AttachmentResolver.resolveAttachment(from: provider) {
+                return .attachment(a.url, a.type)
+            }
+        } catch {
+            // Attachment resolution failed, continue to next step
+        }
+
+        // Text last — but if it *looks like HTML*, turn it into a file
+        do {
+            if let t = try await AttachmentResolver.resolveText(from: provider) {
+                if looksLikeHTML(t) {
+                    let url = try AttachmentResolver.writeTemp(data: Data(t.utf8), ext: "html")
+                    return .attachment(url, .html)
+                }
+                return .text(t)
+            }
+        } catch {
+            // Text resolution failed
+        }
+
         return nil
     }
 

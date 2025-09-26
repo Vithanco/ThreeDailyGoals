@@ -33,8 +33,10 @@ struct Three_Daily_GoalsApp: App {
         // Set up app components
         self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
         
-        // Initialize TipKit
-        TipManager.shared.configureTips()
+        // Initialize TipKit only in production (not during testing)
+        if !enableTesting {
+            TipManager.shared.configureTips()
+        }
         
         // Only initialize calendar access if the plan step is enabled
         let planStepEnabled = appComponents.preferences.isCompassCheckStepEnabled(stepId: "plan")

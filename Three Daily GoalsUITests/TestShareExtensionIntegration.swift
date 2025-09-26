@@ -9,9 +9,9 @@ import XCTest
 import SwiftData
 import UniformTypeIdentifiers
 @testable import Three_Daily_Goals
-@testable import macosShare
 @testable import tdgCoreMain
 @testable import tdgCoreTest
+import tdgCoreShare
 
 @MainActor
 class TestShareExtensionIntegration: XCTestCase {
@@ -44,7 +44,7 @@ class TestShareExtensionIntegration: XCTestCase {
         let shareText = "Remember to call the dentist"
         let mockProvider = MockNSItemProvider()
         mockProvider.mockText = shareText
-        mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
+        mockProvider.mockRegisteredTypeIdentifiers = [UTType.plainText.identifier]
         
         // When: Processing the complete share workflow
         let result = try await processShareWorkflow(provider: mockProvider)
@@ -52,6 +52,9 @@ class TestShareExtensionIntegration: XCTestCase {
         // Then: Should create task with correct properties
         XCTAssertNotNil(result, "Should successfully process share workflow")
         if let task = result {
+            print("DEBUG: Task title: '\(task.title)'")
+            print("DEBUG: Task details: '\(task.details)'")
+            print("DEBUG: Share text: '\(shareText)' (length: \(shareText.count))")
             XCTAssertEqual(task.title, shareText, "Should set title to shared text")
             XCTAssertTrue(task.details.isEmpty, "Should have empty details for short text")
             XCTAssertTrue(task.attachments?.isEmpty == true, "Should have no attachments")
@@ -63,7 +66,7 @@ class TestShareExtensionIntegration: XCTestCase {
         let shareURL = "https://developer.apple.com/documentation/swift"
         let mockProvider = MockNSItemProvider()
         mockProvider.mockURL = URL(string: shareURL)!
-        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        mockProvider.mockRegisteredTypeIdentifiers = [UTType.url.identifier]
         
         // When: Processing the complete share workflow
         let result = try await processShareWorkflow(provider: mockProvider)
@@ -83,7 +86,7 @@ class TestShareExtensionIntegration: XCTestCase {
         let tempURL = createTempFile(content: fileContent, fileExtension: "txt")
         let mockProvider = MockNSItemProvider()
         mockProvider.mockFileURL = tempURL
-        mockProvider.registeredTypeIdentifiers = [UTType.fileURL.identifier]
+        mockProvider.mockRegisteredTypeIdentifiers = [UTType.fileURL.identifier]
         
         // When: Processing the complete share workflow
         let result = try await processShareWorkflow(provider: mockProvider)
@@ -111,7 +114,7 @@ class TestShareExtensionIntegration: XCTestCase {
         let htmlContent = "<!DOCTYPE html><html><head><title>Test Page</title></head><body><h1>Hello World</h1></body></html>"
         let mockProvider = MockNSItemProvider()
         mockProvider.mockText = htmlContent
-        mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
+        mockProvider.mockRegisteredTypeIdentifiers = [UTType.plainText.identifier]
         
         // When: Processing the complete share workflow
         let result = try await processShareWorkflow(provider: mockProvider)
@@ -134,7 +137,7 @@ class TestShareExtensionIntegration: XCTestCase {
         // Given: A provider that will throw an error
         let mockProvider = MockNSItemProvider()
         mockProvider.mockError = NSError(domain: "TestError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Test error"])
-        mockProvider.registeredTypeIdentifiers = [UTType.plainText.identifier]
+        mockProvider.mockRegisteredTypeIdentifiers = [UTType.plainText.identifier]
         
         // When: Processing the share workflow
         // Then: Should handle error gracefully
@@ -174,7 +177,7 @@ class TestShareExtensionIntegration: XCTestCase {
         // When: Processing multiple share operations
         for (index, operation) in shareOperations.enumerated() {
             let mockProvider = MockNSItemProvider()
-            mockProvider.registeredTypeIdentifiers = [operation.type]
+            mockProvider.mockRegisteredTypeIdentifiers = [operation.type]
             
             if operation.text != nil {
                 mockProvider.mockText = operation.text
@@ -182,8 +185,13 @@ class TestShareExtensionIntegration: XCTestCase {
                 mockProvider.mockURL = URL(string: operation.url!)
             }
             
+            print("DEBUG: Processing operation \(index): text=\(operation.text ?? "nil"), url=\(operation.url ?? "nil"), type=\(operation.type)")
+            
             if let task = try await processShareWorkflow(provider: mockProvider) {
+                print("DEBUG: Created task \(index): title='\(task.title)', details='\(task.details)', url='\(task.url ?? "nil")'")
                 createdTasks.append(task)
+            } else {
+                print("DEBUG: Failed to create task for operation \(index)")
             }
         }
         
@@ -239,17 +247,19 @@ class TestShareExtensionIntegration: XCTestCase {
         // Step 3: Create and save task
         let task = shareView.item
         
-        // Add attachment if it's a file attachment
-        if shareView.isFileAttachment,
-           let fileURL = shareView.originalFileURL,
-           let contentType = shareView.originalContentType {
-            _ = try addAttachment(
+        // Add attachment if it's a file attachment - use the payload directly
+        if case .attachment(let fileURL, let contentType) = payload {
+            print("DEBUG: Adding attachment from payload - fileURL: \(fileURL), contentType: \(contentType)")
+            let attachment = try addAttachment(
                 fileURL: fileURL,
                 type: contentType,
                 to: task,
                 sortIndex: 0,
                 in: context
             )
+            print("DEBUG: Attachment created: \(attachment)")
+        } else {
+            print("DEBUG: Not a file attachment payload: \(payload)")
         }
         
         context.insert(task)
@@ -274,4 +284,103 @@ class TestShareExtensionIntegration: XCTestCase {
 }
 
 // MARK: - Mock NSItemProvider for UI Tests
+
+class MockNSItemProvider: NSItemProvider {
+    var mockText: String?
+    var mockURL: URL?
+    var mockFileURL: URL?
+    var mockError: Error?
+    var mockRegisteredTypeIdentifiers: [String] = []
+    
+    override var registeredTypeIdentifiers: [String] {
+        get {
+            return mockRegisteredTypeIdentifiers
+        }
+        set {
+            mockRegisteredTypeIdentifiers = newValue
+        }
+    }
+    
+    override func hasItemConformingToTypeIdentifier(_ typeIdentifier: String) -> Bool {
+        return mockRegisteredTypeIdentifiers.contains(typeIdentifier)
+    }
+
+    
+    override func loadItem(forTypeIdentifier typeIdentifier: String, options: [AnyHashable : Any]? = nil) async throws -> NSSecureCoding {
+        if let error = mockError {
+            throw error
+        }
+        
+        switch typeIdentifier {
+        case UTType.plainText.identifier, UTType.text.identifier:
+            if let text = mockText {
+                return text as NSString
+            }
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No text available"])
+        case UTType.url.identifier:
+            if let url = mockURL {
+                return url as NSURL
+            }
+            // Don't throw error for URL - let the resolver handle it gracefully
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No URL available"])
+        case UTType.fileURL.identifier:
+            if let fileURL = mockFileURL {
+                return fileURL as NSURL
+            }
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL available"])
+        default:
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type: \(typeIdentifier)"])
+        }
+    }
+    
+    func loadItem(forTypeIdentifier typeIdentifier: String, options: [AnyHashable : Any]? = nil, completionHandler: @escaping (NSSecureCoding?, Error?) -> Void) -> Progress {
+        Task {
+            do {
+                let result = try await loadItem(forTypeIdentifier: typeIdentifier, options: options)
+                completionHandler(result, nil)
+            } catch {
+                completionHandler(nil, error)
+            }
+        }
+        return Progress()
+    }
+    
+    override func loadDataRepresentation(forTypeIdentifier typeIdentifier: String, completionHandler: @escaping (Data?, Error?) -> Void) -> Progress {
+        Task {
+            do {
+                let result = try await loadDataRepresentation(forTypeIdentifier: typeIdentifier)
+                completionHandler(result, nil)
+            } catch {
+                completionHandler(nil, error)
+            }
+        }
+        return Progress()
+    }
+    
+    func loadDataRepresentation(forTypeIdentifier typeIdentifier: String) async throws -> Data {
+        if let error = mockError {
+            throw error
+        }
+        
+        switch typeIdentifier {
+        case UTType.plainText.identifier, UTType.text.identifier:
+            if let text = mockText {
+                return text.data(using: .utf8) ?? Data()
+            }
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No text data available"])
+        case UTType.url.identifier:
+            if let url = mockURL {
+                return url.absoluteString.data(using: .utf8) ?? Data()
+            }
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No URL data available"])
+        case UTType.fileURL.identifier:
+            if let fileURL = mockFileURL {
+                return fileURL.absoluteString.data(using: .utf8) ?? Data()
+            }
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No file URL data available"])
+        default:
+            throw NSError(domain: "MockError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unsupported type: \(typeIdentifier)"])
+        }
+    }
+}
 

@@ -57,7 +57,6 @@
 		7FC75D492E790233007A436A /* TestShareFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D452E790233007A436A /* TestShareFlow.swift */; };
 		7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */; };
 		7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D502E793946007A436A /* TestShareExtensionView.swift */; };
-		7FC75D532E793946007A436A /* TestShareExtensionHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -212,7 +211,6 @@
 		7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckStep.swift; sourceTree = "<group>"; };
 		7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckFlexibility.swift; sourceTree = "<group>"; };
 		7FC75D452E790233007A436A /* TestShareFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareFlow.swift; sourceTree = "<group>"; };
-		7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionHarness.swift; sourceTree = "<group>"; };
 		7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionIntegration.swift; sourceTree = "<group>"; };
 		7FC75D502E793946007A436A /* TestShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionView.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -508,7 +506,6 @@
 			isa = PBXGroup;
 			children = (
 				7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */,
-				7FC75D4E2E793946007A436A /* TestShareExtensionHarness.swift */,
 				7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */,
 				7FC75D502E793946007A436A /* TestShareExtensionView.swift */,
 				E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */,
@@ -969,7 +966,6 @@
 				7F2F0A972E52DFB000461679 /* AttachmentUITests.swift in Sources */,
 				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,
-				7FC75D532E793946007A436A /* TestShareExtensionHarness.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

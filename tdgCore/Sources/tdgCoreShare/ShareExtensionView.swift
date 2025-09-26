@@ -25,6 +25,7 @@ public struct ShareExtensionView: View {
             self.item.title = "Review"
         } else {
             self.item.title = text
+            self.item.details = ""  // Explicitly set details to empty for short text
         }
     }
     public init(details: String) {
