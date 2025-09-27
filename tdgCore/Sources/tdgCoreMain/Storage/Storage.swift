@@ -17,7 +17,7 @@ public enum DatabaseError: LocalizedError {
     case unsupportedSchemaVersion
     case cloudKitSyncFailed(underlyingError: Error)
     case dataCorruption
-    
+
     public var errorDescription: String? {
         switch self {
         case .migrationFailed(let error):
@@ -32,7 +32,7 @@ public enum DatabaseError: LocalizedError {
             return "Database data appears to be corrupted"
         }
     }
-    
+
     public var recoverySuggestion: String? {
         switch self {
         case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion:
@@ -43,7 +43,7 @@ public enum DatabaseError: LocalizedError {
             return "Please update the app to the latest version. If the problem continues, contact support."
         }
     }
-    
+
     public var isUpgradeRequired: Bool {
         switch self {
         case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
@@ -52,7 +52,7 @@ public enum DatabaseError: LocalizedError {
             return false
         }
     }
-    
+
     public var userFriendlyTitle: String {
         switch self {
         case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
@@ -61,11 +61,12 @@ public enum DatabaseError: LocalizedError {
             return "Sync Error"
         }
     }
-    
+
     public var userFriendlyMessage: String {
         switch self {
         case .migrationFailed, .containerCreationFailed, .unsupportedSchemaVersion, .dataCorruption:
-            return "Your app needs to be updated to work with the latest data format. Please update to the latest version from the App Store."
+            return
+                "Your app needs to be updated to work with the latest data format. Please update to the latest version from the App Store."
         case .cloudKitSyncFailed:
             return "There was a problem syncing your data. Please check your internet connection and try again."
         }
@@ -96,8 +97,8 @@ public func getPendingMigrationIssues() -> [(message: String, details: String?)]
     return issues
 }
 
-public extension ModelContainer {
-    var isInMemory: Bool {
+extension ModelContainer {
+    public var isInMemory: Bool {
         return configurations.contains(where: { $0.isStoredInMemoryOnly })
     }
 }
@@ -170,8 +171,8 @@ public class TestStorage: Storage {
     public typealias Loader = ((TimeProvider) -> [TaskItem])
 
     public var undoManager: UndoManager? = nil
-    public  var items: [TaskItem]
-    
+    public var items: [TaskItem]
+
     public init(timeProvider: TimeProvider) {
         var result: [TaskItem] = []
         let theGoal = result.add(
@@ -297,4 +298,17 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<Mode
     }
 }
 
-
+// Helper function to create a task for testing
+public func createTestTask(
+    title: String,
+    changedDate: Date,
+    state: TaskItemState = .open,
+    details: String = "",
+    tags: [String] = []
+) -> TaskItem {
+    // Create a new task item
+    let task = TaskItem(title: title, changedDate: changedDate, state: state)
+    task.details = details
+    task.tags = tags
+    return task
+}

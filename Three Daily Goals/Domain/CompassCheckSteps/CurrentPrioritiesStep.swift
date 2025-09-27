@@ -14,6 +14,7 @@ import tdgCoreMain
 public struct CurrentPrioritiesStep: CompassCheckStep {
     public let id: String = "currentPriorities"
     public let name: String = "Review Current Priorities"
+    public let isSilent: Bool = false
     
     public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are priority tasks to review
@@ -25,7 +26,7 @@ public struct CurrentPrioritiesStep: CompassCheckStep {
         AnyView(CompassCheckCurrentPriorities())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // Move all priority tasks to open list
         for task in dataManager.list(which: .priority) {
             dataManager.move(task: task, to: .open)

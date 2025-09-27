@@ -13,6 +13,7 @@ public struct PlanStep: CompassCheckStep {
 
     public let id: String = "plan"
     public let name: String = "Plan Day"
+    public let isSilent: Bool = false
     
     public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Plan step is only available on macOS (not iOS)
@@ -28,7 +29,7 @@ public struct PlanStep: CompassCheckStep {
         AnyView(CompassCheckPlanDay(date: compassCheckManager.timeProvider.getCompassCheckInterval().end))
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - planning happens in the view
     }
     

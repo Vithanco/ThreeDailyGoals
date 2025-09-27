@@ -28,15 +28,24 @@ public protocol CompassCheckStep: Equatable {
     
     /// Actions to perform when moving to the next step
     /// This is where step-specific logic like moving tasks between states happens
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider)
+    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences)
     
     /// Whether this step should be skipped based on current conditions
     func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool
+    
+    /// Whether this step is silent (doesn't require user interaction)
+    /// Silent steps are executed automatically without showing a UI
+    var isSilent: Bool { get }
 }
 
 /// Default implementations for common functionality
 extension CompassCheckStep {
     func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    }
+    
+    /// Default implementation: steps are not silent by default
+    var isSilent: Bool {
+        return false
     }
 }

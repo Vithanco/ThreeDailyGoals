@@ -13,6 +13,7 @@ import tdgCoreMain
 public struct DueDateStep: CompassCheckStep {
     public let id: String = "dueDate"
     public let name: String = "Due Date Check"
+    public let isSilent: Bool = false
     
     public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are tasks due soon
@@ -24,7 +25,7 @@ public struct DueDateStep: CompassCheckStep {
         AnyView(CompassCheckDueDate())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // Move all due soon tasks to priority
         let dueSoon = getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider)
         for task in dueSoon {

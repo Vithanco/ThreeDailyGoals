@@ -12,6 +12,7 @@ import tdgCoreMain
 public struct PendingResponsesStep: CompassCheckStep {
     public let id: String = "pending"
     public let name: String = "Pending Responses"
+    public let isSilent: Bool = false
     
     public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Only show this step if there are pending response tasks
@@ -23,7 +24,7 @@ public struct PendingResponsesStep: CompassCheckStep {
         AnyView(CompassCheckPendingResponses())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - user can close tasks in the view
     }
     

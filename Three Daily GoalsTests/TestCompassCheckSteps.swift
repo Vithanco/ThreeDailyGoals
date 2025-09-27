@@ -777,4 +777,172 @@ struct TestCompassCheckSteps {
         #expect(visitedSteps.contains("review"))
         #expect(visitedSteps.contains("plan"))
     }
+    
+    // MARK: - MoveToGraveyardStep Tests
+    
+    @Test
+    func testMoveToGraveyardStep() throws {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        
+        // Create some old tasks that should be moved to graveyard
+        let oldTask1 = dataManager.addAndFindItem(
+            title: "Old task 1",
+            changedDate: timeProvider.getDate(daysPrior: 35), // 35 days old
+            state: .open
+        )
+        let oldTask2 = dataManager.addAndFindItem(
+            title: "Old task 2", 
+            changedDate: timeProvider.getDate(daysPrior: 40), // 40 days old
+            state: .priority
+        )
+        let recentTask = dataManager.addAndFindItem(
+            title: "Recent task",
+            changedDate: timeProvider.getDate(daysPrior: 5), // 5 days old
+            state: .open
+        )
+        
+        // Verify initial state
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask1.id })
+        #expect(dataManager.list(which: .priority).contains { $0.id == oldTask2.id })
+        #expect(dataManager.list(which: .open).contains { $0.id == recentTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+        
+        // Test the MoveToGraveyardStep
+        let graveyardStep = MoveToGraveyardStep()
+        
+        // Verify step properties
+        #expect(graveyardStep.id == "moveToGraveyard")
+        #expect(graveyardStep.name == "Move unused Tasks to Graveyard")
+        #expect(graveyardStep.isSilent == true)
+        #expect(graveyardStep.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider) == true)
+        
+        // Execute the step
+        graveyardStep.executeGraveyardMove(dataManager: dataManager, preferences: testPreferences)
+        
+        // Verify that old tasks were moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == oldTask1.id })
+        #expect(!dataManager.list(which: .priority).contains { $0.id == oldTask2.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask1.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask2.id })
+        
+        // Verify that recent task was not moved
+        #expect(dataManager.list(which: .open).contains { $0.id == recentTask.id })
+    }
+    
+    @Test
+    func testMoveToGraveyardStepWithCustomExpiry() throws {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        // Set custom expiry to 10 days
+        testPreferences.expiryAfter = 10
+        
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        
+        // Create tasks with different ages
+        let veryOldTask = dataManager.addAndFindItem(
+            title: "Very old task",
+            changedDate: timeProvider.getDate(daysPrior: 15), // 15 days old
+            state: .open
+        )
+        let moderatelyOldTask = dataManager.addAndFindItem(
+            title: "Moderately old task",
+            changedDate: timeProvider.getDate(daysPrior: 8), // 8 days old
+            state: .open
+        )
+        let recentTask = dataManager.addAndFindItem(
+            title: "Recent task",
+            changedDate: timeProvider.getDate(daysPrior: 3), // 3 days old
+            state: .open
+        )
+        
+        // Execute the step
+        let graveyardStep = MoveToGraveyardStep()
+        graveyardStep.executeGraveyardMove(dataManager: dataManager, preferences: testPreferences)
+        
+        // Verify that only the very old task (15 days) was moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == veryOldTask.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == veryOldTask.id })
+        
+        // Verify that moderately old and recent tasks were not moved
+        #expect(dataManager.list(which: .open).contains { $0.id == moderatelyOldTask.id })
+        #expect(dataManager.list(which: .open).contains { $0.id == recentTask.id })
+    }
+    
+    @Test
+    func testMoveToGraveyardStepInCompassCheckFlow() throws {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let timeProvider = appComponents.timeProvider
+        
+        // Create some old tasks
+        let oldTask = createTestTask(
+            title: "Old task",
+            changedDate: timeProvider.getDate(daysPrior: 35),
+            state: .open
+        )
+        
+        let compassCheckManager = appComponents.compassCheckManager
+        let dataManager = appComponents.dataManager
+        
+        // Verify initial state
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+        
+        // Start compass check and go through the flow
+        compassCheckManager.startCompassCheckNow()
+        
+        // Navigate through all steps until we reach the end
+        while compassCheckManager.moveStateForwardText != "Finish" {
+            compassCheckManager.moveStateForward()
+        }
+        
+        // The MoveToGraveyardStep should have been executed automatically as a silent step
+        // Verify that the old task was moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask.id })
+    }
+    
+    @Test
+    func testMoveToGraveyardStepCanBeDisabled() throws {
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        // Disable the moveToGraveyard step
+        testPreferences.setCompassCheckStepEnabled(stepId: "moveToGraveyard", enabled: false)
+        
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        
+        // Create an old task
+        let oldTask = dataManager.addAndFindItem(
+            title: "Old task",
+            changedDate: timeProvider.getDate(daysPrior: 35),
+            state: .open
+        )
+        
+        // Verify initial state
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+        
+        // Start compass check and go through the flow
+        let compassCheckManager = appComponents.compassCheckManager
+        compassCheckManager.startCompassCheckNow()
+        
+        // Navigate through all steps until we reach the end
+        while compassCheckManager.moveStateForwardText != "Finish" {
+            compassCheckManager.moveStateForward()
+        }
+        
+        // The MoveToGraveyardStep should have been skipped because it's disabled
+        // Verify that the old task was NOT moved to graveyard
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+    }
 }

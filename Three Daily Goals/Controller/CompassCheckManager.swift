@@ -22,6 +22,7 @@ public final class CompassCheckManager {
         PendingResponsesStep(),
         DueDateStep(),
         ReviewStep(),
+        MoveToGraveyardStep(),
         PlanStep()
     ]
     private let logger = Logger(
@@ -114,6 +115,15 @@ public final class CompassCheckManager {
             endCompassCheck(didFinishCompassCheck: true)
         } else {
             currentStep = nextStep!
+            
+            // If the new step is silent, automatically execute it and move to the next
+            if currentStep.isSilent {
+                debugPrint("Executing silent step: \(type(of: currentStep))")
+                currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider, preferences: preferences)
+                
+                // Recursively move to the next step
+                moveStateForward()
+            }
         }
         
         debugPrint("new step is: \(type(of: currentStep))")
@@ -189,7 +199,6 @@ public final class CompassCheckManager {
         }
 
         dataManager.updateUndoRedoStatus()
-        dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
         setupCompassCheckNotification()
         
         // The @Observable mechanism in CloudPreferences will automatically trigger UI updates
@@ -380,7 +389,7 @@ public final class CompassCheckManager {
     /// Execute the current step's onMoveToNext action and return the next step
     private func moveToNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
         // Execute the current step's action
-        currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider, preferences: preferences)
         
         // Find the next step
         return getNextStep(from: currentStep, os: os)

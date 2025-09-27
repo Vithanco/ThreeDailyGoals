@@ -13,6 +13,7 @@ import tdgCoreMain
 public struct ReviewStep: CompassCheckStep {
     public let id: String = "review"
     public let name: String = "Set New Priorities"
+    public let isSilent: Bool = false
     
     public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Review step is always available - it's where users set new priorities
@@ -24,7 +25,7 @@ public struct ReviewStep: CompassCheckStep {
         AnyView(CompassCheckNextPriorities())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - user sets priorities in the view
     }
     

@@ -386,7 +386,7 @@ extension CloudPreferences {
         case "plan":
             return false  // "coming soon"
         default:
-            return true  // all other steps enabled by default
+            return true  // all other steps enabled by default, including moveToGraveyard
         }
     }
 
