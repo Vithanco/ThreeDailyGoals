@@ -38,6 +38,8 @@
 		7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357562E5B5020004581B7 /* PriorityUpdater.swift */; };
 		7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357592E5B5040004581B7 /* ItemSelector.swift */; };
 		7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3575A2E5B5050004581B7 /* AppSetup.swift */; };
+		7FBF598D2E87B66200A01AA6 /* TestNotificationLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF598B2E87B66200A01AA6 /* TestNotificationLogic.swift */; };
+		7FBF598E2E87B66200A01AA6 /* TestNotificationLogicSimple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF598C2E87B66200A01AA6 /* TestNotificationLogicSimple.swift */; };
 		7FC1BA532E7FFAC2007E1E2D /* WidgetComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */; };
 		7FC1BA552E811FAF007E1E2D /* DebugPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA542E811FAF007E1E2D /* DebugPreferencesView.swift */; };
 		7FC1BA572E811FF6007E1E2D /* AppTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA562E811FF6007E1E2D /* AppTips.swift */; };
@@ -201,6 +203,8 @@
 		7FB357562E5B5020004581B7 /* PriorityUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityUpdater.swift; sourceTree = "<group>"; };
 		7FB357592E5B5040004581B7 /* ItemSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSelector.swift; sourceTree = "<group>"; };
 		7FB3575A2E5B5050004581B7 /* AppSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetup.swift; sourceTree = "<group>"; };
+		7FBF598B2E87B66200A01AA6 /* TestNotificationLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNotificationLogic.swift; sourceTree = "<group>"; };
+		7FBF598C2E87B66200A01AA6 /* TestNotificationLogicSimple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNotificationLogicSimple.swift; sourceTree = "<group>"; };
 		7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetComponents.swift; sourceTree = "<group>"; };
 		7FC1BA542E811FAF007E1E2D /* DebugPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPreferencesView.swift; sourceTree = "<group>"; };
 		7FC1BA562E811FF6007E1E2D /* AppTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTips.swift; sourceTree = "<group>"; };
@@ -473,6 +477,8 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FBF598B2E87B66200A01AA6 /* TestNotificationLogic.swift */,
+				7FBF598C2E87B66200A01AA6 /* TestNotificationLogicSimple.swift */,
 				7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */,
 				7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */,
 				7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */,
@@ -932,6 +938,8 @@
 				7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */,
 				7F48FD2B2E84F50B0089827F /* TestSwipeButtonStates.swift in Sources */,
 				7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */,
+				7FBF598D2E87B66200A01AA6 /* TestNotificationLogic.swift in Sources */,
+				7FBF598E2E87B66200A01AA6 /* TestNotificationLogicSimple.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
 				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,

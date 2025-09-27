@@ -79,30 +79,32 @@ public struct CompassCheckPreferencesView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             GroupBox {
                 VStack(alignment: .leading, spacing: 10) {
-                    DatePicker(
-                        "Time of Compass Check Notification",
-                        selection: Binding(
-                            get: { preferences.compassCheckTime },
-                            set: { preferences.compassCheckTime = $0 }
-                        ),
-                        displayedComponents: .hourAndMinute
-                    )
+                    Toggle("Enable Notifications", isOn: Binding(
+                        get: { preferences.notificationsEnabled },
+                        set: { preferences.notificationsEnabled = $0 }
+                    ))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    Button("Set Compass Check Time") {
-                        compassCheckManager.setupCompassCheckNotification()
-                    }
-                    .buttonStyle(.bordered)
-                    .frame(maxWidth: .infinity, alignment: .center)
                     
-                    Text("or")
-                        .foregroundColor(.secondary)
+                    if preferences.notificationsEnabled {
+                        DatePicker(
+                            "Time of Compass Check Notification",
+                            selection: Binding(
+                                get: { preferences.compassCheckTime },
+                                set: { preferences.compassCheckTime = $0 }
+                            ),
+                            displayedComponents: .hourAndMinute
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        Button("Set Compass Check Time") {
+                            compassCheckManager.setupCompassCheckNotification()
+                        }
+                        .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity, alignment: .center)
-                    
-                    Button("No Notifications Please", role: .destructive) {
-                        compassCheckManager.deleteNotifications()
+                    } else {
+                        Text("Notifications are disabled")
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
-                    .buttonStyle(.bordered)
-                    .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .padding(5)
             }

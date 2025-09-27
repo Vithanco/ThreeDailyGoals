@@ -45,16 +45,23 @@ public final class PushNotificationManager {
     // Use a computed accessor instead of a stored property
     private var center: UNUserNotificationCenter { UNUserNotificationCenter.current() }
     private var delegate: PushNotificationDelegate?
+    
+    // Injected dependencies
+    private let preferences: CloudPreferences
+    private let timeProvider: TimeProvider
 
-    init() {}
+    init(preferences: CloudPreferences, timeProvider: TimeProvider) {
+        self.preferences = preferences
+        self.timeProvider = timeProvider
+    }
 
     func checkNotificationAuthorization() async -> Bool {
         let settings = await center.notificationSettings()
         return settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional
     }
 
-    func scheduleStreakReminderNotification(preferences: CloudPreferences, timeProvider: TimeProvider) async {
-        guard preferences.daysOfCompassCheck > 3 && !preferences.didCompassCheckToday else {
+    func scheduleStreakReminderNotification() async {
+        guard preferences.notificationsEnabled && preferences.daysOfCompassCheck >= 2 && !preferences.didCompassCheckToday else {
             center.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
             return
         }
@@ -83,7 +90,13 @@ public final class PushNotificationManager {
         }
     }
 
-    func scheduleSystemPushNotification(timing: DateComponents, model: CompassCheckManager) async {
+    func scheduleSystemPushNotification(model: CompassCheckManager) async {
+        // Only schedule if notifications are enabled and compass check is pending
+        guard preferences.notificationsEnabled && !preferences.didCompassCheckToday else {
+            center.removePendingNotificationRequests(withIdentifiers: [id])
+            return
+        }
+        
         if delegate == nil {
             delegate = PushNotificationDelegate(compassCheckManager: model)
             center.delegate = delegate
@@ -99,7 +112,7 @@ public final class PushNotificationManager {
             content.title = "Time for the daily Compass Check!"
             content.body = "Click here for starting the Compass Check"
 
-            let trigger = UNCalendarNotificationTrigger(dateMatching: timing, repeats: true)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: preferences.compassCheckTimeComponents, repeats: true)
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
 
             try await center.add(request)

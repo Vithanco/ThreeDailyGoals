@@ -104,8 +104,8 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader:
     // MARK: - Step 5: Create Data Manager
     let dataManager = DataManager(modelContext: finalModelContext, timeProvider: finalTimeProvider)
     
-    // MARK: - Step 6: Create Push Notification Manager
-    let pushNotificationManager = PushNotificationManager()
+    // MARK: - Step 6: Create Push Notification Manager with dependencies
+    let pushNotificationManager = PushNotificationManager(preferences: finalPreferences, timeProvider: finalTimeProvider)
     
     // MARK: - Step 7: Create Compass Check Manager
     let compassCheckManager = CompassCheckManager(

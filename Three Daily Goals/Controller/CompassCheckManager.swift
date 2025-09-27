@@ -304,8 +304,8 @@ public final class CompassCheckManager {
     
     func setupCompassCheckNotification(when: Date? = nil) {
         Task {
-            await pushNotificationManager.scheduleSystemPushNotification(timing: preferences.compassCheckTimeComponents, model: self)
-            await pushNotificationManager.scheduleStreakReminderNotification(preferences: preferences, timeProvider: timeProvider)
+            await pushNotificationManager.scheduleSystemPushNotification(model: self)
+            await pushNotificationManager.scheduleStreakReminderNotification()
         }
 
         let time = when ?? nextRegularCompassCheckTime
