@@ -26,9 +26,9 @@ public protocol CompassCheckStep: Equatable {
     @ViewBuilder
     func view(compassCheckManager: CompassCheckManager) -> AnyView
     
-    /// Actions to perform when moving to the next step
+    /// Actions to perform when this step is executed
     /// This is where step-specific logic like moving tasks between states happens
-    func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences)
+    func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences)
     
     /// Whether this step should be skipped based on current conditions
     func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool
@@ -47,5 +47,13 @@ extension CompassCheckStep {
     /// Default implementation: steps are not silent by default
     var isSilent: Bool {
         return false
+    }
+    
+    func onMoveToNext(
+        dataManager: Three_Daily_Goals.DataManager,
+        timeProvider: any tdgCoreWidget.TimeProvider,
+        preferences: tdgCoreWidget.CloudPreferences
+    ) {
+        // nothing to be done
     }
 }

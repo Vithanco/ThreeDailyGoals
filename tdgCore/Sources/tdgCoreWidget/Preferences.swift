@@ -59,7 +59,7 @@ public struct StorageKeys: Sendable {
     // Step toggles key
     public static let compassCheckStepToggles = StorageKeys("compassCheckStepToggles")
 
-    // Notification preferences
+    // Notifications key
     public static let notificationsEnabled = StorageKeys("notificationsEnabled")
 }
 
@@ -386,11 +386,11 @@ extension CloudPreferences {
         case "plan":
             return false  // "coming soon"
         default:
-            return true  // all other steps enabled by default, including moveToGraveyard
+            return true  // all other steps enabled by default
         }
     }
 
-    // MARK: - Notification Preferences
+    // MARK: - Notifications
 
     public var notificationsEnabled: Bool {
         get {

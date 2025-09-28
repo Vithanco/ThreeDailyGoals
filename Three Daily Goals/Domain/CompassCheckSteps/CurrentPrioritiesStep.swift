@@ -26,7 +26,7 @@ public struct CurrentPrioritiesStep: CompassCheckStep {
         AnyView(CompassCheckCurrentPriorities())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // Move all priority tasks to open list
         for task in dataManager.list(which: .priority) {
             dataManager.move(task: task, to: .open)

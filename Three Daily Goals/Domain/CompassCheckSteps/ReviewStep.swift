@@ -25,7 +25,7 @@ public struct ReviewStep: CompassCheckStep {
         AnyView(CompassCheckNextPriorities())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - user sets priorities in the view
     }
     

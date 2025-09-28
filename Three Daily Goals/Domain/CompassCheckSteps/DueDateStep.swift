@@ -25,7 +25,7 @@ public struct DueDateStep: CompassCheckStep {
         AnyView(CompassCheckDueDate())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // Move all due soon tasks to priority
         let dueSoon = getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider)
         for task in dueSoon {

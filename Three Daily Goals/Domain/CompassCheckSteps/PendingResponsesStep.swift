@@ -24,7 +24,7 @@ public struct PendingResponsesStep: CompassCheckStep {
         AnyView(CompassCheckPendingResponses())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - user can close tasks in the view
     }
     

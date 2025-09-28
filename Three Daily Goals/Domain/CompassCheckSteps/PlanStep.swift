@@ -29,7 +29,7 @@ public struct PlanStep: CompassCheckStep {
         AnyView(CompassCheckPlanDay(date: compassCheckManager.timeProvider.getCompassCheckInterval().end))
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - planning happens in the view
     }
     

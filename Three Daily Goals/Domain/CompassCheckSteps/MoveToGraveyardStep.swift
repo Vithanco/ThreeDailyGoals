@@ -33,7 +33,7 @@ public struct MoveToGraveyardStep: CompassCheckStep {
         )
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // This is where the actual work happens - move old tasks to graveyard
         let killedCount = dataManager.killOldTasks(expireAfter: preferences.expiryAfter, preferences: preferences)
         debugPrint("MoveToGraveyardStep: Moved \(killedCount) old tasks to graveyard")

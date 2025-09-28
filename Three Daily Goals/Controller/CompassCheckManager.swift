@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 import os
+
+enum CompassCheckState {
+    case notStarted
+    case inProgress(any CompassCheckStep)
+    case finished
+    case paused(any CompassCheckStep)
+}
 import TipKit
 import tdgCoreMain
 
@@ -40,11 +47,18 @@ public final class CompassCheckManager {
 
     let timer: CompassCheckTimer = .init()
 
-    var currentStep: any CompassCheckStep
+    // Compass check state
+    var state: CompassCheckState = .notStarted
     
-    // Pause functionality
-    var isPaused: Bool = false
-    var pausedStep: any CompassCheckStep
+    /// Get the current step from the state
+    var currentStep: any CompassCheckStep {
+        switch state {
+        case .notStarted, .finished:
+            return steps.first ?? InformStep()
+        case .inProgress(let step), .paused(let step):
+            return step
+        }
+    }
 
     // Dependencies
     private let dataManager: DataManager
@@ -82,10 +96,7 @@ public final class CompassCheckManager {
         self.pushNotificationManager = pushNotificationManager
         self.steps = steps
         
-        // Initialize currentStep and pausedStep to the first enabled step
-        let firstEnabledStep = steps.first!
-        self.currentStep = firstEnabledStep
-        self.pausedStep = firstEnabledStep
+        // Initialize state to notStarted - currentStep will be computed from state
     }
     
     @MainActor
@@ -108,22 +119,18 @@ public final class CompassCheckManager {
     }
 
     func moveStateForward() {
-        let nextStep = moveToNextStep(from: currentStep, os: os)
+        // Execute the current step's action
+        executeCurrentStep()
         
-        if nextStep == nil {
-            // We're at the end, finish the compass check
-            endCompassCheck(didFinishCompassCheck: true)
-        } else {
-            currentStep = nextStep!
+        // Find and move to the next step
+        if let nextStep = getNextStep(from: currentStep, os: os) {
+            state = .inProgress(nextStep)
             
-            // If the new step is silent, automatically execute it and move to the next
-            if currentStep.isSilent {
-                debugPrint("Executing silent step: \(type(of: currentStep))")
-                currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider, preferences: preferences)
-                
-                // Recursively move to the next step
-                moveStateForward()
-            }
+            // Process any silent steps that follow
+            processSilentSteps()
+        } else {
+            // No more steps, finish the compass check
+            endCompassCheck(didFinishCompassCheck: true)
         }
         
         debugPrint("new step is: \(type(of: currentStep))")
@@ -131,6 +138,14 @@ public final class CompassCheckManager {
 
     var moveStateForwardText: String {
         return getButtonText(for: currentStep, os: os)
+    }
+    
+    /// Check if the compass check is finished
+    var isFinished: Bool {
+        if case .finished = state {
+            return true
+        }
+        return false
     }
     
     /// Get the current step's view
@@ -141,19 +156,13 @@ public final class CompassCheckManager {
 
     func cancelCompassCheck() {
         uiState.showCompassCheckDialog = false
-        let firstEnabledStep = steps.first { !shouldSkipStep($0) } ?? InformStep()
-        currentStep = firstEnabledStep
-        isPaused = false
-        pausedStep = currentStep
+        state = .paused(currentStep)
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.twoHours))
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
-        let firstEnabledStep = steps.first { !shouldSkipStep($0) } ?? InformStep()
-        currentStep = firstEnabledStep
-        isPaused = false
-        pausedStep = currentStep
+        state = .finished
         
         // Cancel any pending notifications since CC is done
         timer.cancelTimer()
@@ -210,15 +219,16 @@ public final class CompassCheckManager {
     }
     
     func pauseCompassCheck() {
-        isPaused = true
-        pausedStep = currentStep
+        state = .paused(currentStep)
         uiState.showCompassCheckDialog = false
         setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
     }
     
     func resumeCompassCheck() {
-        isPaused = false
-        currentStep = pausedStep
+        // Resume from paused state
+        if case .paused(let step) = state {
+            state = .inProgress(step)
+        }
         uiState.showCompassCheckDialog = true
     }
 
@@ -232,23 +242,37 @@ public final class CompassCheckManager {
             if uiState.showCompassCheckDialog {
                 logger.info("Compass check completed on another device, closing dialog")
                 endCompassCheck(didFinishCompassCheck: false)
-            } else if currentStep.id != steps.first?.id {
-                // Reset state if not showing dialog but state is not the first step
-                logger.info("Compass check completed on another device, resetting state")
-                currentStep = steps.first ?? InformStep()
-                isPaused = false
-                pausedStep = currentStep
-                // Reschedule for next interval since CC was completed externally
-                setupCompassCheckNotification()
+            } else {
+                switch state {
+                case .inProgress, .paused:
+                    // Reset state if not showing dialog but state is not the first step
+                    logger.info("Compass check completed on another device, resetting state")
+                    state = .finished
+                    // Reschedule for next interval since CC was completed externally
+                    setupCompassCheckNotification()
+                default:
+                    break
+                }
             }
         }
     }
     
     /// Check if compass check was completed on another device and update UI accordingly
     func checkForExternalCompassCheckCompletion() {
-        if preferences.didCompassCheckToday && (uiState.showCompassCheckDialog || currentStep.id != steps.first?.id) {
-            logger.info("Detected compass check completion on another device during periodic check")
-            onPreferencesChange()
+        if preferences.didCompassCheckToday {
+            let shouldCheck = uiState.showCompassCheckDialog || {
+                switch state {
+                case .inProgress, .paused:
+                    return true
+                default:
+                    return false
+                }
+            }()
+            
+            if shouldCheck {
+                logger.info("Detected compass check completion on another device during periodic check")
+                onPreferencesChange()
+            }
         }
     }
     
@@ -269,9 +293,15 @@ public final class CompassCheckManager {
     }
 
     func startCompassCheckNow() {
-        if !uiState.showCompassCheckDialog && currentStep.id == steps.first?.id {
-            debugPrint("start compass check \(timeProvider.now)")
-            uiState.showCompassCheckDialog = true
+        if !uiState.showCompassCheckDialog {
+            switch state {
+            case .notStarted, .finished:
+                debugPrint("start compass check \(timeProvider.now)")
+                state = .inProgress(currentStep)
+                uiState.showCompassCheckDialog = true
+            default:
+                break
+            }
         }
     }
 
@@ -291,7 +321,7 @@ public final class CompassCheckManager {
 
     func onCCNotification() {
         // Check if we're resuming from a paused state first
-        if isPaused {
+        if case .paused = state {
             resumeCompassCheck()
             return
         }
@@ -386,21 +416,12 @@ public final class CompassCheckManager {
         return nil
     }
     
-    /// Execute the current step's onMoveToNext action and return the next step
-    private func moveToNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
-        // Execute the current step's action
-        currentStep.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider, preferences: preferences)
-        
-        // Find the next step
-        return getNextStep(from: currentStep, os: os)
-    }
-    
     /// Get the button text for the current step
     private func getButtonText(for currentStep: any CompassCheckStep, os: SupportedOS) -> String {
-        let nextStep = getNextStep(from: currentStep, os: os)
+        let nextVisibleStep = getNextVisibleStep(from: currentStep, os: os)
         
-        // If this is the last step, show "Finish"
-        if nextStep == nil {
+        // If this is the last visible step, show "Finish"
+        if nextVisibleStep == nil {
             return "Finish"
         }
         
@@ -422,5 +443,53 @@ public final class CompassCheckManager {
     /// Check if a step is enabled by the user
     private func isStepEnabled(_ step: any CompassCheckStep) -> Bool {
         return preferences.isCompassCheckStepEnabled(stepId: step.id)
+    }
+    
+    // MARK: - State Machine Helper Methods
+    
+    /// Execute the current step's action
+    private func executeCurrentStep() {
+        currentStep.act(dataManager: dataManager, timeProvider: timeProvider, preferences: preferences)
+    }
+    
+    /// Process any silent steps that follow the current step
+    private func processSilentSteps() {
+        while currentStep.isSilent {
+            debugPrint("Executing silent step: \(type(of: currentStep))")
+            executeCurrentStep()
+            
+            // Find the next step after this silent one
+            if let nextStep = getNextStep(from: currentStep, os: os) {
+                state = .inProgress(nextStep)
+            } else {
+                // No more steps, finish the compass check
+                endCompassCheck(didFinishCompassCheck: true)
+                break
+            }
+        }
+    }
+    
+    /// Get the next visible (non-silent) step for button text logic
+    private func getNextVisibleStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
+        let currentIndex = steps.firstIndex { $0.id == currentStep.id } ?? 0
+        
+        // Look for the next step that should not be skipped and is not silent
+        for i in (currentIndex + 1)..<steps.count {
+            let step = steps[i]
+            
+            // Check if step should be skipped (includes user toggles and platform-specific logic)
+            if !shouldSkipStep(step) {
+                // If this step is silent, continue looking for the next visible step
+                if step.isSilent {
+                    // Recursively find the next visible step after this silent one
+                    return getNextVisibleStep(from: step, os: os)
+                } else {
+                    return step
+                }
+            }
+        }
+        
+        // If no next visible step found, we're at the end
+        return nil
     }
 }

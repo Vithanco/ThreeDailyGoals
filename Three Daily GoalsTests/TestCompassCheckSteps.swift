@@ -146,9 +146,9 @@ struct TestCompassCheckSteps {
         let compassCheckManager = appComponents.compassCheckManager
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        // onMoveToNext should not change anything
+        // act should not change anything
         let initialTaskCount = dataManager.items.count
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         #expect(dataManager.items.count == initialTaskCount)
     }
     
@@ -168,11 +168,11 @@ struct TestCompassCheckSteps {
         #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
         #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
         
-        // Test onMoveToNext - should move all priority tasks to open
+        // Test act - should move all priority tasks to open
         let priorityTasksBefore = dataManager.list(which: .priority)
         #expect(priorityTasksBefore.count > 0)
         
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         
         let priorityTasksAfter = dataManager.list(which: .priority)
         #expect(priorityTasksAfter.count == 0)
@@ -198,9 +198,9 @@ struct TestCompassCheckSteps {
         #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
         #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
         
-        // onMoveToNext should not change task states
+        // act should not change task states
         let pendingTasksBefore = dataManager.list(which: .pendingResponse)
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         let pendingTasksAfter = dataManager.list(which: .pendingResponse)
         #expect(pendingTasksBefore.count == pendingTasksAfter.count)
     }
@@ -221,13 +221,13 @@ struct TestCompassCheckSteps {
         #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
         #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
         
-        // Test onMoveToNext - should move due tasks to priority
+        // Test act - should move due tasks to priority
         let dueTasksBefore = dataManager.items.filter { task in
             task.isActive && task.dueUntil(date: timeProvider.getDate(inDays: 3))
         }
         #expect(dueTasksBefore.count > 0)
         
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         
         // Check that due tasks were moved to priority
         let priorityTasks = dataManager.list(which: .priority)
@@ -248,12 +248,12 @@ struct TestCompassCheckSteps {
         // Test button text for different platforms using compass check manager
         let compassCheckManager = appComponents.compassCheckManager
         // Set to review step for testing
-        compassCheckManager.currentStep = ReviewStep()
+        compassCheckManager.state = .inProgress(ReviewStep())
         #expect(compassCheckManager.moveStateForwardText == "Next") // Should be "Next" on macOS
         
-        // onMoveToNext should not change task states
+        // act should not change task states
         let initialTaskCount = dataManager.items.count
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         #expect(dataManager.items.count == initialTaskCount)
     }
     
@@ -271,12 +271,12 @@ struct TestCompassCheckSteps {
         // Test button text using compass check manager
         let compassCheckManager = appComponents.compassCheckManager
         // Set to plan step for testing
-        compassCheckManager.currentStep = PlanStep()
+        compassCheckManager.state = .inProgress(PlanStep())
         #expect(compassCheckManager.moveStateForwardText == "Finish")
         
-        // onMoveToNext should not change task states
+        // act should not change task states
         let initialTaskCount = dataManager.items.count
-        step.onMoveToNext(dataManager: dataManager, timeProvider: timeProvider)
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
         #expect(dataManager.items.count == initialTaskCount)
     }
     
@@ -391,15 +391,15 @@ struct TestCompassCheckSteps {
         
         // Test that skipped steps show correct button text
         // Reset to inform step for testing button text
-        compassCheckManager.currentStep = InformStep()
+        compassCheckManager.state = .inProgress(InformStep())
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
         // Test review step button text
-        compassCheckManager.currentStep = ReviewStep()
+        compassCheckManager.state = .inProgress(ReviewStep())
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
         // Test plan step button text
-        compassCheckManager.currentStep = PlanStep()
+        compassCheckManager.state = .inProgress(PlanStep())
         #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
     
@@ -427,13 +427,13 @@ struct TestCompassCheckSteps {
         
         // Test button text reflects the focused flow
         // Reset to test button text
-        compassCheckManager.currentStep = InformStep()
+        compassCheckManager.state = .inProgress(InformStep())
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        compassCheckManager.currentStep = CurrentPrioritiesStep()
+        compassCheckManager.state = .inProgress(CurrentPrioritiesStep())
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
-        compassCheckManager.currentStep = ReviewStep()
+        compassCheckManager.state = .inProgress(ReviewStep())
         #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
     
@@ -448,12 +448,12 @@ struct TestCompassCheckSteps {
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         
-        // Priority tasks should still be there (InformStep.onMoveToNext does nothing)
+        // Priority tasks should still be there (InformStep.act does nothing)
         let priorityTasks = dataManager.list(which: .priority)
         #expect(priorityTasks.count > 0) // Should still have priority tasks
         
         // Test moving from currentPriorities to next step
-        // This should execute CurrentPrioritiesStep.onMoveToNext (moves priorities to open)
+        // This should execute CurrentPrioritiesStep.act (moves priorities to open)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "pending")
         
@@ -471,15 +471,15 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.moveStateForwardText == "Next") // Should be "Next" for inform step
         
         // Test currentPriorities step
-        compassCheckManager.currentStep = CurrentPrioritiesStep()
+        compassCheckManager.state = .inProgress(CurrentPrioritiesStep())
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
         // Test review step
-        compassCheckManager.currentStep = ReviewStep()
+        compassCheckManager.state = .inProgress(ReviewStep())
         #expect(compassCheckManager.moveStateForwardText == "Next") // Should be "Next" on macOS
         
         // Test plan step
-        compassCheckManager.currentStep = PlanStep()
+        compassCheckManager.state = .inProgress(PlanStep())
         #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
     
@@ -513,14 +513,14 @@ struct TestCompassCheckSteps {
             
             if currentStep.id == "plan" {
                 // Final step - should show "Finish"
-                compassCheckManager.currentStep = currentStep
+                compassCheckManager.state = .inProgress(currentStep)
                 let buttonText = compassCheckManager.moveStateForwardText
                 #expect(buttonText == "Finish")
                 break
             }
             
             // Move to next step
-            compassCheckManager.currentStep = currentStep
+            compassCheckManager.state = .inProgress(currentStep)
             compassCheckManager.moveStateForward()
             currentStep = compassCheckManager.currentStep
             stepCount += 1
@@ -599,7 +599,7 @@ struct TestCompassCheckSteps {
         #expect(validStep.id == "inform")
         
         // Test button text for valid step
-        compassCheckManager.currentStep = validStep
+        compassCheckManager.state = .inProgress(validStep)
         let buttonText = compassCheckManager.moveStateForwardText
         #expect(buttonText == "Next")
     }
@@ -683,7 +683,7 @@ struct TestCompassCheckSteps {
                 AnyView(Text("iOS Plan Step"))
             }
             
-            func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+            func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
                 // No actions needed
             }
         }
@@ -729,7 +729,7 @@ struct TestCompassCheckSteps {
         
         // Test that plan step is properly skipped by verifying it's not in the flow
         // If we try to manually set it to PlanStep, it should be skipped
-        compassCheckManager.currentStep = PlanStep()
+        compassCheckManager.state = .inProgress(PlanStep())
         // The step should be skipped, so moveStateForward should go to the end
         compassCheckManager.moveStateForward()
         // Should end the compass check since PlanStep was skipped
@@ -821,7 +821,7 @@ struct TestCompassCheckSteps {
         #expect(graveyardStep.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider) == true)
         
         // Execute the step
-        graveyardStep.executeGraveyardMove(dataManager: dataManager, preferences: testPreferences)
+        graveyardStep.act(dataManager: dataManager, timeProvider: timeProvider, preferences: testPreferences)
         
         // Verify that old tasks were moved to graveyard
         #expect(!dataManager.list(which: .open).contains { $0.id == oldTask1.id })
@@ -863,7 +863,7 @@ struct TestCompassCheckSteps {
         
         // Execute the step
         let graveyardStep = MoveToGraveyardStep()
-        graveyardStep.executeGraveyardMove(dataManager: dataManager, preferences: testPreferences)
+        graveyardStep.act(dataManager: dataManager, timeProvider: timeProvider, preferences: testPreferences)
         
         // Verify that only the very old task (15 days) was moved to graveyard
         #expect(!dataManager.list(which: .open).contains { $0.id == veryOldTask.id })
@@ -876,20 +876,26 @@ struct TestCompassCheckSteps {
     
     @Test
     func testMoveToGraveyardStepInCompassCheckFlow() throws {
+        // Create a focused step configuration for testing integration
+        let focusedSteps: [any CompassCheckStep] = [
+            InformStep(),
+            MoveToGraveyardStep()  // Only include the graveyard step
+        ]
+        
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
         let timeProvider = appComponents.timeProvider
         
+        let compassCheckManager = appComponents.compassCheckManager
+        let dataManager = appComponents.dataManager
+        
         // Create some old tasks
-        let oldTask = createTestTask(
+        let oldTask = dataManager.addAndFindItem(
             title: "Old task",
             changedDate: timeProvider.getDate(daysPrior: 35),
             state: .open
         )
-        
-        let compassCheckManager = appComponents.compassCheckManager
-        let dataManager = appComponents.dataManager
         
         // Verify initial state
         #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
@@ -898,12 +904,20 @@ struct TestCompassCheckSteps {
         // Start compass check and go through the flow
         compassCheckManager.startCompassCheckNow()
         
-        // Navigate through all steps until we reach the end
-        while compassCheckManager.moveStateForwardText != "Finish" {
-            compassCheckManager.moveStateForward()
-        }
+        // Should start at InformStep
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
+        
+        // Move forward - should execute InformStep and then MoveToGraveyardStep automatically
+        compassCheckManager.moveStateForward()
+        
+        // Should be finished now
+        #expect(compassCheckManager.isFinished, "Compass check should be finished")
         
         // The MoveToGraveyardStep should have been executed automatically as a silent step
+        // Refresh data to ensure we see the latest state
+        dataManager.callFetch()
+        
         // Verify that the old task was moved to graveyard
         #expect(!dataManager.list(which: .open).contains { $0.id == oldTask.id })
         #expect(dataManager.list(which: .dead).contains { $0.id == oldTask.id })
@@ -944,5 +958,218 @@ struct TestCompassCheckSteps {
         // Verify that the old task was NOT moved to graveyard
         #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
         #expect(dataManager.list(which: .dead).isEmpty)
+    }
+    
+    // MARK: - Comprehensive Silent Step Tests
+    
+    @Test
+    func testSilentStepExecution() throws {
+        // Test that silent steps are executed automatically
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        
+        // Create an old task
+        let oldTask = dataManager.addAndFindItem(
+            title: "Old task",
+            changedDate: timeProvider.getDate(daysPrior: 35),
+            state: .open
+        )
+        
+        // Verify initial state
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+        
+        // Test the MoveToGraveyardStep directly
+        let graveyardStep = MoveToGraveyardStep()
+        #expect(graveyardStep.isSilent == true)
+        
+        // Execute the step
+        graveyardStep.act(dataManager: dataManager, timeProvider: timeProvider, preferences: testPreferences)
+        
+        // Verify the task was moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask.id })
+    }
+    
+    @Test
+    func testSilentStepInFlow() throws {
+        // Test silent step execution in a flow with only silent steps
+        let focusedSteps: [any CompassCheckStep] = [
+            InformStep(),
+            MoveToGraveyardStep()
+        ]
+        
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
+        let timeProvider = appComponents.timeProvider
+        
+        let compassCheckManager = appComponents.compassCheckManager
+        let dataManager = appComponents.dataManager
+        
+        // Create an old task
+        let oldTask = dataManager.addAndFindItem(
+            title: "Old task",
+            changedDate: timeProvider.getDate(daysPrior: 35),
+            state: .open
+        )
+        
+        // Verify initial state
+        #expect(dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).isEmpty)
+        
+        // Start compass check
+        compassCheckManager.startCompassCheckNow()
+        
+        // Should start at InformStep
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
+        
+        // Move forward - should execute InformStep and then MoveToGraveyardStep automatically
+        compassCheckManager.moveStateForward()
+        
+        // Should be at the end now
+        #expect(compassCheckManager.currentStep.id == "inform") // Should restart
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
+        
+        // Refresh data to ensure we see the latest state
+        dataManager.callFetch()
+        
+        // Verify the task was moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask.id })
+    }
+    
+    @Test
+    func testMoveStateForwardOnLastStep() throws {
+        // Test what happens when we call moveStateForward on the last step
+        let focusedSteps: [any CompassCheckStep] = [
+            InformStep(),
+            MoveToGraveyardStep()  // Only include the graveyard step
+        ]
+        
+        let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
+        let testDataLoader = createTestDataLoader()
+        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
+        let timeProvider = appComponents.timeProvider
+        
+        let compassCheckManager = appComponents.compassCheckManager
+        let dataManager = appComponents.dataManager
+        
+        // Create an old task
+        let oldTask = dataManager.addAndFindItem(
+            title: "Old task",
+            changedDate: timeProvider.getDate(daysPrior: 35),
+            state: .open
+        )
+        
+        // Start compass check
+        compassCheckManager.startCompassCheckNow()
+        
+        // Should start at InformStep
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
+        #expect(!compassCheckManager.isFinished, "Should not be finished at first step")
+        
+        // Move forward - should execute InformStep and then MoveToGraveyardStep automatically
+        compassCheckManager.moveStateForward()
+        
+        // After moveStateForward on last step, should be back at first step
+        #expect(compassCheckManager.currentStep.id == "inform", "Should be back at first step")
+        #expect(compassCheckManager.moveStateForwardText == "Finish", "Button should show Finish")
+        #expect(compassCheckManager.isFinished, "Should be finished after moving after all (active) steps")
+        
+        // Refresh data to ensure we see the latest state
+        dataManager.callFetch()
+        
+        // Verify the task was moved to graveyard
+        #expect(!dataManager.list(which: .open).contains { $0.id == oldTask.id })
+        #expect(dataManager.list(which: .dead).contains { $0.id == oldTask.id })
+    }
+    
+    @Test
+    func testButtonTextWithSilentSteps() throws {
+        // Test button text logic with silent steps
+        let focusedSteps: [any CompassCheckStep] = [
+            InformStep(),
+            MoveToGraveyardStep(), // Silent step
+            ReviewStep()
+        ]
+        
+        let appComponents = setupApp(isTesting: true, compassCheckSteps: focusedSteps)
+        let compassCheckManager = appComponents.compassCheckManager
+        
+        // Should start at InformStep
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Next") // Next visible step is ReviewStep
+        
+        // Move forward - should execute InformStep and MoveToGraveyardStep automatically
+        compassCheckManager.moveStateForward()
+        
+        // Should be at ReviewStep now
+        #expect(compassCheckManager.currentStep.id == "review")
+        #expect(compassCheckManager.moveStateForwardText == "Finish") // ReviewStep is the last step
+    }
+    
+    @Test
+    func testMultipleSilentSteps() throws {
+        // Test multiple consecutive silent steps
+        struct SilentStep1: CompassCheckStep {
+            let id: String = "silent1"
+            let name: String = "Silent Step 1"
+            let isSilent: Bool = true
+            
+            func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
+            
+            @ViewBuilder
+            func view(compassCheckManager: CompassCheckManager) -> AnyView {
+                AnyView(Text("Silent 1"))
+            }
+            
+            func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+                debugPrint("Executing SilentStep1")
+            }
+        }
+        
+        struct SilentStep2: CompassCheckStep {
+            let id: String = "silent2"
+            let name: String = "Silent Step 2"
+            let isSilent: Bool = true
+            
+            func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
+            
+            @ViewBuilder
+            func view(compassCheckManager: CompassCheckManager) -> AnyView {
+                AnyView(Text("Silent 2"))
+            }
+            
+            func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+                debugPrint("Executing SilentStep2")
+            }
+        }
+        
+        let focusedSteps: [any CompassCheckStep] = [
+            InformStep(),
+            SilentStep1(),
+            SilentStep2(),
+            ReviewStep()
+        ]
+        
+        let appComponents = setupApp(isTesting: true, compassCheckSteps: focusedSteps)
+        let compassCheckManager = appComponents.compassCheckManager
+        
+        // Should start at InformStep
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(compassCheckManager.moveStateForwardText == "Next")
+        
+        // Move forward - should execute all steps automatically
+        compassCheckManager.moveStateForward()
+        
+        // Should be at ReviewStep now
+        #expect(compassCheckManager.currentStep.id == "review")
+        #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
 }

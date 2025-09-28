@@ -62,7 +62,9 @@ struct TestCompassCheckSynchronization {
         // Verify dialog is closed and state is reset
         #expect(uiState.showCompassCheckDialog == false)
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
     }
     
     @Test
@@ -96,7 +98,9 @@ struct TestCompassCheckSynchronization {
         
         // Verify state is reset even though dialog wasn't showing
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         #expect(uiState.showCompassCheckDialog == false)
     }
     
@@ -119,7 +123,9 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.moveStateForward() // Move to currentPriorities
         compassCheckManager.pauseCompassCheck()
         
-        #expect(compassCheckManager.isPaused == true)
+        if case .paused(let pausedStep) = compassCheckManager.state {
+            #expect(pausedStep.id == "currentPriorities")
+        }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
         
@@ -131,7 +137,9 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
         
         // Verify paused state is cleared
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         #expect(compassCheckManager.currentStep.id == "inform")
         #expect(uiState.showCompassCheckDialog == false)
     }
@@ -201,7 +209,9 @@ struct TestCompassCheckSynchronization {
         
         // Verify state is reset and timers are rescheduled
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         
         // The setupCompassCheckNotification() should have been called
         // We can verify this by checking that the sync timer is running
@@ -236,7 +246,9 @@ struct TestCompassCheckSynchronization {
         
         // Verify that endCompassCheck was called (which cancels notifications)
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         
         // In a real test, we'd verify that push notifications were cancelled
         // but since we're in test mode, the push notification manager isn't fully active
@@ -399,7 +411,9 @@ struct TestCompassCheckSynchronization {
         // Verify complete state reset
         #expect(uiState.showCompassCheckDialog == false)
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         #expect(preferences.didCompassCheckToday == true)
         #expect(preferences.daysOfCompassCheck == initialStreak + 1)
         
@@ -439,7 +453,9 @@ struct TestCompassCheckSynchronization {
         
         // Verify state is reset
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         
         // The key test: verify that setupCompassCheckNotification() was called
         // by checking that the compass check manager is ready for the next interval
@@ -471,7 +487,9 @@ struct TestCompassCheckSynchronization {
         
         // Verify state is clean
         #expect(compassCheckManager.currentStep.id == "inform")
-        #expect(compassCheckManager.isPaused == false)
+        if case .paused = compassCheckManager.state {
+            #expect(false, "Should not be paused")
+        }
         
         // The sync timer should be stopped when endCompassCheck is called
         // In a real implementation, we'd verify the timer is actually stopped

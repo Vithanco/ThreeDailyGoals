@@ -24,7 +24,7 @@ public struct InformStep: CompassCheckStep {
         AnyView(CompassCheckInformView())
     }
     
-    public func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
+    public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed for inform step
     }
     

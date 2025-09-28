@@ -58,6 +58,8 @@ struct TestCompassCheckFlexibility {
     
     /// A custom step that always shows "Custom" button text for testing
     struct CustomTestStep: CompassCheckStep {
+
+
         let id: String = "customTest"
         let name: String = "Custom Test Step"
         
@@ -70,7 +72,7 @@ struct TestCompassCheckFlexibility {
             AnyView(Text("Custom Test Step"))
         }
         
-        func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+        func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
             // Custom action for testing
         }
     }
@@ -89,7 +91,7 @@ struct TestCompassCheckFlexibility {
             AnyView(Text("This should never be shown"))
         }
         
-        func onMoveToNext(dataManager: DataManager, timeProvider: TimeProvider) {
+        func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
             // This should never be called
         }
     }
