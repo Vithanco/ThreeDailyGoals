@@ -436,8 +436,8 @@ public final class CompassCheckManager {
             return true
         }
         
-        // Then check the step's own precondition logic
-        return step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider)
+        // Then check if the step is applicable
+        return !step.isApplicable(dataManager: dataManager, timeProvider: timeProvider)
     }
     
     /// Check if a step is enabled by the user

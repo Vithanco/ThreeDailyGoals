@@ -15,15 +15,6 @@ public struct PlanStep: CompassCheckStep {
     public let name: String = "Plan Day"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Plan step is only available on macOS (not iOS)
-        #if os(macOS)
-        return true
-        #else
-        return false
-        #endif
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckPlanDay(date: compassCheckManager.timeProvider.getCompassCheckInterval().end))
@@ -33,8 +24,13 @@ public struct PlanStep: CompassCheckStep {
         // No specific actions needed - planning happens in the view
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Plan step is only available on macOS (not iOS)
+        #if os(macOS)
+        return true
+        #else
+        return false
+        #endif
     }
 }
 

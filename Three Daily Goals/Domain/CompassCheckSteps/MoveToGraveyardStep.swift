@@ -19,11 +19,6 @@ public struct MoveToGraveyardStep: CompassCheckStep {
         return true
     }
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // This step is always available - it can always check for old tasks
-        return true
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         // Silent steps don't need a view, but we provide a minimal one for protocol compliance
@@ -39,7 +34,8 @@ public struct MoveToGraveyardStep: CompassCheckStep {
         debugPrint("MoveToGraveyardStep: Moved \(killedCount) old tasks to graveyard")
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // This step is always applicable - it can always check for old tasks
+        return true
     }
 }

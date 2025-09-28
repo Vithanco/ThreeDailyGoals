@@ -14,11 +14,6 @@ public struct InformStep: CompassCheckStep {
     public let name: String = "Welcome & Information"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Inform step is always available - it's the starting point
-        return true
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckInformView())
@@ -28,7 +23,8 @@ public struct InformStep: CompassCheckStep {
         // No specific actions needed for inform step
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Inform step is always applicable - it's the starting point
+        return true
     }
 }

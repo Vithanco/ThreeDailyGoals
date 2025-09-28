@@ -15,11 +15,6 @@ public struct ReviewStep: CompassCheckStep {
     public let name: String = "Set New Priorities"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Review step is always available - it's where users set new priorities
-        return true
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckNextPriorities())
@@ -29,7 +24,8 @@ public struct ReviewStep: CompassCheckStep {
         // No specific actions needed - user sets priorities in the view
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Review step is always available - it's where users set new priorities
+        return true
     }
 }

@@ -16,11 +16,6 @@ public struct CurrentPrioritiesStep: CompassCheckStep {
     public let name: String = "Review Current Priorities"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Only show this step if there are priority tasks to review
-        return !dataManager.list(which: .priority).isEmpty
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckCurrentPriorities())
@@ -33,7 +28,8 @@ public struct CurrentPrioritiesStep: CompassCheckStep {
         }
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Only show this step if there are priority tasks to review
+        return !dataManager.list(which: .priority).isEmpty
     }
 }

@@ -20,6 +20,7 @@
 		7F2F0AB62E52E30700461679 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F2F0AB52E52E30700461679 /* SwiftUI.framework */; };
 		7F2FD1BB2E63829300F7BC2F /* NewItemProducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */; };
 		7F378E6C2D3995BE001A5C9D /* TestListHeaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */; };
+		7F3FACBD2E8987B00021AFAA /* NotificationsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F3FACBC2E8987B00021AFAA /* NotificationsPreferencesView.swift */; };
 		7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */; };
 		7F48FD2B2E84F50B0089827F /* TestSwipeButtonStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */; };
 		7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */; };
@@ -186,6 +187,7 @@
 		7F2F0AB52E52E30700461679 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		7F2FD1BA2E63828A00F7BC2F /* NewItemProducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemProducer.swift; sourceTree = "<group>"; };
 		7F378E6B2D3995B4001A5C9D /* TestListHeaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestListHeaders.swift; sourceTree = "<group>"; };
+		7F3FACBC2E8987B00021AFAA /* NotificationsPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPreferencesView.swift; sourceTree = "<group>"; };
 		7F48FD272E8399790089827F /* TestWidgetURLHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWidgetURLHandling.swift; sourceTree = "<group>"; };
 		7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDeleteButtonVisibility.swift; sourceTree = "<group>"; };
 		7F48FD2A2E84F50B0089827F /* TestSwipeButtonStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeButtonStates.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 		E53C13122B6BECB400E51553 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				7F3FACBC2E8987B00021AFAA /* NotificationsPreferencesView.swift */,
 				7FC1BA542E811FAF007E1E2D /* DebugPreferencesView.swift */,
 				E5278A392B658FB90020C83D /* PreferencesView.swift */,
 				E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */,
@@ -891,6 +894,7 @@
 				7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */,
 				E597A48B2B848CD600BCD061 /* JSONDoc.swift in Sources */,
 				7FE38F0F2C33084100C9A798 /* TDGEvent.swift in Sources */,
+				7F3FACBD2E8987B00021AFAA /* NotificationsPreferencesView.swift in Sources */,
 				7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */,
 				7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */,
 				7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */,

@@ -18,6 +18,10 @@ public struct PreferencesView: View {
                 .tabItem {
                     Label("Compass Check", systemImage: imgCompassCheck)
                 }
+            NotificationsPreferencesView()
+                .tabItem {
+                    Label("Notifications", systemImage: "bell")
+                }
             TaskPreferencesView()
                 .tabItem {
                     Label("Tasks", systemImage: "hand.raised")

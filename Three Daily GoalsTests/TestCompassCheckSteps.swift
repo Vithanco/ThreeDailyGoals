@@ -139,8 +139,7 @@ struct TestCompassCheckSteps {
         let step = InformStep()
         
         // Inform step should always be available
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test button text using compass check manager
         let compassCheckManager = appComponents.compassCheckManager
@@ -160,13 +159,11 @@ struct TestCompassCheckSteps {
         let step = CurrentPrioritiesStep()
         
         // Should be available when there are priority tasks
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test with no priority tasks
         let emptyDataManager = createEmptyDataManager()
-        #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
-        #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
+        #expect(!step.isApplicable(dataManager: emptyDataManager, timeProvider: timeProvider))
         
         // Test act - should move all priority tasks to open
         let priorityTasksBefore = dataManager.list(which: .priority)
@@ -190,13 +187,11 @@ struct TestCompassCheckSteps {
         let step = PendingResponsesStep()
         
         // Should be available when there are pending response tasks
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test with no pending tasks
         let emptyDataManager = createEmptyDataManager()
-        #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
-        #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
+        #expect(!step.isApplicable(dataManager: emptyDataManager, timeProvider: timeProvider))
         
         // act should not change task states
         let pendingTasksBefore = dataManager.list(which: .pendingResponse)
@@ -213,13 +208,11 @@ struct TestCompassCheckSteps {
         let step = DueDateStep()
         
         // Should be available when there are tasks due soon
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test with no due tasks
         let emptyDataManager = createEmptyDataManager()
-        #expect(!step.isPreconditionFulfilled(dataManager: emptyDataManager, timeProvider: timeProvider))
-        #expect(step.shouldSkip(dataManager: emptyDataManager, timeProvider: timeProvider))
+        #expect(!step.isApplicable(dataManager: emptyDataManager, timeProvider: timeProvider))
         
         // Test act - should move due tasks to priority
         let dueTasksBefore = dataManager.items.filter { task in
@@ -242,8 +235,7 @@ struct TestCompassCheckSteps {
         let step = ReviewStep()
         
         // Review step should always be available
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test button text for different platforms using compass check manager
         let compassCheckManager = appComponents.compassCheckManager
@@ -265,8 +257,7 @@ struct TestCompassCheckSteps {
         let step = PlanStep()
         
         // Plan step should always be available (only on macOS)
-        #expect(step.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider))
-        #expect(!step.shouldSkip(dataManager: dataManager, timeProvider: timeProvider))
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
         
         // Test button text using compass check manager
         let compassCheckManager = appComponents.compassCheckManager
@@ -674,7 +665,7 @@ struct TestCompassCheckSteps {
             let id: String = "plan"
             let name: String = "iOS Plan Step"
             
-            func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+            func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
                 return false // Always skip on iOS
             }
             
@@ -818,7 +809,7 @@ struct TestCompassCheckSteps {
         #expect(graveyardStep.id == "moveToGraveyard")
         #expect(graveyardStep.name == "Move unused Tasks to Graveyard")
         #expect(graveyardStep.isSilent == true)
-        #expect(graveyardStep.isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider) == true)
+        #expect(graveyardStep.isApplicable(dataManager: dataManager, timeProvider: timeProvider) == true)
         
         // Execute the step
         graveyardStep.act(dataManager: dataManager, timeProvider: timeProvider, preferences: testPreferences)
@@ -1122,7 +1113,7 @@ struct TestCompassCheckSteps {
             let name: String = "Silent Step 1"
             let isSilent: Bool = true
             
-            func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
+            func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
             
             @ViewBuilder
             func view(compassCheckManager: CompassCheckManager) -> AnyView {
@@ -1139,7 +1130,7 @@ struct TestCompassCheckSteps {
             let name: String = "Silent Step 2"
             let isSilent: Bool = true
             
-            func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
+            func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool { true }
             
             @ViewBuilder
             func view(compassCheckManager: CompassCheckManager) -> AnyView {

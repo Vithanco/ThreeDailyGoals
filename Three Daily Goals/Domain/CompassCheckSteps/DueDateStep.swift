@@ -15,11 +15,6 @@ public struct DueDateStep: CompassCheckStep {
     public let name: String = "Due Date Check"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Only show this step if there are tasks due soon
-        return !getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider).isEmpty
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckDueDate())
@@ -33,8 +28,9 @@ public struct DueDateStep: CompassCheckStep {
         }
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Only show this step if there are tasks due soon
+        return !getDueDateSoonTasks(dataManager: dataManager, timeProvider: timeProvider).isEmpty
     }
     
     // Helper method to get tasks due soon (moved from CompassCheckManager)

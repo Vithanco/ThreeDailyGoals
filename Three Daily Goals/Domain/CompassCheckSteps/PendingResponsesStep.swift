@@ -14,11 +14,6 @@ public struct PendingResponsesStep: CompassCheckStep {
     public let name: String = "Pending Responses"
     public let isSilent: Bool = false
     
-    public func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Only show this step if there are pending response tasks
-        return !dataManager.list(which: .pendingResponse).isEmpty
-    }
-    
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckPendingResponses())
@@ -28,7 +23,8 @@ public struct PendingResponsesStep: CompassCheckStep {
         // No specific actions needed - user can close tasks in the view
     }
     
-    public func shouldSkip(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        return !isPreconditionFulfilled(dataManager: dataManager, timeProvider: timeProvider)
+    public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+        // Only show this step if there are pending response tasks
+        return !dataManager.list(which: .pendingResponse).isEmpty
     }
 }

@@ -63,10 +63,6 @@ struct TestCompassCheckFlexibility {
         let id: String = "customTest"
         let name: String = "Custom Test Step"
         
-        func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-            return true
-        }
-        
         @ViewBuilder
         func view(compassCheckManager: CompassCheckManager) -> AnyView {
             AnyView(Text("Custom Test Step"))
@@ -75,16 +71,16 @@ struct TestCompassCheckFlexibility {
         func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
             // Custom action for testing
         }
+        
+        func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+            return true
+        }
     }
     
     /// A step that always skips itself for testing edge cases
     struct AlwaysSkipStep: CompassCheckStep {
         let id: String = "alwaysSkip"
         let name: String = "Always Skip Step"
-        
-        func isPreconditionFulfilled(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-            return false // Always skip this step
-        }
         
         @ViewBuilder
         func view(compassCheckManager: CompassCheckManager) -> AnyView {
@@ -93,6 +89,10 @@ struct TestCompassCheckFlexibility {
         
         func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
             // This should never be called
+        }
+        
+        func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
+            return false // Always skip this step
         }
     }
     
