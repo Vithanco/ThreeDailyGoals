@@ -56,9 +56,6 @@ public struct StorageKeys: Sendable {
         return StorageKeys("compassCheck.step.\(stepId)")
     }
 
-    // Step toggles key
-    public static let compassCheckStepToggles = StorageKeys("compassCheckStepToggles")
-
     // Notifications key
     public static let notificationsEnabled = StorageKeys("notificationsEnabled")
 }
@@ -73,7 +70,7 @@ public protocol KeyValueStorage {
     func date(forKey key: StorageKeys) -> Date
     func set(_ aDate: Date, forKey key: StorageKeys)
 
-    func bool(forKey key: StorageKeys) -> Bool
+    func bool(forKey key: StorageKeys, default defaultValue: Bool) -> Bool
     func set(_ value: Bool, forKey key: StorageKeys)
 }
 
@@ -121,8 +118,8 @@ public class CloudKeyValueStore: KeyValueStorage {
         store.set(aString, forKey: key.id)
     }
 
-    public func bool(forKey key: StorageKeys) -> Bool {
-        return store.object(forKey: key.id) as? Bool ?? false
+    public func bool(forKey key: StorageKeys, default defaultValue: Bool) -> Bool {
+        return store.object(forKey: key.id) as? Bool ?? defaultValue
     }
 
     public func set(_ value: Bool, forKey key: StorageKeys) {
@@ -141,6 +138,8 @@ final public class CloudPreferences {
     // Stored properties that trigger @Observable notifications
     private var _daysOfCompassCheck: Int = 0
     private var _lastCompassCheck: Date = Date()
+    private var _expiryAfter: Int = 30
+    private var _compassCheckStepToggles: [String: Bool] = [:]
 
     public init(store: KeyValueStorage, timeProvider: TimeProvider = RealTimeProvider(), onChange: OnChange? = nil) {
         self.store = store
@@ -156,6 +155,18 @@ final public class CloudPreferences {
         } else {
             self._lastCompassCheck = timeProvider.now
         }
+
+        // Initialize expiryAfter with proper default handling
+        let storedExpiry = store.int(forKey: StorageKeys.expiryAfter)
+        if storedExpiry < 9 {
+            self._expiryAfter = 30
+            store.set(30, forKey: StorageKeys.expiryAfter)
+        } else {
+            self._expiryAfter = storedExpiry
+        }
+
+        // Initialize compass check step toggles
+        self._compassCheckStepToggles = [:]
     }
 
     public convenience init(testData: Bool, timeProvider: TimeProvider, onChange: OnChange? = nil) {
@@ -196,6 +207,9 @@ final public class CloudPreferences {
         {
             _lastCompassCheck = date
         }
+        _expiryAfter = store.int(forKey: StorageKeys.expiryAfter)
+        // Clear the cache so values are reloaded on next access
+        _compassCheckStepToggles = [:]
         onChange?()
     }
 
@@ -283,15 +297,12 @@ extension CloudPreferences {
 
     public var expiryAfter: Int {
         get {
-            let result = self.store.int(forKey: StorageKeys.expiryAfter)
-            if result < 9 {  // default is 0, and that is an issue!
-                store.set(30, forKey: StorageKeys.expiryAfter)
-                return 30
-            }
-            return result
+            return _expiryAfter
         }
         set {
+            _expiryAfter = newValue
             store.set(newValue, forKey: StorageKeys.expiryAfter)
+            onChange?()
         }
     }
 
@@ -339,45 +350,32 @@ extension CloudPreferences {
 
     /// Get the enabled state for a compass check step by its ID
     public func isCompassCheckStepEnabled(stepId: String) -> Bool {
-        // Use a dynamic approach: store step toggles in a single JSON object
-        let stepTogglesKey = StorageKeys.compassCheckStepToggles
-
-        // Get the stored step toggles JSON
-        guard let togglesJson = store.string(forKey: stepTogglesKey),
-            let togglesData = togglesJson.data(using: String.Encoding.utf8),
-            let toggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool]
-        else {
-            // No stored toggles, return default values
-            return getDefaultEnabledForStep(stepId: stepId)
+        // Check if we have it in memory
+        if let cachedValue = _compassCheckStepToggles[stepId] {
+            return cachedValue
         }
 
-        // Return the stored value or default
-        return toggles[stepId] ?? getDefaultEnabledForStep(stepId: stepId)
+        // Load from storage with step-specific default
+        let stepKey = StorageKeys.compassCheckStep(stepId)
+        let defaultValue = getDefaultEnabledForStep(stepId: stepId)
+        let storedValue = store.bool(forKey: stepKey, default: defaultValue)
+
+        // Cache the value
+        _compassCheckStepToggles[stepId] = storedValue
+        return storedValue
     }
 
     /// Set the enabled state for a compass check step by its ID
     public func setCompassCheckStepEnabled(stepId: String, enabled: Bool) {
-        // Use a dynamic approach: store step toggles in a single JSON object
-        let stepTogglesKey = StorageKeys.compassCheckStepToggles
+        // Update the private variable
+        _compassCheckStepToggles[stepId] = enabled
 
-        // Get existing toggles
-        var toggles: [String: Bool] = [:]
-        if let togglesJson = store.string(forKey: stepTogglesKey),
-            let togglesData = togglesJson.data(using: String.Encoding.utf8),
-            let existingToggles = try? JSONSerialization.jsonObject(with: togglesData) as? [String: Bool]
-        {
-            toggles = existingToggles
-        }
+        // Store to persistent storage using individual key
+        let stepKey = StorageKeys.compassCheckStep(stepId)
+        store.set(enabled, forKey: stepKey)
 
-        // Update the specific step
-        toggles[stepId] = enabled
-
-        // Store back as JSON
-        if let togglesData = try? JSONSerialization.data(withJSONObject: toggles),
-            let togglesJson = String(data: togglesData, encoding: String.Encoding.utf8)
-        {
-            store.set(togglesJson, forKey: stepTogglesKey)
-        }
+        // Trigger UI update
+        onChange?()
     }
 
     /// Get the default enabled state for a step
@@ -394,7 +392,7 @@ extension CloudPreferences {
 
     public var notificationsEnabled: Bool {
         get {
-            return store.bool(forKey: StorageKeys.notificationsEnabled)
+            return store.bool(forKey: StorageKeys.notificationsEnabled, default: true)
         }
         set {
             store.set(newValue, forKey: StorageKeys.notificationsEnabled)
@@ -427,8 +425,9 @@ public class TestPreferences: KeyValueStorage {
         values[key.id] = aString
     }
 
-    public func bool(forKey key: StorageKeys) -> Bool {
-        return values[key.id] == "true"
+    public func bool(forKey key: StorageKeys, default defaultValue: Bool) -> Bool {
+        guard let value = values[key.id] else { return defaultValue }
+        return value == "true"
     }
 
     public func set(_ value: Bool, forKey key: StorageKeys) {

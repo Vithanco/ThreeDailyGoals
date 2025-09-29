@@ -18,6 +18,10 @@ public protocol CompassCheckStep: Equatable {
     /// Human-readable display name for this step
     var name: String { get }
     
+    /// Short description of what this step does
+    /// Used in preferences to explain the step's purpose
+    var description: String { get }
+    
     /// The view to display for this step
     @ViewBuilder
     func view(compassCheckManager: CompassCheckManager) -> AnyView
@@ -33,6 +37,11 @@ public protocol CompassCheckStep: Equatable {
     /// Whether this step is silent (doesn't require user interaction)
     /// Silent steps are executed automatically without showing a UI
     var isSilent: Bool { get }
+    
+    /// Configuration view for this step's settings
+    /// Returns nil if this step has no configuration options
+    @ViewBuilder
+    func configurationView() -> AnyView?
 }
 
 /// Default implementations for common functionality
@@ -52,5 +61,11 @@ extension CompassCheckStep {
         preferences: tdgCoreWidget.CloudPreferences
     ) {
         // nothing to be done
+    }
+    
+    /// Default implementation: no configuration view by default
+    @ViewBuilder
+    public func configurationView() -> AnyView? {
+        return nil
     }
 }

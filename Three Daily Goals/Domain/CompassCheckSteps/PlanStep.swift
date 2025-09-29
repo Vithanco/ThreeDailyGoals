@@ -13,6 +13,7 @@ public struct PlanStep: CompassCheckStep {
 
     public let id: String = "plan"
     public let name: String = "Plan Day"
+    public let description: String = "Plan your day by scheduling tasks and setting up your calendar (macOS only)."
     public let isSilent: Bool = false
     
     @ViewBuilder

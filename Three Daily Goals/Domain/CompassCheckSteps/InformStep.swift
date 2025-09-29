@@ -12,6 +12,7 @@ import tdgCoreMain
 public struct InformStep: CompassCheckStep {
     public let id: String = "inform"
     public let name: String = "Welcome & Information"
+    public let description: String = "Welcome screen that provides information about the Compass Check process."
     public let isSilent: Bool = false
     
     @ViewBuilder

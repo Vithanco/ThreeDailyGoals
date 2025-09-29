@@ -13,29 +13,52 @@ public struct TaskPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
 
     public var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             Spacer()
-            Text(
-                "Sort old Tasks out. They seem to be not important to you. You can always find them again in the graveyard. Btw, you can delete tasks from the Graveyard and from the Closed list."
-            )
+            
+            // Header with icon
             HStack {
-                Spacer()
-                Spacer()
-                Text("Expire after")
-                Stepper(
-                    value: Binding(
-                        get: { preferences.expiryAfter },
-                        set: { preferences.expiryAfter = $0 }
-                    ), in: 30...1040, step: 10,
-                    label: {
-                        Text("  " + preferences.expiryAfterString).foregroundColor(Color.priority)
-                    })
-                Text(" days.")
-                Spacer()
-                Spacer()
+                Image(systemName: "hand.raised")
+                    .foregroundColor(Color.priority)
+                    .font(.title2)
+                Text("Task Preferences")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color.priority)
             }
+            .padding(.bottom, 10)
+            
+            Text(
+                "Task management preferences. You can delete tasks from the Graveyard and from the Closed list."
+            )
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: 400, maxHeight: .infinity)
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
+            
+            GroupBox {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Task Expiration")
+                        .font(.headline)
+                    
+                    Text("Task expiration settings have been moved to the Compass Check preferences.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    NavigationLink("Configure in Compass Check Steps →") {
+                        CompassCheckStepsPreferencesView()
+                    }
+                    .font(.caption)
+                    .foregroundColor(Color.priority)
+                }
+                .padding(5)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
             Spacer()
-        }.padding(10).frame(maxWidth: 400)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(10)
     }
 }
 

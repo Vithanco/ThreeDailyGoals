@@ -10,7 +10,6 @@ import tdgCoreMain
 
 public struct CompassCheckPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
-    @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     
     var lastCompassCheck: String {
@@ -78,36 +77,6 @@ public struct CompassCheckPreferencesView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            GroupBox {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Compass Check Steps")
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    ForEach(compassCheckManager.steps, id: \.id) { step in
-                        let isComingSoon = step.id == "plan"
-                        
-                        if isComingSoon {
-                            HStack {
-                                Toggle(step.name, isOn: Binding(
-                                    get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
-                                    set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
-                                ))
-                                Text("(Coming Soon)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        } else {
-                            Toggle(step.name, isOn: Binding(
-                                get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
-                                set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
-                            ))
-                        }
-                    }
-                }
-                .padding(5)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer(minLength: 10)
         }
@@ -122,5 +91,4 @@ public struct CompassCheckPreferencesView: View {
     let appComponents = setupApp(isTesting: true)
     CompassCheckPreferencesView()
         .environment(appComponents.preferences)
-        .environment(appComponents.compassCheckManager)
 }

@@ -662,6 +662,8 @@ struct TestCompassCheckSteps {
     func testIOSFlow() throws {
         // Create a custom PlanStep that simulates iOS behavior (always skips)
         struct iOSPlanStep: CompassCheckStep {
+            var description: String = ""
+
             let id: String = "plan"
             let name: String = "iOS Plan Step"
             
@@ -1109,6 +1111,8 @@ struct TestCompassCheckSteps {
     func testMultipleSilentSteps() throws {
         // Test multiple consecutive silent steps
         struct SilentStep1: CompassCheckStep {
+            var description: String = ""
+
             let id: String = "silent1"
             let name: String = "Silent Step 1"
             let isSilent: Bool = true
@@ -1126,6 +1130,8 @@ struct TestCompassCheckSteps {
         }
         
         struct SilentStep2: CompassCheckStep {
+            var description: String = ""
+
             let id: String = "silent2"
             let name: String = "Silent Step 2"
             let isSilent: Bool = true

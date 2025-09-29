@@ -13,6 +13,7 @@ import tdgCoreMain
 public struct MoveToGraveyardStep: CompassCheckStep {
     public let id: String = "moveToGraveyard"
     public let name: String = "Move unused Tasks to Graveyard"
+    public let description: String = "Automatically moves old tasks to the graveyard after they haven't been used for a specified number of days."
     
     /// This is a silent step - it executes automatically without user interaction
     public var isSilent: Bool {
@@ -37,5 +38,53 @@ public struct MoveToGraveyardStep: CompassCheckStep {
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // This step is always applicable - it can always check for old tasks
         return true
+    }
+    
+    @ViewBuilder
+    public func configurationView() -> AnyView? {
+        AnyView(MoveToGraveyardConfigurationView())
+    }
+}
+
+/// Configuration view for MoveToGraveyardStep
+public struct MoveToGraveyardConfigurationView: View {
+    @Environment(CloudPreferences.self) private var preferences
+    
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Expire after")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            HStack(spacing: 8) {
+                Stepper(
+                    value: Binding(
+                        get: { preferences.expiryAfter },
+                        set: { preferences.expiryAfter = $0 }
+                    ), 
+                    in: 30...1040, 
+                    step: 10,
+                    label: {
+                        Text("\(preferences.expiryAfter)")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .foregroundColor(Color.priority)
+                            .frame(minWidth: 50, alignment: .leading)
+                    }
+                )
+                
+                Text("days")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
+            
+            Text("Tasks will be moved to the graveyard after this many days of inactivity.")
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .lineLimit(nil)
+        }
+        .padding(.vertical, 4)
     }
 }

@@ -18,6 +18,10 @@ public struct PreferencesView: View {
                 .tabItem {
                     Label("Compass Check", systemImage: imgCompassCheck)
                 }
+            CompassCheckStepsPreferencesView()
+                .tabItem {
+                    Label("Compass Check Steps", systemImage: "list.bullet.clipboard")
+                }
             NotificationsPreferencesView()
                 .tabItem {
                     Label("Notifications", systemImage: "bell")
