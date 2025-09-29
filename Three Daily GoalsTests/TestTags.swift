@@ -210,6 +210,44 @@ struct TestTags {
         #expect(task.comments?.count == 2, "Task should have exactly two comments")
     }
     
+    @Test
+    func testTagLowercaseConversion() throws {
+        // Given: A task with no tags
+        let task = TaskItem(title: "Test Task")
+        dataManager.modelContext.insert(task)
+        
+        // When: Adding tags with mixed case
+        task.addTag("IMPORTANT")
+        task.addTag("Work")
+        task.addTag("PERSONAL")
+        
+        // Then: All tags should be lowercase
+        #expect(task.tags.contains("important"), "Tag should be converted to lowercase")
+        #expect(task.tags.contains("work"), "Tag should be converted to lowercase")
+        #expect(task.tags.contains("personal"), "Tag should be converted to lowercase")
+        #expect(!task.tags.contains("IMPORTANT"), "Original uppercase tag should not exist")
+        #expect(!task.tags.contains("Work"), "Original mixed case tag should not exist")
+        #expect(!task.tags.contains("PERSONAL"), "Original uppercase tag should not exist")
+    }
+    
+    @Test
+    func testDirectTagsAssignment_LowercaseConversion() throws {
+        // Given: A task with no tags
+        let task = TaskItem(title: "Test Task")
+        dataManager.modelContext.insert(task)
+        
+        // When: Setting tags directly with mixed case
+        task.tags = ["IMPORTANT", "Work", "PERSONAL"]
+        
+        // Then: All tags should be lowercase
+        #expect(task.tags.contains("important"), "Tag should be converted to lowercase")
+        #expect(task.tags.contains("work"), "Tag should be converted to lowercase")
+        #expect(task.tags.contains("personal"), "Tag should be converted to lowercase")
+        #expect(!task.tags.contains("IMPORTANT"), "Original uppercase tag should not exist")
+        #expect(!task.tags.contains("Work"), "Original mixed case tag should not exist")
+        #expect(!task.tags.contains("PERSONAL"), "Original uppercase tag should not exist")
+    }
+    
     // MARK: - Test Performance
     
     @Test

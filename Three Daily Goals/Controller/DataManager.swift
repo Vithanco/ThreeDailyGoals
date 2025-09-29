@@ -683,7 +683,8 @@ public final class DataManager {
     func batchAddTags(_ tags: [String], to tasks: [TaskItem]) {
         for task in tasks {
             let currentTags = Set(task.tags)
-            let newTags = currentTags.union(tags)
+            let lowercaseTags = tags.map { $0.lowercased() }
+            let newTags = currentTags.union(lowercaseTags)
             task.tags = Array(newTags)
         }
         save()
@@ -693,7 +694,8 @@ public final class DataManager {
     func batchRemoveTags(_ tags: [String], from tasks: [TaskItem]) {
         for task in tasks {
             let currentTags = Set(task.tags)
-            let remainingTags = currentTags.subtracting(tags)
+            let lowercaseTags = tags.map { $0.lowercased() }
+            let remainingTags = currentTags.subtracting(lowercaseTags)
             task.tags = Array(remainingTags)
         }
         save()
@@ -732,8 +734,9 @@ public final class DataManager {
 
     /// Exchange one tag for another across all tasks
     func exchangeTag(from: String, to: String) {
+        let lowercaseTo = to.lowercased()
         for item in items {
-            item.tags = item.tags.map { $0 == from ? to : $0 }
+            item.tags = item.tags.map { $0 == from ? lowercaseTo : $0 }
         }
         save()
     }

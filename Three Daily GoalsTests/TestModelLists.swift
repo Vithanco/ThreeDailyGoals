@@ -60,8 +60,8 @@ struct TestModelLists {
     @MainActor
     @Test
     func testTags() async throws {
-        let testTag = "aTestTag34"
-        let testTag2 = "aTestTag346"
+        let testTag = "atesttag34"
+        let testTag2 = "atesttag346"
         #expect(testTag != testTag2)
 
         let model = setupApp(isTesting: true)

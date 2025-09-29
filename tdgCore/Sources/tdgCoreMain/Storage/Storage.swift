@@ -157,7 +157,7 @@ extension Array where Element == TaskItem {
     ) -> TaskItem {
         let new = TaskItem(title: title, changedDate: changedDate, state: state)
         new.dueDate = dueDate
-        new.tags = tags
+        new.tags = tags.map { $0.lowercased() }
         self.append(new)
         return new
     }
@@ -309,6 +309,6 @@ public func createTestTask(
     // Create a new task item
     let task = TaskItem(title: title, changedDate: changedDate, state: state)
     task.details = details
-    task.tags = tags
+    task.tags = tags.map { $0.lowercased() }
     return task
 }

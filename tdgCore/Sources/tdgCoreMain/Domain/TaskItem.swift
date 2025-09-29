@@ -72,7 +72,7 @@ public protocol Taggable {
 }
 
 extension TaskItem: Taggable {
-    
+
     public func updateFrom(_ other: TaskItem) {
         if other.uuid != self.uuid {
             logger.error("UUID mismatch during import: \(other.uuid) != \(self.uuid) for  \(self.title) ")
@@ -92,9 +92,9 @@ extension TaskItem: Taggable {
     }
 }
 
-public extension TaskItem {
+extension TaskItem {
     @Transient
-    var title: String {
+    public var title: String {
         get {
             return _title
         }
@@ -107,7 +107,7 @@ public extension TaskItem {
     }
 
     @Transient
-    var details: String {
+    public var details: String {
         get {
             return _details
         }
@@ -120,7 +120,7 @@ public extension TaskItem {
     }
 
     @Transient
-    var due: Date? {
+    public var due: Date? {
         get {
             return self.dueDate
         }
@@ -133,7 +133,7 @@ public extension TaskItem {
     }
 
     @Transient
-    var url: String {
+    public var url: String {
         get {
             return _url
         }
@@ -146,7 +146,7 @@ public extension TaskItem {
     }
 
     @Transient
-    var state: TaskItemState {
+    public var state: TaskItemState {
         get {
             return _state
         }
@@ -169,7 +169,7 @@ public extension TaskItem {
     }
 
     @Transient
-    var tags: [String] {
+    public var tags: [String] {
         get {
             return allTagsString.components(separatedBy: ",")
                 .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -177,41 +177,44 @@ public extension TaskItem {
         }
         set {
             let oldTags: [String] = self.tags
-            
-            // Filter out empty and whitespace-only strings, and trim whitespace from valid tags
-            let filteredTags = newValue
+
+            // Filter out empty and whitespace-only strings, trim whitespace, and convert to lowercase
+            let filteredTags =
+                newValue
                 .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .filter { !$0.isEmpty }
-            
+                .map { $0.lowercased() }
+
             if filteredTags != oldTags {
                 changed = Date.now
-                
+
                 // Add comments for new tags
-                filteredTags.filter { !oldTags.contains($0) }.forEach { 
-                    addComment(text: "Added tag: \($0)", icon: imgTag) 
+                filteredTags.filter { !oldTags.contains($0) }.forEach {
+                    addComment(text: "Added tag: \($0)", icon: imgTag)
                 }
-                
+
                 // Add comments for removed tags
-                oldTags.filter { !filteredTags.contains($0) }.forEach { 
-                    addComment(text: "Removed tag: \($0)", icon: imgTag) 
+                oldTags.filter { !filteredTags.contains($0) }.forEach {
+                    addComment(text: "Removed tag: \($0)", icon: imgTag)
                 }
-                
+
                 allTagsString = filteredTags.joined(separator: ",")
             }
         }
     }
 
-    func addTag(_ newTag: String) {
+    public func addTag(_ newTag: String) {
+        let lowercaseTag = newTag.lowercased()
         var tags = self.tags
-        if !tags.contains(newTag) {
-            tags.append(newTag)
+        if !tags.contains(lowercaseTag) {
+            tags.append(lowercaseTag)
             changed = Date.now
             self.tags = tags
         }
-        assert(tags.contains(newTag))
+        assert(tags.contains(lowercaseTag))
     }
 
-    func removeTag(_ oldTag: String) {
+    public func removeTag(_ oldTag: String) {
         var tags = self.tags
         if tags.contains(oldTag) {
             tags.removeObject(oldTag)
@@ -221,64 +224,66 @@ public extension TaskItem {
         assert(!tags.contains(oldTag))
     }
 
-    var isEmpty: Bool {
+    public var isEmpty: Bool {
         return (title.isEmpty || title == emptyTaskTitle) && (details.isEmpty || details == emptyTaskDetails)
             && url.isEmpty
     }
 
-    var isOpen: Bool {
+    public var isOpen: Bool {
         return state == .open
     }
 
-    var isPriority: Bool {
+    public var isPriority: Bool {
         return state == .priority
     }
 
-    var isOpenOrPriority: Bool {
+    public var isOpenOrPriority: Bool {
         return state == .open || state == .priority
     }
 
-    var isClosed: Bool {
+    public var isClosed: Bool {
         return state == .closed
     }
 
-    var isActive: Bool {
+    public var isActive: Bool {
         return [.open, .priority, .pendingResponse].contains(self.state)
     }
 
-    var canBeMadePriority: Bool {
+    public var canBeMadePriority: Bool {
         return [.open, .pendingResponse].contains(self.state)
     }
 
-    var canBeClosed: Bool {
+    public var canBeClosed: Bool {
         return [.open, .priority, .pendingResponse, .dead].contains(self.state)
     }
 
-    var canBeMovedToOpen: Bool {
+    public var canBeMovedToOpen: Bool {
         return self.state != .open
     }
 
-    var canBeMovedToPendingResponse: Bool {
+    public var canBeMovedToPendingResponse: Bool {
         return self.state != .pendingResponse
     }
 
-    var canBeTouched: Bool {
+    public var canBeTouched: Bool {
         return [.pendingResponse, .open, .priority, .dead].contains(self.state)
     }
 
-    var canBeDeleted: Bool {
+    public var canBeDeleted: Bool {
         return [.closed, .dead].contains(self.state)
     }
 
-    var isDead: Bool {
+    public var isDead: Bool {
         return state == .dead
     }
 
-    var isPending: Bool {
+    public var isPending: Bool {
         return state == .pendingResponse
     }
 
-    @discardableResult func addComment(text: String, icon: String? = nil, state: TaskItemState? = nil) -> TaskItem {
+    @discardableResult public func addComment(text: String, icon: String? = nil, state: TaskItemState? = nil)
+        -> TaskItem
+    {
         if comments == nil {
             comments = [Comment]()
         }
@@ -292,41 +297,41 @@ public extension TaskItem {
         return self
     }
 
-    func closeTask() {
+    public func closeTask() {
         if state != .closed {
             state = .closed
             addComment(text: "closed this task on \(Date.now)", icon: imgClosed, state: .closed)
         }
     }
 
-    func reOpenTask() {
+    public func reOpenTask() {
         if state != .open {
             state = .open
             addComment(text: "Reopened this Task.", icon: imgOpen, state: .open)
         }
     }
-    func graveyard() {
+    public func graveyard() {
         if state != .dead {
             state = .dead
             addComment(text: "Moved task to the Graveyard of not needed tasks.", icon: imgGraveyard, state: .dead)
         }
     }
 
-    func makePriority() {
+    public func makePriority() {
         if state != .priority {
             state = .priority
             addComment(text: "Turned into a priority.", icon: imgPriority, state: .priority)
         }
     }
 
-    func dueUntil(date: Date) -> Bool {
+    public func dueUntil(date: Date) -> Bool {
         if let due {
             return due <= date
         }
         return false
     }
 
-    func touch() {
+    public func touch() {
         if state == .open {
             addComment(text: "You 'touched' this task.", icon: imgTouch)
         } else {
@@ -335,42 +340,44 @@ public extension TaskItem {
     }
 
     /// only use for test cases
-    func setChangedDate(_ date: Date) {
+    public func setChangedDate(_ date: Date) {
         changed = date
     }
 
-    func pending() {
+    public func pending() {
         if state != .pendingResponse {
             state = .pendingResponse
-            addComment(text: "You did your part. Closure is pending a response.", icon: imgPendingResponse, state: .pendingResponse)
+            addComment(
+                text: "You did your part. Closure is pending a response.", icon: imgPendingResponse,
+                state: .pendingResponse)
         }
     }
 
-    func purgeableStoredBytes(at date: Date = Date()) -> Int {
+    public func purgeableStoredBytes(at date: Date = Date()) -> Int {
         return attachments?.reduce(0) { $0 + ($1.isDueForPurge(at: date) ? $1.storedBytes : 0) } ?? 0
     }
-    var totalStoredBytes: Int { attachments?.reduce(0) { $0 + $1.storedBytes } ?? 0 }  // current storage
-    var totalOriginalBytes: Int { attachments?.reduce(0) { $0 + $1.byteSize } ?? 0 }  // original sizes
+    public var totalStoredBytes: Int { attachments?.reduce(0) { $0 + $1.storedBytes } ?? 0 }  // current storage
+    public var totalOriginalBytes: Int { attachments?.reduce(0) { $0 + $1.byteSize } ?? 0 }  // original sizes
 
-    var isUnchanged: Bool {
-        return isTitleEmpty && isDetailsEmpty &&  url.isEmpty && !hasAttachments
+    public var isUnchanged: Bool {
+        return isTitleEmpty && isDetailsEmpty && url.isEmpty && !hasAttachments
     }
-    
-    var isTitleEmpty: Bool {
+
+    public var isTitleEmpty: Bool {
         return title.isEmpty || title == emptyTaskTitle
     }
-    
-    var isDetailsEmpty: Bool {
+
+    public var isDetailsEmpty: Bool {
         return details.isEmpty || details == emptyTaskDetails
     }
-    
-    var hasAttachments: Bool {
+
+    public var hasAttachments: Bool {
         if let attachments = attachments {
             return !attachments.isEmpty
         }
         return false
     }
-    
+
 }
 extension TaskItem: CustomStringConvertible, CustomDebugStringConvertible {
 
@@ -388,7 +395,6 @@ extension TaskItem: Comparable {
     }
 }
 
-
 //import UniformTypeIdentifiers
 //import SwiftUI
 //
@@ -401,8 +407,8 @@ extension TaskItem: Comparable {
 //                CodableRepresentation(contentType: .taskItem)
 //            }
 //}
-public extension Sequence where Element: TaskItem {
-    var tags: Set<String> {
+extension Sequence where Element: TaskItem {
+    public var tags: Set<String> {
         var result = Set<String>()
         for t in self {
             result.formUnion(t.tags)
@@ -413,7 +419,7 @@ public extension Sequence where Element: TaskItem {
         return result
     }
 
-    var activeTags: Set<String> {
+    public var activeTags: Set<String> {
         var result = Set<String>()
         for t in self where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
