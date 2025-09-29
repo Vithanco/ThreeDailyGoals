@@ -52,7 +52,7 @@ public struct StorageKeys: Sendable {
     }
 
     // Dynamic step keys
-    public static func compassCheckStep(_ stepId: String) -> StorageKeys {
+    public static func compassCheckStepIsEnabled(_ stepId: String) -> StorageKeys {
         return StorageKeys("compassCheck.step.\(stepId)")
     }
 
@@ -356,7 +356,7 @@ extension CloudPreferences {
         }
 
         // Load from storage with step-specific default
-        let stepKey = StorageKeys.compassCheckStep(stepId)
+        let stepKey = StorageKeys.compassCheckStepIsEnabled(stepId)
         let defaultValue = getDefaultEnabledForStep(stepId: stepId)
         let storedValue = store.bool(forKey: stepKey, default: defaultValue)
 
@@ -371,7 +371,7 @@ extension CloudPreferences {
         _compassCheckStepToggles[stepId] = enabled
 
         // Store to persistent storage using individual key
-        let stepKey = StorageKeys.compassCheckStep(stepId)
+        let stepKey = StorageKeys.compassCheckStepIsEnabled(stepId)
         store.set(enabled, forKey: stepKey)
 
         // Trigger UI update

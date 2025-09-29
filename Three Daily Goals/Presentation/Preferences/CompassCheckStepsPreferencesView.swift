@@ -99,7 +99,7 @@ public struct CompassCheckStepsPreferencesView: View {
                     .padding(.horizontal, 12)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
-                            .fill(Color(NSColor.controlBackgroundColor).opacity(0.5))
+                            .fill(Color(Color.background).opacity(0.5))
                     )
                 }
             }

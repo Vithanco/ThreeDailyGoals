@@ -22,14 +22,6 @@ public struct PreferencesView: View {
                 .tabItem {
                     Label("Compass Check Steps", systemImage: "list.bullet.clipboard")
                 }
-            NotificationsPreferencesView()
-                .tabItem {
-                    Label("Notifications", systemImage: "bell")
-                }
-            TaskPreferencesView()
-                .tabItem {
-                    Label("Tasks", systemImage: "hand.raised")
-                }
             TagsPreferencesView()
                 .tabItem {
                     Label("Tags", systemImage: "tag.circle.fill")
@@ -41,6 +33,7 @@ public struct PreferencesView: View {
                 }
             #endif
         }
+        .frame(minHeight: 600)
         //#if os(iOS)
         //            Spacer()
         //            Button("Close Preferences"){

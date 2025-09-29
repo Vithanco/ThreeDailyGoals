@@ -92,3 +92,8 @@ The code is for iOS and macOS. All code has to run all all platforms unless ther
 - Avoid global singletons; use dependency injection
 - Avoid duplicate logic in tests; keep them simple and focused
 - Avoid stale comments; only document intent, not implementation
+
+## process
+- test only the non-gui tests
+- test the non-gui tests at the end of each of your answers
+- compile the code for iOS and macOS at the end of each of your answers
