@@ -152,11 +152,11 @@ struct TestCompassCheckSteps {
     }
     
     @Test
-    func testCurrentPrioritiesStep() throws {
+    func testMovePrioritiesToOpenStep() throws {
         let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
-        let step = CurrentPrioritiesStep()
+        let step = MovePrioritiesToOpenStep()
         
         // Should be available when there are priority tasks
         #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
@@ -482,6 +482,7 @@ struct TestCompassCheckSteps {
         let simplifiedSteps: [any CompassCheckStep] = [
             InformStep(),
             CurrentPrioritiesStep(),
+            MovePrioritiesToOpenStep(),
             ReviewStep(),
             PlanStep()
         ]
@@ -540,6 +541,7 @@ struct TestCompassCheckSteps {
         let focusedSteps: [any CompassCheckStep] = [
             InformStep(),
             CurrentPrioritiesStep(),
+            MovePrioritiesToOpenStep(),
             ReviewStep()
         ]
         

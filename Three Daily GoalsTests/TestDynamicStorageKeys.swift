@@ -47,13 +47,13 @@ struct TestDynamicStorageKeys {
     @Test
     func testCompassCheckStepKeyGeneration() {
         // Test dynamic compass check step key generation
-        #expect(StorageKeys.compassCheckStepIsEnabled("inform").id == "compassCheck.step.inform")
-        #expect(StorageKeys.compassCheckStepIsEnabled("currentPriorities").id == "compassCheck.step.currentPriorities")
-        #expect(StorageKeys.compassCheckStepIsEnabled("pending").id == "compassCheck.step.pending")
-        #expect(StorageKeys.compassCheckStepIsEnabled("dueDate").id == "compassCheck.step.dueDate")
-        #expect(StorageKeys.compassCheckStepIsEnabled("review").id == "compassCheck.step.review")
-        #expect(StorageKeys.compassCheckStepIsEnabled("plan").id == "compassCheck.step.plan")
-        #expect(StorageKeys.compassCheckStepIsEnabled("customStep").id == "compassCheck.step.customStep") // Test custom step
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("inform").id == "compassCheck.step.inform")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("currentPriorities").id == "compassCheck.step.currentPriorities")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("pending").id == "compassCheck.step.pending")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("dueDate").id == "compassCheck.step.dueDate")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("review").id == "compassCheck.step.review")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("plan").id == "compassCheck.step.plan")
+        #expect(StorageKeys.compassCheckStepIsEnabledKey("customStep").id == "compassCheck.step.customStep") // Test custom step
     }
     
     // MARK: - Compass Check Step Toggle Tests

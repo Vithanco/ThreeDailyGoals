@@ -23,10 +23,7 @@ public struct CurrentPrioritiesStep: CompassCheckStep {
     }
     
     public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
-        // Move all priority tasks to open list
-        for task in dataManager.list(which: .priority) {
-            dataManager.move(task: task, to: .open)
-        }
+        // No specific actions needed - the actual moving is handled by MovePrioritiesToOpenStep
     }
     
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {

@@ -54,7 +54,6 @@ public struct ShareExtensionView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Button {
-                    debugPrint("Number: \(allItems.count)")
 
                     // If this is a file attachment, add it to the task
                     if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType {

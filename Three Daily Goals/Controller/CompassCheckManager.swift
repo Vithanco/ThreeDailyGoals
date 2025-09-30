@@ -26,6 +26,7 @@ public final class CompassCheckManager {
     public static let DEFAULT_STEPS: [any CompassCheckStep] = [
         InformStep(),
         CurrentPrioritiesStep(),
+        MovePrioritiesToOpenStep(),
         PendingResponsesStep(),
         DueDateStep(),
         ReviewStep(),
@@ -132,8 +133,6 @@ public final class CompassCheckManager {
             // No more steps, finish the compass check
             endCompassCheck(didFinishCompassCheck: true)
         }
-        
-        debugPrint("new step is: \(type(of: currentStep))")
     }
 
     var moveStateForwardText: String {
@@ -173,10 +172,6 @@ public final class CompassCheckManager {
             await pushNotificationManager.cancelCompassCheckNotifications()
         }
         
-        debugPrint("endCompassCheck, finished: \(didFinishCompassCheck)")
-        debugPrint("did check already today?: \(preferences.didCompassCheckToday)")
-        debugPrint("current interval: \(timeProvider.getCompassCheckInterval())")
-        debugPrint("next check will be notified at: \(preferences.nextCompassCheckTime)")
         let didCCAlreadyHappenInCurrentInterval = preferences.didCompassCheckToday
 
         // setting last review date
@@ -184,26 +179,15 @@ public final class CompassCheckManager {
             if !didCCAlreadyHappenInCurrentInterval {
                 let secondsOfLastCCBeforeCurrentInterval: TimeInterval = timeProvider.getCompassCheckInterval().start
                     .timeIntervalSince(preferences.lastCompassCheck)
-                debugPrint("secondsOfLastCCBeforeCurrentInterval: \(secondsOfLastCCBeforeCurrentInterval)")
-                debugPrint("smaller than a day?: \(secondsOfLastCCBeforeCurrentInterval < Seconds.fullDay)")
                 if !(0...Seconds.fullDay).contains(secondsOfLastCCBeforeCurrentInterval) {
                     // reset the streak to 0
-                    debugPrint("reset streak")
                     preferences.daysOfCompassCheck = 0  // will soon be set to 1
                 }
-                debugPrint("current streak: \(preferences.daysOfCompassCheck)")
                 preferences.daysOfCompassCheck = preferences.daysOfCompassCheck + 1
                 if preferences.daysOfCompassCheck > preferences.longestStreak {
                     preferences.longestStreak = preferences.daysOfCompassCheck
                 }
-                debugPrint(
-                    "current streak: \(preferences.daysOfCompassCheck), longest: \(preferences.longestStreak)"
-                )
-                debugPrint("----- set date -----")
                 preferences.lastCompassCheck = timeProvider.now
-                debugPrint("lastCompassCheck: \(preferences.lastCompassCheck)")
-                debugPrint("next interval: \(preferences.nextCompassCheckTime)")
-                debugPrint("did check: \(preferences.didCompassCheckToday)")
             }
         }
 
@@ -296,7 +280,6 @@ public final class CompassCheckManager {
         if !uiState.showCompassCheckDialog {
             switch state {
             case .notStarted, .finished:
-                debugPrint("start compass check \(timeProvider.now)")
                 state = .inProgress(currentStep)
                 uiState.showCompassCheckDialog = true
             default:
@@ -455,7 +438,6 @@ public final class CompassCheckManager {
     /// Process any silent steps that follow the current step
     private func processSilentSteps() {
         while currentStep.isSilent {
-            debugPrint("Executing silent step: \(type(of: currentStep))")
             executeCurrentStep()
             
             // Find the next step after this silent one

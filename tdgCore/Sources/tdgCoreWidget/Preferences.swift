@@ -52,7 +52,7 @@ public struct StorageKeys: Sendable {
     }
 
     // Dynamic step keys
-    public static func compassCheckStepIsEnabled(_ stepId: String) -> StorageKeys {
+    public static func compassCheckStepIsEnabledKey(_ stepId: String) -> StorageKeys {
         return StorageKeys("compassCheck.step.\(stepId)")
     }
 
@@ -221,11 +221,9 @@ extension CloudPreferences {
     public var daysOfCompassCheck: Int {
         get {
             let result = isStreakBroken ? 0 : _daysOfCompassCheck
-            debugPrint("read daysOfCompassCheck: \(result), isStreakBroken: \(isStreakBroken)")
             return result
         }
         set {
-            debugPrint("write new daysOfCompassCheck: \(newValue)")
             _daysOfCompassCheck = newValue
             store.set(newValue, forKey: StorageKeys.daysOfCompassCheck)
         }
@@ -327,7 +325,6 @@ extension CloudPreferences {
     public func getPriority(nr: Int) -> String {
         let key = nrToCloudKey(nr: nr)
         let value = store.string(forKey: key) ?? ""
-        print("Widget: Getting priority \(nr) with key '\(key.id)': '\(value)'")
         return value
     }
 
@@ -338,7 +335,6 @@ extension CloudPreferences {
     public func getPriorityUUID(nr: Int) -> String {
         let key = StorageKeys.priorityUUID(nr)
         let value = store.string(forKey: key) ?? ""
-        print("Widget: Getting priority UUID \(nr) with key '\(key.id)': '\(value)'")
         return value
     }
 
@@ -356,7 +352,7 @@ extension CloudPreferences {
         }
 
         // Load from storage with step-specific default
-        let stepKey = StorageKeys.compassCheckStepIsEnabled(stepId)
+        let stepKey = StorageKeys.compassCheckStepIsEnabledKey(stepId)
         let defaultValue = getDefaultEnabledForStep(stepId: stepId)
         let storedValue = store.bool(forKey: stepKey, default: defaultValue)
 
@@ -371,7 +367,7 @@ extension CloudPreferences {
         _compassCheckStepToggles[stepId] = enabled
 
         // Store to persistent storage using individual key
-        let stepKey = StorageKeys.compassCheckStepIsEnabled(stepId)
+        let stepKey = StorageKeys.compassCheckStepIsEnabledKey(stepId)
         store.set(enabled, forKey: stepKey)
 
         // Trigger UI update
@@ -440,7 +436,7 @@ extension CKContainer {
     public static var isProductionEnvironment: Bool {
         let container = CKContainer.default()
         if let containerID = container.value(forKey: "containerID") as? NSObject {
-            debugPrint("containerID: \(containerID)")
+            //  debugPrint("containerID: \(containerID)")
             return containerID.description.contains("Production")
         }
         return false
