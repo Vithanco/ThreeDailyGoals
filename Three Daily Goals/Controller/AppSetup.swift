@@ -37,12 +37,16 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader:
     let finalModelContext: Storage
     var databaseError: DatabaseError?
     
+    // Create a shared undo manager for all contexts
+    let sharedUndoManager = UndoManager()
+    
     if isTesting {
         // Test setup
         switch sharedModelContainer(inMemory: true, withCloud: false) {
         case .success(let testContainer):
             container = testContainer
             modelContext = ModelContext(container)
+            modelContext.undoManager = sharedUndoManager
             
             // Use TestStorage with custom loader or default data
             if let loader = loader {
@@ -54,6 +58,7 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader:
             // For testing, we can still use TestStorage even if container creation fails
             container = try! ModelContainer(for: TaskItem.self, Attachment.self, Comment.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
             modelContext = ModelContext(container)
+            modelContext.undoManager = sharedUndoManager
             finalModelContext = TestStorage(timeProvider: finalTimeProvider)
             print("Warning: Database container creation failed in test mode: \(error)")
         }
@@ -63,12 +68,14 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader:
         case .success(let prodContainer):
             container = prodContainer
             modelContext = ModelContext(container)
+            modelContext.undoManager = sharedUndoManager
             finalModelContext = modelContext
         case .failure(let error):
             // For production, we need to handle this gracefully
             // Create a minimal container for basic functionality
             container = try! ModelContainer(for: TaskItem.self, Attachment.self, Comment.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
             modelContext = ModelContext(container)
+            modelContext.undoManager = sharedUndoManager
             finalModelContext = modelContext
             
             // We'll need to show the error to the user after UI is set up

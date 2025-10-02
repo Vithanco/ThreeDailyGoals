@@ -169,6 +169,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
                 addNewItem()
             }) {
                 Label("Add New Task", systemImage: imgAddItem)
+                    .foregroundColor(TaskItemState.open.color)
                     .help("Add a new task")
             }
             .accessibilityIdentifier("addTaskButton")

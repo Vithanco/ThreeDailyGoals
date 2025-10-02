@@ -39,6 +39,10 @@ public final class DataManager {
     // Core data properties
     var items = [TaskItem]()
     var lists: [TaskItemState: [TaskItem]] = [:]
+    
+    // Observable undo/redo state
+    var undoAvailable: Bool = false
+    var redoAvailable: Bool = false
 
     init(modelContext: Storage, timeProvider: TimeProvider) {
         self.modelContext = modelContext
@@ -48,6 +52,10 @@ public final class DataManager {
         for state in TaskItemState.allCases {
             lists[state] = []
         }
+        
+        // Set up undo manager notifications
+        setupUndoNotifications()
+        updateUndoRedoState()
     }
 
     // MARK: - Data Access
@@ -187,9 +195,7 @@ public final class DataManager {
 
     /// Delete a task with undo grouping
     func delete(task: TaskItem) {
-        beginUndoGrouping()
         deleteTask(task)
-        endUndoGrouping()
     }
 
     /// Delete a task with undo grouping and UI updates
@@ -619,24 +625,69 @@ public final class DataManager {
         modelContext.undoManager?.endUndoGrouping()
     }
 
+    /// Set up notifications to listen to undo manager changes
+    private func setupUndoNotifications() {
+        guard let undoManager = modelContext.undoManager else { return }
+        
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidUndoChange,
+            object: undoManager,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateUndoRedoState()
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidRedoChange,
+            object: undoManager,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateUndoRedoState()
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidOpenUndoGroup,
+            object: undoManager,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateUndoRedoState()
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidCloseUndoGroup,
+            object: undoManager,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateUndoRedoState()
+        }
+    }
+    
+    /// Update the observable undo/redo state
+    private func updateUndoRedoState() {
+        undoAvailable = modelContext.undoManager?.canUndo ?? false
+        redoAvailable = modelContext.undoManager?.canRedo ?? false
+    }
+
     /// Undo the last operation
     func undo() {
         modelContext.undoManager?.undo()
+        updateUndoRedoState()
     }
 
     /// Redo the last undone operation
     func redo() {
         modelContext.undoManager?.redo()
+        updateUndoRedoState()
     }
 
     /// Check if undo is available
     var canUndo: Bool {
-        return modelContext.undoManager?.canUndo ?? false
+        return undoAvailable
     }
 
     /// Check if redo is available
     var canRedo: Bool {
-        return modelContext.undoManager?.canRedo ?? false
+        return redoAvailable
     }
 
     /// Process pending changes
