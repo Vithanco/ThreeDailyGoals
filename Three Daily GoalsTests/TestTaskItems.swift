@@ -30,19 +30,22 @@ struct TestTaskItems {
         //        #expect(task.comments!.count,1)
     }
 
-    func loader(timeProvider: TimeProvider, whichList: TaskItemState) -> [TaskItem] {
-        var result: [TaskItem] = []
-        for i in stride(from: 1, to: 100, by: 5) {
-            result.add(title: "day \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: whichList)
+    @MainActor
+    func createLoader() -> TestDataLoader {
+        return { timeProvider in
+            var result: [TaskItem] = []
+            for i in stride(from: 1, to: 100, by: 5) {
+                result.add(title: "day \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: .open)
+            }
+            return result
         }
-        return result
     }
 
     @MainActor
     @Test
     func testListSorting() throws {
         #expect(TaskItemState.open.subHeaders != TaskItemState.closed.subHeaders)
-        let appComponents = setupApp(isTesting: true, loader: { tp in return self.loader(timeProvider: tp, whichList: .open) })
+        let appComponents = setupApp(isTesting: true, loader: createLoader())
         let dataManager = appComponents.dataManager
         let itemList = dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
@@ -163,6 +166,30 @@ struct TestTaskItems {
         #expect(task.due == nil)
     }
     
+    @MainActor
+    @Test
+    func testUnchangedItemsCleanup() throws {
+        // Given: A test data loader that creates unchanged items
+        let unchangedLoader: TestDataLoader = { timeProvider in
+            var tasks: [TaskItem] = []
+            // Create some unchanged tasks (with default empty values)
+            for i in 1...3 {
+                let task = TaskItem(title: emptyTaskTitle, details: emptyTaskDetails)
+                task.state = .open
+                tasks.append(task)
+            }
+            return tasks
+        }
+        
+        // When: Setting up the app with unchanged items
+        let appComponents = setupApp(isTesting: true, loader: unchangedLoader)
+        let dataManager = appComponents.dataManager
+        
+        // Then: The unchanged items should be cleaned up after loading
+        #expect(dataManager.items.isEmpty, "All unchanged items should be cleaned up")
+        #expect(dataManager.list(which: .open).isEmpty, "Open list should be empty after cleanup")
+    }
+
     @MainActor
     @Test
     func testDatePickerNullableBindingCrash() throws {

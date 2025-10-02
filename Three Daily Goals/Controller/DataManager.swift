@@ -445,11 +445,28 @@ public final class DataManager {
         do {
             items = try modelContext.fetch(descriptor)
             ensureEveryItemHasAUniqueUuid()
+            
+            // Clean up unchanged items after loading
+            cleanupUnchangedItems()
+            
             organizeLists()
             logger.debug("Loaded \(self.items.count) tasks from database")
         } catch {
             logger.error("Failed to load tasks: \(error)")
             reportDatabaseError(.containerCreationFailed(underlyingError: error))
+        }
+    }
+
+    /// Clean up unchanged items that were persisted but should be removed
+    private func cleanupUnchangedItems() {
+        let unchangedItems = items.filter { $0.isUnchanged }
+        if !unchangedItems.isEmpty {
+            logger.info("Cleaning up \(unchangedItems.count) unchanged items")
+            for item in unchangedItems {
+                deleteTask(item)
+            }
+            // Remove the deleted items from the items array
+            items.removeAll { $0.isUnchanged }
         }
     }
 
@@ -465,6 +482,10 @@ public final class DataManager {
 
             logger.info(
                 "fetched \(fetchedItems.count) tasks from central store, added \(added), updated \(updated)")
+            
+            // Clean up unchanged items after merging
+            cleanupUnchangedItems()
+            
             // Organize lists after merging
             organizeLists()
             ensureEveryItemHasAUniqueUuid()

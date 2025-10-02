@@ -8,7 +8,7 @@
 import Foundation
 
 /// Protocol for time operations to allow mocking in tests
-public protocol TimeProvider {
+public protocol TimeProvider: Sendable {
     var now: Date { get }
     var calendar: Calendar { get }
 }

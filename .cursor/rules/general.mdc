@@ -1,99 +1,26 @@
 The code is for iOS and macOS. All code has to run all all platforms unless there are good reasons to do otherwise. 
 
-## Code Style & Structure
-- camelCase for vars/functions, PascalCase for types
-- Verbs for methods, `is/has/should` for booleans
-- Use clear, descriptive names (Apple style)
-- Prefer value types (structs) over classes
-- Use protocol-oriented programming and composition
-- MVVM with SwiftUI
-- Follow Apple's Human Interface Guidelines
-
-## Swift Best Practices
-- Prefer `let` over `var`
-- Use strong typing and proper optionals
-- Use async/await for concurrency
-- Use `Result` or `throws` for errors
-- Use protocol extensions for shared logic
-- Keep functions small and focused
-
-## State & Data
+- Follow Apple's Human Interface Guidelines or warn 
+- Follow App Store guidelines (privacy, signing, review, purchases, localization, thinning)
 - Use `@State`, `@Binding` for local view state
 - Use `@Observable`, `@Bindable` for shared state (replace `@ObservedObject`/`@EnvironmentObject`)
-- Use CoreData for complex persistence, UserDefaults for preferences
-- Use dependency injection for testability
-- Ensure clean, predictable data flow
-- Support state restoration
-
-## SwiftUI & UI Development
-- SwiftUI-only
-- Use `VStack`/`HStack`/`ZStack` for intent, `Grid` or `Layout` for complex cases
-- Use `.padding()`, `.spacing()`, `ViewThatFits`, and adaptive sizing (no magic numbers)
-- Use `@Environment(\.widgetFamily)` and size classes for adaptive layouts
-- Use semantic styling: `foregroundStyle`, `tint`, system materials
-- SF Symbols for icons, dark mode, dynamic type
-- Use SafeArea, GeometryReader when required
-- Add accessibility labels, hints, dynamic type support
-- Test all screen sizes and orientations
-- Use SwiftUI previews for iteration
-
-## Widget Development
-- Test all widget sizes
-- Keep small widgets minimal
-- Use conditional layouts by `widgetFamily`
-- Centralize widget sizing (e.g., `WidgetSizeConfig`)
-- Use modular components, not monolithic views
-
-## Performance
-- Avoid heavy work in view bodies
-- Minimize view rebuilds with correct state wrappers
-- Cache expensive computations
-- Lazy load views and images
-- Profile with Instruments
-- Optimize network requests and background tasks
-- Manage memory explicitly when needed
-
-## Error Handling
+- Use swiftdata & swiftui, swift testing, TipKit
+- code has to run on iOS and macOS
+- only use UIKit and AppKit in sync to add for both platforms. 
+- Visuals have to be useful for light and dark appearances
+- Add keyboard shortcuts for all buttons, etc. 
+- Use DRY (don't repeat yourself) and SOLID principles
 - Use `Result` or `throws` consistently
-- Provide meaningful error messages
 - Use `guard` for early exits
-- Handle empty/error states gracefully
-
-## Security
-- Encrypt sensitive data
-- Store credentials in Keychain
-- Use ATS, certificate pinning
-- Support biometric auth when appropriate
-- Validate all user input
-
-## Testing & Quality
 - Use Swift Testing with `#expect` (XCTest for UI/legacy)
 - Write unit tests for business logic
 - Test edge cases, errors, and performance
 - Accessibility testing included
 - Prefer small, focused tests with descriptive names
 
-## Development Process
 - only commit when I explicitly request
-- Follow Git branching and review process
-- Use CI/CD pipelines
-- Keep documentation minimal but accurate (why > how)
+- Keep documentation minimal, updated and accurate (why > how)
 - Maintain test coverage
-- Follow App Store guidelines (privacy, signing, review, purchases, localization, thinning)
 
-## Things to Avoid
-- Avoid magic numbers in layout (use spacing, padding, or config constants)
-- Avoid business logic inside SwiftUI views (keep views declarative)
-- Avoid blocking the main thread (use async/await or background tasks)
-- Avoid force unwraps (`!`) and force casts (`as!`)
-- Avoid large view structs; split into smaller components
-- Avoid UIKit unless SwiftUI cannot handle the use case
-- Avoid unnecessary state wrappers (only use @State/@Binding/@Observable when needed)
-- Avoid global singletons; use dependency injection
-- Avoid duplicate logic in tests; keep them simple and focused
-- Avoid stale comments; only document intent, not implementation
-
-## process
-- test only the non-gui tests
+- test only the non-gui tests (only Three Daily GoalsTests and not Three Daily GoalsUITests)
 - test the non-gui tests at the end of each of your answers
-- compile the code for iOS and macOS at the end of each of your answers

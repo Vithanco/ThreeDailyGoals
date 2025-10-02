@@ -26,7 +26,7 @@ public struct AppComponents {
 /// - Parameter customSteps: Optional custom CompassCheck steps. If nil, uses DEFAULT_STEPS
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestStorage.Loader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
+public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestDataLoader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
     
     // MARK: - Step 1: Create TimeProvider (needed by everything)
     let finalTimeProvider = timeProvider ?? (isTesting ? MockTimeProvider(fixedNow: Date.now) : RealTimeProvider())

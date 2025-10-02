@@ -163,12 +163,13 @@ extension Array where Element == TaskItem {
     }
 }
 
+/// A Sendable type for loading test data
+public typealias TestDataLoader = @Sendable (TimeProvider) -> [TaskItem]
+
 public class TestStorage: Storage {
     public var hasChanges: Bool {
         return false
     }
-
-    public typealias Loader = ((TimeProvider) -> [TaskItem])
 
     public var undoManager: UndoManager? = nil
     public var items: [TaskItem]
@@ -214,7 +215,7 @@ public class TestStorage: Storage {
         items = result
     }
 
-    public init(loader: @escaping Loader, timeProvider: TimeProvider) {
+    public init(loader: @escaping TestDataLoader, timeProvider: TimeProvider) {
         items = loader(timeProvider)
     }
 
@@ -262,6 +263,9 @@ public class TestStorage: Storage {
     public var canRedo: Bool = false
 
 }
+
+/// A default empty loader for testing
+public let emptyTestDataLoader: TestDataLoader = { _ in return [] }
 
 @MainActor
 public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<ModelContainer, DatabaseError> {

@@ -41,7 +41,7 @@ struct TestCompassCheckSteps {
     // MARK: - Test Setup Helpers
     
     /// Creates a test data loader with various task states
-    private func createTestDataLoader() -> TestStorage.Loader {
+    private func createTestDataLoader() -> TestDataLoader {
         return { timeProvider in
             var tasks: [TaskItem] = []
             
@@ -69,14 +69,14 @@ struct TestCompassCheckSteps {
     }
     
     /// Creates a test data loader with no tasks
-    private func createEmptyDataLoader() -> TestStorage.Loader {
+    private func createEmptyDataLoader() -> TestDataLoader {
         return { timeProvider in
             return [] // No tasks
         }
     }
     
     /// Creates a test data loader with only priority tasks
-    private func createPriorityOnlyDataLoader() -> TestStorage.Loader {
+    private func createPriorityOnlyDataLoader() -> TestDataLoader {
         return { timeProvider in
             var tasks: [TaskItem] = []
             

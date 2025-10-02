@@ -26,7 +26,7 @@ struct TestCompassCheckFlexibility {
     // MARK: - Test Helpers
     
     /// Creates a test data loader with various task states
-    private func createTestDataLoader() -> TestStorage.Loader {
+    private func createTestDataLoader() -> TestDataLoader {
         return { timeProvider in
             var tasks: [TaskItem] = []
             
