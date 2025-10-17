@@ -53,29 +53,29 @@ struct TestImportExport {
     @Test
     func testFile() throws {
         let model = setupApp(isTesting: true)
-        let count = model.dataManager.items.count
+        let count = model.dataManager.allTasks.count
         #expect(count > 0)
         let url = getDocumentsDirectory().appendingPathComponent("taskItems-test.json")
         model.dataManager.exportTasks(url: url, uiState: model.uiState)
-        #expect(model.dataManager.items.count == count)
-        guard let first = model.dataManager.items.first else {
+        #expect(model.dataManager.allTasks.count == count)
+        guard let first = model.dataManager.allTasks.first else {
             #expect(Bool(false))
             return
         }
         #expect(first == model.dataManager.findTask(withUuidString: first.id))
         
         // Create a new model with empty data for import testing
-        let newModelComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let newModelComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let newModel = newModelComponents.dataManager
         let newUiState = newModelComponents.uiState
         
-        #expect(0 == newModel.items.count)
+        #expect(0 == newModel.allTasks.count)
         newModel.importTasks(url: url, uiState: newUiState)
 
-        #expect(newModel.items.count > 0)
-        #expect(model.dataManager.items.count == newModel.items.count)
-        #expect(178 == newModel.items.count)
-        for item in model.dataManager.items {
+        #expect(newModel.allTasks.count > 0)
+        #expect(model.dataManager.allTasks.count == newModel.allTasks.count)
+        #expect(178 == newModel.allTasks.count)
+        for item in model.dataManager.allTasks {
 
             #expect(model.dataManager.findTask(withUuidString: item.id) != nil)
             guard let newItem = newModel.findTask(withUuidString: item.id) else {

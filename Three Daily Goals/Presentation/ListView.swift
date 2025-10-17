@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import tdgCoreMain
 
 extension ListHeader {
@@ -24,6 +25,19 @@ struct ListView: View {
 
     init(whichList: TaskItemState? = nil) {
         self.whichList = whichList
+    }
+
+    @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
+    
+    private var tasks: [TaskItem] {
+        let state = whichList ?? uiState.whichList
+        let filtered = allTasks.filter { $0.state == state }
+        
+        // Sort by changed date, reverse for closed/dead
+        if state == .closed || state == .dead {
+            return filtered.sorted { $0.changed > $1.changed }
+        }
+        return filtered
     }
 
     var list: TaskItemState {
@@ -45,16 +59,18 @@ struct ListView: View {
         colorScheme == .dark ? Color.neutral800.opacity(0.3) : Color.neutral50.opacity(0.8)
     }
 
+    private var filteredTasks: [TaskItem] {
+        if uiState.selectedTags.isEmpty {
+            return tasks
+        }
+        return tasks.filter { $0.tags.contains(where: uiState.selectedTags.contains) }
+    }
+    
     var body: some View {
-        let filterFunc: (TaskItem) -> Bool =
-            uiState.selectedTags.isEmpty
-            ? { _ in true } : { $0.tags.contains(where: uiState.selectedTags.contains) }
-        let itemList = dataManager.list(which: list).filter(filterFunc)
-        let headers = list.subHeaders
         VStack {
             SimpleListView(
                 color: list.color,
-                itemList: itemList, headers: headers, showHeaders: list != .priority, section: list.section,
+                itemList: filteredTasks, headers: list.subHeaders, showHeaders: list != .priority, section: list.section,
                 id: list.getListAccessibilityIdentifier
             )
             .frame(minHeight: 145, maxHeight: .infinity)
@@ -67,14 +83,18 @@ struct ListView: View {
             .shadow(color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.05), radius: 2, x: 0, y: 1)
             .dropDestination(for: String.self) {
                 items, _ in
-                for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
-                    dataManager.move(task: item, to: list)
+                // Defer changes to next run loop to avoid transaction conflicts
+                Task { @MainActor in
+                    withAnimation {
+                        for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                            dataManager.move(task: item, to: list)
+                        }
+                    }
                 }
                 return true
             }
             Spacer()
-            let taskItems: [TaskItem] = dataManager.list(which: list)
-            let tags = Set(taskItems.flatMap { $0.tags }).asArray
+            let tags = Set(tasks.flatMap { $0.tags }).asArray
             if !tags.isEmpty {
                 TagFilterView(
                     tags: tags,
@@ -97,3 +117,4 @@ struct ListView: View {
         .environment(appComp.dataManager)
         .environment(appComp.preferences)
 }
+

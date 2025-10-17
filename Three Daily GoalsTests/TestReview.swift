@@ -50,7 +50,7 @@ struct TestReview {
         }
         #expect(compassCheckManager.currentStep.id == "inform")
         #expect(pref.daysOfCompassCheck == 1)
-        for t in dataManager.items {
+        for t in dataManager.allTasks {
             t.dueDate = nil
         }
         #expect(compassCheckManager.dueDateSoon.isEmpty)

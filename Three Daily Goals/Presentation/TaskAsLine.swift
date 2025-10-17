@@ -19,7 +19,6 @@ struct TaskAsLine: View {
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
           //  .strikethrough(item.isClosed, color: .closed)
-            .draggable(item.id)
     }
 
     var hasDue: Bool {
@@ -59,9 +58,13 @@ struct TaskAsLine: View {
                 .stroke(cardBorder, lineWidth: 1.0)
         )
         .contentShape(Rectangle())
-        #if os(macOS)
-            .draggable(item.id)
-        #endif
+        .draggable(item.id) {
+            // Provide a simple preview
+            Text(item.title)
+                .padding(8)
+                .background(Color.accentColor.opacity(0.4))
+                .cornerRadius(8)
+        }
         .swipeActions(edge: .leading) {
             if item.canBeMovedToOpen {
                 dataManager.openButton(item: item).tint(TaskItemState.open.color)
@@ -87,7 +90,7 @@ struct TaskAsLine: View {
 
 #Preview {
     let appComp = setupApp(isTesting: true)
-    TaskAsLine(item: appComp.dataManager.items.first!)
+    TaskAsLine(item: appComp.dataManager.allTasks.first!)
             .environment(appComp.uiState)
             .environment(appComp.dataManager)
             .environment(appComp.preferences)

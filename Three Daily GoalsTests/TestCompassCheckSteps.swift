@@ -100,7 +100,7 @@ struct TestCompassCheckSteps {
         let dataManager = appComponents.dataManager
         
         // Clear existing tasks
-        let allTasks = dataManager.items
+        let allTasks = dataManager.allTasks
         for task in allTasks {
             dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
         }
@@ -114,7 +114,7 @@ struct TestCompassCheckSteps {
         let dataManager = appComponents.dataManager
         
         // Clear existing tasks
-        let allTasks = dataManager.items
+        let allTasks = dataManager.allTasks
         for task in allTasks {
             dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
         }
@@ -133,7 +133,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testInformStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = InformStep()
@@ -146,14 +146,14 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.moveStateForwardText == "Next")
         
         // act should not change anything
-        let initialTaskCount = dataManager.items.count
+        let initialTaskCount = dataManager.allTasks.count
         step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
-        #expect(dataManager.items.count == initialTaskCount)
+        #expect(dataManager.allTasks.count == initialTaskCount)
     }
     
     @Test
     func testMovePrioritiesToOpenStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = MovePrioritiesToOpenStep()
@@ -181,7 +181,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testPendingResponsesStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = PendingResponsesStep()
@@ -202,7 +202,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testDueDateStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = DueDateStep()
@@ -215,7 +215,7 @@ struct TestCompassCheckSteps {
         #expect(!step.isApplicable(dataManager: emptyDataManager, timeProvider: timeProvider))
         
         // Test act - should move due tasks to priority
-        let dueTasksBefore = dataManager.items.filter { task in
+        let dueTasksBefore = dataManager.allTasks.filter { task in
             task.isActive && task.dueUntil(date: timeProvider.getDate(inDays: 3))
         }
         #expect(dueTasksBefore.count > 0)
@@ -229,7 +229,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testReviewStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = ReviewStep()
@@ -244,14 +244,14 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.moveStateForwardText == "Next") // Should be "Next" on macOS
         
         // act should not change task states
-        let initialTaskCount = dataManager.items.count
+        let initialTaskCount = dataManager.allTasks.count
         step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
-        #expect(dataManager.items.count == initialTaskCount)
+        #expect(dataManager.allTasks.count == initialTaskCount)
     }
     
     @Test
     func testPlanStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         let step = PlanStep()
@@ -266,9 +266,9 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.moveStateForwardText == "Finish")
         
         // act should not change task states
-        let initialTaskCount = dataManager.items.count
+        let initialTaskCount = dataManager.allTasks.count
         step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
-        #expect(dataManager.items.count == initialTaskCount)
+        #expect(dataManager.allTasks.count == initialTaskCount)
     }
     
     // MARK: - Step Enablement Tests
@@ -322,7 +322,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testStepManagerFlow() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test getting current step - we now work directly with step instances
@@ -368,7 +368,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createEmptyDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: stepsWithControlledSkipping)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createEmptyDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: stepsWithControlledSkipping)
         let compassCheckManager = appComponents.compassCheckManager
         
         // With no tasks, should skip directly from inform to review
@@ -404,7 +404,7 @@ struct TestCompassCheckSteps {
             DueDateStep(),           // Should be skipped (no due tasks)
             ReviewStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createPriorityOnlyDataLoader(), compassCheckSteps: priorityFocusedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createPriorityOnlyDataLoader(), compassCheckSteps: priorityFocusedSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Should move from inform to currentPriorities
@@ -430,7 +430,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testStepManagerMoveToNextStep() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let compassCheckManager = appComponents.compassCheckManager
         let dataManager = appComponents.dataManager
         
@@ -455,7 +455,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testStepManagerButtonText() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled())
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test button text for different states
@@ -486,7 +486,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: simplifiedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: simplifiedSteps)
         let compassCheckManager = appComponents.compassCheckManager
         let dataManager = appComponents.dataManager
         
@@ -584,7 +584,7 @@ struct TestCompassCheckSteps {
     
     @Test
     func testStepManagerWithInvalidState() throws {
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader())
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test with valid step (should work)
@@ -603,7 +603,7 @@ struct TestCompassCheckSteps {
         let dataManager = appComponents.dataManager
         
         // Clear existing tasks
-        let allTasks = dataManager.items
+        let allTasks = dataManager.allTasks
         for task in allTasks {
             dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
         }
@@ -634,7 +634,7 @@ struct TestCompassCheckSteps {
         let dataManager = appComponents.dataManager
         
         // Clear existing tasks
-        let allTasks = dataManager.items
+        let allTasks = dataManager.allTasks
         for task in allTasks {
             dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
         }
@@ -692,7 +692,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             iOSPlanStep() // This should be skipped on iOS
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: iOSSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), compassCheckSteps: iOSSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the actual iOS flow - should skip PlanStep
@@ -741,7 +741,7 @@ struct TestCompassCheckSteps {
             ReviewStep(),
             PlanStep() // This should be included on macOS
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: macOSSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: macOSSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the actual macOS flow - should include PlanStep
@@ -779,7 +779,7 @@ struct TestCompassCheckSteps {
     func testMoveToGraveyardStep() throws {
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences)
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         
@@ -835,7 +835,7 @@ struct TestCompassCheckSteps {
         testPreferences.expiryAfter = 10
         
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences)
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         
@@ -879,7 +879,7 @@ struct TestCompassCheckSteps {
         
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
         let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
@@ -925,7 +925,7 @@ struct TestCompassCheckSteps {
         testPreferences.setCompassCheckStepEnabled(stepId: "moveToGraveyard", enabled: false)
         
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences)
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         
@@ -962,7 +962,7 @@ struct TestCompassCheckSteps {
         // Test that silent steps are executed automatically
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences)
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         
@@ -999,7 +999,7 @@ struct TestCompassCheckSteps {
         
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
         let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager
@@ -1048,7 +1048,7 @@ struct TestCompassCheckSteps {
         
         let testPreferences = CloudPreferences(store: TestPreferences(), timeProvider: RealTimeProvider())
         let testDataLoader = createTestDataLoader()
-        let appComponents = setupApp(isTesting: true, loader: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: testDataLoader, preferences: testPreferences, compassCheckSteps: focusedSteps)
         let timeProvider = appComponents.timeProvider
         
         let compassCheckManager = appComponents.compassCheckManager

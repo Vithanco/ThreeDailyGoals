@@ -104,7 +104,7 @@ struct TestCompassCheckFlexibility {
     func testCustomStepInjection() throws {
         // Create a custom compass check manager with only our test step
         let customSteps: [any CompassCheckStep] = [CustomTestStep()]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: customSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), compassCheckSteps: customSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Verify the custom step is available
@@ -125,7 +125,7 @@ struct TestCompassCheckFlexibility {
             AlwaysSkipStep(), // This should always be skipped
             ReviewStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: stepsWithSkip)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), compassCheckSteps: stepsWithSkip)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test that the skipping step is properly skipped
@@ -141,7 +141,7 @@ struct TestCompassCheckFlexibility {
     func testCompassCheckManagerWithCustomSteps() throws {
         // Create a custom compass check manager with minimal steps
         let customSteps: [any CompassCheckStep] = [InformStep(), ReviewStep()]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: customSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), compassCheckSteps: customSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test that the CompassCheckManager uses our custom steps
@@ -163,7 +163,7 @@ struct TestCompassCheckFlexibility {
             InformStep(),
             ReviewStep()
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), compassCheckSteps: minimalSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), compassCheckSteps: minimalSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the minimal flow
@@ -186,7 +186,7 @@ struct TestCompassCheckFlexibility {
             InformStep(),    // Then inform
             PlanStep()       // End with plan
         ]
-        let appComponents = setupApp(isTesting: true, loader: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: reorderedSteps)
+        let appComponents = setupApp(isTesting: true, loaderForTests: createTestDataLoader(), preferences: createTestPreferencesWithPlanEnabled(), compassCheckSteps: reorderedSteps)
         let compassCheckManager = appComponents.compassCheckManager
         
         // Test the reordered flow - should start with the first step (review)

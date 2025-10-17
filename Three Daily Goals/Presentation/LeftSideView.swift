@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 import tdgCoreMain
 
 struct LeftSideView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(CloudPreferences.self) private var preferences
     @Environment(\.colorScheme) private var colorScheme
+    
+    @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
+    
+    private var priorityTasks: [TaskItem] {
+        allTasks.filter { $0.state == .priority }
+    }
 
     var body: some View {
         
@@ -36,8 +43,11 @@ struct LeftSideView: View {
                     .dropDestination(for: String.self) {
                         items,
                         location in
-                        for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
-                            dataManager.moveWithPriorityTracking(task: item, to: .open)
+                        // Defer changes to next run loop to avoid transaction conflicts
+                        Task { @MainActor in
+                            for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                                dataManager.moveWithPriorityTracking(task: item, to: .open)
+                            }
                         }
                         return true
                     }
@@ -45,15 +55,28 @@ struct LeftSideView: View {
             #endif
             
             // Priority list (main content area) - removed background styling
-            SimpleListView.priorityView(dataManager: dataManager)
-                .dropDestination(for: String.self) {
-                    items, _ in
-                    for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
-                        dataManager.moveWithPriorityTracking(task: item, to: .priority)
+            SimpleListView(
+                color: .priority,
+                itemList: priorityTasks,
+                headers: TaskItemState.priority.subHeaders,
+                showHeaders: false,
+                section: TaskItemState.priority.section,
+                id: TaskItemState.priority.getListAccessibilityIdentifier
+            )
+            .dropDestination(for: String.self) { items, _ in
+                // Defer changes to next run loop to avoid transaction conflicts
+                Task { @MainActor in
+                    withAnimation {
+                        for itemId in items {
+                            if let item = dataManager.findTask(withUuidString: itemId) {
+                                dataManager.moveWithPriorityTracking(task: item, to: .priority)
+                            }
+                        }
                     }
-                    return true
                 }
-                .frame(minHeight: 145, maxHeight: .infinity)
+                return true
+            }
+            .frame(minHeight: 145, maxHeight: .infinity)
             
             Spacer()
             

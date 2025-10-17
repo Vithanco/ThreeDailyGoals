@@ -15,13 +15,23 @@ private struct ListLabel: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(\.colorScheme) private var colorScheme
     @Environment(UIStateManager.self) private var uiState
+    
+    init(whichList: TaskItemState) {
+        self.whichList = whichList
+    }
+    
+    @Query private var allTasks: [TaskItem]
+    
+    private var tasks: [TaskItem] {
+        allTasks.filter { $0.state == whichList }
+    }
 
     var name: Text {
         return whichList.section.asText
     }
 
     var count: Text {
-        return Text(dataManager.list(which: whichList).count.description)
+        return Text(tasks.count.description)
     }
     
     // Enhanced list icons using the new semantic icons
@@ -59,8 +69,8 @@ private struct ListLabel: View {
             Spacer()
             
             // Enhanced count badge
-            if whichList.showCount && dataManager.list(which: whichList).count > 0 {
-                Text(dataManager.list(which: whichList).count.description)
+            if whichList.showCount && tasks.count > 0 {
+                Text(tasks.count.description)
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.white)
                     .padding(.horizontal, 8)

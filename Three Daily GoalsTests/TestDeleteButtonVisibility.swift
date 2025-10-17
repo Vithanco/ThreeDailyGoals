@@ -18,7 +18,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testCanBeDeletedForClosedTasks() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Create a task in closed state
@@ -31,7 +31,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testCanBeDeletedForDeadTasks() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Create a task in dead state
@@ -44,7 +44,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testCannotBeDeletedForOpenTasks() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Create a task in open state
@@ -57,7 +57,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testCannotBeDeletedForPriorityTasks() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Create a task in priority state
@@ -70,7 +70,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testCannotBeDeletedForPendingResponseTasks() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Create a task in pending response state
@@ -83,7 +83,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testDeleteButtonVisibilityInTaskAsLine() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         
@@ -126,7 +126,7 @@ struct TestDeleteButtonVisibility {
     
     @Test
     func testDeleteButtonImplementation() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         
@@ -141,9 +141,9 @@ struct TestDeleteButtonVisibility {
         #expect(deleteButton != nil, "Delete button should be created for closed tasks")
         
         // Test that the task can actually be deleted
-        let initialCount = dataManager.items.count
+        let initialCount = dataManager.allTasks.count
         dataManager.deleteWithUIUpdate(task: closedTask, uiState: uiState)
-        let finalCount = dataManager.items.count
+        let finalCount = dataManager.allTasks.count
         
         #expect(finalCount == initialCount - 1, "Task should be deleted from items list")
     }

@@ -37,7 +37,7 @@ public struct DueDateStep: CompassCheckStep {
     // Helper method to get tasks due soon (moved from CompassCheckManager)
     private func getDueDateSoonTasks(dataManager: DataManager, timeProvider: TimeProvider) -> [TaskItem] {
         let due = timeProvider.getDate(inDays: 3)
-        let open = dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
+        let open = dataManager.allTasks.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
         return open.sorted()
     }
 }

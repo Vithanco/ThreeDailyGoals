@@ -23,7 +23,14 @@ public struct CompassCheckNextPriorities: View {
                     "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
                 ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
                 HStack {
-                    SimpleListView.priorityView(dataManager: dataManager).frame(minHeight: 300)
+                    SimpleListView(
+                        color: .priority,
+                        itemList: dataManager.list(which: .priority),
+                        headers: TaskItemState.priority.subHeaders,
+                        showHeaders: false,
+                        section: TaskItemState.priority.section,
+                        id: TaskItemState.priority.getListAccessibilityIdentifier
+                    ).frame(minHeight: 300)
                     SimpleListView(
                         color: .open,
                         itemList: dataManager.list(which: .open),

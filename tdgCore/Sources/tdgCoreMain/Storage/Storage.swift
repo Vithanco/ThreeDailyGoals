@@ -174,7 +174,7 @@ public class TestStorage: Storage {
     public var undoManager: UndoManager? = nil
     public var items: [TaskItem]
 
-    public init(timeProvider: TimeProvider) {
+    public static func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         var result: [TaskItem] = []
         let theGoal = result.add(
             title: "Read 'The Goal' by Goldratt",
@@ -212,7 +212,11 @@ public class TestStorage: Storage {
         for i in 32..<200 {
             result.add(title: "Dead Task \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: .dead)
         }
-        items = result
+        return result
+    }
+
+    public init(timeProvider: TimeProvider) {
+        items = TestStorage.createDefaultTestData(timeProvider: timeProvider)
     }
 
     public init(loader: @escaping TestDataLoader, timeProvider: TimeProvider) {

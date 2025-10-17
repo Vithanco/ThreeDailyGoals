@@ -26,7 +26,7 @@ public struct AppComponents {
 /// - Parameter customSteps: Optional custom CompassCheck steps. If nil, uses DEFAULT_STEPS
 /// - Returns: AppComponents struct containing all managers and components
 @MainActor
-public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader: TestDataLoader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
+public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loaderForTests: TestDataLoader? = nil, preferences: CloudPreferences? = nil, compassCheckSteps: [any CompassCheckStep] = CompassCheckManager.DEFAULT_STEPS) -> AppComponents {
     
     // MARK: - Step 1: Create TimeProvider (needed by everything)
     let finalTimeProvider = timeProvider ?? (isTesting ? MockTimeProvider(fixedNow: Date.now) : RealTimeProvider())
@@ -49,7 +49,7 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loader:
             modelContext.undoManager = sharedUndoManager
             
             // Use TestStorage with custom loader or default data
-            if let loader = loader {
+            if let loader = loaderForTests {
                 finalModelContext = TestStorage(loader: loader, timeProvider: finalTimeProvider)
             } else {
                 finalModelContext = TestStorage(timeProvider: finalTimeProvider)  // Use default test data with 178 items

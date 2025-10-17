@@ -16,19 +16,6 @@ struct SimpleListView: View {
     let section: TaskSection
     let id: String
     @Environment(CloudPreferences.self) private var preferences
-
-   
-    public static func priorityView(dataManager: DataManager) ->  SimpleListView {
-        return SimpleListView(
-            color: .priority,
-            itemList: dataManager.list(which: .priority),
-            headers: TaskItemState.priority.subHeaders,
-            showHeaders: false, // Don't show headers for priority list
-            section: TaskItemState.priority.section,
-            id: TaskItemState.priority.getListAccessibilityIdentifier
-        )
-    }
-
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
     
     var body: some View {

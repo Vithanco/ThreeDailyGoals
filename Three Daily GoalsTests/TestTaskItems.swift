@@ -45,7 +45,7 @@ struct TestTaskItems {
     @Test
     func testListSorting() throws {
         #expect(TaskItemState.open.subHeaders != TaskItemState.closed.subHeaders)
-        let appComponents = setupApp(isTesting: true, loader: createLoader())
+        let appComponents = setupApp(isTesting: true, loaderForTests: createLoader())
         let dataManager = appComponents.dataManager
         let itemList = dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
@@ -101,12 +101,12 @@ struct TestTaskItems {
     @MainActor
     @Test
     func dontAddEmptyTask() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
 
-        #expect(dataManager.items.count == 0)
+        #expect(dataManager.allTasks.count == 0)
         dataManager.addItem(item: TaskItem(title: ""))
-        #expect(dataManager.items.count == 0)
+        #expect(dataManager.allTasks.count == 0)
 
         dataManager.addItem(item: TaskItem(title: emptyTaskTitle))
     }
@@ -114,18 +114,18 @@ struct TestTaskItems {
     @MainActor
     @Test
     func addTaskWithDetails() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let newTask = TaskItem(title: "", details: "something")
-        #expect(dataManager.items.count == 0)
+        #expect(dataManager.allTasks.count == 0)
         dataManager.addItem(item: newTask)
-        #expect(dataManager.items.count == 1)
+        #expect(dataManager.allTasks.count == 1)
     }
     
     @MainActor
     @Test
     func testDueDateRemovalCrash() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
         
@@ -182,18 +182,18 @@ struct TestTaskItems {
         }
         
         // When: Setting up the app with unchanged items
-        let appComponents = setupApp(isTesting: true, loader: unchangedLoader)
+        let appComponents = setupApp(isTesting: true, loaderForTests: unchangedLoader)
         let dataManager = appComponents.dataManager
         
         // Then: The unchanged items should be cleaned up after loading
-        #expect(dataManager.items.isEmpty, "All unchanged items should be cleaned up")
+        #expect(dataManager.allTasks.isEmpty, "All unchanged items should be cleaned up")
         #expect(dataManager.list(which: .open).isEmpty, "Open list should be empty after cleanup")
     }
 
     @MainActor
     @Test
     func testDatePickerNullableBindingCrash() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let timeProvider = appComponents.timeProvider
         
         // Test the exact scenario that might cause the crash

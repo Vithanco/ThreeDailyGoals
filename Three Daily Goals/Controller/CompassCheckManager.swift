@@ -109,7 +109,7 @@ public final class CompassCheckManager {
 
     var dueDateSoon: [TaskItem] {
         let due = timeProvider.getDate(inDays: 3)
-        let open = self.dataManager.items.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
+        let open = self.dataManager.allTasks.filter({ $0.isActive }).filter({ $0.dueUntil(date: due) })
         return open.sorted()
     }
 

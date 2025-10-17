@@ -13,6 +13,11 @@ import os
 import tdgCoreMain
 import TipKit
 
+// Test data loader using TestStorage's default data
+let defaultTestDataLoader: TestDataLoader = { timeProvider in
+    return TestStorage.createDefaultTestData(timeProvider: timeProvider)
+}
+
 @main
 struct Three_Daily_GoalsApp: App {
 
@@ -31,7 +36,7 @@ struct Three_Daily_GoalsApp: App {
         #endif
 
         // Set up app components
-        self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting))
+        self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting, loaderForTests: defaultTestDataLoader))
         
         // Initialize TipKit only in production (not during testing)
         if !enableTesting {

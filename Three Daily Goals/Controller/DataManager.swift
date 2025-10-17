@@ -33,12 +33,8 @@ public final class DataManager {
     var itemSelector: ItemSelector?
     var dataIssueReporter: DataIssueReporter?
     var jsonExportDoc: JSONWriteOnlyDoc? {
-        return JSONWriteOnlyDoc(content: items)
+        return JSONWriteOnlyDoc(content: allTasks)
     }
-
-    // Core data properties
-    var items = [TaskItem]()
-    var lists: [TaskItemState: [TaskItem]] = [:]
     
     // Observable undo/redo state
     var undoAvailable: Bool = false
@@ -47,11 +43,6 @@ public final class DataManager {
     init(modelContext: Storage, timeProvider: TimeProvider) {
         self.modelContext = modelContext
         self.timeProvider = timeProvider
-
-        // Initialize lists for all states
-        for state in TaskItemState.allCases {
-            lists[state] = []
-        }
         
         // Set up undo manager notifications
         setupUndoNotifications()
@@ -62,16 +53,25 @@ public final class DataManager {
 
     /// Get all tasks for a specific state
     func list(which state: TaskItemState) -> [TaskItem] {
-        guard let result = lists[state] else {
-            logger.fault("couldn't retrieve list \(state) from lists")
-            return []
+        // Fetch all tasks and filter in memory (predicate doesn't support enum captures)
+        let filtered = allTasks.filter { $0.state == state }
+        
+        // Sort by changed date
+        if state == .closed || state == .dead {
+            return filtered.sorted { $0.changed > $1.changed }
         }
-        return result
+        return filtered.sorted { $0.changed < $1.changed }
     }
 
     /// Get all tasks
     var allTasks: [TaskItem] {
-        return items
+        let descriptor = FetchDescriptor<TaskItem>()
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch {
+            logger.error("Failed to fetch all tasks: \(error)")
+            return []
+        }
     }
 
     /// Get current list based on UI state (delegates to TaskManagerViewModel)
@@ -83,7 +83,7 @@ public final class DataManager {
     /// Get all active tags across all tasks
     var activeTags: Set<String> {
         var result = Set<String>()
-        for t in items where !t.tags.isEmpty && t.isActive {
+        for t in allTasks where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
         }
         result.formUnion(["work", "private"])
@@ -94,11 +94,25 @@ public final class DataManager {
 
     /// Find a task by UUID string
     func findTask(withUuidString uuidString: String) -> TaskItem? {
-
-        for item in items where item.id == uuidString {
-            return item
+        // Convert string to UUID for comparison with stored uuid property
+        guard let searchUuid = UUID(uuidString: uuidString) else {
+            logger.error("Invalid UUID string: \(uuidString)")
+            return nil
         }
-        return nil
+        
+        // Search by the actual stored uuid property (predicates can't access computed 'id')
+        let predicate = #Predicate<TaskItem> { task in
+            task.uuid == searchUuid
+        }
+        let descriptor = FetchDescriptor<TaskItem>(predicate: predicate)
+        
+        do {
+            let results = try modelContext.fetch(descriptor)
+            return results.first
+        } catch {
+            logger.error("Failed to find task with UUID \(uuidString): \(error)")
+            return nil
+        }
     }
 
     /// Move a task to a different state
@@ -107,17 +121,8 @@ public final class DataManager {
             return  // nothing to be done
         }
 
-        // Remove from old list
-        lists[task.state]?.removeObject(task)
-
-        // Update task state
+        // Update task state - SwiftData will autosave, no need to call save()
         task.state = state
-
-        // Add to new list
-        lists[state]?.append(task)
-        sortList(state)
-
-        save()
     }
 
     /// Move a task to a different state with priority tracking
@@ -146,10 +151,7 @@ public final class DataManager {
     /// Add an existing task to the data manager
     func addExistingTask(_ task: TaskItem) {
         modelContext.insert(task)
-        items.append(task)
-        lists[task.state]?.append(task)
-        sortList(task.state)
-        save()
+        // SwiftData will autosave
     }
 
     /// Add a new task with specified parameters
@@ -175,22 +177,13 @@ public final class DataManager {
 
     /// Delete a task
     func deleteTask(_ task: TaskItem) {
-        // Remove from lists
-        lists[task.state]?.removeObject(task)
-
-        // Remove from items array
-        if let index = items.firstIndex(of: task) {
-            items.remove(at: index)
-        }
-
         // Delete comments first
         for c in task.comments ?? [] {
             modelContext.delete(c)
         }
 
-        // Delete from database
+        // Delete from database - SwiftData will autosave
         modelContext.delete(task)
-        save()
     }
 
     /// Delete a task with undo grouping
@@ -229,7 +222,7 @@ public final class DataManager {
         }
 
         modelContext.insert(newTask)
-        save()
+        // SwiftData will autosave
         return newTask
     }
 
@@ -244,7 +237,7 @@ public final class DataManager {
             // Dead and pending tasks can't be toggled
             break
         }
-        save()
+        // SwiftData will autosave
     }
 
 //    /// Touch a task (update its changed date)
@@ -278,14 +271,12 @@ public final class DataManager {
 
     /// Remove a task from the data manager
     func remove(task: TaskItem) {
-        items.removeObject(task)
-        lists[task.state]?.removeObject(task)
         deleteTask(task)
     }
 
     /// Remove a task by ID
     func removeItem(withID: String) {
-        if let item = items.first(where: { $0.id == withID }) {
+        if let item = allTasks.first(where: { $0.id == withID }) {
             remove(task: item)
         }
     }
@@ -447,16 +438,13 @@ public final class DataManager {
 
     /// Load all tasks from the database and organize them into lists
     func loadData() {
-        let descriptor = FetchDescriptor<TaskItem>()
         do {
-            items = try modelContext.fetch(descriptor)
             ensureEveryItemHasAUniqueUuid()
             
             // Clean up unchanged items after loading
             cleanupUnchangedItems()
             
-            organizeLists()
-            logger.debug("Loaded \(self.items.count) tasks from database")
+            logger.debug("Loaded \(self.allTasks.count) tasks from database")
         } catch {
             logger.error("Failed to load tasks: \(error)")
             reportDatabaseError(.containerCreationFailed(underlyingError: error))
@@ -465,14 +453,12 @@ public final class DataManager {
 
     /// Clean up unchanged items that were persisted but should be removed
     private func cleanupUnchangedItems() {
-        let unchangedItems = items.filter { $0.isUnchanged }
+        let unchangedItems = allTasks.filter { $0.isUnchanged }
         if !unchangedItems.isEmpty {
             logger.info("Cleaning up \(unchangedItems.count) unchanged items")
             for item in unchangedItems {
                 deleteTask(item)
             }
-            // Remove the deleted items from the items array
-            items.removeAll { $0.isUnchanged }
         }
     }
 
@@ -484,16 +470,12 @@ public final class DataManager {
                 SortDescriptor(\.changed, order: .forward)
             ])
             let fetchedItems = try modelContext.fetch(descriptor)
-            let (added, updated) = mergeItems(fetchedItems)
 
-            logger.info(
-                "fetched \(fetchedItems.count) tasks from central store, added \(added), updated \(updated)")
+            logger.info("fetched \(fetchedItems.count) tasks from central store")
             
             // Clean up unchanged items after merging
             cleanupUnchangedItems()
             
-            // Organize lists after merging
-            organizeLists()
             ensureEveryItemHasAUniqueUuid()
 
         } catch {
@@ -508,73 +490,12 @@ public final class DataManager {
         }
     }
 
-    /// Merge fetched items with existing items
-    private func mergeItems(_ fetchedItems: [TaskItem]) -> (Int, Int) {
-        var seenIDs = Set<UUID>()
-        let adjustedItems = fetchedItems.map { item -> TaskItem in
-            if seenIDs.contains(item.uuid) {
-                let newItem = item
-                newItem.uuid = UUID()
-                return newItem
-            }
-            seenIDs.insert(item.uuid)
-            return item
-        }
-
-        var addedCount = 0
-        var updatedCount = 0
-
-        // Create a dictionary of existing items by ID for quick lookup
-        var existingItemsById = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
-
-        for fetchedItem in adjustedItems {
-            if let existingItem = existingItemsById[fetchedItem.id] {
-                // Item exists, check if it needs updating
-                if fetchedItem.changed > existingItem.changed {
-                    existingItem.updateFrom(fetchedItem)
-                    updatedCount = updatedCount + 1
-                }
-            } else {
-                // New item, add it
-                items.append(fetchedItem)
-                existingItemsById[fetchedItem.id] = fetchedItem
-                addedCount = addedCount + 1
-            }
-        }
-
-        return (addedCount, updatedCount)
-    }
-
-    /// Organize items into lists by state
-    func organizeLists() {
-        // Clear all lists
-        for t in TaskItemState.allCases {
-            lists[t]?.removeAll(keepingCapacity: true)
-        }
-        // Redistribute items
-        for item in items {
-            lists[item.state]?.append(item)
-        }
-        // Sort all lists
-        for state in TaskItemState.allCases {
-            sortList(state)
-        }
-    }
-
-    /// Sort a specific list by its state's criteria
-    func sortList(_ state: TaskItemState) {
-        lists[state]?.sort { task1, task2 in
-            guard state == .closed || state == .dead else {
-                return task1.changed < task2.changed  // Oldest first
-            }
-            return task1.changed > task2.changed  // Most recent first
-        }
-    }
 
     /// Ensure every item has a unique UUID
     private func ensureEveryItemHasAUniqueUuid() {
+        let tasks = allTasks
         var allUuids: Set<UUID> = []
-        for i in items {
+        for i in tasks {
             if allUuids.contains(i.uuid) {
                 i.uuid = UUID()
             } else {
@@ -582,8 +503,8 @@ public final class DataManager {
             }
         }
         assert(
-            Set(items.map(\.uuid)).count == items.count,
-            "Duplicate UUIDs: \(items.count - Set(items.map(\.uuid)).count)")
+            Set(tasks.map(\.uuid)).count == tasks.count,
+            "Duplicate UUIDs: \(tasks.count - Set(tasks.map(\.uuid)).count)")
     }
 
     /// Save changes to the database
@@ -778,7 +699,7 @@ public final class DataManager {
     /// Get all tags from tasks
     var allTags: Set<String> {
         var result = Set<String>()
-        for task in items where !task.tags.isEmpty {
+        for task in allTasks where !task.tags.isEmpty {
             result.formUnion(task.tags)
         }
         result.formUnion(["work", "private"])
@@ -807,7 +728,7 @@ public final class DataManager {
     /// Exchange one tag for another across all tasks
     func exchangeTag(from: String, to: String) {
         let lowercaseTo = to.lowercased()
-        for item in items {
+        for item in allTasks {
             item.tags = item.tags.map { $0 == from ? lowercaseTo : $0 }
         }
         save()
@@ -818,7 +739,7 @@ public final class DataManager {
         if tag.isEmpty {
             return
         }
-        for item in items {
+        for item in allTasks {
             item.tags = item.tags.filter { $0 != tag }
         }
         save()
@@ -832,7 +753,7 @@ public final class DataManager {
             // Create an instance of JSONEncoder
             let encoder = JSONEncoder()
             // Convert your array into JSON data
-            let data = try encoder.encode(items)
+            let data = try encoder.encode(allTasks)
 
             // Write the data to the file
             try data.write(to: url)

@@ -95,77 +95,32 @@ extension TaskItem: Taggable {
 extension TaskItem {
     @Transient
     public var title: String {
-        get {
-            return _title
-        }
-        set {
-            if newValue != _title {
-                _title = newValue
-                changed = Date.now
-            }
-        }
+        get { _title }
+        set { _title = newValue }
     }
 
     @Transient
     public var details: String {
-        get {
-            return _details
-        }
-        set {
-            if newValue != _details {
-                _details = newValue
-                changed = Date.now
-            }
-        }
+        get { _details }
+        set { _details = newValue }
     }
 
     @Transient
     public var due: Date? {
-        get {
-            return self.dueDate
-        }
-        set {
-            if newValue != self.dueDate {
-                self.dueDate = newValue
-                changed = Date.now
-            }
-        }
+        get { dueDate }
+        set { dueDate = newValue }
     }
 
     @Transient
     public var url: String {
-        get {
-            return _url
-        }
-        set {
-            if newValue != _url {
-                _url = newValue
-                changed = Date.now
-            }
-        }
+        get { _url }
+        set { _url = newValue }
     }
 
     @Transient
     public var state: TaskItemState {
-        get {
-            return _state
-        }
-        set {
-            if newValue != state {
-                changed = Date.now
-                addComment(text: "Changed state to: \(newValue)", icon: imgStateChange)
-                _state = newValue
-                if newValue == .closed {
-                    closed = Date.now
-                }
-                if newValue == .open {
-                    closed = nil
-                }
-                if newValue == .dead {
-                    closed = nil
-                }
-            }
-        }
+        get { _state }
+        set { _state = newValue }
     }
 
     @Transient
@@ -176,8 +131,6 @@ extension TaskItem {
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         }
         set {
-            let oldTags: [String] = self.tags
-
             // Filter out empty and whitespace-only strings, trim whitespace, and convert to lowercase
             let filteredTags =
                 newValue
@@ -185,21 +138,7 @@ extension TaskItem {
                 .filter { !$0.isEmpty }
                 .map { $0.lowercased() }
 
-            if filteredTags != oldTags {
-                changed = Date.now
-
-                // Add comments for new tags
-                filteredTags.filter { !oldTags.contains($0) }.forEach {
-                    addComment(text: "Added tag: \($0)", icon: imgTag)
-                }
-
-                // Add comments for removed tags
-                oldTags.filter { !filteredTags.contains($0) }.forEach {
-                    addComment(text: "Removed tag: \($0)", icon: imgTag)
-                }
-
-                allTagsString = filteredTags.joined(separator: ",")
-            }
+            allTagsString = filteredTags.joined(separator: ",")
         }
     }
 

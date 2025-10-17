@@ -31,18 +31,74 @@ public enum SchemaV3_6: VersionedSchema {
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
 
-        var _title: String = emptyTaskTitle
-        var _details: String = emptyTaskDetails
-        var _state: TaskItemState = TaskItemState.open
-        var _url: String = ""
+        public var _title: String = emptyTaskTitle {
+            didSet {
+                guard oldValue != _title else { return }
+                changed = Date.now
+            }
+        }
+        public var _details: String = emptyTaskDetails {
+            didSet {
+                guard oldValue != _details else { return }
+                changed = Date.now
+            }
+        }
+        public var _state: TaskItemState = TaskItemState.open {
+            didSet {
+                guard oldValue != _state else { return }
+                changed = Date.now
+                if _state == .closed {
+                    closed = Date.now
+                } else {
+                    closed = nil
+                }
+                guard comments != nil else { return }
+                addComment(text: "Changed state to: \(_state)", icon: imgStateChange)
+            }
+        }
+        public var _url: String = "" {
+            didSet {
+                guard oldValue != _url else { return }
+                changed = Date.now
+            }
+        }
         public var uuid: UUID = UUID()
         @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) public var comments: [Comment]? = [
             Comment
         ]()
         @Relationship(deleteRule: .cascade, inverse: \Attachment.taskItem) public var attachments: [Attachment]? = []
-        public var dueDate: Date? = nil
+        public var dueDate: Date? = nil {
+            didSet {
+                guard oldValue != dueDate else { return }
+                changed = Date.now
+            }
+        }
         public var eventId: String? = nil
-        public var allTagsString: String = ""
+        public var allTagsString: String = "" {
+            didSet {
+                guard oldValue != allTagsString else { return }
+                changed = Date.now
+                guard comments != nil else { return }
+
+                // Parse old and new tags to add comments about changes
+                let oldTags = oldValue.components(separatedBy: ",")
+                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                let newTags = allTagsString.components(separatedBy: ",")
+                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+                // Add comments for new tags
+                newTags.filter { !oldTags.contains($0) }.forEach {
+                    addComment(text: "Added tag: \($0)", icon: imgTag)
+                }
+
+                // Add comments for removed tags
+                oldTags.filter { !newTags.contains($0) }.forEach {
+                    addComment(text: "Removed tag: \($0)", icon: imgTag)
+                }
+            }
+        }
         public var estimatedMinutes: Int = 0
 
         //future potential additions:

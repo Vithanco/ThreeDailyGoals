@@ -19,7 +19,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testPendingResponseButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Test all task states for pending response button eligibility
@@ -43,7 +43,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testPendingResponseButtonAccessibilityIdentifier() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
@@ -62,7 +62,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testPriorityButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Test all task states for priority button eligibility
@@ -85,7 +85,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testDeleteButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         
@@ -112,7 +112,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testTouchButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Test all task states for touch button eligibility
@@ -135,7 +135,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testOpenButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Test all task states for open button eligibility
@@ -158,7 +158,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testCloseButtonDisabledStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         
         // Test all task states for close button eligibility
@@ -181,7 +181,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testSwipeActionButtonConsistency() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         
@@ -200,7 +200,7 @@ struct TestSwipeButtonStates {
     
     @Test
     func testPendingResponseTaskButtonStates() throws {
-        let appComponents = setupApp(isTesting: true, loader: { _ in return [] })
+        let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let uiState = appComponents.uiState
         
