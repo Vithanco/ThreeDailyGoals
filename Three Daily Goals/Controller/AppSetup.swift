@@ -7,7 +7,7 @@ import tdgCoreMain
 /// Struct containing all app components and managers
 public struct AppComponents {
     let modelContainer: ModelContainer
-    let modelContext: Storage
+    let modelContext: ModelContext
     let preferences: CloudPreferences
     let uiState: UIStateManager
     let dataManager: DataManager
@@ -34,33 +34,45 @@ public func setupApp(isTesting: Bool, timeProvider: TimeProvider? = nil, loaderF
     // MARK: - Step 2: Create Storage Layer
     let container: ModelContainer
     let modelContext: ModelContext
-    let finalModelContext: Storage
+    let finalModelContext: ModelContext
     var databaseError: DatabaseError?
     
     // Create a shared undo manager for all contexts
     let sharedUndoManager = UndoManager()
     
     if isTesting {
-        // Test setup
+        // Test setup - create in-memory container
         switch sharedModelContainer(inMemory: true, withCloud: false) {
         case .success(let testContainer):
             container = testContainer
             modelContext = ModelContext(container)
             modelContext.undoManager = sharedUndoManager
             
-            // Use TestStorage with custom loader or default data
-            if let loader = loaderForTests {
-                finalModelContext = TestStorage(loader: loader, timeProvider: finalTimeProvider)
-            } else {
-                finalModelContext = TestStorage(timeProvider: finalTimeProvider)  // Use default test data with 178 items
+            // Populate with test data once on startup
+            let testData = loaderForTests?(finalTimeProvider) ?? createDefaultTestData(timeProvider: finalTimeProvider)
+            for item in testData {
+                modelContext.insert(item)
             }
+            try? modelContext.save()
+            
+            print("✅ Populated ModelContext with \(testData.count) test items")
+            finalModelContext = modelContext
+            
         case .failure(let error):
-            // For testing, we can still use TestStorage even if container creation fails
+            // Fallback with minimal container
             container = try! ModelContainer(for: TaskItem.self, Attachment.self, Comment.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
             modelContext = ModelContext(container)
             modelContext.undoManager = sharedUndoManager
-            finalModelContext = TestStorage(timeProvider: finalTimeProvider)
-            print("Warning: Database container creation failed in test mode: \(error)")
+            
+            // Still populate with test data
+            let testData = createDefaultTestData(timeProvider: finalTimeProvider)
+            for item in testData {
+                modelContext.insert(item)
+            }
+            try? modelContext.save()
+            
+            finalModelContext = modelContext
+            print("⚠️ Database container creation failed in test mode: \(error)")
         }
     } else {
         // Production setup

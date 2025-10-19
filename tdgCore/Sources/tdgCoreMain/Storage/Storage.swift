@@ -103,50 +103,6 @@ extension ModelContainer {
     }
 }
 
-public protocol Storage {
-    func insert<T>(_ model: T) where T: PersistentModel
-    func save() throws
-    func beginUndoGrouping()
-    func endUndoGrouping()
-    func processPendingChanges()
-    func fetch<T>(_ descriptor: FetchDescriptor<T>) throws -> [T] where T: PersistentModel
-    func delete<T>(_ model: T) where T: PersistentModel
-    func undo()
-    func redo()
-    var canUndo: Bool { get }
-    var canRedo: Bool { get }
-    var undoManager: UndoManager? { get }
-    var hasChanges: Bool { get }
-}
-
-extension ModelContext: @preconcurrency Storage {
-    @MainActor public func undo() {
-        undoManager?.undo()
-    }
-
-    @MainActor public func redo() {
-        undoManager?.redo()
-    }
-
-    @MainActor public var canUndo: Bool {
-        undoManager?.canUndo ?? false
-    }
-
-    @MainActor public var canRedo: Bool {
-        undoManager?.canRedo ?? false
-    }
-
-    @MainActor public func beginUndoGrouping() {
-        undoManager?.beginUndoGrouping()
-        processPendingChanges()
-    }
-
-    @MainActor public func endUndoGrouping() {
-        undoManager?.endUndoGrouping()
-        processPendingChanges()
-    }
-}
-
 extension Array where Element == TaskItem {
     @discardableResult mutating func add(
         title: String,
@@ -166,106 +122,117 @@ extension Array where Element == TaskItem {
 /// A Sendable type for loading test data
 public typealias TestDataLoader = @Sendable (TimeProvider) -> [TaskItem]
 
-public class TestStorage: Storage {
-    public var hasChanges: Bool {
-        return false
-    }
+/// Creates default test data for testing and development
+public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
+    var result: [TaskItem] = []
+    let theGoal = result.add(
+        title: "Read 'The Goal' by Goldratt",
+        changedDate: timeProvider.now.addingTimeInterval(-1 * Seconds.fiveMin))
+    theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
+    theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
+    theGoal.dueDate = timeProvider.getDate(inDays: 2)
+    result.add(
+        title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
+        tags: ["CMaps"])
+    result.add(
+        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead"])
+    result.add(
+        title: "Transfer tasks from old task manager into this one",
+        changedDate: timeProvider.getDate(daysPrior: 11), state: .open)
+    let lastMonth2 = result.add(
+        title: "Read about Structured Visual Thinking",
+        changedDate: timeProvider.getDate(daysPrior: 22),
+        state: .open,
+        tags: ["toRead"]
+    )
+    lastMonth2.url = "https://vithanco.com"
+    result.add(
+        title: "Contact Vithanco Author regarding new map style", changedDate: timeProvider.getDate(daysPrior: 3),
+        state: .pendingResponse)
+    result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead)
+    result.add(
+        title: "Read this about Agile vs Waterfall", changedDate: timeProvider.getDate(daysPrior: 101),
+        state: .dead)
+    result.add(
+        title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse)
+    result.add(
+        title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
+        dueDate: timeProvider.getDate(inDays: 2))
 
-    public var undoManager: UndoManager? = nil
-    public var items: [TaskItem]
+    // Exploring Three Daily Goals App features
+    let widgetTask = result.add(
+        title: "Add widget to home screen",
+        changedDate: timeProvider.getDate(daysPrior: 1),
+        state: .priority,
+        tags: ["widget", "setup"])
+    widgetTask.details =
+        "Explore the widget feature - long press on home screen, search for Three Daily Goals, and add the widget to see your priorities at a glance"
 
-    public static func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
-        var result: [TaskItem] = []
-        let theGoal = result.add(
-            title: "Read 'The Goal' by Goldratt",
-            changedDate: timeProvider.now.addingTimeInterval(-1 * Seconds.fiveMin))
-        theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
-        theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
-        theGoal.dueDate = timeProvider.getDate(inDays: 2)
-        result.add(
-            title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
-            tags: ["CMaps"])
-        result.add(
-            title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead"])
-        result.add(
-            title: "Transfer tasks from old task manager into this one",
-            changedDate: timeProvider.getDate(daysPrior: 11), state: .open)
-        let lastMonth2 = result.add(
-            title: "Read about Structured Visual Thinking",
-            changedDate: timeProvider.getDate(daysPrior: 22),
-            state: .open,
-            tags: ["toRead"]
-        )
-        lastMonth2.url = "https://vithanco.com"
-        result.add(
-            title: "Contact Vithanco Author regarding new map style", changedDate: timeProvider.getDate(daysPrior: 3),
-            state: .pendingResponse)
-        result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead)
-        result.add(
-            title: "Read this about Agile vs Waterfall", changedDate: timeProvider.getDate(daysPrior: 101),
-            state: .dead)
-        result.add(
-            title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse)
-        result.add(
-            title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
-            dueDate: timeProvider.getDate(inDays: 2))
-        for i in 32..<200 {
-            result.add(title: "Dead Task \(i)", changedDate: timeProvider.getDate(daysPrior: i), state: .dead)
-        }
-        return result
-    }
+    let shareTask = result.add(
+        title: "Try sharing a webpage to Three Daily Goals",
+        changedDate: timeProvider.getDate(daysPrior: 2),
+        state: .open,
+        tags: ["share", "feature"])
+    shareTask.details =
+        "Test the share extension: open Safari, tap the share button, and select Three Daily Goals to create a task from any webpage"
+    shareTask.url = "https://www.apple.com"
 
-    public init(timeProvider: TimeProvider) {
-        items = TestStorage.createDefaultTestData(timeProvider: timeProvider)
-    }
+    let compassTask = result.add(
+        title: "Complete my first Compass Check",
+        changedDate: timeProvider.now,
+        state: .priority,
+        tags: ["compass", "review"])
+    compassTask.details =
+        "The Compass Check helps you reflect on what you've done and plan ahead. Access it from the menu to review your progress and set new priorities"
 
-    public init(loader: @escaping TestDataLoader, timeProvider: TimeProvider) {
-        items = loader(timeProvider)
-    }
+    result.add(
+        title: "Organize tasks with tags",
+        changedDate: timeProvider.getDate(daysPrior: 1),
+        state: .open,
+        tags: ["productivity", "organization"])
 
-    public func insert<T>(_ model: T) where T: PersistentModel {
+    let undoTask = result.add(
+        title: "Explore undo/redo functionality",
+        changedDate: timeProvider.getDate(daysPrior: 4),
+        state: .closed,
+        tags: ["feature"])
+    undoTask.details = "Try making changes and using Cmd+Z (macOS) to undo them. All changes can be undone and redone!"
 
-    }
+    result.add(
+        title: "Set up daily Compass Check reminder",
+        changedDate: timeProvider.getDate(daysPrior: 2),
+        state: .pendingResponse,
+        tags: ["compass", "notifications"])
 
-    public func save() throws {
+    let exportTask = result.add(
+        title: "Export tasks to JSON for backup",
+        changedDate: timeProvider.getDate(daysPrior: 6),
+        state: .open,
+        tags: ["backup", "data"])
+    exportTask.details =
+        "Use File → Export to save all your tasks as JSON. Great for backups or migrating to another device"
 
-    }
+    result.add(
+        title: "Test CloudKit sync between devices",
+        changedDate: timeProvider.getDate(daysPrior: 3),
+        state: .open,
+        tags: ["sync", "icloud"])
 
-    public func beginUndoGrouping() {
+    let attachmentTask = result.add(
+        title: "Add attachments to important tasks",
+        changedDate: timeProvider.getDate(daysPrior: 5),
+        state: .open,
+        tags: ["attachments", "feature"])
+    attachmentTask.details =
+        "You can add images and files to tasks. Try it with screenshots, PDFs, or photos relevant to your work"
 
-    }
+    result.add(
+        title: "Customize Compass Check steps in preferences",
+        changedDate: timeProvider.getDate(daysPrior: 7),
+        state: .closed,
+        tags: ["compass", "preferences", "customization"])
 
-    public func endUndoGrouping() {
-
-    }
-
-    public func processPendingChanges() {
-
-    }
-
-    public func fetch<T>(_ descriptor: FetchDescriptor<T>) throws -> [T] where T: PersistentModel {
-        if T.self == TaskItem.self {
-            return items as! [T]
-        }
-        return []
-    }
-
-    public func delete<T>(_ model: T) where T: PersistentModel {
-
-    }
-
-    public func undo() {
-
-    }
-
-    public func redo() {
-
-    }
-
-    public var canUndo: Bool = false
-
-    public var canRedo: Bool = false
-
+    return result
 }
 
 /// A default empty loader for testing
@@ -273,7 +240,8 @@ public let emptyTestDataLoader: TestDataLoader = { _ in return [] }
 
 @MainActor
 public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<ModelContainer, DatabaseError> {
-    if let result = container, result.isInMemory == inMemory {
+    // Don't cache in-memory containers (used for testing) - each test should get a fresh container
+    if !inMemory, let result = container, result.isInMemory == inMemory {
         return .success(result)
     }
 
@@ -291,7 +259,10 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<Mode
             configurations: [modelConfiguration]
         )
         result.mainContext.undoManager = UndoManager()
-        container = result
+        // Only cache persistent containers, not in-memory ones
+        if !inMemory {
+            container = result
+        }
         return .success(result)
     } catch {
         // Check if this is a migration-related error

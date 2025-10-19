@@ -23,13 +23,9 @@ final class TestUndoRedo: XCTestCase {
         appComponents = setupApp(isTesting: true, timeProvider: MockTimeProvider(fixedNow: Date.now))
         dataManager = appComponents.dataManager
         
-        // Get the model context (need to cast from Storage protocol)
-        if let ctx = dataManager.modelContext as? ModelContext {
-            modelContext = ctx
-            undoManager = ctx.undoManager
-        } else {
-            XCTFail("Model context is not a ModelContext")
-        }
+        // Get the model context - no cast needed since it's always ModelContext now
+        modelContext = dataManager.modelContext
+        undoManager = modelContext.undoManager
     }
     
     override func tearDown() async throws {

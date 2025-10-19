@@ -13,9 +13,9 @@ import os
 import tdgCoreMain
 import TipKit
 
-// Test data loader using TestStorage's default data
+// Test data loader using the default test data function
 let defaultTestDataLoader: TestDataLoader = { timeProvider in
-    return TestStorage.createDefaultTestData(timeProvider: timeProvider)
+    return createDefaultTestData(timeProvider: timeProvider)
 }
 
 @main

@@ -27,7 +27,7 @@ private let logger = Logger(
 @Observable
 public final class DataManager {
 
-    let modelContext: Storage
+    let modelContext: ModelContext
     let timeProvider: TimeProvider
     var priorityUpdater: PriorityUpdater?
     var itemSelector: ItemSelector?
@@ -40,7 +40,7 @@ public final class DataManager {
     var undoAvailable: Bool = false
     var redoAvailable: Bool = false
 
-    init(modelContext: Storage, timeProvider: TimeProvider) {
+    init(modelContext: ModelContext, timeProvider: TimeProvider) {
         self.modelContext = modelContext
         self.timeProvider = timeProvider
         
@@ -444,7 +444,7 @@ public final class DataManager {
             // Clean up unchanged items after loading
             cleanupUnchangedItems()
             
-            logger.debug("Loaded \(self.allTasks.count) tasks from database")
+            //logger.debug("Loaded \(self.allTasks.count) tasks from database")
         } catch {
             logger.error("Failed to load tasks: \(error)")
             reportDatabaseError(.containerCreationFailed(underlyingError: error))
