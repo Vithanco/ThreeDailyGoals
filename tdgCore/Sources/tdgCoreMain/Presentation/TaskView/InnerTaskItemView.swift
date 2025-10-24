@@ -1,3 +1,4 @@
+import SwiftData
 //
 //  InnerTaskItemView.swift
 //  Three Daily Goals
@@ -6,17 +7,14 @@
 //
 import SwiftUI
 import UniformTypeIdentifiers
-import SwiftData
 
-
-public extension Array {
-    func chunked(into size: Int) -> [[Element]] {
+extension Array {
+    public func chunked(into size: Int) -> [[Element]] {
         return stride(from: 0, to: count, by: size).map {
             Array(self[$0..<Swift.min($0 + size, count)])
         }
     }
 }
-
 
 public struct InnerTaskItemView: View {
     @Bindable var item: TaskItem
@@ -28,8 +26,11 @@ public struct InnerTaskItemView: View {
     let showAttachmentImport: Bool
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var isTitleFocused: Bool
-    
-    public init(item: TaskItem, allTags: [String], buildTag: String = "", showAttachmentImporter: Bool = false,  showAttachmentImport: Bool) {
+
+    public init(
+        item: TaskItem, allTags: [String], buildTag: String = "", showAttachmentImporter: Bool = false,
+        showAttachmentImport: Bool
+    ) {
         self.item = item
         self.allTags = allTags
         self.buildTag = buildTag
@@ -75,7 +76,7 @@ public struct InnerTaskItemView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Details:").bold().foregroundColor(Color.secondary)
                     TextEditor(text: $item.details)
-                        .frame(minHeight: 90, maxHeight: 450) // 3x to 15x height (30 * 3 = 90, 30 * 15 = 450)
+                        .frame(minHeight: 90, maxHeight: 450)  // 3x to 15x height (30 * 3 = 90, 30 * 15 = 450)
                         .padding(8)
                         .background(Color(.secondarySystemFill))
                         .cornerRadius(8)
@@ -100,7 +101,8 @@ public struct InnerTaskItemView: View {
 
                 // Due date field
                 LabeledContent {
-                    DatePickerNullable(selected: $item.due, defaultDate: timeProviderWrapper.timeProvider.getDate(inDays: 7))
+                    DatePickerNullable(
+                        selected: $item.due, defaultDate: timeProviderWrapper.timeProvider.getDate(inDays: 7))
                 } label: {
                     Text("Due Date:").bold().foregroundColor(Color.secondary)
                 }
@@ -166,7 +168,7 @@ public struct InnerTaskItemView: View {
                             }
                         }
                     }
-                    .frame(maxHeight: 80) // Reduced height
+                    .frame(maxHeight: 80)  // Reduced height
                 }
             }
         }
@@ -227,7 +229,6 @@ public struct InnerTaskItemView: View {
                 }
             }
         }
-        .opacity(showAttachmentImport ? 1 : 0)  // Hide fileImporter when not needed
     }
 
     private func deleteAttachment(_ attachment: Attachment) {
@@ -240,7 +241,7 @@ public struct InnerTaskItemView: View {
         modelContext.delete(attachment)
 
         // Add a comment about the deletion
-                    item.addComment(text: "Removed attachment: \(filename)", icon: imgAttachment)
+        item.addComment(text: "Removed attachment: \(filename)", icon: imgAttachment)
 
         // Save the changes
         do {

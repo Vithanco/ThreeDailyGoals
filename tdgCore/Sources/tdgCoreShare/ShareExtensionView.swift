@@ -20,31 +20,40 @@ public struct ShareExtensionView: View {
     @Query private var allItems: [TaskItem]
 
     public init(text: String) {
+        var newItem = TaskItem()
         if text.count > 30 {
-            self.item.details = text
-            self.item.title = "Review"
+            newItem.details = text
+            newItem.title = "Review"
         } else {
-            self.item.title = text
-            self.item.details = ""  // Explicitly set details to empty for short text
+            newItem.title = text
+            newItem.details = ""  // Explicitly set details to empty for short text
         }
+        _item = State(initialValue: newItem)
     }
+
     public init(details: String) {
-        self.item.details = details
+        var newItem = TaskItem()
+        newItem.details = details
+        _item = State(initialValue: newItem)
     }
+
     public init(url: String) {
-        self.item.title = "Read"
-        self.item.url = url
+        var newItem = TaskItem()
+        newItem.title = "Read"
+        newItem.url = url
+        _item = State(initialValue: newItem)
     }
 
     public init(fileURL: URL, contentType: UTType) {
         // Create a task item for the shared file
-        self.item.title = "Review File"
-        self.item.details = "Shared file: \(fileURL.lastPathComponent)"
+        var newItem = TaskItem()
+        newItem.title = "Review File"
+        newItem.details = "Shared file: \(fileURL.lastPathComponent)"
 
-        // Store file info for later attachment
-        self.originalFileURL = fileURL
-        self.originalContentType = contentType
-        self.isFileAttachment = true
+        _item = State(initialValue: newItem)
+        _isFileAttachment = State(initialValue: true)
+        _originalFileURL = State(initialValue: fileURL)
+        _originalContentType = State(initialValue: contentType)
     }
 
     public init() {
@@ -54,9 +63,10 @@ public struct ShareExtensionView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Button {
-
+                    print("🔘 Add button tapped")
                     // If this is a file attachment, add it to the task
                     if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType {
+                        print("📎 Adding file attachment: \(fileURL.lastPathComponent)")
                         do {
                             _ = try addAttachment(
                                 fileURL: fileURL,
@@ -65,7 +75,9 @@ public struct ShareExtensionView: View {
                                 sortIndex: 0,
                                 in: model
                             )
+                            print("✅ Attachment added successfully")
                         } catch {
+                            print("❌ Failed to add attachment: \(error)")
                             debugPrint("Failed to add attachment: \(error)")
                         }
                     }
@@ -74,7 +86,9 @@ public struct ShareExtensionView: View {
 
                     do {
                         try model.save()
+                        print("✅ Item saved successfully")
                     } catch {
+                        print("❌ Failed to save: \(error)")
                         debugPrint(error)
                     }
                     self.close()
@@ -84,11 +98,14 @@ public struct ShareExtensionView: View {
                 }
                 .buttonStyle(.borderedProminent)
 
-                InnerTaskItemView(
-                    item: item,
-                    allTags: [],
-                    showAttachmentImport: false
-                ).frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
+                ScrollView {
+                    InnerTaskItemView(
+                        item: item,
+                        allTags: [],
+                        showAttachmentImport: false
+                    )
+                }
+                .frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
 
             }
             .padding()
@@ -97,6 +114,13 @@ public struct ShareExtensionView: View {
                 Button("Cancel") {
                     self.close()
                 }
+            }
+            .onAppear {
+                print("📱 ShareExtensionView appeared")
+                print("  - title: '\(item.title)'")
+                print("  - url: '\(item.url ?? "nil")'")
+                print("  - details: '\(item.details)'")
+                print("  - isFileAttachment: \(isFileAttachment)")
             }
         }
     }

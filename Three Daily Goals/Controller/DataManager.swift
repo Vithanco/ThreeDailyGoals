@@ -438,17 +438,8 @@ public final class DataManager {
 
     /// Load all tasks from the database and organize them into lists
     func loadData() {
-        do {
-            ensureEveryItemHasAUniqueUuid()
-            
-            // Clean up unchanged items after loading
-            cleanupUnchangedItems()
-            
-            //logger.debug("Loaded \(self.allTasks.count) tasks from database")
-        } catch {
-            logger.error("Failed to load tasks: \(error)")
-            reportDatabaseError(.containerCreationFailed(underlyingError: error))
-        }
+        ensureEveryItemHasAUniqueUuid()
+        cleanupUnchangedItems()
     }
 
     /// Clean up unchanged items that were persisted but should be removed
@@ -546,41 +537,34 @@ public final class DataManager {
         modelContext.undoManager?.endUndoGrouping()
     }
 
-    /// Set up notifications to listen to undo manager changes
     private func setupUndoNotifications() {
         guard let undoManager = modelContext.undoManager else { return }
         
-        NotificationCenter.default.addObserver(
-            forName: .NSUndoManagerDidUndoChange,
-            object: undoManager,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updateUndoRedoState()
+        let handler: @Sendable (Notification) -> Void = { [weak self] _ in
+            Task { @MainActor in
+                self?.updateUndoRedoState()
+            }
         }
         
-        NotificationCenter.default.addObserver(
-            forName: .NSUndoManagerDidRedoChange,
-            object: undoManager,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updateUndoRedoState()
-        }
+        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidUndoChange,
+                                               object: undoManager,
+                                               queue: .main,
+                                               using: handler)
         
-        NotificationCenter.default.addObserver(
-            forName: .NSUndoManagerDidOpenUndoGroup,
-            object: undoManager,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updateUndoRedoState()
-        }
+        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidRedoChange,
+                                               object: undoManager,
+                                               queue: .main,
+                                               using: handler)
         
-        NotificationCenter.default.addObserver(
-            forName: .NSUndoManagerDidCloseUndoGroup,
-            object: undoManager,
-            queue: .main
-        ) { [weak self] _ in
-            self?.updateUndoRedoState()
-        }
+        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidOpenUndoGroup,
+                                               object: undoManager,
+                                               queue: .main,
+                                               using: handler)
+        
+        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidCloseUndoGroup,
+                                               object: undoManager,
+                                               queue: .main,
+                                               using: handler)
     }
     
     /// Update the observable undo/redo state

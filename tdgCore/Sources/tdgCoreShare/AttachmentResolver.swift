@@ -25,7 +25,23 @@ enum AttachmentResolver {
                     c.resume(throwing: err)
                     return
                 }
-                c.resume(returning: item as? URL)
+
+                // Try multiple ways to extract the URL
+                if let url = item as? URL {
+                    c.resume(returning: url)
+                } else if let string = item as? String, let url = URL(string: string) {
+                    // Safari sometimes provides URL as String
+                    c.resume(returning: url)
+                } else if let data = item as? Data,
+                    let string = String(data: data, encoding: .utf8),
+                    let url = URL(string: string)
+                {
+                    // Sometimes it's Data containing the URL string
+                    c.resume(returning: url)
+                } else {
+                    print("⚠️ resolveURL: item type is \(type(of: item))")
+                    c.resume(returning: nil)
+                }
             }
         }
     }

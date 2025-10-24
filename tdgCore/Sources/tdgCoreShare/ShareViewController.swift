@@ -6,19 +6,23 @@ import UniformTypeIdentifiers
 open class ShareViewController: BaseViewController {
 
     private let container: ModelContainer
-    private let preferences = CloudPreferences(testData: false, timeProvider: RealTimeProvider())
+    private let preferences: CloudPreferences
+    private let timeProviderWrapper: TimeProviderWrapper
 
     public init() {
-        // For share extensions, we'll use a simple in-memory container
-        // since we don't need CloudKit sync for share operations
-        switch sharedModelContainer(inMemory: true, withCloud: false) {
+        let timeProvider = RealTimeProvider()
+        self.preferences = CloudPreferences(testData: false, timeProvider: timeProvider)
+        self.timeProviderWrapper = TimeProviderWrapper(timeProvider)
+        // For share extensions, use the persistent database without CloudKit sync
+        // The main app will handle CloudKit sync when it starts
+        switch sharedModelContainer(inMemory: false, withCloud: false) {
         case .success(let container):
             self.container = container
         case .failure:
             // Fallback to a basic container if there's an error
             self.container = try! ModelContainer(
                 for: TaskItem.self, Attachment.self, Comment.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+                configurations: ModelConfiguration(isStoredInMemoryOnly: false))
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,14 +49,17 @@ open class ShareViewController: BaseViewController {
         Task {
             do {
                 guard let payload = try await ShareFlow.resolve(from: provider) else {
+                    print("❌ ShareViewController: Failed to resolve payload")
                     await MainActor.run { self.close() }
                     return
                 }
+                print("✅ ShareViewController: Resolved payload: \(payload)")
                 await MainActor.run {
                     let shareView = self.createShareView(for: payload)
                     self.presentRoot(shareView)
                 }
             } catch {
+                print("❌ ShareViewController: Error resolving payload: \(error)")
                 await MainActor.run { self.close() }
             }
         }
@@ -77,6 +84,7 @@ open class ShareViewController: BaseViewController {
                 content
                 .modelContainer(container)
                 .environment(preferences)
+                .environment(timeProviderWrapper)
         )
         addChild(host)
         view.addSubview(host.view)
