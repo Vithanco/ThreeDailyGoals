@@ -49,17 +49,14 @@ open class ShareViewController: BaseViewController {
         Task {
             do {
                 guard let payload = try await ShareFlow.resolve(from: provider) else {
-                    print("❌ ShareViewController: Failed to resolve payload")
                     await MainActor.run { self.close() }
                     return
                 }
-                print("✅ ShareViewController: Resolved payload: \(payload)")
                 await MainActor.run {
                     let shareView = self.createShareView(for: payload)
                     self.presentRoot(shareView)
                 }
             } catch {
-                print("❌ ShareViewController: Error resolving payload: \(error)")
                 await MainActor.run { self.close() }
             }
         }

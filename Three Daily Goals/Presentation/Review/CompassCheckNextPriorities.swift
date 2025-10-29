@@ -30,7 +30,7 @@ public struct CompassCheckNextPriorities: View {
                         showHeaders: false,
                         section: TaskItemState.priority.section,
                         id: TaskItemState.priority.getListAccessibilityIdentifier
-                    ).frame(minHeight: 300)
+                    ).frame(minHeight: 500)
                     SimpleListView(
                         color: .open,
                         itemList: dataManager.list(which: .open),
@@ -39,7 +39,7 @@ public struct CompassCheckNextPriorities: View {
                         section: TaskItemState.open.section,
                         id: TaskItemState.open.getListAccessibilityIdentifier
                     )
-                }
+                }.frame(minWidth: 600)
 
             #endif
             #if os(iOS)

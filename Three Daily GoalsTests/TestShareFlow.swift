@@ -84,6 +84,73 @@ struct TestShareFlow {
     // MARK: - Business Logic Tests (ShareFlow-specific behavior)
     
     @Test
+    func testFileURLBecomesAttachment() async throws {
+        // CRITICAL: File URLs from Finder should become attachments, not web URLs
+        // Regression test for bug where file:// URLs were treated as web URLs
+        
+        // Given: A file URL (as shared from Finder)
+        let fileURL = URL(fileURLWithPath: "/Users/test/invoice.pdf")
+        let mockProvider = MockNSItemProvider()
+        mockProvider.mockURL = fileURL
+        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        
+        // When: Resolving the payload
+        let payload = try await ShareFlow.resolve(from: mockProvider)
+        
+        // Then: Should be attachment, NOT url
+        #expect(payload != nil, "Should resolve file URL")
+        if case .attachment(let url, _) = payload {
+            #expect(url.lastPathComponent.contains("invoice") || url.lastPathComponent.contains("pdf"),
+                   "Should preserve filename information")
+        } else {
+            #expect(Bool(false), "File URL should become attachment, not URL. Got: \(String(describing: payload))")
+        }
+    }
+    
+    @Test
+    func testWebURLStaysURL() async throws {
+        // Web URLs (https://) should remain as URL type, not become attachments
+        
+        // Given: A web URL
+        let webURL = URL(string: "https://example.com")!
+        let mockProvider = MockNSItemProvider()
+        mockProvider.mockURL = webURL
+        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        
+        // When: Resolving the payload
+        let payload = try await ShareFlow.resolve(from: mockProvider)
+        
+        // Then: Should be URL type, not attachment
+        #expect(payload != nil, "Should resolve web URL")
+        if case .url(let urlString) = payload {
+            #expect(urlString == "https://example.com", "Should preserve URL string")
+        } else {
+            #expect(Bool(false), "Web URL should stay as URL type, not attachment. Got: \(String(describing: payload))")
+        }
+    }
+    
+    @Test
+    func testHTTPURLStaysURL() async throws {
+        // HTTP URLs (not just HTTPS) should also remain as URL type
+        
+        // Given: An HTTP URL
+        let httpURL = URL(string: "http://example.com")!
+        let mockProvider = MockNSItemProvider()
+        mockProvider.mockURL = httpURL
+        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        
+        // When: Resolving the payload
+        let payload = try await ShareFlow.resolve(from: mockProvider)
+        
+        // Then: Should be URL type
+        if case .url(let urlString) = payload {
+            #expect(urlString == "http://example.com", "Should preserve HTTP URL")
+        } else {
+            #expect(Bool(false), "HTTP URL should stay as URL type. Got: \(String(describing: payload))")
+        }
+    }
+    
+    @Test
     func testHTMLDetectionAndConversion() async throws {
         // Test ShareFlow's HTML detection and conversion to attachment
         let htmlContent = "<!DOCTYPE html><html><head><title>Test</title></head><body>Hello</body></html>"

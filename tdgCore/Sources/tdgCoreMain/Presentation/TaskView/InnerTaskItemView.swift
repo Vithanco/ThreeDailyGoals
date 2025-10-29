@@ -26,6 +26,8 @@ public struct InnerTaskItemView: View {
     let showAttachmentImport: Bool
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var isTitleFocused: Bool
+    @State private var isEnhancing = false
+    @State private var enhancer: WebPageEnhancer?
 
     public init(
         item: TaskItem, allTags: [String], buildTag: String = "", showAttachmentImporter: Bool = false,
@@ -36,6 +38,7 @@ public struct InnerTaskItemView: View {
         self.buildTag = buildTag
         self.showAttachmentImporter = showAttachmentImporter
         self.showAttachmentImport = showAttachmentImport
+        _enhancer = State(initialValue: WebPageEnhancer())
     }
 
     private var attachmentButton: some View {
@@ -90,7 +93,24 @@ public struct InnerTaskItemView: View {
                             .textFieldStyle(.roundedBorder)
                             .frame(idealHeight: 30)
                             .frame(minHeight: 30)
-                        if let link = URL(string: item.url) {
+
+                        if let link = URL(string: item.url), !item.url.isEmpty {
+                            // Enhance button
+                            Button(action: {
+                                Task {
+                                    await enhanceURL(link)
+                                }
+                            }) {
+                                if isEnhancing {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                } else {
+                                    Image(systemName: "sparkles")
+                                }
+                            }
+                            .help("Extract title and description from webpage")
+                            .disabled(isEnhancing)
+
                             Link("Open", destination: link)
                                 .foregroundColor(item.color)
                         }
@@ -249,5 +269,31 @@ public struct InnerTaskItemView: View {
         } catch {
             print("Failed to delete attachment: \(error)")
         }
+    }
+
+    private func enhanceURL(_ url: URL) async {
+        guard let enhancer = enhancer else { return }
+
+        isEnhancing = true
+
+        // Use AI if available, otherwise just basic metadata
+        let useAI = enhancer.hasAI
+        let (formattedTitle, description) = await enhancer.enhance(
+            url: url,
+            currentTitle: item.title,
+            useAI: useAI
+        )
+
+        // Update title if empty or default
+        if item.title.isEmpty || item.title.lowercased() == "read" {
+            item.title = formattedTitle
+        }
+
+        // Only update details if empty
+        if item.details.isEmpty, let desc = description {
+            item.details = desc
+        }
+
+        isEnhancing = false
     }
 }

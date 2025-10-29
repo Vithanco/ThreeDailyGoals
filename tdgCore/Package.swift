@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "tdgCore",
     platforms: [
-        .iOS(.v17),
-        .macOS(.v14),
+        .iOS(.v26),
+        .macOS(.v26),
         .watchOS(.v11),
     ],
     products: [

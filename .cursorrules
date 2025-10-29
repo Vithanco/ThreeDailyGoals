@@ -1,10 +1,10 @@
-The code is for iOS and macOS. All code has to run all all platforms unless there are good reasons to do otherwise. 
+The code is for iOS and macOS. All code has to run on all platforms unless there are good reasons to do otherwise. 
 
 - Follow Apple's Human Interface Guidelines or warn 
 - Follow App Store guidelines (privacy, signing, review, purchases, localization, thinning)
 - Use `@State`, `@Binding` for local view state
 - Use `@Observable`, `@Bindable` for shared state (replace `@ObservedObject`/`@EnvironmentObject`)
-- Use swiftdata & swiftui, swift testing, TipKit
+- Use SwiftData & SwiftUI, Swift Testing, TipKit
 - code has to run on iOS and macOS
 - only use UIKit and AppKit in sync to add for both platforms. 
 - Visuals have to be useful for light and dark appearances
@@ -19,8 +19,9 @@ The code is for iOS and macOS. All code has to run all all platforms unless ther
 - Prefer small, focused tests with descriptive names
 
 - only commit when I explicitly request
-- Keep documentation minimal, updated and accurate (why > how)
+- Keep documentation minimal, updated and accurate (only why, never how)
 - Maintain test coverage
 
 - test only the non-gui tests (only Three Daily GoalsTests and not Three Daily GoalsUITests)
 - test the non-gui tests at the end of each of your answers
+

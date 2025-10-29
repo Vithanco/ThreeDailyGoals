@@ -14,6 +14,8 @@ public struct ShareExtensionView: View {
     @State public var isFileAttachment: Bool = false
     @State public var originalFileURL: URL?
     @State public var originalContentType: UTType?
+    @State private var isEnhancing = false
+    @State private var enhancer: WebPageEnhancer?
     @Environment(CloudPreferences.self) var pref: CloudPreferences
     @Environment(\.modelContext) var model
 
@@ -42,6 +44,7 @@ public struct ShareExtensionView: View {
         newItem.title = "Read"
         newItem.url = url
         _item = State(initialValue: newItem)
+        _enhancer = State(initialValue: WebPageEnhancer())
     }
 
     public init(fileURL: URL, contentType: UTType) {
@@ -63,10 +66,8 @@ public struct ShareExtensionView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Button {
-                    print("🔘 Add button tapped")
                     // If this is a file attachment, add it to the task
                     if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType {
-                        print("📎 Adding file attachment: \(fileURL.lastPathComponent)")
                         do {
                             _ = try addAttachment(
                                 fileURL: fileURL,
@@ -75,10 +76,8 @@ public struct ShareExtensionView: View {
                                 sortIndex: 0,
                                 in: model
                             )
-                            print("✅ Attachment added successfully")
                         } catch {
                             print("❌ Failed to add attachment: \(error)")
-                            debugPrint("Failed to add attachment: \(error)")
                         }
                     }
 
@@ -86,10 +85,8 @@ public struct ShareExtensionView: View {
 
                     do {
                         try model.save()
-                        print("✅ Item saved successfully")
                     } catch {
                         print("❌ Failed to save: \(error)")
-                        debugPrint(error)
                     }
                     self.close()
                 } label: {
@@ -97,6 +94,17 @@ public struct ShareExtensionView: View {
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
+
+                if isEnhancing {
+                    HStack {
+                        ProgressView()
+                            .controlSize(.small)
+                        Text("Extracting title and description...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(.horizontal)
+                }
 
                 ScrollView {
                     InnerTaskItemView(
@@ -115,12 +123,15 @@ public struct ShareExtensionView: View {
                     self.close()
                 }
             }
-            .onAppear {
-                print("📱 ShareExtensionView appeared")
-                print("  - title: '\(item.title)'")
-                print("  - url: '\(item.url ?? "nil")'")
-                print("  - details: '\(item.details)'")
-                print("  - isFileAttachment: \(isFileAttachment)")
+            .task {
+                // Auto-enhance when sharing a URL
+                let urlString = item.url
+                if !urlString.isEmpty,
+                    let url = URL(string: urlString),
+                    let enhancer = enhancer
+                {
+                    await enhanceURL(url, enhancer: enhancer)
+                }
             }
         }
     }
@@ -128,5 +139,23 @@ public struct ShareExtensionView: View {
     // so we can close the whole extension
     func close() {
         NotificationCenter.default.post(name: NSNotification.Name("close"), object: nil)
+    }
+
+    private func enhanceURL(_ url: URL, enhancer: WebPageEnhancer) async {
+        isEnhancing = true
+
+        let (formattedTitle, description) = await enhancer.enhance(
+            url: url,
+            currentTitle: item.title,
+            useAI: false
+        )
+
+        item.title = formattedTitle
+
+        if let desc = description {
+            item.details = desc
+        }
+
+        isEnhancing = false
     }
 }

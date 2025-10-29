@@ -289,7 +289,6 @@ public final class DataManager {
         result += killOldTasks(expiryDate: expireData, whichList: .open)
         result += killOldTasks(expiryDate: expireData, whichList: .priority)
         result += killOldTasks(expiryDate: expireData, whichList: .pendingResponse)
-        logger.info("killed \(result) tasks")
         return result
     }
 
