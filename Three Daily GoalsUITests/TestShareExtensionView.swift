@@ -93,7 +93,7 @@ class TestShareExtensionView: XCTestCase {
         let contentType = UTType.plainText
         
         // When: Creating ShareExtensionView with file attachment
-        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType)
+        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType, suggestedFilename: "test.txt")
         
         // Then: Should set up file attachment properties
         XCTAssertEqual(shareView.item.title, "Review File", "Should set title to 'Review File'")
@@ -167,7 +167,7 @@ class TestShareExtensionView: XCTestCase {
         // Given: ShareExtensionView with file attachment
         let tempURL = createTempFile(content: "Test file content for attachment", fileExtension: "txt")
         let contentType = UTType.plainText
-        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType)
+        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType, suggestedFilename: "attachment.txt")
         
         // When: Creating and saving the task with attachment
         let task = try await createAndSaveTaskWithAttachment(from: shareView)

@@ -70,7 +70,7 @@ struct TestShareFlow {
         
         // Then: Should return attachment payload
         #expect(payload != nil, "Should resolve attachment payload")
-        if case .attachment(let url, let type) = payload {
+        if case .attachment(let url, let type, _) = payload {
             #expect(type == .plainText, "Should infer correct UTType")
             #expect(FileManager.default.fileExists(atPath: url.path), "Should create valid file")
         } else {
@@ -91,19 +91,44 @@ struct TestShareFlow {
         // Given: A file URL (as shared from Finder)
         let fileURL = URL(fileURLWithPath: "/Users/test/invoice.pdf")
         let mockProvider = MockNSItemProvider()
-        mockProvider.mockURL = fileURL
-        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        mockProvider.mockFileURL = fileURL  // Finder provides files as fileURL, not URL
+        mockProvider.registeredTypeIdentifiers = [UTType.fileURL.identifier]
         
         // When: Resolving the payload
         let payload = try await ShareFlow.resolve(from: mockProvider)
         
         // Then: Should be attachment, NOT url
         #expect(payload != nil, "Should resolve file URL")
-        if case .attachment(let url, _) = payload {
+        if case .attachment(let url, _, let suggestedFilename) = payload {
             #expect(url.lastPathComponent.contains("invoice") || url.lastPathComponent.contains("pdf"),
                    "Should preserve filename information")
+            #expect(suggestedFilename == "invoice.pdf", "Should preserve original filename")
         } else {
             #expect(Bool(false), "File URL should become attachment, not URL. Got: \(String(describing: payload))")
+        }
+    }
+    
+    @Test
+    func testFileURLViaURLTypeBecomesAttachment() async throws {
+        // CRITICAL: File URLs provided as UTType.url should ALSO become attachments
+        // Regression test for bug where file:// URLs in mockURL were skipped and lost
+        
+        // Given: A file URL provided via UTType.url (this is how Finder sometimes provides files)
+        let fileURL = URL(fileURLWithPath: "/Users/test/Package.swift")
+        let mockProvider = MockNSItemProvider()
+        mockProvider.mockURL = fileURL  // File URL coming through URL type identifier
+        mockProvider.registeredTypeIdentifiers = [UTType.url.identifier]
+        
+        // When: Resolving the payload
+        let payload = try await ShareFlow.resolve(from: mockProvider)
+        
+        // Then: Should be attachment with original filename, NOT lost
+        #expect(payload != nil, "Should resolve file URL")
+        if case .attachment(let url, _, let suggestedFilename) = payload {
+            #expect(url.path.contains("Package.swift"), "Should preserve file path")
+            #expect(suggestedFilename == "Package.swift", "Should extract and preserve original filename")
+        } else {
+            #expect(Bool(false), "File URL via mockURL should become attachment. Got: \(String(describing: payload))")
         }
     }
     
@@ -163,7 +188,7 @@ struct TestShareFlow {
         
         // Then: Should convert HTML to attachment
         #expect(payload != nil, "Should resolve HTML as attachment")
-        if case .attachment(let url, let type) = payload {
+        if case .attachment(let url, let type, _) = payload {
             #expect(type == .html, "Should detect as HTML type")
             #expect(url.pathExtension == "html", "Should have .html extension")
         } else {
@@ -233,7 +258,7 @@ struct TestShareFlow {
             
             #expect(payload != nil, "Should resolve content: \(content)")
             if shouldBeHTML {
-                if case .attachment(let url, let type) = payload {
+                if case .attachment(let url, let type, _) = payload {
                     #expect(type == .html, "Should detect as HTML: \(content)")
                     #expect(url.pathExtension == "html", "Should have .html extension")
                 } else {

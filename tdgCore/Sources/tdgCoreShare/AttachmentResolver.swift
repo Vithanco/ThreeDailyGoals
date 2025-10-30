@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 struct AttachmentResolution {
     let url: URL
     let type: UTType
+    let suggestedFilename: String?
 }
 
 private let utf8PlainText = UTType("public.utf8-plain-text")
@@ -109,18 +110,29 @@ enum AttachmentResolver {
         }
     }
 
-    // Attachments → (fileURL, UTType)
+    // Attachments → (fileURL, UTType, suggestedFilename)
     static func resolveAttachment(from p: NSItemProvider) async throws -> AttachmentResolution? {
-        if let url = try await loadFile(for: [.movie, .video, .pdf, .image, .html], from: p) {
-            return .init(url: url, type: inferType(from: url) ?? .data)
-        }
+        let suggestedFilename = p.suggestedName
+
+        // Try to get fileURL first - this is what Finder should provide
         if let url = try await loadFileURL(from: p) {
-            return .init(url: url, type: inferType(from: url) ?? .data)
+            // For file URLs, use the original filename from the URL
+            let filename = suggestedFilename ?? url.lastPathComponent
+            return .init(url: url, type: inferType(from: url) ?? .data, suggestedFilename: filename)
         }
+
+        // Try specific file types (movies, PDFs, images, etc.)
+        if let url = try await loadFile(for: [.movie, .video, .pdf, .image, .html], from: p) {
+            let filename = suggestedFilename ?? url.lastPathComponent
+            return .init(url: url, type: inferType(from: url) ?? .data, suggestedFilename: filename)
+        }
+
+        // Last resort: load as raw data
         if let payload = try await loadData(from: p) {
             let ext = payload.type.preferredFilenameExtension ?? "bin"
             let url = try writeTemp(data: payload.data, ext: ext)
-            return .init(url: url, type: payload.type)
+            let filename = suggestedFilename ?? "attachment.\(ext)"
+            return .init(url: url, type: payload.type, suggestedFilename: filename)
         }
         return nil
     }

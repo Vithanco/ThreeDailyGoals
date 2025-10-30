@@ -67,6 +67,9 @@ struct TestTimestampFix {
         // Record initial timestamp
         let initialTimestamp = task.changed
         
+        // Wait a tiny bit to ensure timestamp difference is measurable
+        Thread.sleep(forTimeInterval: 0.001)
+        
         // Make actual changes
         task.title = "Modified Task"
         task.details = "Modified details"

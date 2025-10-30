@@ -69,8 +69,8 @@ open class ShareViewController: BaseViewController {
             return ShareExtensionView(text: text)
         case .url(let url):
             return ShareExtensionView(url: url)
-        case .attachment(let fileURL, let contentType):
-            return ShareExtensionView(fileURL: fileURL, contentType: contentType)
+        case .attachment(let fileURL, let contentType, let suggestedFilename):
+            return ShareExtensionView(fileURL: fileURL, contentType: contentType, suggestedFilename: suggestedFilename)
         }
     }
 

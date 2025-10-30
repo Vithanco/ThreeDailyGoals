@@ -63,9 +63,7 @@ public enum SchemaV3_6: VersionedSchema {
             }
         }
         public var uuid: UUID = UUID()
-        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) public var comments: [Comment]? = [
-            Comment
-        ]()
+        @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) public var comments: [Comment]? = []
         @Relationship(deleteRule: .cascade, inverse: \Attachment.taskItem) public var attachments: [Attachment]? = []
         public var dueDate: Date? = nil {
             didSet {
@@ -109,6 +107,7 @@ public enum SchemaV3_6: VersionedSchema {
         public init() {
             self.uuid = UUID()
             self.eventId = nil
+            self.comments = []
         }
 
         public init(
