@@ -104,7 +104,7 @@ struct LeftSideView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, paddingVertical)
-            .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
+         //   .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)

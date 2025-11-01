@@ -15,7 +15,7 @@ private struct ListLabel: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(\.colorScheme) private var colorScheme
     @Environment(UIStateManager.self) private var uiState
-    
+
     init(whichList: TaskItemState) {
         self.whichList = whichList
     }
@@ -43,66 +43,89 @@ private struct ListLabel: View {
     private var listColor: Color {
         return whichList.color
     }
-    
+
     // Check if this list is currently selected
     private var isSelected: Bool {
         return uiState.whichList == whichList
     }
-    
-    private var verticalPadding:CGFloat {
+
+    private var verticalPadding: CGFloat {
         return isLargeDevice ? 12.0 : 4.0
     }
 
+    // Stronger background and shadow for standout effect
+    private var cardBackground: LinearGradient {
+        let base = colorScheme == .dark ? Color.neutral800 : Color.neutral50
+        let highlight = colorScheme == .dark ? Color.neutral700 : Color.white.opacity(0.7)
+        return LinearGradient(
+            gradient: Gradient(colors: [highlight, base]),
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+    }
+
+    private var cardShadow: Color {
+        colorScheme == .dark ? .black.opacity(0.23) : .black.opacity(0.18)
+    }
+
     var body: some View {
-        HStack(spacing: 12) {
-            // Single semantic list icon with color
-            Image(systemName: listIcon)
-                .font(.system(size: 18, weight: .medium))
-                .foregroundColor(listColor)
-                .frame(width: 28, height: 28)
-            
-            // List name only (removed duplicate count)
-            name
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(.primary)
-            
-            Spacer()
-            
-            // Enhanced count badge
-            if whichList.showCount && tasks.count > 0 {
-                Text(tasks.count.description)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(listColor)
-                    .clipShape(Capsule())
+        HStack(spacing: 0) {
+            // Accent bar for visual pop
+            RoundedRectangle(cornerRadius: 5)
+                .fill(listColor)
+                .frame(width: 5)
+                .shadow(color: listColor.opacity(0.2), radius: isSelected ? 5 : 3, x: 0, y: 0)
+                .padding(.vertical, 6)
+                .padding(.trailing, 12)
+
+            HStack(spacing: 12) {
+                // Single semantic list icon with color
+                Image(systemName: listIcon)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(listColor)
+                    .frame(width: 28, height: 28)
+                
+                // List name only (removed duplicate count)
+                name
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+                
+                // Enhanced count badge
+                if whichList.showCount && tasks.count > 0 {
+                    Text(tasks.count.description)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(listColor)
+                        .clipShape(Capsule())
+                }
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, verticalPadding)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, verticalPadding)
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(colorScheme == .dark ? Color.neutral800 : Color.neutral50)
+            RoundedRectangle(cornerRadius: 14)
+                .fill(cardBackground)
                 .shadow(
-                    color: colorScheme == .dark ? .black.opacity(0.2) : .black.opacity(0.05),
-                    radius: 4,
+                    color: cardShadow,
+                    radius: isSelected ? 8 : 6,
                     x: 0,
-                    y: 2
+                    y: 3
                 )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 14)
                 .stroke(
                     isSelected ? listColor : (colorScheme == .dark ? Color.neutral700 : Color.neutral200),
-                    lineWidth: isSelected ? 2 : 1
+                    lineWidth: isSelected ? 3 : 1.2
                 )
         )
-        .scaleEffect(isSelected ? 1.02 : 1.0)
-        .animation(.easeInOut(duration: 0.2), value: isSelected)
+        .scaleEffect(isSelected ? 1.035 : 1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.75), value: isSelected)
         .accessibilityIdentifier(whichList.getLinkedListAccessibilityIdentifier)
-        .dropDestination(for: String.self) {
-            items, location in
+        .dropDestination(for: String.self) { items, location in
             for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
                 dataManager.move(task: item, to: whichList)
             }
