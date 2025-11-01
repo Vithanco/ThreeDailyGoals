@@ -37,8 +37,11 @@ struct TestModelLists {
     func testLists() throws {
 
         let model = setupApp(isTesting: true)
-        #expect(178 == model.dataManager.allTasks.count)
-        let item = model.dataManager.allTasks.first!
+        #expect(20 == model.dataManager.allTasks.count)
+        guard let item = model.dataManager.allTasks.first(where: { $0.state == .open }) else {
+            #expect(Bool(false), "Should have at least one open task")
+            return
+        }
 
         func move(from: TaskItemState, to: TaskItemState) {
             model.dataManager.moveWithPriorityTracking(task: item, to: to)
@@ -65,7 +68,7 @@ struct TestModelLists {
         #expect(testTag != testTag2)
 
         let model = setupApp(isTesting: true)
-        #expect(model.dataManager.allTasks.count == 178)
+        #expect(model.dataManager.allTasks.count == 20)
         #expect(model.dataManager.allTags.contains("private"))
         #expect(model.dataManager.allTags.contains("work"))
         #expect(model.dataManager.activeTags.contains("private"))

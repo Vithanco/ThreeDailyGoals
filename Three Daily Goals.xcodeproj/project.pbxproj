@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */; };
 		7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */; };
 		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
 		7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BF9C2E672BF800238C81 /* TestTags.swift */; };
@@ -175,6 +176,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFileEnhancer.swift; sourceTree = "<group>"; };
 		7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStateManager.swift; sourceTree = "<group>"; };
 		7F160E882E5AE6DF006ABEEE /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
@@ -483,6 +485,7 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */,
 				7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */,
 				7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */,
 				7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */,
@@ -962,6 +965,7 @@
 				7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */,
 				7FC676BC2E70B76200C41568 /* TestCompassCheckFlexibility.swift in Sources */,
 				7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */,
+				7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,

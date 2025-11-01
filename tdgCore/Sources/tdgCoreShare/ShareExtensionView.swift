@@ -17,6 +17,7 @@ public struct ShareExtensionView: View {
     @State public var suggestedFilename: String?
     @State private var isEnhancing = false
     @State private var enhancer: WebPageEnhancer?
+    @State private var fileEnhancer: FileEnhancer?
     @Environment(CloudPreferences.self) var pref: CloudPreferences
     @Environment(\.modelContext) var model
 
@@ -60,6 +61,7 @@ public struct ShareExtensionView: View {
         _originalFileURL = State(initialValue: fileURL)
         _originalContentType = State(initialValue: contentType)
         _suggestedFilename = State(initialValue: suggestedFilename)
+        _fileEnhancer = State(initialValue: FileEnhancer())
     }
 
     public init() {
@@ -75,7 +77,7 @@ public struct ShareExtensionView: View {
                             HStack(spacing: 8) {
                                 ProgressView()
                                     .controlSize(.small)
-                                Text("Extracting title and description...")
+                                Text("Analyzing file...")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
@@ -155,6 +157,14 @@ public struct ShareExtensionView: View {
                             sortIndex: 0,
                             in: model
                         )
+
+                        // Auto-enhance file description
+                        if let fileEnhancer = fileEnhancer {
+                            Task {
+                                await enhanceFileDescription(
+                                    fileURL: finalFileURL, contentType: contentType, enhancer: fileEnhancer)
+                            }
+                        }
                     } catch {
                         print("❌ Failed to auto-add attachment: \(error)")
                     }
@@ -202,6 +212,21 @@ public struct ShareExtensionView: View {
 
         if let desc = description {
             item.details = desc
+        }
+
+        isEnhancing = false
+    }
+
+    private func enhanceFileDescription(fileURL: URL, contentType: UTType, enhancer: FileEnhancer) async {
+        isEnhancing = true
+
+        // Use AI if available, otherwise just basic description
+        let useAI = enhancer.hasAI
+        if let description = await enhancer.enhance(fileURL: fileURL, contentType: contentType, useAI: useAI) {
+            // Only update if details are still the default "Shared file:" message
+            if item.details.hasPrefix("Shared file:") {
+                item.details = description
+            }
         }
 
         isEnhancing = false

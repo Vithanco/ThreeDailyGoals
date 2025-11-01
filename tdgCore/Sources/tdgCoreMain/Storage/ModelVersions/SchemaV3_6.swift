@@ -72,31 +72,7 @@ public enum SchemaV3_6: VersionedSchema {
             }
         }
         public var eventId: String? = nil
-        public var allTagsString: String = "" {
-            didSet {
-                guard oldValue != allTagsString else { return }
-                changed = Date.now
-                guard comments != nil else { return }
-
-                // Parse old and new tags to add comments about changes
-                let oldTags = oldValue.components(separatedBy: ",")
-                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                let newTags = allTagsString.components(separatedBy: ",")
-                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-                    .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-
-                // Add comments for new tags
-                newTags.filter { !oldTags.contains($0) }.forEach {
-                    addComment(text: "Added tag: \($0)", icon: imgTag)
-                }
-
-                // Add comments for removed tags
-                oldTags.filter { !newTags.contains($0) }.forEach {
-                    addComment(text: "Removed tag: \($0)", icon: imgTag)
-                }
-            }
-        }
+        public var allTagsString: String = ""
         public var estimatedMinutes: Int = 0
 
         //future potential additions:
@@ -147,7 +123,7 @@ public enum SchemaV3_6: VersionedSchema {
             self._details = try container.decode(String.self, forKey: .details)
             self._state = try container.decode(TaskItemState.self, forKey: .state)
             self._url = try container.decode(String.self, forKey: .url)
-            self.comments = try container.decode([Comment].self, forKey: .comments)
+            self.comments = try container.decodeIfPresent([Comment].self, forKey: .comments) ?? []
             self.dueDate = try? container.decode(Date.self, forKey: .dueDate)
             self.allTagsString = try container.decode(String.self, forKey: .tags)
             if let uuid = try? container.decode(UUID.self, forKey: .uuid) {

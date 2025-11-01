@@ -74,7 +74,7 @@ struct TestImportExport {
 
         #expect(newModel.allTasks.count > 0)
         #expect(model.dataManager.allTasks.count == newModel.allTasks.count)
-        #expect(178 == newModel.allTasks.count)
+        #expect(20 == newModel.allTasks.count)
         for item in model.dataManager.allTasks {
 
             #expect(model.dataManager.findTask(withUuidString: item.id) != nil)

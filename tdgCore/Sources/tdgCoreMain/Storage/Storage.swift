@@ -113,7 +113,7 @@ extension Array where Element == TaskItem {
     ) -> TaskItem {
         let new = TaskItem(title: title, changedDate: changedDate, state: state)
         new.dueDate = dueDate
-        new.tags = tags.map { $0.lowercased() }
+        new.setTags(tags.map { $0.lowercased() }, createComments: false)
         self.append(new)
         return new
     }
@@ -135,7 +135,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
         tags: ["CMaps"])
     result.add(
-        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead"])
+        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead", "work"])
     result.add(
         title: "Transfer tasks from old task manager into this one",
         changedDate: timeProvider.getDate(daysPrior: 11), state: .open)
@@ -157,7 +157,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse)
     result.add(
         title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
-        dueDate: timeProvider.getDate(inDays: 2))
+        tags: ["private"], dueDate: timeProvider.getDate(inDays: 2))
 
     // Exploring Three Daily Goals App features
     let widgetTask = result.add(

@@ -20,8 +20,7 @@ The code is for iOS and macOS. All code has to run on all platforms unless there
 
 - only commit when I explicitly request
 - Keep documentation minimal, updated and accurate (only why, never how)
-- Maintain test coverage
 
-- test only the non-gui tests (only Three Daily GoalsTests and not Three Daily GoalsUITests)
-- test the non-gui tests at the end of each of your answers
+- never run the gui tests (Three Daily GoalsUITests)
+- at the end of each of your answers ensure that 1) all tests compile and 2) ensure that the tests in Three Daily GoalsTest are passing 3) that new features have tests in Three Daily GoalsTest and 4) remove unnecessary comments
 

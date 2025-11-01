@@ -240,15 +240,15 @@ class TestShareExtensionIntegration: XCTestCase {
             shareView = ShareExtensionView(text: text)
         case .url(let url):
             shareView = ShareExtensionView(url: url)
-        case .attachment(let fileURL, let contentType):
-            shareView = ShareExtensionView(fileURL: fileURL, contentType: contentType)
+        case .attachment(let fileURL, let contentType, let suggestedFilename):
+            shareView = ShareExtensionView(fileURL: fileURL, contentType: contentType, suggestedFilename: suggestedFilename)
         }
         
         // Step 3: Create and save task
         let task = shareView.item
         
         // Add attachment if it's a file attachment - use the payload directly
-        if case .attachment(let fileURL, let contentType) = payload {
+        if case .attachment(let fileURL, let contentType, _) = payload {
             print("DEBUG: Adding attachment from payload - fileURL: \(fileURL), contentType: \(contentType)")
             let attachment = try addAttachment(
                 fileURL: fileURL,

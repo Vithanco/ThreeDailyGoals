@@ -559,7 +559,7 @@ struct TestCompassCheckSteps {
         
         // Priority tasks should still exist at this point (not moved yet)
         let priorityTasksBefore = dataManager.list(which: .priority)
-        #expect(priorityTasksBefore.count == 1)
+        #expect(priorityTasksBefore.count == 3)
         
         // Test moveStateForward from CurrentPrioritiesStep (this should move priority tasks to open)
         compassCheckManager.moveStateForward()

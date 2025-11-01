@@ -131,36 +131,66 @@ extension TaskItem {
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         }
         set {
-            // Filter out empty and whitespace-only strings, trim whitespace, and convert to lowercase
-            let filteredTags =
-                newValue
-                .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .filter { !$0.isEmpty }
-                .map { $0.lowercased() }
+            updateTags(newValue, createComments: true)
+        }
+    }
 
-            allTagsString = filteredTags.joined(separator: ",")
+    /// Set tags with optional comment creation
+    public func setTags(_ newTags: [String], createComments: Bool = true) {
+        updateTags(newTags, createComments: createComments)
+    }
+
+    /// Internal method to update tags with control over comment creation
+    private func updateTags(_ newTags: [String], createComments: Bool) {
+        // Get old tags for comparison
+        let oldTags = self.tags
+
+        // Filter out empty and whitespace-only strings, trim whitespace, convert to lowercase, and remove duplicates
+        // Preserve order of first occurrence
+        var seen = Set<String>()
+        let filteredTags =
+            newTags
+            .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .map { $0.lowercased() }
+            .filter { seen.insert($0).inserted }  // Remove duplicates while preserving order
+
+        // Check if tags actually changed
+        let tagsChanged = Set(oldTags) != Set(filteredTags)
+
+        // Always update the string (even if same, to normalize formatting)
+        allTagsString = filteredTags.joined(separator: ",")
+
+        // Only update timestamp and create comments if tags actually changed
+        if tagsChanged {
+            changed = Date.now
+
+            if createComments && comments != nil {
+                // Add comments for new tags
+                filteredTags.filter { !oldTags.contains($0) }.forEach {
+                    addComment(text: "Added tag: \($0)", icon: imgTag)
+                }
+
+                // Add comments for removed tags
+                oldTags.filter { !filteredTags.contains($0) }.forEach {
+                    addComment(text: "Removed tag: \($0)", icon: imgTag)
+                }
+            }
         }
     }
 
     public func addTag(_ newTag: String) {
-        let lowercaseTag = newTag.lowercased()
-        var tags = self.tags
-        if !tags.contains(lowercaseTag) {
-            tags.append(lowercaseTag)
-            changed = Date.now
-            self.tags = tags
-        }
-        assert(tags.contains(lowercaseTag))
+        var newTags = self.tags
+        newTags.append(newTag)
+        updateTags(newTags, createComments: true)
+        assert(self.tags.contains(newTag.lowercased()))
     }
 
     public func removeTag(_ oldTag: String) {
-        var tags = self.tags
-        if tags.contains(oldTag) {
-            tags.removeObject(oldTag)
-            changed = Date.now
-            self.tags = tags
-        }
-        assert(!tags.contains(oldTag))
+        var newTags = self.tags
+        newTags.removeAll { $0 == oldTag.lowercased() }
+        updateTags(newTags, createComments: true)
+        assert(!self.tags.contains(oldTag.lowercased()))
     }
 
     public var isEmpty: Bool {

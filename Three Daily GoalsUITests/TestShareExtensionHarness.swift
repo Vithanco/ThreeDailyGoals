@@ -220,8 +220,8 @@ class TestShareExtensionHarness: XCTestCase {
             shareView = ShareExtensionView(text: text)
         case .url(let url):
             shareView = ShareExtensionView(url: url)
-        case .attachment(let fileURL, let contentType):
-            shareView = ShareExtensionView(fileURL: fileURL, contentType: contentType)
+        case .attachment(let fileURL, let contentType, let suggestedFilename):
+            shareView = ShareExtensionView(fileURL: fileURL, contentType: contentType, suggestedFilename: suggestedFilename)
         }
         
         let task = shareView.item

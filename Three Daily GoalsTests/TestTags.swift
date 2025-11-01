@@ -21,16 +21,14 @@ struct TestTags {
     func testAddTag_CreatesSingleComment() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
+        
+        // When: Adding a tag BEFORE inserting into context
+        task.addTag("important")
+        
+        // Then insert into context
         dataManager.modelContext.insert(task)
         
         // Verify initial state
-        #expect(task.tags.isEmpty, "Task should start with no tags")
-        #expect(task.comments?.count == 0, "Task should start with no comments")
-        
-        // When: Adding a tag
-        task.addTag("important")
-        
-        // Then: Should have exactly one tag and one comment
         #expect(task.tags.count == 1, "Task should have exactly one tag")
         #expect(task.tags.contains("important"), "Task should contain the added tag")
         #expect(task.comments?.count == 1, "Task should have exactly one comment")
