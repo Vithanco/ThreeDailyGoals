@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */; };
+		7F0EAB742EB621A100BBD5C2 /* AppTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0EAB732EB621A100BBD5C2 /* AppTips.swift */; };
+		7F0EAB782EB765DD00BBD5C2 /* StatsDialogButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0EAB772EB765DD00BBD5C2 /* StatsDialogButton.swift */; };
 		7F160E872E5AE3F9006ABEEE /* UIStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */; };
 		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
 		7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BF9C2E672BF800238C81 /* TestTags.swift */; };
@@ -47,7 +49,6 @@
 		7FBF598E2E87B66200A01AA6 /* TestNotificationLogicSimple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FBF598C2E87B66200A01AA6 /* TestNotificationLogicSimple.swift */; };
 		7FC1BA532E7FFAC2007E1E2D /* WidgetComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */; };
 		7FC1BA552E811FAF007E1E2D /* DebugPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA542E811FAF007E1E2D /* DebugPreferencesView.swift */; };
-		7FC1BA572E811FF6007E1E2D /* AppTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC1BA562E811FF6007E1E2D /* AppTips.swift */; };
 		7FC6353F2E7B0C410033A1EF /* tdgCoreMain in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6353E2E7B0C410033A1EF /* tdgCoreMain */; };
 		7FC635412E7B0C480033A1EF /* tdgCoreWidget in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635402E7B0C480033A1EF /* tdgCoreWidget */; };
 		7FC635442E7B0C500033A1EF /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
@@ -177,6 +178,8 @@
 
 /* Begin PBXFileReference section */
 		7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestFileEnhancer.swift; sourceTree = "<group>"; };
+		7F0EAB732EB621A100BBD5C2 /* AppTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTips.swift; sourceTree = "<group>"; };
+		7F0EAB772EB765DD00BBD5C2 /* StatsDialogButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsDialogButton.swift; sourceTree = "<group>"; };
 		7F160E862E5AE3F9006ABEEE /* UIStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStateManager.swift; sourceTree = "<group>"; };
 		7F160E882E5AE6DF006ABEEE /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		7F1774622E1F8D1B00C12285 /* Requirements.txt */ = {isa = PBXFileReference; explicitFileType = text; path = Requirements.txt; sourceTree = "<group>"; };
@@ -216,7 +219,6 @@
 		7FBF598C2E87B66200A01AA6 /* TestNotificationLogicSimple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNotificationLogicSimple.swift; sourceTree = "<group>"; };
 		7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetComponents.swift; sourceTree = "<group>"; };
 		7FC1BA542E811FAF007E1E2D /* DebugPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPreferencesView.swift; sourceTree = "<group>"; };
-		7FC1BA562E811FF6007E1E2D /* AppTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTips.swift; sourceTree = "<group>"; };
 		7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabaseErrors.swift; sourceTree = "<group>"; };
 		7FC676A42E6F685B00C41568 /* DatabaseErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseErrorReporter.swift; sourceTree = "<group>"; };
 		7FC676A62E7060B900C41568 /* TestCompassCheckSynchronization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckSynchronization.swift; sourceTree = "<group>"; };
@@ -288,6 +290,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7F0EAB752EB6277D00BBD5C2 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Sources/tdgCoreMain/Presentation/FlowLayout.swift,
+			);
+			target = E561D6D72B1F54A6003BE36F /* Three Daily Goals */;
+		};
 		7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -306,7 +315,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7F2F0A822E52DEB200461679 /* macosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE813822E5431DB00CEA462 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = macosShare; sourceTree = "<group>"; };
-		7FC6176C2E7B0A5E0033A1EF /* tdgCore */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = tdgCore; sourceTree = "<group>"; };
+		7FC6176C2E7B0A5E0033A1EF /* tdgCore */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7F0EAB752EB6277D00BBD5C2 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = tdgCore; sourceTree = "<group>"; };
 		7FC676B22E706B7900C41568 /* CompassCheckSteps */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CompassCheckSteps; sourceTree = "<group>"; };
 		7FE1FDDD2E42845B0016C181 /* iosShare */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (7FE1FDE92E42845B0016C181 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iosShare; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -574,7 +583,7 @@
 		E5E1F4762B30611700E83A21 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				7FC1BA562E811FF6007E1E2D /* AppTips.swift */,
+				7F0EAB732EB621A100BBD5C2 /* AppTips.swift */,
 				E5B376B42B7B506F00E66FAD /* TaskView */,
 				E53C13122B6BECB400E51553 /* Preferences */,
 				E5FFC5BB2B6A715400C9D60B /* Review */,
@@ -589,6 +598,7 @@
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
 				7FA581032B9838B700803614 /* SimpleListView.swift */,
+				7F0EAB772EB765DD00BBD5C2 /* StatsDialogButton.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -922,8 +932,10 @@
 				7FC1BA552E811FAF007E1E2D /* DebugPreferencesView.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
+				7F0EAB782EB765DD00BBD5C2 /* StatsDialogButton.swift in Sources */,
 				7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
+				7F0EAB742EB621A100BBD5C2 /* AppTips.swift in Sources */,
 				E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */,
 				7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
@@ -932,7 +944,6 @@
 				E5ADEDD32B318B8800F0EA9C /* ListView.swift in Sources */,
 				E51142B52B35ABB900AB6E05 /* LinkToTask.swift in Sources */,
 				E5E8B3942B77442F003300C3 /* RegularMainView.swift in Sources */,
-				7FC1BA572E811FF6007E1E2D /* AppTips.swift in Sources */,
 				7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */,
 				7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */,
 				E5B003102B31FE4900A90F8D /* CompassCheckDialog.swift in Sources */,

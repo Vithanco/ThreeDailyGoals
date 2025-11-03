@@ -15,13 +15,26 @@ struct LeftSideView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
+    @State private var selectedTags: [String] = [] // <-- State property for TagFilterView
+    
+    // You can replace this with your dynamic tags source
+    private var allAvailableTags: [String] {
+        // Example: collect all tags present in your tasks dynamically
+        Set(allTasks.flatMap { task in
+            #if swift(>=5.9)
+            task.tags
+            #else
+            // If using new schema, may be something like task.allTagsString.split(separator: ",")
+            task._tags
+            #endif
+        }).sorted()
+    }
     
     private var priorityTasks: [TaskItem] {
         allTasks.filter { $0.state == .priority }
     }
 
     var body: some View {
-        
         VStack(spacing: 0) {
             // Streak view for both iOS and macOS (moved above Today's Goals)
             FullStreakView().frame(maxWidth: .infinity, alignment: .center)
@@ -104,7 +117,7 @@ struct LeftSideView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, paddingVertical)
-         //   .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
+            //   .background(preferences.isProductionEnvironment ? Color.clear : Color.yellow.opacity(0.3))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         #if os(macOS)

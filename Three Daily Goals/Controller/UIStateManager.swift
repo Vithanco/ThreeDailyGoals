@@ -195,23 +195,6 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
                 .help("Import tasks from JSON")
         }
     }
-
-    /// Stats dialog button for app commands
-    var statsDialog: some View {
-        Button(action: { [self] in
-            showInfoMessage = true
-        }) {
-            Label("Show Statistics", systemImage: imgStats)
-                .help("Show task statistics")
-        }
-    }
+    
 }
 
-// MARK: - Convenience Initializers
-
-extension UIStateManager {
-    /// Create a UI state manager for testing
-    static func testManager() -> UIStateManager {
-        return UIStateManager()
-    }
-}

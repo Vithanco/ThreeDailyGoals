@@ -169,26 +169,24 @@ public struct InnerTaskItemView: View {
                                 item.addTag(buildTag)
                             })
                     }
-                    ScrollView(.vertical, showsIndicators: false) {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
-                            ForEach(allTags.sorted(), id: \.self) { text in
-                                let isTag = item.tags.contains(text)
-                                TagView(
-                                    text: text,
-                                    isSelected: isTag,
-                                    accentColor: item.color,
-                                    onTap: {
-                                        if isTag {
-                                            item.tags.removeAll { $0 == text }
-                                        } else {
-                                            item.tags.append(text)
-                                        }
+                    FlowLayout(spacing: 8, runSpacing: 8) {
+                        ForEach(allTags.sorted(), id: \.self) { text in
+                            let isTag = item.tags.contains(text)
+                            TagView(
+                                text: text,
+                                isSelected: isTag,
+                                accentColor: item.color,
+                                onTap: {
+                                    if isTag {
+                                        item.tags.removeAll { $0 == text }
+                                    } else {
+                                        item.tags.append(text)
                                     }
-                                )
-                            }
+                                }
+                            )
                         }
                     }
-                    .frame(maxHeight: 80)  // Reduced height
+                    .frame(maxHeight: 120)
                 }
             }
         }

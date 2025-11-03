@@ -10,6 +10,7 @@ import tdgCoreMain
 
 public struct MainToolbarContent: ToolbarContent {
     @Environment(UIStateManager.self) private var uiState
+    @Environment(DataManager.self) private var dataManager
 
     public var body: some ToolbarContent {
         ToolbarItem {
@@ -25,7 +26,7 @@ public struct MainToolbarContent: ToolbarContent {
             uiState.importButton
         }
         ToolbarItem {
-            uiState.statsDialog
+            ShowStatisticsButton(uiState: uiState, dataManager: dataManager)
         }
     }
 }

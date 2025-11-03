@@ -36,8 +36,8 @@ public let imgStateChange = "arrow.triangle.2.circlepath"
 public let imgAddItem = "plus.app.fill"
 public let imgPreferences = "gearshape"
 
-public let imgExport = "square.and.arrow.up.on.square.fill"
-public let imgImport = "square.and.arrow.down.on.square.fill"
+public let imgExport = "square.and.arrow.up.fill"
+public let imgImport = "square.and.arrow.down.fill"
 public let imgStats = "chart.bar.fill"
 //
 //

@@ -26,7 +26,7 @@ public struct TagFilterView: View {
 
     public var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
+            FlowLayout(spacing: 8, runSpacing: 8) {
                 ForEach(tags.sorted(), id: \.self) { text in
                     let isSelected = selectedTags.contains(text)
                     TagView(
@@ -43,11 +43,11 @@ public struct TagFilterView: View {
                     )
                 }
             }
+            .padding(.vertical, 6)
         }
-        .frame(maxHeight: 100)  // Reduced height
-        .frame(maxWidth: .infinity)  // Use full width
+        .frame(maxHeight: 100)  // You may adjust or remove this as needed
+        //   .frame(maxWidth: .infinity)
         .padding(.horizontal, 8)
-        .padding(.vertical, 6)  // Reduced vertical padding
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(tagContainerBackground.opacity(0.3))

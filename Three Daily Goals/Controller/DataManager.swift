@@ -416,6 +416,25 @@ public final class DataManager {
         return counts
     }
 
+    /// Produce a simple human-readable overview string based on taskCounts
+    public func statsOverviewString() -> String {
+        let counts = taskCounts
+        let total = counts.values.reduce(0, +)
+        let priority = counts[.priority] ?? 0
+        let open = counts[.open] ?? 0
+        let pending = counts[.pendingResponse] ?? 0
+        let closed = counts[.closed] ?? 0
+        let dead = counts[.dead] ?? 0
+        return """
+        Total tasks: \(total)
+        - Priority: \(priority)
+        - Open: \(open)
+        - Pending: \(pending)
+        - Closed: \(closed)
+        - Graveyard: \(dead)
+        """
+    }
+
     /// Get completion rate for a date range
     func completionRate(from startDate: Date, to endDate: Date) -> Double {
         let completedTasks = allTasks.filter { task in
@@ -968,5 +987,4 @@ extension DataManager :  NewItemProducer {
         return result
     }
 }
-
 

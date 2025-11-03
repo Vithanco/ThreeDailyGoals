@@ -74,7 +74,7 @@ struct Three_Daily_GoalsApp: App {
             CommandGroup(after: .importExport) {
                 appComponents.uiState.exportButton
                 appComponents.uiState.importButton
-                appComponents.uiState.statsDialog
+                ShowStatisticsButton(uiState: appComponents.uiState, dataManager: appComponents.dataManager)
             }
             CommandGroup(replacing: .undoRedo) {
                 appComponents.dataManager.undoButton
@@ -118,8 +118,7 @@ struct Three_Daily_GoalsApp: App {
                         appComponents.uiState.select(task)
                         return
                     } else {
-                        appComponents.uiState.infoMessage = "Task not found: \(taskUUID)"
-                        appComponents.uiState.showInfoMessage = true
+                        appComponents.uiState.showInfo("Task not found: \(taskUUID)")
                         return
                     }
                 }
