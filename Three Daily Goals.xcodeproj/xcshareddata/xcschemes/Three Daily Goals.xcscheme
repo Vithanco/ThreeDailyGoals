@@ -119,7 +119,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "enable-testing"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

@@ -122,6 +122,9 @@ public struct ShareExtensionView: View {
                 }
                 .padding()
             }
+            #if os(macOS)
+                .frame(minWidth: 360, maxWidth: 600, minHeight: 300, maxHeight: 700, alignment: .topLeading)
+            #endif
             .navigationTitle("Add to Goals")
             #if os(macOS)
                 .navigationSubtitle("Three Daily Goals")

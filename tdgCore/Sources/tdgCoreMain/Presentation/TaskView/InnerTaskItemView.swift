@@ -283,12 +283,12 @@ public struct InnerTaskItemView: View {
         )
 
         // Update title if empty or default
-        if item.title.isEmpty || item.title.lowercased() == "read" {
+        if item.isTitleEmpty || item.title.lowercased() == "read" {
             item.title = formattedTitle
         }
 
         // Only update details if empty
-        if item.details.isEmpty, let desc = description {
+        if item.isDetailsEmpty, let desc = description {
             item.details = desc
         }
 

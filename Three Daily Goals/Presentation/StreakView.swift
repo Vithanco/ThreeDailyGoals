@@ -14,14 +14,19 @@ struct StreakView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: 16, weight: .semibold))
-            Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
-                .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
-                .font(.system(size: 18, weight: .medium))
-                .frame(width: 24, height: 24)
-            Text("Today:")
-                .font(.system(size: 18, weight: .medium))
+            if preferences.isStreakActive {
+                Text("\(preferences.daysOfCompassCheck)")
+                    .font(.system(size: 16, weight: .semibold))
+                Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
+                    .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
+                    .font(.system(size: 18, weight: .medium))
+                    .frame(width: 24, height: 24)
+                Text("Today:")
+                    .font(.system(size: 18, weight: .medium))
+            } else {
+                Text("Compass Check Today:").font(.system(size: 18, weight: .medium))
+            }
+                
             Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
                 .font(.system(size: 18, weight: .medium))

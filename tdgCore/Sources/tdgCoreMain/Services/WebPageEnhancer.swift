@@ -12,17 +12,37 @@ import Foundation
     import FoundationModels
 #endif
 
+#if os(macOS) || os(Linux)
+    import Darwin
+#endif
+
 public final class WebPageEnhancer: Sendable {
-    private let metadataProvider: LPMetadataProvider
     private let aiSession: LanguageModelSession?
 
     public init() {
-        self.metadataProvider = LPMetadataProvider()
-
         #if canImport(FoundationModels)
-            let model = SystemLanguageModel.default
-            if case .available = model.availability {
-                self.aiSession = LanguageModelSession()
+            // Avoid initializing FoundationModels when running as root or if unavailable
+            // Running as root is not supported by FoundationModels; fall back gracefully
+            let isRootUser: Bool = {
+                #if os(macOS) || os(Linux)
+                    return (getuid() == 0)
+                #else
+                    return false
+                #endif
+            }()
+
+            if !isRootUser {
+                let model = SystemLanguageModel.default
+                if case .available = model.availability {
+                    do {
+                        self.aiSession = try LanguageModelSession()
+                    } catch {
+                        // If session creation fails for any reason, disable AI gracefully
+                        self.aiSession = nil
+                    }
+                } else {
+                    self.aiSession = nil
+                }
             } else {
                 self.aiSession = nil
             }
@@ -43,8 +63,10 @@ public final class WebPageEnhancer: Sendable {
     public func enhance(url: URL, currentTitle: String = "", useAI: Bool = false) async -> (
         title: String, description: String?
     ) {
+        let metadataProvider = LPMetadataProvider()
         // Step 1: Use LinkPresentation to get basic metadata
         do {
+            debugPrint("url: \(url)")
             let metadata = try await metadataProvider.startFetchingMetadata(for: url)
 
             let extractedTitle = metadata.title ?? url.host ?? "Read"
@@ -63,6 +85,7 @@ public final class WebPageEnhancer: Sendable {
                 description = await fetchMetaDescription(url: url)
             }
 
+            debugPrint("description: \(String(describing: description))")
             return (formattedTitle, description)
 
         } catch {
