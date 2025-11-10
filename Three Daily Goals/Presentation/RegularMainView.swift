@@ -22,7 +22,9 @@ struct RegularMainView: View {
                 .mainToolbar()
         } content: {
             SingleView {
-                ListView().background(Color.background)
+                ListView(whichList: uiState.whichList)
+                    .id(uiState.whichList)
+                    .background(Color.background)
             }.background(Color.background)
                 .navigationSplitViewColumnWidth(min: 400, ideal: 500)
                 .navigationTitle("Three Daily Goals")

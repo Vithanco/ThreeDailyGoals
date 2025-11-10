@@ -21,27 +21,26 @@ struct ListView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(\.colorScheme) private var colorScheme
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
-    let whichList: TaskItemState?
+    let whichList: TaskItemState
+    
+    @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
 
-    init(whichList: TaskItemState? = nil) {
+    init(whichList: TaskItemState) {
         self.whichList = whichList
     }
-
-    @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
     
     private var tasks: [TaskItem] {
-        let state = whichList ?? uiState.whichList
-        let filtered = allTasks.filter { $0.state == state }
+        let filtered = allTasks.filter { $0.state == whichList }
         
         // Sort by changed date, reverse for closed/dead
-        if state == .closed || state == .dead {
+        if whichList == .closed || whichList == .dead {
             return filtered.sorted { $0.changed > $1.changed }
         }
         return filtered
     }
 
     var list: TaskItemState {
-        return whichList ?? uiState.whichList
+        return whichList
     }
     
     // Adaptive background color for tag container
@@ -81,9 +80,7 @@ struct ListView: View {
                     .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 1)
             )
             .shadow(color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.05), radius: 2, x: 0, y: 1)
-            .dropDestination(for: String.self) {
-                items, _ in
-                // Defer changes to next run loop to avoid transaction conflicts
+            .dropDestination(for: String.self) { items, _ in
                 Task { @MainActor in
                     withAnimation {
                         for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {

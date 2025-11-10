@@ -53,10 +53,7 @@ struct LeftSideView: View {
                         )
                         Spacer()
                     }
-                    .dropDestination(for: String.self) {
-                        items,
-                        location in
-                        // Defer changes to next run loop to avoid transaction conflicts
+                    .dropDestination(for: String.self) { items, location in
                         Task { @MainActor in
                             for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
                                 dataManager.moveWithPriorityTracking(task: item, to: .open)
@@ -77,7 +74,6 @@ struct LeftSideView: View {
                 id: TaskItemState.priority.getListAccessibilityIdentifier
             )
             .dropDestination(for: String.self) { items, _ in
-                // Defer changes to next run loop to avoid transaction conflicts
                 Task { @MainActor in
                     withAnimation {
                         for itemId in items {

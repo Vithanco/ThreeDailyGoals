@@ -121,8 +121,11 @@ public final class DataManager {
             return  // nothing to be done
         }
 
-        // Update task state - SwiftData will autosave, no need to call save()
+        // Update task state
         task.state = state
+        
+        // Explicitly save to ensure SwiftData notifies all observers
+        save()
     }
 
     /// Move a task to a different state with priority tracking

@@ -14,7 +14,7 @@ struct TaskAsLine: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     @Environment(\.colorScheme) private var colorScheme
-    let item: TaskItem
+    @Bindable var item: TaskItem
 
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
