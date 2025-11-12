@@ -32,9 +32,9 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
                 else {
                     // If we can't encode the old task, skip it and continue with migration
                     // This prevents the app from crashing due to corrupted data
-                    let taskTitle = oldTask._title 
+                    let taskTitle = oldTask._title
                     print("Warning: Failed to encode TaskItem during migration, skipping: \(taskTitle)")
-                    
+
                     // Report this data loss to the user
                     reportMigrationIssue(
                         "Some tasks could not be migrated and were skipped during the database update.",
@@ -111,11 +111,11 @@ enum TDGMigrationPlan: SchemaMigrationPlan {
         fromVersion: SchemaV3_4.self,
         toVersion: SchemaV3_5.self
     )
-    
+
     static let migrateV3_5toV3_6 = MigrationStage.lightweight(
-            fromVersion: SchemaV3_5.self,
-            toVersion: SchemaV3_6.self
-        )
+        fromVersion: SchemaV3_5.self,
+        toVersion: SchemaV3_6.self
+    )
 
     static var stages: [MigrationStage] {
         [migrateV3_1toV3_2, migrateV3_2toV3_3, migrateV3_3toV3_4, migrateV3_4toV3_5, migrateV3_5toV3_6]

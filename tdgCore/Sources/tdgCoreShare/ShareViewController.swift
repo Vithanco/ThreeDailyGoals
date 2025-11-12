@@ -83,7 +83,6 @@ open class ShareViewController: BaseViewController {
                 .environment(preferences)
                 .environment(timeProviderWrapper)
         )
-        host.sizingOptions = .maxSize
         addChild(host)
         view.addSubview(host.view)
 

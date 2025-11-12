@@ -6,10 +6,10 @@
 //
 
 import XCTest
-
-@testable import Three_Daily_Goals
 import tdgCoreTest
 import tdgCoreWidget
+
+@testable import Three_Daily_Goals
 
 // this is not working for some reason see https://stackoverflow.com/questions/33755019/linker-error-when-accessing-application-module-in-ui-tests-in-xcode-7-1
 //@testable import Three_Daily_Goals
@@ -53,7 +53,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         // Check for add task button - it should be visible in the main toolbar
         // Wait for UI to load
         sleep(1)
-        
+
         let addTaskButton = app.buttons["addTaskButton"]
         if !addTaskButton.exists {
             // If not found as a standalone button, try looking in the toolbar
@@ -90,13 +90,13 @@ func ensureExists(text: String, inApp: XCUIApplication) {
     func testInfo() throws {
         // UI tests must launch the application that they test.
         let app = launchTestApp()
-        
+
         // Wait for the app to load
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        
+
         // Wait a bit more for the UI to fully render
         sleep(1)
-        
+
         if isLargeDevice {
             // Look for "Today:" text which is actually displayed in the streak view
             ensureExists(text: "Today:", inApp: app)
@@ -160,16 +160,16 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         let testString = "test title 45#"
         //
         let app = launchTestApp()
-        
+
         // Wait for the app to load
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        
+
         let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
         listOpenButton.tap()
 
         let addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
         addButton.tap()
-        
+
         // Wait for the task detail view to load
         sleep(1)
 
@@ -179,7 +179,7 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         title.clearText()
         title.typeText(testString)
         // Task is saved automatically when title is edited - no need for submit button
-        
+
         // Wait for task to save - use dynamic wait instead of fixed delay
         sleep(1)
 
@@ -197,15 +197,15 @@ func ensureExists(text: String, inApp: XCUIApplication) {
         // Debug: Print all static texts to see what's available
         let allStaticTexts = app.staticTexts.allElementsBoundByIndex
         print("🔍 Available static texts: \(allStaticTexts.map { $0.label })")
-        
+
         // Debug: Check if the task was actually created by looking for any tasks
         let allButtons = app.buttons.allElementsBoundByIndex
         print("🔍 Available buttons: \(allButtons.map { $0.label })")
-        
+
         // For now, let's just verify that we can navigate to the list view
         // The task creation might need more complex setup
         XCTAssertTrue(openList.exists, "Open list should be visible")
-        
+
         // TODO: Fix task creation and verification logic
         // The current test setup doesn't seem to properly create tasks
         // This will need investigation of the test environment setup

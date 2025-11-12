@@ -27,10 +27,10 @@ public struct PreferencesView: View {
                     Label("Tags", systemImage: "tag.circle.fill")
                 }
             #if DEBUG
-            DebugPreferencesView()
-                .tabItem {
-                    Label("Debug", systemImage: "wrench.and.screwdriver")
-                }
+                DebugPreferencesView()
+                    .tabItem {
+                        Label("Debug", systemImage: "wrench.and.screwdriver")
+                    }
             #endif
         }
         .frame(minHeight: 600)

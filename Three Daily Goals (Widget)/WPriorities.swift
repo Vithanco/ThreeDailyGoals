@@ -14,11 +14,11 @@ import tdgCoreWidget
 struct WPriorities: View {
     let preferences: CloudPreferences
     @Environment(\.widgetFamily) var widgetFamily: WidgetFamily
-    
+
     private var config: WidgetSizeConfig {
         WidgetSizeConfig.forFamily(widgetFamily)
     }
-    
+
     private var availablePriorities: [String] {
         var priorities: [String] = []
         for i in 1...5 {
@@ -29,40 +29,38 @@ struct WPriorities: View {
         }
         return priorities
     }
-    
+
     private var displayText: String {
         let priorities = availablePriorities
-        
+
         if priorities.isEmpty {
             return "Run a compass check to set your goals"
         }
-        
-        if priorities.count <= config.maxPriorities {
-            return priorities.joined(separator: ", ")
-        } else {
+
+        guard priorities.count <= config.maxPriorities else {
             let first = priorities[0]
             let remaining = priorities.count - 1
             return "\(first) + \(remaining) more"
         }
+        return priorities.joined(separator: ", ")
     }
-    
+
     private var displayedPriorities: [String] {
         return Array(availablePriorities.prefix(config.maxPriorities))
     }
-    
+
     private var remainingTasksCount: Int {
         return max(0, availablePriorities.count - config.maxPriorities)
     }
-    
 
     var body: some View {
         #if os(watchOS)
-        watchOSLayout
+            watchOSLayout
         #else
-        standardLayout
+            standardLayout
         #endif
     }
-    
+
     // MARK: - WatchOS Layout
     @ViewBuilder
     private var watchOSLayout: some View {
@@ -77,7 +75,7 @@ struct WPriorities: View {
             standardLayout
         }
     }
-    
+
     // MARK: - Standard Layout
     @ViewBuilder
     private var standardLayout: some View {
@@ -88,17 +86,17 @@ struct WPriorities: View {
             }
             .padding(.horizontal, config.horizontalPadding)
             .padding(.vertical, config.verticalSpacing)
-            
+
             // Separator line
             Rectangle()
                 .fill(Color.white)
                 .frame(height: 1)
                 .frame(maxWidth: .infinity)
-            
+
             // Content section
             VStack(alignment: .leading, spacing: config.itemSpacing) {
                 individualItemsView
-                
+
                 if remainingTasksCount > 0 {
                     remainingTasksView
                 }
@@ -107,9 +105,9 @@ struct WPriorities: View {
             .padding(.vertical, config.verticalSpacing)
         }
     }
-    
+
     // MARK: - Helper Properties
-    
+
     @ViewBuilder
     private var headerView: some View {
         HStack(spacing: config.itemSpacing) {
@@ -122,27 +120,27 @@ struct WPriorities: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: config.iconSize, height: config.iconSize)
             }
-            
+
             Text("Goals")
                 .font(.system(size: config.fontSize + 2, weight: .semibold))
                 .foregroundStyle(Color.white)
         }
     }
-    
+
     @ViewBuilder
     private var individualItemsView: some View {
         ForEach(Array(displayedPriorities.enumerated()), id: \.offset) { index, priority in
             let priorityNumber = index + 1
             let taskUUID = preferences.getPriorityUUID(nr: priorityNumber)
             WidgetPriorityItem(
-                item: priority, 
-                priorityNumber: priorityNumber, 
+                item: priority,
+                priorityNumber: priorityNumber,
                 config: config,
                 taskUUID: taskUUID.isEmpty ? nil : taskUUID
             )
         }
     }
-    
+
     @ViewBuilder
     private var remainingTasksView: some View {
         Text("+ \(remainingTasksCount) tasks")

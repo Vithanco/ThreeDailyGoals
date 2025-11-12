@@ -15,7 +15,7 @@ struct RegularMainView: View {
 
     var body: some View {
         @Bindable var uiState = uiState
-        
+
         return NavigationSplitView(columnVisibility: $columnVisibility) {
             LeftSideView().background(Color.background).frame(maxHeight: .infinity)
                 .navigationSplitViewColumnWidth(min: 300, ideal: 400)

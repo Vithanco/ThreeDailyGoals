@@ -16,8 +16,8 @@ import UniformTypeIdentifiers
     import AppKit
 #endif
 
-public extension Image {
-    init?(data: Data) {
+extension Image {
+    public init?(data: Data) {
         #if canImport(UIKit)
             guard let ui = UIImage(data: data) else { return nil }
             self = Image(uiImage: ui)

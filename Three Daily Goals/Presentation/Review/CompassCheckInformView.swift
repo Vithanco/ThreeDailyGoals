@@ -19,19 +19,19 @@ public struct CompassCheckInformView: View {
                 Text("Current Streak")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(Color.priority)
-                
+
                 StreakView()
                     .padding(.horizontal, 8)
             }
-            
+
             Spacer(minLength: 10)
-            
+
             Text("It is about time to do a Compass Check and review your tasks")
                 .font(.title2)
                 .foregroundStyle(Color.priority)
                 .frame(maxWidth: 300, maxHeight: .infinity)
                 .multilineTextAlignment(.center)
-            
+
             Text(
                 "The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work."
             )

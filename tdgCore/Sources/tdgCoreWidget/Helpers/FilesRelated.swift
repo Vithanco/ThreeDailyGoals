@@ -31,10 +31,10 @@ public func createAttachmentTempFile(
         print("Cannot create temporary file: data is empty")
         return nil
     }
-    
+
     // Extract extension from filename if not provided
     let ext = fileExtension ?? URL(fileURLWithPath: filename).pathExtension
-    
+
     // If we still don't have an extension, try to infer it from the filename
     let finalExt = ext.isEmpty ? URL(fileURLWithPath: filename).pathExtension : ext
 
@@ -79,11 +79,11 @@ public func createAttachmentTempFile(
 public func createSimpleTempFile(data: Data, filename: String) -> URL? {
     // Extract extension from filename
     let ext = URL(fileURLWithPath: filename).pathExtension
-    
+
     // Create a simple unique filename
     let uniqueName = "attachment_\(UUID().uuidString)"
     let finalName = ext.isEmpty ? uniqueName : "\(uniqueName).\(ext)"
-    
+
     #if os(iOS)
         // On iOS, use the app's documents directory for better file access
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

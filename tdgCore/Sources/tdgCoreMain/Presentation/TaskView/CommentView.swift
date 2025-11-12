@@ -23,7 +23,7 @@ public struct CommentView: View {
                 Color.clear
                     .frame(width: 20)
             }
-            
+
             // Content column
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
@@ -32,7 +32,7 @@ public struct CommentView: View {
                         .foregroundColor(.secondary)
                     Spacer()
                 }
-                
+
                 Text(comment.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, comment.icon != nil ? 4 : 0)

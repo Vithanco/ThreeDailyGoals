@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import tdgCoreMain
 
 struct LinkToTask: View {

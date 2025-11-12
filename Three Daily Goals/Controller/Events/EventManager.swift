@@ -40,7 +40,7 @@ public final class EventManager {
         let today = timeProvider.startOfDay(for: timeProvider.now)
         self.startDate = today
         self.endDate = timeProvider.date(byAdding: .day, value: 1, to: today) ?? today
-        
+
         // Fire-and-forget: Start the async operation without waiting
         Task {
             await startAsync()
@@ -52,7 +52,7 @@ public final class EventManager {
         do {
             let granted = try await eventService.requestCalendarAccess()
             state = granted ? .granted : .denied
-            if granted { 
+            if granted {
                 events = eventService.fetchEvents(startDate: startDate, endDate: endDate)
             }
         } catch {
@@ -67,7 +67,7 @@ public final class EventManager {
             startDate = r.lowerBound
             endDate = r.upperBound
         }
-        if case .granted = state { 
+        if case .granted = state {
             events = eventService.fetchEvents(startDate: startDate, endDate: endDate)
         }
     }

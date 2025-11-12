@@ -14,24 +14,24 @@ struct DebugPreferencesView: View {
             Text("Debug Options")
                 .font(.title2)
                 .fontWeight(.semibold)
-            
+
             Divider()
-            
+
             VStack(alignment: .leading, spacing: 12) {
                 Text("Tips & Onboarding")
                     .font(.headline)
-                
+
                 Button("Reset All Tips") {
                     TipManager.shared.resetAllTips()
                 }
                 .buttonStyle(.bordered)
                 .help("Reset all tips to show them again")
-                
+
                 Text("This will make all tips appear again for testing purposes.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            
+
             Spacer()
         }
         .padding()
@@ -42,5 +42,3 @@ struct DebugPreferencesView: View {
 #Preview {
     DebugPreferencesView()
 }
-
-

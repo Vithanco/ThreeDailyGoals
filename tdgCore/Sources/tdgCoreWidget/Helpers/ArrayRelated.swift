@@ -61,36 +61,36 @@ extension Array where Element: Equatable {
     }
 }
 
-public extension Sequence {
-    func chunked(into size: Int) -> [[Element]] {
+extension Sequence {
+    public func chunked(into size: Int) -> [[Element]] {
         let array = Array(self)
         return stride(from: 0, to: array.count, by: size).map {
             Array(array[$0..<Swift.min($0 + size, array.count)])
         }
     }
 
-    func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Element] {
+    public func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>) -> [Element] {
         return sorted { a, b in
             a[keyPath: keyPath] < b[keyPath: keyPath]
         }
     }
 }
 
-public extension Sequence where Element: Hashable {
-    var asSet: Set<Element> {
+extension Sequence where Element: Hashable {
+    public var asSet: Set<Element> {
         return Set<Element>(self)
     }
 }
 
-public extension Array {
-    func first() -> Element? {
+extension Array {
+    public func first() -> Element? {
         if isEmpty {
             return nil
         }
         return self[0]
     }
 
-    func last() -> Element? {
+    public func last() -> Element? {
         if isEmpty {
             return nil
         }
@@ -98,11 +98,11 @@ public extension Array {
         return self[index]
     }
 
-    func head() -> Element? {
+    public func head() -> Element? {
         return first()
     }
 
-    func tail() -> [Element] {
+    public func tail() -> [Element] {
         if isEmpty || count == 1 {
             return []
         }
@@ -117,24 +117,24 @@ public protocol OptionalArray {}
 extension Array: OptionalArray {}
 
 // inspired from https://stackoverflow.com/questions/25738817/removing-duplicate-elements-from-an-array-in-swift
-public extension Sequence where Iterator.Element: Hashable {
+extension Sequence where Iterator.Element: Hashable {
     /// only unique elements, but doesn't respect order
-    func uniqueItemsSet() -> Set<Iterator.Element> {
+    public func uniqueItemsSet() -> Set<Iterator.Element> {
         return Set<Iterator.Element>(self)
     }
 
-    func uniqueItemsArray() -> [Iterator.Element] {
+    public func uniqueItemsArray() -> [Iterator.Element] {
         return Array(uniqueItemsSet())
     }
 
     /// only unique elements, but keep order
-    func uniqueItemsArrayMaintainedOrder() -> [Iterator.Element] {
+    public func uniqueItemsArrayMaintainedOrder() -> [Iterator.Element] {
         return reduce([Iterator.Element]()) { $0.contains($1) ? $0 : $0 + [$1] }
     }
 }
 
-public extension Set {
-    var asArray: [Element] {
+extension Set {
+    public var asArray: [Element] {
         return Array(self)
     }
 }

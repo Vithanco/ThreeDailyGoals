@@ -10,8 +10,8 @@ import SwiftData
 
 public typealias Comment = SchemaLatest.Comment
 
-public extension Comment {
-    func deleteComment() {
+extension Comment {
+    public func deleteComment() {
         modelContext?.delete(self)
         taskItem = nil
     }

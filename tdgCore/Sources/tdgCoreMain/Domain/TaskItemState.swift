@@ -33,16 +33,16 @@ extension TaskItemState: CustomStringConvertible, Identifiable {
     }
 }
 
-public extension TaskItemState {
-    var showCount: Bool {
+extension TaskItemState {
+    public var showCount: Bool {
         switch self {
         case .closed, .dead: return false
         case .open, .pendingResponse, .priority: return true
         }
     }
-    
+
     // List-specific colors
-    var color: Color {
+    public var color: Color {
         switch self {
         case .priority: return Color.priority
         case .open: return Color.open
@@ -52,7 +52,7 @@ public extension TaskItemState {
         }
     }
 
-    var imageName: String {
+    public var imageName: String {
         switch self {
         case .closed: return imgClosed
         case .dead: return imgGraveyard
@@ -62,19 +62,19 @@ public extension TaskItemState {
         }
     }
 
-    var image: Image {
+    public var image: Image {
         return Image(systemName: self.imageName)
     }
 
-    var getLinkedListAccessibilityIdentifier: String {
+    public var getLinkedListAccessibilityIdentifier: String {
         return self.description + "_LinkedList"
     }
 
-    var getListAccessibilityIdentifier: String {
+    public var getListAccessibilityIdentifier: String {
         return self.description + "_List"
     }
 
-    var section: TaskSection {
+    public var section: TaskSection {
         switch self {
         case .open: return secOpen
         case .closed: return secClosed
@@ -84,21 +84,21 @@ public extension TaskItemState {
         }
     }
 
-    static func oldestFirst(a: TaskItem, b: TaskItem) -> Bool {
+    public static func oldestFirst(a: TaskItem, b: TaskItem) -> Bool {
         return a.changed < b.changed
     }
 
-    static func youngestFirst(a: TaskItem, b: TaskItem) -> Bool {
+    public static func youngestFirst(a: TaskItem, b: TaskItem) -> Bool {
         return a.changed > b.changed
     }
 
-    var sorter: TaskSorter {
+    public var sorter: TaskSorter {
         switch self {
         case .closed, .dead: return TaskItemState.youngestFirst
         case .open, .priority, .pendingResponse: return TaskItemState.oldestFirst
         }
     }
-    var subHeaders: [ListHeader] {
+    public var subHeaders: [ListHeader] {
         switch self {
         case .open: return ListHeader.defaultListHeaders
         case .closed: return ListHeader.defaultListHeaders.reversed()

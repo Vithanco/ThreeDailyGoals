@@ -28,15 +28,14 @@ final class AttachmentUITests: XCTestCase {
 
         // Look for any existing task instead of creating a new one
         let taskButtons = app.buttons
-        if taskButtons.count > 0 {
-            // Use the first available task
-            let firstTask = taskButtons.element(boundBy: 0)
-            firstTask.tap()
-        } else {
+        guard taskButtons.count > 0 else {
             // If no tasks exist, skip the test
             XCTSkip("No tasks available for testing")
             return
         }
+        // Use the first available task
+        let firstTask = taskButtons.element(boundBy: 0)
+        firstTask.tap()
 
         // Wait for the task detail view to load
         let attachmentSection = app.staticTexts["Attachments"]
@@ -64,15 +63,14 @@ final class AttachmentUITests: XCTestCase {
 
         // Look for any existing task instead of creating a new one
         let taskButtons = app.buttons
-        if taskButtons.count > 0 {
-            // Use the first available task
-            let firstTask = taskButtons.element(boundBy: 0)
-            firstTask.tap()
-        } else {
+        guard taskButtons.count > 0 else {
             // If no tasks exist, skip the test
             XCTSkip("No tasks available for testing")
             return
         }
+        // Use the first available task
+        let firstTask = taskButtons.element(boundBy: 0)
+        firstTask.tap()
 
         // Wait for the task detail view to load
         let addAttachmentButton = app.buttons["addAttachmentButton"]
@@ -139,7 +137,7 @@ final class AttachmentUITests: XCTestCase {
 
         // Wait for UI to load
         sleep(1)
-        
+
         // Try to find the button in toolbar first, then as standalone
         let toolbar = app.toolbars.firstMatch
         let addButton: XCUIElement

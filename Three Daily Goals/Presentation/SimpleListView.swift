@@ -17,7 +17,7 @@ struct SimpleListView: View {
     let id: String
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
-    
+
     var body: some View {
         List {
             Section(
@@ -28,7 +28,7 @@ struct SimpleListView: View {
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(color)
                             .frame(width: 20, height: 20)
-                        
+
                         section.asText
                             .foregroundStyle(color)
                             .font(.system(size: 14, weight: .semibold))
@@ -56,7 +56,7 @@ struct SimpleListView: View {
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(color)
                                         .frame(width: 16, height: 16)
-                                    
+
                                     header.asText
                                         .foregroundStyle(color)
                                         .font(.system(size: 13, weight: .medium))

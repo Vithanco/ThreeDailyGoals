@@ -28,7 +28,7 @@ public struct CompassCheckPlanDay: View {
     init(date: Date) {
         self._date = State(initialValue: date)
     }
-    
+
     private func setupEventManager() {
         if eventMgr == nil {
             let newEventMgr = EventManager(timeProvider: timeProviderWrapper.timeProvider)

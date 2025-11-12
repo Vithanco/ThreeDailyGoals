@@ -1,8 +1,8 @@
 import SwiftUI
 import tdgCoreWidget
 
-func ShowStatisticsButton (  uiState: UIStateManager, dataManager: DataManager ) -> some View {
-    
+func ShowStatisticsButton(uiState: UIStateManager, dataManager: DataManager) -> some View {
+
     return Button {
         uiState.showInfo(dataManager.statsOverviewString())
     } label: {

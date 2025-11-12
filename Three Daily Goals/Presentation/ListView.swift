@@ -5,8 +5,8 @@
 //  Created by Klaus Kneupner on 19/12/2023.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 import tdgCoreMain
 
 extension ListHeader {
@@ -22,16 +22,16 @@ struct ListView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
     let whichList: TaskItemState
-    
+
     @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
 
     init(whichList: TaskItemState) {
         self.whichList = whichList
     }
-    
+
     private var tasks: [TaskItem] {
         let filtered = allTasks.filter { $0.state == whichList }
-        
+
         // Sort by changed date, reverse for closed/dead
         if whichList == .closed || whichList == .dead {
             return filtered.sorted { $0.changed > $1.changed }
@@ -42,17 +42,17 @@ struct ListView: View {
     var list: TaskItemState {
         return whichList
     }
-    
+
     // Adaptive background color for tag container
     private var tagContainerBackground: Color {
         colorScheme == .dark ? Color.neutral700 : Color.neutral300
     }
-    
+
     // Adaptive border color for tag container
     private var tagContainerBorder: Color {
         colorScheme == .dark ? Color.neutral600 : Color.neutral200
     }
-    
+
     // Enhanced list background for better task box visibility
     private var listBackground: Color {
         colorScheme == .dark ? Color.neutral800.opacity(0.3) : Color.neutral50.opacity(0.8)
@@ -64,12 +64,13 @@ struct ListView: View {
         }
         return tasks.filter { $0.tags.contains(where: uiState.selectedTags.contains) }
     }
-    
+
     var body: some View {
         VStack {
             SimpleListView(
                 color: list.color,
-                itemList: filteredTasks, headers: list.subHeaders, showHeaders: list != .priority, section: list.section,
+                itemList: filteredTasks, headers: list.subHeaders, showHeaders: list != .priority,
+                section: list.section,
                 id: list.getListAccessibilityIdentifier
             )
             .frame(minHeight: 145, maxHeight: .infinity)
@@ -114,4 +115,3 @@ struct ListView: View {
         .environment(appComp.dataManager)
         .environment(appComp.preferences)
 }
-

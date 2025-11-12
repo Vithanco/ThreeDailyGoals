@@ -26,7 +26,7 @@ struct StreakView: View {
             } else {
                 Text("Compass Check Today:").font(.system(size: 18, weight: .medium))
             }
-                
+
             Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
                 .font(.system(size: 18, weight: .medium))
@@ -45,31 +45,30 @@ struct FullStreakView: View {
     private var streakBackground: Color {
         colorScheme == .dark ? Color.neutral800 : Color.neutral50
     }
-    
+
     // Adaptive border color for streak view
     private var streakBorder: Color {
         colorScheme == .dark ? Color.neutral700 : Color.neutral200
     }
-    
 
     var body: some View {
         GroupBox {
             VStack(spacing: 8) {
                 // Streak display
                 StreakView()
-                
+
                 Button(action: { compassCheckManager.startCompassCheckNow() }) {
-                            Label("Start Compass Check Now", systemImage: imgCompassCheck)
-                                .foregroundStyle(.white)
-                                .font(.system(size: 14, weight: .medium))
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color.priority)
-                                .clipShape(RoundedRectangle(cornerRadius: 6))
-                                .help("Start Compass Check now")
-                        }
-                        .buttonStyle(.plain)
-                        .frame(height: 20)
+                    Label("Start Compass Check Now", systemImage: imgCompassCheck)
+                        .foregroundStyle(.white)
+                        .font(.system(size: 14, weight: .medium))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.priority)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .help("Start Compass Check now")
+                }
+                .buttonStyle(.plain)
+                .frame(height: 20)
             }
         }
         .background(streakBackground)

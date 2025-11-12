@@ -9,6 +9,7 @@ import Foundation
 import UniformTypeIdentifiers
 import XCTest
 import tdgCoreTest
+
 @testable import tdgCoreShare
 
 final class TestAttachmentResolver: XCTestCase {
@@ -148,7 +149,7 @@ final class TestAttachmentResolver: XCTestCase {
         mockProvider.registeredTypeIdentifiers = [
             UTType.text.identifier,
             UTType.plainText.identifier,
-            "public.utf8-plain-text"
+            "public.utf8-plain-text",
         ]
 
         // When: Resolving text
@@ -277,7 +278,7 @@ final class TestAttachmentResolver: XCTestCase {
         // Then: Should create file with correct content
         XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
         XCTAssertTrue(url.pathExtension == ext)
-        
+
         let fileData = try Data(contentsOf: url)
         XCTAssertEqual(fileData, testData)
 
@@ -296,7 +297,7 @@ final class TestAttachmentResolver: XCTestCase {
         // Then: Should create file with correct content
         XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
         XCTAssertTrue(url.pathExtension == ext)
-        
+
         let fileData = try Data(contentsOf: url)
         XCTAssertEqual(fileData, testData)
 
@@ -308,7 +309,7 @@ final class TestAttachmentResolver: XCTestCase {
 
     func testResolveTextWithInvalidEncoding() async throws {
         // Given: A mock provider with invalid UTF-8 data
-        let invalidData = Data([0xFF, 0xFE, 0xFD]) // Invalid UTF-8
+        let invalidData = Data([0xFF, 0xFE, 0xFD])  // Invalid UTF-8
         let mockProvider = MockNSItemProvider()
         mockProvider.mockData = invalidData
         mockProvider.registeredTypeIdentifiers = [UTType.data.identifier]
@@ -347,7 +348,7 @@ final class TestAttachmentResolver: XCTestCase {
 
     func testResolveAttachmentWithLargeFile() async throws {
         // Given: A mock provider with large data
-        let largeData = Data(repeating: 0x42, count: 1024 * 1024) // 1MB
+        let largeData = Data(repeating: 0x42, count: 1024 * 1024)  // 1MB
         let mockProvider = MockNSItemProvider()
         mockProvider.mockData = largeData
         mockProvider.registeredTypeIdentifiers = [UTType.data.identifier]
@@ -373,7 +374,7 @@ final class TestAttachmentResolver: XCTestCase {
         let tempDir = FileManager.default.temporaryDirectory
         let fileName = UUID().uuidString + "." + fileExtension
         let fileURL = tempDir.appendingPathComponent(fileName)
-        
+
         do {
             try content.write(to: fileURL, atomically: true, encoding: .utf8)
             return fileURL

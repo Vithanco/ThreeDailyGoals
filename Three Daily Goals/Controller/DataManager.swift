@@ -8,8 +8,8 @@
 import Foundation
 import SwiftData
 import SwiftUI
-import os
 import TipKit
+import os
 import tdgCoreMain
 
 /// Struct for import conflict resolution
@@ -35,7 +35,7 @@ public final class DataManager {
     var jsonExportDoc: JSONWriteOnlyDoc? {
         return JSONWriteOnlyDoc(content: allTasks)
     }
-    
+
     // Observable undo/redo state
     var undoAvailable: Bool = false
     var redoAvailable: Bool = false
@@ -43,7 +43,7 @@ public final class DataManager {
     init(modelContext: ModelContext, timeProvider: TimeProvider) {
         self.modelContext = modelContext
         self.timeProvider = timeProvider
-        
+
         // Set up undo manager notifications
         setupUndoNotifications()
         updateUndoRedoState()
@@ -55,7 +55,7 @@ public final class DataManager {
     func list(which state: TaskItemState) -> [TaskItem] {
         // Fetch all tasks and filter in memory (predicate doesn't support enum captures)
         let filtered = allTasks.filter { $0.state == state }
-        
+
         // Sort by changed date
         if state == .closed || state == .dead {
             return filtered.sorted { $0.changed > $1.changed }
@@ -99,13 +99,13 @@ public final class DataManager {
             logger.error("Invalid UUID string: \(uuidString)")
             return nil
         }
-        
+
         // Search by the actual stored uuid property (predicates can't access computed 'id')
         let predicate = #Predicate<TaskItem> { task in
             task.uuid == searchUuid
         }
         let descriptor = FetchDescriptor<TaskItem>(predicate: predicate)
-        
+
         do {
             let results = try modelContext.fetch(descriptor)
             return results.first
@@ -123,7 +123,7 @@ public final class DataManager {
 
         // Update task state
         task.state = state
-        
+
         // Explicitly save to ensure SwiftData notifies all observers
         save()
     }
@@ -219,7 +219,8 @@ public final class DataManager {
         // Copy comments
         if let comments = task.comments {
             for comment in comments {
-                let newComment = Comment(text: comment.text, taskItem: newTask, icon: comment.icon, state: comment.state)
+                let newComment = Comment(
+                    text: comment.text, taskItem: newTask, icon: comment.icon, state: comment.state)
                 newTask.comments?.append(newComment)
             }
         }
@@ -243,22 +244,10 @@ public final class DataManager {
         // SwiftData will autosave
     }
 
-//    /// Touch a task (update its changed date)
-//    func touch(task: TaskItem) {
-//        task.touch()
-//        save()
-//    }
-//
-//    /// Touch a task and update undo status
-//    func touchAndUpdateUndoStatus(task: TaskItem) {
-//        touch(task: task)
-//        updateUndoRedoStatus()
-//    }
-    
     /// Touch a task with a description and update undo status
     func touchWithDescriptionAndUpdateUndoStatus(task: TaskItem, description: String) {
         let trimmedDescription = description.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         if !trimmedDescription.isEmpty {
             // Use the provided description
             task.setChangedDate(.now)
@@ -268,7 +257,7 @@ public final class DataManager {
             task.setChangedDate(.now)
             task.addComment(text: "You 'touched' this task.", icon: task.state.imageName, state: task.state)
         }
-        
+
         updateUndoRedoStatus()
     }
 
@@ -429,13 +418,13 @@ public final class DataManager {
         let closed = counts[.closed] ?? 0
         let dead = counts[.dead] ?? 0
         return """
-        Total tasks: \(total)
-        - Priority: \(priority)
-        - Open: \(open)
-        - Pending: \(pending)
-        - Closed: \(closed)
-        - Graveyard: \(dead)
-        """
+            Total tasks: \(total)
+            - Priority: \(priority)
+            - Open: \(open)
+            - Pending: \(pending)
+            - Closed: \(closed)
+            - Graveyard: \(dead)
+            """
     }
 
     /// Get completion rate for a date range
@@ -484,24 +473,24 @@ public final class DataManager {
             let fetchedItems = try modelContext.fetch(descriptor)
 
             logger.info("fetched \(fetchedItems.count) tasks from central store")
-            
+
             // Clean up unchanged items after merging
             cleanupUnchangedItems()
-            
+
             ensureEveryItemHasAUniqueUuid()
 
         } catch {
             logger.error("Fetch failed: \(error)")
             // For CloudKit sync failures, use the appropriate error type
-            if error.localizedDescription.lowercased().contains("cloudkit") || 
-               error.localizedDescription.lowercased().contains("sync") {
+            if error.localizedDescription.lowercased().contains("cloudkit")
+                || error.localizedDescription.lowercased().contains("sync")
+            {
                 reportDatabaseError(.cloudKitSyncFailed(underlyingError: error))
             } else {
                 reportDatabaseError(.containerCreationFailed(underlyingError: error))
             }
         }
     }
-
 
     /// Ensure every item has a unique UUID
     private func ensureEveryItemHasAUniqueUuid() {
@@ -529,7 +518,7 @@ public final class DataManager {
             reportDatabaseError(.containerCreationFailed(underlyingError: error))
         }
     }
-    
+
     /// Report a database error to the user interface
     private func reportDatabaseError(_ error: DatabaseError) {
         dataIssueReporter?.reportDatabaseError(error)
@@ -560,34 +549,38 @@ public final class DataManager {
 
     private func setupUndoNotifications() {
         guard let undoManager = modelContext.undoManager else { return }
-        
+
         let handler: @Sendable (Notification) -> Void = { [weak self] _ in
             Task { @MainActor in
                 self?.updateUndoRedoState()
             }
         }
-        
-        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidUndoChange,
-                                               object: undoManager,
-                                               queue: .main,
-                                               using: handler)
-        
-        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidRedoChange,
-                                               object: undoManager,
-                                               queue: .main,
-                                               using: handler)
-        
-        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidOpenUndoGroup,
-                                               object: undoManager,
-                                               queue: .main,
-                                               using: handler)
-        
-        NotificationCenter.default.addObserver(forName: .NSUndoManagerDidCloseUndoGroup,
-                                               object: undoManager,
-                                               queue: .main,
-                                               using: handler)
+
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidUndoChange,
+            object: undoManager,
+            queue: .main,
+            using: handler)
+
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidRedoChange,
+            object: undoManager,
+            queue: .main,
+            using: handler)
+
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidOpenUndoGroup,
+            object: undoManager,
+            queue: .main,
+            using: handler)
+
+        NotificationCenter.default.addObserver(
+            forName: .NSUndoManagerDidCloseUndoGroup,
+            object: undoManager,
+            queue: .main,
+            using: handler)
     }
-    
+
     /// Update the observable undo/redo state
     private func updateUndoRedoState() {
         undoAvailable = modelContext.undoManager?.canUndo ?? false
@@ -812,7 +805,7 @@ public final class DataManager {
                 .help("undo an action")
         }
         .disabled(!canUndo)
-        .opacity(canUndo ? 1.0 : 0.5) // Make disabled buttons visible but dimmed
+        .opacity(canUndo ? 1.0 : 0.5)  // Make disabled buttons visible but dimmed
         .keyboardShortcut("z", modifiers: [.command])
     }
 
@@ -829,18 +822,16 @@ public final class DataManager {
                 .help("redo an action")
         }
         .disabled(!canRedo)
-        .opacity(canRedo ? 1.0 : 0.5) // Make disabled buttons visible but dimmed
+        .opacity(canRedo ? 1.0 : 0.5)  // Make disabled buttons visible but dimmed
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
-
-
 
     /// Close button for task items
     func closeButton(item: TaskItem) -> some View {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .closed)
         }) {
-            Label("Close", systemImage: imgClosed).foregroundColor(TaskItemState.closed.color)
+            Image(systemName: imgClosed).foregroundColor(TaskItemState.closed.color)
         }
         .help("Close the task")
         .accessibilityIdentifier("closeButton")
@@ -852,8 +843,8 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .dead)
         }) {
-            Label("Kill", systemImage: imgGraveyard).foregroundColor(TaskItemState.dead.color)
-                
+            Image(systemName: imgGraveyard).foregroundColor(TaskItemState.dead.color)
+
         }
         .help("Move the task to the Graveyard")
         .accessibilityIdentifier("killButton")
@@ -865,8 +856,8 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .open)
         }) {
-            Label("Open", systemImage: imgOpen).foregroundColor(TaskItemState.open.color)
-                
+            Image(systemName: imgOpen).foregroundColor(TaskItemState.open.color)
+
         }
         .help("Open this task again")
         .accessibilityIdentifier("openButton")
@@ -878,10 +869,12 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
-            Label("Pending a Response", systemImage: imgPendingResponse).foregroundColor(TaskItemState.pendingResponse.color)
-                .help(
-                    "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
-                )
+            Image(systemName: imgPendingResponse).foregroundColor(
+                TaskItemState.pendingResponse.color
+            )
+            .help(
+                "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
+            )
         }
         .accessibilityIdentifier("pendingResponseButton")
         .disabled(!item.canBeMovedToPendingResponse)
@@ -911,26 +904,28 @@ public final class DataManager {
                 }
             }
         ) {
-            Label("Delete", systemImage: "trash")
+            Image(systemName: "trash")
                 .help("Delete this task for good.")
         }
         .accessibilityIdentifier("deleteButton")
         .disabled(!item.canBeDeleted)
     }
-    
+
     /// Touch button with description prompt for task items
-    func touchWithDescriptionButton(item: TaskItem, presentAlert: Binding<Bool>, description: Binding<String>) -> some View {
+    func touchWithDescriptionButton(item: TaskItem, presentAlert: Binding<Bool>, description: Binding<String>)
+        -> some View
+    {
         Button(action: {
             presentAlert.wrappedValue = true
         }) {
-            Label("Touch", systemImage:imgTouch)
+            Label("Touch", systemImage: imgTouch)
                 .help("Touch this task and add a description of what was done")
         }
         .accessibilityIdentifier("touchWithDescriptionButton")
         .disabled(!item.canBeTouched)
         .alert("What did you do?", isPresented: presentAlert) {
             TextField("Description of what was done", text: description)
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
             Button("Touch") {
                 self.touchWithDescriptionAndUpdateUndoStatus(task: item, description: description.wrappedValue)
                 description.wrappedValue = ""
@@ -973,10 +968,9 @@ public final class DataManager {
     }
 }
 
-
-extension DataManager :  NewItemProducer {
+extension DataManager: NewItemProducer {
     public func removeItem(_ item: TaskItem) {
-        if (item.isUnchanged) {
+        if item.isUnchanged {
             debugPrint("is unchanged")
             deleteTask(item)
         } else {
@@ -990,4 +984,3 @@ extension DataManager :  NewItemProducer {
         return result
     }
 }
-

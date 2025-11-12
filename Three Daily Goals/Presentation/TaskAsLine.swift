@@ -18,23 +18,23 @@ struct TaskAsLine: View {
 
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
-          //  .strikethrough(item.isClosed, color: .closed)
+        //  .strikethrough(item.isClosed, color: .closed)
     }
 
     var hasDue: Bool {
         return item.due != nil && item.isOpenOrPriority
     }
-    
+
     // Adaptive background color for light/dark mode
     private var cardBackground: Color {
         colorScheme == .dark ? Color.neutral800 : Color.neutral50
     }
-    
+
     // Adaptive border color for light/dark mode
     private var cardBorder: Color {
         colorScheme == .dark ? Color.neutral700 : Color.neutral200
     }
-    
+
     // Enhanced shadow color for better visibility
     private var cardShadow: Color {
         colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.15)
@@ -91,7 +91,7 @@ struct TaskAsLine: View {
 #Preview {
     let appComp = setupApp(isTesting: true)
     TaskAsLine(item: appComp.dataManager.allTasks.first!)
-            .environment(appComp.uiState)
-            .environment(appComp.dataManager)
-            .environment(appComp.preferences)
+        .environment(appComp.uiState)
+        .environment(appComp.dataManager)
+        .environment(appComp.preferences)
 }

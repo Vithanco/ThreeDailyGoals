@@ -19,52 +19,52 @@ struct TaskItemView: View {
         ScrollView {
             Group {
                 #if os(iOS)
-                // iOS: Stacked vertical layout for narrow screens
-                VStack(spacing: 20) {
-                    // Main task content with enhanced card styling
-                    InnerTaskItemView(
-                        item: item,
-                        allTags: dataManager.activeTags.asArray,
-                        showAttachmentImport: true
-                    )
-                    
-                    // History section
-                    AllCommentsView(item: item)
-                }
-                #else
-                // macOS: Responsive layout using ViewThatFits
-                ViewThatFits {
-                    // Try side-by-side layout first
-                    HStack(alignment: .top, spacing: 20) {
+                    // iOS: Stacked vertical layout for narrow screens
+                    VStack(spacing: 20) {
                         // Main task content with enhanced card styling
                         InnerTaskItemView(
                             item: item,
                             allTags: dataManager.activeTags.asArray,
                             showAttachmentImport: true
                         )
-                        .frame(maxWidth: .infinity)
-                        
+
                         // History section
                         AllCommentsView(item: item)
+                    }
+                #else
+                    // macOS: Responsive layout using ViewThatFits
+                    ViewThatFits {
+                        // Try side-by-side layout first
+                        HStack(alignment: .top, spacing: 20) {
+                            // Main task content with enhanced card styling
+                            InnerTaskItemView(
+                                item: item,
+                                allTags: dataManager.activeTags.asArray,
+                                showAttachmentImport: true
+                            )
                             .frame(maxWidth: .infinity)
-                    }
-                    
-                    // Fallback to stacked layout if side-by-side doesn't fit
-                    VStack(spacing: 20) {
-                        // Main task content with enhanced card styling
-                        InnerTaskItemView(
-                            item: item,
-                            allTags: dataManager.allTags.asArray,
-                            showAttachmentImport: true
-                        )
+
+                            // History section
+                            AllCommentsView(item: item)
+                                .frame(maxWidth: .infinity)
+                        }
+
+                        // Fallback to stacked layout if side-by-side doesn't fit
+                        VStack(spacing: 20) {
+                            // Main task content with enhanced card styling
+                            InnerTaskItemView(
+                                item: item,
+                                allTags: dataManager.allTags.asArray,
+                                showAttachmentImport: true
+                            )
+                            .frame(maxWidth: .infinity)
+
+                            // History section
+                            AllCommentsView(item: item)
+                                .frame(maxWidth: .infinity)
+                        }
                         .frame(maxWidth: .infinity)
-                        
-                        // History section
-                        AllCommentsView(item: item)
-                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
-                }
                 #endif
             }
             .padding(.horizontal, 16)
@@ -80,9 +80,9 @@ struct TaskItemView: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: TaskItem.self, configurations: config)
-    
+
     let item = TaskItem(title: "Sample Task", state: .open)
-    
+
     TaskItemView(item: item)
         .modelContainer(container)
 }

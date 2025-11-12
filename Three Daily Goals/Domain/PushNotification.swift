@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import tdgCoreMain
 @preconcurrency import UserNotifications
+import tdgCoreMain
 
 let id = "3dg.dailyCompssCheck"
 let streakReminderId = "3dg.streakReminder"
@@ -30,7 +30,7 @@ public class PushNotificationDelegate: NSObject, @preconcurrency UNUserNotificat
         switch response.actionIdentifier {
         case UNNotificationDefaultActionIdentifier:
             Task {
-                 compassCheckManager.startCompassCheckNow()
+                compassCheckManager.startCompassCheckNow()
             }
         default:
             break
@@ -45,7 +45,7 @@ public final class PushNotificationManager {
     // Use a computed accessor instead of a stored property
     private var center: UNUserNotificationCenter { UNUserNotificationCenter.current() }
     private var delegate: PushNotificationDelegate?
-    
+
     // Injected dependencies
     private let preferences: CloudPreferences
     private let timeProvider: TimeProvider
@@ -61,7 +61,9 @@ public final class PushNotificationManager {
     }
 
     func scheduleStreakReminderNotification() async {
-        guard preferences.notificationsEnabled && preferences.daysOfCompassCheck >= 2 && !preferences.didCompassCheckToday else {
+        guard
+            preferences.notificationsEnabled && preferences.daysOfCompassCheck >= 2 && !preferences.didCompassCheckToday
+        else {
             center.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
             return
         }
@@ -78,13 +80,14 @@ public final class PushNotificationManager {
 
         let content = UNMutableNotificationContent()
         content.title = "Keep Your Streak Alive! 🔥"
-        content.body = "You have a \(preferences.daysOfCompassCheck)-day streak - don't break it now! Time for your Compass Check."
+        content.body =
+            "You have a \(preferences.daysOfCompassCheck)-day streak - don't break it now! Time for your Compass Check."
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: streakReminderId, content: content, trigger: trigger)
 
         do {
-            try await center.add(request)   // stays on MainActor, no extra Task, no captured stored property
+            try await center.add(request)  // stays on MainActor, no extra Task, no captured stored property
         } catch {
             print("Not able to add streak reminder notification: \(error.localizedDescription)")
         }
@@ -96,7 +99,7 @@ public final class PushNotificationManager {
             center.removePendingNotificationRequests(withIdentifiers: [id])
             return
         }
-        
+
         if delegate == nil {
             delegate = PushNotificationDelegate(compassCheckManager: model)
             center.delegate = delegate
@@ -112,7 +115,8 @@ public final class PushNotificationManager {
             content.title = "Time for the daily Compass Check!"
             content.body = "Click here for starting the Compass Check"
 
-            let trigger = UNCalendarNotificationTrigger(dateMatching: preferences.compassCheckTimeComponents, repeats: true)
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: preferences.compassCheckTimeComponents, repeats: true)
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
 
             try await center.add(request)
@@ -120,7 +124,7 @@ public final class PushNotificationManager {
             print("Authorization/scheduling failed: \(error.localizedDescription)")
         }
     }
-    
+
     /// Cancel all compass check related notifications
     func cancelCompassCheckNotifications() async {
         center.removePendingNotificationRequests(withIdentifiers: [id, streakReminderId])

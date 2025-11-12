@@ -78,9 +78,9 @@ struct MainView: View {
                     // Open App Store for app update
                     if let url = URL(string: "https://apps.apple.com/app/three-daily-goals/id1234567890") {
                         #if os(macOS)
-                        NSWorkspace.shared.open(url)
+                            NSWorkspace.shared.open(url)
                         #else
-                        UIApplication.shared.open(url)
+                            UIApplication.shared.open(url)
                         #endif
                     }
                 }

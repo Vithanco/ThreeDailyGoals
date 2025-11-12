@@ -14,16 +14,16 @@ public struct InformStep: CompassCheckStep {
     public let name: String = "Welcome & Information"
     public let description: String = "Welcome screen that provides information about the Compass Check process."
     public let isSilent: Bool = false
-    
+
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckInformView())
     }
-    
+
     public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed for inform step
     }
-    
+
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Inform step is always applicable - it's the starting point
         return true

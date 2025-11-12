@@ -11,7 +11,7 @@ import tdgCoreMain
 public struct CompassCheckStepsPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(CompassCheckManager.self) private var compassCheckManager
-    
+
     public var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -26,14 +26,14 @@ public struct CompassCheckStepsPreferencesView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(Color.priority)
                     }
-                    
+
                     Text("Configure which steps are included in your daily Compass Check process.")
                         .multilineTextAlignment(.center)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 .padding(.bottom, 8)
-                
+
                 // Individual step configuration sections
                 ForEach(Array(compassCheckManager.steps.enumerated()), id: \.element.id) { index, step in
                     VStack(alignment: .leading, spacing: 6) {
@@ -43,26 +43,38 @@ public struct CompassCheckStepsPreferencesView: View {
                                 Text(step.name)
                                     .font(.headline)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(preferences.isCompassCheckStepEnabled(stepId: step.id) ? .primary : .secondary)
-                                    .animation(.easeInOut(duration: 0.2), value: preferences.isCompassCheckStepEnabled(stepId: step.id))
-                                
+                                    .foregroundColor(
+                                        preferences.isCompassCheckStepEnabled(stepId: step.id) ? .primary : .secondary
+                                    )
+                                    .animation(
+                                        .easeInOut(duration: 0.2),
+                                        value: preferences.isCompassCheckStepEnabled(stepId: step.id))
+
                                 Text(step.description)
                                     .font(.caption)
-                                    .foregroundColor(preferences.isCompassCheckStepEnabled(stepId: step.id) ? .secondary : Color.secondary.opacity(0.6))
+                                    .foregroundColor(
+                                        preferences.isCompassCheckStepEnabled(stepId: step.id)
+                                            ? .secondary : Color.secondary.opacity(0.6)
+                                    )
                                     .lineLimit(2)
-                                    .animation(.easeInOut(duration: 0.2), value: preferences.isCompassCheckStepEnabled(stepId: step.id))
+                                    .animation(
+                                        .easeInOut(duration: 0.2),
+                                        value: preferences.isCompassCheckStepEnabled(stepId: step.id))
                             }
-                            
+
                             Spacer()
-                            
+
                             VStack(alignment: .trailing, spacing: 4) {
-                                Toggle("", isOn: Binding(
-                                    get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
-                                    set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
-                                ))
+                                Toggle(
+                                    "",
+                                    isOn: Binding(
+                                        get: { preferences.isCompassCheckStepEnabled(stepId: step.id) },
+                                        set: { preferences.setCompassCheckStepEnabled(stepId: step.id, enabled: $0) }
+                                    )
+                                )
                                 .toggleStyle(.switch)
                                 .scaleEffect(0.65)
-                                
+
                                 if step.id == "plan" {
                                     Text("Coming Soon")
                                         .font(.caption2)
@@ -74,7 +86,7 @@ public struct CompassCheckStepsPreferencesView: View {
                                 }
                             }
                         }
-                        
+
                         // Step-specific configuration (if available)
                         if let configView = step.configurationView() {
                             VStack(alignment: .leading, spacing: 4) {
@@ -88,7 +100,7 @@ public struct CompassCheckStepsPreferencesView: View {
                                         .textCase(.uppercase)
                                 }
                                 .padding(.vertical, 2)
-                                
+
                                 configView
                             }
                             .padding(.leading, 12)

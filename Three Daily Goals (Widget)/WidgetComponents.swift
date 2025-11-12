@@ -19,7 +19,7 @@ struct WidgetSizeConfig {
     let verticalSpacing: CGFloat
     let itemSpacing: CGFloat
     let showHeader: Bool
-    
+
     static func forFamily(_ family: WidgetFamily) -> WidgetSizeConfig {
         switch family {
         case .systemSmall:
@@ -63,36 +63,36 @@ struct WidgetSizeConfig {
                 showHeader: true
             )
         #if os(watchOS)
-        case .accessoryRectangular:
-            return WidgetSizeConfig(
-                maxPriorities: 3,
-                fontSize: 11,
-                iconSize: 14,
-                horizontalPadding: 0,
-                verticalSpacing: 2,
-                itemSpacing: 1,
-                showHeader: false
-            )
-        case .accessoryCircular:
-            return WidgetSizeConfig(
-                maxPriorities: 1,
-                fontSize: 9,
-                iconSize: 12,
-                horizontalPadding: 0,
-                verticalSpacing: 1,
-                itemSpacing: 1,
-                showHeader: false
-            )
-        case .accessoryInline:
-            return WidgetSizeConfig(
-                maxPriorities: 1,
-                fontSize: 9,
-                iconSize: 12,
-                horizontalPadding: 0,
-                verticalSpacing: 1,
-                itemSpacing: 1,
-                showHeader: false
-            )
+            case .accessoryRectangular:
+                return WidgetSizeConfig(
+                    maxPriorities: 3,
+                    fontSize: 11,
+                    iconSize: 14,
+                    horizontalPadding: 0,
+                    verticalSpacing: 2,
+                    itemSpacing: 1,
+                    showHeader: false
+                )
+            case .accessoryCircular:
+                return WidgetSizeConfig(
+                    maxPriorities: 1,
+                    fontSize: 9,
+                    iconSize: 12,
+                    horizontalPadding: 0,
+                    verticalSpacing: 1,
+                    itemSpacing: 1,
+                    showHeader: false
+                )
+            case .accessoryInline:
+                return WidgetSizeConfig(
+                    maxPriorities: 1,
+                    fontSize: 9,
+                    iconSize: 12,
+                    horizontalPadding: 0,
+                    verticalSpacing: 1,
+                    itemSpacing: 1,
+                    showHeader: false
+                )
         #endif
         default:
             return WidgetSizeConfig(
@@ -114,7 +114,7 @@ struct WidgetPriorityItem: View {
     let priorityNumber: Int
     let config: WidgetSizeConfig
     let taskUUID: String?
-    
+
     var body: some View {
         HStack(spacing: config.itemSpacing) {
             ZStack {
@@ -139,7 +139,7 @@ struct WidgetStreakView: View {
     let preferences: CloudPreferences
     let config: WidgetSizeConfig
     let widgetFamily: WidgetFamily
-    
+
     var body: some View {
         if shouldUseEnhancedLayout {
             enhancedLayout
@@ -147,7 +147,7 @@ struct WidgetStreakView: View {
             simpleLayout
         }
     }
-    
+
     private var shouldUseEnhancedLayout: Bool {
         switch widgetFamily {
         case .systemMedium, .systemLarge, .systemExtraLarge:
@@ -156,7 +156,7 @@ struct WidgetStreakView: View {
             return false
         }
     }
-    
+
     @ViewBuilder
     private var simpleLayout: some View {
         HStack(spacing: 3) {
@@ -182,7 +182,7 @@ struct WidgetStreakView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private var enhancedLayout: some View {
         HStack(spacing: 3) {
@@ -196,14 +196,14 @@ struct WidgetStreakView: View {
                     .font(.system(size: config.fontSize + 3, weight: .medium))
                     .frame(width: config.iconSize + 1, height: config.iconSize + 1)
             }
-            
+
             // Vertical separator line
             Rectangle()
                 .fill(Color.white.opacity(0.3))
                 .frame(width: 1, height: config.fontSize + 6)
-            
+
             Spacer()
-            
+
             // Today section
             HStack(spacing: 3) {
                 Text("Today")
@@ -227,7 +227,7 @@ struct WidgetStreakView: View {
 // MARK: - WatchOS Accessory Widgets
 struct WatchAccessoryCircularView: View {
     let preferences: CloudPreferences
-    
+
     var body: some View {
         VStack {
             Text("\(preferences.daysOfCompassCheck)")
@@ -243,7 +243,7 @@ struct WatchAccessoryCircularView: View {
 struct WatchAccessoryInlineView: View {
     let preferences: CloudPreferences
     let priorities: [String]
-    
+
     var body: some View {
         HStack {
             Text("\(preferences.daysOfCompassCheck) days")
@@ -262,7 +262,7 @@ struct WatchAccessoryInlineView: View {
 struct WatchAccessoryRectangularView: View {
     let preferences: CloudPreferences
     let priorities: [String]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
@@ -276,7 +276,7 @@ struct WatchAccessoryRectangularView: View {
                         .font(.system(size: 8))
                 }
             }
-            
+
             if !priorities.isEmpty {
                 Text(priorities.prefix(2).joined(separator: ", "))
                     .font(.system(size: 8))

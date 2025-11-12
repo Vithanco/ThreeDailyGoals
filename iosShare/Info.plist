@@ -14,10 +14,6 @@
 	<string>1.0</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>

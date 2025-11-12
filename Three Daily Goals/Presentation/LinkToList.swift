@@ -19,9 +19,9 @@ private struct ListLabel: View {
     init(whichList: TaskItemState) {
         self.whichList = whichList
     }
-    
+
     @Query private var allTasks: [TaskItem]
-    
+
     private var tasks: [TaskItem] {
         allTasks.filter { $0.state == whichList }
     }
@@ -33,12 +33,12 @@ private struct ListLabel: View {
     var count: Text {
         return Text(tasks.count.description)
     }
-    
+
     // Enhanced list icons using the new semantic icons
     private var listIcon: String {
         return whichList.imageName
     }
-    
+
     // List-specific colors
     private var listColor: Color {
         return whichList.color
@@ -83,14 +83,14 @@ private struct ListLabel: View {
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(listColor)
                     .frame(width: 28, height: 28)
-                
+
                 // List name only (removed duplicate count)
                 name
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.primary)
-                
+
                 Spacer()
-                
+
                 // Enhanced count badge
                 if whichList.showCount && tasks.count > 0 {
                     Text(tasks.count.description)
@@ -163,7 +163,7 @@ struct LinkToList: View {
 #Preview {
     let appComp = setupApp(isTesting: true)
     LinkToList(whichList: .open)
-            .environment(appComp.uiState)
-            .environment(appComp.dataManager)
-            .environment(appComp.preferences)
+        .environment(appComp.uiState)
+        .environment(appComp.dataManager)
+        .environment(appComp.preferences)
 }

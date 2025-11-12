@@ -63,7 +63,7 @@ public struct TagsPreferencesView: View {
                             ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
                                 TagView(
                                     text: text,
-                                    isSelected: true, // All tags in preferences are "selected" for display
+                                    isSelected: true,  // All tags in preferences are "selected" for display
                                     accentColor: Color.priority,
                                     onTap: {
                                         tag = text
@@ -73,7 +73,7 @@ public struct TagsPreferencesView: View {
                             }
                         }
                     }
-                    .frame(maxHeight: 150) // Reduced height for preferences
+                    .frame(maxHeight: 150)  // Reduced height for preferences
                     Spacer()
                 }
                 Spacer()

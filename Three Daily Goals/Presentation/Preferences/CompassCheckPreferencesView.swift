@@ -11,15 +11,14 @@ import tdgCoreMain
 public struct CompassCheckPreferencesView: View {
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
-    
+
     var lastCompassCheck: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
         return dateFormatter.string(from: preferences.lastCompassCheck)
     }
-    
-    
+
     public var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -34,7 +33,7 @@ public struct CompassCheckPreferencesView: View {
                         .foregroundColor(Color.priority)
                 }
                 .padding(.bottom, 10)
-                
+
                 Text(
                     "Daily Compass Checks are at the heart of Three Daily Goals. Choose when you want to plan your Daily Compass Check. In the morning? Or the evening before?"
                 )
@@ -44,7 +43,7 @@ public struct CompassCheckPreferencesView: View {
                 Text(
                     "Three Daily Goals is assuming that you should do a Compass Check to occur at least once between noon of one day and noon the next day."
                 ).multilineTextAlignment(.center)
-                
+
                 // Status Information
                 GroupBox {
                     VStack(alignment: .leading, spacing: 8) {
@@ -53,9 +52,9 @@ public struct CompassCheckPreferencesView: View {
                             Spacer()
                             Text(lastCompassCheck).foregroundColor(Color.priority)
                         }
-                        
+
                         StreakView()
-                        
+
                         Text("Current Compass Check Interval").bold()
                         HStack {
                             Text("Started:")
@@ -76,22 +75,25 @@ public struct CompassCheckPreferencesView: View {
                     .padding(5)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 // Notification Settings
                 GroupBox("Notifications") {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Enable Compass Check Notifications")
                             Spacer()
-                            Toggle("", isOn: Binding(
-                                get: { preferences.notificationsEnabled },
-                                set: { preferences.notificationsEnabled = $0 }
-                            ))
+                            Toggle(
+                                "",
+                                isOn: Binding(
+                                    get: { preferences.notificationsEnabled },
+                                    set: { preferences.notificationsEnabled = $0 }
+                                )
+                            )
                             .toggleStyle(.switch)
                             .scaleEffect(0.65)
                         }
                         .frame(maxWidth: .infinity)
-                        
+
                         Text("Receive reminders to complete your daily Compass Check")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -105,7 +107,7 @@ public struct CompassCheckPreferencesView: View {
             .padding(10)
         }
     }
-    
+
 }
 
 #Preview {

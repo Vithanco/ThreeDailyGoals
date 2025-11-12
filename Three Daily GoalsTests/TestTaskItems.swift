@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Testing
 import SwiftUI
+import Testing
 
 @testable import Three_Daily_Goals
 @testable import tdgCoreMain
@@ -49,7 +49,9 @@ struct TestTaskItems {
         let dataManager = appComponents.dataManager
         let itemList = dataManager.list(which: .open)
         let headers = TaskItemState.open.subHeaders
-        let partialLists: [[TaskItem]] = headers.map({ $0.filter(items: itemList, timeProvider: appComponents.timeProvider) })
+        let partialLists: [[TaskItem]] = headers.map({
+            $0.filter(items: itemList, timeProvider: appComponents.timeProvider)
+        })
         #expect(Array(partialLists.joined()) == itemList)
     }
 
@@ -121,51 +123,51 @@ struct TestTaskItems {
         dataManager.addItem(item: newTask)
         #expect(dataManager.allTasks.count == 1)
     }
-    
+
     @MainActor
     @Test
     func testDueDateRemovalCrash() throws {
         let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
-        
+
         // Create a task with a due date
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
-        task.due = timeProvider.getDate(inDays: 7) // Set due date 7 days from now
+        task.due = timeProvider.getDate(inDays: 7)  // Set due date 7 days from now
         dataManager.addItem(item: task)
-        
+
         // Verify the task has a due date
         #expect(task.due != nil)
         #expect(task.dueDate != nil)
-        
+
         // Test the dueUntil method with the due date
         let futureDate = timeProvider.getDate(inDays: 10)
         #expect(task.dueUntil(date: futureDate) == true)
-        
+
         // Now remove the due date - this should not crash
         task.due = nil
-        
+
         // Verify the due date is removed
         #expect(task.due == nil)
         #expect(task.dueDate == nil)
-        
+
         // Test dueUntil method with nil due date
         #expect(task.dueUntil(date: futureDate) == false)
-        
+
         // Test accessing the due property multiple times after removal
         let _ = task.due
         let _ = task.dueDate
         let _ = task.due
-        
+
         // Test setting due date again
         task.due = timeProvider.getDate(inDays: 3)
         #expect(task.due != nil)
-        
+
         // Remove it again
         task.due = nil
         #expect(task.due == nil)
     }
-    
+
     @MainActor
     @Test
     func testUnchangedItemsCleanup() throws {
@@ -180,11 +182,11 @@ struct TestTaskItems {
             }
             return tasks
         }
-        
+
         // When: Setting up the app with unchanged items
         let appComponents = setupApp(isTesting: true, loaderForTests: unchangedLoader)
         let dataManager = appComponents.dataManager
-        
+
         // Then: The unchanged items should be cleaned up after loading
         #expect(dataManager.allTasks.isEmpty, "All unchanged items should be cleaned up")
         #expect(dataManager.list(which: .open).isEmpty, "Open list should be empty after cleanup")
@@ -195,17 +197,17 @@ struct TestTaskItems {
     func testDatePickerNullableBindingCrash() throws {
         let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let timeProvider = appComponents.timeProvider
-        
+
         // Test the exact scenario that might cause the crash
         var selectedDate: Date? = timeProvider.getDate(inDays: 7)
-        
+
         // Simulate the DatePickerNullable logic
         // This is the problematic line: if let date = Binding($selected) {
         // We need to test if this crashes when selectedDate becomes nil
-        
+
         // First, test with a valid date
         #expect(selectedDate != nil)
-        
+
         // Test the binding creation (this is what might crash)
         if selectedDate != nil {
             // This simulates the safe version of the binding creation
@@ -215,11 +217,11 @@ struct TestTaskItems {
             )
             #expect(binding.wrappedValue != nil)
         }
-        
+
         // Now set to nil (simulating removing the due date)
         selectedDate = nil
         #expect(selectedDate == nil)
-        
+
         // Test the binding creation with nil value
         if selectedDate != nil {
             // This should not execute since selectedDate is nil
@@ -228,12 +230,12 @@ struct TestTaskItems {
             // This is the safe path - no binding creation attempted
             #expect(true, "Safe path taken")
         }
-        
+
         // Test rapid toggling between nil and valid dates
         for i in 1...10 {
             selectedDate = timeProvider.getDate(inDays: i)
             #expect(selectedDate != nil)
-            
+
             selectedDate = nil
             #expect(selectedDate == nil)
         }

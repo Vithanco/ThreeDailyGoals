@@ -18,8 +18,8 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
 
     /// Currently selected task item (for detail view)
     var selectedItem: TaskItem?
-    
-    var newItemProducer : NewItemProducer? = nil
+
+    var newItemProducer: NewItemProducer? = nil
 
     /// Currently selected list type
     var whichList: TaskItemState = .open
@@ -48,10 +48,10 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
 
     /// Show missing compass check alert
     var showMissingCompassCheckAlert: Bool = false
-    
+
     /// Show database error alert
     var showDatabaseErrorAlert: Bool = false
-    
+
     /// Current database error
     var databaseError: DatabaseError?
 
@@ -84,7 +84,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     @MainActor
     func select(which: TaskItemState, item: TaskItem?) {
         withAnimation {
-            if (which != .priority) {
+            if which != .priority {
                 whichList = which
             }
             selectedItem = item
@@ -108,24 +108,24 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
         infoMessage = message
         showInfoMessage = true
     }
-    
+
     /// Show a database error
     func showDatabaseError(_ error: DatabaseError) {
         databaseError = error
         showDatabaseErrorAlert = true
     }
-    
+
     /// Report a database error (DataIssueReporter protocol)
     public func reportDatabaseError(_ error: DatabaseError) {
         showDatabaseError(error)
     }
-    
+
     /// Report data loss to the user
     public func reportDataLoss(_ message: String, details: String?) {
         let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
         showInfo("⚠️ Data Loss Warning\n\n\(fullMessage)")
     }
-    
+
     /// Report migration issues to the user
     public func reportMigrationIssue(_ message: String, details: String?) {
         let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
@@ -166,17 +166,17 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     // MARK: - Command Buttons
 
     /// Add new item button for app commands
-        var addNewItemButton: some View {
-            Button(action: { [self] in
-                addNewItem()
-            }) {
-                Label("Add New Task", systemImage: imgAddItem)
-                    .foregroundColor(TaskItemState.open.color)
-                    .help("Add a new task")
-            }
-            .accessibilityIdentifier("addTaskButton")
-            .popoverTip(AddFirstGoalTip())
+    var addNewItemButton: some View {
+        Button(action: { [self] in
+            addNewItem()
+        }) {
+            Label("Add New Task", systemImage: imgAddItem)
+                .foregroundColor(TaskItemState.open.color)
+                .help("Add a new task")
         }
+        .accessibilityIdentifier("addTaskButton")
+        .popoverTip(AddFirstGoalTip())
+    }
 
     /// Export button for app commands
     var exportButton: some View {
@@ -197,6 +197,5 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
                 .help("Import tasks from JSON")
         }
     }
-    
-}
 
+}

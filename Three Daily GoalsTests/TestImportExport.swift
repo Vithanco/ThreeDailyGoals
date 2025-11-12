@@ -63,12 +63,12 @@ struct TestImportExport {
             return
         }
         #expect(first == model.dataManager.findTask(withUuidString: first.id))
-        
+
         // Create a new model with empty data for import testing
         let newModelComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let newModel = newModelComponents.dataManager
         let newUiState = newModelComponents.uiState
-        
+
         #expect(0 == newModel.allTasks.count)
         newModel.importTasks(url: url, uiState: newUiState)
 

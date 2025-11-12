@@ -15,23 +15,22 @@ public struct PlanStep: CompassCheckStep {
     public let name: String = "Plan Day"
     public let description: String = "Plan your day by scheduling tasks and setting up your calendar (macOS only)."
     public let isSilent: Bool = false
-    
+
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         AnyView(CompassCheckPlanDay(date: compassCheckManager.timeProvider.getCompassCheckInterval().end))
     }
-    
+
     public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {
         // No specific actions needed - planning happens in the view
     }
-    
+
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
         // Plan step is only available on macOS (not iOS)
         #if os(macOS)
-        return true
+            return true
         #else
-        return false
+            return false
         #endif
     }
 }
-

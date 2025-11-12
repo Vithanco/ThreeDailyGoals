@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-public extension TaskSection {
-    var asText: Text {
+extension TaskSection {
+    public var asText: Text {
         return Text(text).font(.title)
     }
 }

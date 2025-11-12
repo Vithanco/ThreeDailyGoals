@@ -8,10 +8,10 @@
 import EventKit
 import SwiftData
 import SwiftUI
+import TipKit
 import UniformTypeIdentifiers
 import os
 import tdgCoreMain
-import TipKit
 
 // Test data loader using the default test data function
 let defaultTestDataLoader: TestDataLoader = { timeProvider in
@@ -36,13 +36,14 @@ struct Three_Daily_GoalsApp: App {
         #endif
 
         // Set up app components
-        self._appComponents = State(wrappedValue: setupApp(isTesting: enableTesting, loaderForTests: defaultTestDataLoader))
-        
+        self._appComponents = State(
+            wrappedValue: setupApp(isTesting: enableTesting, loaderForTests: defaultTestDataLoader))
+
         // Initialize TipKit only in production (not during testing)
         if !enableTesting {
             TipManager.shared.configureTips()
         }
-        
+
         // Only initialize calendar access if the plan step is enabled
         let planStepEnabled = appComponents.preferences.isCompassCheckStepEnabled(stepId: "plan")
         if calendarManager.shouldRequestCalendarAccess(planStepEnabled: planStepEnabled) {
@@ -95,8 +96,8 @@ struct Three_Daily_GoalsApp: App {
                     .environment(appComponents.preferences)
                     .environment(appComponents.dataManager)
                     .environment(appComponents.uiState)
-                                    .environment(appComponents.compassCheckManager)
-                .environment(appComponents.timeProviderWrapper)
+                    .environment(appComponents.compassCheckManager)
+                    .environment(appComponents.timeProviderWrapper)
             }
         #endif
     }
@@ -114,20 +115,19 @@ struct Three_Daily_GoalsApp: App {
             if url.host == "task" {
                 // Extract UUID from path: three-daily-goals://task/{uuid}
                 if let taskUUID = url.pathComponents.last {
-                    if let task = appComponents.dataManager.findTask(withUuidString: taskUUID) {
-                        appComponents.uiState.select(task)
-                        return
-                    } else {
+                    guard let task = appComponents.dataManager.findTask(withUuidString: taskUUID) else {
                         appComponents.uiState.showInfo("Task not found: \(taskUUID)")
                         return
                     }
+                    appComponents.uiState.select(task)
+                    return
                 }
             } else if url.host == "app" {
                 // Just open the app, no task creation
                 return
             }
         }
-        
+
         // Unknown URL scheme - just open the app
         // (Share extension handles task creation separately)
     }

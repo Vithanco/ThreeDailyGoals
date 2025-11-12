@@ -84,7 +84,8 @@ public struct ItemToolbarContent: ToolbarContent {
         }
         if item.canBeTouched {
             ToolbarItem {
-                dataManager.touchWithDescriptionButton(item: item, presentAlert: $showTouchAlert, description: $touchDescription)
+                dataManager.touchWithDescriptionButton(
+                    item: item, presentAlert: $showTouchAlert, description: $touchDescription)
             }
         }
     }

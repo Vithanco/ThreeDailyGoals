@@ -11,9 +11,8 @@ public struct AttachmentRow: View {
     let onDelete: (() -> Void)?
     #if os(iOS)
         @State private var showingPreview = false
-#endif
-        @State private var showingDeleteConfirmation = false
-
+    #endif
+    @State private var showingDeleteConfirmation = false
 
     public var body: some View {
         HStack(spacing: 12) {
@@ -33,7 +32,7 @@ public struct AttachmentRow: View {
                         fileExtension: attachment.type?.preferredFilenameExtension,
                         uniqueIdentifier: String(describing: attachment.id)
                     )
-                    
+
                     if let url = tempURL {
                         ShareLink(item: url)
                         Button("Open") {
@@ -68,7 +67,7 @@ public struct AttachmentRow: View {
                 #endif
                 if onDelete != nil {
                     Button("Delete") {
-                            showingDeleteConfirmation = true
+                        showingDeleteConfirmation = true
                     }
                     .foregroundColor(.red)
                 }
@@ -81,19 +80,19 @@ public struct AttachmentRow: View {
             .sheet(isPresented: $showingPreview) {
                 AttachmentPreviewSheet(attachment: attachment)
             }
-#endif
-            .confirmationDialog(
-                "Delete Attachment",
-                isPresented: $showingDeleteConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Delete", role: .destructive) {
-                    onDelete?()
-                }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Are you sure you want to delete '\(attachment.filename)'? This action cannot be undone.")
+        #endif
+        .confirmationDialog(
+            "Delete Attachment",
+            isPresented: $showingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                onDelete?()
             }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to delete '\(attachment.filename)'? This action cannot be undone.")
+        }
 
     }
 

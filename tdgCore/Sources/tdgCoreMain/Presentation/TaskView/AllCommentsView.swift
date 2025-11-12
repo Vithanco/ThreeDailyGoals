@@ -10,7 +10,7 @@ import SwiftUI
 public struct AllCommentsView: View {
     @Bindable var item: TaskItem
 
-    @State private var presentAlert: Bool 
+    @State private var presentAlert: Bool
     @State private var newComment: String
 
     public init(item: TaskItem, presentAlert: Bool = false, newComment: String = "") {
@@ -18,7 +18,7 @@ public struct AllCommentsView: View {
         self.presentAlert = presentAlert
         self.newComment = newComment
     }
-    
+
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with Add Comment button
@@ -30,7 +30,7 @@ public struct AllCommentsView: View {
                         "Add some comment to the history of this task")
                 }.accessibilityIdentifier("addCommentButton")
             }
-            
+
             // Enhanced Last Updated section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
@@ -51,7 +51,7 @@ public struct AllCommentsView: View {
             .padding(.horizontal, 12)
             .background(item.color.opacity(0.05))
             .cornerRadius(8)
-            
+
             // Comments section
             if let comments = item.comments, !comments.isEmpty {
                 ForEach(comments.sorted(by: { $0.created > $1.created })) { comment in
@@ -60,7 +60,7 @@ public struct AllCommentsView: View {
             } else {
                 Text("No history yet").foregroundColor(.secondary).italic()
             }
-            
+
             // Enhanced Created section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
@@ -84,7 +84,7 @@ public struct AllCommentsView: View {
         }
         .alert("Add Comment", isPresented: $presentAlert) {
             TextField("Comment", text: $newComment)
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
             Button("Add") {
                 if !newComment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     item.addComment(text: newComment.trimmingCharacters(in: .whitespacesAndNewlines))
