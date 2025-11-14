@@ -77,18 +77,18 @@ extension TaskItem: Taggable {
         if other.uuid != self.uuid {
             logger.error("UUID mismatch during import: \(other.uuid) != \(self.uuid) for  \(self.title) ")
         }
-        self._title = other._title
-        self._details = other._details
-        self.dueDate = other.dueDate
-        self._url = other._url
+        setTitle(other._title)
+        setDetails(other._details)
+        setDueDate(other.dueDate)
+        setUrl(other._url)
         self.changed = other.changed
-        self.allTagsString = other.allTagsString
+        setTags(other.tags)
         self.comments = other.comments
-        self.state = other.state
+        setState(other._state)
         self.eventId = other.eventId
         self.created = other.created
         self.closed = other.closed
-        self.estimatedMinutes = other.estimatedMinutes
+        setEstimatedMinutes(other.estimatedMinutes)
     }
 }
 
@@ -267,30 +267,100 @@ extension TaskItem {
     }
 
     public func closeTask() {
-        if state != .closed {
-            state = .closed
+        if _state != .closed {
+            setState(.closed)
             addComment(text: "closed this task on \(Date.now)", icon: imgClosed, state: .closed)
         }
     }
 
     public func reOpenTask() {
-        if state != .open {
-            state = .open
+        if _state != .open {
+            setState(.open)
             addComment(text: "Reopened this Task.", icon: imgOpen, state: .open)
         }
     }
     public func graveyard() {
-        if state != .dead {
-            state = .dead
+        if _state != .dead {
+            setState(.dead)
             addComment(text: "Moved task to the Graveyard of not needed tasks.", icon: imgGraveyard, state: .dead)
         }
     }
 
     public func makePriority() {
-        if state != .priority {
-            state = .priority
+        if _state != .priority {
+            setState(.priority)
             addComment(text: "Turned into a priority.", icon: imgPriority, state: .priority)
         }
+    }
+
+    // MARK: - Explicit Setters (replace didSet handlers)
+
+    public func setTitle(_ newTitle: String) {
+        guard _title != newTitle else { return }
+        _title = newTitle
+        changed = Date.now
+    }
+
+    public func setDetails(_ newDetails: String) {
+        guard _details != newDetails else { return }
+        _details = newDetails
+        changed = Date.now
+    }
+
+    public func setState(_ newState: TaskItemState) {
+        guard _state != newState else { return }
+        _state = newState
+        changed = Date.now
+
+        if newState == .closed {
+            closed = Date.now
+        } else {
+            closed = nil
+        }
+
+        if comments != nil {
+            addComment(text: "Changed state to: \(newState)", icon: imgStateChange)
+        }
+    }
+
+    public func setUrl(_ newUrl: String) {
+        guard _url != newUrl else { return }
+        _url = newUrl
+        changed = Date.now
+    }
+
+    public func setDueDate(_ newDueDate: Date?) {
+        guard dueDate != newDueDate else { return }
+        dueDate = newDueDate
+        changed = Date.now
+    }
+
+    public func setTags(_ newTags: [String]) {
+        let lowercaseTags = newTags.map { $0.lowercased() }
+        guard allTagsString != lowercaseTags.joined(separator: ",") else { return }
+
+        let oldTags = Set(tags)
+        let newTagsSet = Set(lowercaseTags)
+
+        allTagsString = lowercaseTags.joined(separator: ",")
+        changed = Date.now
+
+        // Add comments for tag changes
+        let added = newTagsSet.subtracting(oldTags)
+        let removed = oldTags.subtracting(newTagsSet)
+
+        for tag in added where !tag.isEmpty {
+            addComment(text: "Added tag: \(tag)", icon: imgTag)
+        }
+        for tag in removed where !tag.isEmpty {
+            addComment(text: "Removed tag: \(tag)", icon: imgTag)
+        }
+    }
+
+    public func setEstimatedMinutes(_ newMinutes: Int) {
+        guard estimatedMinutes != newMinutes else { return }
+        estimatedMinutes = newMinutes
+        changed = Date.now
     }
 
     public func dueUntil(date: Date) -> Bool {
@@ -301,7 +371,7 @@ extension TaskItem {
     }
 
     public func touch() {
-        if state == .open {
+        if _state == .open {
             addComment(text: "You 'touched' this task.", icon: imgTouch)
         } else {
             reOpenTask()
@@ -314,8 +384,8 @@ extension TaskItem {
     }
 
     public func pending() {
-        if state != .pendingResponse {
-            state = .pendingResponse
+        if _state != .pendingResponse {
+            setState(.pendingResponse)
             addComment(
                 text: "You did your part. Closure is pending a response.", icon: imgPendingResponse,
                 state: .pendingResponse)

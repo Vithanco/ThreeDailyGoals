@@ -14,9 +14,194 @@ import UniformTypeIdentifiers
 
 @Suite("FileEnhancer Tests")
 struct TestFileEnhancer {
-    // ... all your previous tests unchanged ...
+    // MARK: - Text File Tests
 
-    // (all the text, binary, and quality tests remain here)
+    @Test("Plain text file generates description with line and character counts")
+    func testPlainTextFileDescription() async throws {
+        let enhancer = FileEnhancer()
+        let content = "Line 1\nLine 2\nLine 3\n\nLine 5"
+        let fileURL = createTempFile(content: content, extension: "txt")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .plainText, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("4 lines") == true)
+        #expect(description?.contains("27 characters") == true)
+    }
+
+    @Test("Swift source code file is detected as text")
+    func testSwiftSourceCodeDetection() async throws {
+        let enhancer = FileEnhancer()
+        let content = "import Foundation\n\nfunc test() {\n    print(\"Hello\")\n}"
+        let fileURL = createTempFile(content: content, extension: "swift")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("lines") == true)
+    }
+
+    @Test("TypeScript file is detected as text")
+    func testTypeScriptDetection() async throws {
+        let enhancer = FileEnhancer()
+        let content = "const x: number = 42;\nconsole.log(x);"
+        let fileURL = createTempFile(content: content, extension: "ts")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("lines") == true)
+    }
+
+    @Test("Markdown file is detected as text")
+    func testMarkdownDetection() async throws {
+        let enhancer = FileEnhancer()
+        let content = "# Title\n\nSome content here."
+        let fileURL = createTempFile(content: content, extension: "md")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("lines") == true)
+    }
+
+    @Test("Empty text file is handled gracefully")
+    func testEmptyTextFile() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(content: "", extension: "txt")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .plainText, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("0 lines") == true)
+    }
+
+    // MARK: - Binary File Tests
+
+    @Test("PDF file returns PDF document description")
+    func testPDFDescription() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalPDFData(), extension: "pdf")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .pdf, useAI: false)
+
+        #expect(description == "PDF document")
+    }
+
+    @Test("PNG image file returns image description")
+    func testPNGDescription() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalPNGData(), extension: "png")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .png, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("Image file") == true)
+    }
+
+    @Test("JPEG image file returns image description")
+    func testJPEGDescription() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalJPEGData(), extension: "jpg")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .jpeg, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("Image file") == true)
+    }
+
+    @Test("MP4 video file returns video description")
+    func testMP4Description() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalMP4Data(), extension: "mp4")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .mpeg4Movie, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("Video file") == true)
+    }
+
+    @Test("MP3 audio file returns audio description")
+    func testMP3Description() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalMP3Data(), extension: "mp3")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .mp3, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("Audio file") == true)
+    }
+
+    @Test("ZIP archive file returns archive description")
+    func testZIPDescription() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = createTempFile(data: minimalZIPData(), extension: "zip")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .zip, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("Archive file") == true)
+    }
+
+    // MARK: - Edge Cases
+
+    @Test("Unknown binary file gets generic description")
+    func testUnknownBinaryFile() async throws {
+        let enhancer = FileEnhancer()
+        let binaryData = Data([0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x01])
+        let fileURL = createTempFile(data: binaryData, extension: "dat")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description != nil)
+    }
+
+    @Test("Binary file with text-like extension detected correctly by content")
+    func testBinaryWithTextExtension() async throws {
+        let enhancer = FileEnhancer()
+        let binaryData = Data([0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x01])
+        let fileURL = createTempFile(data: binaryData, extension: "txt")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description != nil)
+    }
+
+    @Test("Non-existent file returns nil")
+    func testNonExistentFile() async throws {
+        let enhancer = FileEnhancer()
+        let fileURL = URL(fileURLWithPath: "/tmp/this-file-does-not-exist-\(UUID().uuidString).txt")
+
+        let description = await enhancer.enhance(fileURL: fileURL, useAI: false)
+
+        #expect(description == nil)
+    }
+
+    @Test("File with only whitespace is handled correctly")
+    func testWhitespaceOnlyFile() async throws {
+        let enhancer = FileEnhancer()
+        let content = "   \n  \n\t\n   "
+        let fileURL = createTempFile(content: content, extension: "txt")
+        defer { try? FileManager.default.removeItem(at: fileURL) }
+
+        let description = await enhancer.enhance(fileURL: fileURL, contentType: .plainText, useAI: false)
+
+        #expect(description != nil)
+        #expect(description?.contains("0 lines") == true)
+    }
 
     // MARK: - Helper Methods
 

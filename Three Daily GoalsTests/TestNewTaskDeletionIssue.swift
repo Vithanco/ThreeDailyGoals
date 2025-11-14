@@ -15,7 +15,7 @@ import tdgCoreMain
 struct TestNewTaskDeletionIssue {
 
     @Test @MainActor
-    func testNewTaskGetsDeletedWhenUnchanged() throws {
+    func testNewTaskGetsDeletedWhenUnchanged() async throws {
         // Given: App setup with testing configuration
         let appComponents = setupApp(isTesting: true, loaderForTests: emptyTestDataLoader)
         let dataManager = appComponents.dataManager
@@ -24,6 +24,8 @@ struct TestNewTaskDeletionIssue {
         // When: Creating a new task via the add button (simulating the flow)
         let initialCount = dataManager.allTasks.count
         uiState.addNewItem()
+
+        try await Task.sleep(for: .milliseconds(10))
 
         // Then: The task should be created and added to the open list
         #expect(dataManager.allTasks.count == initialCount + 1, "Task count should increase")
@@ -45,7 +47,7 @@ struct TestNewTaskDeletionIssue {
     }
 
     @Test @MainActor
-    func testTaskCreationAndImmediateDeletionFlow() throws {
+    func testTaskCreationAndImmediateDeletionFlow() async throws {
         // Given: App setup with testing configuration
         let appComponents = setupApp(isTesting: true, loaderForTests: emptyTestDataLoader)
         let dataManager = appComponents.dataManager
@@ -54,6 +56,8 @@ struct TestNewTaskDeletionIssue {
         // When: Creating a new task (simulating add button click)
         let initialCount = dataManager.allTasks.count
         uiState.addNewItem()
+
+        try await Task.sleep(for: .milliseconds(10))
 
         // Then: Task should be added
         #expect(dataManager.allTasks.count == initialCount + 1, "Task count should increase")

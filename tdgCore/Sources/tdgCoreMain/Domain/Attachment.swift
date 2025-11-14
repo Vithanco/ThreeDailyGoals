@@ -65,7 +65,7 @@ public func addAttachment(
 }
 
 extension Attachment {
-    func purge(in context: ModelContext) throws {
+    public func purge(in context: ModelContext) throws {
         self.blob = nil
         self.isPurged = true
         self.purgedAt = .now
@@ -73,16 +73,16 @@ extension Attachment {
         try context.save()
     }
 
-    func scheduleNextPurgePrompt(months: Int, in context: ModelContext, timeProvider: TimeProvider) throws {
+    public func scheduleNextPurgePrompt(months: Int, in context: ModelContext, timeProvider: TimeProvider) throws {
         self.nextPurgePrompt = timeProvider.date(byAdding: .month, value: months, to: timeProvider.now)
         try context.save()
     }
 
-    func isDueForPurge(at date: Date = .now) -> Bool {
+    public func isDueForPurge(at date: Date = .now) -> Bool {
         guard !isPurged else { return false }
         guard let nextPurgePrompt = nextPurgePrompt else { return false }
         return nextPurgePrompt.compare(date) != .orderedDescending
     }
 
-    var storedBytes: Int { blob?.count ?? 0 }
+    public var storedBytes: Int { blob?.count ?? 0 }
 }

@@ -31,46 +31,14 @@ public enum SchemaV3_6: VersionedSchema {
         public internal(set) var changed: Date = Date.now
         public internal(set) var closed: Date? = nil
 
-        public var _title: String = emptyTaskTitle {
-            didSet {
-                guard oldValue != _title else { return }
-                changed = Date.now
-            }
-        }
-        public var _details: String = emptyTaskDetails {
-            didSet {
-                guard oldValue != _details else { return }
-                changed = Date.now
-            }
-        }
-        public var _state: TaskItemState = TaskItemState.open {
-            didSet {
-                guard oldValue != _state else { return }
-                changed = Date.now
-                if _state == .closed {
-                    closed = Date.now
-                } else {
-                    closed = nil
-                }
-                guard comments != nil else { return }
-                addComment(text: "Changed state to: \(_state)", icon: imgStateChange)
-            }
-        }
-        public var _url: String = "" {
-            didSet {
-                guard oldValue != _url else { return }
-                changed = Date.now
-            }
-        }
+        public var _title: String = emptyTaskTitle
+        public var _details: String = emptyTaskDetails
+        public var _state: TaskItemState = TaskItemState.open
+        public var _url: String = ""
         public var uuid: UUID = UUID()
         @Relationship(deleteRule: .cascade, inverse: \Comment.taskItem) public var comments: [Comment]? = []
         @Relationship(deleteRule: .cascade, inverse: \Attachment.taskItem) public var attachments: [Attachment]? = []
-        public var dueDate: Date? = nil {
-            didSet {
-                guard oldValue != dueDate else { return }
-                changed = Date.now
-            }
-        }
+        public var dueDate: Date? = nil
         public var eventId: String? = nil
         public var allTagsString: String = ""
         public var estimatedMinutes: Int = 0

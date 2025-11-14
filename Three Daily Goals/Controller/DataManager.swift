@@ -122,7 +122,7 @@ public final class DataManager {
         }
 
         // Update task state
-        task.state = state
+        task.setState(state)
 
         // Explicitly save to ensure SwiftData notifies all observers
         save()
@@ -180,16 +180,67 @@ public final class DataManager {
 
     /// Delete a task
     func deleteTask(_ task: TaskItem) {
-        // Delete comments first
-        for c in task.comments ?? [] {
-            modelContext.delete(c)
+        logger.debug("deleteTask START - Task: '\(task.title)'")
+        logger.debug("  Task ID: \(task.id)")
+
+        // Find the task in the context to ensure we're deleting the right object
+        guard let taskToDelete = findTask(withUuidString: task.id) else {
+            logger.error("Task not found in context: \(task.id)")
+            return
         }
 
-        // Delete from database - SwiftData will autosave
+        logger.debug("  Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
+        logger.debug("  Undo grouping level: \(self.modelContext.undoManager?.groupingLevel ?? -1)")
+        let taskCountBefore: Int? = try? self.modelContext.fetchCount(FetchDescriptor<TaskItem>())
+        logger.debug("  Task count before delete: \(taskCountBefore ?? -1)")
+
+        // Manually delete attachments and comments to avoid SwiftData snapshot issues
+        // This allows proper undo tracking for each deletion
+        beginUndoGrouping()
+
+        // Delete task and its relationships
+        deleteTaskAndRelationships(taskToDelete)
+
+        endUndoGrouping()
+
+        logger.debug("  After delete: level = \(self.modelContext.undoManager?.groupingLevel ?? -1)")
+        logger.debug("  After delete, before save:")
+        logger.debug("    Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
+        logger.debug("    Has changes: \(self.modelContext.hasChanges)")
+
+        save()
+
+        let taskCountAfter: Int? = try? self.modelContext.fetchCount(FetchDescriptor<TaskItem>())
+        logger.debug("  After save:")
+        logger.debug("    Task count: \(taskCountAfter ?? -1)")
+        logger.debug("    Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
+        logger.debug("deleteTask END")
+    }
+
+    /// Delete a task and its related attachments/comments
+    /// Manually deletes relationships to avoid SwiftData cascade snapshot issues
+    private func deleteTaskAndRelationships(_ task: TaskItem) {
+        // Delete attachments first (including their data)
+        if let attachments = task.attachments {
+            for attachment in attachments {
+                // Purge attachment data to free storage
+                try? attachment.purge(in: modelContext)
+                // Delete the attachment record
+                modelContext.delete(attachment)
+            }
+        }
+
+        // Delete comments
+        if let comments = task.comments {
+            for comment in comments {
+                modelContext.delete(comment)
+            }
+        }
+
+        // Now delete the task itself
         modelContext.delete(task)
     }
 
-    /// Delete a task with undo grouping
     func delete(task: TaskItem) {
         deleteTask(task)
     }
@@ -203,9 +254,11 @@ public final class DataManager {
 
     /// Delete multiple tasks
     func deleteTasks(_ tasks: [TaskItem]) {
+        beginUndoGrouping()
         for task in tasks {
-            modelContext.delete(task)
+            deleteTaskAndRelationships(task)
         }
+        endUndoGrouping()
         save()
     }
 
@@ -234,9 +287,9 @@ public final class DataManager {
     func toggleCompletion(for task: TaskItem) {
         switch task.state {
         case .open, .priority:
-            task.state = .closed
+            task.setState(.closed)
         case .closed:
-            task.state = .open
+            task.setState(.open)
         case .dead, .pendingResponse:
             // Dead and pending tasks can't be toggled
             break
@@ -364,7 +417,7 @@ public final class DataManager {
         }
 
         for task in tasksToArchive {
-            task.state = .dead
+            task.setState(.dead)
         }
         save()
         logger.info("Archived \(tasksToArchive.count) completed tasks older than \(days) days")
@@ -510,13 +563,31 @@ public final class DataManager {
 
     /// Save changes to the database
     func save() {
+        logger.debug("save START")
+        logger.debug("  Grouping level: \(self.modelContext.undoManager?.groupingLevel ?? -1)")
+        logger.debug("  Has changes: \(self.modelContext.hasChanges)")
+        logger.debug("  Inserted: \(self.modelContext.insertedModelsArray.count)")
+        logger.debug("  Deleted: \(self.modelContext.deletedModelsArray.count)")
+        logger.debug("  Changed: \(self.modelContext.changedModelsArray.count)")
+
+        modelContext.processPendingChanges()
+
+        logger.debug("  After processPendingChanges:")
+        logger.debug("    Has changes: \(self.modelContext.hasChanges)")
+        logger.debug("    Deleted: \(self.modelContext.deletedModelsArray.count)")
+        logger.debug("    Undo available: \(self.canUndo)")
+
         do {
             try modelContext.save()
             logger.debug("Successfully saved changes to database")
+            logger.debug("  After save - Has changes: \(self.modelContext.hasChanges)")
+            logger.debug("  After save - Deleted: \(self.modelContext.deletedModelsArray.count)")
         } catch {
             logger.error("Failed to save changes: \(error)")
             reportDatabaseError(.containerCreationFailed(underlyingError: error))
         }
+
+        logger.debug("save END")
     }
 
     /// Report a database error to the user interface
@@ -618,6 +689,7 @@ public final class DataManager {
     func updateUndoRedoStatus() {
         processPendingChanges()
         processPendingChanges()
+        updateUndoRedoState()
     }
 
     /// Check if there are unsaved changes
@@ -795,9 +867,11 @@ public final class DataManager {
     /// Undo button for app commands
     var undoButton: some View {
         Button(action: { [self] in
-            withAnimation {
-                undo()
-                callFetch()
+            Task { @MainActor in
+                withAnimation {
+                    undo()
+                    callFetch()
+                }
             }
         }) {
             Label("Undo", systemImage: imgUndo)
@@ -805,16 +879,18 @@ public final class DataManager {
                 .help("undo an action")
         }
         .disabled(!canUndo)
-        .opacity(canUndo ? 1.0 : 0.5)  // Make disabled buttons visible but dimmed
+        .opacity(canUndo ? 1.0 : 0.5)
         .keyboardShortcut("z", modifiers: [.command])
     }
 
     /// Redo button for app commands
     var redoButton: some View {
         Button(action: { [self] in
-            withAnimation {
-                redo()
-                callFetch()
+            Task { @MainActor in
+                withAnimation {
+                    redo()
+                    callFetch()
+                }
             }
         }) {
             Label("Redo", systemImage: imgRedo)
@@ -822,7 +898,7 @@ public final class DataManager {
                 .help("redo an action")
         }
         .disabled(!canRedo)
-        .opacity(canRedo ? 1.0 : 0.5)  // Make disabled buttons visible but dimmed
+        .opacity(canRedo ? 1.0 : 0.5)
         .keyboardShortcut("Z", modifiers: [.command, .shift])
     }
 
@@ -899,8 +975,10 @@ public final class DataManager {
         Button(
             role: .destructive,
             action: { [self] in
-                withAnimation {
-                    deleteWithUIUpdate(task: item, uiState: uiState)
+                Task { @MainActor in
+                    withAnimation {
+                        deleteWithUIUpdate(task: item, uiState: uiState)
+                    }
                 }
             }
         ) {

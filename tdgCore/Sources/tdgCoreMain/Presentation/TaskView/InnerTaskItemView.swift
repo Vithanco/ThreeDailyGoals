@@ -255,6 +255,9 @@ public struct InnerTaskItemView: View {
         // Remove the attachment from the task
         item.attachments?.removeAll { $0.id == attachment.id }
 
+        // Purge attachment data to free storage before deleting
+        try? attachment.purge(in: modelContext)
+
         // Delete the attachment from the model context
         modelContext.delete(attachment)
 

@@ -71,9 +71,11 @@ struct TaskItemView: View {
             .padding(.vertical, 8)
         }
         .itemToolbar(item: item)
-        .onAppear(perform: {
-            dataManager.updateUndoRedoStatus()
-        })
+        .onAppear {
+            Task { @MainActor in
+                dataManager.updateUndoRedoStatus()
+            }
+        }
     }
 }
 

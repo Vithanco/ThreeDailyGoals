@@ -160,6 +160,8 @@ final class TestAttachments: XCTestCase {
         // Delete attachment using the actual deletion function
         let filename = attachment.filename
         taskItem.attachments?.removeAll { $0.id == attachment.id }
+        // Purge attachment data to free storage before deleting
+        try? attachment.purge(in: context)
         context.delete(attachment)
         taskItem.addComment(text: "Removed attachment: \(filename)", icon: imgAttachment)
         try context.save()

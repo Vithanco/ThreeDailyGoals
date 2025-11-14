@@ -83,11 +83,13 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     /// Select a task item and optionally its list
     @MainActor
     func select(which: TaskItemState, item: TaskItem?) {
-        withAnimation {
-            if which != .priority {
-                whichList = which
+        Task { @MainActor in
+            withAnimation {
+                if which != .priority {
+                    whichList = which
+                }
+                selectedItem = item
             }
-            selectedItem = item
         }
     }
 
