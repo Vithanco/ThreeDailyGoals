@@ -155,7 +155,8 @@ public func setupApp(
     // MARK: - Step 9: Initialize Data and Setup
     dataManager.loadData()
     uiState.showItem = false
-    dataManager.mergeDataFromCentralStorage()
+    // Note: mergeDataFromCentralStorage() is now called asynchronously from MainView.onAppear
+    // to avoid blocking the main thread during app launch
 
     // Show database error if one occurred during setup
     if let error = databaseError {

@@ -47,8 +47,8 @@ struct TestTags {
         dataManager.modelContext.insert(task)
 
         // When: Adding multiple tags
-        task.addTag("urgent")
-        task.addTag("work")
+        task.addTag("urgent\n")
+        task.addTag("work ")
         task.addTag("personal")
 
         // Then: Should have all tags and correct number of comments

@@ -82,7 +82,7 @@ extension TaskItem: Taggable {
         setDueDate(other.dueDate)
         setUrl(other._url)
         self.changed = other.changed
-        setTags(other.tags)
+        updateTags(other.tags)
         self.comments = other.comments
         setState(other._state)
         self.eventId = other.eventId
@@ -135,55 +135,50 @@ extension TaskItem {
         }
     }
 
-    /// Set tags with optional comment creation
-    public func setTags(_ newTags: [String], createComments: Bool = true) {
-        updateTags(newTags, createComments: createComments)
-    }
 
-    /// Internal method to update tags with control over comment creation
-    private func updateTags(_ newTags: [String], createComments: Bool) {
-        // Get old tags for comparison
-        let oldTags = self.tags
-
-        // Filter out empty and whitespace-only strings, trim whitespace, convert to lowercase, and remove duplicates
-        // Preserve order of first occurrence
-        var seen = Set<String>()
-        let filteredTags =
-            newTags
-            .compactMap { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-            .map { $0.lowercased() }
-            .filter { seen.insert($0).inserted }  // Remove duplicates while preserving order
-
-        // Check if tags actually changed
-        let tagsChanged = Set(oldTags) != Set(filteredTags)
-
-        // Always update the string (even if same, to normalize formatting)
-        allTagsString = filteredTags.joined(separator: ",")
-
-        // Only update timestamp and create comments if tags actually changed
-        if tagsChanged {
-            changed = Date.now
-
-            if createComments && comments != nil {
-                // Add comments for new tags
-                filteredTags.filter { !oldTags.contains($0) }.forEach {
-                    addComment(text: "Added tag: \($0)", icon: imgTag)
-                }
-
-                // Add comments for removed tags
-                oldTags.filter { !filteredTags.contains($0) }.forEach {
-                    addComment(text: "Removed tag: \($0)", icon: imgTag)
-                }
+    public func updateTags(_ newTags: [String], createComments: Bool = true) {
+        func normalize(_ s: String) -> String {
+            s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        }
+        
+        let oldRaw = self.tags
+        var seenOld = Set<String>()
+        let oldNormOrdered = oldRaw
+            .map(normalize)
+            .filter { !$0.isEmpty && seenOld.insert($0).inserted }
+        
+        var seenNew = Set<String>()
+        let newNormOrdered = newTags
+            .map(normalize)
+            .filter { !$0.isEmpty && seenNew.insert($0).inserted }
+        
+        allTagsString = newNormOrdered.joined(separator: ",")
+        
+        let oldSet = Set(oldNormOrdered)
+        let newSet = Set(newNormOrdered)
+        guard oldSet != newSet else { return }
+        
+        changed = Date.now
+        
+        if createComments && comments != nil {
+            let added = newSet.subtracting(oldSet)
+            let removed = oldSet.subtracting(newSet)
+            
+            for t in newNormOrdered where added.contains(t) {
+                addComment(text: "Added tag: \(t)", icon: imgTag)
+            }
+            for t in oldNormOrdered where removed.contains(t) {
+                addComment(text: "Removed tag: \(t)", icon: imgTag)
             }
         }
     }
 
     public func addTag(_ newTag: String) {
+        let toBeAdded = newTag.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         var newTags = self.tags
-        newTags.append(newTag)
+        newTags.append(toBeAdded)
         updateTags(newTags, createComments: true)
-        assert(self.tags.contains(newTag.lowercased()))
+        assert(self.tags.contains(toBeAdded))
     }
 
     public func removeTag(_ oldTag: String) {
@@ -333,28 +328,6 @@ extension TaskItem {
         guard dueDate != newDueDate else { return }
         dueDate = newDueDate
         changed = Date.now
-    }
-
-    public func setTags(_ newTags: [String]) {
-        let lowercaseTags = newTags.map { $0.lowercased() }
-        guard allTagsString != lowercaseTags.joined(separator: ",") else { return }
-
-        let oldTags = Set(tags)
-        let newTagsSet = Set(lowercaseTags)
-
-        allTagsString = lowercaseTags.joined(separator: ",")
-        changed = Date.now
-
-        // Add comments for tag changes
-        let added = newTagsSet.subtracting(oldTags)
-        let removed = oldTags.subtracting(newTagsSet)
-
-        for tag in added where !tag.isEmpty {
-            addComment(text: "Added tag: \(tag)", icon: imgTag)
-        }
-        for tag in removed where !tag.isEmpty {
-            addComment(text: "Removed tag: \(tag)", icon: imgTag)
-        }
     }
 
     public func setEstimatedMinutes(_ newMinutes: Int) {

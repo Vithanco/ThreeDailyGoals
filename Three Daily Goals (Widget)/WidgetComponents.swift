@@ -160,13 +160,15 @@ struct WidgetStreakView: View {
     @ViewBuilder
     private var simpleLayout: some View {
         HStack(spacing: 3) {
-            Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: config.fontSize + 3, weight: .bold))
-                .foregroundStyle(Color.white)
-            Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
-                .foregroundStyle(Color.white)
-                .font(.system(size: config.fontSize + 3, weight: .medium))
-                .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            if preferences.isStreakActive {
+                Text("\(preferences.daysOfCompassCheck)")
+                    .font(.system(size: config.fontSize + 3, weight: .bold))
+                    .foregroundStyle(Color.white)
+                Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
+                    .foregroundStyle(Color.white)
+                    .font(.system(size: config.fontSize + 3, weight: .medium))
+                    .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            }
             Text("Today")
                 .font(.system(size: config.fontSize + 3, weight: .semibold))
                 .foregroundStyle(Color.white)
@@ -186,23 +188,25 @@ struct WidgetStreakView: View {
     @ViewBuilder
     private var enhancedLayout: some View {
         HStack(spacing: 3) {
-            // Streak section
-            HStack(spacing: 3) {
-                Text("\(preferences.daysOfCompassCheck) Day Streak")
-                    .font(.system(size: config.fontSize + 3, weight: .bold))
-                    .foregroundStyle(Color.white)
-                Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
-                    .foregroundStyle(Color.white)
-                    .font(.system(size: config.fontSize + 3, weight: .medium))
-                    .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+            if preferences.isStreakActive {
+                // Streak section
+                HStack(spacing: 3) {
+                    Text("\(preferences.daysOfCompassCheck) Day Streak")
+                        .font(.system(size: config.fontSize + 3, weight: .bold))
+                        .foregroundStyle(Color.white)
+                    Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
+                        .foregroundStyle(Color.white)
+                        .font(.system(size: config.fontSize + 3, weight: .medium))
+                        .frame(width: config.iconSize + 1, height: config.iconSize + 1)
+                }
+
+                // Vertical separator line
+                Rectangle()
+                    .fill(Color.white.opacity(0.3))
+                    .frame(width: 1, height: config.fontSize + 6)
+
+                Spacer()
             }
-
-            // Vertical separator line
-            Rectangle()
-                .fill(Color.white.opacity(0.3))
-                .frame(width: 1, height: config.fontSize + 6)
-
-            Spacer()
 
             // Today section
             HStack(spacing: 3) {
@@ -229,13 +233,21 @@ struct WatchAccessoryCircularView: View {
     let preferences: CloudPreferences
 
     var body: some View {
-        VStack {
-            Text("\(preferences.daysOfCompassCheck)")
-                .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(Color.primary)
-            Text("days")
-                .font(.system(size: 6))
-                .foregroundStyle(Color.secondary)
+        if preferences.isStreakActive {
+            VStack {
+                Text("\(preferences.daysOfCompassCheck)")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(Color.primary)
+                Text("days")
+                    .font(.system(size: 6))
+                    .foregroundStyle(Color.secondary)
+            }
+        } else {
+            ZStack {
+                Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                    .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
+                    .font(.system(size: 16, weight: .bold))
+            }
         }
     }
 }
@@ -246,9 +258,15 @@ struct WatchAccessoryInlineView: View {
 
     var body: some View {
         HStack {
-            Text("\(preferences.daysOfCompassCheck) days")
-                .font(.system(size: 8, weight: .medium))
-                .foregroundStyle(Color.primary)
+            if preferences.isStreakActive {
+                Text("\(preferences.daysOfCompassCheck) days")
+                    .font(.system(size: 8, weight: .medium))
+                    .foregroundStyle(Color.primary)
+            } else {
+                Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
+                    .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
+                    .font(.system(size: 8, weight: .medium))
+            }
             if !priorities.isEmpty {
                 Text("• \(priorities.first ?? "")")
                     .font(.system(size: 8))
@@ -266,9 +284,15 @@ struct WatchAccessoryRectangularView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
-                Text("\(preferences.daysOfCompassCheck) days")
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(Color.primary)
+                if preferences.isStreakActive {
+                    Text("\(preferences.daysOfCompassCheck) days")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color.primary)
+                } else {
+                    Text("Today")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(Color.primary)
+                }
                 Spacer()
                 if preferences.didCompassCheckToday {
                     Image(systemName: "checkmark.circle.fill")

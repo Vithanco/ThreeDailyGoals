@@ -27,6 +27,7 @@ struct MainView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(CloudPreferences.self) private var preferences
     @Environment(DataManager.self) private var dataManager
+    @State private var hasLoadedData = false
 
     var body: some View {
         @Bindable var uiState = uiState
@@ -39,6 +40,12 @@ struct MainView: View {
             }
         }
         .background(Color.background)
+        .task {
+            // Defer heavy data operations until after initial UI render
+            guard !hasLoadedData else { return }
+            hasLoadedData = true
+            await dataManager.mergeDataFromCentralStorageAsync()
+        }
         #if os(iOS)
             .fullScreenCover(isPresented: $uiState.showCompassCheckDialog) {
                 CompassCheckDialog()

@@ -42,9 +42,6 @@ struct LeftSideView: View {
             FullStreakView().frame(maxWidth: .infinity, alignment: .center)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                #if os(iOS)
-                    .standardToolbar(include: !isLargeDevice)
-                #endif
 
             #if os(iOS)
                 if isLargeDevice {

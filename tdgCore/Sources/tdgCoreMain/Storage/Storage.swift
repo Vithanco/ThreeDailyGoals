@@ -113,7 +113,7 @@ extension Array where Element == TaskItem {
     ) -> TaskItem {
         let new = TaskItem(title: title, changedDate: changedDate, state: state)
         new.dueDate = dueDate
-        new.setTags(tags.map { $0.lowercased() }, createComments: false)
+        new.updateTags(tags.map { $0.lowercased() }, createComments: false)
         self.append(new)
         return new
     }

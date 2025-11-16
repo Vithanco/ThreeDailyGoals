@@ -220,25 +220,26 @@ public final class DataManager {
     /// Delete a task and its related attachments/comments
     /// Manually deletes relationships to avoid SwiftData cascade snapshot issues
     private func deleteTaskAndRelationships(_ task: TaskItem) {
-        // Delete attachments first (including their data)
+        beginUndoGrouping()
+        // Purge attachment data first (before deletion)
         if let attachments = task.attachments {
             for attachment in attachments {
                 // Purge attachment data to free storage
                 try? attachment.purge(in: modelContext)
-                // Delete the attachment record
-                modelContext.delete(attachment)
             }
         }
 
-        // Delete comments
-        if let comments = task.comments {
-            for comment in comments {
-                modelContext.delete(comment)
-            }
-        }
+        // Clear the relationships to prevent snapshot issues during cascade deletion
+        // SwiftData's cascade delete will handle the actual deletion
+        task.attachments = []
+        task.comments = []
 
-        // Now delete the task itself
+        // Process pending changes to ensure relationships are cleared
+        modelContext.processPendingChanges()
+
+        // Now delete the task itself (cascade will handle attachments/comments)
         modelContext.delete(task)
+        endUndoGrouping()
     }
 
     func delete(task: TaskItem) {
@@ -516,7 +517,52 @@ public final class DataManager {
         }
     }
 
-    /// Merge data from central storage (CloudKit)
+    /// Clean up unchanged items asynchronously
+    private func cleanupUnchangedItemsAsync() async {
+        // Process in batches to avoid blocking
+        let unchangedItems = allTasks.filter { $0.isUnchanged }
+
+        if !unchangedItems.isEmpty {
+            logger.info("Cleaning up \(unchangedItems.count) unchanged items")
+            for item in unchangedItems {
+                deleteTask(item)
+            }
+        }
+    }
+
+    /// Merge data from central storage (CloudKit) - async version for app startup
+    func mergeDataFromCentralStorageAsync() async {
+        processPendingChanges()
+
+        do {
+            let descriptor = FetchDescriptor<TaskItem>(sortBy: [
+                SortDescriptor(\.changed, order: .forward)
+            ])
+
+            let fetchedItems = try modelContext.fetch(descriptor)
+
+            logger.info("fetched \(fetchedItems.count) tasks from central store")
+
+            // Clean up unchanged items after merging (async)
+            await cleanupUnchangedItemsAsync()
+
+            // Ensure unique UUIDs (async)
+            await ensureEveryItemHasAUniqueUuidAsync()
+
+        } catch {
+            logger.error("Fetch failed: \(error)")
+            // For CloudKit sync failures, use the appropriate error type
+            if error.localizedDescription.lowercased().contains("cloudkit")
+                || error.localizedDescription.lowercased().contains("sync")
+            {
+                reportDatabaseError(.cloudKitSyncFailed(underlyingError: error))
+            } else {
+                reportDatabaseError(.containerCreationFailed(underlyingError: error))
+            }
+        }
+    }
+
+    /// Merge data from central storage (CloudKit) - synchronous version for backward compatibility
     func mergeDataFromCentralStorage() {
         processPendingChanges()
         do {
@@ -547,6 +593,23 @@ public final class DataManager {
 
     /// Ensure every item has a unique UUID
     private func ensureEveryItemHasAUniqueUuid() {
+        let tasks = allTasks
+        var allUuids: Set<UUID> = []
+        for i in tasks {
+            if allUuids.contains(i.uuid) {
+                i.uuid = UUID()
+            } else {
+                allUuids.insert(i.uuid)
+            }
+        }
+        assert(
+            Set(tasks.map(\.uuid)).count == tasks.count,
+            "Duplicate UUIDs: \(tasks.count - Set(tasks.map(\.uuid)).count)")
+    }
+
+    /// Ensure every item has a unique UUID (async version)
+    private func ensureEveryItemHasAUniqueUuidAsync() async {
+        // Process on the same actor context (MainActor) since DataManager is @MainActor
         let tasks = allTasks
         var allUuids: Set<UUID> = []
         for i in tasks {
@@ -744,10 +807,10 @@ public final class DataManager {
 
     /// Add tags to multiple tasks
     func batchAddTags(_ tags: [String], to tasks: [TaskItem]) {
+        let toBeAdded = tags.map{$0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)  }
         for task in tasks {
             let currentTags = Set(task.tags)
-            let lowercaseTags = tags.map { $0.lowercased() }
-            let newTags = currentTags.union(lowercaseTags)
+            let newTags = currentTags.union(toBeAdded)
             task.tags = Array(newTags)
         }
         save()

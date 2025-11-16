@@ -26,6 +26,7 @@ struct CompactMainView: View {
                         uiState.addNewItemButton
                     }
                 }
+                .standardToolbar(include: isLargeDevice)
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
 
     }
