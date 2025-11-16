@@ -248,6 +248,10 @@ public final class DataManager {
 
     /// Delete a task with undo grouping and UI updates
     func deleteWithUIUpdate(task: TaskItem, uiState: UIStateManager) {
+        // Clear selectedItem if it's the task being deleted to prevent accessing deleted object
+        if uiState.selectedItem == task {
+            uiState.selectedItem = nil
+        }
         delete(task: task)
         updateUndoRedoStatus()
         uiState.selectedItem = list(which: uiState.whichList).first
@@ -807,7 +811,7 @@ public final class DataManager {
 
     /// Add tags to multiple tasks
     func batchAddTags(_ tags: [String], to tasks: [TaskItem]) {
-        let toBeAdded = tags.map{$0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)  }
+        let toBeAdded = tags.map { $0.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) }
         for task in tasks {
             let currentTags = Set(task.tags)
             let newTags = currentTags.union(toBeAdded)
