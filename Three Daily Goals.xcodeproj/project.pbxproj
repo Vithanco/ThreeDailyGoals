@@ -809,7 +809,7 @@
 			mainGroup = E561D6CF2B1F54A6003BE36F;
 			packageReferences = (
 				7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */,
-				7F53825C2E7E805A00D00EC7 /* XCLocalSwiftPackageReference "../SimpleCalendar" */,
+				7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
 			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
@@ -1732,19 +1732,27 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		7F53825C2E7E805A00D00EC7 /* XCLocalSwiftPackageReference "../SimpleCalendar" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../SimpleCalendar;
-		};
 		7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = tdgCore;
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Vithanco/SimpleCalendar";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		7F53825D2E7E805A00D00EC7 /* SimpleCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
 			productName = SimpleCalendar;
 		};
 		7FC6353E2E7B0C410033A1EF /* tdgCoreMain */ = {

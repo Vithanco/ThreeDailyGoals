@@ -1,0 +1,15 @@
+{
+  "originHash" : "e6d4da8d002df921243c9d4b864d687fd2253852d60eaac1ed2c694c5c9b07f2",
+  "pins" : [
+    {
+      "identity" : "simplecalendar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Vithanco/SimpleCalendar",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e6bc2ad7e47814b055fdfab08a24265c3042f032"
+      }
+    }
+  ],
+  "version" : 3
+}

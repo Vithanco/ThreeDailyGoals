@@ -145,8 +145,12 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
         if newItem == selectedItem {
             return
         }
-        if let oldItem = selectedItem, oldItem.isUnchanged {
-            newItemProducer?.removeItem(oldItem)
+        if let oldItem = selectedItem {
+            // Check if oldItem is still in the context (not deleted)
+            // If modelContext is nil, the item has been deleted
+            if oldItem.modelContext != nil && oldItem.isUnchanged {
+                newItemProducer?.removeItem(oldItem)
+            }
             selectedItem = nil
         }
         #if os(macOS)
