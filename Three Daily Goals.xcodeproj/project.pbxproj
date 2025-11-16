@@ -39,7 +39,6 @@
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */; };
-		7FAE86C02E8E393400CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */; };
 		7FAE86C22E8F210A00CAF597 /* TestUndoRedo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */; };
 		7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */; };
 		7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB357562E5B5020004581B7 /* PriorityUpdater.swift */; };
@@ -775,7 +774,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					7F2F0A802E52DEB200461679 = {
 						CreatedOnToolsVersion = 26.0;
@@ -983,7 +982,6 @@
 				7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,
-				7FAE86C02E8E393400CAF597 /* TestNewTaskDeletionIssue.swift in Sources */,
 				7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */,
 				E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */,
 				7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */,
