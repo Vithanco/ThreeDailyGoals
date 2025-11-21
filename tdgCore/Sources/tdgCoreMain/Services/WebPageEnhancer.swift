@@ -63,38 +63,30 @@ public final class WebPageEnhancer: Sendable {
     public func enhance(url: URL, currentTitle: String = "", useAI: Bool = false) async -> (
         title: String, description: String?
     ) {
+        debugPrint("url: \(url)")
+
+        var extractedTitle: String? = nil
+
         let metadataProvider = LPMetadataProvider()
-        // Step 1: Use LinkPresentation to get basic metadata
         do {
-            debugPrint("url: \(url)")
             let metadata = try await metadataProvider.startFetchingMetadata(for: url)
-
-            let extractedTitle = metadata.title ?? url.host ?? "Read"
-
-            // Step 2: Format the title to be actionable
-            let formattedTitle = formatActionableTitle(currentTitle: currentTitle, extractedTitle: extractedTitle)
-
-            // Step 3: Get description
-            var description: String? = nil
-
-            if useAI {
-                // Use AI to generate summary from the page
-                description = await generateAISummary(url: url)
-            } else {
-                // Try to fetch meta description from HTML
-                description = await fetchMetaDescription(url: url)
-            }
-
-            debugPrint("description: \(String(describing: description))")
-            return (formattedTitle, description)
-
+            extractedTitle = metadata.title
         } catch {
-            print("⚠️ Metadata extraction failed: \(error.localizedDescription)")
-            // Fallback to URL host
-            let fallbackTitle = url.host ?? "Read"
-            let formattedTitle = formatActionableTitle(currentTitle: currentTitle, extractedTitle: fallbackTitle)
-            return (formattedTitle, nil)
+            print("⚠️ Metadata extraction failed (share extension context?): \(error.localizedDescription)")
         }
+
+        let titleToUse = extractedTitle ?? url.host ?? "Read"
+        let formattedTitle = formatActionableTitle(currentTitle: currentTitle, extractedTitle: titleToUse)
+
+        var description: String? = nil
+        if useAI {
+            description = await generateAISummary(url: url)
+        } else {
+            description = await fetchMetaDescription(url: url)
+        }
+
+        debugPrint("description: \(String(describing: description))")
+        return (formattedTitle, description)
     }
 
     /// Format a title to be actionable by combining action verb with extracted title

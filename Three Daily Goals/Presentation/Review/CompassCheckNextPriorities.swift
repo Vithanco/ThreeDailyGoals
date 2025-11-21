@@ -30,7 +30,18 @@ public struct CompassCheckNextPriorities: View {
                         showHeaders: false,
                         section: TaskItemState.priority.section,
                         id: TaskItemState.priority.getListAccessibilityIdentifier
-                    ).frame(minHeight: 500)
+                    )
+                    .frame(minHeight: 500)
+                    .dropDestination(for: String.self) { items, _ in
+                        Task { @MainActor in
+                            withAnimation {
+                                for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                                    dataManager.move(task: item, to: .priority)
+                                }
+                            }
+                        }
+                        return true
+                    }
                     SimpleListView(
                         color: .open,
                         itemList: dataManager.list(which: .open),
@@ -39,6 +50,16 @@ public struct CompassCheckNextPriorities: View {
                         section: TaskItemState.open.section,
                         id: TaskItemState.open.getListAccessibilityIdentifier
                     )
+                    .dropDestination(for: String.self) { items, _ in
+                        Task { @MainActor in
+                            withAnimation {
+                                for item in items.compactMap({ dataManager.findTask(withUuidString: $0) }) {
+                                    dataManager.move(task: item, to: .open)
+                                }
+                            }
+                        }
+                        return true
+                    }
                 }.frame(minWidth: 600)
 
             #endif
