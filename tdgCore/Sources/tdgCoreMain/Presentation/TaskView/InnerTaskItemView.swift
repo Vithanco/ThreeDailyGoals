@@ -106,6 +106,8 @@ public struct InnerTaskItemView: View {
                                         .controlSize(.small)
                                 } else {
                                     Image(systemName: "sparkles")
+                                        .imageScale(.medium)
+                                        .foregroundColor(.yellow)
                                 }
                             }
                             .help("Extract title and description from webpage")
@@ -160,7 +162,7 @@ public struct InnerTaskItemView: View {
 
             // Labels section
             GroupBox {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 24) {
                     HStack {
                         Text("Add new Label:")
                         TextField("Tag Me", text: $buildTag)
