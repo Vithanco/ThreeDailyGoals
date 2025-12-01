@@ -29,6 +29,11 @@ struct MainView: View {
     @Environment(DataManager.self) private var dataManager
     @State private var hasLoadedData = false
 
+    #if os(macOS)
+        @Environment(\.openWindow) private var openWindow
+        @Environment(\.dismissWindow) private var dismissWindow
+    #endif
+
     var body: some View {
         @Bindable var uiState = uiState
 
@@ -51,8 +56,20 @@ struct MainView: View {
                 CompassCheckDialog()
             }
         #else
-            .sheet(isPresented: $uiState.showCompassCheckDialog) {
-                CompassCheckDialog()
+            // On macOS, open/close a dedicated window instead of a sheet
+            .onChange(of: uiState.showCompassCheckDialog) { oldValue, newValue in
+                if newValue {
+                    openWindow(id: "CompassCheckWindow")
+                } else {
+                    dismissWindow(id: "CompassCheckWindow")
+                }
+            }
+            .onAppear {
+                if uiState.showCompassCheckDialog {
+                    openWindow(id: "CompassCheckWindow")
+                } else {
+                    dismissWindow(id: "CompassCheckWindow")
+                }
             }
         #endif
         .sheet(isPresented: $uiState.showSettingsDialog) {

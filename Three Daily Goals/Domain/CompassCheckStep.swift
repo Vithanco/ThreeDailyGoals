@@ -66,6 +66,6 @@ extension CompassCheckStep {
     /// Default implementation: no configuration view by default
     @ViewBuilder
     public func configurationView() -> AnyView? {
-        return nil
+        nil as AnyView?
     }
 }
