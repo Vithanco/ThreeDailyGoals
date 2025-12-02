@@ -30,6 +30,7 @@ public final class CompassCheckManager {
         DueDateStep(),
         ReviewStep(),
         MoveToGraveyardStep(),
+        EisenhowerMatrixConsistencyStep(),
         PlanStep(),
     ]
     private let logger = Logger(
