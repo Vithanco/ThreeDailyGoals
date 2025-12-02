@@ -58,6 +58,7 @@ struct MainView: View {
         #else
             // On macOS, open/close a dedicated window instead of a sheet
             .onChange(of: uiState.showCompassCheckDialog) { oldValue, newValue in
+                guard oldValue != newValue else { return }
                 if newValue {
                     openWindow(id: "CompassCheckWindow")
                 } else {
@@ -67,8 +68,6 @@ struct MainView: View {
             .onAppear {
                 if uiState.showCompassCheckDialog {
                     openWindow(id: "CompassCheckWindow")
-                } else {
-                    dismissWindow(id: "CompassCheckWindow")
                 }
             }
         #endif
