@@ -28,6 +28,14 @@ struct RegularMainView: View {
             }.background(Color.background)
                 .navigationSplitViewColumnWidth(min: 400, ideal: 500)
                 .navigationTitle("Three Daily Goals")
+                .toolbar {
+                    #if os(iOS)
+                    // iPadOS needs explicit toolbar button (macOS gets it from .standardToolbar())
+                    ToolbarItem(placement: .primaryAction) {
+                        uiState.addNewItemButton
+                    }
+                    #endif
+                }
         } detail: {
             if let detail = uiState.selectedItem {
                 TaskItemView(item: detail).frame(minWidth: 400)

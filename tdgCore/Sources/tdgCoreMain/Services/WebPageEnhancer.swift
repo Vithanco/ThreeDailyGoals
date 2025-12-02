@@ -63,7 +63,7 @@ public final class WebPageEnhancer: Sendable {
     public func enhance(url: URL, currentTitle: String = "", useAI: Bool = false) async -> (
         title: String, description: String?
     ) {
-        debugPrint("url: \(url)")
+        debugPrint("WebPageEnhancer - Processing URL: \(url)")
 
         var extractedTitle: String? = nil
 
@@ -72,7 +72,8 @@ public final class WebPageEnhancer: Sendable {
             let metadata = try await metadataProvider.startFetchingMetadata(for: url)
             extractedTitle = metadata.title
         } catch {
-            print("⚠️ Metadata extraction failed (share extension context?): \(error.localizedDescription)")
+            // LPMetadataProvider can fail in share extension contexts or with certain URL types
+            print("⚠️ Metadata extraction failed for \(url.host ?? "unknown host"): \(error.localizedDescription) (Error type: \(type(of: error)))")
         }
 
         let titleToUse = extractedTitle ?? url.host ?? "Read"
@@ -85,7 +86,7 @@ public final class WebPageEnhancer: Sendable {
             description = await fetchMetaDescription(url: url)
         }
 
-        debugPrint("description: \(String(describing: description))")
+        debugPrint("WebPageEnhancer - Extracted description: \(String(describing: description))")
         return (formattedTitle, description)
     }
 

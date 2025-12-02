@@ -90,6 +90,21 @@ struct Three_Daily_GoalsApp: App {
                     .keyboardShortcut("r", modifiers: [.command])
             }
         }
+        #if os(macOS)
+            // Dedicated window for Compass Check dialog
+            WindowGroup("Compass Check", id: "CompassCheckWindow") {
+                CompassCheckDialog()
+                    .frame(minWidth: 700, minHeight: 500)
+            }
+            .defaultSize(width: 900, height: 650)
+            .modelContainer(appComponents.modelContainer)
+            .environment(calendarManager)
+            .environment(appComponents.preferences)
+            .environment(appComponents.uiState)
+            .environment(appComponents.dataManager)
+            .environment(appComponents.compassCheckManager)
+            .environment(appComponents.timeProviderWrapper)
+        #endif
         #if os(macOS)  // see Toolbar for iOS way
             Settings {
                 PreferencesView().frame(width: 450)
