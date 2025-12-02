@@ -65,12 +65,6 @@ extension TaskItem: Equatable {
 
 }
 
-public protocol Taggable {
-    var tags: [String] { get }
-    func addTag(_ newTag: String)
-    func removeTag(_ oldTag: String)
-}
-
 extension TaskItem: Taggable {
 
     public func updateFrom(_ other: TaskItem) {
@@ -436,7 +430,7 @@ extension Sequence where Element: TaskItem {
         for t in self where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
         }
-        result.formUnion(["work", "private"])
+        result.formUnion(standardTags)
         return result
     }
 
