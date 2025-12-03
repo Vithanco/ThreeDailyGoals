@@ -10,7 +10,7 @@ import SwiftUI
 import tdgCoreMain
 
 @MainActor
-public struct EisenhowerMatrixStep: CompassCheckStep {
+public struct EnergyEffortMatrixStep: CompassCheckStep {
     public let id: String = "eisenhowerMatrix"
     public let name: String = "Energy-Effort Matrix"
     public let description: String =
@@ -22,7 +22,7 @@ public struct EisenhowerMatrixStep: CompassCheckStep {
 
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
-        AnyView(CompassCheckEisenhowerMatrix())
+        AnyView(CompassCheckEnergyEffortMatrix())
     }
 
     public func act(dataManager: DataManager, timeProvider: TimeProvider, preferences: CloudPreferences) {

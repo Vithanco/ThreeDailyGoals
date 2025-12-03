@@ -26,12 +26,12 @@ public final class CompassCheckManager {
         InformStep(),
         CurrentPrioritiesStep(),
         MovePrioritiesToOpenStep(),
-        EisenhowerMatrixStep(),
+        EnergyEffortMatrixStep(),
         PendingResponsesStep(),
         DueDateStep(),
         ReviewStep(),
         MoveToGraveyardStep(),
-        EisenhowerMatrixConsistencyStep(),
+        EnergyEffortMatrixConsistencyStep(),
         PlanStep(),
     ]
     private let logger = Logger(

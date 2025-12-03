@@ -8,15 +8,15 @@
 import SwiftUI
 import tdgCoreMain
 
-public struct CompassCheckEisenhowerMatrix: View {
+public struct CompassCheckEnergyEffortMatrix: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
 
     public var body: some View {
         #if os(macOS)
-        EisenhowerMatrixMacOSView()
+        EnergyEffortMatrixMacOSView()
         #else
-        EisenhowerMatrixiOSView()
+        EnergyEffortMatrixiOSView()
         #endif
     }
 }
@@ -24,7 +24,7 @@ public struct CompassCheckEisenhowerMatrix: View {
 // MARK: - macOS Implementation (Drag & Drop)
 
 @MainActor
-struct EisenhowerMatrixMacOSView: View {
+struct EnergyEffortMatrixMacOSView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
     @Environment(\.colorScheme) private var colorScheme
@@ -246,7 +246,7 @@ struct QuadrantDropZone: View {
 // MARK: - iOS/iPadOS Implementation (Button Selection)
 
 @MainActor
-struct EisenhowerMatrixiOSView: View {
+struct EnergyEffortMatrixiOSView: View {
     @Environment(DataManager.self) private var dataManager
     @Environment(TimeProviderWrapper.self) private var timeProviderWrapper
 
@@ -441,7 +441,7 @@ struct QuadrantButton: View {
 
 #Preview {
     let appComponents = setupApp(isTesting: true)
-    CompassCheckEisenhowerMatrix()
+    CompassCheckEnergyEffortMatrix()
         .environment(appComponents.dataManager)
         .environment(appComponents.timeProviderWrapper)
 }
