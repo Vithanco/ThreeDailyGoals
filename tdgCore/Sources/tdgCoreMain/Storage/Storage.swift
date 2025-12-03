@@ -250,7 +250,22 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<Mode
         (inMemory || !withCloud)
         ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
 
-    let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
+    // Configure storage location
+    let modelConfiguration: ModelConfiguration
+    if inMemory {
+        // For in-memory storage (testing), don't specify a URL
+        modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: useCloudDB)
+    } else {
+        // For persistent storage, use App Group container so widgets and share extensions can access the data
+        let appGroupIdentifier = "group.com.vithanco.three-daily-goals"
+        if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) {
+            let storeURL = appGroupURL.appendingPathComponent("default.store")
+            modelConfiguration = ModelConfiguration(url: storeURL, cloudKitDatabase: useCloudDB)
+        } else {
+            // Fallback to default location if App Group is not available (shouldn't happen in production)
+            modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: useCloudDB)
+        }
+    }
 
     do {
         let result = try ModelContainer(
