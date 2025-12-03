@@ -1,5 +1,5 @@
 //
-//  EisenhowerMatrixConsistencyStep.swift
+//  EnergyEffortMatrixConsistencyStep.swift
 //  Three Daily Goals
 //
 //  Created by Claude Code on 2025-12-02.
@@ -11,7 +11,7 @@ import tdgCoreMain
 
 @MainActor
 public struct EnergyEffortMatrixConsistencyStep: CompassCheckStep {
-    public let id: String = "eisenhowerMatrixConsistency"
+    public let id: String = "EnergyEffortMatrixConsistency"
     public let name: String = "Energy-Effort Matrix Consistency"
     public let description: String =
         "Ensures tasks don't have conflicting Energy-Effort Matrix tags (e.g., both high-energy and low-energy)."

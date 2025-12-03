@@ -1195,11 +1195,11 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
 
-    // MARK: - Eisenhower Matrix Consistency Tests
+    // MARK: - EnergyEffort Matrix Consistency Tests
 
     @Test
-    func testEisenhowerMatrixConsistencyStep() throws {
-        // Create test data loader with conflicting Eisenhower Matrix tags
+    func testEnergyEffortMatrixConsistencyStep() throws {
+        // Create test data loader with conflicting EnergyEffort Matrix tags
         let conflictingTagsLoader: TestDataLoader = { timeProvider in
             var tasks: [TaskItem] = []
 
@@ -1233,7 +1233,7 @@ struct TestCompassCheckSteps {
         let appComponents = setupApp(isTesting: true, loaderForTests: conflictingTagsLoader)
         let dataManager = appComponents.dataManager
         let timeProvider = appComponents.timeProvider
-        let step = EisenhowerMatrixConsistencyStep()
+        let step = EnergyEffortMatrixConsistencyStep()
 
         // Step should always be applicable
         #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))

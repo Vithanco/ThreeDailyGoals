@@ -1,5 +1,5 @@
 //
-//  EisenhowerQuadrant.swift
+//  EnergyEffortQuadrant.swift
 //  Three Daily Goals
 //
 //  Created by Claude Code on 2025-12-02.
@@ -12,7 +12,7 @@ import tdgCoreMain
 // MARK: - Quadrant Wording Constants
 
 /// Display names, descriptions, colors, and icons for the Energy-Effort Matrix quadrants
-/// (Inspired by the Eisenhower Matrix, adapted for execution planning)
+/// (Inspired by the EnergyEffort Matrix, adapted for execution planning)
 public struct EnergyEffortQuadrantWording {
     // Q1: High Energy & Big Task
     public static let urgentImportantName = "Deep Work"

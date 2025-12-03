@@ -1,5 +1,5 @@
 //
-//  CompassCheckEisenhowerMatrix.swift
+//  CompassCheckEnergyEffortMatrix.swift
 //  Three Daily Goals
 //
 //  Created by Claude Code on 2025-12-02.
@@ -68,7 +68,7 @@ struct EnergyEffortMatrixMacOSView: View {
                 Text("Categorize tasks by energy required and task size")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text("Inspired by the Eisenhower Matrix, adapted for execution planning")
+                Text("Inspired by the EnergyEffort Matrix, adapted for execution planning")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                     .italic()
@@ -81,7 +81,7 @@ struct EnergyEffortMatrixMacOSView: View {
             }
             .padding(.top, 8)
 
-            // Eisenhower Matrix Grid
+            // EnergyEffort Matrix Grid
             HStack(spacing: 12) {
                 // Left Column
                 VStack(spacing: 12) {

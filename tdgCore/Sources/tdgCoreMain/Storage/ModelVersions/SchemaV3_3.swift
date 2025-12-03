@@ -42,7 +42,7 @@ enum SchemaV3_3: VersionedSchema {
         var allTags: [String] = []
 
         //future potential additions:
-        //Eisenhower Matrix (Important, Urgent),
+        //EnergyEffort Matrix (Important, Urgent),
         //Priority (1-10)
         //ImageData
 

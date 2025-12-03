@@ -1,5 +1,5 @@
 //
-//  EisenhowerMatrixStep.swift
+//  EnergyEffortMatrixStep.swift
 //  Three Daily Goals
 //
 //  Created by Claude Code on 2025-12-02.
@@ -11,10 +11,10 @@ import tdgCoreMain
 
 @MainActor
 public struct EnergyEffortMatrixStep: CompassCheckStep {
-    public let id: String = "eisenhowerMatrix"
+    public let id: String = "EnergyEffortMatrix"
     public let name: String = "Energy-Effort Matrix"
     public let description: String =
-        "Categorize tasks by energy required and task size (inspired by the Eisenhower Matrix)."
+        "Categorize tasks by energy required and task size (inspired by the EnergyEffort Matrix)."
 
     public var isSilent: Bool {
         return false
