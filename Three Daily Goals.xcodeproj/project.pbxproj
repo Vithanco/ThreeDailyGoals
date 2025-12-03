@@ -30,8 +30,8 @@
 		7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
 		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
-		7F63C5A62EDF3D2F00881791 /* EisenhowerQuadrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A52EDF3D2F00881791 /* EisenhowerQuadrant.swift */; };
-		7F63C5A82EDF3D5C00881791 /* CompassCheckEisenhowerMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A72EDF3D5C00881791 /* CompassCheckEisenhowerMatrix.swift */; };
+		7F63C5A62EDF3D2F00881791 /* EnergyEffortQuadrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */; };
+		7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
 		7F88BE402E7DF7BD00D2E050 /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
 		7F88BE412E7DF7BD00D2E050 /* tdgCoreTest in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6354A2E7B0C500033A1EF /* tdgCoreTest */; };
@@ -202,8 +202,8 @@
 		7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeActions.swift; sourceTree = "<group>"; };
 		7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimeRemaining.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
-		7F63C5A52EDF3D2F00881791 /* EisenhowerQuadrant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EisenhowerQuadrant.swift; sourceTree = "<group>"; };
-		7F63C5A72EDF3D5C00881791 /* CompassCheckEisenhowerMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckEisenhowerMatrix.swift; sourceTree = "<group>"; };
+		7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyEffortQuadrant.swift; sourceTree = "<group>"; };
+		7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckEnergyEffortMatrix.swift; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
 		7F71FD252E6BFEA8001B92F4 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAttachmentResolver.swift; sourceTree = "<group>"; };
@@ -575,7 +575,7 @@
 		E5E1F4752B3060FD00E83A21 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				7F63C5A52EDF3D2F00881791 /* EisenhowerQuadrant.swift */,
+				7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */,
 				7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */,
 				7FC676B22E706B7900C41568 /* CompassCheckSteps */,
 				E57C31AF2B724B2700943EA1 /* PushNotification.swift */,
@@ -618,7 +618,7 @@
 		E5FFC5BB2B6A715400C9D60B /* Review */ = {
 			isa = PBXGroup;
 			children = (
-				7F63C5A72EDF3D5C00881791 /* CompassCheckEisenhowerMatrix.swift */,
+				7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */,
 				E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */,
 				E5FFC5BC2B6A717A00C9D60B /* CompassCheckCurrentPriorities.swift */,
 				E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */,
@@ -921,7 +921,7 @@
 				7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */,
 				7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */,
 				7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */,
-				7F63C5A62EDF3D2F00881791 /* EisenhowerQuadrant.swift in Sources */,
+				7F63C5A62EDF3D2F00881791 /* EnergyEffortQuadrant.swift in Sources */,
 				7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
@@ -942,7 +942,7 @@
 				7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
 				7F0EAB742EB621A100BBD5C2 /* AppTips.swift in Sources */,
-				7F63C5A82EDF3D5C00881791 /* CompassCheckEisenhowerMatrix.swift in Sources */,
+				7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */,
 				E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */,
 				7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
