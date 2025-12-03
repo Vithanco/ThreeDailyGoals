@@ -26,6 +26,7 @@ public final class CompassCheckManager {
         InformStep(),
         CurrentPrioritiesStep(),
         MovePrioritiesToOpenStep(),
+        EisenhowerMatrixStep(),
         PendingResponsesStep(),
         DueDateStep(),
         ReviewStep(),
@@ -45,6 +46,9 @@ public final class CompassCheckManager {
     }
 
     private var syncCheckTimer: Timer?
+
+    // Track when this compass check session started
+    private var currentSessionStartTime: Date?
 
     let timer: CompassCheckTimer = .init()
 
@@ -163,6 +167,9 @@ public final class CompassCheckManager {
         uiState.showCompassCheckDialog = false
         state = .finished
 
+        // Clear session start time
+        currentSessionStartTime = nil
+
         // Cancel any pending notifications since CC is done
         timer.cancelTimer()
         stopSyncCheckTimer()
@@ -222,20 +229,33 @@ public final class CompassCheckManager {
 
     func onPreferencesChange() {
         // If compass check was completed on another device, close the dialog and reset state
+        // Only close if lastCompassCheck was updated AFTER this session started
         if preferences.didCompassCheckToday {
-            if uiState.showCompassCheckDialog {
-                logger.info("Compass check completed on another device, closing dialog")
-                endCompassCheck(didFinishCompassCheck: false)
+            // Check if lastCompassCheck was updated after this session started
+            let wasCompletedDuringThisSession: Bool
+            if let sessionStart = currentSessionStartTime {
+                wasCompletedDuringThisSession = preferences.lastCompassCheck > sessionStart
             } else {
-                switch state {
-                case .inProgress, .paused:
-                    // Reset state if not showing dialog but state is not the first step
-                    logger.info("Compass check completed on another device, resetting state")
-                    state = .finished
-                    // Reschedule for next interval since CC was completed externally
-                    setupCompassCheckNotification()
-                default:
-                    break
+                // No session start time means we're not in an active session
+                wasCompletedDuringThisSession = false
+            }
+
+            // Only act if the check was completed externally (not during this session)
+            if wasCompletedDuringThisSession {
+                if uiState.showCompassCheckDialog {
+                    logger.info("Compass check completed on another device, closing dialog")
+                    endCompassCheck(didFinishCompassCheck: false)
+                } else {
+                    switch state {
+                    case .inProgress, .paused:
+                        // Reset state if not showing dialog but state is not the first step
+                        logger.info("Compass check completed on another device, resetting state")
+                        state = .finished
+                        // Reschedule for next interval since CC was completed externally
+                        setupCompassCheckNotification()
+                    default:
+                        break
+                    }
                 }
             }
         }
@@ -282,6 +302,8 @@ public final class CompassCheckManager {
         if !uiState.showCompassCheckDialog {
             switch state {
             case .notStarted, .finished:
+                // Record when this session started
+                currentSessionStartTime = timeProvider.now
                 state = .inProgress(currentStep)
                 uiState.showCompassCheckDialog = true
             default:

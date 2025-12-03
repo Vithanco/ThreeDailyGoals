@@ -435,3 +435,31 @@ extension Sequence where Element: TaskItem {
     }
 
 }
+
+// MARK: - Energy-Effort Matrix Extensions
+
+extension TaskItem {
+
+    /// Check if task has both Energy-Effort dimensions set
+    public var hasCompleteEnergyEffortTags: Bool {
+        let taskTags = Set(self.tags)
+        let hasEnergy = taskTags.contains("high-energy") || taskTags.contains("low-energy")
+        let hasSize = taskTags.contains("big-task") || taskTags.contains("small-task")
+        return hasEnergy && hasSize
+    }
+
+    /// Apply Energy-Effort Matrix tags to the task by removing old ones and adding new ones
+    public func applyEnergyEffortTags(energyTag: String, effortTag: String) {
+        // Remove any existing Energy-Effort Matrix tags
+        var currentTags = self.tags.filter { tag in
+            !["high-energy", "low-energy", "big-task", "small-task"].contains(tag)
+        }
+
+        // Add new quadrant tags
+        currentTags.append(energyTag)
+        currentTags.append(effortTag)
+
+        // Update tags
+        self.tags = currentTags
+    }
+}

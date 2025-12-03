@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Standard Tags
 
 /// Standard tags that are always available and cannot be deleted
-public let standardTags = ["work", "private", "important", "non-important", "urgent", "non-urgent"]
+public let standardTags = ["work", "private", "high-energy", "low-energy", "big-task", "small-task"]
 
 // MARK: - Taggable Protocol
 

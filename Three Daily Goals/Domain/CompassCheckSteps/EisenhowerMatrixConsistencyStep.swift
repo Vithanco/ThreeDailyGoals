@@ -12,9 +12,9 @@ import tdgCoreMain
 @MainActor
 public struct EisenhowerMatrixConsistencyStep: CompassCheckStep {
     public let id: String = "eisenhowerMatrixConsistency"
-    public let name: String = "Eisenhower Matrix Consistency"
+    public let name: String = "Energy-Effort Matrix Consistency"
     public let description: String =
-        "Ensures tasks don't have conflicting Eisenhower Matrix tags (e.g., both urgent and non-urgent)."
+        "Ensures tasks don't have conflicting Energy-Effort Matrix tags (e.g., both high-energy and low-energy)."
 
     /// This is a silent step - it executes automatically without user interaction
     public var isSilent: Bool {
@@ -25,7 +25,7 @@ public struct EisenhowerMatrixConsistencyStep: CompassCheckStep {
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         // Silent steps don't need a view, but we provide a minimal one for protocol compliance
         AnyView(
-            Text("Checking Eisenhower Matrix tag consistency...")
+            Text("Checking Energy-Effort Matrix tag consistency...")
                 .foregroundColor(.secondary)
         )
     }
@@ -60,7 +60,7 @@ public struct EisenhowerMatrixConsistencyStep: CompassCheckStep {
         }
 
         if fixedCount > 0 {
-            debugPrint("EisenhowerMatrixConsistencyStep: Fixed \(fixedCount) tasks with conflicting Eisenhower Matrix tags")
+            debugPrint("EnergyEffortMatrixConsistencyStep: Fixed \(fixedCount) tasks with conflicting Energy-Effort Matrix tags")
         }
     }
 
