@@ -36,6 +36,7 @@
 		7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */; };
 		7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */; };
 		7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8EBC852C2FC39E0003C1BB /* EventManager.swift */; };
+		7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */; };
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */; };
@@ -205,6 +206,7 @@
 		7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAttachmentResolver.swift; sourceTree = "<group>"; };
 		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
 		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddWidget.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 		E51142942B342E3C00AB6E05 /* Three Daily Goals (Widget) */ = {
 			isa = PBXGroup;
 			children = (
+				7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */,
 				7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */,
 				E51142952B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift */,
 				E51142972B342E3C00AB6E05 /* Three_Daily_Goals__Widget_.swift */,
@@ -899,6 +902,7 @@
 				E511429A2B342E3C00AB6E05 /* AppIntent.swift in Sources */,
 				E51142B32B34947F00AB6E05 /* WPriorities.swift in Sources */,
 				7FC1BA532E7FFAC2007E1E2D /* WidgetComponents.swift in Sources */,
+				7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
