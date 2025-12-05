@@ -8,6 +8,10 @@
 	<string>Three Daily Goals would like to help you to plan your days better by blocking time in your calendar for your main tasks. </string>
 	<key>NSRemindersFullAccessUsageDescription</key>
 	<string>Three Daily Goals would like you to remind you about your upcoming dedicated times for your three daily goals.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>
