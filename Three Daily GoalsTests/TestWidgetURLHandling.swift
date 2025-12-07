@@ -52,6 +52,20 @@ struct TestWidgetURLHandling {
     }
 
     @Test
+    func testNewTaskURLParsing() throws {
+        // Given: A valid new-task URL
+        let newTaskURL = URL(string: "three-daily-goals://new-task")!
+
+        // When: Parsing the URL
+        let scheme = newTaskURL.scheme
+        let host = newTaskURL.host
+
+        // Then: Should parse correctly
+        #expect(scheme == "three-daily-goals", "Should have correct scheme")
+        #expect(host == "new-task", "Should have correct host")
+    }
+
+    @Test
     func testInvalidURLSchemes() throws {
         // Given: URLs with different schemes
         let httpURL = URL(string: "https://example.com")!
@@ -130,6 +144,20 @@ struct TestWidgetURLHandling {
         #expect(host == "app", "Should have correct host")
     }
 
+    @Test
+    func testWidgetNewTaskURLGeneration() throws {
+        // Given: New task URL
+        let newTaskURL = URL(string: "three-daily-goals://new-task")!
+
+        // When: Checking URL structure
+        let scheme = newTaskURL.scheme
+        let host = newTaskURL.host
+
+        // Then: Should have correct structure
+        #expect(scheme == "three-daily-goals", "Should have correct scheme")
+        #expect(host == "new-task", "Should have correct host")
+    }
+
     // MARK: - Edge Cases Tests
 
     @Test
@@ -191,16 +219,35 @@ struct TestWidgetURLHandling {
         // Given: Different types of URLs
         let taskURL = URL(string: "three-daily-goals://task/12345678-1234-1234-1234-123456789012")!
         let appURL = URL(string: "three-daily-goals://app")!
+        let newTaskURL = URL(string: "three-daily-goals://new-task")!
         let externalURL = URL(string: "https://example.com")!
 
         // When: Checking URL handling logic
         let taskURLIsOurs = taskURL.scheme == "three-daily-goals" && taskURL.host == "task"
         let appURLIsOurs = appURL.scheme == "three-daily-goals" && appURL.host == "app"
+        let newTaskURLIsOurs = newTaskURL.scheme == "three-daily-goals" && newTaskURL.host == "new-task"
         let externalURLIsOurs = externalURL.scheme == "three-daily-goals"
 
         // Then: Should identify URLs correctly
         #expect(taskURLIsOurs, "Should identify task URL as ours")
         #expect(appURLIsOurs, "Should identify app URL as ours")
+        #expect(newTaskURLIsOurs, "Should identify new-task URL as ours")
         #expect(!externalURLIsOurs, "Should not identify external URL as ours")
+    }
+
+    @Test
+    func testQuickAddWidgetURL() throws {
+        // Given: QuickAddWidget URL
+        let quickAddURL = URL(string: "three-daily-goals://new-task")!
+
+        // When: Parsing URL components
+        let scheme = quickAddURL.scheme
+        let host = quickAddURL.host
+        let pathComponents = quickAddURL.pathComponents
+
+        // Then: Should match expected structure for new task creation
+        #expect(scheme == "three-daily-goals", "Should have correct scheme")
+        #expect(host == "new-task", "Should have new-task host")
+        #expect(pathComponents.isEmpty || pathComponents == ["/"], "Should have no extra path components")
     }
 }
