@@ -1194,4 +1194,93 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.currentStep.id == "review")
         #expect(compassCheckManager.moveStateForwardText == "Finish")
     }
+
+    // MARK: - EnergyEffort Matrix Consistency Tests
+
+    @Test
+    func testEnergyEffortMatrixConsistencyStep() throws {
+        // Create test data loader with conflicting EnergyEffort Matrix tags
+        let conflictingTagsLoader: TestDataLoader = { timeProvider in
+            var tasks: [TaskItem] = []
+
+            // Task with both urgent and non-urgent tags
+            let conflictingTask1 = TaskItem(title: "Conflicting Task 1")
+            conflictingTask1.state = .open
+            conflictingTask1.tags = ["urgent", "non-urgent", "work"]
+            tasks.append(conflictingTask1)
+
+            // Task with both important and non-important tags
+            let conflictingTask2 = TaskItem(title: "Conflicting Task 2")
+            conflictingTask2.state = .priority
+            conflictingTask2.tags = ["important", "non-important", "private"]
+            tasks.append(conflictingTask2)
+
+            // Task with conflicts in both dimensions
+            let conflictingTask3 = TaskItem(title: "Conflicting Task 3")
+            conflictingTask3.state = .open
+            conflictingTask3.tags = ["urgent", "non-urgent", "important", "non-important"]
+            tasks.append(conflictingTask3)
+
+            // Task with no conflicts
+            let normalTask = TaskItem(title: "Normal Task")
+            normalTask.state = .open
+            normalTask.tags = ["urgent", "important", "work"]
+            tasks.append(normalTask)
+
+            return tasks
+        }
+
+        let appComponents = setupApp(isTesting: true, loaderForTests: conflictingTagsLoader)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        let step = EnergyEffortMatrixConsistencyStep()
+
+        // Step should always be applicable
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
+
+        // Step should be silent
+        #expect(step.isSilent == true)
+
+        // Verify initial conflicting tags
+        let task1 = dataManager.allTasks.first { $0.title == "Conflicting Task 1" }
+        let task2 = dataManager.allTasks.first { $0.title == "Conflicting Task 2" }
+        let task3 = dataManager.allTasks.first { $0.title == "Conflicting Task 3" }
+        let task4 = dataManager.allTasks.first { $0.title == "Normal Task" }
+
+        #expect(task1?.tags.contains("urgent") == true)
+        #expect(task1?.tags.contains("non-urgent") == true)
+
+        #expect(task2?.tags.contains("important") == true)
+        #expect(task2?.tags.contains("non-important") == true)
+
+        #expect(task3?.tags.contains("urgent") == true)
+        #expect(task3?.tags.contains("non-urgent") == true)
+        #expect(task3?.tags.contains("important") == true)
+        #expect(task3?.tags.contains("non-important") == true)
+
+        // Execute the step
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
+
+        // Verify conflicts are resolved
+        // Task 1: both urgent and non-urgent should be removed
+        #expect(task1?.tags.contains("urgent") == false)
+        #expect(task1?.tags.contains("non-urgent") == false)
+        #expect(task1?.tags.contains("work") == true)  // Other tags preserved
+
+        // Task 2: both important and non-important should be removed
+        #expect(task2?.tags.contains("important") == false)
+        #expect(task2?.tags.contains("non-important") == false)
+        #expect(task2?.tags.contains("private") == true)  // Other tags preserved
+
+        // Task 3: all conflicting tags should be removed
+        #expect(task3?.tags.contains("urgent") == false)
+        #expect(task3?.tags.contains("non-urgent") == false)
+        #expect(task3?.tags.contains("important") == false)
+        #expect(task3?.tags.contains("non-important") == false)
+
+        // Task 4: non-conflicting tags should remain unchanged
+        #expect(task4?.tags.contains("urgent") == true)
+        #expect(task4?.tags.contains("important") == true)
+        #expect(task4?.tags.contains("work") == true)
+    }
 }

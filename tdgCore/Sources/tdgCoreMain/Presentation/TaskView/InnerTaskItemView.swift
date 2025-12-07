@@ -7,6 +7,7 @@ import SwiftData
 //
 import SwiftUI
 import UniformTypeIdentifiers
+import PhotosUI
 
 extension Array {
     public func chunked(into size: Int) -> [[Element]] {
@@ -29,6 +30,13 @@ public struct InnerTaskItemView: View {
     @State private var isEnhancing = false
     @State private var enhancer: WebPageEnhancer?
 
+    // Photo picker state
+    @State private var showPhotosPicker = false
+    @State private var selectedPhotosItems: [PhotosPickerItem] = []
+    #if os(iOS)
+    @State private var showCamera = false
+    #endif
+
     public init(
         item: TaskItem, allTags: [String], buildTag: String = "", showAttachmentImporter: Bool = false,
         showAttachmentImport: Bool
@@ -42,13 +50,18 @@ public struct InnerTaskItemView: View {
     }
 
     private var attachmentButton: some View {
-        Button {
-            showAttachmentImporter = true
-        } label: {
-            Label("Add Attachment", systemImage: imgAttachment)
-        }
-        .accessibilityIdentifier("addAttachmentButton")
-        .help("Add file attachment to this task")
+        #if os(iOS)
+        PhotoAttachmentMenu(
+            showPhotosPicker: $showPhotosPicker,
+            showCamera: $showCamera,
+            showFileImporter: $showAttachmentImporter
+        )
+        #else
+        PhotoAttachmentMenu(
+            showPhotosPicker: $showPhotosPicker,
+            showFileImporter: $showAttachmentImporter
+        )
+        #endif
     }
 
     public var body: some View {
@@ -249,6 +262,26 @@ public struct InnerTaskItemView: View {
                 }
             }
         }
+        .photosPicker(
+            isPresented: $showPhotosPicker,
+            selection: $selectedPhotosItems,
+            matching: .images,
+            photoLibrary: .shared()
+        )
+        .onChange(of: selectedPhotosItems) { oldValue, newValue in
+            Task {
+                await handlePhotosSelection(newValue)
+                selectedPhotosItems = []  // Reset after processing
+            }
+        }
+        #if os(iOS)
+        .sheet(isPresented: $showCamera) {
+            CameraPickerView { image in
+                handleCapturedImage(image)
+            }
+            .ignoresSafeArea()
+        }
+        #endif
     }
 
     private func deleteAttachment(_ attachment: Attachment) {
@@ -299,4 +332,73 @@ public struct InnerTaskItemView: View {
 
         isEnhancing = false
     }
+
+    // MARK: - Photo Handling
+
+    private func handlePhotosSelection(_ items: [PhotosPickerItem]) async {
+        for (index, item) in items.enumerated() {
+            do {
+                guard let data = try await item.loadImageData() else { continue }
+
+                // Create a temporary file to save the image
+                let tempDir = FileManager.default.temporaryDirectory
+                let filename = "photo_\(Date().timeIntervalSince1970)_\(index).jpg"
+                let tempURL = tempDir.appendingPathComponent(filename)
+
+                try data.write(to: tempURL)
+
+                // Add as attachment
+                let attachment = try addAttachment(
+                    fileURL: tempURL,
+                    type: .jpeg,
+                    to: self.item,
+                    sortIndex: (self.item.attachments ?? []).count,
+                    in: modelContext
+                )
+
+                // Add a comment about the attachment
+                self.item.addComment(text: "Added photo: \(attachment.filename)", icon: imgAttachment)
+
+                // Clean up temp file
+                try? FileManager.default.removeItem(at: tempURL)
+            } catch {
+                print("Failed to add photo: \(error)")
+            }
+        }
+    }
+
+    #if os(iOS)
+    private func handleCapturedImage(_ image: UIImage) {
+        guard let data = image.jpegData(compressionQuality: 0.8) else {
+            print("Failed to convert captured image to JPEG")
+            return
+        }
+
+        // Create a temporary file to save the image
+        let tempDir = FileManager.default.temporaryDirectory
+        let filename = "camera_\(Date().timeIntervalSince1970).jpg"
+        let tempURL = tempDir.appendingPathComponent(filename)
+
+        do {
+            try data.write(to: tempURL)
+
+            // Add as attachment
+            let attachment = try addAttachment(
+                fileURL: tempURL,
+                type: .jpeg,
+                to: item,
+                sortIndex: (item.attachments ?? []).count,
+                in: modelContext
+            )
+
+            // Add a comment about the attachment
+            item.addComment(text: "Added photo from camera: \(attachment.filename)", icon: imgAttachment)
+
+            // Clean up temp file
+            try? FileManager.default.removeItem(at: tempURL)
+        } catch {
+            print("Failed to add captured photo: \(error)")
+        }
+    }
+    #endif
 }

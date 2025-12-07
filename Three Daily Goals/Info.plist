@@ -12,6 +12,10 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Three Daily Goals would like to access your camera to take photos and attach them to your tasks.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Three Daily Goals would like to access your photo library to attach photos to your tasks.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>

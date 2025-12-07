@@ -137,6 +137,10 @@ struct Three_Daily_GoalsApp: App {
                     appComponents.uiState.select(task)
                     return
                 }
+            } else if url.host == "new-task" {
+                // Create a new task: three-daily-goals://new-task
+                appComponents.uiState.addNewItem()
+                return
             } else if url.host == "app" {
                 // Just open the app, no task creation
                 return

@@ -28,7 +28,7 @@ extension Comment: Equatable, Comparable {
 }
 
 extension Comment: Identifiable {
-    public var id: Date {
-        return created
+    public var id: ObjectIdentifier {
+        return ObjectIdentifier(self)
     }
 }

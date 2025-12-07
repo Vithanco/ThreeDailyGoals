@@ -86,7 +86,7 @@ public final class DataManager {
         for t in allTasks where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
         }
-        result.formUnion(["work", "private"])
+        result.formUnion(standardTags)
         return result
     }
 
@@ -839,7 +839,7 @@ public final class DataManager {
         for task in allTasks where !task.tags.isEmpty {
             result.formUnion(task.tags)
         }
-        result.formUnion(["work", "private"])
+        result.formUnion(standardTags)
         return result
     }
 

@@ -29,7 +29,6 @@ public let imgTouch = "hand.tap"
 public let imgUndo = "arrow.uturn.backward.circle.fill"
 public let imgRedo = "arrow.uturn.forward.circle.fill"
 public let imgAttachment = "paperclip"
-public let imgTag = "tag"
 public let imgStateChange = "arrow.triangle.2.circlepath"
 
 // MARK: - UI Icons
