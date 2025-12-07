@@ -117,12 +117,12 @@ public struct ShareExtensionView: View {
                                     .controlSize(.small)
                                 Text("Analyzing...")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.secondary.opacity(0.1))
-                            .cornerRadius(8)
+                            .clipShape(.rect(cornerRadius: 8))
                         }
 
                         // Show "Enhance" button for AI description if applicable

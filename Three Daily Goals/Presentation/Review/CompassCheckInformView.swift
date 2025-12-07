@@ -17,7 +17,7 @@ public struct CompassCheckInformView: View {
             // Enhanced streak display
             VStack(spacing: 8) {
                 Text("Current Streak")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.body.weight(.semibold))
                     .foregroundStyle(Color.priority)
 
                 StreakView()
@@ -35,7 +35,7 @@ public struct CompassCheckInformView: View {
             Text(
                 "The Compass Check is where the \"daily magic\" happens. By reviewing your tasks daily you can stay on top of your work."
             )
-            .font(.system(size: 14, weight: .medium))
+            .font(.subheadline.weight(.medium))
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 16)

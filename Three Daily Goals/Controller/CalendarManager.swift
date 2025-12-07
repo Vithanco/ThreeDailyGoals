@@ -61,7 +61,7 @@ public class CalendarManager {
         guard let eventStore = eventStore else { return }
 
         eventStore.requestFullAccessToEvents { [weak self] granted, error in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 if let error = error {
                     debugPrint("Calendar access error: \(error)")
                     return

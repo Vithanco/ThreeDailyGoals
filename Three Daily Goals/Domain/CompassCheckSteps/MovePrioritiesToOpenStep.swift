@@ -25,7 +25,7 @@ public struct MovePrioritiesToOpenStep: CompassCheckStep {
         // Silent steps don't need a view, but we provide a minimal one for protocol compliance
         AnyView(
             Text("Moving priorities to open list...")
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         )
     }
 

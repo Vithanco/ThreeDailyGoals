@@ -23,7 +23,7 @@ public struct AllCommentsView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header with Add Comment button
             HStack {
-                Text("History:").bold().foregroundColor(Color.secondary)
+                Text("History:").bold().foregroundStyle(Color.secondary)
                 Spacer()
                 Button(action: { presentAlert = true }) {
                     Label("Add Comment", systemImage: "plus.circle.fill").help(
@@ -35,16 +35,16 @@ public struct AllCommentsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "clock.arrow.circlepath")
-                        .foregroundColor(item.color)
+                        .foregroundStyle(item.color)
                         .font(.system(size: 14, weight: .medium))
                     Text("Last Updated")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     Spacer()
                 }
                 Text(item.changed.formatted(date: .abbreviated, time: .shortened))
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .padding(.leading, 22)
             }
             .padding(.vertical, 8)
@@ -58,23 +58,23 @@ public struct AllCommentsView: View {
                     CommentView(comment: comment)
                 }
             } else {
-                Text("No history yet").foregroundColor(.secondary).italic()
+                Text("No history yet").foregroundStyle(.secondary).italic()
             }
 
             // Enhanced Created section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(systemName: "calendar.badge.plus")
-                        .foregroundColor(.open)
+                        .foregroundStyle(Color.open)
                         .font(.system(size: 14, weight: .medium))
                     Text("Created")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.primary)
+                        .foregroundStyle(.primary)
                     Spacer()
                 }
                 Text(item.created.formatted(date: .abbreviated, time: .shortened))
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                     .padding(.leading, 22)
             }
             .padding(.vertical, 8)

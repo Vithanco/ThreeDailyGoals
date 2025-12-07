@@ -25,13 +25,13 @@ struct SimpleListView: View {
                     HStack(spacing: 8) {
                         // Section icon with color
                         Image(systemName: section.image)
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(color)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(color)
                             .frame(width: 20, height: 20)
 
                         section.asText
                             .foregroundStyle(color)
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.subheadline.weight(.semibold))
                             .accessibilityIdentifier("ListView" + id)
                     }
                 }
@@ -53,13 +53,13 @@ struct SimpleListView: View {
                                 HStack(spacing: 8) {
                                     // Header icon with color
                                     Image(systemName: section.image)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(color)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(color)
                                         .frame(width: 16, height: 16)
 
                                     header.asText
                                         .foregroundStyle(color)
-                                        .font(.system(size: 13, weight: .medium))
+                                        .font(.footnote.weight(.medium))
                                         .listRowSeparator(.hidden)
                                 }
                                 .listRowSeparator(.hidden)
@@ -76,8 +76,8 @@ struct SimpleListView: View {
                     if itemList.count > 10 {
                         HStack(spacing: 8) {
                             Image(systemName: section.image)
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(color)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(color)
                                 .frame(width: 16, height: 16)
                             Text("\(itemList.count) tasks").font(.callout).foregroundStyle(color)
                                 .listRowSeparator(.hidden)
@@ -92,6 +92,9 @@ struct SimpleListView: View {
         .listRowSeparator(.hidden)
         .background(Color.clear)
         .accessibilityIdentifier("scrollView_\(id)")
+        .navigationDestination(for: TaskItem.self) { item in
+            TaskItemView(item: item)
+        }
     }
 
 }

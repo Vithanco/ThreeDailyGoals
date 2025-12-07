@@ -23,14 +23,9 @@ struct LinkToTask: View {
             .buttonStyle(PlainButtonStyle())
             .accessibilityIdentifier("linkToTask" + item.title)
         } else {
-            ZStack {
+            NavigationLink(value: item) {
                 TaskAsLine(item: item)
                     .accessibilityIdentifier(item.id.description)
-                NavigationLink(destination: TaskItemView(item: item)) {
-                    EmptyView()
-                }
-                .opacity(0)
-                .accessibilityHidden(true)
             }
         }
     }
