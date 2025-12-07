@@ -47,7 +47,7 @@ struct LeftSideView: View {
                 if isLargeDevice {
                     HStack {
                         Spacer()
-                        Circle().frame(width: 10).foregroundColor(.accentColor).help(
+                        Circle().frame(width: 10).foregroundStyle(.accentColor).help(
                             "Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS."
                         )
                         Spacer()
@@ -95,8 +95,8 @@ struct LeftSideView: View {
                 // Section header
                 HStack {
                     Text("Lists")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(.secondary)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                         .tracking(0.5)
                     Spacer()

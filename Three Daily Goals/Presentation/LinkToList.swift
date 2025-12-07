@@ -80,22 +80,22 @@ private struct ListLabel: View {
             HStack(spacing: 12) {
                 // Single semantic list icon with color
                 Image(systemName: listIcon)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(listColor)
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(listColor)
                     .frame(width: 28, height: 28)
 
                 // List name only (removed duplicate count)
                 name
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.primary)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.primary)
 
                 Spacer()
 
                 // Enhanced count badge
                 if whichList.showCount && tasks.count > 0 {
                     Text(tasks.count.description)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(.white)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(listColor)
@@ -144,10 +144,12 @@ struct LinkToList: View {
     var body: some View {
         SingleView {
             if isLargeDevice {
-                ListLabel(whichList: whichList)
-                    .onTapGesture {
-                        uiState.select(which: whichList, item: dataManager.list(which: whichList).first)
-                    }
+                Button(action: {
+                    uiState.select(which: whichList, item: dataManager.list(which: whichList).first)
+                }) {
+                    ListLabel(whichList: whichList)
+                }
+                .buttonStyle(.plain)
             } else {
                 NavigationLink {
                     ListView(whichList: whichList)

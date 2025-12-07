@@ -131,6 +131,54 @@ Steps can be enabled/disabled in preferences. Step execution is managed by `Comp
 
 ### Testing Strategy
 
+**CRITICAL: Test-Driven Development Approach**
+
+This project follows a strict Test-Driven Development (TDD) methodology:
+
+1. **Write Tests First**
+   - When identifying a bug or implementing a new feature, **ALWAYS create a failing test first**
+   - The test should demonstrate the problem or define the expected behavior
+   - Only after the test is written and fails should you implement the fix
+
+2. **Test-First Workflow:**
+   ```
+   1. Identify the issue or feature requirement
+   2. Discuss and align on test cases with the user
+   3. Write a failing test that proves the issue or defines the behavior
+   4. Verify the test fails for the right reason
+   5. Implement the minimal fix to make the test pass
+   6. Verify the test passes
+   7. Refactor if needed while keeping tests green
+   ```
+
+3. **Bug Fixing Protocol:**
+   - **Never fix a bug without a failing test first**
+   - The test serves as proof that:
+     - The bug exists (test fails)
+     - The fix works (test passes)
+     - The bug won't regress in the future
+   - Example workflow:
+     ```swift
+     // Step 1: Write a test that demonstrates the bug
+     @Test func taskStateTransitionCreatesComment() {
+         // This test will fail, proving the bug exists
+         let task = TaskItem()
+         task.setState(.closed)
+         #expect(task.comments.count > 0)
+     }
+
+     // Step 2: Fix the bug
+     // Step 3: Verify test now passes
+     ```
+
+4. **Feature Development Protocol:**
+   - Before writing implementation code, align with the user on:
+     - What tests will be written
+     - What behavior they should verify
+     - Edge cases to cover
+   - Get approval on test strategy before implementing
+   - Write tests first, then implementation
+
 **Test Modes:**
 - App detects test mode via `CommandLine.arguments` containing "enable-testing"
 - Test mode uses in-memory ModelContainer with `createDefaultTestData()`
@@ -141,12 +189,14 @@ Steps can be enabled/disabled in preferences. Step execution is managed by `Comp
 - Default loader: `defaultTestDataLoader` creates ~25 sample tasks
 - Custom loaders can be passed to `setupApp()` for specific test scenarios
 
-**Share Extension Testing:**
-See `SHARE_EXTENSION_TESTING.md` for comprehensive test harness documentation. Key points:
+**Test Frameworks:**
 - Non-GUI tests use Swift Testing framework (`@Test`, `#expect()`)
 - UI tests use XCTest for view initialization
 - Mock `NSItemProvider` for simulating shared content
 - Test utilities in `ShareExtensionTestUtilities.swift`
+
+**Share Extension Testing:**
+See `SHARE_EXTENSION_TESTING.md` for comprehensive test harness documentation.
 
 ### Widget & Share Extension
 
@@ -262,3 +312,146 @@ xcodebuild test -project "Three Daily Goals.xcodeproj" -scheme "Three Daily Goal
 - `three-daily-goals://app` - Just open the app
 
 Handle in `handleURL()` function in Three_Daily_GoalsApp.swift.
+
+## SwiftUI Best Practices
+
+This project follows modern SwiftUI conventions and best practices. When writing or modifying SwiftUI code, adhere to these guidelines:
+
+### Modern API Usage
+
+1. **Styling Modifiers**
+   - ✅ Use `.foregroundStyle()` instead of deprecated `.foregroundColor()`
+   - ✅ Use `.clipShape(.rect(cornerRadius:))` instead of deprecated `.cornerRadius()`
+   - Exception: `RoundedRectangle(cornerRadius:)` is still the correct pattern for shapes
+
+2. **View Modifiers**
+   - ✅ Use 2-parameter or no-parameter `.onChange(of:)` - the 1-parameter variant is unsafe and deprecated
+   - ✅ Use the new `Tab` API instead of old `tabItem()` modifier for type-safe tab selection
+
+3. **Navigation**
+   - ✅ Use `NavigationStack` instead of deprecated `NavigationView`
+   - ✅ Use modern `NavigationLink(value:)` with `.navigationDestination(for:)` instead of inline destination NavigationLinks
+   - Better for type safety and allows for more flexible navigation patterns
+
+4. **User Interaction**
+   - ✅ Use `Button` instead of `.onTapGesture()` for interactive elements
+   - Exceptions: Only use `.onTapGesture()` when you need tap location or tap count
+   - Buttons work better with VoiceOver and eye tracking on visionOS
+
+### State Management
+
+1. **Observable Pattern**
+   - ✅ Use `@Observable` macro instead of `ObservableObject` (unless specifically relying on Combine publishers)
+   - Simpler code and better performance
+   - Intelligent view invalidation
+
+2. **View Decomposition**
+   - ✅ Split views into separate structs instead of computed properties
+   - Critical for performance with `@Observable` - computed properties don't benefit from intelligent view invalidation
+   - Example:
+     ```swift
+     // ❌ Don't do this
+     var headerView: some View {
+         Text("Header")
+     }
+
+     // ✅ Do this instead
+     struct HeaderView: View {
+         var body: some View {
+             Text("Header")
+         }
+     }
+     ```
+
+### Typography & Accessibility
+
+1. **Dynamic Type**
+   - ✅ Use Dynamic Type fonts (`.body`, `.headline`, `.caption`, etc.) instead of `.font(.system(size:))`
+   - Better accessibility support for users with different font size preferences
+   - Exception: Widget sizes are constrained, fixed fonts may be acceptable
+   - For scaling: Use `.font(.body.scaled(by: 1.5))` on iOS 26+
+
+2. **Button Labels**
+   - ✅ Use inline API: `Button("Tap me", systemImage: "plus", action: action)` or `Label` for better VoiceOver
+   - ❌ Avoid using just images without labels
+
+### SwiftData Considerations
+
+1. **CloudKit Compatibility**
+   - ❌ **DO NOT** use `@Attribute(.unique)` with CloudKit - it doesn't work
+   - Our project syncs via CloudKit, so avoid unique constraints
+
+### Concurrency & Threading
+
+1. **Actor Isolation**
+   - ✅ Use `Task { @MainActor in }` instead of `DispatchQueue.main.async`
+   - Better Swift 6 concurrency support
+   - All managers are already `@MainActor` for UI safety
+
+### Number Formatting
+
+1. **Modern Formatters**
+   - ✅ Use `.formatted(.number.precision(.fractionLength(2)))` instead of C-style `String(format:)`
+   - Type-safe and localization-friendly
+   - Example:
+     ```swift
+     // ❌ Old way
+     Text(String(format: "%.2f", value))
+
+     // ✅ New way
+     Text(value, format: .number.precision(.fractionLength(2)))
+     ```
+
+### Collections & Iteration
+
+1. **Array Initialization**
+   - ✅ Use `x.enumerated()` directly in `ForEach`
+   - ❌ Don't wrap with `Array()`: `Array(x.enumerated())`
+   - Example:
+     ```swift
+     // ❌ Don't do this
+     ForEach(Array(items.enumerated()), id: \.offset) { index, item in }
+
+     // ✅ Do this
+     ForEach(items.enumerated(), id: \.offset) { index, item in }
+     ```
+
+### Layout & Geometry
+
+1. **Avoid Over-Using GeometryReader**
+   - ❌ GeometryReader is often overused and can cause performance issues
+   - ✅ Consider alternatives: `.visualEffect()`, `.containerRelativeFrame()`, or fixed frame sizes
+   - Only use GeometryReader when truly necessary
+
+2. **Frame Sizes**
+   - ❌ Avoid fixed frame sizes where they don't belong
+   - ✅ Let SwiftUI's layout system work naturally when possible
+
+### Performance
+
+1. **Font Weight**
+   - Be aware: `fontWeight(.bold)` and `.bold()` don't always produce the same result
+   - Prefer `.bold()` for semantic boldness
+
+2. **Build Times**
+   - ❌ Don't place many types in a single file - it increases build times
+   - ✅ Organize code into focused, single-purpose files
+
+### Rendering
+
+1. **Image Rendering**
+   - ✅ Use `ImageRenderer` for SwiftUI views instead of `UIGraphicsImageRenderer`
+   - Better integration with SwiftUI
+
+### Code Organization
+
+- Keep files focused on a single responsibility
+- Use meaningful file names that reflect the content
+- Group related functionality together in directories
+- Follow the existing project structure (Presentation/, Domain/, Storage/, etc.)
+
+### Custom Colors
+
+When using custom color extensions (like `Color.open`, `Color.priority`, `Color.closed`):
+- Wrap in `Color` type when used with `.foregroundStyle()` to avoid compilation errors
+- Example: `.foregroundStyle(Color.open)` not `.foregroundStyle(.open)`

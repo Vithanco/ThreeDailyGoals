@@ -40,7 +40,7 @@ public func createAttachmentTempFile(
 
     // Create a short, safe unique identifier using hash of the original identifier
     let hash = uniqueIdentifier.hashValue
-    let shortIdentifier = String(format: "att_%d", abs(hash))
+    let shortIdentifier = "att_\(abs(hash))"
 
     // Create unique filename to avoid conflicts (limit total length)
     let maxFilenameLength = 100  // Reasonable limit for filesystem compatibility

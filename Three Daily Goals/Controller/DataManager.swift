@@ -974,7 +974,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .closed)
         }) {
-            Image(systemName: imgClosed).foregroundColor(TaskItemState.closed.color)
+            Image(systemName: imgClosed).foregroundStyle(TaskItemState.closed.color)
         }
         .help("Close the task")
         .accessibilityIdentifier("closeButton")
@@ -986,7 +986,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .dead)
         }) {
-            Image(systemName: imgGraveyard).foregroundColor(TaskItemState.dead.color)
+            Image(systemName: imgGraveyard).foregroundStyle(TaskItemState.dead.color)
 
         }
         .help("Move the task to the Graveyard")
@@ -999,7 +999,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .open)
         }) {
-            Image(systemName: imgOpen).foregroundColor(TaskItemState.open.color)
+            Image(systemName: imgOpen).foregroundStyle(TaskItemState.open.color)
 
         }
         .help("Open this task again")
@@ -1012,7 +1012,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
-            Image(systemName: imgPendingResponse).foregroundColor(
+            Image(systemName: imgPendingResponse).foregroundStyle(
                 TaskItemState.pendingResponse.color
             )
             .help(
@@ -1028,7 +1028,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .priority)
         }) {
-            Image(systemName: imgPriority).foregroundColor(TaskItemState.priority.color)
+            Image(systemName: imgPriority).foregroundStyle(TaskItemState.priority.color)
                 .frame(width: 8, height: 8)
                 .help("Make this task a priority for today")
         }

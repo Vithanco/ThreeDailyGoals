@@ -15,7 +15,7 @@ public struct CommentView: View {
             // Icon column
             if let icon = comment.icon {
                 Image(systemName: icon)
-                    .foregroundColor(comment.state?.color ?? .secondary)
+                    .foregroundStyle(comment.state?.color ?? .secondary)
                     .font(.system(size: 14, weight: .medium))
                     .frame(width: 20, alignment: .center)
             } else {
@@ -29,7 +29,7 @@ public struct CommentView: View {
                 HStack {
                     Text(comment.created, format: stdOnlyDateFormat)
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                     Spacer()
                 }
 

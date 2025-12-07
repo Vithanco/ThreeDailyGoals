@@ -26,7 +26,7 @@ public struct MoveToGraveyardStep: CompassCheckStep {
         // Silent steps don't need a view, but we provide a minimal one for protocol compliance
         AnyView(
             Text("Moving unused tasks to graveyard...")
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         )
     }
 
@@ -55,7 +55,7 @@ public struct MoveToGraveyardConfigurationView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Expire after")
                 .font(.headline)
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             HStack(spacing: 8) {
                 Stepper(
@@ -69,21 +69,21 @@ public struct MoveToGraveyardConfigurationView: View {
                         Text("\(preferences.expiryAfter)")
                             .font(.title3)
                             .fontWeight(.medium)
-                            .foregroundColor(Color.priority)
+                            .foregroundStyle(Color.priority)
                             .frame(minWidth: 50, alignment: .leading)
                     }
                 )
 
                 Text("days")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
 
                 Spacer()
             }
 
             Text("Tasks will be moved to the graveyard after this many days of inactivity.")
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .lineLimit(nil)
         }
         .padding(.vertical, 4)

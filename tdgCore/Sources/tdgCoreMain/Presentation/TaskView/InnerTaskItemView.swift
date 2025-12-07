@@ -85,12 +85,12 @@ public struct InnerTaskItemView: View {
                         .textFieldStyle(.roundedBorder)
                         .focused($isTitleFocused)
                 } label: {
-                    Text("Title:").bold().foregroundColor(Color.secondary)
+                    Text("Title:").bold().foregroundStyle(Color.secondary)
                 }
 
                 // Details field
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Details:").bold().foregroundColor(Color.secondary)
+                    Text("Details:").bold().foregroundStyle(Color.secondary)
                     TextEditor(text: $item.details)
                         .frame(minHeight: 90, maxHeight: 450)  // 3x to 15x height (30 * 3 = 90, 30 * 15 = 450)
                         .padding(8)
@@ -120,18 +120,18 @@ public struct InnerTaskItemView: View {
                                 } else {
                                     Image(systemName: "sparkles")
                                         .imageScale(.medium)
-                                        .foregroundColor(.yellow)
+                                        .foregroundStyle(.yellow)
                                 }
                             }
                             .help("Extract title and description from webpage")
                             .disabled(isEnhancing)
 
                             Link("Open", destination: link)
-                                .foregroundColor(item.color)
+                                .foregroundStyle(item.color)
                         }
                     }
                 } label: {
-                    Text("URL:").bold().foregroundColor(Color.secondary)
+                    Text("URL:").bold().foregroundStyle(Color.secondary)
                 }
 
                 // Due date field
@@ -139,7 +139,7 @@ public struct InnerTaskItemView: View {
                     DatePickerNullable(
                         selected: $item.due, defaultDate: timeProviderWrapper.timeProvider.getDate(inDays: 7))
                 } label: {
-                    Text("Due Date:").bold().foregroundColor(Color.secondary)
+                    Text("Due Date:").bold().foregroundStyle(Color.secondary)
                 }
             }
 

@@ -76,7 +76,7 @@ public let imgStats = "chart.bar.fill"
 //                    Text("v\(versionString)")
 //                }
 //                .font(.caption)
-//                .foregroundColor(.primary)
+//                .foregroundStyle(.primary)
 //            }
 //            .fixedSize()
 //            .accessibilityElement(children: .ignore)

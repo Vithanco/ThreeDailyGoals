@@ -51,7 +51,7 @@ struct TaskAsLine: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 8)
         .background(cardBackground)
-        .cornerRadius(10)
+        .clipShape(.rect(cornerRadius: 10))
         .shadow(color: cardShadow, radius: 3, x: 0, y: 2)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
@@ -63,7 +63,7 @@ struct TaskAsLine: View {
             Text(item.title)
                 .padding(8)
                 .background(Color.accentColor.opacity(0.4))
-                .cornerRadius(8)
+                .clipShape(.rect(cornerRadius: 8))
         }
         .swipeActions(edge: .leading) {
             if item.canBeMovedToOpen {

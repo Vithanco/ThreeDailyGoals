@@ -69,7 +69,7 @@ public struct AttachmentRow: View {
                     Button("Delete") {
                         showingDeleteConfirmation = true
                     }
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
                 }
             } else if attachment.isPurged {
                 Text("Purged").font(.caption).foregroundStyle(.tertiary)
@@ -136,7 +136,7 @@ public struct AttachmentRow: View {
         @State private var saveErrorMessage = ""
 
         public var body: some View {
-            NavigationView {
+            NavigationStack {
                 VStack {
                     if let data = attachment.blob {
                         if attachment.type?.conforms(to: .image) == true,
@@ -164,7 +164,7 @@ public struct AttachmentRow: View {
                             VStack(spacing: 20) {
                                 Image(systemName: "doc.fill")
                                     .font(.system(size: 64))
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
 
                                 VStack(spacing: 8) {
                                     Text(attachment.filename)
@@ -174,18 +174,18 @@ public struct AttachmentRow: View {
                                             fromByteCount: Int64(attachment.byteSize), countStyle: .file)
                                     )
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
 
                                     if let type = attachment.type {
                                         Text(type.localizedDescription ?? type.identifier)
                                             .font(.caption)
-                                            .foregroundColor(.secondary)
+                                            .foregroundStyle(.secondary)
                                     }
                                 }
 
                                 Text("This file type cannot be previewed in the app.")
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundStyle(.secondary)
                                     .multilineTextAlignment(.center)
 
                                 Button("Save to Files") {
@@ -197,7 +197,7 @@ public struct AttachmentRow: View {
                         }
                     } else {
                         Text("No data available")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
 
                     Spacer()

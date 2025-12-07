@@ -16,20 +16,21 @@ struct StreakView: View {
         HStack(spacing: 6) {
             if preferences.isStreakActive {
                 Text("\(preferences.daysOfCompassCheck)")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.body.weight(.semibold))
                 Image(systemName: preferences.isStreakBroken ? imgStreakBroken : imgStreakActive)
                     .foregroundStyle(preferences.daysOfCompassCheck > 0 ? Color.priority : Color.secondary)
-                    .font(.system(size: 18, weight: .medium))
+                    .font(.body.weight(.medium))
                     .frame(width: 24, height: 24)
                 Text("Today:")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(.body.weight(.medium))
             } else {
-                Text("Compass Check Today:").font(.system(size: 18, weight: .medium))
+                Text("Compass Check Today:")
+                    .font(.body.weight(.medium))
             }
 
             Image(systemName: preferences.didCompassCheckToday ? imgCompassCheckDone : imgCompassCheckPending)
                 .foregroundStyle(preferences.didCompassCheckToday ? Color.closed : Color.open)
-                .font(.system(size: 18, weight: .medium))
+                .font(.body.weight(.medium))
                 .frame(width: 24, height: 24)
         }
         .popoverTip(StreakTip())
@@ -60,7 +61,7 @@ struct FullStreakView: View {
                 Button(action: { compassCheckManager.startCompassCheckNow() }) {
                     Label("Start Compass Check Now", systemImage: imgCompassCheck)
                         .foregroundStyle(.white)
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.subheadline.weight(.medium))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(Color.priority)

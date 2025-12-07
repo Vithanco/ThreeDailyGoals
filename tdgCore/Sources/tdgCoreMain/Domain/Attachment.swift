@@ -13,7 +13,7 @@ enum AttachmentError: LocalizedError {
             let fileSizeMB = Double(fileSize) / (1024 * 1024)
             let maxSizeMB = Double(maxSize) / (1024 * 1024)
             return
-                "File is too large (\(String(format: "%.1f", fileSizeMB))MB). Maximum size is \(String(format: "%.1f", maxSizeMB))MB."
+                "File is too large (\(fileSizeMB.formatted(.number.precision(.fractionLength(1))))MB). Maximum size is \(maxSizeMB.formatted(.number.precision(.fractionLength(1))))MB."
         }
     }
 }
