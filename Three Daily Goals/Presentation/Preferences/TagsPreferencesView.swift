@@ -15,11 +15,8 @@ public struct EditTag: View {
     @Environment(DataManager.self) private var dataManager
 
     var displayCurrentTagName: String {
-        if currentTagName == "private" {
-            return "private (inbuilt)"
-        }
-        if currentTagName == "work" {
-            return "private (work)"
+        if standardTags.contains(currentTagName) {
+            return "\(currentTagName) (inbuilt)"
         }
         return currentTagName
     }
@@ -43,7 +40,7 @@ public struct EditTag: View {
             Button("Delete this tag", role: .destructive) {
                 dataManager.delete(tag: currentTagName)
             }.buttonStyle(.bordered)
-                .disabled(currentTagName == "private" || currentTagName == "work")
+                .disabled(standardTags.contains(currentTagName))
         }
         Spacer()
     }
