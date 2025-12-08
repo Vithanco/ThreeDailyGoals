@@ -26,7 +26,7 @@ public struct AllCommentsView: View {
                 Text("History:").bold().foregroundStyle(Color.secondary)
                 Spacer()
                 Button(action: { presentAlert = true }) {
-                    Label("Add Comment", systemImage: "plus.circle.fill").help(
+                    Label("Add Comment", systemImage: imgCommentsAdd).help(
                         "Add some comment to the history of this task")
                 }.accessibilityIdentifier("addCommentButton")
             }
@@ -34,7 +34,7 @@ public struct AllCommentsView: View {
             // Enhanced Last Updated section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Image(systemName: "clock.arrow.circlepath")
+                    Image(systemName: imgClockArrowCirclepath)
                         .foregroundStyle(item.color)
                         .font(.system(size: 14, weight: .medium))
                     Text("Last Updated")
@@ -64,7 +64,7 @@ public struct AllCommentsView: View {
             // Enhanced Created section
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Image(systemName: "calendar.badge.plus")
+                    Image(systemName: imgCalendarBadgePlus)
                         .foregroundStyle(Color.open)
                         .font(.system(size: 14, weight: .medium))
                     Text("Created")

@@ -114,12 +114,12 @@ public struct AttachmentRow: View {
     }
 
     private func symbolName() -> String {
-        guard let t = attachment.type else { return "doc" }
-        if t.conforms(to: .image) { return "photo" }
-        if t == .pdf { return "doc.richtext" }
-        if t.conforms(to: .audio) { return "waveform" }
-        if t.conforms(to: .video) { return "film" }
-        return "doc"
+        guard let t = attachment.type else { return imgDoc }
+        if t.conforms(to: .image) { return imgPhoto }
+        if t == .pdf { return imgDocRichtext }
+        if t.conforms(to: .audio) { return imgWaveform }
+        if t.conforms(to: .video) { return imgFilm }
+        return imgDoc
     }
 
     private var byteCount: String {
@@ -162,7 +162,7 @@ public struct AttachmentRow: View {
                         } else {
                             // Show file info for other types
                             VStack(spacing: 20) {
-                                Image(systemName: "doc.fill")
+                                Image(systemName: imgDocFill)
                                     .font(.system(size: 64))
                                     .foregroundStyle(.secondary)
 

@@ -41,7 +41,7 @@ public struct CompassCheckPlanDay: View {
         VStack {
             Text("This is under development and not yet working.").font(.title)
             Text(
-                "Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
+                "Book the time for your daily goals via drag'n'drop \(Image(systemName: imgArrowshapeLeftRight))"
             ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
             HStack {
                 SimpleCalendarView(

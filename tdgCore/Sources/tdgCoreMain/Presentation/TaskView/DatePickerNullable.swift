@@ -28,7 +28,7 @@ public struct DatePickerNullable: View {
                 Button(action: {
                     selected = nil
                 }) {
-                    Image(systemName: "xmark.circle").font(.title2)
+                    Image(systemName: imgXmarkCircle).font(.title2)
                 }
                 .padding(.trailing)
             } else {
@@ -37,7 +37,7 @@ public struct DatePickerNullable: View {
                 }) {
                     HStack {
                         Text("isn't set")
-                        Image(systemName: "plus.circle")
+                        Image(systemName: imgPlusCircle)
                     }
                 }
                 .background(Color.clear)

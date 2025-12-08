@@ -375,6 +375,51 @@ This project follows modern SwiftUI conventions and best practices. When writing
    - ✅ Use inline API: `Button("Tap me", systemImage: "plus", action: action)` or `Label` for better VoiceOver
    - ❌ Avoid using just images without labels
 
+### SF Symbols (System Images)
+
+**CRITICAL RULE: All SF Symbols must be declared in IconsRelated.swift before use**
+
+1. **Central Declaration**
+   - ✅ **ALWAYS** define SF Symbol constants in `tdgCore/Sources/tdgCoreWidget/Helpers/IconsRelated.swift`
+   - ❌ **NEVER** use hardcoded SF Symbol strings directly (e.g., `"star.fill"`, `"plus.circle"`)
+   - All symbol constants are public and available throughout the app via `import tdgCoreWidget`
+
+2. **Adding New SF Symbols**
+   - Before using any `systemImage:` or `Image(systemName:)`, check if a constant exists in `IconsRelated.swift`
+   - If the constant doesn't exist, add it to the appropriate category in `IconsRelated.swift` first
+   - Use descriptive names with `img` prefix (e.g., `imgPlus`, `imgTrash`, `imgCamera`)
+   - Organize constants by category with MARK comments (Task State, UI Control, Media, etc.)
+
+3. **Usage Pattern**
+   ```swift
+   // ❌ Don't do this
+   Image(systemName: "star.fill")
+   Label("Priority", systemImage: "star.fill")
+
+   // ✅ Do this
+   Image(systemName: imgPriority)
+   Label("Priority", systemImage: imgPriority)
+   ```
+
+4. **Benefits**
+   - Single source of truth for all icons
+   - Easy to update icons globally
+   - Type-safe references (compiler catches typos)
+   - Better code completion and discoverability
+   - Consistent naming across the codebase
+
+5. **Existing Categories in IconsRelated.swift**
+   - Task State Icons (`imgOpen`, `imgClosed`, `imgPriority`, etc.)
+   - Date and Time Icons (`imgCalendarBadgePlus`, `imgClockArrowCirclepath`, etc.)
+   - Information and Navigation Icons (`imgInformation`, `imgCompassCheck`, etc.)
+   - Action Icons (`imgTrash`, `imgPlus`, `imgPlusCircle`, etc.)
+   - History Icons (`imgUndo`, `imgRedo`, `imgStateChange`)
+   - Attachment and Media Icons (`imgCamera`, `imgPhoto`, `imgDoc`, etc.)
+   - UI Control Icons (`imgAddItem`, `imgPreferences`, `imgSparkles`, etc.)
+   - Import/Export Icons (`imgExport`, `imgImport`, `imgStats`)
+   - Settings Icons (`imgListBulletClipboard`, `imgTagCircleFill`, etc.)
+   - Energy-Effort Matrix Icons (`imgBrainHeadProfile`, `imgTortoiseFill`, `imgBoltFill`)
+
 ### SwiftData Considerations
 
 1. **CloudKit Compatibility**

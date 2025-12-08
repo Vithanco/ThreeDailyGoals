@@ -20,7 +20,7 @@ public struct CompassCheckNextPriorities: View {
             #if os(macOS)
 
                 Text(
-                    "Choose Next Priorities via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
+                    "Choose Next Priorities via drag'n'drop \(Image(systemName: imgArrowshapeLeftRight))"
                 ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
                 HStack {
                     SimpleListView(

@@ -295,7 +295,7 @@ struct WatchAccessoryRectangularView: View {
                 }
                 Spacer()
                 if preferences.didCompassCheckToday {
-                    Image(systemName: "checkmark.circle.fill")
+                    Image(systemName: imgCompassCheckDone)
                         .foregroundStyle(Color.green)
                         .font(.system(size: 8))
                 }
