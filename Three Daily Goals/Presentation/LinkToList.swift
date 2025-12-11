@@ -151,10 +151,7 @@ struct LinkToList: View {
                 }
                 .buttonStyle(.plain)
             } else {
-                NavigationLink {
-                    ListView(whichList: whichList)
-                        .standardToolbar(include: !isLargeDevice)
-                } label: {
+                NavigationLink(value: whichList) {
                     ListLabel(whichList: whichList)
                 }
             }

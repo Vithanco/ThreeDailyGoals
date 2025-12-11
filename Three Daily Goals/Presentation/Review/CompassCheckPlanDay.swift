@@ -56,7 +56,8 @@ public struct CompassCheckPlanDay: View {
                     headers: [ListHeader.all],
                     showHeaders: false,
                     section: secToday,
-                    id: TaskItemState.priority.getListAccessibilityIdentifier
+                    id: TaskItemState.priority.getListAccessibilityIdentifier,
+                    enableNavigation: false
                 )
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {

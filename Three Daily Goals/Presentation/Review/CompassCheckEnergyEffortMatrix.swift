@@ -132,7 +132,7 @@ struct EnergyEffortMatrixView: View {
 
                     List {
                         ForEach(uncategorizedTasks) { task in
-                            LinkToTask(item: task, list: task.state)
+                            TaskAsLine(item: task)
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
                                 .listRowInsets(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
@@ -141,9 +141,6 @@ struct EnergyEffortMatrixView: View {
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
                     .frame(maxHeight: 200)
-                    #if !os(macOS)
-                    .environment(\.editMode, .constant(.inactive))
-                    #endif
                 }
                 .padding(.horizontal)
             }

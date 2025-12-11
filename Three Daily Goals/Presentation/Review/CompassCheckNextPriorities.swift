@@ -29,7 +29,8 @@ public struct CompassCheckNextPriorities: View {
                         headers: TaskItemState.priority.subHeaders,
                         showHeaders: false,
                         section: TaskItemState.priority.section,
-                        id: TaskItemState.priority.getListAccessibilityIdentifier
+                        id: TaskItemState.priority.getListAccessibilityIdentifier,
+                        enableNavigation: false
                     )
                     .frame(minHeight: 500)
                     .dropDestination(for: String.self) { items, _ in
@@ -48,7 +49,8 @@ public struct CompassCheckNextPriorities: View {
                         headers: TaskItemState.open.subHeaders,
                         showHeaders: true,
                         section: TaskItemState.open.section,
-                        id: TaskItemState.open.getListAccessibilityIdentifier
+                        id: TaskItemState.open.getListAccessibilityIdentifier,
+                        enableNavigation: false
                     )
                     .dropDestination(for: String.self) { items, _ in
                         Task { @MainActor in
@@ -76,7 +78,8 @@ public struct CompassCheckNextPriorities: View {
                     headers: TaskItemState.open.subHeaders,
                     showHeaders: true,
                     section: TaskItemState.open.section,
-                    id: TaskItemState.open.getListAccessibilityIdentifier
+                    id: TaskItemState.open.getListAccessibilityIdentifier,
+                    enableNavigation: false
                 )
                 .frame(minHeight: 300)
 

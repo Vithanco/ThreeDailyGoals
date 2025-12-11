@@ -118,14 +118,16 @@ protocol CompassCheckStep {
 ```
 
 **Default Steps (in order):**
-1. **DueDateStep** - Review tasks with approaching due dates
-2. **PendingResponsesStep** - Check tasks waiting for responses
-3. **ReviewStep** - Review recently closed tasks
-4. **MoveToGraveyardStep** - Archive stale tasks as "dead"
-5. **CurrentPrioritiesStep** - Review current priorities
-6. **MovePrioritiesToOpenStep** - Demote priorities back to open
-7. **PlanStep** - Select new priorities for today (integrates with Calendar via EventKit)
-8. **InformStep** - Summary and completion
+1. **InformStep** - Welcome and introduction to the Compass Check
+2. **EnergyEffortMatrixConsistencyStep** (silent) - Auto-fixes conflicting Energy-Effort Matrix tags
+3. **CurrentPrioritiesStep** - Review current priorities
+4. **MovePrioritiesToOpenStep** - Demote old priorities back to open
+5. **EnergyEffortMatrixStep** - Categorize tasks by energy required and task size
+6. **PendingResponsesStep** - Check tasks waiting for responses
+7. **DueDateStep** - Review tasks with approaching due dates
+8. **ReviewStep** - Review recently closed tasks
+9. **MoveToGraveyardStep** - Archive stale tasks as "dead"
+10. **PlanStep** - Select new priorities for today (integrates with Calendar via EventKit)
 
 Steps can be enabled/disabled in preferences. Step execution is managed by `CompassCheckManager`.
 

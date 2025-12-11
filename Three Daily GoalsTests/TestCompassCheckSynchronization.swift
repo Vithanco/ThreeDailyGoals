@@ -397,6 +397,7 @@ struct TestCompassCheckSynchronization {
         #expect(compassCheckManager.currentStep.id == "inform")
 
         compassCheckManager.moveStateForward()  // currentPriorities
+        compassCheckManager.moveStateForward()  // EnergyEffortMatrix
         compassCheckManager.moveStateForward()  // pending
         #expect(compassCheckManager.currentStep.id == "pending")
 

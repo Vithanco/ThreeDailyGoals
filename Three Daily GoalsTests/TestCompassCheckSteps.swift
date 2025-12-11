@@ -339,11 +339,15 @@ struct TestCompassCheckSteps {
         // Test step progression through moveStateForward
         #expect(compassCheckManager.currentStep.id == "inform")
 
-        // Should move from inform to currentPriorities (because we have priority tasks)
+        // Should move from inform to currentPriorities (EnergyEffortMatrixConsistency is silent and auto-skipped)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
 
-        // Should move from currentPriorities to pending (because we have pending tasks)
+        // Should move from currentPriorities to EnergyEffortMatrix (new step for categorizing tasks)
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
+
+        // Should move from EnergyEffortMatrix to pending (because we have pending tasks)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "pending")
 
@@ -355,7 +359,7 @@ struct TestCompassCheckSteps {
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
 
-        // Should move from review to plan (on macOS)
+        // Should move from review to plan (on macOS, after MoveToGraveyard)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "plan")
 
@@ -453,10 +457,10 @@ struct TestCompassCheckSteps {
         let priorityTasks = dataManager.list(which: .priority)
         #expect(priorityTasks.count > 0)  // Should still have priority tasks
 
-        // Test moving from currentPriorities to next step
+        // Test moving from currentPriorities to next step (EnergyEffortMatrix)
         // This should execute CurrentPrioritiesStep.act (moves priorities to open)
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.currentStep.id == "pending")
+        #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
 
         // Now verify that priority tasks were moved to open
         let priorityTasksAfter = dataManager.list(which: .priority)
@@ -636,7 +640,7 @@ struct TestCompassCheckSteps {
             pushNotificationManager: appComponents.pushNotificationManager
         )
 
-        // Should skip directly to review
+        // Should skip directly to review (all task-specific steps skipped, including EnergyEffortMatrix which requires uncategorized tasks)
         #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
@@ -666,7 +670,7 @@ struct TestCompassCheckSteps {
             pushNotificationManager: appComponents.pushNotificationManager
         )
 
-        // Should skip dueDate step
+        // Should skip dueDate step (and other non-applicable steps like EnergyEffortMatrix)
         #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")

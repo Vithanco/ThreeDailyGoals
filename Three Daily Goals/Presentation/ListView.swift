@@ -22,11 +22,13 @@ struct ListView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
     let whichList: TaskItemState
+    let enableNavigation: Bool
 
     @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
 
-    init(whichList: TaskItemState) {
+    init(whichList: TaskItemState, enableNavigation: Bool = true) {
         self.whichList = whichList
+        self.enableNavigation = enableNavigation
     }
 
     private var tasks: [TaskItem] {
@@ -71,7 +73,8 @@ struct ListView: View {
                 color: list.color,
                 itemList: filteredTasks, headers: list.subHeaders, showHeaders: list != .priority,
                 section: list.section,
-                id: list.getListAccessibilityIdentifier
+                id: list.getListAccessibilityIdentifier,
+                enableNavigation: enableNavigation
             )
             .frame(minHeight: 145, maxHeight: .infinity)
             .background(listBackground)

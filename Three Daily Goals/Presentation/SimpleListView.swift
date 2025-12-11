@@ -15,8 +15,27 @@ struct SimpleListView: View {
     let showHeaders: Bool
     let section: TaskSection
     let id: String
+    let enableNavigation: Bool
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
+
+    init(
+        color: Color,
+        itemList: [TaskItem],
+        headers: [ListHeader],
+        showHeaders: Bool,
+        section: TaskSection,
+        id: String,
+        enableNavigation: Bool = true
+    ) {
+        self.color = color
+        self.itemList = itemList
+        self.headers = headers
+        self.showHeaders = showHeaders
+        self.section = section
+        self.id = id
+        self.enableNavigation = enableNavigation
+    }
 
     var body: some View {
         List {
@@ -66,10 +85,17 @@ struct SimpleListView: View {
                                 .listRowBackground(Color.clear)
                             }
                             ForEach(partialList) { item in
-                                LinkToTask(item: item, list: item.state)
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.clear)
-                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                if enableNavigation {
+                                    LinkToTask(item: item, list: item.state)
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
+                                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                } else {
+                                    TaskAsLine(item: item)
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
+                                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                }
                             }
                         }
                     }
@@ -92,9 +118,6 @@ struct SimpleListView: View {
         .listRowSeparator(.hidden)
         .background(Color.clear)
         .accessibilityIdentifier("scrollView_\(id)")
-        .navigationDestination(for: TaskItem.self) { item in
-            TaskItemView(item: item)
-        }
     }
 
 }

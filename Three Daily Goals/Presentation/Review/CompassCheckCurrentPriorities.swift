@@ -27,7 +27,8 @@ public struct CompassCheckCurrentPriorities: View {
                     headers: TaskItemState.priority.subHeaders,
                     showHeaders: false,
                     section: TaskItemState.priority.section,
-                    id: TaskItemState.priority.getListAccessibilityIdentifier
+                    id: TaskItemState.priority.getListAccessibilityIdentifier,
+                    enableNavigation: false
                 )
             }.frame(minHeight: 300, idealHeight: 500)
             Button(action: { presentAlert = true }) {

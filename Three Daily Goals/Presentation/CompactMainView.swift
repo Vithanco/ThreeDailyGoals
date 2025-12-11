@@ -15,10 +15,12 @@ struct CompactMainView: View {
         @Bindable var uiState = uiState
         return NavigationStack {
             LeftSideView().background(Color.background)
-                .navigationDestination(isPresented: $uiState.showItem) {
-                    if let item = uiState.selectedItem {
-                        TaskItemView(item: item)
-                    }
+                .navigationDestination(for: TaskItem.self) { item in
+                    TaskItemView(item: item)
+                }
+                .navigationDestination(for: TaskItemState.self) { state in
+                    ListView(whichList: state)
+                        .standardToolbar(include: !isLargeDevice)
                 }
                 .mainToolbar()
                 .toolbar {

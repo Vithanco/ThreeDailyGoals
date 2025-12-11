@@ -130,10 +130,14 @@ struct TestModelLists {
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         #expect(model.compassCheckManager.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
 
-        model.compassCheckManager.moveStateForward()
+        // With no priority tasks, currentPriorities and movePrioritiesToOpen are skipped
+        // Flow: inform → EnergyEffortMatrix (if uncategorized) → dueDate → review
+        model.compassCheckManager.moveStateForward()  // inform → EnergyEffortMatrix (no priorities, so skipped to first applicable)
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
 
-        model.compassCheckManager.moveStateForward()
+        model.compassCheckManager.moveStateForward()  // EnergyEffortMatrix → dueDate (pending skipped, no pending tasks)
+        #expect(model.compassCheckManager.currentStep.id == "dueDate")  // Now on dueDate step
+        model.compassCheckManager.moveStateForward()  // dueDate → review
         #expect(model.compassCheckManager.currentStep.id == "review")
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         model.compassCheckManager.moveStateForward()
