@@ -27,25 +27,14 @@ final class TestSwipeActions: XCTestCase {
         print("DEBUG: App launched, checking basic UI elements")
         print("DEBUG: Buttons: \(app.buttons.count), Toolbars: \(app.toolbars.count)")
 
-        // Try to find the addTaskButton with a simple approach
-        let addTaskButton = app.buttons["addTaskButton"]
+        // Try to find the addTaskButton - use firstMatch to handle multiple matches
+        let addTaskButton = app.buttons["addTaskButton"].firstMatch
         print("DEBUG: addTaskButton exists: \(addTaskButton.exists)")
 
         if addTaskButton.exists {
             print("DEBUG: Found addTaskButton - tapping it")
             addTaskButton.tap()
             sleep(1)
-        } else {
-            // Try looking in toolbar
-            let toolbar = app.toolbars.firstMatch
-            if toolbar.exists {
-                let toolbarButton = toolbar.buttons["addTaskButton"]
-                if toolbarButton.exists {
-                    print("DEBUG: Found addTaskButton in toolbar - tapping it")
-                    toolbarButton.tap()
-                    sleep(1)
-                }
-            }
         }
 
         // Navigate to Open list
