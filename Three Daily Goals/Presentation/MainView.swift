@@ -54,6 +54,7 @@ struct MainView: View {
         #if os(iOS)
             .fullScreenCover(isPresented: $uiState.showCompassCheckDialog) {
                 CompassCheckDialog()
+                    .interactiveDismissDisabled()
             }
         #else
             // On macOS, open/close a dedicated window instead of a sheet

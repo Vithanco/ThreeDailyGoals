@@ -87,7 +87,7 @@ private struct ListLabel: View {
                 // List name only (removed duplicate count)
                 name
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(colorScheme == .dark ? .primary : Color.black)
 
                 Spacer()
 
@@ -151,10 +151,7 @@ struct LinkToList: View {
                 }
                 .buttonStyle(.plain)
             } else {
-                NavigationLink {
-                    ListView(whichList: whichList)
-                        .standardToolbar(include: !isLargeDevice)
-                } label: {
+                NavigationLink(value: whichList) {
                     ListLabel(whichList: whichList)
                 }
             }

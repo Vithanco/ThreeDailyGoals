@@ -70,7 +70,7 @@ struct QuickAddWidgetView: View {
                             .fill(Color.white.opacity(0.2))
                             .frame(width: iconSize, height: iconSize)
 
-                        Image(systemName: "plus.circle.fill")
+                        Image(systemName: imgPlus)
                             .font(.system(size: iconSize * 0.6, weight: .semibold))
                             .foregroundStyle(Color.white)
                     }

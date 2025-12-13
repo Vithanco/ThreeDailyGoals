@@ -20,16 +20,16 @@ public struct PreferencesView: View {
                 }
             CompassCheckStepsPreferencesView()
                 .tabItem {
-                    Label("Compass Check Steps", systemImage: "list.bullet.clipboard")
+                    Label("Compass Check Steps", systemImage: imgListBulletClipboard)
                 }
             TagsPreferencesView()
                 .tabItem {
-                    Label("Tags", systemImage: "tag.circle.fill")
+                    Label("Tags", systemImage: imgTagCircleFill)
                 }
             #if DEBUG
                 DebugPreferencesView()
                     .tabItem {
-                        Label("Debug", systemImage: "wrench.and.screwdriver")
+                        Label("Debug", systemImage: imgWrenchAndScrewdriver)
                     }
             #endif
         }

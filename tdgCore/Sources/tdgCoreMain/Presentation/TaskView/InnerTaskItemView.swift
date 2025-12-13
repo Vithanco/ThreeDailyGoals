@@ -118,7 +118,7 @@ public struct InnerTaskItemView: View {
                                     ProgressView()
                                         .controlSize(.small)
                                 } else {
-                                    Image(systemName: "sparkles")
+                                    Image(systemName: imgSparkles)
                                         .imageScale(.medium)
                                         .foregroundStyle(.yellow)
                                 }
@@ -184,21 +184,23 @@ public struct InnerTaskItemView: View {
                                 item.addTag(buildTag)
                             })
                     }
-                    FlowLayout(spacing: 8, runSpacing: 8) {
-                        ForEach(allTags.sorted(), id: \.self) { text in
-                            let isTag = item.tags.contains(text)
-                            TagView(
-                                text: text,
-                                isSelected: isTag,
-                                accentColor: item.color,
-                                onTap: {
-                                    if isTag {
-                                        item.tags.removeAll { $0 == text }
-                                    } else {
-                                        item.tags.append(text)
+                    ScrollView {
+                        FlowLayout(spacing: 8, runSpacing: 8) {
+                            ForEach(allTags.sorted(), id: \.self) { text in
+                                let isTag = item.tags.contains(text)
+                                TagView(
+                                    text: text,
+                                    isSelected: isTag,
+                                    accentColor: item.color,
+                                    onTap: {
+                                        if isTag {
+                                            item.tags.removeAll { $0 == text }
+                                        } else {
+                                            item.tags.append(text)
+                                        }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                     .frame(maxHeight: 120)
@@ -325,9 +327,14 @@ public struct InnerTaskItemView: View {
             item.title = formattedTitle
         }
 
-        // Only update details if empty
-        if item.isDetailsEmpty, let desc = description {
-            item.details = desc
+        // Add description to details
+        if let desc = description {
+            if item.isDetailsEmpty {
+                item.details = desc
+            } else {
+                // Append below existing text
+                item.details += "\n\n" + desc
+            }
         }
 
         isEnhancing = false

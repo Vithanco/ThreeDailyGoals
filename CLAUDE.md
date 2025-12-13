@@ -118,14 +118,16 @@ protocol CompassCheckStep {
 ```
 
 **Default Steps (in order):**
-1. **DueDateStep** - Review tasks with approaching due dates
-2. **PendingResponsesStep** - Check tasks waiting for responses
-3. **ReviewStep** - Review recently closed tasks
-4. **MoveToGraveyardStep** - Archive stale tasks as "dead"
-5. **CurrentPrioritiesStep** - Review current priorities
-6. **MovePrioritiesToOpenStep** - Demote priorities back to open
-7. **PlanStep** - Select new priorities for today (integrates with Calendar via EventKit)
-8. **InformStep** - Summary and completion
+1. **InformStep** - Welcome and introduction to the Compass Check
+2. **EnergyEffortMatrixConsistencyStep** (silent) - Auto-fixes conflicting Energy-Effort Matrix tags
+3. **CurrentPrioritiesStep** - Review current priorities
+4. **MovePrioritiesToOpenStep** - Demote old priorities back to open
+5. **EnergyEffortMatrixStep** - Categorize tasks by energy required and task size
+6. **PendingResponsesStep** - Check tasks waiting for responses
+7. **DueDateStep** - Review tasks with approaching due dates
+8. **ReviewStep** - Review recently closed tasks
+9. **MoveToGraveyardStep** - Archive stale tasks as "dead"
+10. **PlanStep** - Select new priorities for today (integrates with Calendar via EventKit)
 
 Steps can be enabled/disabled in preferences. Step execution is managed by `CompassCheckManager`.
 
@@ -374,6 +376,51 @@ This project follows modern SwiftUI conventions and best practices. When writing
 2. **Button Labels**
    - ✅ Use inline API: `Button("Tap me", systemImage: "plus", action: action)` or `Label` for better VoiceOver
    - ❌ Avoid using just images without labels
+
+### SF Symbols (System Images)
+
+**CRITICAL RULE: All SF Symbols must be declared in IconsRelated.swift before use**
+
+1. **Central Declaration**
+   - ✅ **ALWAYS** define SF Symbol constants in `tdgCore/Sources/tdgCoreWidget/Helpers/IconsRelated.swift`
+   - ❌ **NEVER** use hardcoded SF Symbol strings directly (e.g., `"star.fill"`, `"plus.circle"`)
+   - All symbol constants are public and available throughout the app via `import tdgCoreWidget`
+
+2. **Adding New SF Symbols**
+   - Before using any `systemImage:` or `Image(systemName:)`, check if a constant exists in `IconsRelated.swift`
+   - If the constant doesn't exist, add it to the appropriate category in `IconsRelated.swift` first
+   - Use descriptive names with `img` prefix (e.g., `imgPlus`, `imgTrash`, `imgCamera`)
+   - Organize constants by category with MARK comments (Task State, UI Control, Media, etc.)
+
+3. **Usage Pattern**
+   ```swift
+   // ❌ Don't do this
+   Image(systemName: "star.fill")
+   Label("Priority", systemImage: "star.fill")
+
+   // ✅ Do this
+   Image(systemName: imgPriority)
+   Label("Priority", systemImage: imgPriority)
+   ```
+
+4. **Benefits**
+   - Single source of truth for all icons
+   - Easy to update icons globally
+   - Type-safe references (compiler catches typos)
+   - Better code completion and discoverability
+   - Consistent naming across the codebase
+
+5. **Existing Categories in IconsRelated.swift**
+   - Task State Icons (`imgOpen`, `imgClosed`, `imgPriority`, etc.)
+   - Date and Time Icons (`imgCalendarBadgePlus`, `imgClockArrowCirclepath`, etc.)
+   - Information and Navigation Icons (`imgInformation`, `imgCompassCheck`, etc.)
+   - Action Icons (`imgTrash`, `imgPlus`, `imgPlusCircle`, etc.)
+   - History Icons (`imgUndo`, `imgRedo`, `imgStateChange`)
+   - Attachment and Media Icons (`imgCamera`, `imgPhoto`, `imgDoc`, etc.)
+   - UI Control Icons (`imgAddItem`, `imgPreferences`, `imgSparkles`, etc.)
+   - Import/Export Icons (`imgExport`, `imgImport`, `imgStats`)
+   - Settings Icons (`imgListBulletClipboard`, `imgTagCircleFill`, etc.)
+   - Energy-Effort Matrix Icons (`imgBrainHeadProfile`, `imgTortoiseFill`, `imgBoltFill`)
 
 ### SwiftData Considerations
 

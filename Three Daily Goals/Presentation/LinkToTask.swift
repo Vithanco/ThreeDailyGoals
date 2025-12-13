@@ -25,8 +25,8 @@ struct LinkToTask: View {
         } else {
             NavigationLink(value: item) {
                 TaskAsLine(item: item)
-                    .accessibilityIdentifier(item.id.description)
             }
+            .accessibilityIdentifier(item.id.description)
         }
     }
 }

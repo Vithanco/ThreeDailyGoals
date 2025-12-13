@@ -1049,7 +1049,7 @@ public final class DataManager {
                 }
             }
         ) {
-            Image(systemName: "trash")
+            Image(systemName: imgTrash)
                 .help("Delete this task for good.")
         }
         .accessibilityIdentifier("deleteButton")

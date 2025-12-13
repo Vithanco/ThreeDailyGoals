@@ -93,14 +93,16 @@ class TestShareExtensionView: XCTestCase {
         // Given: A file URL and content type
         let tempURL = createTempFile(content: "Test file content", fileExtension: "txt")
         let contentType = UTType.plainText
+        let suggestedFilename = "test.txt"
 
         // When: Creating ShareExtensionView with file attachment
-        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType, suggestedFilename: "test.txt")
+        let shareView = ShareExtensionView(fileURL: tempURL, contentType: contentType, suggestedFilename: suggestedFilename)
 
         // Then: Should set up file attachment properties
         XCTAssertEqual(shareView.item.title, "Review File", "Should set title to 'Review File'")
         XCTAssertTrue(shareView.item.details.contains("Shared file:"), "Should include file info in details")
-        XCTAssertTrue(shareView.item.details.contains(tempURL.lastPathComponent), "Should include filename in details")
+        // Check for the suggested filename, not the temp URL's lastPathComponent
+        XCTAssertTrue(shareView.item.details.contains(suggestedFilename), "Should include suggested filename in details")
 
         // Note: Testing internal state properties may not be reliable in SwiftUI views
         // The important thing is that the item is created correctly with file info

@@ -41,7 +41,7 @@ public struct CompassCheckPlanDay: View {
         VStack {
             Text("This is under development and not yet working.").font(.title)
             Text(
-                "Book the time for your daily goals via drag'n'drop \(Image(systemName: "arrowshape.left.arrowshape.right.fill"))"
+                "Book the time for your daily goals via drag'n'drop \(Image(systemName: imgArrowshapeLeftRight))"
             ).font(.title2).foregroundStyle(Color.priority).multilineTextAlignment(.center)
             HStack {
                 SimpleCalendarView(
@@ -56,7 +56,8 @@ public struct CompassCheckPlanDay: View {
                     headers: [ListHeader.all],
                     showHeaders: false,
                     section: secToday,
-                    id: TaskItemState.priority.getListAccessibilityIdentifier
+                    id: TaskItemState.priority.getListAccessibilityIdentifier,
+                    enableNavigation: false
                 )
                 .frame(minHeight: 300)
                 .dropDestination(for: String.self) {

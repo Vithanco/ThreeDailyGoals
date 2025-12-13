@@ -47,7 +47,7 @@ struct LeftSideView: View {
                 if isLargeDevice {
                     HStack {
                         Spacer()
-                        Circle().frame(width: 10).foregroundStyle(.accentColor).help(
+                        Circle().frame(width: 10).foregroundStyle(Color.priority).help(
                             "Drop Target, as iOS has an issue. Will be hopefully removed with next version of iOS."
                         )
                         Spacer()

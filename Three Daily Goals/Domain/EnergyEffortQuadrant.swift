@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import tdgCoreMain
+import tdgCoreWidget
 
 // MARK: - Quadrant Wording Constants
 
@@ -18,25 +19,25 @@ public struct EnergyEffortQuadrantWording {
     public static let urgentImportantName = "Deep Work"
     public static let urgentImportantDescription = "High Energy & Big Task"
     public static let urgentImportantColor = Color.purple
-    public static let urgentImportantIcon = "brain.head.profile"
+    public static let urgentImportantIcon = imgBrainHeadProfile
 
     // Q2: Low Energy & Big Task
     public static let notUrgentImportantName = "Steady Progress"
     public static let notUrgentImportantDescription = "Low Energy & Big Task"
     public static let notUrgentImportantColor = Color.green
-    public static let notUrgentImportantIcon = "tortoise.fill"
+    public static let notUrgentImportantIcon = imgTortoiseFill
 
     // Q3: High Energy & Small Task
     public static let urgentNotImportantName = "Sprint Tasks"
     public static let urgentNotImportantDescription = "High Energy & Small Task"
     public static let urgentNotImportantColor = Color.orange
-    public static let urgentNotImportantIcon = "bolt.fill"
+    public static let urgentNotImportantIcon = imgBoltFill
 
     // Q4: Low Energy & Small Task
     public static let notUrgentNotImportantName = "Easy Wins"
     public static let notUrgentNotImportantDescription = "Low Energy & Small Task"
     public static let notUrgentNotImportantColor = Color.blue
-    public static let notUrgentNotImportantIcon = "checkmark.circle.fill"
+    public static let notUrgentNotImportantIcon = imgClosed
 }
 
 /// Represents the four quadrants of the Energy-Effort Matrix

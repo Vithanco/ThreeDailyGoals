@@ -133,7 +133,7 @@ public struct ShareExtensionView: View {
                                 }
                             } label: {
                                 HStack {
-                                    Image(systemName: "sparkles")
+                                    Image(systemName: imgSparkles)
                                     Text("Generate AI Description")
                                 }
                                 .frame(maxWidth: .infinity)

@@ -128,36 +128,38 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
     let theGoal = result.add(
         title: "Read 'The Goal' by Goldratt",
         changedDate: timeProvider.now.addingTimeInterval(-1 * Seconds.fiveMin))
+    theGoal.created = theGoal.changed  // Match created to changed for test data
     theGoal.details = "It is the book that introduced the fundamentals for 'Theory of Constraints'"
     theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
     theGoal.dueDate = timeProvider.getDate(inDays: 2)
     result.add(
         title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
-        tags: ["CMaps"])
+        tags: ["CMaps"]).created = timeProvider.getDate(daysPrior: 3)
     result.add(
-        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead", "work"])
+        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead", "work"]).created = timeProvider.getDate(daysPrior: 5)
     result.add(
         title: "Transfer tasks from old task manager into this one",
-        changedDate: timeProvider.getDate(daysPrior: 11), state: .open)
+        changedDate: timeProvider.getDate(daysPrior: 11), state: .open).created = timeProvider.getDate(daysPrior: 11)
     let lastMonth2 = result.add(
         title: "Read about Structured Visual Thinking",
         changedDate: timeProvider.getDate(daysPrior: 22),
         state: .open,
         tags: ["toRead"]
     )
+    lastMonth2.created = lastMonth2.changed  // Match created to changed for test data
     lastMonth2.url = "https://vithanco.com"
     result.add(
         title: "Contact Vithanco Author regarding new map style", changedDate: timeProvider.getDate(daysPrior: 3),
-        state: .pendingResponse)
-    result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead)
+        state: .pendingResponse).created = timeProvider.getDate(daysPrior: 3)
+    result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead).created = timeProvider.getDate(daysPrior: 31)
     result.add(
         title: "Read this about Agile vs Waterfall", changedDate: timeProvider.getDate(daysPrior: 101),
-        state: .dead)
+        state: .dead).created = timeProvider.getDate(daysPrior: 101)
     result.add(
-        title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse)
+        title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse).created = timeProvider.getDate(inDays: 3)
     result.add(
         title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
-        tags: ["private"], dueDate: timeProvider.getDate(inDays: 2))
+        tags: ["private"], dueDate: timeProvider.getDate(inDays: 2)).created = timeProvider.getDate(inDays: 30)
 
     // Exploring Three Daily Goals App features
     let widgetTask = result.add(
@@ -165,6 +167,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         changedDate: timeProvider.getDate(daysPrior: 1),
         state: .priority,
         tags: ["widget", "setup"])
+    widgetTask.created = widgetTask.changed  // Match created to changed for test data
     widgetTask.details =
         "Explore the widget feature - long press on home screen, search for Three Daily Goals, and add the widget to see your priorities at a glance"
 
@@ -173,6 +176,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         changedDate: timeProvider.getDate(daysPrior: 2),
         state: .open,
         tags: ["share", "feature"])
+    shareTask.created = shareTask.changed  // Match created to changed for test data
     shareTask.details =
         "Test the share extension: open Safari, tap the share button, and select Three Daily Goals to create a task from any webpage"
     shareTask.url = "https://www.apple.com"
@@ -182,6 +186,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         changedDate: timeProvider.now,
         state: .priority,
         tags: ["compass", "review"])
+    compassTask.created = compassTask.changed  // Match created to changed for test data
     compassTask.details =
         "The Compass Check helps you reflect on what you've done and plan ahead. Access it from the menu to review your progress and set new priorities"
 
@@ -189,26 +194,28 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Organize tasks with tags",
         changedDate: timeProvider.getDate(daysPrior: 1),
         state: .open,
-        tags: ["productivity", "organization"])
+        tags: ["productivity", "organization"]).created = timeProvider.getDate(daysPrior: 1)
 
     let undoTask = result.add(
         title: "Explore undo/redo functionality",
         changedDate: timeProvider.getDate(daysPrior: 4),
         state: .closed,
         tags: ["feature"])
+    undoTask.created = undoTask.changed  // Match created to changed for test data
     undoTask.details = "Try making changes and using Cmd+Z (macOS) to undo them. All changes can be undone and redone!"
 
     result.add(
         title: "Set up daily Compass Check reminder",
         changedDate: timeProvider.getDate(daysPrior: 2),
         state: .pendingResponse,
-        tags: ["compass", "notifications"])
+        tags: ["compass", "notifications"]).created = timeProvider.getDate(daysPrior: 2)
 
     let exportTask = result.add(
         title: "Export tasks to JSON for backup",
         changedDate: timeProvider.getDate(daysPrior: 6),
         state: .open,
         tags: ["backup", "data"])
+    exportTask.created = exportTask.changed  // Match created to changed for test data
     exportTask.details =
         "Use File → Export to save all your tasks as JSON. Great for backups or migrating to another device"
 
@@ -216,13 +223,14 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Test CloudKit sync between devices",
         changedDate: timeProvider.getDate(daysPrior: 3),
         state: .open,
-        tags: ["sync", "icloud"])
+        tags: ["sync", "icloud"]).created = timeProvider.getDate(daysPrior: 3)
 
     let attachmentTask = result.add(
         title: "Add attachments to important tasks",
         changedDate: timeProvider.getDate(daysPrior: 5),
         state: .open,
         tags: ["attachments", "feature"])
+    attachmentTask.created = attachmentTask.changed  // Match created to changed for test data
     attachmentTask.details =
         "You can add images and files to tasks. Try it with screenshots, PDFs, or photos relevant to your work"
 
@@ -230,7 +238,7 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Customize Compass Check steps in preferences",
         changedDate: timeProvider.getDate(daysPrior: 7),
         state: .closed,
-        tags: ["compass", "preferences", "customization"])
+        tags: ["compass", "preferences", "customization"]).created = timeProvider.getDate(daysPrior: 7)
 
     return result
 }

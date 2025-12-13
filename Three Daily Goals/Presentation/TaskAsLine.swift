@@ -65,6 +65,27 @@ struct TaskAsLine: View {
                 .background(Color.accentColor.opacity(0.4))
                 .clipShape(.rect(cornerRadius: 8))
         }
+        #if os(macOS)
+        .contextMenu {
+            if item.canBeMovedToOpen {
+                dataManager.openButton(item: item)
+            }
+            if item.canBeMadePriority {
+                dataManager.priorityButton(item: item)
+            }
+            if item.canBeMovedToPendingResponse {
+                dataManager.waitForResponseButton(item: item)
+            }
+            if item.canBeClosed {
+                dataManager.closeButton(item: item)
+                dataManager.killButton(item: item)
+            }
+            if item.canBeDeleted {
+                Divider()
+                dataManager.deleteButton(item: item, uiState: uiState)
+            }
+        }
+        #else
         .swipeActions(edge: .leading) {
             if item.canBeMovedToOpen {
                 dataManager.openButton(item: item).tint(TaskItemState.open.color)
@@ -85,6 +106,7 @@ struct TaskAsLine: View {
                 dataManager.deleteButton(item: item, uiState: uiState)
             }
         }
+        #endif
     }
 }
 

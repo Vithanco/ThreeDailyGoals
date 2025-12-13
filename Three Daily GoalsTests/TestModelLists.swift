@@ -119,21 +119,27 @@ struct TestModelLists {
                 var result: [TaskItem] = []
                 let theGoal = result.add(
                     title: "Read 'The Goal' by Goldratt",
-                    changedDate: Date.now.addingTimeInterval(-1 * Seconds.fiveMin))
+                    changedDate: Date.now.addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600))
                 theGoal.details =
                     "It is the book that introduced the fundamentals for 'Theory of Constraints'"
                 theGoal.url = "https://www.goodreads.com/book/show/113934.The_Goal"
                 theGoal.dueDate = tp.getDate(inDays: 2)
+                theGoal.created = Date.now.addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
                 return result
             })
 
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         #expect(model.compassCheckManager.dueDateSoon[0].title == "Read 'The Goal' by Goldratt")
 
-        model.compassCheckManager.moveStateForward()
+        // With no priority tasks, currentPriorities and movePrioritiesToOpen are skipped
+        // EnergyEffortMatrixConsistency is silent and auto-runs
+        // Flow: inform → EnergyEffortMatrix (if uncategorized) → dueDate → review → plan (on macOS)
+        model.compassCheckManager.moveStateForward()  // inform → EnergyEffortMatrix (no priorities)
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
 
-        model.compassCheckManager.moveStateForward()
+        model.compassCheckManager.moveStateForward()  // EnergyEffortMatrix → dueDate (pending skipped)
+        #expect(model.compassCheckManager.currentStep.id == "dueDate")  // Now on dueDate step
+        model.compassCheckManager.moveStateForward()  // dueDate → review
         #expect(model.compassCheckManager.currentStep.id == "review")
         #expect(model.compassCheckManager.dueDateSoon.count == 1)
         model.compassCheckManager.moveStateForward()

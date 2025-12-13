@@ -24,6 +24,7 @@ public final class CompassCheckManager {
 
     public static let DEFAULT_STEPS: [any CompassCheckStep] = [
         InformStep(),
+        EnergyEffortMatrixConsistencyStep(),
         CurrentPrioritiesStep(),
         MovePrioritiesToOpenStep(),
         EnergyEffortMatrixStep(),
@@ -31,7 +32,6 @@ public final class CompassCheckManager {
         DueDateStep(),
         ReviewStep(),
         MoveToGraveyardStep(),
-        EnergyEffortMatrixConsistencyStep(),
         PlanStep(),
     ]
     private let logger = Logger(

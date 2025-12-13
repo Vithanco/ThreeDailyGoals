@@ -36,6 +36,10 @@ public enum Seconds {
     public static let eightHours = oneHour * 8.0
 }
 
+/// Hours before a task is ready for Energy-Effort Matrix classification
+/// Tasks must be at least this old before they appear in the categorization step
+public let hoursBeforeReadyForClassification: Int = 55
+
 extension Date {
     // Only keep non-calendar related methods
     @MainActor public func timeAgoDisplay() -> String {

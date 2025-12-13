@@ -20,13 +20,15 @@ struct CompactMainView: View {
                         TaskItemView(item: item)
                     }
                 }
-                .mainToolbar()
-                .toolbar {
-                    ToolbarItem {
-                        uiState.addNewItemButton
-                    }
+                .navigationDestination(for: TaskItem.self) { item in
+                    TaskItemView(item: item)
                 }
-                .standardToolbar(include: isLargeDevice)
+                .navigationDestination(for: TaskItemState.self) { state in
+                    ListView(whichList: state)
+                        .standardToolbar(include: !isLargeDevice)
+                }
+                .mainToolbar()
+                .standardToolbar()
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
 
     }

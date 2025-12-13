@@ -67,13 +67,13 @@ public struct PhotoAttachmentMenu: View {
             Button {
                 showCamera = true
             } label: {
-                Label("Take Photo", systemImage: "camera")
+                Label("Take Photo", systemImage: imgCamera)
             }
 
             Button {
                 showPhotosPicker = true
             } label: {
-                Label("Choose from Library", systemImage: "photo.on.rectangle")
+                Label("Choose from Library", systemImage: imgPhotoOnRectangle)
             }
 
             Button {
@@ -82,7 +82,7 @@ public struct PhotoAttachmentMenu: View {
                 Label("Attach File", systemImage: imgAttachment)
             }
         } label: {
-            Label("Add Attachment", systemImage: "paperclip")
+            Label("Add Attachment", systemImage: imgAddAttachment)
         }
         .accessibilityIdentifier("addAttachmentMenu")
         .help("Add photo or file attachment to this task")
@@ -105,7 +105,7 @@ public struct PhotoAttachmentMenu: View {
             Button {
                 showPhotosPicker = true
             } label: {
-                Label("Choose Photo", systemImage: "photo.on.rectangle")
+                Label("Choose Photo", systemImage: imgPhotoOnRectangle)
             }
 
             Button {
@@ -114,7 +114,7 @@ public struct PhotoAttachmentMenu: View {
                 Label("Attach File", systemImage: imgAttachment)
             }
         } label: {
-            Label("Add Attachment", systemImage: "paperclip")
+            Label("Add Attachment", systemImage: imgAddAttachment)
         }
         .accessibilityIdentifier("addAttachmentMenu")
         .help("Add photo or file attachment to this task")
