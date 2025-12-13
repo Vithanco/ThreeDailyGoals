@@ -52,20 +52,24 @@ struct TestCompassCheckSteps {
             // Add test tasks in different states
             let priorityTask = TaskItem(title: "Priority Task")
             priorityTask.state = .priority
+            priorityTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(priorityTask)
 
             let pendingTask = TaskItem(title: "Pending Task")
             pendingTask.state = .pendingResponse
+            pendingTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(pendingTask)
 
             let openTask = TaskItem(title: "Open Task")
             openTask.state = .open
+            openTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(openTask)
 
             // Add a task due soon (in 2 days)
             let dueTask = TaskItem(title: "Due Soon Task")
             dueTask.due = Date().addingTimeInterval(2 * 24 * 60 * 60)
             dueTask.state = .open
+            dueTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(dueTask)
 
             return tasks
@@ -344,6 +348,7 @@ struct TestCompassCheckSteps {
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
 
         // Should move from currentPriorities to EnergyEffortMatrix (new step for categorizing tasks)
+        // Note: MovePrioritiesToOpenStep is silent and will execute automatically
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
 
@@ -359,7 +364,7 @@ struct TestCompassCheckSteps {
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
 
-        // Should move from review to plan (on macOS, after MoveToGraveyard)
+        // Should move from review to plan (on macOS, MoveToGraveyard is silent and auto-executes)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "plan")
 
@@ -457,8 +462,9 @@ struct TestCompassCheckSteps {
         let priorityTasks = dataManager.list(which: .priority)
         #expect(priorityTasks.count > 0)  // Should still have priority tasks
 
-        // Test moving from currentPriorities to next step (EnergyEffortMatrix)
-        // This should execute CurrentPrioritiesStep.act (moves priorities to open)
+        // Test moving from currentPriorities to next step
+        // This should execute CurrentPrioritiesStep.act first, then MovePrioritiesToOpenStep (silent)
+        // will automatically execute and move priorities to open
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
 

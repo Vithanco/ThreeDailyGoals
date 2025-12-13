@@ -25,8 +25,9 @@ struct TestCompassCheckSynchronization {
 
     /// Simulates external compass check completion by updating preferences
     private func simulateExternalCompassCheckCompletion(preferences: CloudPreferences, timeProvider: TimeProvider) {
-        // Set lastCompassCheck to current time to simulate completion
-        preferences.lastCompassCheck = timeProvider.now
+        // Set lastCompassCheck to slightly after current time to simulate external completion
+        // This ensures it's detected as happening during the session (wasCompletedDuringThisSession = true)
+        preferences.lastCompassCheck = timeProvider.now.addingTimeInterval(1)
         // Increment streak
         preferences.daysOfCompassCheck = preferences.daysOfCompassCheck + 1
     }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import tdgCoreMain
+import tdgCoreWidget
 
 public struct CompassCheckEnergyEffortMatrix: View {
     @Environment(DataManager.self) private var dataManager
@@ -29,13 +30,13 @@ struct EnergyEffortMatrixView: View {
 
     private var uncategorizedTasks: [TaskItem] {
         let now = timeProviderWrapper.timeProvider.now
-        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -hoursBeforeReadyForClassification, to: now) ?? now
 
         return dataManager.allTasks.filter { task in
             task.isActive
             && !task.hasCompleteEnergyEffortTags
             && categorizedTasks[task.uuid] == nil
-            && task.changed < cutoffDate  // Only show tasks older than 55 hours
+            && task.created < cutoffDate  // Only show tasks created long enough ago for classification
         }
     }
 

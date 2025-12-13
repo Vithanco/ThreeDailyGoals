@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import tdgCoreMain
+import tdgCoreWidget
 
 @MainActor
 public struct EnergyEffortMatrixStep: CompassCheckStep {
@@ -30,14 +31,14 @@ public struct EnergyEffortMatrixStep: CompassCheckStep {
     }
 
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Only show if there are active tasks without complete Energy-Effort tags that are older than 55 hours
+        // Only show if there are active tasks without complete Energy-Effort tags that are old enough
         let now = timeProvider.now
-        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -hoursBeforeReadyForClassification, to: now) ?? now
 
         let uncategorizedTasks = dataManager.allTasks.filter { task in
             task.isActive
             && !task.hasCompleteEnergyEffortTags
-            && task.changed < cutoffDate
+            && task.created < cutoffDate
         }
         return !uncategorizedTasks.isEmpty
     }
