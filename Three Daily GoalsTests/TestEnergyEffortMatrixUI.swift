@@ -149,6 +149,129 @@ struct TestEnergyEffortMatrixUI {
         }
         #expect(stillUncategorized.isEmpty)
     }
+
+    /// Test that only tasks older than 55 hours are shown in EnergyEffortMatrix
+    @Test
+    func testEnergyEffortMatrixAgeFilter() throws {
+        let appComponents = setupApp(isTesting: true)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+
+        // Create a recent task (30 hours old) - should NOT be shown
+        let recentTask = dataManager.addAndFindItem(
+            title: "Recent Task",
+            changedDate: timeProvider.getDate(hoursPrior: 30),
+            state: .open
+        )
+
+        // Create an old task (60 hours old) - SHOULD be shown
+        let oldTask = dataManager.addAndFindItem(
+            title: "Old Task",
+            changedDate: timeProvider.getDate(hoursPrior: 60),
+            state: .open
+        )
+
+        // Create a very old task (100 hours old) - SHOULD be shown
+        let veryOldTask = dataManager.addAndFindItem(
+            title: "Very Old Task",
+            changedDate: timeProvider.getDate(hoursPrior: 100),
+            state: .priority
+        )
+
+        // Verify all tasks exist
+        #expect(dataManager.allTasks.contains { $0.id == recentTask.id })
+        #expect(dataManager.allTasks.contains { $0.id == oldTask.id })
+        #expect(dataManager.allTasks.contains { $0.id == veryOldTask.id })
+
+        // Test the EnergyEffortMatrixStep.isApplicable logic
+        let step = EnergyEffortMatrixStep()
+        let now = timeProvider.now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+
+        let uncategorizedTasks = dataManager.allTasks.filter { task in
+            task.isActive
+            && !task.hasCompleteEnergyEffortTags
+            && task.changed < cutoffDate
+        }
+
+        // Should show 2 tasks (60h and 100h old), but not the 30h old task
+        #expect(uncategorizedTasks.count == 2)
+        #expect(uncategorizedTasks.contains { $0.id == oldTask.id })
+        #expect(uncategorizedTasks.contains { $0.id == veryOldTask.id })
+        #expect(!uncategorizedTasks.contains { $0.id == recentTask.id })
+
+        // Verify the step is applicable when old tasks exist
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
+    }
+
+    /// Test that EnergyEffortMatrix step is not applicable when only recent tasks exist
+    @Test
+    func testEnergyEffortMatrixNotApplicableForRecentTasks() throws {
+        let appComponents = setupApp(isTesting: true)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+
+        // Clear existing tasks
+        let allTasks = dataManager.allTasks
+        for task in allTasks {
+            dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
+        }
+
+        // Create only recent tasks (all less than 55 hours old)
+        let recentTask1 = dataManager.addAndFindItem(
+            title: "Recent Task 1",
+            changedDate: timeProvider.getDate(hoursPrior: 20),
+            state: .open
+        )
+
+        let recentTask2 = dataManager.addAndFindItem(
+            title: "Recent Task 2",
+            changedDate: timeProvider.getDate(hoursPrior: 40),
+            state: .priority
+        )
+
+        // Verify tasks exist
+        #expect(dataManager.allTasks.contains { $0.id == recentTask1.id })
+        #expect(dataManager.allTasks.contains { $0.id == recentTask2.id })
+
+        // Test that the step is NOT applicable
+        let step = EnergyEffortMatrixStep()
+        #expect(!step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
+    }
+
+    /// Test that tasks exactly at 55 hours are NOT shown (boundary test)
+    @Test
+    func testEnergyEffortMatrixBoundaryAt55Hours() throws {
+        let appComponents = setupApp(isTesting: true)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+
+        // Clear existing tasks
+        let allTasks = dataManager.allTasks
+        for task in allTasks {
+            dataManager.deleteWithUIUpdate(task: task, uiState: appComponents.uiState)
+        }
+
+        // Create a task exactly 55 hours old
+        let boundaryTask = dataManager.addAndFindItem(
+            title: "Boundary Task",
+            changedDate: timeProvider.getDate(hoursPrior: 55),
+            state: .open
+        )
+
+        // Test the filter logic
+        let now = timeProvider.now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+
+        let uncategorizedTasks = dataManager.allTasks.filter { task in
+            task.isActive
+            && !task.hasCompleteEnergyEffortTags
+            && task.changed < cutoffDate
+        }
+
+        // Task at exactly 55 hours should NOT be included (< not <=)
+        #expect(!uncategorizedTasks.contains { $0.id == boundaryTask.id })
+    }
 }
 
 struct TestError: Error {

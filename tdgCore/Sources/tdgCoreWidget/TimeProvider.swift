@@ -55,6 +55,14 @@ extension TimeProvider {
         return calendar.startOfDay(for: exact)
     }
 
+    public func getDate(hoursPrior: Int) -> Date {
+        guard let exact = calendar.date(byAdding: .hour, value: -1 * hoursPrior, to: now) else {
+            assert(false, "Could not create date \(hoursPrior) hours prior")
+            return now
+        }
+        return exact
+    }
+
     public func getDate(inDays: Int) -> Date {
         let exact = calendar.date(byAdding: .day, value: inDays, to: now) ?? now
         return calendar.startOfDay(for: exact)

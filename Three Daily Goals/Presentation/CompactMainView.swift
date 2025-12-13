@@ -15,6 +15,11 @@ struct CompactMainView: View {
         @Bindable var uiState = uiState
         return NavigationStack {
             LeftSideView().background(Color.background)
+                .navigationDestination(isPresented: $uiState.showItem) {
+                    if let item = uiState.selectedItem {
+                        TaskItemView(item: item)
+                    }
+                }
                 .navigationDestination(for: TaskItem.self) { item in
                     TaskItemView(item: item)
                 }
@@ -23,12 +28,7 @@ struct CompactMainView: View {
                         .standardToolbar(include: !isLargeDevice)
                 }
                 .mainToolbar()
-                .toolbar {
-                    ToolbarItem {
-                        uiState.addNewItemButton
-                    }
-                }
-                .standardToolbar(include: isLargeDevice)
+                .standardToolbar()
         }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
 
     }

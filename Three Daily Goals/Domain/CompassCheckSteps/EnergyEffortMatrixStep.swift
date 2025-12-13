@@ -30,9 +30,14 @@ public struct EnergyEffortMatrixStep: CompassCheckStep {
     }
 
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Only show if there are active tasks without complete Energy-Effort tags
+        // Only show if there are active tasks without complete Energy-Effort tags that are older than 55 hours
+        let now = timeProvider.now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+
         let uncategorizedTasks = dataManager.allTasks.filter { task in
-            task.isActive && !task.hasCompleteEnergyEffortTags
+            task.isActive
+            && !task.hasCompleteEnergyEffortTags
+            && task.changed < cutoffDate
         }
         return !uncategorizedTasks.isEmpty
     }

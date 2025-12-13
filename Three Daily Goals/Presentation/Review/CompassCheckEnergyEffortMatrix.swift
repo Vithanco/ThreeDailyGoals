@@ -28,8 +28,14 @@ struct EnergyEffortMatrixView: View {
     @State private var categorizedTasks: [UUID: EnergyEffortQuadrant] = [:]
 
     private var uncategorizedTasks: [TaskItem] {
-        dataManager.allTasks.filter { task in
-            task.isActive && !task.hasCompleteEnergyEffortTags && categorizedTasks[task.uuid] == nil
+        let now = timeProviderWrapper.timeProvider.now
+        let cutoffDate = Calendar.current.date(byAdding: .hour, value: -55, to: now) ?? now
+
+        return dataManager.allTasks.filter { task in
+            task.isActive
+            && !task.hasCompleteEnergyEffortTags
+            && categorizedTasks[task.uuid] == nil
+            && task.changed < cutoffDate  // Only show tasks older than 55 hours
         }
     }
 
