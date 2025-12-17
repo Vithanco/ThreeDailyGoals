@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
+import tdgCoreWidget
 
 #if os(iOS)
     import UIKit

@@ -15,6 +15,10 @@
 		7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BF9C2E672BF800238C81 /* TestTags.swift */; };
 		7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
+		7F2D43E32EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */; };
+		7F2D43E42EF1AED200C527F3 /* TestTaskDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */; };
+		7F2D43E52EF1AED200C527F3 /* TestCompassCheckPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */; };
+		7F2D43E62EF1AED200C527F3 /* TestEventManagerMultiDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */; };
 		7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */; };
 		7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F2F0A812E52DEB200461679 /* macosShare.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2F0A942E52DF8000461679 /* TestAttachments.swift */; };
@@ -30,7 +34,6 @@
 		7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
 		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
-		7F63C5A62EDF3D2F00881791 /* EnergyEffortQuadrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */; };
 		7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
 		7F88BE402E7DF7BD00D2E050 /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
@@ -189,6 +192,10 @@
 		7F19BF9C2E672BF800238C81 /* TestTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTags.swift; sourceTree = "<group>"; };
 		7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskItemIsUnchanged.swift; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckPersistence.swift; sourceTree = "<group>"; };
+		7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnergyEffortMatrixUI.swift; sourceTree = "<group>"; };
+		7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEventManagerMultiDay.swift; sourceTree = "<group>"; };
+		7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskDeletion.swift; sourceTree = "<group>"; };
 		7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPlanDay.swift; sourceTree = "<group>"; };
 		7F2F0A812E52DEB200461679 /* macosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = macosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F2F0A942E52DF8000461679 /* TestAttachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAttachments.swift; sourceTree = "<group>"; };
@@ -204,7 +211,6 @@
 		7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeActions.swift; sourceTree = "<group>"; };
 		7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimeRemaining.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
-		7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyEffortQuadrant.swift; sourceTree = "<group>"; };
 		7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckEnergyEffortMatrix.swift; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
 		7F71FD252E6BFEA8001B92F4 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
@@ -502,6 +508,10 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */,
+				7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */,
+				7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */,
+				7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */,
 				7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */,
 				7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */,
 				7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */,
@@ -581,7 +591,6 @@
 		E5E1F4752B3060FD00E83A21 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				7F63C5A52EDF3D2F00881791 /* EnergyEffortQuadrant.swift */,
 				7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */,
 				7FC676B22E706B7900C41568 /* CompassCheckSteps */,
 				E57C31AF2B724B2700943EA1 /* PushNotification.swift */,
@@ -928,7 +937,6 @@
 				7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */,
 				7FB357572E5B5020004581B7 /* PriorityUpdater.swift in Sources */,
 				7FB3575A2E5B5040004581B7 /* ItemSelector.swift in Sources */,
-				7F63C5A62EDF3D2F00881791 /* EnergyEffortQuadrant.swift in Sources */,
 				7FB3575B2E5B5050004581B7 /* AppSetup.swift in Sources */,
 				E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */,
 				7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */,
@@ -989,6 +997,10 @@
 				E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */,
 				7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */,
 				7FC676BC2E70B76200C41568 /* TestCompassCheckFlexibility.swift in Sources */,
+				7F2D43E32EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift in Sources */,
+				7F2D43E42EF1AED200C527F3 /* TestTaskDeletion.swift in Sources */,
+				7F2D43E52EF1AED200C527F3 /* TestCompassCheckPersistence.swift in Sources */,
+				7F2D43E62EF1AED200C527F3 /* TestEventManagerMultiDay.swift in Sources */,
 				7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */,
 				7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
@@ -1753,9 +1765,9 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Vithanco/SimpleCalendar";
+			repositoryURL = "file:///Users/kkn/private/swift/SimpleCalendar";
 			requirement = {
-				branch = main;
+				branch = "drag&drop";
 				kind = branch;
 			};
 		};

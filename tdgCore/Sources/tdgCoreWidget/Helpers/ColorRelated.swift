@@ -41,6 +41,13 @@ extension Color {
 
     public static let dueSoon = Color.red
 
+    // MARK: - Energy-Effort Matrix Colors (Muted/Toned Down)
+
+    public static let matrixPurple = Color(hex: "#B4A5D5")  // Soft lavender (Deep Work)
+    public static let matrixTeal = Color(hex: "#7BB8BA")  // Soft teal (Steady Progress)
+    public static let matrixCoral = Color(hex: "#F4A89A")  // Soft coral/peach (Sprint Tasks)
+    public static let matrixMint = Color(hex: "#A8D5BA")  // Soft mint (Easy Wins)
+
 }
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193

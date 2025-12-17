@@ -14,29 +14,31 @@ import tdgCoreWidget
 
 /// Display names, descriptions, colors, and icons for the Energy-Effort Matrix quadrants
 /// (Inspired by the EnergyEffort Matrix, adapted for execution planning)
+/// Colors chosen to be distinct from task state colors (orange/blue/green/yellow/brown)
+/// Using muted/toned down colors for a more professional appearance
 public struct EnergyEffortQuadrantWording {
     // Q1: High Energy & Big Task
     public static let urgentImportantName = "Deep Work"
     public static let urgentImportantDescription = "High Energy & Big Task"
-    public static let urgentImportantColor = Color.purple
+    public static let urgentImportantColor = Color.matrixPurple  // Soft lavender
     public static let urgentImportantIcon = imgBrainHeadProfile
 
     // Q2: Low Energy & Big Task
     public static let notUrgentImportantName = "Steady Progress"
     public static let notUrgentImportantDescription = "Low Energy & Big Task"
-    public static let notUrgentImportantColor = Color.green
+    public static let notUrgentImportantColor = Color.matrixTeal  // Soft teal
     public static let notUrgentImportantIcon = imgTortoiseFill
 
     // Q3: High Energy & Small Task
     public static let urgentNotImportantName = "Sprint Tasks"
     public static let urgentNotImportantDescription = "High Energy & Small Task"
-    public static let urgentNotImportantColor = Color.orange
+    public static let urgentNotImportantColor = Color.matrixCoral  // Soft coral/peach
     public static let urgentNotImportantIcon = imgBoltFill
 
     // Q4: Low Energy & Small Task
     public static let notUrgentNotImportantName = "Easy Wins"
     public static let notUrgentNotImportantDescription = "Low Energy & Small Task"
-    public static let notUrgentNotImportantColor = Color.blue
+    public static let notUrgentNotImportantColor = Color.matrixMint  // Soft mint
     public static let notUrgentNotImportantIcon = imgClosed
 }
 
@@ -150,5 +152,12 @@ extension TaskItem {
         let tags = quadrant.tags
         // tags array always has exactly 2 elements: [energyTag, effortTag]
         applyEnergyEffortTags(energyTag: tags[0], effortTag: tags[1])
+    }
+
+    /// Clear all Energy-Effort Matrix tags from the task
+    public func clearEnergyEffortTags() {
+        // Remove all energy and effort tags
+        let matrixTags = ["high-energy", "low-energy", "big-task", "small-task"]
+        self.tags.removeAll { matrixTags.contains($0) }
     }
 }

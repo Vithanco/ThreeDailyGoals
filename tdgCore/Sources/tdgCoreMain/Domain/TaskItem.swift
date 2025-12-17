@@ -129,35 +129,36 @@ extension TaskItem {
         }
     }
 
-
     public func updateTags(_ newTags: [String], createComments: Bool = true) {
         func normalize(_ s: String) -> String {
             s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         }
-        
+
         let oldRaw = self.tags
         var seenOld = Set<String>()
-        let oldNormOrdered = oldRaw
+        let oldNormOrdered =
+            oldRaw
             .map(normalize)
             .filter { !$0.isEmpty && seenOld.insert($0).inserted }
-        
+
         var seenNew = Set<String>()
-        let newNormOrdered = newTags
+        let newNormOrdered =
+            newTags
             .map(normalize)
             .filter { !$0.isEmpty && seenNew.insert($0).inserted }
-        
+
         allTagsString = newNormOrdered.joined(separator: ",")
-        
+
         let oldSet = Set(oldNormOrdered)
         let newSet = Set(newNormOrdered)
         guard oldSet != newSet else { return }
-        
+
         changed = Date.now
-        
+
         if createComments && comments != nil {
             let added = newSet.subtracting(oldSet)
             let removed = oldSet.subtracting(newSet)
-            
+
             for t in newNormOrdered where added.contains(t) {
                 addComment(text: "Added tag: \(t)", icon: imgTag)
             }
@@ -327,6 +328,12 @@ extension TaskItem {
     public func setEstimatedMinutes(_ newMinutes: Int) {
         guard estimatedMinutes != newMinutes else { return }
         estimatedMinutes = newMinutes
+        changed = Date.now
+    }
+
+    public func setCalendarEventId(_ newEventId: String?) {
+        guard eventId != newEventId else { return }
+        eventId = newEventId
         changed = Date.now
     }
 

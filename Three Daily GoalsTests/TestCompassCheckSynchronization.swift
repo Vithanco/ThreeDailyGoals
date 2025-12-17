@@ -25,11 +25,76 @@ struct TestCompassCheckSynchronization {
 
     /// Simulates external compass check completion by updating preferences
     private func simulateExternalCompassCheckCompletion(preferences: CloudPreferences, timeProvider: TimeProvider) {
-        // Set lastCompassCheck to slightly after current time to simulate external completion
-        // This ensures it's detected as happening during the session (wasCompletedDuringThisSession = true)
-        preferences.lastCompassCheck = timeProvider.now.addingTimeInterval(1)
+        // Complete the compass check externally (as if on another device)
+        preferences.lastCompassCheck = timeProvider.now
         // Increment streak
         preferences.daysOfCompassCheck = preferences.daysOfCompassCheck + 1
+        // Clear the saved progress (external device finished)
+        preferences.clearCompassCheckProgress()
+    }
+
+    // MARK: - Step Synchronization Tests
+
+    @Test
+    func testStepSyncAcrossDevices() throws {
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let compassCheckManager = appComponents.compassCheckManager
+        let uiState = appComponents.uiState
+
+        // Start compass check on device 1
+        compassCheckManager.startCompassCheckNow()
+        #expect(uiState.showCompassCheckDialog == true)
+        #expect(compassCheckManager.currentStep.id == "inform")
+        #expect(preferences.currentCompassCheckStepId == "inform")
+
+        // Simulate another device moving forward to a different step
+        preferences.currentCompassCheckStepId = "pending"
+
+        // Trigger sync
+        compassCheckManager.onPreferencesChange()
+
+        // Dialog should remain open but step should be synced
+        #expect(uiState.showCompassCheckDialog == true)
+        #expect(compassCheckManager.currentStep.id == "pending")
+        if case .inProgress(let step) = compassCheckManager.state {
+            #expect(step.id == "pending")
+        } else {
+            #expect(false, "Should be inProgress after sync")
+        }
+    }
+
+    @Test
+    func testStepSyncWhenDialogClosed() throws {
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let preferences = appComponents.preferences
+        let timeProvider = appComponents.timeProvider
+        let compassCheckManager = appComponents.compassCheckManager
+        let uiState = appComponents.uiState
+
+        // Set up saved progress from another device
+        let currentInterval = timeProvider.getCompassCheckInterval()
+        preferences.currentCompassCheckStepId = "pending"
+        preferences.currentCompassCheckPeriodStart = currentInterval.start
+
+        // This device is not showing dialog yet
+        #expect(uiState.showCompassCheckDialog == false)
+        if case .notStarted = compassCheckManager.state {
+            // Still at initial state
+        }
+
+        // Trigger sync
+        compassCheckManager.onPreferencesChange()
+
+        // Should update to paused state with the external step
+        if case .paused(let step) = compassCheckManager.state {
+            #expect(step.id == "pending")
+        } else {
+            #expect(false, "Should be paused after detecting external progress")
+        }
+
+        // Dialog should still be closed (user hasn't opened it yet)
+        #expect(uiState.showCompassCheckDialog == false)
     }
 
     // MARK: - External Completion Detection Tests
@@ -54,17 +119,20 @@ struct TestCompassCheckSynchronization {
         #expect(compassCheckManager.currentStep.id == "inform")
 
         // Simulate external completion (e.g., on another device)
+        // This clears the saved step ID and marks as completed
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
         #expect(preferences.didCompassCheckToday == true)
+        #expect(preferences.currentCompassCheckStepId == nil)
 
         // Trigger preferences change (simulating iCloud sync)
         compassCheckManager.onPreferencesChange()
 
-        // Verify dialog is closed and state is reset
+        // Verify dialog is closed and state is reset (because saved step was cleared)
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        if case .finished = compassCheckManager.state {
+            // Success - should be finished
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
     }
 
@@ -90,17 +158,19 @@ struct TestCompassCheckSynchronization {
         // Close dialog manually (simulating user closing it)
         uiState.showCompassCheckDialog = false
 
-        // Simulate external completion
+        // Simulate external completion (clears saved step ID)
         simulateExternalCompassCheckCompletion(preferences: preferences, timeProvider: timeProvider)
         #expect(preferences.didCompassCheckToday == true)
+        #expect(preferences.currentCompassCheckStepId == nil)
 
         // Trigger preferences change
         compassCheckManager.onPreferencesChange()
 
         // Verify state is reset even though dialog wasn't showing
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
         #expect(uiState.showCompassCheckDialog == false)
     }
@@ -137,11 +207,12 @@ struct TestCompassCheckSynchronization {
         // Trigger preferences change
         compassCheckManager.onPreferencesChange()
 
-        // Verify paused state is cleared
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        // Verify state is finished (external completion cleared saved step)
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
-        #expect(compassCheckManager.currentStep.id == "inform")
         #expect(uiState.showCompassCheckDialog == false)
     }
 
@@ -173,9 +244,13 @@ struct TestCompassCheckSynchronization {
         // Manually trigger the periodic sync check
         compassCheckManager.checkForExternalCompassCheckCompletion()
 
-        // Verify dialog is closed
+        // Verify dialog is closed and state is finished
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.currentStep.id == "inform")
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion detected")
+        }
     }
 
     // MARK: - Timer Rescheduling Tests
@@ -208,10 +283,11 @@ struct TestCompassCheckSynchronization {
         // Trigger preferences change (this should reschedule timers)
         compassCheckManager.onPreferencesChange()
 
-        // Verify state is reset and timers are rescheduled
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        // Verify state is finished (external completion)
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
 
         // The setupCompassCheckNotification() should have been called
@@ -246,9 +322,10 @@ struct TestCompassCheckSynchronization {
         compassCheckManager.onPreferencesChange()
 
         // Verify that endCompassCheck was called (which cancels notifications)
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
 
         // In a real test, we'd verify that push notifications were cancelled
@@ -412,9 +489,10 @@ struct TestCompassCheckSynchronization {
 
         // Verify complete state reset
         #expect(uiState.showCompassCheckDialog == false)
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
         #expect(preferences.didCompassCheckToday == true)
         #expect(preferences.daysOfCompassCheck == initialStreak + 1)
@@ -453,10 +531,11 @@ struct TestCompassCheckSynchronization {
         // Trigger preferences change - this should reschedule timers
         compassCheckManager.onPreferencesChange()
 
-        // Verify state is reset
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        // Verify state is finished
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
 
         // The key test: verify that setupCompassCheckNotification() was called
@@ -487,10 +566,11 @@ struct TestCompassCheckSynchronization {
         // Trigger preferences change (this should stop the sync timer)
         compassCheckManager.onPreferencesChange()
 
-        // Verify state is clean
-        #expect(compassCheckManager.currentStep.id == "inform")
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        // Verify state is finished
+        if case .finished = compassCheckManager.state {
+            // Success
+        } else {
+            #expect(false, "Should be finished after external completion")
         }
 
         // The sync timer should be stopped when endCompassCheck is called

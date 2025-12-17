@@ -13,7 +13,7 @@ public struct PlanStep: CompassCheckStep {
 
     public let id: String = "plan"
     public let name: String = "Plan Day"
-    public let description: String = "Plan your day by scheduling tasks and setting up your calendar (macOS only)."
+    public let description: String = "Plan your day by scheduling tasks to your calendar."
     public let isSilent: Bool = false
 
     @ViewBuilder
@@ -26,11 +26,7 @@ public struct PlanStep: CompassCheckStep {
     }
 
     public func isApplicable(dataManager: DataManager, timeProvider: TimeProvider) -> Bool {
-        // Plan step is only available on macOS (not iOS)
-        #if os(macOS)
-            return true
-        #else
-            return false
-        #endif
+        // Plan step is now available on all platforms
+        return true
     }
 }

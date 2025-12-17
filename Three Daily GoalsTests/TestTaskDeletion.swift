@@ -49,12 +49,12 @@ struct TestTaskDeletion {
         
         let taskId = task.id
         let initialTaskCount = try dataManager.modelContext.fetchCount(FetchDescriptor<TaskItem>())
-        let initialCommentCount = try dataManager.modelContext.fetchCount(FetchDescriptor<Comment>())
-        
+        let initialCommentCount = try dataManager.modelContext.fetchCount(FetchDescriptor<tdgCoreMain.Comment>())
+
         dataManager.deleteTask(task)
-        
+
         let finalTaskCount = try dataManager.modelContext.fetchCount(FetchDescriptor<TaskItem>())
-        let finalCommentCount = try dataManager.modelContext.fetchCount(FetchDescriptor<Comment>())
+        let finalCommentCount = try dataManager.modelContext.fetchCount(FetchDescriptor<tdgCoreMain.Comment>())
         
         #expect(finalTaskCount == initialTaskCount - 1, "Task should be deleted")
         #expect(finalCommentCount == initialCommentCount - 2, "Comments should be cascade deleted. Initial: \(initialCommentCount), Final: \(finalCommentCount)")

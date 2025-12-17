@@ -48,7 +48,7 @@ struct TestEnergyEffortMatrixUI {
 
         // Simulate tapping on the "Deep Work" quadrant (high-energy, big-task)
         guard let task = uncategorizedTasks.first else {
-            throw TestError("No uncategorized tasks found")
+            throw TestError.noUncategorisedTask
         }
 
         // Apply the quadrant tags
@@ -133,7 +133,7 @@ struct TestEnergyEffortMatrixUI {
         #expect(uncategorizedTasks.count == 1)
 
         guard let task = uncategorizedTasks.first else {
-            throw TestError("No uncategorized tasks found")
+            throw TestError.noUncategorisedTask
         }
 
         // Test that task has swipe action capabilities
@@ -278,12 +278,5 @@ struct TestEnergyEffortMatrixUI {
 
         // Task at exactly the threshold should NOT be included (< not <=)
         #expect(!uncategorizedTasks.contains { $0.id == boundaryTask.id })
-    }
-}
-
-struct TestError: Error {
-    let message: String
-    init(_ message: String) {
-        self.message = message
     }
 }

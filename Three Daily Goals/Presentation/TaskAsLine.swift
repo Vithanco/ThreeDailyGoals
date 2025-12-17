@@ -176,6 +176,7 @@ struct EnergyEffortQuadrantIndicator: View {
             }
         }
         .frame(width: size, height: size)
+        .opacity(hasCompleteMatrixTags ? 0.8 : 0)
     }
 }
 
