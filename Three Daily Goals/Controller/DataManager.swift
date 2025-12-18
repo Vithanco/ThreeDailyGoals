@@ -974,7 +974,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .closed)
         }) {
-            Image(systemName: imgClosed).foregroundStyle(TaskItemState.closed.color)
+            Label("Close", systemImage: imgClosed)
         }
         .help("Close the task")
         .accessibilityIdentifier("closeButton")
@@ -986,8 +986,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .dead)
         }) {
-            Image(systemName: imgGraveyard).foregroundStyle(TaskItemState.dead.color)
-
+            Label("Graveyard", systemImage: imgGraveyard)
         }
         .help("Move the task to the Graveyard")
         .accessibilityIdentifier("killButton")
@@ -999,8 +998,7 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .open)
         }) {
-            Image(systemName: imgOpen).foregroundStyle(TaskItemState.open.color)
-
+            Label("Open", systemImage: imgOpen)
         }
         .help("Open this task again")
         .accessibilityIdentifier("openButton")
@@ -1012,13 +1010,11 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .pendingResponse)
         }) {
-            Image(systemName: imgPendingResponse).foregroundStyle(
-                TaskItemState.pendingResponse.color
-            )
-            .help(
-                "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
-            )
+            Label("Pending", systemImage: imgPendingResponse)
         }
+        .help(
+            "Mark as Pending Response. That is the state for a task that you completed, but you are waiting for a response, acknowledgement or similar."
+        )
         .accessibilityIdentifier("pendingResponseButton")
         .disabled(!item.canBeMovedToPendingResponse)
     }
@@ -1028,10 +1024,9 @@ public final class DataManager {
         Button(action: { [self] in
             moveWithPriorityTracking(task: item, to: .priority)
         }) {
-            Image(systemName: imgPriority).foregroundStyle(TaskItemState.priority.color)
-                .frame(width: 8, height: 8)
-                .help("Make this task a priority for today")
+            Label("Priority", systemImage: imgPriority)
         }
+        .help("Make this task a priority for today")
         .accessibilityIdentifier("prioritiseButton")
         .disabled(!item.canBeMadePriority)
         .popoverTip(PriorityTip())
@@ -1049,9 +1044,9 @@ public final class DataManager {
                 }
             }
         ) {
-            Image(systemName: imgTrash)
-                .help("Delete this task for good.")
+            Label("Delete", systemImage: imgTrash)
         }
+        .help("Delete this task for good.")
         .accessibilityIdentifier("deleteButton")
         .disabled(!item.canBeDeleted)
     }

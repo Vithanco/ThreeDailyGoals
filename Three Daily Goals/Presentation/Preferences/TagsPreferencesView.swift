@@ -56,11 +56,11 @@ public struct TagsPreferencesView: View {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
+                        FlowLayout(spacing: 8, runSpacing: 8) {
                             ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
                                 TagView(
                                     text: text,
-                                    isSelected: true,  // All tags in preferences are "selected" for display
+                                    isSelected: tag == text,  // Highlight selected tag
                                     accentColor: Color.priority,
                                     onTap: {
                                         tag = text

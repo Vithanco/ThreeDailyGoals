@@ -19,6 +19,9 @@ import Foundation
 public final class WebPageEnhancer: Sendable {
     private let aiSession: LanguageModelSession?
 
+    // Maximum length for descriptions to prevent overly long details
+    private static let maxDescriptionLength = 500
+
     public init() {
         #if canImport(FoundationModels)
             // Avoid initializing FoundationModels when running as root or if unavailable
@@ -73,7 +76,9 @@ public final class WebPageEnhancer: Sendable {
             extractedTitle = metadata.title
         } catch {
             // LPMetadataProvider can fail in share extension contexts or with certain URL types
-            print("⚠️ Metadata extraction failed for \(url.host ?? "unknown host"): \(error.localizedDescription) (Error type: \(type(of: error)))")
+            print(
+                "⚠️ Metadata extraction failed for \(url.host ?? "unknown host"): \(error.localizedDescription) (Error type: \(type(of: error)))"
+            )
         }
 
         let titleToUse = extractedTitle ?? url.host ?? "Read"
@@ -126,7 +131,8 @@ public final class WebPageEnhancer: Sendable {
                 {
                     let desc = String(html[range])
                     if !desc.isEmpty {
-                        return decodeHTMLEntities(desc)
+                        let decoded = decodeHTMLEntities(desc)
+                        return truncateDescription(decoded)
                     }
                 }
             }
@@ -148,6 +154,27 @@ public final class WebPageEnhancer: Sendable {
             result = result.replacingOccurrences(of: entity, with: char)
         }
         return result
+    }
+
+    /// Truncate description to maxDescriptionLength, preferring sentence boundaries
+    private func truncateDescription(_ text: String) -> String {
+        guard text.count > Self.maxDescriptionLength else { return text }
+
+        // Try to find a sentence boundary (. ! ?) before the max length
+        let truncated = String(text.prefix(Self.maxDescriptionLength))
+        if let lastSentenceEnd = truncated.lastIndex(where: { $0 == "." || $0 == "!" || $0 == "?" }) {
+            // Include the punctuation mark
+            let endIndex = text.index(after: lastSentenceEnd)
+            return String(text[..<endIndex])
+        }
+
+        // Fall back to word boundary
+        if let lastSpace = truncated.lastIndex(of: " ") {
+            return String(truncated[..<lastSpace]) + "..."
+        }
+
+        // Last resort: hard truncate
+        return truncated + "..."
     }
 
     private func extractMainText(from html: String) -> String {
@@ -179,13 +206,13 @@ public final class WebPageEnhancer: Sendable {
                 let truncated = String(mainText.prefix(4000))
 
                 let prompt = """
-                    Summarize the following webpage content in 2-3 sentences. Focus on the main points and key information:
+                    Summarize the following webpage content in 2-3 concise sentences (maximum 500 characters). Focus on the main points and key information:
 
                     \(truncated)
                     """
 
                 let response = try await session.respond(to: prompt)
-                return response.content
+                return truncateDescription(response.content)
             } catch {
                 print("⚠️ AI summary generation failed: \(error.localizedDescription)")
                 return await fetchMetaDescription(url: url)
