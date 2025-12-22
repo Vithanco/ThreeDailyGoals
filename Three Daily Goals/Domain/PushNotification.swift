@@ -70,13 +70,14 @@ public final class PushNotificationManager {
 
         center.removePendingNotificationRequests(withIdentifiers: [streakReminderId])
 
-        var components = DateComponents()
-        components.hour = 11
-        components.minute = 0
-        components.calendar = timeProvider.calendar
+        // Schedule 1 hour before end of planning cycle (which is noon)
+        let planningCycleEnd = timeProvider.getCompassCheckInterval().end
+        let reminderTime = planningCycleEnd.addingTimeInterval(-Seconds.oneHour)
 
-        let elevenAM = timeProvider.calendar.date(from: components) ?? timeProvider.now
-        guard elevenAM > timeProvider.now else { return }
+        // Don't schedule if reminder time has already passed
+        guard reminderTime > timeProvider.now else { return }
+
+        let components = timeProvider.calendar.dateComponents([.year, .month, .day, .hour, .minute], from: reminderTime)
 
         let content = UNMutableNotificationContent()
         content.title = "Keep Your Streak Alive! 🔥"

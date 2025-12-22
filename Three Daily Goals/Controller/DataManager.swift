@@ -229,15 +229,7 @@ public final class DataManager {
             }
         }
 
-        // Clear the relationships to prevent snapshot issues during cascade deletion
-        // SwiftData's cascade delete will handle the actual deletion
-        task.attachments = []
-        task.comments = []
-
-        // Process pending changes to ensure relationships are cleared
-        modelContext.processPendingChanges()
-
-        // Now delete the task itself (cascade will handle attachments/comments)
+        // Delete the task - SwiftData's cascade delete will handle attachments/comments
         modelContext.delete(task)
         endUndoGrouping()
     }

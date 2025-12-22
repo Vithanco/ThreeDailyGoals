@@ -187,6 +187,18 @@ public final class CompassCheckManager {
     }
 
     func moveStateForward() {
+        // Check if another device has progressed further - sync to their step
+        if let remoteStepId = preferences.currentCompassCheckStepId,
+           isStepAhead(remoteStepId, of: currentStep.id) {
+            logger.info("Remote device is ahead at step '\(remoteStepId)', syncing...")
+            if let remoteStep = steps.first(where: { $0.id == remoteStepId }) {
+                state = .inProgress(remoteStep)
+                // Don't save - we're syncing TO remote, not FROM local
+                processSilentSteps()
+                return
+            }
+        }
+
         // Execute the current step's action
         executeCurrentStep()
 
@@ -203,6 +215,22 @@ public final class CompassCheckManager {
             // No more steps, finish the compass check
             endCompassCheck(didFinishCompassCheck: true)
         }
+    }
+
+    /// Go back to the previous visible step (skipping silent steps)
+    func goBackOneStep() {
+        guard canGoBack else { return }
+
+        if let previousStep = getPreviousVisibleStep(from: currentStep) {
+            state = .inProgress(previousStep)
+            saveCurrentProgress()
+            logger.info("Went back to step: \(previousStep.id)")
+        }
+    }
+
+    /// Whether we can go back (not on first visible step)
+    var canGoBack: Bool {
+        return getPreviousVisibleStep(from: currentStep) != nil
     }
 
     var moveStateForwardText: String {
@@ -271,17 +299,6 @@ public final class CompassCheckManager {
 
         // The @Observable mechanism in CloudPreferences will automatically trigger UI updates
         // when the stored properties change, so no manual UI refresh is needed
-    }
-
-    func waitABit() {
-        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
-    }
-
-    func pauseCompassCheck() {
-        // Just close the dialog and restart timer - state is already saved
-        uiState.showCompassCheckDialog = false
-        // Restart timer for 5 minutes
-        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
     }
 
     func resumeCompassCheck() {
@@ -425,9 +442,9 @@ public final class CompassCheckManager {
             return
         }
 
+        // Don't interrupt other dialogs - they will naturally close and CC can be started manually
         if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog
         {
-            waitABit()
             return
         }
 
@@ -492,6 +509,39 @@ public final class CompassCheckManager {
     }
 
     // MARK: - Step Management Methods
+
+    /// Get the index of a step by its ID
+    func stepIndex(of stepId: String) -> Int? {
+        return steps.firstIndex { $0.id == stepId }
+    }
+
+    /// Check if a step (by ID) is ahead of another step (by ID)
+    private func isStepAhead(_ stepId: String, of otherStepId: String) -> Bool {
+        guard let stepIdx = stepIndex(of: stepId),
+              let otherIdx = stepIndex(of: otherStepId) else {
+            return false
+        }
+        return stepIdx > otherIdx
+    }
+
+    /// Get the previous visible (non-silent) step, skipping silent and disabled steps
+    private func getPreviousVisibleStep(from currentStep: any CompassCheckStep) -> (any CompassCheckStep)? {
+        guard let currentIndex = steps.firstIndex(where: { $0.id == currentStep.id }), currentIndex > 0 else {
+            return nil
+        }
+
+        // Look backwards for the previous step that should not be skipped and is not silent
+        for i in stride(from: currentIndex - 1, through: 0, by: -1) {
+            let step = steps[i]
+
+            // Check if step should be skipped (includes user toggles and platform-specific logic)
+            if !shouldSkipStep(step) && !step.isSilent {
+                return step
+            }
+        }
+
+        return nil
+    }
 
     /// Get the next step in the flow, skipping steps that should be skipped
     private func getNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {

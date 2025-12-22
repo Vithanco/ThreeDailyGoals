@@ -210,7 +210,6 @@ struct TestPhotoAttachments {
 
         // When: Attempting to create image from invalid data
         let image = PlatformImage(data: invalidData)
-        #endif
 
         // Then: Should fail gracefully
         #expect(image == nil, "Should not create image from invalid data")

@@ -323,20 +323,23 @@ struct TestReview {
             #expect(false, "Should not be paused")
         }
 
-        // Pause the compass check
-        compassCheckManager.pauseCompassCheck()
-        if case .paused = compassCheckManager.state {
-            // Paused state confirmed
+        // Cancel the compass check (closes dialog but preserves progress)
+        compassCheckManager.cancelCompassCheck()
+        // State remains inProgress after cancel (dialog just closes)
+        if case .inProgress(let step) = compassCheckManager.state {
+            #expect(step.id == "currentPriorities")
         } else {
-            #expect(false, "Expected paused state")
+            #expect(false, "Expected inProgress state after cancel")
         }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
 
-        // Simulate the notification timer firing (this should resume the compass check)
-        compassCheckManager.onCCNotification()
-        if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+        // Resume the compass check
+        compassCheckManager.startCompassCheckNow()
+        if case .inProgress = compassCheckManager.state {
+            // inProgress state confirmed
+        } else {
+            #expect(false, "Should be inProgress after resume")
         }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == true)
@@ -359,7 +362,7 @@ struct TestReview {
 
     @MainActor
     @Test
-    func testCompassCheckPauseAtDifferentStates() {
+    func testCompassCheckCancelAtDifferentStates() {
         let appComponents = setupApp(isTesting: true)
         let pref = appComponents.preferences
         let uiState = appComponents.uiState
@@ -371,7 +374,7 @@ struct TestReview {
         pref.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600)
         #expect(!pref.didCompassCheckToday)
 
-        // Test pausing at different states
+        // Test cancelling at different states
         let stepIdsToTest = ["currentPriorities", "pending", "dueDate", "review"]
 
         for stepIdToTest in stepIdsToTest {
@@ -385,31 +388,26 @@ struct TestReview {
             }
             #expect(compassCheckManager.currentStep.id == stepIdToTest)
 
-            // Pause at this state
-            compassCheckManager.pauseCompassCheck()
-            if case .paused(let pausedStep) = compassCheckManager.state {
-                #expect(pausedStep.id == stepIdToTest)
+            // Cancel at this state (closes dialog but preserves state as inProgress)
+            compassCheckManager.cancelCompassCheck()
+            if case .inProgress(let inProgressStep) = compassCheckManager.state {
+                #expect(inProgressStep.id == stepIdToTest)
             } else {
-                #expect(false, "Expected paused state")
+                #expect(false, "Expected inProgress state after cancel")
             }
             #expect(uiState.showCompassCheckDialog == false)
 
             // Resume and verify we're back at the same state
-            compassCheckManager.onCCNotification()
-            if case .paused = compassCheckManager.state {
-                #expect(false, "Should not be paused")
+            compassCheckManager.startCompassCheckNow()
+            if case .inProgress = compassCheckManager.state {
+                // inProgress state confirmed
+            } else {
+                #expect(false, "Should be inProgress after resume")
             }
             #expect(compassCheckManager.currentStep.id == stepIdToTest)
             #expect(uiState.showCompassCheckDialog == true)
 
-            // Cancel to pause for next test
-            compassCheckManager.cancelCompassCheck()
-            #expect(compassCheckManager.currentStep.id == stepIdToTest)  // Should stay at current step
-            if case .paused = compassCheckManager.state {
-                // Paused state confirmed
-            } else {
-                #expect(false, "Should be paused after cancel")
-            }
+            // End compass check for next iteration
             compassCheckManager.endCompassCheck(didFinishCompassCheck: true)
         }
     }

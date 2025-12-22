@@ -125,32 +125,7 @@ struct TestCompassCheckPersistence {
         #expect(preferences.currentCompassCheckPeriodStart == nil)
     }
 
-    // MARK: - Pause/Cancel Behavior Tests
-
-    @Test
-    func testPauseDoesNotChangeState() throws {
-        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
-        let compassCheckManager = appComponents.compassCheckManager
-        let uiState = appComponents.uiState
-
-        // Start and move to a specific step
-        compassCheckManager.startCompassCheckNow()
-        compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.currentStep.id == "currentPriorities")
-
-        // Pause
-        compassCheckManager.pauseCompassCheck()
-
-        // Dialog should be closed
-        #expect(uiState.showCompassCheckDialog == false)
-
-        // State should still be inProgress (not changed to paused)
-        if case .inProgress(let step) = compassCheckManager.state {
-            #expect(step.id == "currentPriorities")
-        } else {
-            #expect(Bool(false), "State should remain inProgress after pause")
-        }
-    }
+    // MARK: - Cancel Behavior Tests
 
     @Test
     func testCancelDoesNotChangeState() throws {

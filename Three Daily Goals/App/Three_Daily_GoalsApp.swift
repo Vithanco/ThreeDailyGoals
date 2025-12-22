@@ -91,8 +91,8 @@ struct Three_Daily_GoalsApp: App {
             }
         }
         #if os(macOS)
-            // Dedicated window for Compass Check dialog
-            WindowGroup("Compass Check", id: "CompassCheckWindow") {
+            // Dedicated single-instance window for Compass Check dialog
+            Window("Compass Check", id: "CompassCheckWindow") {
                 CompassCheckDialog()
                     .frame(minWidth: 700, minHeight: 500)
             }

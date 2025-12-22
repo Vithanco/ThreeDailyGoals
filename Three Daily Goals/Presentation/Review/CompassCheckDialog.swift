@@ -28,9 +28,12 @@ public struct CompassCheckDialog: View {
             HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(Color.priority)
                 Spacer()
-                Button(action: compassCheckManager.pauseCompassCheck) {
-                    Text("Pause for 5 min")
-                }.buttonStyle(.bordered).frame(maxHeight: 30)
+                Button(action: compassCheckManager.goBackOneStep) {
+                    Text("Back")
+                }
+                .buttonStyle(.bordered)
+                .frame(maxHeight: 30)
+                .disabled(!compassCheckManager.canGoBack)
                 Button(role: .cancel, action: compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)

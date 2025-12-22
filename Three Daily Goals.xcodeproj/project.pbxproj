@@ -72,6 +72,8 @@
 		7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D502E793946007A436A /* TestShareExtensionView.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
+		7FD7165C2EF46A2200DB4561 /* TestCompassCheckNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */; };
+		7FD7165E2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7FE1FE032E42B3060016C181 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE022E42B3060016C181 /* CloudKit.framework */; };
 		7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE042E42B3230016C181 /* SwiftUI.framework */; };
@@ -242,6 +244,8 @@
 		7FC75D502E793946007A436A /* TestShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionView.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
+		7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckNavigation.swift; sourceTree = "<group>"; };
+		7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWebPageEnhancerTruncation.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE1FE022E42B3060016C181 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		7FE1FE042E42B3230016C181 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
@@ -508,6 +512,8 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */,
+				7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */,
 				7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */,
 				7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */,
 				7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */,
@@ -985,6 +991,7 @@
 				7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */,
 				7FBF598D2E87B66200A01AA6 /* TestNotificationLogic.swift in Sources */,
 				7FBF598E2E87B66200A01AA6 /* TestNotificationLogicSimple.swift in Sources */,
+				7FD7165E2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
 				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,
@@ -1005,6 +1012,7 @@
 				7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */,
+				7FD7165C2EF46A2200DB4561 /* TestCompassCheckNavigation.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,

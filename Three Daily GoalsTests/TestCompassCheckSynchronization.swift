@@ -176,7 +176,7 @@ struct TestCompassCheckSynchronization {
     }
 
     @Test
-    func testExternalCompletionDuringPausedState() throws {
+    func testExternalCompletionDuringCancelledState() throws {
         let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
         let preferences = appComponents.preferences
         let timeProvider = appComponents.timeProvider
@@ -189,14 +189,11 @@ struct TestCompassCheckSynchronization {
         preferences.lastCompassCheck = currentInterval.start.addingTimeInterval(-3600)
         #expect(!preferences.didCompassCheckToday)
 
-        // Start compass check and pause it
+        // Start compass check and cancel it (closes dialog but preserves state)
         compassCheckManager.startCompassCheckNow()
         compassCheckManager.moveStateForward()  // Move to currentPriorities
-        compassCheckManager.pauseCompassCheck()
+        compassCheckManager.cancelCompassCheck()
 
-        if case .paused(let pausedStep) = compassCheckManager.state {
-            #expect(pausedStep.id == "currentPriorities")
-        }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
 
