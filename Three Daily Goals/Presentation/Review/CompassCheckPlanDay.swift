@@ -399,7 +399,6 @@ public struct CompassCheckPlanDay: View {
                         },
                         dragGranularityMinutes: 15
                     )
-                    .frame(minHeight: 500)
                     .padding(.horizontal)
                 }
             }

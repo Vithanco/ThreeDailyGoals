@@ -75,7 +75,7 @@ struct EnergyEffortMatrixView: View {
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
                     .italic()
-                Text("Drag tasks into quadrants or tap a quadrant to move the top task")
+                Text("Tap a quadrant to categorize the top task")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("\(categorizedCount) of \(totalCount) tasks categorized")
@@ -84,70 +84,109 @@ struct EnergyEffortMatrixView: View {
             }
             .padding(.top, 8)
 
-            // EnergyEffort Matrix Grid
-            HStack(spacing: 12) {
-                // Left Column
-                VStack(spacing: 12) {
-                    // Q1: Urgent & Important
-                    QuadrantDropZone(
-                        quadrant: .urgentImportant,
-                        taskCount: tasksForQuadrant(.urgentImportant).count,
-                        isHighlighted: !uncategorizedTasks.isEmpty,
-                        onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentImportant) },
-                        onTap: { handleTap(quadrant: .urgentImportant) }
-                    )
+            // Grid with distributed axis labels (matching popover design)
+            VStack(spacing: 8) {
+                // Top label: Big Task
+                VStack(spacing: 0) {
+                    Text("Big")
+                    Text("Task")
+                }
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
 
-                    // Q3: Urgent & Not Important
-                    QuadrantDropZone(
-                        quadrant: .urgentNotImportant,
-                        taskCount: tasksForQuadrant(.urgentNotImportant).count,
-                        isHighlighted: !uncategorizedTasks.isEmpty,
-                        onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentNotImportant) },
-                        onTap: { handleTap(quadrant: .urgentNotImportant) }
-                    )
+                HStack(spacing: 8) {
+                    // Left label: High Energy
+                    VStack(spacing: 0) {
+                        Text("High")
+                        Text("Energy")
+                    }
+                    .font(.callout)
+                    .fontWeight(.medium)
+                    .frame(width: 70)
+                    .foregroundStyle(.secondary)
+
+                    // Interactive 2x2 grid (vertical=task size, horizontal=energy)
+                    VStack(spacing: 8) {
+                        // Top row: big tasks (high-energy -> low-energy)
+                        HStack(spacing: 8) {
+                            // Top-Left: urgentImportant (high-energy, big-task) = Deep Work
+                            QuadrantDropZone(
+                                quadrant: .urgentImportant,
+                                taskCount: tasksForQuadrant(.urgentImportant).count,
+                                isHighlighted: !uncategorizedTasks.isEmpty,
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentImportant) },
+                                onTap: { handleTap(quadrant: .urgentImportant) }
+                            )
+                            // Top-Right: notUrgentImportant (low-energy, big-task) = Steady Progress
+                            QuadrantDropZone(
+                                quadrant: .notUrgentImportant,
+                                taskCount: tasksForQuadrant(.notUrgentImportant).count,
+                                isHighlighted: !uncategorizedTasks.isEmpty,
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentImportant) },
+                                onTap: { handleTap(quadrant: .notUrgentImportant) }
+                            )
+                        }
+                        // Bottom row: small tasks (high-energy -> low-energy)
+                        HStack(spacing: 8) {
+                            // Bottom-Left: urgentNotImportant (high-energy, small-task) = Sprint Tasks
+                            QuadrantDropZone(
+                                quadrant: .urgentNotImportant,
+                                taskCount: tasksForQuadrant(.urgentNotImportant).count,
+                                isHighlighted: !uncategorizedTasks.isEmpty,
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentNotImportant) },
+                                onTap: { handleTap(quadrant: .urgentNotImportant) }
+                            )
+                            // Bottom-Right: notUrgentNotImportant (low-energy, small-task) = Easy Wins
+                            QuadrantDropZone(
+                                quadrant: .notUrgentNotImportant,
+                                taskCount: tasksForQuadrant(.notUrgentNotImportant).count,
+                                isHighlighted: !uncategorizedTasks.isEmpty,
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentNotImportant) },
+                                onTap: { handleTap(quadrant: .notUrgentNotImportant) }
+                            )
+                        }
+                    }
+
+                    // Right label: Low Energy
+                    VStack(spacing: 0) {
+                        Text("Low")
+                        Text("Energy")
+                    }
+                    .font(.callout)
+                    .fontWeight(.medium)
+                    .frame(width: 70)
+                    .foregroundStyle(.secondary)
                 }
 
-                // Right Column
-                VStack(spacing: 12) {
-                    // Q2: Not Urgent & Important
-                    QuadrantDropZone(
-                        quadrant: .notUrgentImportant,
-                        taskCount: tasksForQuadrant(.notUrgentImportant).count,
-                        isHighlighted: !uncategorizedTasks.isEmpty,
-                        onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentImportant) },
-                        onTap: { handleTap(quadrant: .notUrgentImportant) }
-                    )
-
-                    // Q4: Not Urgent & Not Important
-                    QuadrantDropZone(
-                        quadrant: .notUrgentNotImportant,
-                        taskCount: tasksForQuadrant(.notUrgentNotImportant).count,
-                        isHighlighted: !uncategorizedTasks.isEmpty,
-                        onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentNotImportant) },
-                        onTap: { handleTap(quadrant: .notUrgentNotImportant) }
-                    )
+                // Bottom label: Small Task
+                VStack(spacing: 0) {
+                    Text("Small")
+                    Text("Task")
                 }
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
             }
             .padding(.horizontal)
 
             // Uncategorized Tasks
             if !uncategorizedTasks.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Uncategorized Tasks - Drag to categorize")
-                        .font(.headline)
+                    Divider()
+                        .padding(.vertical, 4)
+
+                    Text("Uncategorized Tasks - Tap a quadrant above to categorize the top task")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
                         .foregroundStyle(.secondary)
 
-                    List {
+                    VStack(alignment: .leading, spacing: 4) {
                         ForEach(uncategorizedTasks) { task in
                             TaskAsLine(item: task)
-                                .listRowSeparator(.hidden)
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
+                                .padding(.vertical, 2)
                         }
                     }
-                    .listStyle(.plain)
-                    .scrollContentBackground(.hidden)
-                    .frame(maxHeight: 200)
                 }
                 .padding(.horizontal)
             }
@@ -212,60 +251,43 @@ struct QuadrantDropZone: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private var quadrantBackground: Color {
-        if isHighlighted {
-            return quadrant.color.opacity(0.15)
-        }
-        return colorScheme == .dark ? Color.neutral800 : Color.neutral100
-    }
-
-    private var quadrantBorder: Color {
-        if isHighlighted {
-            return quadrant.color
-        }
-        return quadrant.color.opacity(0.5)
-    }
-
     var body: some View {
         Button(action: onTap) {
-            VStack(spacing: 12) {
-            // Quadrant Icon
-            Image(systemName: quadrant.icon)
-                .font(.largeTitle)
-                .foregroundStyle(quadrant.color)
+            VStack(spacing: 4) {
+                // Quadrant Icon
+                Image(systemName: quadrant.icon)
+                    .font(.title3)
+                    .foregroundStyle(.white)
 
-            // Quadrant Name
-            Text(quadrant.name)
-                .font(.headline)
-                .foregroundStyle(quadrant.color)
-                .multilineTextAlignment(.center)
-
-            // Quadrant Description
-            Text(quadrant.description)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            // Task Count
-            if taskCount > 0 {
-                Text("\(taskCount) task\(taskCount == 1 ? "" : "s")")
+                // Quadrant Name
+                Text(quadrant.name)
                     .font(.caption)
-                    .foregroundStyle(quadrant.color)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 4)
-                    .background(quadrant.color.opacity(0.2))
-                    .clipShape(.rect(cornerRadius: 12))
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+
+                // Task Count (if any)
+                if taskCount > 0 {
+                    Text("\(taskCount)")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 1)
+                        .background(Color.white.opacity(0.25))
+                        .clipShape(.rect(cornerRadius: 6))
+                }
             }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding()
+            .frame(maxWidth: .infinity)
+            .frame(height: 100)
+            .padding(8)
         }
         .buttonStyle(.plain)
-        .background(quadrantBackground)
-        .clipShape(.rect(cornerRadius: 12))
+        .background(quadrant.color.opacity(0.85))
+        .clipShape(.rect(cornerRadius: 8))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(quadrantBorder, lineWidth: isHighlighted ? 3 : 2)
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isHighlighted ? Color.white : Color.clear, lineWidth: 3)
         )
         .dropDestination(for: String.self) { items, _ in
             for item in items {
@@ -273,6 +295,7 @@ struct QuadrantDropZone: View {
             }
             return true
         }
+        .help(quadrant.description)
     }
 }
 
