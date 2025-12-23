@@ -260,11 +260,14 @@ public final class CompassCheckManager {
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
-        uiState.showCompassCheckDialog = false
+        // Set state to finished BEFORE closing dialog to prevent brief flash of first step
         state = .finished
 
         // Clear saved progress
         preferences.clearCompassCheckProgress()
+
+        // Close dialog after state is set
+        uiState.showCompassCheckDialog = false
 
         // Cancel any pending notifications since CC is done
         timer.cancelTimer()

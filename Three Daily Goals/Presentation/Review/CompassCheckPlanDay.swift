@@ -32,6 +32,7 @@ public struct CompassCheckPlanDay: View {
     @State private var taskStates: [TaskScheduleState] = []
     @State private var selectedCalendarId: String?
     @State private var errorMessage: String?
+    @State private var refreshTrigger: Int = 0
 
     init(date: Date) {
         self._date = State(initialValue: date)
@@ -170,21 +171,43 @@ public struct CompassCheckPlanDay: View {
     }
 
     private func handleEventMoved(event: any CalendarEventRepresentable, newDate: Date) {
-        guard let tdgEvent = event as? TDGEvent else { return }
-        let eventId = tdgEvent.base.calendarItemIdentifier
-
-        // Find the task associated with this event
-        guard let task = compassCheckManager.priorityTasks.first(where: { $0.eventId == eventId }) else {
+        guard let tdgEvent = event as? TDGEvent else {
+            print("❌ Event is not TDGEvent")
             return
         }
+        let eventId = tdgEvent.base.calendarItemIdentifier
+
+        print("🔍 Event ID from drag: \(eventId)")
+        print("🔍 Event URL from drag: \(tdgEvent.base.url?.absoluteString ?? "nil")")
+
+        // Find the task associated with this event by matching the URL
+        // The URL format is: three-daily-goals://task/{taskUUID}
+        guard let eventURL = tdgEvent.base.url,
+              let taskUUIDString = eventURL.absoluteString.split(separator: "/").last,
+              let taskUUID = UUID(uuidString: String(taskUUIDString)) else {
+            print("❌ Could not extract task UUID from event URL: \(tdgEvent.base.url?.absoluteString ?? "nil")")
+            return
+        }
+
+        guard let task = compassCheckManager.priorityTasks.first(where: { $0.uuid == taskUUID }) else {
+            print("❌ Could not find task with UUID: \(taskUUID)")
+            return
+        }
+
+        print("✅ Found task: '\(task.title)' with stored eventId: \(task.eventId ?? "nil")")
+        print("📅 Moving task '\(task.title)' to new time: \(newDate.formatted(date: .abbreviated, time: .shortened))")
 
         // Calculate duration from original event
         let duration = tdgEvent.base.endDate.timeIntervalSince(tdgEvent.base.startDate)
 
         // Update the event time
         Task { @MainActor in
-            guard let eventMgr = eventMgr else { return }
+            guard let eventMgr = eventMgr else {
+                print("❌ EventManager is nil")
+                return
+            }
 
+            print("🔄 Calling updateEvent on EventService")
             // Update the event using EventService
             let success = eventMgr.eventService.updateEvent(
                 eventId: eventId,
@@ -192,14 +215,34 @@ public struct CompassCheckPlanDay: View {
                 duration: duration
             )
 
+            print("✅ UpdateEvent result: \(success)")
+
             if success {
+                // Update the task's eventId if it doesn't match (it might have changed)
+                if task.eventId != eventId {
+                    print("🔄 Updating task's stored eventId from \(task.eventId ?? "nil") to \(eventId)")
+                    task.setCalendarEventId(eventId)
+                }
+
                 // Refresh events to show updated position
                 let startOfDay = timeProviderWrapper.timeProvider.startOfDay(for: date)
                 let endOfDay = timeProviderWrapper.timeProvider.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
-                eventMgr.refresh(for: startOfDay..<endOfDay)
+
+                print("🔄 Refreshing EventManager for range: \(startOfDay) to \(endOfDay)")
+
+                // Give EventKit time to process the update
                 try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+
+                eventMgr.refresh(for: startOfDay..<endOfDay)
+
+                print("📊 Updated events count: \(eventMgr.events.count)")
                 events = eventMgr.events
+
+                // Force UI refresh by changing the trigger
+                refreshTrigger += 1
+                print("✅ Successfully moved event - triggered UI refresh (\(refreshTrigger))")
             } else {
+                print("❌ Failed to update event in EventKit")
                 errorMessage = "Failed to move task: \(task.title)"
             }
         }
@@ -379,26 +422,25 @@ public struct CompassCheckPlanDay: View {
                         selectedDate: $date,
                         selectionAction: .inform({ _ in }),
                         dateSelectionStyle: .selectedDates([date]),
-                        hourHeight: 25.0,
-                        hourSpacing: 24.0,
+                        hourHeight: 48.0,
                         startHourOfDay: 6,
                         draggablePredicate: { event in
                             // Only our task events are draggable (check for our deep link URL)
                             if let tdgEvent = event as? TDGEvent {
                                 let isDraggable = tdgEvent.base.url?.absoluteString.starts(with: "three-daily-goals://task/") == true
-                                print("🔍 Drag check for '\(tdgEvent.base.title)': URL=\(tdgEvent.base.url?.absoluteString ?? "nil"), draggable=\(isDraggable)")
                                 return isDraggable
                             }
                             return false
                         },
                         onEventMoved: { event, newDate in
                             if let tdgEvent = event as? TDGEvent {
-                                print("🎯 Event moved callback triggered: '\(tdgEvent.base.title)' to \(newDate)")
+                                print("🎯 Event moved callback triggered: '\(tdgEvent.base.title)' to \(newDate.formatted(date: .abbreviated, time: .shortened))")
                             }
                             handleEventMoved(event: event, newDate: newDate)
                         },
                         dragGranularityMinutes: 15
                     )
+                    .id(refreshTrigger) // Force view refresh when trigger changes
                     .padding(.horizontal)
                 }
             }

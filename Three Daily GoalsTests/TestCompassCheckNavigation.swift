@@ -405,4 +405,38 @@ struct TestCompassCheckNavigation {
         // Test unknown step
         #expect(compassCheckManager.stepIndex(of: "nonexistent") == nil)
     }
+
+    // MARK: - Finish Button Behavior Tests
+
+    @Test
+    func testFinishButtonClosesWindowAfterLastStep() throws {
+        let appComponents = setupApp(isTesting: true, timeProvider: createMockTimeProvider(fixedNow: Date()))
+        let compassCheckManager = appComponents.compassCheckManager
+        let uiState = appComponents.uiState
+
+        // Start compass check
+        compassCheckManager.startCompassCheckNow()
+        #expect(uiState.showCompassCheckDialog == true)
+
+        // Move through all steps to reach the last step
+        var iterationCount = 0
+        let maxIterations = 20  // Safety limit to prevent infinite loop
+
+        while !compassCheckManager.isFinished && iterationCount < maxIterations {
+            compassCheckManager.moveStateForward()
+            iterationCount += 1
+        }
+
+        #expect(iterationCount < maxIterations, "Should finish within reasonable number of steps")
+
+        // After finishing last step:
+        // 1. Dialog should be closed
+        #expect(uiState.showCompassCheckDialog == false, "Window should close after finish button is pressed on last step")
+
+        // 2. State should be finished
+        #expect(compassCheckManager.isFinished == true, "Compass check should be marked as finished")
+
+        // 3. Saved progress should be cleared
+        #expect(appComponents.preferences.currentCompassCheckStepId == nil, "Progress should be cleared after completion")
+    }
 }
