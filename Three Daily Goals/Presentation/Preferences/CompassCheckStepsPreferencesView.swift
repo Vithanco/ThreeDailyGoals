@@ -74,16 +74,6 @@ public struct CompassCheckStepsPreferencesView: View {
                                 )
                                 .toggleStyle(.switch)
                                 .scaleEffect(0.65)
-
-                                if step.id == "plan" {
-                                    Text("Coming Soon")
-                                        .font(.caption2)
-                                        .foregroundStyle(.orange)
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(Color.orange.opacity(0.15))
-                                        .clipShape(.rect(cornerRadius: 3))
-                                }
                             }
                         }
 

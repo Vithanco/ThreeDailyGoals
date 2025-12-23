@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import TipKit
 import tdgCoreMain
+import tdgCoreWidget
 
 @MainActor
 @Observable

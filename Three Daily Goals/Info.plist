@@ -21,5 +21,18 @@
 		<key>UIImageName</key>
 		<string></string>
 	</dict>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.simplecalendar.event</string>
+			<key>UTTypeDescription</key>
+			<string>Calendar Event</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

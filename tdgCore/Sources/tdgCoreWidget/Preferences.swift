@@ -40,6 +40,8 @@ public struct StorageKeys: Sendable {
     // Compass check keys
     public static let compassCheckTimeHour = StorageKeys("compassCheckTimeHour")
     public static let compassCheckTimeMinute = StorageKeys("compassCheckTimeMinute")
+    public static let currentCompassCheckStepId = StorageKeys("currentCompassCheckStepId")
+    public static let currentCompassCheckPeriodStart = StorageKeys("currentCompassCheckPeriodStart")
 
     // Priority keys
     public static func priority(_ number: Int) -> StorageKeys {
@@ -58,6 +60,9 @@ public struct StorageKeys: Sendable {
 
     // Notifications key
     public static let notificationsEnabled = StorageKeys("notificationsEnabled")
+
+    // Calendar integration key
+    public static let targetCalendarIdentifier = StorageKeys("targetCalendarIdentifier")
 }
 
 public protocol KeyValueStorage {
@@ -393,6 +398,56 @@ extension CloudPreferences {
         set {
             store.set(newValue, forKey: StorageKeys.notificationsEnabled)
         }
+    }
+
+    // MARK: - Calendar Integration
+
+    /// The calendar identifier for scheduling tasks
+    public var targetCalendarId: String? {
+        get {
+            return store.string(forKey: StorageKeys.targetCalendarIdentifier)
+        }
+        set {
+            store.set(newValue, forKey: StorageKeys.targetCalendarIdentifier)
+            onChange?()
+        }
+    }
+
+    // MARK: - Compass Check Progress Persistence
+
+    /// The ID of the current compass check step
+    public var currentCompassCheckStepId: String? {
+        get {
+            return store.string(forKey: StorageKeys.currentCompassCheckStepId)
+        }
+        set {
+            store.set(newValue, forKey: StorageKeys.currentCompassCheckStepId)
+        }
+    }
+
+    /// The start of the compass check period when CC began
+    public var currentCompassCheckPeriodStart: Date? {
+        get {
+            guard let dateString = store.string(forKey: StorageKeys.currentCompassCheckPeriodStart),
+                let date = cloudDateFormatter.date(from: dateString)
+            else {
+                return nil
+            }
+            return date
+        }
+        set {
+            if let date = newValue {
+                store.set(cloudDateFormatter.string(from: date), forKey: StorageKeys.currentCompassCheckPeriodStart)
+            } else {
+                store.set(nil, forKey: StorageKeys.currentCompassCheckPeriodStart)
+            }
+        }
+    }
+
+    /// Clear the compass check progress (when finished or cancelled)
+    public func clearCompassCheckProgress() {
+        currentCompassCheckStepId = nil
+        currentCompassCheckPeriodStart = nil
     }
 
 }

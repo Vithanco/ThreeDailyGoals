@@ -1,13 +1,15 @@
-import SwiftData
 //
 //  InnerTaskItemView.swift
 //  Three Daily Goals
 //
 //  Created by Klaus Kneupner on 05/08/2025.
 //
+
+import PhotosUI
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
-import PhotosUI
+import tdgCoreWidget
 
 extension Array {
     public func chunked(into size: Int) -> [[Element]] {
@@ -34,7 +36,7 @@ public struct InnerTaskItemView: View {
     @State private var showPhotosPicker = false
     @State private var selectedPhotosItems: [PhotosPickerItem] = []
     #if os(iOS)
-    @State private var showCamera = false
+        @State private var showCamera = false
     #endif
 
     public init(
@@ -51,16 +53,16 @@ public struct InnerTaskItemView: View {
 
     private var attachmentButton: some View {
         #if os(iOS)
-        PhotoAttachmentMenu(
-            showPhotosPicker: $showPhotosPicker,
-            showCamera: $showCamera,
-            showFileImporter: $showAttachmentImporter
-        )
+            PhotoAttachmentMenu(
+                showPhotosPicker: $showPhotosPicker,
+                showCamera: $showCamera,
+                showFileImporter: $showAttachmentImporter
+            )
         #else
-        PhotoAttachmentMenu(
-            showPhotosPicker: $showPhotosPicker,
-            showFileImporter: $showAttachmentImporter
-        )
+            PhotoAttachmentMenu(
+                showPhotosPicker: $showPhotosPicker,
+                showFileImporter: $showAttachmentImporter
+            )
         #endif
     }
 
@@ -69,7 +71,13 @@ public struct InnerTaskItemView: View {
             // Header section
             HStack {
                 StateView(state: item.state)
+
                 Text("Task").font(.title).foregroundStyle(item.color)
+
+                // Energy-Effort Matrix quadrant selector
+                EnergyEffortQuadrantSelector(task: item)
+                    .padding(.leading, 8)
+
                 Spacer()
             }
             .padding(.bottom, 8)
@@ -140,6 +148,22 @@ public struct InnerTaskItemView: View {
                         selected: $item.due, defaultDate: timeProviderWrapper.timeProvider.getDate(inDays: 7))
                 } label: {
                     Text("Due Date:").bold().foregroundStyle(Color.secondary)
+                }
+
+                // Calendar event link (if scheduled)
+                if item.eventId != nil {
+                    LabeledContent {
+                        Button(action: openCalendar) {
+                            HStack {
+                                Image(systemName: imgCalendarBadgePlus)
+                                    .foregroundStyle(.green)
+                                Text("View in Calendar")
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                    } label: {
+                        Text("Calendar:").bold().foregroundStyle(Color.secondary)
+                    }
                 }
             }
 
@@ -277,12 +301,12 @@ public struct InnerTaskItemView: View {
             }
         }
         #if os(iOS)
-        .sheet(isPresented: $showCamera) {
-            CameraPickerView { image in
-                handleCapturedImage(image)
+            .sheet(isPresented: $showCamera) {
+                CameraPickerView { image in
+                    handleCapturedImage(image)
+                }
+                .ignoresSafeArea()
             }
-            .ignoresSafeArea()
-        }
         #endif
     }
 
@@ -375,37 +399,318 @@ public struct InnerTaskItemView: View {
     }
 
     #if os(iOS)
-    private func handleCapturedImage(_ image: UIImage) {
-        guard let data = image.jpegData(compressionQuality: 0.8) else {
-            print("Failed to convert captured image to JPEG")
-            return
+        private func handleCapturedImage(_ image: UIImage) {
+            guard let data = image.jpegData(compressionQuality: 0.8) else {
+                print("Failed to convert captured image to JPEG")
+                return
+            }
+
+            // Create a temporary file to save the image
+            let tempDir = FileManager.default.temporaryDirectory
+            let filename = "camera_\(Date().timeIntervalSince1970).jpg"
+            let tempURL = tempDir.appendingPathComponent(filename)
+
+            do {
+                try data.write(to: tempURL)
+
+                // Add as attachment
+                let attachment = try addAttachment(
+                    fileURL: tempURL,
+                    type: .jpeg,
+                    to: item,
+                    sortIndex: (item.attachments ?? []).count,
+                    in: modelContext
+                )
+
+                // Add a comment about the attachment
+                item.addComment(text: "Added photo from camera: \(attachment.filename)", icon: imgAttachment)
+
+                // Clean up temp file
+                try? FileManager.default.removeItem(at: tempURL)
+            } catch {
+                print("Failed to add captured photo: \(error)")
+            }
         }
+    #endif
 
-        // Create a temporary file to save the image
-        let tempDir = FileManager.default.temporaryDirectory
-        let filename = "camera_\(Date().timeIntervalSince1970).jpg"
-        let tempURL = tempDir.appendingPathComponent(filename)
+    // MARK: - Calendar Integration
 
-        do {
-            try data.write(to: tempURL)
+    private func openCalendar() {
+        #if os(iOS)
+            // On iOS, use the calshow URL scheme to open Calendar app
+            // Open to today's date - we can't open to a specific event without the date
+            let now = Date()
+            let interval = now.timeIntervalSinceReferenceDate
+            if let url = URL(string: "calshow:\(interval)") {
+                UIApplication.shared.open(url)
+            }
+        #elseif os(macOS)
+            // On macOS, open the Calendar app
+            NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Calendar.app"))
+        #endif
+    }
+}
 
-            // Add as attachment
-            let attachment = try addAttachment(
-                fileURL: tempURL,
-                type: .jpeg,
-                to: item,
-                sortIndex: (item.attachments ?? []).count,
-                in: modelContext
+// MARK: - Energy-Effort Matrix Quadrant Selector
+
+/// Interactive quadrant selector for the task detail view
+/// Shows current quadrant and allows clicking to change it
+struct EnergyEffortQuadrantSelector: View {
+    @Bindable var task: TaskItem
+    @State private var showQuadrantPicker = false
+
+    private var activeQuadrant: EnergyEffortQuadrant? {
+        EnergyEffortQuadrant.from(task: task)
+    }
+
+    private var hasCompleteMatrixTags: Bool {
+        task.hasCompleteEnergyEffortTags
+    }
+
+    var body: some View {
+        Button(action: {
+            showQuadrantPicker = true
+        }) {
+            // Reuse the same pattern as TaskAsLine
+            QuadrantIndicatorView(
+                activeQuadrant: activeQuadrant,
+                hasCompleteTags: hasCompleteMatrixTags,
+                size: 20
             )
-
-            // Add a comment about the attachment
-            item.addComment(text: "Added photo from camera: \(attachment.filename)", icon: imgAttachment)
-
-            // Clean up temp file
-            try? FileManager.default.removeItem(at: tempURL)
-        } catch {
-            print("Failed to add captured photo: \(error)")
+        }
+        .buttonStyle(.plain)
+        .help("Click to set Energy-Effort Matrix quadrant")
+        .popover(isPresented: $showQuadrantPicker) {
+            QuadrantPickerView(task: task, isPresented: $showQuadrantPicker)
         }
     }
-    #endif
+}
+
+/// Quadrant indicator matching TaskAsLine's EnergyEffortQuadrantIndicator
+private struct QuadrantIndicatorView: View {
+    let activeQuadrant: EnergyEffortQuadrant?
+    let hasCompleteTags: Bool
+    let size: CGFloat
+
+    private var quadrantSize: CGFloat {
+        (size - 2) / 2  // Subtract 2 for the 1pt gaps between squares
+    }
+
+    var body: some View {
+        VStack(spacing: 1) {
+            // Top row: high-energy tasks
+            HStack(spacing: 1) {
+                // Top-Left: urgentImportant (high-energy, big-task)
+                QuadrantSquare(
+                    quadrant: .urgentImportant,
+                    isActive: activeQuadrant == .urgentImportant,
+                    hasCompleteTags: hasCompleteTags,
+                    size: quadrantSize
+                )
+
+                // Top-Right: urgentNotImportant (high-energy, small-task)
+                QuadrantSquare(
+                    quadrant: .urgentNotImportant,
+                    isActive: activeQuadrant == .urgentNotImportant,
+                    hasCompleteTags: hasCompleteTags,
+                    size: quadrantSize
+                )
+            }
+
+            // Bottom row: low-energy tasks
+            HStack(spacing: 1) {
+                // Bottom-Left: notUrgentImportant (low-energy, big-task)
+                QuadrantSquare(
+                    quadrant: .notUrgentImportant,
+                    isActive: activeQuadrant == .notUrgentImportant,
+                    hasCompleteTags: hasCompleteTags,
+                    size: quadrantSize
+                )
+
+                // Bottom-Right: notUrgentNotImportant (low-energy, small-task)
+                QuadrantSquare(
+                    quadrant: .notUrgentNotImportant,
+                    isActive: activeQuadrant == .notUrgentNotImportant,
+                    hasCompleteTags: hasCompleteTags,
+                    size: quadrantSize
+                )
+            }
+        }
+        .frame(width: size, height: size)
+    }
+}
+
+/// Single square in the 2x2 quadrant grid
+private struct QuadrantSquare: View {
+    let quadrant: EnergyEffortQuadrant
+    let isActive: Bool
+    let hasCompleteTags: Bool
+    let size: CGFloat
+
+    private var fillColor: Color {
+        if !hasCompleteTags {
+            // If task doesn't have complete tags, all quadrants are gray
+            return Color.gray.opacity(0.2)
+        } else if isActive {
+            // Active quadrant shows its designated color
+            return quadrant.color
+        } else {
+            // Inactive quadrants are grayed out
+            return Color.gray.opacity(0.2)
+        }
+    }
+
+    var body: some View {
+        Rectangle()
+            .fill(fillColor)
+            .frame(width: size, height: size)
+    }
+}
+
+/// Popover view for selecting quadrant
+private struct QuadrantPickerView: View {
+    @Bindable var task: TaskItem
+    @Binding var isPresented: Bool
+
+    private let quadrantSize: CGFloat = 70
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Select Energy-Effort Quadrant")
+                .font(.headline)
+                .padding(.top, 8)
+
+            // Grid with distributed axis labels
+            VStack(spacing: 4) {
+                // Top label: Big Task
+                VStack(spacing: 0) {
+                    Text("Big")
+                    Text("Task")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+                HStack(spacing: 4) {
+                    // Left label: High Energy
+                    VStack(spacing: 0) {
+                        Text("High")
+                        Text("Energy")
+                    }
+                    .font(.caption)
+                    .frame(width: 50)
+                    .foregroundStyle(.secondary)
+
+                    // Interactive 2x2 grid (flipped: vertical=task size, horizontal=energy)
+                    VStack(spacing: 2) {
+                        // Top row: big tasks (high-energy -> low-energy)
+                        HStack(spacing: 2) {
+                            // Top-Left: urgentImportant (high-energy, big-task) = Deep Work
+                            QuadrantButton(
+                                quadrant: .urgentImportant,
+                                size: quadrantSize,
+                                task: task,
+                                isPresented: $isPresented
+                            )
+                            // Top-Right: notUrgentImportant (low-energy, big-task) = Steady Progress
+                            QuadrantButton(
+                                quadrant: .notUrgentImportant,
+                                size: quadrantSize,
+                                task: task,
+                                isPresented: $isPresented
+                            )
+                        }
+                        // Bottom row: small tasks (high-energy -> low-energy)
+                        HStack(spacing: 2) {
+                            // Bottom-Left: urgentNotImportant (high-energy, small-task) = Sprint Tasks
+                            QuadrantButton(
+                                quadrant: .urgentNotImportant,
+                                size: quadrantSize,
+                                task: task,
+                                isPresented: $isPresented
+                            )
+                            // Bottom-Right: notUrgentNotImportant (low-energy, small-task) = Easy Wins
+                            QuadrantButton(
+                                quadrant: .notUrgentNotImportant,
+                                size: quadrantSize,
+                                task: task,
+                                isPresented: $isPresented
+                            )
+                        }
+                    }
+
+                    // Right label: Low Energy
+                    VStack(spacing: 0) {
+                        Text("Low")
+                        Text("Energy")
+                    }
+                    .font(.caption)
+                    .frame(width: 50)
+                    .foregroundStyle(.secondary)
+                }
+
+                // Bottom label: Small Task
+                VStack(spacing: 0) {
+                    Text("Small")
+                    Text("Task")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+
+            Divider()
+
+            // Clear button
+            Button(
+                role: .destructive,
+                action: {
+                    task.clearEnergyEffortTags()
+                    isPresented = false
+                }
+            ) {
+                Label("Clear Matrix Tags", systemImage: "xmark.circle")
+            }
+            .padding(.bottom, 8)
+        }
+        .padding()
+        .frame(minWidth: 280)
+    }
+}
+
+/// Individual quadrant button in picker
+private struct QuadrantButton: View {
+    let quadrant: EnergyEffortQuadrant
+    let size: CGFloat
+    @Bindable var task: TaskItem
+    @Binding var isPresented: Bool
+
+    private var isSelected: Bool {
+        EnergyEffortQuadrant.from(task: task) == quadrant
+    }
+
+    var body: some View {
+        Button(action: {
+            task.applyEnergyEffortQuadrant(quadrant)
+            isPresented = false
+        }) {
+            VStack(spacing: 4) {
+                Image(systemName: quadrant.icon)
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                Text(quadrant.name)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+            }
+            .frame(width: size, height: size)
+            .background(quadrant.color.opacity(0.8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(isSelected ? Color.white : Color.clear, lineWidth: 3)
+            )
+            .clipShape(.rect(cornerRadius: 4))
+        }
+        .buttonStyle(.plain)
+        .help(quadrant.description)
+    }
 }

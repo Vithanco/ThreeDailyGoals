@@ -11,11 +11,24 @@ import TipKit
 import os
 import tdgCoreMain
 
-enum CompassCheckState {
+enum CompassCheckState: CustomStringConvertible {
     case notStarted
     case inProgress(any CompassCheckStep)
     case finished
     case paused(any CompassCheckStep)
+
+    nonisolated var description: String {
+        switch self {
+        case .notStarted:
+            return "notStarted"
+        case .inProgress:
+            return "inProgress"
+        case .finished:
+            return "finished"
+        case .paused:
+            return "paused"
+        }
+    }
 }
 
 @MainActor
@@ -46,9 +59,6 @@ public final class CompassCheckManager {
     }
 
     private var syncCheckTimer: Timer?
-
-    // Track when this compass check session started
-    private var currentSessionStartTime: Date?
 
     let timer: CompassCheckTimer = .init()
 
@@ -101,12 +111,65 @@ public final class CompassCheckManager {
         self.pushNotificationManager = pushNotificationManager
         self.steps = steps
 
-        // Initialize state to notStarted - currentStep will be computed from state
+        // Load saved state if available and still valid
+        loadSavedState()
     }
 
     @MainActor
     deinit {
         stopSyncCheckTimer()
+    }
+
+    // MARK: - State Persistence
+
+    /// Load saved compass check state from preferences
+    private func loadSavedState() {
+        // Check if we have a saved step
+        guard let savedStepId = preferences.currentCompassCheckStepId,
+            let savedPeriodStart = preferences.currentCompassCheckPeriodStart
+        else {
+            // No saved state, start fresh
+            state = .notStarted
+            return
+        }
+
+        // Check if we're still in the same review period
+        let currentInterval = timeProvider.getCompassCheckInterval()
+        if !currentInterval.contains(savedPeriodStart) {
+            // Different review period, reset to start
+            logger.info(
+                "Compass check period changed since last save, resetting to start (saved: \(savedPeriodStart), current: \(currentInterval.start))"
+            )
+            preferences.clearCompassCheckProgress()
+            state = .notStarted
+            return
+        }
+
+        // Find the saved step in our steps array
+        if let step = steps.first(where: { $0.id == savedStepId }) {
+            logger.info("Resuming compass check from saved step: \(savedStepId)")
+            state = .paused(step)
+        } else {
+            logger.warning("Saved step ID '\(savedStepId)' not found in steps, resetting")
+            preferences.clearCompassCheckProgress()
+            state = .notStarted
+        }
+    }
+
+    /// Save current compass check progress to preferences
+    private func saveCurrentProgress() {
+        let currentInterval = timeProvider.getCompassCheckInterval()
+
+        switch state {
+        case .inProgress(let step), .paused(let step):
+            preferences.currentCompassCheckStepId = step.id
+            preferences.currentCompassCheckPeriodStart = currentInterval.start
+            logger.info("Saved compass check progress: step=\(step.id), period=\(currentInterval.start)")
+        case .notStarted, .finished:
+            // Clear saved state when not in progress
+            preferences.clearCompassCheckProgress()
+            logger.info("Cleared compass check progress (state: \(self.state))")
+        }
     }
 
     // MARK: - Compass Check Logic
@@ -124,6 +187,18 @@ public final class CompassCheckManager {
     }
 
     func moveStateForward() {
+        // Check if another device has progressed further - sync to their step
+        if let remoteStepId = preferences.currentCompassCheckStepId,
+           isStepAhead(remoteStepId, of: currentStep.id) {
+            logger.info("Remote device is ahead at step '\(remoteStepId)', syncing...")
+            if let remoteStep = steps.first(where: { $0.id == remoteStepId }) {
+                state = .inProgress(remoteStep)
+                // Don't save - we're syncing TO remote, not FROM local
+                processSilentSteps()
+                return
+            }
+        }
+
         // Execute the current step's action
         executeCurrentStep()
 
@@ -131,12 +206,31 @@ public final class CompassCheckManager {
         if let nextStep = getNextStep(from: currentStep, os: os) {
             state = .inProgress(nextStep)
 
+            // Save progress after moving to next step
+            saveCurrentProgress()
+
             // Process any silent steps that follow
             processSilentSteps()
         } else {
             // No more steps, finish the compass check
             endCompassCheck(didFinishCompassCheck: true)
         }
+    }
+
+    /// Go back to the previous visible step (skipping silent steps)
+    func goBackOneStep() {
+        guard canGoBack else { return }
+
+        if let previousStep = getPreviousVisibleStep(from: currentStep) {
+            state = .inProgress(previousStep)
+            saveCurrentProgress()
+            logger.info("Went back to step: \(previousStep.id)")
+        }
+    }
+
+    /// Whether we can go back (not on first visible step)
+    var canGoBack: Bool {
+        return getPreviousVisibleStep(from: currentStep) != nil
     }
 
     var moveStateForwardText: String {
@@ -158,17 +252,19 @@ public final class CompassCheckManager {
     }
 
     func cancelCompassCheck() {
+        // Just close the dialog - state is already saved
         uiState.showCompassCheckDialog = false
-        state = .paused(currentStep)
-        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.twoHours))
+        // Don't change state - keep it as is (will be .paused from saveCurrentProgress or already paused)
+        // Restart timer for regular time
+        setupCompassCheckNotification()
     }
 
     func endCompassCheck(didFinishCompassCheck: Bool) {
         uiState.showCompassCheckDialog = false
         state = .finished
 
-        // Clear session start time
-        currentSessionStartTime = nil
+        // Clear saved progress
+        preferences.clearCompassCheckProgress()
 
         // Cancel any pending notifications since CC is done
         timer.cancelTimer()
@@ -205,16 +301,6 @@ public final class CompassCheckManager {
         // when the stored properties change, so no manual UI refresh is needed
     }
 
-    func waitABit() {
-        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
-    }
-
-    func pauseCompassCheck() {
-        state = .paused(currentStep)
-        uiState.showCompassCheckDialog = false
-        setupCompassCheckNotification(when: timeProvider.now.addingTimeInterval(Seconds.fiveMin))
-    }
-
     func resumeCompassCheck() {
         // Resume from paused state
         if case .paused(let step) = state {
@@ -228,35 +314,48 @@ public final class CompassCheckManager {
     }
 
     func onPreferencesChange() {
-        // If compass check was completed on another device, close the dialog and reset state
-        // Only close if lastCompassCheck was updated AFTER this session started
-        if preferences.didCompassCheckToday {
-            // Check if lastCompassCheck was updated after this session started
-            let wasCompletedDuringThisSession: Bool
-            if let sessionStart = currentSessionStartTime {
-                wasCompletedDuringThisSession = preferences.lastCompassCheck > sessionStart
-            } else {
-                // No session start time means we're not in an active session
-                wasCompletedDuringThisSession = false
-            }
+        // Sync step across devices instead of closing dialog
 
-            // Only act if the check was completed externally (not during this session)
-            if wasCompletedDuringThisSession {
-                if uiState.showCompassCheckDialog {
-                    logger.info("Compass check completed on another device, closing dialog")
-                    endCompassCheck(didFinishCompassCheck: false)
-                } else {
-                    switch state {
-                    case .inProgress, .paused:
-                        // Reset state if not showing dialog but state is not the first step
+        // Check if the saved step changed externally
+        guard let savedStepId = preferences.currentCompassCheckStepId else {
+            // No saved step - compass check was completed or cancelled externally
+            if preferences.didCompassCheckToday {
+                // Completed on another device
+                switch state {
+                case .inProgress, .paused:
+                    if uiState.showCompassCheckDialog {
+                        logger.info("Compass check completed on another device, closing dialog")
+                        endCompassCheck(didFinishCompassCheck: false)
+                    } else {
                         logger.info("Compass check completed on another device, resetting state")
                         state = .finished
-                        // Reschedule for next interval since CC was completed externally
                         setupCompassCheckNotification()
-                    default:
-                        break
                     }
+                default:
+                    break
                 }
+            }
+            return
+        }
+
+        // We have a saved step - sync to it if different from current
+        switch state {
+        case .inProgress(let currentStep), .paused(let currentStep):
+            if currentStep.id != savedStepId {
+                // Step changed externally, sync to the new step
+                if let newStep = steps.first(where: { $0.id == savedStepId }) {
+                    logger.info("Step changed on another device from '\(currentStep.id)' to '\(savedStepId)', syncing...")
+                    state = .inProgress(newStep)
+                    // Don't close dialog - just update to show the new step
+                } else {
+                    logger.warning("External step ID '\(savedStepId)' not found in steps")
+                }
+            }
+        case .notStarted, .finished:
+            // If we're not in progress but there's a saved step, we should resume
+            if let step = steps.first(where: { $0.id == savedStepId }) {
+                logger.info("Compass check started on another device at step '\(savedStepId)', syncing...")
+                state = .paused(step)
             }
         }
     }
@@ -276,7 +375,6 @@ public final class CompassCheckManager {
                 }()
 
             if shouldCheck {
-                logger.info("Detected compass check completion on another device during periodic check")
                 onPreferencesChange()
             }
         }
@@ -302,12 +400,18 @@ public final class CompassCheckManager {
         if !uiState.showCompassCheckDialog {
             switch state {
             case .notStarted, .finished:
-                // Record when this session started
-                currentSessionStartTime = timeProvider.now
+                // Start fresh compass check from first step
+                let firstStep = steps.first ?? InformStep()
+                state = .inProgress(firstStep)
+                saveCurrentProgress()
+                uiState.showCompassCheckDialog = true
+            case .paused:
+                // Resume from saved state
                 state = .inProgress(currentStep)
                 uiState.showCompassCheckDialog = true
-            default:
-                break
+            case .inProgress:
+                // Already in progress, just show dialog
+                uiState.showCompassCheckDialog = true
             }
         }
     }
@@ -338,9 +442,9 @@ public final class CompassCheckManager {
             return
         }
 
+        // Don't interrupt other dialogs - they will naturally close and CC can be started manually
         if uiState.showInfoMessage || uiState.showExportDialog || uiState.showImportDialog || uiState.showSettingsDialog
         {
-            waitABit()
             return
         }
 
@@ -405,6 +509,39 @@ public final class CompassCheckManager {
     }
 
     // MARK: - Step Management Methods
+
+    /// Get the index of a step by its ID
+    func stepIndex(of stepId: String) -> Int? {
+        return steps.firstIndex { $0.id == stepId }
+    }
+
+    /// Check if a step (by ID) is ahead of another step (by ID)
+    private func isStepAhead(_ stepId: String, of otherStepId: String) -> Bool {
+        guard let stepIdx = stepIndex(of: stepId),
+              let otherIdx = stepIndex(of: otherStepId) else {
+            return false
+        }
+        return stepIdx > otherIdx
+    }
+
+    /// Get the previous visible (non-silent) step, skipping silent and disabled steps
+    private func getPreviousVisibleStep(from currentStep: any CompassCheckStep) -> (any CompassCheckStep)? {
+        guard let currentIndex = steps.firstIndex(where: { $0.id == currentStep.id }), currentIndex > 0 else {
+            return nil
+        }
+
+        // Look backwards for the previous step that should not be skipped and is not silent
+        for i in stride(from: currentIndex - 1, through: 0, by: -1) {
+            let step = steps[i]
+
+            // Check if step should be skipped (includes user toggles and platform-specific logic)
+            if !shouldSkipStep(step) && !step.isSilent {
+                return step
+            }
+        }
+
+        return nil
+    }
 
     /// Get the next step in the flow, skipping steps that should be skipped
     private func getNextStep(from currentStep: any CompassCheckStep, os: SupportedOS) -> (any CompassCheckStep)? {
@@ -472,6 +609,7 @@ public final class CompassCheckManager {
                 break
             }
             state = .inProgress(nextStep)
+            saveCurrentProgress()
         }
     }
 

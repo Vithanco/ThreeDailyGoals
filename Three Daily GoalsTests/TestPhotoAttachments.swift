@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 
 @testable import Three_Daily_Goals
 @testable import tdgCoreMain
+import tdgCoreWidget
 
 @Suite
 @MainActor
@@ -37,7 +38,7 @@ struct TestPhotoAttachments {
         #if os(iOS)
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
-            UIColor.red.setFill()
+            PlatformColor.red.setFill()
             context.fill(CGRect(origin: .zero, size: size))
         }
         return image.jpegData(compressionQuality: 0.8) ?? Data()
@@ -179,7 +180,7 @@ struct TestPhotoAttachments {
         let size = CGSize(width: 100, height: 100)
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
-            UIColor.blue.setFill()
+            PlatformColor.blue.setFill()
             context.fill(CGRect(origin: .zero, size: size))
         }
 
@@ -208,11 +209,7 @@ struct TestPhotoAttachments {
         let invalidData = Data([0x00, 0x01, 0x02, 0x03])
 
         // When: Attempting to create image from invalid data
-        #if os(iOS)
-        let image = UIImage(data: invalidData)
-        #else
-        let image = NSImage(data: invalidData)
-        #endif
+        let image = PlatformImage(data: invalidData)
 
         // Then: Should fail gracefully
         #expect(image == nil, "Should not create image from invalid data")
