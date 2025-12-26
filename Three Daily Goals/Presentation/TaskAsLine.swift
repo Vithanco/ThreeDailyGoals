@@ -137,7 +137,7 @@ struct EnergyEffortQuadrantIndicator: View {
 
     var body: some View {
         VStack(spacing: 1) {
-            // Top row: high-energy tasks
+            // Top row: big tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
                 // Top-Left: urgentImportant (high-energy, big-task)
                 QuadrantSquare(
@@ -147,21 +147,21 @@ struct EnergyEffortQuadrantIndicator: View {
                     size: quadrantSize
                 )
 
-                // Top-Right: urgentNotImportant (high-energy, small-task)
+                // Top-Right: notUrgentImportant (low-energy, big-task)
                 QuadrantSquare(
-                    quadrant: .urgentNotImportant,
-                    isActive: activeQuadrant == .urgentNotImportant,
+                    quadrant: .notUrgentImportant,
+                    isActive: activeQuadrant == .notUrgentImportant,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )
             }
 
-            // Bottom row: low-energy tasks
+            // Bottom row: small tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
-                // Bottom-Left: notUrgentImportant (low-energy, big-task)
+                // Bottom-Left: urgentNotImportant (high-energy, small-task)
                 QuadrantSquare(
-                    quadrant: .notUrgentImportant,
-                    isActive: activeQuadrant == .notUrgentImportant,
+                    quadrant: .urgentNotImportant,
+                    isActive: activeQuadrant == .urgentNotImportant,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )

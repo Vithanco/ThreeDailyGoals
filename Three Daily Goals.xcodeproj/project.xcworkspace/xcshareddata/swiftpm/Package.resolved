@@ -1,13 +1,13 @@
 {
-  "originHash" : "e5a142ea163793a58894206cf329221a3a7fe046cda866ca9cb1d6273b1e1c75",
+  "originHash" : "e6d4da8d002df921243c9d4b864d687fd2253852d60eaac1ed2c694c5c9b07f2",
   "pins" : [
     {
       "identity" : "simplecalendar",
-      "kind" : "localSourceControl",
-      "location" : "/Users/kkn/private/swift/SimpleCalendar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Vithanco/SimpleCalendar",
       "state" : {
-        "branch" : "drag&drop",
-        "revision" : "e7acb1ed7ead2c80b802a7c9febf6d5afe758fca"
+        "branch" : "main",
+        "revision" : "5bdfbb9dd0a9b6566ced39aab732cbf39ddfde50"
       }
     }
   ],

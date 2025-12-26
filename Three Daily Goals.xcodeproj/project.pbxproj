@@ -14,6 +14,8 @@
 		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
 		7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BF9C2E672BF800238C81 /* TestTags.swift */; };
 		7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */; };
+		7F1B9E3D2EFA7253004076BF /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F1B9E3C2EFA7253004076BF /* SimpleCalendar */; };
+		7F1B9E402EFA7285004076BF /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F1B9E3F2EFA7285004076BF /* SimpleCalendar */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
 		7F2D43E32EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */; };
 		7F2D43E42EF1AED200C527F3 /* TestTaskDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */; };
@@ -33,7 +35,7 @@
 		7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */; };
 		7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
-		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
+		7F582D782EFA72FB005C8106 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F582D772EFA72FB005C8106 /* SimpleCalendar */; };
 		7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
 		7F88BE402E7DF7BD00D2E050 /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
@@ -375,7 +377,9 @@
 			files = (
 				7FC6353F2E7B0C410033A1EF /* tdgCoreMain in Frameworks */,
 				E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */,
-				7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */,
+				7F582D782EFA72FB005C8106 /* SimpleCalendar in Frameworks */,
+				7F1B9E402EFA7285004076BF /* SimpleCalendar in Frameworks */,
+				7F1B9E3D2EFA7253004076BF /* SimpleCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -742,7 +746,9 @@
 			name = "Three Daily Goals";
 			packageProductDependencies = (
 				7FC6353E2E7B0C410033A1EF /* tdgCoreMain */,
-				7F53825D2E7E805A00D00EC7 /* SimpleCalendar */,
+				7F1B9E3C2EFA7253004076BF /* SimpleCalendar */,
+				7F1B9E3F2EFA7285004076BF /* SimpleCalendar */,
+				7F582D772EFA72FB005C8106 /* SimpleCalendar */,
 			);
 			productName = "Three Daily Goals";
 			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
@@ -836,7 +842,7 @@
 			mainGroup = E561D6CF2B1F54A6003BE36F;
 			packageReferences = (
 				7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */,
-				7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
+				7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
 			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
@@ -1771,20 +1777,28 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
+		7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "file:///Users/kkn/private/swift/SimpleCalendar";
+			repositoryURL = "https://github.com/Vithanco/SimpleCalendar";
 			requirement = {
-				branch = "drag&drop";
+				branch = main;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7F53825D2E7E805A00D00EC7 /* SimpleCalendar */ = {
+		7F1B9E3C2EFA7253004076BF /* SimpleCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
+			productName = SimpleCalendar;
+		};
+		7F1B9E3F2EFA7285004076BF /* SimpleCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SimpleCalendar;
+		};
+		7F582D772EFA72FB005C8106 /* SimpleCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
 			productName = SimpleCalendar;
 		};
 		7FC6353E2E7B0C410033A1EF /* tdgCoreMain */ = {
