@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to AI coding assistants (Claude Code, Cursor, GitHub Copilot, etc.) when working with code in this repository.
 
 ## Project Overview
 
@@ -274,6 +274,51 @@ ModelContext has `UndoManager` enabled. DataManager provides `undoButton` and `r
 - All managers are `@MainActor` for UI safety
 - Sendable conformance for data passed across actor boundaries
 - tdgCore package targets iOS 26, macOS 26, watchOS 11
+
+## Development Workflow
+
+### Testing Workflow
+- **Always run tests before committing** - Use `xcodebuild test` or `swift test` (for tdgCore package)
+- **Fix all test failures before creating PR** - No exceptions; the entire test suite must be green
+- **Add tests for any code you change** - Even if not explicitly requested, always add or update tests
+- **Use TDD approach** - Write failing test first, then implement fix (see Testing Strategy above)
+- **Run specific tests during development:**
+  ```bash
+  # Run only failing tests to iterate quickly
+  xcodebuild test -project "Three Daily Goals.xcodeproj" -scheme "Three Daily Goals" -destination "platform=iOS Simulator,name=iPhone 15,OS=latest" -only-testing:Three_Daily_GoalsTests/TestClassName/testMethodName
+  ```
+- **Type-check Swift files** before committing:
+  ```bash
+  swiftc -typecheck "path/to/file.swift"
+  ```
+
+### Pre-Commit Checklist
+1. All tests pass (`xcodebuild test` for main app, `swift test` for tdgCore)
+2. No compiler warnings
+3. Code follows SwiftUI best practices (see above)
+4. SF Symbols are declared in `IconsRelated.swift`
+5. Schema changes include migration logic if needed
+6. TDD workflow followed (test written before implementation)
+
+### PR Conventions
+- **Title format:** `[Component] Description`
+  - Examples: `[CompassCheck] Fix step navigation bug`, `[Storage] Add migration for SchemaV3_7`, `[Widget] Update priority display`
+- **Always run full test suite before creating PR**
+- **Include test evidence** - Mention which tests were added/updated
+- **Reference AGENTS.md sections** - If following specific guidelines (e.g., TDD, SwiftUI best practices), mention them
+
+### Navigation Tips
+- Use Xcode's **Open Quickly** (Cmd+Shift+O) to jump to files, types, or methods instead of browsing
+- Search for specific test classes: `xcodebuild test -only-testing:TestClassName` to focus on one area
+- Check Swift package structure: `cd tdgCore && swift package describe` to see module dependencies
+- Find SwiftData schema versions: Look in `tdgCore/Sources/tdgCoreMain/Storage/ModelVersions/`
+
+### Debugging Workflow
+- **Check git status** before making changes to understand current state
+- **Run targeted tests** to validate fixes quickly
+- **Use test mode** - Pass `enable-testing` argument to load in-memory test data
+- **Check schema migrations** - Review `Migrations.swift` when storage issues occur
+- **Verify CloudKit sync** - Check `CloudPreferences` for sync-related settings
 
 ## Common Workflows
 
