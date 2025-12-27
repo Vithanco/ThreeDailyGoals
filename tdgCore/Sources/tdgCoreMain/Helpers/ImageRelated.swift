@@ -9,21 +9,15 @@ import Foundation
 import QuickLookThumbnailing
 import SwiftUI
 import UniformTypeIdentifiers
-
-#if canImport(UIKit)
-    import UIKit
-#elseif canImport(AppKit)
-    import AppKit
-#endif
+import tdgCoreWidget
 
 extension Image {
     public init?(data: Data) {
+        guard let platformImage = PlatformImage(data: data) else { return nil }
         #if canImport(UIKit)
-            guard let ui = UIImage(data: data) else { return nil }
-            self = Image(uiImage: ui)
+            self = Image(uiImage: platformImage)
         #elseif canImport(AppKit)
-            guard let ns = NSImage(data: data) else { return nil }
-            self = Image(nsImage: ns)
+            self = Image(nsImage: platformImage)
         #else
             return nil
         #endif
@@ -56,27 +50,26 @@ public func qlThumbnailImage(
 }
 
 public func makeThumbnail(from data: Data, type: UTType, maxSide: CGFloat = 160) -> Data? {
+    guard type.conforms(to: .image),
+        let img = PlatformImage(data: data)
+    else {
+        return nil
+    }
+
     #if canImport(UIKit)
-        if type.conforms(to: .image),
-            let img = UIImage(data: data),
-            let thumb = img.preparingThumbnail(of: CGSize(width: maxSide, height: maxSide))
-        {
+        if let thumb = img.preparingThumbnail(of: CGSize(width: maxSide, height: maxSide)) {
             return thumb.jpegData(compressionQuality: 0.7)
         }
     #elseif canImport(AppKit)
-        if type.conforms(to: .image),
-            let nsImg = NSImage(data: data)
-        {
-            let size = NSSize(width: maxSide, height: maxSide)
-            let scaled = NSImage(size: size)
-            scaled.lockFocus()
-            nsImg.draw(
-                in: NSRect(origin: .zero, size: size),
-                from: NSRect(origin: .zero, size: nsImg.size),
-                operation: .copy, fraction: 1.0)
-            scaled.unlockFocus()
-            return scaled.tiffRepresentation
-        }
+        let size = NSSize(width: maxSide, height: maxSide)
+        let scaled = NSImage(size: size)
+        scaled.lockFocus()
+        img.draw(
+            in: NSRect(origin: .zero, size: size),
+            from: NSRect(origin: .zero, size: img.size),
+            operation: .copy, fraction: 1.0)
+        scaled.unlockFocus()
+        return scaled.tiffRepresentation
     #endif
     return nil
 }

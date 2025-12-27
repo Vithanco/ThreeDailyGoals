@@ -40,7 +40,7 @@ public func createAttachmentTempFile(
 
     // Create a short, safe unique identifier using hash of the original identifier
     let hash = uniqueIdentifier.hashValue
-    let shortIdentifier = String(format: "att_%d", abs(hash))
+    let shortIdentifier = "att_\(abs(hash))"
 
     // Create unique filename to avoid conflicts (limit total length)
     let maxFilenameLength = 100  // Reasonable limit for filesystem compatibility
@@ -49,16 +49,9 @@ public func createAttachmentTempFile(
 
     let uniqueName = "\(shortIdentifier)_\(truncatedFilename)"
 
-    #if os(iOS)
-        // On iOS, use the app's documents directory for better file access
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = documentsPath.appendingPathComponent(uniqueName).appendingPathExtension(finalExt)
-    #else
-        // On macOS, use temporary directory
-        let url = URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent(uniqueName)
-            .appendingPathExtension(finalExt)
-    #endif
+    let url = PlatformFileSystem.temporaryDirectory
+        .appendingPathComponent(uniqueName)
+        .appendingPathExtension(finalExt)
 
     do {
         if !FileManager.default.fileExists(atPath: url.path) {
@@ -84,15 +77,8 @@ public func createSimpleTempFile(data: Data, filename: String) -> URL? {
     let uniqueName = "attachment_\(UUID().uuidString)"
     let finalName = ext.isEmpty ? uniqueName : "\(uniqueName).\(ext)"
 
-    #if os(iOS)
-        // On iOS, use the app's documents directory for better file access
-        let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = documentsPath.appendingPathComponent(finalName)
-    #else
-        // On macOS, use temporary directory
-        let url = URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent(finalName)
-    #endif
+    let url = PlatformFileSystem.temporaryDirectory
+        .appendingPathComponent(finalName)
 
     do {
         try data.write(to: url, options: .atomic)

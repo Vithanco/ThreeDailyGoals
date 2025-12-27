@@ -69,7 +69,8 @@ struct StreakTip: Tip {
 // MARK: - Tip Manager
 
 @MainActor
-class TipManager: ObservableObject {
+@Observable
+class TipManager {
     static let shared = TipManager()
 
     private init() {}

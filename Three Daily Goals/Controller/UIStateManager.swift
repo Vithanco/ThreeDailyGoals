@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import TipKit
 import tdgCoreMain
+import tdgCoreWidget
 
 @MainActor
 @Observable
@@ -177,7 +178,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
             addNewItem()
         }) {
             Label("Add New Task", systemImage: imgAddItem)
-                .foregroundColor(TaskItemState.open.color)
+                .foregroundStyle(TaskItemState.open.color)
                 .help("Add a new task")
         }
         .accessibilityIdentifier("addTaskButton")

@@ -22,30 +22,34 @@ public struct TagView: View {
     }
 
     public var body: some View {
-        Text(text)
-            .padding(.horizontal, 2)
-            .padding(.vertical, 3)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(
-                        isSelected
-                            ? accentColor.opacity(0.2)
-                            : (colorScheme == .dark ? Color.neutral700.opacity(0.3) : Color.neutral200.opacity(0.5)))
-            )
-            .foregroundColor(isSelected ? accentColor : .primary)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(
-                        isSelected
-                            ? accentColor
-                            : (colorScheme == .dark ? Color.neutral600.opacity(0.6) : Color.neutral400.opacity(0.6)),
-                        lineWidth: 1)
-            )
-            .lineLimit(1)  // Prevent text wrapping
-            .truncationMode(.tail)  // Truncate with ellipsis if needed
-            .onTapGesture {
-                onTap?()
-            }
+        Button(action: {
+            onTap?()
+        }) {
+            Text(text)
+                .padding(.horizontal, 2)
+                .padding(.vertical, 3)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(
+                            isSelected
+                                ? accentColor.opacity(0.2)
+                                : (colorScheme == .dark ? Color.neutral700.opacity(0.3) : Color.neutral200.opacity(0.5))
+                        )
+                )
+                .foregroundStyle(isSelected ? accentColor : .primary)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(
+                            isSelected
+                                ? accentColor
+                                : (colorScheme == .dark
+                                    ? Color.neutral600.opacity(0.6) : Color.neutral400.opacity(0.6)),
+                            lineWidth: 1)
+                )
+                .lineLimit(1)  // Prevent text wrapping
+                .truncationMode(.tail)  // Truncate with ellipsis if needed
+        }
+        .buttonStyle(.plain)
     }
 }
 

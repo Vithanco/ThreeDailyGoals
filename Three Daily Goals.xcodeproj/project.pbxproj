@@ -14,7 +14,13 @@
 		7F160E892E5AE6DF006ABEEE /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F160E882E5AE6DF006ABEEE /* DataManager.swift */; };
 		7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BF9C2E672BF800238C81 /* TestTags.swift */; };
 		7F19BFAD2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */; };
+		7F1B9E3D2EFA7253004076BF /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F1B9E3C2EFA7253004076BF /* SimpleCalendar */; };
+		7F1B9E402EFA7285004076BF /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F1B9E3F2EFA7285004076BF /* SimpleCalendar */; };
 		7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */; };
+		7F2D43E32EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */; };
+		7F2D43E42EF1AED200C527F3 /* TestTaskDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */; };
+		7F2D43E52EF1AED200C527F3 /* TestCompassCheckPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */; };
+		7F2D43E62EF1AED200C527F3 /* TestEventManagerMultiDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */; };
 		7F2D67612C2BC13D00C893B3 /* CompassCheckPlanDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */; };
 		7F2F0A8D2E52DEB200461679 /* macosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F2F0A812E52DEB200461679 /* macosShare.appex */; platformFilters = (macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F2F0A942E52DF8000461679 /* TestAttachments.swift */; };
@@ -29,13 +35,15 @@
 		7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD292E84F50B0089827F /* TestDeleteButtonVisibility.swift */; };
 		7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */; };
 		7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */; };
-		7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F53825D2E7E805A00D00EC7 /* SimpleCalendar */; };
+		7F582D782EFA72FB005C8106 /* SimpleCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 7F582D772EFA72FB005C8106 /* SimpleCalendar */; };
+		7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */; };
 		7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F71FD252E6BFEA8001B92F4 /* EventService.swift */; };
 		7F88BE402E7DF7BD00D2E050 /* tdgCoreShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC635432E7B0C500033A1EF /* tdgCoreShare */; };
 		7F88BE412E7DF7BD00D2E050 /* tdgCoreTest in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC6354A2E7B0C500033A1EF /* tdgCoreTest */; };
 		7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */; };
 		7F8C88AD2BF3E7D1005ACAF4 /* TagsPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */; };
 		7F8EBC862C2FC39E0003C1BB /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8EBC852C2FC39E0003C1BB /* EventManager.swift */; };
+		7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */; };
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
 		7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */; };
@@ -66,6 +74,8 @@
 		7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D502E793946007A436A /* TestShareExtensionView.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
+		7FD7165C2EF46A2200DB4561 /* TestCompassCheckNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */; };
+		7FD7165E2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */; };
 		7FE1FDE62E42845B0016C181 /* iosShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7FE1FDDC2E42845B0016C181 /* iosShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7FE1FE032E42B3060016C181 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE022E42B3060016C181 /* CloudKit.framework */; };
 		7FE1FE052E42B3230016C181 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FE1FE042E42B3230016C181 /* SwiftUI.framework */; };
@@ -75,6 +85,7 @@
 		7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1D2E6613FB00E02234 /* TestTimestampFix.swift */; };
 		7FECEC202E6613FB00E02234 /* TestTouchWithDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1E2E6613FB00E02234 /* TestTouchWithDescription.swift */; };
 		7FECEC212E6613FB00E02234 /* TestIsStreakBroken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */; };
+		7FPHOTO12EF0000000000001 /* TestPhotoAttachments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FPHOTO22EF0000000000002 /* TestPhotoAttachments.swift */; };
 		E51142922B342E3C00AB6E05 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142752B33768300AB6E05 /* WidgetKit.framework */; };
 		E51142932B342E3C00AB6E05 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51142772B33768300AB6E05 /* SwiftUI.framework */; };
 		E51142962B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51142952B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift */; };
@@ -185,6 +196,10 @@
 		7F19BF9C2E672BF800238C81 /* TestTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTags.swift; sourceTree = "<group>"; };
 		7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskItemIsUnchanged.swift; sourceTree = "<group>"; };
 		7F1EC4BB2E087F09000E5FDC /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckPersistence.swift; sourceTree = "<group>"; };
+		7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEnergyEffortMatrixUI.swift; sourceTree = "<group>"; };
+		7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEventManagerMultiDay.swift; sourceTree = "<group>"; };
+		7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskDeletion.swift; sourceTree = "<group>"; };
 		7F2D67602C2BC13D00C893B3 /* CompassCheckPlanDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPlanDay.swift; sourceTree = "<group>"; };
 		7F2F0A812E52DEB200461679 /* macosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = macosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F2F0A942E52DF8000461679 /* TestAttachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAttachments.swift; sourceTree = "<group>"; };
@@ -200,11 +215,13 @@
 		7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwipeActions.swift; sourceTree = "<group>"; };
 		7F4CC0592E81D666004557DB /* TestTimeRemaining.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimeRemaining.swift; sourceTree = "<group>"; };
 		7F5B8B132CE91548007FE910 /* Three_Daily_Goals_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Three_Daily_Goals_macOS.entitlements; sourceTree = "<group>"; };
+		7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckEnergyEffortMatrix.swift; sourceTree = "<group>"; };
 		7F66BAE62BA76D9C0009B181 /* Three Daily Goals.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Three Daily Goals.xctestplan"; sourceTree = "<group>"; };
 		7F71FD252E6BFEA8001B92F4 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
 		7F88D1F72E7DFC8400D2E050 /* TestAttachmentResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAttachmentResolver.swift; sourceTree = "<group>"; };
 		7F8C88AC2BF3E7D1005ACAF4 /* TagsPreferencesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsPreferencesView.swift; sourceTree = "<group>"; };
 		7F8EBC852C2FC39E0003C1BB /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddWidget.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
 		7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
@@ -229,6 +246,8 @@
 		7FC75D502E793946007A436A /* TestShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionView.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
+		7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckNavigation.swift; sourceTree = "<group>"; };
+		7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestWebPageEnhancerTruncation.swift; sourceTree = "<group>"; };
 		7FE1FDDC2E42845B0016C181 /* iosShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = iosShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE1FE022E42B3060016C181 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		7FE1FE042E42B3230016C181 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.5.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
@@ -237,6 +256,7 @@
 		7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIsStreakBroken.swift; sourceTree = "<group>"; };
 		7FECEC1D2E6613FB00E02234 /* TestTimestampFix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimestampFix.swift; sourceTree = "<group>"; };
 		7FECEC1E2E6613FB00E02234 /* TestTouchWithDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTouchWithDescription.swift; sourceTree = "<group>"; };
+		7FPHOTO22EF0000000000002 /* TestPhotoAttachments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPhotoAttachments.swift; sourceTree = "<group>"; };
 		E51142752B33768300AB6E05 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
 		E51142772B33768300AB6E05 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
 		E51142912B342E3C00AB6E05 /* Three Daily Goals Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Three Daily Goals Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -357,7 +377,9 @@
 			files = (
 				7FC6353F2E7B0C410033A1EF /* tdgCoreMain in Frameworks */,
 				E597A4852B82B68300BCD061 /* CloudKit.framework in Frameworks */,
-				7F53825E2E7E805A00D00EC7 /* SimpleCalendar in Frameworks */,
+				7F582D782EFA72FB005C8106 /* SimpleCalendar in Frameworks */,
+				7F1B9E402EFA7285004076BF /* SimpleCalendar in Frameworks */,
+				7F1B9E3D2EFA7253004076BF /* SimpleCalendar in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +433,7 @@
 		E51142942B342E3C00AB6E05 /* Three Daily Goals (Widget) */ = {
 			isa = PBXGroup;
 			children = (
+				7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */,
 				7FC1BA522E7FFAC2007E1E2D /* WidgetComponents.swift */,
 				E51142952B342E3C00AB6E05 /* Three_Daily_Goals__Widget_Bundle.swift */,
 				E51142972B342E3C00AB6E05 /* Three_Daily_Goals__Widget_.swift */,
@@ -493,6 +516,12 @@
 		E561D6EF2B1F54A9003BE36F /* Three Daily GoalsTests */ = {
 			isa = PBXGroup;
 			children = (
+				7FD7165D2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift */,
+				7FD7165B2EF46A2200DB4561 /* TestCompassCheckNavigation.swift */,
+				7F2D43DF2EF1AED200C527F3 /* TestCompassCheckPersistence.swift */,
+				7F2D43E02EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift */,
+				7F2D43E12EF1AED200C527F3 /* TestEventManagerMultiDay.swift */,
+				7F2D43E22EF1AED200C527F3 /* TestTaskDeletion.swift */,
 				7F0EAB6B2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift */,
 				7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */,
 				7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */,
@@ -522,6 +551,7 @@
 				E5F705EB2B71EE56007BF387 /* TestDailyCompassCheckTime.swift */,
 				E5B376B52B7B551600E66FAD /* TestTaskItems.swift */,
 				7F2F0A942E52DF8000461679 /* TestAttachments.swift */,
+				7FPHOTO22EF0000000000002 /* TestPhotoAttachments.swift */,
 				E597A4862B83D7B000BCD061 /* TestImportExport.swift */,
 				7FC89D282BFB239200FBA363 /* TestReview.swift */,
 			);
@@ -613,6 +643,7 @@
 		E5FFC5BB2B6A715400C9D60B /* Review */ = {
 			isa = PBXGroup;
 			children = (
+				7F63C5A72EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift */,
 				E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */,
 				E5FFC5BC2B6A717A00C9D60B /* CompassCheckCurrentPriorities.swift */,
 				E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */,
@@ -715,7 +746,9 @@
 			name = "Three Daily Goals";
 			packageProductDependencies = (
 				7FC6353E2E7B0C410033A1EF /* tdgCoreMain */,
-				7F53825D2E7E805A00D00EC7 /* SimpleCalendar */,
+				7F1B9E3C2EFA7253004076BF /* SimpleCalendar */,
+				7F1B9E3F2EFA7285004076BF /* SimpleCalendar */,
+				7F582D772EFA72FB005C8106 /* SimpleCalendar */,
 			);
 			productName = "Three Daily Goals";
 			productReference = E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */;
@@ -809,7 +842,7 @@
 			mainGroup = E561D6CF2B1F54A6003BE36F;
 			packageReferences = (
 				7FC6352F2E7B0C060033A1EF /* XCLocalSwiftPackageReference "tdgCore" */,
-				7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
+				7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */,
 			);
 			productRefGroup = E561D6D92B1F54A6003BE36F /* Products */;
 			projectDirPath = "";
@@ -899,6 +932,7 @@
 				E511429A2B342E3C00AB6E05 /* AppIntent.swift in Sources */,
 				E51142B32B34947F00AB6E05 /* WPriorities.swift in Sources */,
 				7FC1BA532E7FFAC2007E1E2D /* WidgetComponents.swift in Sources */,
+				7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +969,7 @@
 				7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
 				7F0EAB742EB621A100BBD5C2 /* AppTips.swift in Sources */,
+				7F63C5A82EDF3D5C00881791 /* CompassCheckEnergyEffortMatrix.swift in Sources */,
 				E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */,
 				7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */,
 				E5278A3A2B658FB90020C83D /* PreferencesView.swift in Sources */,
@@ -962,6 +997,7 @@
 				7F48FD2C2E84F50B0089827F /* TestDeleteButtonVisibility.swift in Sources */,
 				7FBF598D2E87B66200A01AA6 /* TestNotificationLogic.swift in Sources */,
 				7FBF598E2E87B66200A01AA6 /* TestNotificationLogicSimple.swift in Sources */,
+				7FD7165E2EF46A2D00DB4561 /* TestWebPageEnhancerTruncation.swift in Sources */,
 				7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */,
 				7FECEC1F2E6613FB00E02234 /* TestTimestampFix.swift in Sources */,
 				7FC676A92E706AB900C41568 /* TestCompassCheckSteps.swift in Sources */,
@@ -974,10 +1010,15 @@
 				E5F705EC2B71EE56007BF387 /* TestDailyCompassCheckTime.swift in Sources */,
 				7FC676A32E6F658E00C41568 /* TestDatabaseErrors.swift in Sources */,
 				7FC676BC2E70B76200C41568 /* TestCompassCheckFlexibility.swift in Sources */,
+				7F2D43E32EF1AED200C527F3 /* TestEnergyEffortMatrixUI.swift in Sources */,
+				7F2D43E42EF1AED200C527F3 /* TestTaskDeletion.swift in Sources */,
+				7F2D43E52EF1AED200C527F3 /* TestCompassCheckPersistence.swift in Sources */,
+				7F2D43E62EF1AED200C527F3 /* TestEventManagerMultiDay.swift in Sources */,
 				7F4CC05A2E81D666004557DB /* TestTimeRemaining.swift in Sources */,
 				7F0EAB6C2EB5E8BF00BBD5C2 /* TestFileEnhancer.swift in Sources */,
 				E5DE105D2B69041F00381337 /* PreferencesTests.swift in Sources */,
 				7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */,
+				7FD7165C2EF46A2200DB4561 /* TestCompassCheckNavigation.swift in Sources */,
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,
@@ -986,6 +1027,7 @@
 				E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */,
 				7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */,
 				7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */,
+				7FPHOTO12EF0000000000001 /* TestPhotoAttachments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1070,7 +1112,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.macosShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1116,7 +1158,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.macosShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1148,7 +1190,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.iosShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1182,7 +1224,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.iosShare";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1204,7 +1246,6 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 111;
@@ -1229,7 +1270,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1248,7 +1289,6 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "Three Daily Goals (Widget)/Three_Daily_Goals__Widget_.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 111;
@@ -1273,7 +1313,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals.Three-Daily-Goals-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1481,7 +1521,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UILaunchStoryboardName[sdk=macosx*]" = "";
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1489,7 +1528,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1549,7 +1588,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				"INFOPLIST_KEY_UILaunchStoryboardName[sdk=macosx*]" = "";
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1557,7 +1595,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 2.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.vithanco.Three-Daily-Goals";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -1739,7 +1777,7 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
+		7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Vithanco/SimpleCalendar";
 			requirement = {
@@ -1750,9 +1788,17 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7F53825D2E7E805A00D00EC7 /* SimpleCalendar */ = {
+		7F1B9E3C2EFA7253004076BF /* SimpleCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7F53825C2E7E805A00D00EC7 /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
+			productName = SimpleCalendar;
+		};
+		7F1B9E3F2EFA7285004076BF /* SimpleCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SimpleCalendar;
+		};
+		7F582D772EFA72FB005C8106 /* SimpleCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7F582D762EFA72FB005C8106 /* XCRemoteSwiftPackageReference "SimpleCalendar" */;
 			productName = SimpleCalendar;
 		};
 		7FC6353E2E7B0C410033A1EF /* tdgCoreMain */ = {

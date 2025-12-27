@@ -15,11 +15,8 @@ public struct EditTag: View {
     @Environment(DataManager.self) private var dataManager
 
     var displayCurrentTagName: String {
-        if currentTagName == "private" {
-            return "private (inbuilt)"
-        }
-        if currentTagName == "work" {
-            return "private (work)"
+        if standardTags.contains(currentTagName) {
+            return "\(currentTagName) (inbuilt)"
         }
         return currentTagName
     }
@@ -43,7 +40,7 @@ public struct EditTag: View {
             Button("Delete this tag", role: .destructive) {
                 dataManager.delete(tag: currentTagName)
             }.buttonStyle(.bordered)
-                .disabled(currentTagName == "private" || currentTagName == "work")
+                .disabled(standardTags.contains(currentTagName))
         }
         Spacer()
     }
@@ -59,11 +56,11 @@ public struct TagsPreferencesView: View {
             HStack(alignment: .top) {
                 GroupBox(label: Text("All Tags").bold()) {
                     ScrollView(.vertical, showsIndicators: false) {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70, maximum: 150))], spacing: 0) {
+                        FlowLayout(spacing: 8, runSpacing: 8) {
                             ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
                                 TagView(
                                     text: text,
-                                    isSelected: true,  // All tags in preferences are "selected" for display
+                                    isSelected: tag == text,  // Highlight selected tag
                                     accentColor: Color.priority,
                                     onTap: {
                                         tag = text

@@ -11,13 +11,12 @@ import SwiftUI
 import UniformTypeIdentifiers
 // Re-export everything from tdgCoreMain for full functionality
 @_exported import tdgCoreMain
+import tdgCoreWidget
 
 #if os(iOS)
-    import UIKit
-    public typealias BaseViewController = UIViewController
+    public typealias BaseViewController = PlatformViewController
     public typealias HostingController = UIHostingController
 #elseif os(macOS)
-    import AppKit
-    public typealias BaseViewController = NSViewController
+    public typealias BaseViewController = PlatformViewController
     public typealias HostingController = NSHostingController
 #endif

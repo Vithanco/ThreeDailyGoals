@@ -67,39 +67,23 @@ public struct ShareExtensionView: View {
     public init() {
     }
 
+    // Computed property to determine if enhancement is available
+    private var canEnhance: Bool {
+        // Can enhance if we have a URL and an enhancer
+        if !item.url.isEmpty, enhancer != nil {
+            return true
+        }
+        // Can enhance if we have a file attachment and file enhancer with AI
+        if isFileAttachment, let fileEnhancer = fileEnhancer, fileEnhancer.hasAI {
+            return true
+        }
+        return false
+    }
+
     public var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Main content area
-                ScrollView {
-                    VStack(spacing: 16) {
-                        if isEnhancing {
-                            HStack(spacing: 8) {
-                                ProgressView()
-                                    .controlSize(.small)
-                                Text("Analyzing file...")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.secondary.opacity(0.1))
-                            .cornerRadius(8)
-                        }
-
-                        InnerTaskItemView(
-                            item: item,
-                            allTags: [],
-                            showAttachmentImport: false
-                        )
-                    }
-                    .padding()
-                }
-                .frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
-
-                Divider()
-
-                // Bottom action buttons
+                // Top action buttons
                 HStack(spacing: 12) {
                     Button {
                         self.close()
@@ -121,6 +105,52 @@ public struct ShareExtensionView: View {
                     .disabled(item.title.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
                 .padding()
+
+                Divider()
+
+                // Main content area
+                ScrollView {
+                    VStack(spacing: 16) {
+                        if isEnhancing {
+                            HStack(spacing: 8) {
+                                ProgressView()
+                                    .controlSize(.small)
+                                Text("Analyzing...")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.secondary.opacity(0.1))
+                            .clipShape(.rect(cornerRadius: 8))
+                        }
+
+                        // Show "Enhance" button for AI description if applicable
+                        if canEnhance && !isEnhancing {
+                            Button {
+                                Task {
+                                    await performEnhancement()
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: imgSparkles)
+                                    Text("Generate AI Description")
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.bordered)
+                            .padding(.horizontal)
+                        }
+
+                        InnerTaskItemView(
+                            item: item,
+                            allTags: [],
+                            showAttachmentImport: false
+                        )
+                    }
+                    .padding()
+                }
+                .frame(minWidth: 300, maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
             }
             #if os(macOS)
                 .frame(minWidth: 360, maxWidth: 600, minHeight: 300, maxHeight: 700, alignment: .topLeading)
@@ -130,7 +160,7 @@ public struct ShareExtensionView: View {
                 .navigationSubtitle("Three Daily Goals")
             #endif
             .onAppear {
-                // Auto-add file attachment when view appears
+                // Auto-add file attachment when view appears (but don't auto-enhance)
                 if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType {
                     // If we have a suggested filename, rename the temp file to use it
                     let finalFileURL: URL
@@ -160,27 +190,9 @@ public struct ShareExtensionView: View {
                             sortIndex: 0,
                             in: model
                         )
-
-                        // Auto-enhance file description
-                        if let fileEnhancer = fileEnhancer {
-                            Task {
-                                await enhanceFileDescription(
-                                    fileURL: finalFileURL, contentType: contentType, enhancer: fileEnhancer)
-                            }
-                        }
                     } catch {
                         print("❌ Failed to auto-add attachment: \(error)")
                     }
-                }
-            }
-            .task {
-                // Auto-enhance when sharing a URL
-                let urlString = item.url
-                if !urlString.isEmpty,
-                    let url = URL(string: urlString),
-                    let enhancer = enhancer
-                {
-                    await enhanceURL(url, enhancer: enhancer)
                 }
             }
         }
@@ -200,6 +212,21 @@ public struct ShareExtensionView: View {
     // so we can close the whole extension
     func close() {
         NotificationCenter.default.post(name: NSNotification.Name("close"), object: nil)
+    }
+
+    private func performEnhancement() async {
+        // Enhance URL if we have one
+        if !item.url.isEmpty, let url = URL(string: item.url), let enhancer = enhancer {
+            await enhanceURL(url, enhancer: enhancer)
+            return
+        }
+
+        // Enhance file if we have one
+        if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType,
+            let fileEnhancer = fileEnhancer
+        {
+            await enhanceFileDescription(fileURL: fileURL, contentType: contentType, enhancer: fileEnhancer)
+        }
     }
 
     private func enhanceURL(_ url: URL, enhancer: WebPageEnhancer) async {

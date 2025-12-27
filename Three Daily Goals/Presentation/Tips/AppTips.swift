@@ -7,6 +7,7 @@
 
 import SwiftUI
 import TipKit
+import tdgCoreWidget
 
 // MARK: - Welcome Tips
 
@@ -20,7 +21,7 @@ struct AddFirstGoalTip: Tip {
     }
 
     var image: Image? {
-        Image(systemName: "plus.circle.fill")
+        Image(systemName: imgPlus)
     }
 }
 
@@ -34,7 +35,7 @@ struct CompassCheckTip: Tip {
     }
 
     var image: Image? {
-        Image(systemName: "checkmark.circle.fill")
+        Image(systemName: imgCompassCheckDone)
     }
 }
 
@@ -48,7 +49,7 @@ struct PriorityTip: Tip {
     }
 
     var image: Image? {
-        Image(systemName: "star.fill")
+        Image(systemName: imgPriority)
     }
 }
 
@@ -62,14 +63,15 @@ struct StreakTip: Tip {
     }
 
     var image: Image? {
-        Image(systemName: "flame.fill")
+        Image(systemName: imgStreakActive)
     }
 }
 
 // MARK: - Tip Manager
 
 @MainActor
-class TipManager: ObservableObject {
+@Observable
+class TipManager {
     static let shared = TipManager()
 
     private init() {}

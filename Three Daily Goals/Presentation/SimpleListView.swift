@@ -15,8 +15,27 @@ struct SimpleListView: View {
     let showHeaders: Bool
     let section: TaskSection
     let id: String
+    let enableNavigation: Bool
     @Environment(CloudPreferences.self) private var preferences
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
+
+    init(
+        color: Color,
+        itemList: [TaskItem],
+        headers: [ListHeader],
+        showHeaders: Bool,
+        section: TaskSection,
+        id: String,
+        enableNavigation: Bool = true
+    ) {
+        self.color = color
+        self.itemList = itemList
+        self.headers = headers
+        self.showHeaders = showHeaders
+        self.section = section
+        self.id = id
+        self.enableNavigation = enableNavigation
+    }
 
     var body: some View {
         List {
@@ -25,13 +44,13 @@ struct SimpleListView: View {
                     HStack(spacing: 8) {
                         // Section icon with color
                         Image(systemName: section.image)
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(color)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(color)
                             .frame(width: 20, height: 20)
 
                         section.asText
                             .foregroundStyle(color)
-                            .font(.system(size: 14, weight: .semibold))
+                            .font(.subheadline.weight(.semibold))
                             .accessibilityIdentifier("ListView" + id)
                     }
                 }
@@ -53,31 +72,38 @@ struct SimpleListView: View {
                                 HStack(spacing: 8) {
                                     // Header icon with color
                                     Image(systemName: section.image)
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(color)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(color)
                                         .frame(width: 16, height: 16)
 
                                     header.asText
                                         .foregroundStyle(color)
-                                        .font(.system(size: 13, weight: .medium))
+                                        .font(.footnote.weight(.medium))
                                         .listRowSeparator(.hidden)
                                 }
                                 .listRowSeparator(.hidden)
                                 .listRowBackground(Color.clear)
                             }
                             ForEach(partialList) { item in
-                                LinkToTask(item: item, list: item.state)
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.clear)
-                                    .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                if enableNavigation {
+                                    LinkToTask(item: item, list: item.state)
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
+                                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                } else {
+                                    TaskAsLine(item: item)
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
+                                        .listRowInsets(EdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8))
+                                }
                             }
                         }
                     }
                     if itemList.count > 10 {
                         HStack(spacing: 8) {
                             Image(systemName: section.image)
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(color)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(color)
                                 .frame(width: 16, height: 16)
                             Text("\(itemList.count) tasks").font(.callout).foregroundStyle(color)
                                 .listRowSeparator(.hidden)

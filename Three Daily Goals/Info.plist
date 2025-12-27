@@ -8,10 +8,31 @@
 	<string>Three Daily Goals would like to help you to plan your days better by blocking time in your calendar for your main tasks. </string>
 	<key>NSRemindersFullAccessUsageDescription</key>
 	<string>Three Daily Goals would like you to remind you about your upcoming dedicated times for your three daily goals.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Three Daily Goals would like to access your camera to take photos and attach them to your tasks.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Three Daily Goals would like to access your photo library to attach photos to your tasks.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>
 		<string></string>
 	</dict>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.simplecalendar.event</string>
+			<key>UTTypeDescription</key>
+			<string>Calendar Event</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

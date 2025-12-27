@@ -44,7 +44,7 @@ public enum SchemaV3_6: VersionedSchema {
         public var estimatedMinutes: Int = 0
 
         //future potential additions:
-        //Eisenhower Matrix (Important, Urgent),
+        //EnergyEffort Matrix (Important, Urgent),
         //Priority (1-10)
         //ImageData
 

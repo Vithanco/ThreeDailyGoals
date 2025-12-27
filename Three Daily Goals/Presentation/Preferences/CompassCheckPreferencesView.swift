@@ -25,12 +25,12 @@ public struct CompassCheckPreferencesView: View {
                 // Header with icon
                 HStack {
                     Image(systemName: imgCompassCheck)
-                        .foregroundColor(Color.priority)
+                        .foregroundStyle(Color.priority)
                         .font(.title2)
                     Text("Compass Check Preferences")
                         .font(.title2)
                         .fontWeight(.semibold)
-                        .foregroundColor(Color.priority)
+                        .foregroundStyle(Color.priority)
                 }
                 .padding(.bottom, 10)
 
@@ -50,7 +50,7 @@ public struct CompassCheckPreferencesView: View {
                         HStack {
                             Text("Last Compass Check was:")
                             Spacer()
-                            Text(lastCompassCheck).foregroundColor(Color.priority)
+                            Text(lastCompassCheck).foregroundStyle(Color.priority)
                         }
 
                         StreakView()
@@ -96,7 +96,7 @@ public struct CompassCheckPreferencesView: View {
 
                         Text("Receive reminders to complete your daily Compass Check")
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                             .padding(.leading, 4)
                     }
                     .padding(5)

@@ -23,14 +23,17 @@ public struct CompassCheckDialog: View {
     //    @State private var sheetHeight: CGFloat = .zero
 
     public var body: some View {
-        VStack {
-
+        VStack(spacing: 0) {
+            // Fixed header with navigation buttons
             HStack {
                 Text("Daily Compass Check").font(.title).foregroundStyle(Color.priority)
                 Spacer()
-                Button(action: compassCheckManager.pauseCompassCheck) {
-                    Text("Pause for 5 min")
-                }.buttonStyle(.bordered).frame(maxHeight: 30)
+                Button(action: compassCheckManager.goBackOneStep) {
+                    Text("Back")
+                }
+                .buttonStyle(.bordered)
+                .frame(maxHeight: 30)
+                .disabled(!compassCheckManager.canGoBack)
                 Button(role: .cancel, action: compassCheckManager.cancelCompassCheck) {
                     Text("Cancel")
                 }.buttonStyle(.bordered).frame(maxHeight: 30)
@@ -43,11 +46,17 @@ public struct CompassCheckDialog: View {
                         .clipShape(RoundedRectangle(cornerRadius: 6))
                 }.buttonStyle(.plain)
             }
-            Spacer()
+            .padding(4)
 
-            compassCheckManager.getCurrentStepView()
-            Spacer()
-        }.padding(4).frame(minHeight: 350, idealHeight: 600)
+            Divider()
+
+            // Scrollable step content
+            ScrollView {
+                compassCheckManager.getCurrentStepView()
+                    .padding(.vertical)
+            }
+        }
+        .frame(minHeight: 350, idealHeight: 600)
     }
     //                .overlay {
     //                    GeometryReader { geometry in

@@ -129,7 +129,7 @@ struct WPriorities: View {
 
     @ViewBuilder
     private var individualItemsView: some View {
-        ForEach(Array(displayedPriorities.enumerated()), id: \.offset) { index, priority in
+        ForEach(displayedPriorities.enumerated(), id: \.offset) { index, priority in
             let priorityNumber = index + 1
             let taskUUID = preferences.getPriorityUUID(nr: priorityNumber)
             WidgetPriorityItem(

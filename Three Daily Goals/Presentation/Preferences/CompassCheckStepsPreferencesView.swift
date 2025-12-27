@@ -19,23 +19,23 @@ public struct CompassCheckStepsPreferencesView: View {
                 VStack(spacing: 6) {
                     HStack {
                         Image(systemName: imgCompassCheck)
-                            .foregroundColor(Color.priority)
+                            .foregroundStyle(Color.priority)
                             .font(.title2)
                         Text("Compass Check Steps")
                             .font(.title2)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color.priority)
+                            .foregroundStyle(Color.priority)
                     }
 
                     Text("Configure which steps are included in your daily Compass Check process.")
                         .multilineTextAlignment(.center)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .padding(.bottom, 8)
 
                 // Individual step configuration sections
-                ForEach(Array(compassCheckManager.steps.enumerated()), id: \.element.id) { index, step in
+                ForEach(compassCheckManager.steps.enumerated(), id: \.element.id) { index, step in
                     VStack(alignment: .leading, spacing: 6) {
                         // Step header with toggle
                         HStack(alignment: .top) {
@@ -43,7 +43,7 @@ public struct CompassCheckStepsPreferencesView: View {
                                 Text(step.name)
                                     .font(.headline)
                                     .fontWeight(.semibold)
-                                    .foregroundColor(
+                                    .foregroundStyle(
                                         preferences.isCompassCheckStepEnabled(stepId: step.id) ? .primary : .secondary
                                     )
                                     .animation(
@@ -52,7 +52,7 @@ public struct CompassCheckStepsPreferencesView: View {
 
                                 Text(step.description)
                                     .font(.caption)
-                                    .foregroundColor(
+                                    .foregroundStyle(
                                         preferences.isCompassCheckStepEnabled(stepId: step.id)
                                             ? .secondary : Color.secondary.opacity(0.6)
                                     )
@@ -74,16 +74,6 @@ public struct CompassCheckStepsPreferencesView: View {
                                 )
                                 .toggleStyle(.switch)
                                 .scaleEffect(0.65)
-
-                                if step.id == "plan" {
-                                    Text("Coming Soon")
-                                        .font(.caption2)
-                                        .foregroundColor(.orange)
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(Color.orange.opacity(0.15))
-                                        .cornerRadius(3)
-                                }
                             }
                         }
 
@@ -96,7 +86,7 @@ public struct CompassCheckStepsPreferencesView: View {
                                         .frame(width: 2, height: 16)
                                     Text("Configuration")
                                         .font(.caption2)
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                         .textCase(.uppercase)
                                 }
                                 .padding(.vertical, 2)

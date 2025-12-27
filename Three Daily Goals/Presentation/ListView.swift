@@ -22,11 +22,13 @@ struct ListView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(TimeProviderWrapper.self) var timeProviderWrapper: TimeProviderWrapper
     let whichList: TaskItemState
+    let enableNavigation: Bool
 
     @Query(sort: \TaskItem.changed) private var allTasks: [TaskItem]
 
-    init(whichList: TaskItemState) {
+    init(whichList: TaskItemState, enableNavigation: Bool = true) {
         self.whichList = whichList
+        self.enableNavigation = enableNavigation
     }
 
     private var tasks: [TaskItem] {
@@ -53,9 +55,19 @@ struct ListView: View {
         colorScheme == .dark ? Color.neutral600 : Color.neutral200
     }
 
-    // Enhanced list background for better task box visibility
-    private var listBackground: Color {
-        colorScheme == .dark ? Color.neutral800.opacity(0.3) : Color.neutral50.opacity(0.8)
+    // Enhanced list background with subtle tint toward list color
+    private var listBackground: some View {
+        ZStack {
+            // Base neutral background
+            if colorScheme == .dark {
+                Color.neutral800.opacity(0.3)
+            } else {
+                Color.neutral200.opacity(0.9)
+            }
+
+            // Subtle color tint overlay
+            whichList.color.opacity(0.02)
+        }
     }
 
     private var filteredTasks: [TaskItem] {
@@ -71,7 +83,8 @@ struct ListView: View {
                 color: list.color,
                 itemList: filteredTasks, headers: list.subHeaders, showHeaders: list != .priority,
                 section: list.section,
-                id: list.getListAccessibilityIdentifier
+                id: list.getListAccessibilityIdentifier,
+                enableNavigation: enableNavigation
             )
             .frame(minHeight: 145, maxHeight: .infinity)
             .background(listBackground)

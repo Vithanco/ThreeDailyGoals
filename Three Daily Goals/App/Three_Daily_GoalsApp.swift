@@ -91,8 +91,8 @@ struct Three_Daily_GoalsApp: App {
             }
         }
         #if os(macOS)
-            // Dedicated window for Compass Check dialog
-            WindowGroup("Compass Check", id: "CompassCheckWindow") {
+            // Dedicated single-instance window for Compass Check dialog
+            Window("Compass Check", id: "CompassCheckWindow") {
                 CompassCheckDialog()
                     .frame(minWidth: 700, minHeight: 500)
             }
@@ -137,6 +137,10 @@ struct Three_Daily_GoalsApp: App {
                     appComponents.uiState.select(task)
                     return
                 }
+            } else if url.host == "new-task" {
+                // Create a new task: three-daily-goals://new-task
+                appComponents.uiState.addNewItem()
+                return
             } else if url.host == "app" {
                 // Just open the app, no task creation
                 return

@@ -54,6 +54,7 @@ struct MainView: View {
         #if os(iOS)
             .fullScreenCover(isPresented: $uiState.showCompassCheckDialog) {
                 CompassCheckDialog()
+                    .interactiveDismissDisabled()
             }
         #else
             // On macOS, open/close a dedicated window instead of a sheet
@@ -100,11 +101,7 @@ struct MainView: View {
                 Button("Update App") {
                     // Open App Store for app update
                     if let url = URL(string: "https://apps.apple.com/app/three-daily-goals/id1234567890") {
-                        #if os(macOS)
-                            NSWorkspace.shared.open(url)
-                        #else
-                            UIApplication.shared.open(url)
-                        #endif
+                        PlatformFileSystem.openURL(url)
                     }
                 }
                 Button("Later", role: .cancel) {

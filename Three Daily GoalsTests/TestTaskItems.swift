@@ -14,6 +14,7 @@ import Testing
 
 enum TestError: Error {
     case taskNotFound
+    case noUncategorisedTask
 }
 
 @Suite

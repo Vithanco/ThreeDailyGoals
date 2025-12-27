@@ -65,12 +65,6 @@ extension TaskItem: Equatable {
 
 }
 
-public protocol Taggable {
-    var tags: [String] { get }
-    func addTag(_ newTag: String)
-    func removeTag(_ oldTag: String)
-}
-
 extension TaskItem: Taggable {
 
     public func updateFrom(_ other: TaskItem) {
@@ -135,35 +129,36 @@ extension TaskItem {
         }
     }
 
-
     public func updateTags(_ newTags: [String], createComments: Bool = true) {
         func normalize(_ s: String) -> String {
             s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         }
-        
+
         let oldRaw = self.tags
         var seenOld = Set<String>()
-        let oldNormOrdered = oldRaw
+        let oldNormOrdered =
+            oldRaw
             .map(normalize)
             .filter { !$0.isEmpty && seenOld.insert($0).inserted }
-        
+
         var seenNew = Set<String>()
-        let newNormOrdered = newTags
+        let newNormOrdered =
+            newTags
             .map(normalize)
             .filter { !$0.isEmpty && seenNew.insert($0).inserted }
-        
+
         allTagsString = newNormOrdered.joined(separator: ",")
-        
+
         let oldSet = Set(oldNormOrdered)
         let newSet = Set(newNormOrdered)
         guard oldSet != newSet else { return }
-        
+
         changed = Date.now
-        
+
         if createComments && comments != nil {
             let added = newSet.subtracting(oldSet)
             let removed = oldSet.subtracting(newSet)
-            
+
             for t in newNormOrdered where added.contains(t) {
                 addComment(text: "Added tag: \(t)", icon: imgTag)
             }
@@ -336,6 +331,12 @@ extension TaskItem {
         changed = Date.now
     }
 
+    public func setCalendarEventId(_ newEventId: String?) {
+        guard eventId != newEventId else { return }
+        eventId = newEventId
+        changed = Date.now
+    }
+
     public func dueUntil(date: Date) -> Bool {
         if let due {
             return due <= date
@@ -436,8 +437,36 @@ extension Sequence where Element: TaskItem {
         for t in self where !t.tags.isEmpty && t.isActive {
             result.formUnion(t.tags)
         }
-        result.formUnion(["work", "private"])
+        result.formUnion(standardTags)
         return result
     }
 
+}
+
+// MARK: - Energy-Effort Matrix Extensions
+
+extension TaskItem {
+
+    /// Check if task has both Energy-Effort dimensions set
+    public var hasCompleteEnergyEffortTags: Bool {
+        let taskTags = Set(self.tags)
+        let hasEnergy = taskTags.contains("high-energy") || taskTags.contains("low-energy")
+        let hasSize = taskTags.contains("big-task") || taskTags.contains("small-task")
+        return hasEnergy && hasSize
+    }
+
+    /// Apply Energy-Effort Matrix tags to the task by removing old ones and adding new ones
+    public func applyEnergyEffortTags(energyTag: String, effortTag: String) {
+        // Remove any existing Energy-Effort Matrix tags
+        var currentTags = self.tags.filter { tag in
+            !["high-energy", "low-energy", "big-task", "small-task"].contains(tag)
+        }
+
+        // Add new quadrant tags
+        currentTags.append(energyTag)
+        currentTags.append(effortTag)
+
+        // Update tags
+        self.tags = currentTags
+    }
 }

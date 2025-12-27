@@ -8,10 +8,7 @@
 import SwiftData
 import SwiftUI
 import tdgCoreShare
-
-#if os(macOS)
-    import AppKit
-#endif
+import tdgCoreWidget
 
 // This file provides a local alias for the tdgCoreShare.ShareExtensionView
 // to maintain compatibility with the existing codebase structure

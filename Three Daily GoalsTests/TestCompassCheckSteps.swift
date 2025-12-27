@@ -52,20 +52,24 @@ struct TestCompassCheckSteps {
             // Add test tasks in different states
             let priorityTask = TaskItem(title: "Priority Task")
             priorityTask.state = .priority
+            priorityTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(priorityTask)
 
             let pendingTask = TaskItem(title: "Pending Task")
             pendingTask.state = .pendingResponse
+            pendingTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(pendingTask)
 
             let openTask = TaskItem(title: "Open Task")
             openTask.state = .open
+            openTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(openTask)
 
             // Add a task due soon (in 2 days)
             let dueTask = TaskItem(title: "Due Soon Task")
             dueTask.due = Date().addingTimeInterval(2 * 24 * 60 * 60)
             dueTask.state = .open
+            dueTask.created = Date().addingTimeInterval(Double(-hoursBeforeReadyForClassification - 1) * 3600)
             tasks.append(dueTask)
 
             return tasks
@@ -339,11 +343,16 @@ struct TestCompassCheckSteps {
         // Test step progression through moveStateForward
         #expect(compassCheckManager.currentStep.id == "inform")
 
-        // Should move from inform to currentPriorities (because we have priority tasks)
+        // Should move from inform to currentPriorities (EnergyEffortMatrixConsistency is silent and auto-skipped)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
 
-        // Should move from currentPriorities to pending (because we have pending tasks)
+        // Should move from currentPriorities to EnergyEffortMatrix (new step for categorizing tasks)
+        // Note: MovePrioritiesToOpenStep is silent and will execute automatically
+        compassCheckManager.moveStateForward()
+        #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
+
+        // Should move from EnergyEffortMatrix to pending (because we have pending tasks)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "pending")
 
@@ -355,7 +364,7 @@ struct TestCompassCheckSteps {
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
 
-        // Should move from review to plan (on macOS)
+        // Should move from review to plan (on macOS, MoveToGraveyard is silent and auto-executes)
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "plan")
 
@@ -454,9 +463,10 @@ struct TestCompassCheckSteps {
         #expect(priorityTasks.count > 0)  // Should still have priority tasks
 
         // Test moving from currentPriorities to next step
-        // This should execute CurrentPrioritiesStep.act (moves priorities to open)
+        // This should execute CurrentPrioritiesStep.act first, then MovePrioritiesToOpenStep (silent)
+        // will automatically execute and move priorities to open
         compassCheckManager.moveStateForward()
-        #expect(compassCheckManager.currentStep.id == "pending")
+        #expect(compassCheckManager.currentStep.id == "EnergyEffortMatrix")
 
         // Now verify that priority tasks were moved to open
         let priorityTasksAfter = dataManager.list(which: .priority)
@@ -636,7 +646,7 @@ struct TestCompassCheckSteps {
             pushNotificationManager: appComponents.pushNotificationManager
         )
 
-        // Should skip directly to review
+        // Should skip directly to review (all task-specific steps skipped, including EnergyEffortMatrix which requires uncategorized tasks)
         #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
@@ -666,7 +676,7 @@ struct TestCompassCheckSteps {
             pushNotificationManager: appComponents.pushNotificationManager
         )
 
-        // Should skip dueDate step
+        // Should skip dueDate step (and other non-applicable steps like EnergyEffortMatrix)
         #expect(compassCheckManager.currentStep.id == "inform")
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "review")
@@ -1193,5 +1203,94 @@ struct TestCompassCheckSteps {
         // Should be at ReviewStep now
         #expect(compassCheckManager.currentStep.id == "review")
         #expect(compassCheckManager.moveStateForwardText == "Finish")
+    }
+
+    // MARK: - EnergyEffort Matrix Consistency Tests
+
+    @Test
+    func testEnergyEffortMatrixConsistencyStep() throws {
+        // Create test data loader with conflicting EnergyEffort Matrix tags
+        let conflictingTagsLoader: TestDataLoader = { timeProvider in
+            var tasks: [TaskItem] = []
+
+            // Task with both urgent and non-urgent tags
+            let conflictingTask1 = TaskItem(title: "Conflicting Task 1")
+            conflictingTask1.state = .open
+            conflictingTask1.tags = ["urgent", "non-urgent", "work"]
+            tasks.append(conflictingTask1)
+
+            // Task with both important and non-important tags
+            let conflictingTask2 = TaskItem(title: "Conflicting Task 2")
+            conflictingTask2.state = .priority
+            conflictingTask2.tags = ["important", "non-important", "private"]
+            tasks.append(conflictingTask2)
+
+            // Task with conflicts in both dimensions
+            let conflictingTask3 = TaskItem(title: "Conflicting Task 3")
+            conflictingTask3.state = .open
+            conflictingTask3.tags = ["urgent", "non-urgent", "important", "non-important"]
+            tasks.append(conflictingTask3)
+
+            // Task with no conflicts
+            let normalTask = TaskItem(title: "Normal Task")
+            normalTask.state = .open
+            normalTask.tags = ["urgent", "important", "work"]
+            tasks.append(normalTask)
+
+            return tasks
+        }
+
+        let appComponents = setupApp(isTesting: true, loaderForTests: conflictingTagsLoader)
+        let dataManager = appComponents.dataManager
+        let timeProvider = appComponents.timeProvider
+        let step = EnergyEffortMatrixConsistencyStep()
+
+        // Step should always be applicable
+        #expect(step.isApplicable(dataManager: dataManager, timeProvider: timeProvider))
+
+        // Step should be silent
+        #expect(step.isSilent == true)
+
+        // Verify initial conflicting tags
+        let task1 = dataManager.allTasks.first { $0.title == "Conflicting Task 1" }
+        let task2 = dataManager.allTasks.first { $0.title == "Conflicting Task 2" }
+        let task3 = dataManager.allTasks.first { $0.title == "Conflicting Task 3" }
+        let task4 = dataManager.allTasks.first { $0.title == "Normal Task" }
+
+        #expect(task1?.tags.contains("urgent") == true)
+        #expect(task1?.tags.contains("non-urgent") == true)
+
+        #expect(task2?.tags.contains("important") == true)
+        #expect(task2?.tags.contains("non-important") == true)
+
+        #expect(task3?.tags.contains("urgent") == true)
+        #expect(task3?.tags.contains("non-urgent") == true)
+        #expect(task3?.tags.contains("important") == true)
+        #expect(task3?.tags.contains("non-important") == true)
+
+        // Execute the step
+        step.act(dataManager: dataManager, timeProvider: timeProvider, preferences: appComponents.preferences)
+
+        // Verify conflicts are resolved
+        // Task 1: both urgent and non-urgent should be removed
+        #expect(task1?.tags.contains("urgent") == false)
+        #expect(task1?.tags.contains("non-urgent") == false)
+        #expect(task1?.tags.contains("work") == true)  // Other tags preserved
+
+        // Task 2: both important and non-important should be removed
+        #expect(task2?.tags.contains("important") == false)
+        #expect(task2?.tags.contains("non-important") == false)
+        #expect(task2?.tags.contains("private") == true)  // Other tags preserved
+
+        // Task 3: all conflicting tags should be removed
+        #expect(task3?.tags.contains("urgent") == false)
+        #expect(task3?.tags.contains("non-urgent") == false)
+        #expect(task3?.tags.contains("important") == false)
+        #expect(task3?.tags.contains("non-important") == false)
+
+        // Task 4: non-conflicting tags should remain unchanged
+        #expect(task4?.tags.contains("urgent") == true)
+        #expect(task4?.tags.contains("important") == true)
+        #expect(task4?.tags.contains("work") == true)
     }
 }
