@@ -27,7 +27,7 @@ struct TestTouchWithDescription {
     func testTouchWithDescriptionAddsComment() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Verify initial state
         #expect(task.comments?.count ?? 0 == 0, "Initial comment count should be 0")
@@ -48,7 +48,7 @@ struct TestTouchWithDescription {
     func testTouchWithEmptyDescriptionUsesDefaultTouch() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Verify initial state
         #expect(task.comments?.count ?? 0 == 0, "Initial comment count should be 0")
@@ -69,7 +69,7 @@ struct TestTouchWithDescription {
     func testTouchWithWhitespaceOnlyDescriptionUsesDefaultTouch() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Verify initial state
         #expect(task.comments?.count ?? 0 == 0, "Initial comment count should be 0")

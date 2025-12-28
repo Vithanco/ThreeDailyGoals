@@ -63,6 +63,10 @@ public final class DataManager {
         return filtered.sorted { $0.changed < $1.changed }
     }
 
+    var nrOfTasks: Int {
+       return ( try? modelContext.fetchCount(FetchDescriptor<TaskItem>())) ?? 0
+    }
+    
     /// Get all tasks
     var allTasks: [TaskItem] {
         let descriptor = FetchDescriptor<TaskItem>()
@@ -180,8 +184,7 @@ public final class DataManager {
 
     /// Delete a task
     func deleteTask(_ task: TaskItem) {
-        logger.debug("deleteTask START - Task: '\(task.title)'")
-        logger.debug("  Task ID: \(task.id)")
+        logger.debug("deleteTask START - Task: '\(task.title)', Task ID: \(task.id)")
 
         // Find the task in the context to ensure we're deleting the right object
         guard let taskToDelete = findTask(withUuidString: task.id) else {
@@ -189,38 +192,6 @@ public final class DataManager {
             return
         }
 
-        logger.debug("  Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
-        logger.debug("  Undo grouping level: \(self.modelContext.undoManager?.groupingLevel ?? -1)")
-        let taskCountBefore: Int? = try? self.modelContext.fetchCount(FetchDescriptor<TaskItem>())
-        logger.debug("  Task count before delete: \(taskCountBefore ?? -1)")
-
-        // Manually delete attachments and comments to avoid SwiftData snapshot issues
-        // This allows proper undo tracking for each deletion
-        beginUndoGrouping()
-
-        // Delete task and its relationships
-        deleteTaskAndRelationships(taskToDelete)
-
-        endUndoGrouping()
-
-        logger.debug("  After delete: level = \(self.modelContext.undoManager?.groupingLevel ?? -1)")
-        logger.debug("  After delete, before save:")
-        logger.debug("    Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
-        logger.debug("    Has changes: \(self.modelContext.hasChanges)")
-
-        save()
-
-        let taskCountAfter: Int? = try? self.modelContext.fetchCount(FetchDescriptor<TaskItem>())
-        logger.debug("  After save:")
-        logger.debug("    Task count: \(taskCountAfter ?? -1)")
-        logger.debug("    Undo available: \(self.canUndo), Redo available: \(self.canRedo)")
-        logger.debug("deleteTask END")
-    }
-
-    /// Delete a task and its related attachments/comments
-    /// Manually deletes relationships to avoid SwiftData cascade snapshot issues
-    private func deleteTaskAndRelationships(_ task: TaskItem) {
-        beginUndoGrouping()
         // Purge attachment data first (before deletion)
         if let attachments = task.attachments {
             for attachment in attachments {
@@ -229,9 +200,13 @@ public final class DataManager {
             }
         }
 
-        // Delete the task - SwiftData's cascade delete will handle attachments/comments
         modelContext.delete(task)
-        endUndoGrouping()
+
+        // Process pending changes to register the delete with the undo manager
+        // This is required for SwiftData to register undo operations
+        modelContext.processPendingChanges()
+
+        updateUndoRedoState()
     }
 
     func delete(task: TaskItem) {
@@ -252,11 +227,12 @@ public final class DataManager {
     /// Delete multiple tasks
     func deleteTasks(_ tasks: [TaskItem]) {
         beginUndoGrouping()
+        defer { endUndoGrouping() }
         for task in tasks {
-            deleteTaskAndRelationships(task)
+            deleteTask(task)
         }
-        endUndoGrouping()
-        save()
+   
+        // DON'T call processPendingChanges() or save() - they interfere with undo
     }
 
     /// Duplicate a task
@@ -622,6 +598,12 @@ public final class DataManager {
 
     /// Save changes to the database
     func save() {
+        // Check if there are changes before saving (Apple best practice)
+        guard modelContext.hasChanges else {
+            logger.debug("save: No changes to save, skipping")
+            return
+        }
+
         logger.debug("save START")
         logger.debug("  Grouping level: \(self.modelContext.undoManager?.groupingLevel ?? -1)")
         logger.debug("  Has changes: \(self.modelContext.hasChanges)")
@@ -774,14 +756,14 @@ public final class DataManager {
         modelContext.insert(older1)
         modelContext.insert(older2)
 
-        try? modelContext.save()
+        save()
     }
 
     /// Clear all data (for testing)
     func clearAllData() {
         // Uncomment when needed for testing
         // try? modelContext.delete(model: TaskItem.self)
-        // try? modelContext.save()
+        // save()
     }
 
     // MARK: - Attachment Operations
@@ -900,7 +882,10 @@ public final class DataManager {
             let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             let jsonData = try decoder.decode([TaskItem].self, from: data)
+
             beginUndoGrouping()
+            defer { endUndoGrouping() }
+
             for item in jsonData {
                 if let existing = findTask(withUuidString: item.id) {
                     if !deepEqual(existing, item) {
@@ -917,7 +902,6 @@ public final class DataManager {
             uiState.infoMessage = "The tasks weren't imported because :\(error)"
         }
 
-        endUndoGrouping()
         uiState.showInfoMessage = true
     }
 
