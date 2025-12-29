@@ -58,6 +58,10 @@ public func setupApp(
             }
             try? modelContext.save()
 
+            // Clear undo stack after initial population so tests start with clean undo history
+            // This ensures that undoing during tests doesn't undo the test data creation
+            sharedUndoManager.removeAllActions()
+
             print("✅ Populated ModelContext with \(testData.count) test items")
             finalModelContext = modelContext
 
@@ -75,6 +79,9 @@ public func setupApp(
                 modelContext.insert(item)
             }
             try? modelContext.save()
+
+            // Clear undo stack after initial population so tests start with clean undo history
+            sharedUndoManager.removeAllActions()
 
             finalModelContext = modelContext
             print("⚠️ Database container creation failed in test mode: \(error)")

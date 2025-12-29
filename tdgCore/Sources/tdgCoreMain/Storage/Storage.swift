@@ -134,12 +134,15 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
     theGoal.dueDate = timeProvider.getDate(inDays: 2)
     result.add(
         title: "Try out Concept Maps", changedDate: timeProvider.getDate(daysPrior: 3), state: .priority,
-        tags: ["CMaps"]).created = timeProvider.getDate(daysPrior: 3)
+        tags: ["CMaps"]
+    ).created = timeProvider.getDate(daysPrior: 3)
     result.add(
-        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead", "work"]).created = timeProvider.getDate(daysPrior: 5)
+        title: "Read about Systems Thinking", changedDate: timeProvider.getDate(daysPrior: 5), tags: ["toRead", "work"]
+    ).created = timeProvider.getDate(daysPrior: 5)
     result.add(
         title: "Transfer tasks from old task manager into this one",
-        changedDate: timeProvider.getDate(daysPrior: 11), state: .open).created = timeProvider.getDate(daysPrior: 11)
+        changedDate: timeProvider.getDate(daysPrior: 11), state: .open
+    ).created = timeProvider.getDate(daysPrior: 11)
     let lastMonth2 = result.add(
         title: "Read about Structured Visual Thinking",
         changedDate: timeProvider.getDate(daysPrior: 22),
@@ -150,16 +153,21 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
     lastMonth2.url = "https://vithanco.com"
     result.add(
         title: "Contact Vithanco Author regarding new map style", changedDate: timeProvider.getDate(daysPrior: 3),
-        state: .pendingResponse).created = timeProvider.getDate(daysPrior: 3)
-    result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead).created = timeProvider.getDate(daysPrior: 31)
+        state: .pendingResponse
+    ).created = timeProvider.getDate(daysPrior: 3)
+    result.add(title: "Read this", changedDate: timeProvider.getDate(daysPrior: 31), state: .dead).created =
+        timeProvider.getDate(daysPrior: 31)
     result.add(
         title: "Read this about Agile vs Waterfall", changedDate: timeProvider.getDate(daysPrior: 101),
-        state: .dead).created = timeProvider.getDate(daysPrior: 101)
+        state: .dead
+    ).created = timeProvider.getDate(daysPrior: 101)
     result.add(
-        title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse).created = timeProvider.getDate(inDays: 3)
+        title: "Request Parking Permission", changedDate: timeProvider.getDate(inDays: 3), state: .pendingResponse
+    ).created = timeProvider.getDate(inDays: 3)
     result.add(
         title: "Tax Declaration", changedDate: timeProvider.getDate(inDays: 30), state: .open,
-        tags: ["private"], dueDate: timeProvider.getDate(inDays: 2)).created = timeProvider.getDate(inDays: 30)
+        tags: ["private"], dueDate: timeProvider.getDate(inDays: 2)
+    ).created = timeProvider.getDate(inDays: 30)
 
     // Exploring Three Daily Goals App features
     let widgetTask = result.add(
@@ -194,7 +202,8 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Organize tasks with tags",
         changedDate: timeProvider.getDate(daysPrior: 1),
         state: .open,
-        tags: ["productivity", "organization"]).created = timeProvider.getDate(daysPrior: 1)
+        tags: ["productivity", "organization"]
+    ).created = timeProvider.getDate(daysPrior: 1)
 
     let undoTask = result.add(
         title: "Explore undo/redo functionality",
@@ -208,7 +217,8 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Set up daily Compass Check reminder",
         changedDate: timeProvider.getDate(daysPrior: 2),
         state: .pendingResponse,
-        tags: ["compass", "notifications"]).created = timeProvider.getDate(daysPrior: 2)
+        tags: ["compass", "notifications"]
+    ).created = timeProvider.getDate(daysPrior: 2)
 
     let exportTask = result.add(
         title: "Export tasks to JSON for backup",
@@ -223,7 +233,8 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Test CloudKit sync between devices",
         changedDate: timeProvider.getDate(daysPrior: 3),
         state: .open,
-        tags: ["sync", "icloud"]).created = timeProvider.getDate(daysPrior: 3)
+        tags: ["sync", "icloud"]
+    ).created = timeProvider.getDate(daysPrior: 3)
 
     let attachmentTask = result.add(
         title: "Add attachments to important tasks",
@@ -238,7 +249,8 @@ public func createDefaultTestData(timeProvider: TimeProvider) -> [TaskItem] {
         title: "Customize Compass Check steps in preferences",
         changedDate: timeProvider.getDate(daysPrior: 7),
         state: .closed,
-        tags: ["compass", "preferences", "customization"]).created = timeProvider.getDate(daysPrior: 7)
+        tags: ["compass", "preferences", "customization"]
+    ).created = timeProvider.getDate(daysPrior: 7)
 
     return result
 }
@@ -258,7 +270,23 @@ public func sharedModelContainer(inMemory: Bool, withCloud: Bool) -> Result<Mode
         (inMemory || !withCloud)
         ? ModelConfiguration.CloudKitDatabase.none : ModelConfiguration.CloudKitDatabase.automatic
 
-    let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: inMemory, cloudKitDatabase: useCloudDB)
+    // Configure storage location
+    let modelConfiguration: ModelConfiguration
+    if inMemory {
+        // For in-memory storage (testing), don't specify a URL
+        modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: useCloudDB)
+    } else {
+        // For persistent storage, use App Group container so widgets and share extensions can access the data
+        let appGroupIdentifier = "group.com.vithanco.three-daily-goals"
+        if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier)
+        {
+            let storeURL = appGroupURL.appendingPathComponent("default.store")
+            modelConfiguration = ModelConfiguration(url: storeURL, cloudKitDatabase: useCloudDB)
+        } else {
+            // Fallback to default location if App Group is not available (shouldn't happen in production)
+            modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: useCloudDB)
+        }
+    }
 
     do {
         let result = try ModelContainer(

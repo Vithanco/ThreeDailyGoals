@@ -222,7 +222,9 @@ public struct ShareExtensionView: View {
         }
 
         // Enhance file if we have one
-        if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType, let fileEnhancer = fileEnhancer {
+        if isFileAttachment, let fileURL = originalFileURL, let contentType = originalContentType,
+            let fileEnhancer = fileEnhancer
+        {
             await enhanceFileDescription(fileURL: fileURL, contentType: contentType, enhancer: fileEnhancer)
         }
     }

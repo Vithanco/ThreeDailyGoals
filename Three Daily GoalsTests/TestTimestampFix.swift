@@ -21,7 +21,7 @@ struct TestTimestampFix {
     func testTaskSelectionDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -43,7 +43,7 @@ struct TestTimestampFix {
     func testSettingSameValuesDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -63,7 +63,7 @@ struct TestTimestampFix {
     func testActualChangesDoUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -86,7 +86,7 @@ struct TestTimestampFix {
     func testColorPropertyAccessDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -104,7 +104,7 @@ struct TestTimestampFix {
     func testStateChangeWithSameValueDoesNotUpdateTimestamp() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -121,7 +121,7 @@ struct TestTimestampFix {
         // Create a test task with tags
         let task = TaskItem(title: "Test Task", state: .open)
         task.tags = ["work", "important"]
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Record initial timestamp
         let initialTimestamp = task.changed
@@ -137,7 +137,7 @@ struct TestTimestampFix {
     func testCommentWithIconAndState() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Add a comment with icon and state
         task.addComment(text: "Test comment with icon", icon: imgTouch, state: .open)
@@ -156,7 +156,7 @@ struct TestTimestampFix {
     func testCommentWithoutIconAndState() throws {
         // Create a test task
         let task = TaskItem(title: "Test Task", state: .open)
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Add a comment without icon and state
         task.addComment(text: "Test comment without icon")

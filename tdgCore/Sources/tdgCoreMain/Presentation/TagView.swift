@@ -33,7 +33,8 @@ public struct TagView: View {
                         .fill(
                             isSelected
                                 ? accentColor.opacity(0.2)
-                                : (colorScheme == .dark ? Color.neutral700.opacity(0.3) : Color.neutral200.opacity(0.5)))
+                                : (colorScheme == .dark ? Color.neutral700.opacity(0.3) : Color.neutral200.opacity(0.5))
+                        )
                 )
                 .foregroundStyle(isSelected ? accentColor : .primary)
                 .overlay(
@@ -41,7 +42,8 @@ public struct TagView: View {
                         .stroke(
                             isSelected
                                 ? accentColor
-                                : (colorScheme == .dark ? Color.neutral600.opacity(0.6) : Color.neutral400.opacity(0.6)),
+                                : (colorScheme == .dark
+                                    ? Color.neutral600.opacity(0.6) : Color.neutral400.opacity(0.6)),
                             lineWidth: 1)
                 )
                 .lineLimit(1)  // Prevent text wrapping

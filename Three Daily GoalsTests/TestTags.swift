@@ -27,7 +27,7 @@ struct TestTags {
         task.addTag("important")
 
         // Then insert into context
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // Verify initial state
         #expect(task.tags.count == 1, "Task should have exactly one tag")
@@ -44,7 +44,7 @@ struct TestTags {
     func testAddMultipleTags_CreatesCorrectComments() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // When: Adding multiple tags
         task.addTag("urgent\n")
@@ -69,7 +69,7 @@ struct TestTags {
     func testAddDuplicateTag_DoesNotCreateComment() throws {
         // Given: A task with an existing tag
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
         task.addTag("existing")
 
         let initialCommentCount = task.comments?.count ?? 0
@@ -88,7 +88,7 @@ struct TestTags {
     func testRemoveTag_CreatesSingleComment() throws {
         // Given: A task with a tag
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
         task.addTag("removable")
 
         let initialCommentCount = task.comments?.count ?? 0
@@ -110,7 +110,7 @@ struct TestTags {
     func testRemoveNonExistentTag_DoesNotCreateComment() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         let initialCommentCount = task.comments?.count ?? 0
 
@@ -128,7 +128,7 @@ struct TestTags {
     func testDirectTagsAssignment_CreatesCorrectComments() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // When: Directly assigning tags
         task.tags = ["direct", "assignment", "test"]
@@ -148,7 +148,7 @@ struct TestTags {
     func testTagsReplacement_CreatesCorrectComments() throws {
         // Given: A task with existing tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
         task.tags = ["old1", "old2", "old3"]
 
         let initialCommentCount = task.comments?.count ?? 0
@@ -176,7 +176,7 @@ struct TestTags {
     func testEmptyTagsArray_DoesNotCreateComments() throws {
         // Given: A task with existing tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
         task.tags = ["existing"]
 
         let initialCommentCount = task.comments?.count ?? 0
@@ -196,7 +196,7 @@ struct TestTags {
     func testWhitespaceOnlyTags_AreFilteredOut() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
         #expect(task.comments?.count == 0, "Task should have exactly zero comments initially")
 
         // When: Adding tags with whitespace
@@ -213,7 +213,7 @@ struct TestTags {
     func testTagLowercaseConversion() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // When: Adding tags with mixed case
         task.addTag("IMPORTANT")
@@ -233,7 +233,7 @@ struct TestTags {
     func testDirectTagsAssignment_LowercaseConversion() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // When: Setting tags directly with mixed case
         task.tags = ["IMPORTANT", "Work", "PERSONAL"]
@@ -253,7 +253,7 @@ struct TestTags {
     func testTagOperations_Performance() throws {
         // Given: A task with no tags
         let task = TaskItem(title: "Test Task")
-        dataManager.modelContext.insert(task)
+        dataManager.addExistingTask(task)
 
         // When: Performing multiple tag operations
         let startTime = Date()
