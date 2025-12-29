@@ -320,7 +320,8 @@ struct TestEventManagerMultiDay {
         let eventManager = EventManager(timeProvider: timeProvider, eventService: mockService)
 
         // Wait for async initialization to complete
-        try await Task.sleep(for: .milliseconds(100))
+        let granted = await eventManager.waitForInitialization()
+        #expect(granted, "Calendar access should be granted with mock service")
 
         // Create a test task
         let task = TaskItem(title: "Test Task - Deleted Event", details: "Testing graceful handling of deleted events", state: .priority)
