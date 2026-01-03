@@ -10,7 +10,7 @@ import SwiftUI
 
 public typealias TaskSorter = (TaskItem, TaskItem) -> Bool
 
-public enum TaskItemState: Codable, Hashable, CaseIterable {
+public enum TaskItemState: Codable, Hashable, CaseIterable, Sendable, Equatable {
     case open
     case closed
     case dead

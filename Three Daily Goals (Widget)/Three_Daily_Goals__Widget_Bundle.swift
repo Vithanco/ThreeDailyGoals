@@ -13,5 +13,6 @@ struct Three_Daily_Goals__Widget_Bundle: WidgetBundle {
     var body: some Widget {
         Three_Daily_Goals__Widget_()
         QuickAddWidget()
+        GetMeATaskWidget()
     }
 }

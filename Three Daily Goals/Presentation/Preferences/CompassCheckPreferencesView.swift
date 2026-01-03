@@ -98,6 +98,31 @@ public struct CompassCheckPreferencesView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .padding(.leading, 4)
+
+                        if preferences.notificationsEnabled {
+                            Divider()
+                                .padding(.vertical, 4)
+
+                            HStack {
+                                Text("Notification Time")
+                                Spacer()
+                                DatePicker(
+                                    "",
+                                    selection: Binding(
+                                        get: { preferences.compassCheckTime },
+                                        set: { preferences.compassCheckTime = $0 }
+                                    ),
+                                    displayedComponents: .hourAndMinute
+                                )
+                                .labelsHidden()
+                            }
+                            .frame(maxWidth: .infinity)
+
+                            Text("Choose when to receive your daily reminder (default: 6:00 PM)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.leading, 4)
+                        }
                     }
                     .padding(5)
                 }

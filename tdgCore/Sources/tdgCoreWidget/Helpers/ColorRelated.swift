@@ -43,10 +43,17 @@ extension Color {
 
     // MARK: - Energy-Effort Matrix Colors (Muted/Toned Down)
 
-    public static let matrixPurple = Color(hex: "#B4A5D5")  // Soft lavender (Deep Work)
-    public static let matrixTeal = Color(hex: "#7BB8BA")  // Soft teal (Steady Progress)
-    public static let matrixCoral = Color(hex: "#F4A89A")  // Soft coral/peach (Sprint Tasks)
-    public static let matrixMint = Color(hex: "#A8D5BA")  // Soft mint (Easy Wins)
+    /// Q1: High Energy & Big Task - Deep Work (Soft lavender)
+    public static let eemDeepWork = Color(hex: "#B4A5D5")
+
+    /// Q2: Low Energy & Big Task - Steady Progress (Soft teal)
+    public static let eemSteadyProgress = Color(hex: "#7BB8BA")
+
+    /// Q3: High Energy & Small Task - Sprint Tasks (Soft coral/peach)
+    public static let eemSprintTasks = Color(hex: "#F4A89A")
+
+    /// Q4: Low Energy & Small Task - Easy Wins (Soft mint)
+    public static let eemEasyWins = Color(hex: "#A8D5BA")
 
 }
 

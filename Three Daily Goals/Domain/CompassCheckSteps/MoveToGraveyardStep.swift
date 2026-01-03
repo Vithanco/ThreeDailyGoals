@@ -10,7 +10,7 @@ import SwiftUI
 import tdgCoreMain
 
 @MainActor
-public struct MoveToGraveyardStep: CompassCheckStep {
+public struct MoveToGraveyardStep: @MainActor CompassCheckStep {
     public let id: String = "moveToGraveyard"
     public let name: String = "Move unused Tasks to Graveyard"
     public let description: String =

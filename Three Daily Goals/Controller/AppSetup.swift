@@ -214,3 +214,4 @@ extension CloudPreferences: PriorityUpdater {
         WidgetCenter.shared.reloadAllTimelines()
     }
 }
+

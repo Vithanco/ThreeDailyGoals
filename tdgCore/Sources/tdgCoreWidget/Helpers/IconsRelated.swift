@@ -72,6 +72,15 @@ public let imgTagCircleFill = "tag.circle.fill"
 public let imgWrenchAndScrewdriver = "wrench.and.screwdriver"
 
 // MARK: - Energy-Effort Matrix Icons
-public let imgBrainHeadProfile = "brain.head.profile"
-public let imgTortoiseFill = "tortoise.fill"
-public let imgBoltFill = "bolt.fill"
+
+/// Q1: High Energy & Big Task - Deep Work
+public let imgEemDeepWork = "brain.head.profile"
+
+/// Q2: Low Energy & Big Task - Steady Progress
+public let imgEemSteadyProgress = "tortoise.fill"
+
+/// Q3: High Energy & Small Task - Sprint Tasks
+public let imgEemSprintTasks = "bolt.fill"
+
+/// Q4: Low Energy & Small Task - Easy Wins
+public let imgEemEasyWins = "checkmark.circle.fill"

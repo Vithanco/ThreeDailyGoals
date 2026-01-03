@@ -432,9 +432,13 @@ public struct CompassCheckPlanDay: View {
                             }
                             return false
                         },
-                        onEventMoved: { event, newDate in
+                        onEventMoved: {
+ event,
+ newDate in
                             if let tdgEvent = event as? TDGEvent {
-                                print("🎯 Event moved callback triggered: '\(tdgEvent.base.title)' to \(newDate.formatted(date: .abbreviated, time: .shortened))")
+                                print(
+                                    "🎯 Event moved callback triggered: '\(tdgEvent.base.title ?? "")' to \(newDate.formatted(date: .abbreviated, time: .shortened))"
+                                )
                             }
                             handleEventMoved(event: event, newDate: newDate)
                         },

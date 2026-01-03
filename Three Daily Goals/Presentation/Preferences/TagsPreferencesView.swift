@@ -52,31 +52,31 @@ public struct TagsPreferencesView: View {
     @State var tag: String = ""
     @State var changeTo: String = ""
     public var body: some View {
-        VStack {
-            HStack(alignment: .top) {
-                GroupBox(label: Text("All Tags").bold()) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        FlowLayout(spacing: 8, runSpacing: 8) {
-                            ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
-                                TagView(
-                                    text: text,
-                                    isSelected: tag == text,  // Highlight selected tag
-                                    accentColor: Color.priority,
-                                    onTap: {
-                                        tag = text
-                                        changeTo = text
-                                    }
-                                )
-                            }
+        HStack(alignment: .top) {
+            GroupBox(label: Text("All Tags").bold()) {
+                ScrollView(.vertical, showsIndicators: false) {
+                    FlowLayout(spacing: 8, runSpacing: 8) {
+                        ForEach(dataManager.allTags.asArray.sorted(), id: \.self) { text in
+                            TagView(
+                                text: text,
+                                isSelected: tag == text,  // Highlight selected tag
+                                accentColor: Color.priority,
+                                onTap: {
+                                    tag = text
+                                    changeTo = text
+                                }
+                            )
                         }
                     }
-                    .frame(maxHeight: 150)  // Reduced height for preferences
-                    Spacer()
                 }
-                Spacer()
-                EditTag(currentTagName: $tag, changeTo: $changeTo)
+                .frame(maxHeight: .infinity)
             }
-        }.padding(10).frame(maxWidth: 400)
+            .frame(maxHeight: .infinity)
+            Spacer()
+            EditTag(currentTagName: $tag, changeTo: $changeTo)
+        }
+        .padding(10)
+        .frame(maxWidth: 400, maxHeight: .infinity)
     }
 }
 

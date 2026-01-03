@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import tdgCoreMain
 
-public struct DueDateStep: CompassCheckStep {
+public struct DueDateStep: @MainActor CompassCheckStep {
     public let id: String = "dueDate"
     public let name: String = "Due Date Check"
     public let description: String = "Automatically moves tasks with upcoming due dates to your priority list."

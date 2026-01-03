@@ -30,25 +30,10 @@ class Provider: AppIntentTimelineProvider {
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<
         PriorityEntry
     > {
-        var entries: [PriorityEntry] = []
-        let timeProvider = RealTimeProvider()
+        let entry = PriorityEntry(date: Date(), configuration: configuration)
 
-        // Generate a timeline with more frequent updates to ensure data freshness
-        let currentDate = timeProvider.now
-
-        // Create entries for the next few hours with more frequent updates
-        for hourOffset in 0..<3 {
-            let entryDate = timeProvider.date(byAdding: .hour, value: hourOffset, to: currentDate) ?? currentDate
-            let entry = PriorityEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        // Add a refresh entry in 15 minutes to ensure data stays fresh
-        let refreshDate = timeProvider.date(byAdding: .minute, value: 15, to: currentDate) ?? currentDate
-        let refreshEntry = PriorityEntry(date: refreshDate, configuration: configuration)
-        entries.append(refreshEntry)
-
-        return Timeline(entries: entries, policy: .atEnd)
+        // Only refresh on explicit reload - app calls WidgetCenter.reloadAllTimelines() when priorities change
+        return Timeline(entries: [entry], policy: .never)
     }
 
     // MARK: - AppIntentTimelineProvider Protocol Requirements
@@ -64,25 +49,10 @@ class Provider: AppIntentTimelineProvider {
         for configuration: ConfigurationAppIntent, in context: Context,
         completion: @escaping (Timeline<PriorityEntry>) -> Void
     ) {
-        var entries: [PriorityEntry] = []
-        let timeProvider = RealTimeProvider()
+        let entry = PriorityEntry(date: Date(), configuration: configuration)
 
-        // Generate a timeline with more frequent updates to ensure data freshness
-        let currentDate = timeProvider.now
-
-        // Create entries for the next few hours with more frequent updates
-        for hourOffset in 0..<3 {
-            let entryDate = timeProvider.date(byAdding: .hour, value: hourOffset, to: currentDate) ?? currentDate
-            let entry = PriorityEntry(date: entryDate, configuration: configuration)
-            entries.append(entry)
-        }
-
-        // Add a refresh entry in 15 minutes to ensure data stays fresh
-        let refreshDate = timeProvider.date(byAdding: .minute, value: 15, to: currentDate) ?? currentDate
-        let refreshEntry = PriorityEntry(date: refreshDate, configuration: configuration)
-        entries.append(refreshEntry)
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        // Only refresh on explicit reload - app calls WidgetCenter.reloadAllTimelines() when priorities change
+        let timeline = Timeline(entries: [entry], policy: .never)
         completion(timeline)
     }
 }
