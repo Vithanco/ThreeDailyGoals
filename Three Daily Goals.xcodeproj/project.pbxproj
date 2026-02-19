@@ -131,6 +131,9 @@
 		E5FFC5C12B6A72FB00C9D60B /* CompassCheckPendingResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */; };
 		E5FFC5C32B6A73A900C9D60B /* CompassCheckInformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */; };
 		E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */; };
+		7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000100000000000SRCH1 /* TestSearch.swift */; };
+		7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000300000000000SRCH2 /* TestSearchState.swift */; };
+		7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000500000000000SRCH3 /* TestSearchUI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,6 +311,9 @@
 		E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPendingResponses.swift; sourceTree = "<group>"; };
 		E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckInformView.swift; sourceTree = "<group>"; };
 		E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckNextPriorities.swift; sourceTree = "<group>"; };
+		7FCC000100000000000SRCH1 /* TestSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearch.swift; sourceTree = "<group>"; };
+		7FCC000300000000000SRCH2 /* TestSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchState.swift; sourceTree = "<group>"; };
+		7FCC000500000000000SRCH3 /* TestSearchUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -556,6 +562,8 @@
 				7FPHOTO22EF0000000000002 /* TestPhotoAttachments.swift */,
 				E597A4862B83D7B000BCD061 /* TestImportExport.swift */,
 				7FC89D282BFB239200FBA363 /* TestReview.swift */,
+				7FCC000100000000000SRCH1 /* TestSearch.swift */,
+				7FCC000300000000000SRCH2 /* TestSearchState.swift */,
 			);
 			path = "Three Daily GoalsTests";
 			sourceTree = "<group>";
@@ -570,6 +578,7 @@
 				E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */,
 				7F2F0A952E52DF9000461679 /* AttachmentUITests.swift */,
 				E5B376B02B78984200E66FAD /* AppLauncher.swift */,
+				7FCC000500000000000SRCH3 /* TestSearchUI.swift */,
 			);
 			path = "Three Daily GoalsUITests";
 			sourceTree = "<group>";
@@ -1032,6 +1041,8 @@
 				7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */,
 				7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */,
 				7FPHOTO12EF0000000000001 /* TestPhotoAttachments.swift in Sources */,
+				7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */,
+				7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1046,6 +1057,7 @@
 				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
+				7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
