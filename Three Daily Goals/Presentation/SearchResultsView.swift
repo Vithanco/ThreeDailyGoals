@@ -67,16 +67,12 @@ struct SearchResultsView: View {
     @Environment(UIStateManager.self) private var uiState
     @Environment(DataManager.self) private var dataManager
     @Environment(\.colorScheme) private var colorScheme
-
-    private var searchResults: [TaskItem] {
-        dataManager.searchTasks(query: uiState.searchText)
-    }
+    @State private var debouncedResults: [TaskItem] = []
 
     private var groupedResults: [(state: TaskItemState, tasks: [TaskItem])] {
-        let results = searchResults
         let order: [TaskItemState] = [.priority, .open, .pendingResponse, .closed, .dead]
         return order.compactMap { state in
-            let tasksForState = results.filter { $0.state == state }
+            let tasksForState = debouncedResults.filter { $0.state == state }
             return tasksForState.isEmpty ? nil : (state: state, tasks: tasksForState)
         }
     }
@@ -148,6 +144,18 @@ struct SearchResultsView: View {
                 .stroke(colorScheme == .dark ? Color.neutral700 : Color.neutral200, lineWidth: 1)
         )
         .shadow(color: colorScheme == .dark ? .black.opacity(0.1) : .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        .task(id: uiState.searchText) {
+            let query = uiState.searchText
+            // Show results immediately for empty queries
+            guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                debouncedResults = dataManager.searchTasks(query: query)
+                return
+            }
+            // Debounce non-empty queries by 300ms
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            debouncedResults = dataManager.searchTasks(query: query)
+        }
     }
 }
 

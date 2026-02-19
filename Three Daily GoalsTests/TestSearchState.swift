@@ -49,6 +49,28 @@ struct TestSearchState {
         #expect(uiState.searchText == "existing query", "startSearch should not clear existing search text")
     }
 
+    @Test
+    func startSearch_clearsSelectedItem() throws {
+        let loader: TestDataLoader = { timeProvider in
+            var result: [TaskItem] = []
+            result.add(title: "Test task", changedDate: timeProvider.getDate(daysPrior: 1), state: .open)
+            return result
+        }
+        let appComponents = setupApp(isTesting: true, loaderForTests: loader)
+        let uiState = appComponents.uiState
+        let dataManager = appComponents.dataManager
+
+        // Select a task first
+        let tasks = dataManager.list(which: .open)
+        uiState.selectedItem = tasks.first
+
+        #expect(uiState.selectedItem != nil, "Should have a selected item")
+
+        uiState.startSearch()
+
+        #expect(uiState.selectedItem == nil, "startSearch should clear selectedItem to avoid state conflicts")
+    }
+
     // MARK: - UIStateManager: stopSearch
 
     @Test

@@ -146,6 +146,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     /// Start searching
     func startSearch() {
         isSearching = true
+        selectedItem = nil
     }
 
     /// Stop searching and clear query
