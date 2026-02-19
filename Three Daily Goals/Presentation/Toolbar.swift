@@ -7,6 +7,7 @@
 
 import SwiftUI
 import tdgCoreMain
+import tdgCoreWidget
 
 public struct MainToolbarContent: ToolbarContent {
     @Environment(UIStateManager.self) private var uiState
@@ -38,6 +39,9 @@ public struct StandardToolbarContent: ToolbarContent {
 
     public var body: some ToolbarContent {
         ToolbarItem {
+            SearchToolbarButton()
+        }
+        ToolbarItem {
             dataManager.undoButton
         }
         ToolbarItem {
@@ -49,6 +53,24 @@ public struct StandardToolbarContent: ToolbarContent {
         ToolbarItem {
             uiState.addNewItemButton
         }
+    }
+}
+
+struct SearchToolbarButton: View {
+    @Environment(UIStateManager.self) private var uiState
+
+    var body: some View {
+        Button(action: {
+            if uiState.isSearching {
+                uiState.stopSearch()
+            } else {
+                uiState.startSearch()
+            }
+        }) {
+            Label("Search", systemImage: imgSearch)
+                .help(uiState.isSearching ? "Close search" : "Search tasks")
+        }
+        .accessibilityIdentifier("searchButton")
     }
 }
 

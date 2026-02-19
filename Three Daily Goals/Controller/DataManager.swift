@@ -187,7 +187,7 @@ public final class DataManager {
         logger.debug("deleteTask START - Task: '\(task.title)', Task ID: \(task.id)")
 
         // Find the task in the context to ensure we're deleting the right object
-        guard let taskToDelete = findTask(withUuidString: task.id) else {
+        guard let _ = findTask(withUuidString: task.id) else {
             logger.error("Task not found in context: \(task.id)")
             return
         }
@@ -409,7 +409,7 @@ public final class DataManager {
         }
     }
 
-    /// Search tasks by title
+    /// Search tasks by title, details and tags (case-insensitive)
     func searchTasks(query: String) -> [TaskItem] {
         guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return allTasks
@@ -418,6 +418,8 @@ public final class DataManager {
         let lowercaseQuery = query.lowercased()
         return allTasks.filter { task in
             task.title.lowercased().contains(lowercaseQuery)
+                || task.details.lowercased().contains(lowercaseQuery)
+                || task.tags.contains(where: { $0.lowercased().contains(lowercaseQuery) })
         }
     }
 

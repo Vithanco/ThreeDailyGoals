@@ -64,6 +64,14 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     /// Info message text
     var infoMessage: String = "(invalid)"
 
+    // MARK: - Search State
+
+    /// Whether the search field is active
+    var isSearching: Bool = false
+
+    /// Current search query text
+    var searchText: String = ""
+
     // MARK: - Selection State
 
     /// Selected tags for filtering
@@ -133,6 +141,17 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     public func reportMigrationIssue(_ message: String, details: String?) {
         let fullMessage = details != nil ? "\(message)\n\nDetails: \(details!)" : message
         showInfo("⚠️ Migration Issue\n\n\(fullMessage)")
+    }
+
+    /// Start searching
+    func startSearch() {
+        isSearching = true
+    }
+
+    /// Stop searching and clear query
+    func stopSearch() {
+        isSearching = false
+        searchText = ""
     }
 
     /// Show preferences dialog

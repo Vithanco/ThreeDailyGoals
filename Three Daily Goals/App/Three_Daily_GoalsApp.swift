@@ -88,6 +88,10 @@ struct Three_Daily_GoalsApp: App {
             CommandMenu("Three Daily Goals") {
                 appComponents.compassCheckManager.compassCheckButton
                     .keyboardShortcut("r", modifiers: [.command])
+                Button("Search Tasks") {
+                    appComponents.uiState.startSearch()
+                }
+                .keyboardShortcut("f", modifiers: [.command])
             }
         }
         #if os(macOS)

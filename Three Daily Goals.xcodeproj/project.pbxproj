@@ -46,6 +46,7 @@
 		7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */; };
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
+		AABB00022F0200060000SRCH /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00012F0200060000SRCH /* SearchResultsView.swift */; };
 		7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */; };
 		7FAE86C22E8F210A00CAF597 /* TestUndoRedo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */; };
 		7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */; };
@@ -224,6 +225,7 @@
 		7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddWidget.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
+		AABB00012F0200060000SRCH /* SearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsView.swift; sourceTree = "<group>"; };
 		7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
 		7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
 		7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUndoRedo.swift; sourceTree = "<group>"; };
@@ -627,6 +629,7 @@
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
 				7FA581032B9838B700803614 /* SimpleListView.swift */,
+				AABB00012F0200060000SRCH /* SearchResultsView.swift */,
 				7F0EAB772EB765DD00BBD5C2 /* StatsDialogButton.swift */,
 			);
 			path = Presentation;
@@ -965,6 +968,7 @@
 				7FC1BA552E811FAF007E1E2D /* DebugPreferencesView.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
+				AABB00022F0200060000SRCH /* SearchResultsView.swift in Sources */,
 				7F0EAB782EB765DD00BBD5C2 /* StatsDialogButton.swift in Sources */,
 				7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
