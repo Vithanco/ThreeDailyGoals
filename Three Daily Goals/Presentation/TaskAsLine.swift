@@ -139,18 +139,18 @@ struct EnergyEffortQuadrantIndicator: View {
         VStack(spacing: 1) {
             // Top row: big tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
-                // Top-Left: urgentImportant (high-energy, big-task)
+                // Top-Left: highEnergyBigTask (high-energy, big-task)
                 QuadrantSquare(
-                    quadrant: .urgentImportant,
-                    isActive: activeQuadrant == .urgentImportant,
+                    quadrant: .highEnergyBigTask,
+                    isActive: activeQuadrant == .highEnergyBigTask,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )
 
-                // Top-Right: notUrgentImportant (low-energy, big-task)
+                // Top-Right: lowEnergyBigTask (low-energy, big-task)
                 QuadrantSquare(
-                    quadrant: .notUrgentImportant,
-                    isActive: activeQuadrant == .notUrgentImportant,
+                    quadrant: .lowEnergyBigTask,
+                    isActive: activeQuadrant == .lowEnergyBigTask,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )
@@ -158,18 +158,18 @@ struct EnergyEffortQuadrantIndicator: View {
 
             // Bottom row: small tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
-                // Bottom-Left: urgentNotImportant (high-energy, small-task)
+                // Bottom-Left: highEnergySmallTask (high-energy, small-task)
                 QuadrantSquare(
-                    quadrant: .urgentNotImportant,
-                    isActive: activeQuadrant == .urgentNotImportant,
+                    quadrant: .highEnergySmallTask,
+                    isActive: activeQuadrant == .highEnergySmallTask,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )
 
-                // Bottom-Right: notUrgentNotImportant (low-energy, small-task)
+                // Bottom-Right: lowEnergySmallTask (low-energy, small-task)
                 QuadrantSquare(
-                    quadrant: .notUrgentNotImportant,
-                    isActive: activeQuadrant == .notUrgentNotImportant,
+                    quadrant: .lowEnergySmallTask,
+                    isActive: activeQuadrant == .lowEnergySmallTask,
                     hasCompleteTags: hasCompleteMatrixTags,
                     size: quadrantSize
                 )

@@ -110,40 +110,40 @@ struct EnergyEffortMatrixView: View {
                     VStack(spacing: 8) {
                         // Top row: big tasks (high-energy -> low-energy)
                         HStack(spacing: 8) {
-                            // Top-Left: urgentImportant (high-energy, big-task) = Deep Work
+                            // Top-Left: highEnergyBigTask (high-energy, big-task) = Deep Work
                             QuadrantDropZone(
-                                quadrant: .urgentImportant,
-                                taskCount: tasksForQuadrant(.urgentImportant).count,
+                                quadrant: .highEnergyBigTask,
+                                taskCount: tasksForQuadrant(.highEnergyBigTask).count,
                                 isHighlighted: !uncategorizedTasks.isEmpty,
-                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentImportant) },
-                                onTap: { handleTap(quadrant: .urgentImportant) }
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .highEnergyBigTask) },
+                                onTap: { handleTap(quadrant: .highEnergyBigTask) }
                             )
-                            // Top-Right: notUrgentImportant (low-energy, big-task) = Steady Progress
+                            // Top-Right: lowEnergyBigTask (low-energy, big-task) = Steady Progress
                             QuadrantDropZone(
-                                quadrant: .notUrgentImportant,
-                                taskCount: tasksForQuadrant(.notUrgentImportant).count,
+                                quadrant: .lowEnergyBigTask,
+                                taskCount: tasksForQuadrant(.lowEnergyBigTask).count,
                                 isHighlighted: !uncategorizedTasks.isEmpty,
-                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentImportant) },
-                                onTap: { handleTap(quadrant: .notUrgentImportant) }
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .lowEnergyBigTask) },
+                                onTap: { handleTap(quadrant: .lowEnergyBigTask) }
                             )
                         }
                         // Bottom row: small tasks (high-energy -> low-energy)
                         HStack(spacing: 8) {
-                            // Bottom-Left: urgentNotImportant (high-energy, small-task) = Sprint Tasks
+                            // Bottom-Left: highEnergySmallTask (high-energy, small-task) = Sprint Tasks
                             QuadrantDropZone(
-                                quadrant: .urgentNotImportant,
-                                taskCount: tasksForQuadrant(.urgentNotImportant).count,
+                                quadrant: .highEnergySmallTask,
+                                taskCount: tasksForQuadrant(.highEnergySmallTask).count,
                                 isHighlighted: !uncategorizedTasks.isEmpty,
-                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .urgentNotImportant) },
-                                onTap: { handleTap(quadrant: .urgentNotImportant) }
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .highEnergySmallTask) },
+                                onTap: { handleTap(quadrant: .highEnergySmallTask) }
                             )
-                            // Bottom-Right: notUrgentNotImportant (low-energy, small-task) = Easy Wins
+                            // Bottom-Right: lowEnergySmallTask (low-energy, small-task) = Easy Wins
                             QuadrantDropZone(
-                                quadrant: .notUrgentNotImportant,
-                                taskCount: tasksForQuadrant(.notUrgentNotImportant).count,
+                                quadrant: .lowEnergySmallTask,
+                                taskCount: tasksForQuadrant(.lowEnergySmallTask).count,
                                 isHighlighted: !uncategorizedTasks.isEmpty,
-                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .notUrgentNotImportant) },
-                                onTap: { handleTap(quadrant: .notUrgentNotImportant) }
+                                onDrop: { taskId in handleDrop(taskId: taskId, quadrant: .lowEnergySmallTask) },
+                                onTap: { handleTap(quadrant: .lowEnergySmallTask) }
                             )
                         }
                     }

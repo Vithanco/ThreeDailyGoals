@@ -116,7 +116,7 @@ struct GetMeATaskProvider: AppIntentTimelineProvider {
         var selectedTask: TaskInfo?
 
         if let selectedQuadrantString = preferences.getSelectedQuadrant(),
-           let quadrant = EnergyEffortQuadrant(rawValue: selectedQuadrantString),
+           let quadrant = EnergyEffortQuadrant.fromStoredValue(selectedQuadrantString),
            let tasks = quadrantTasks[quadrant], !tasks.isEmpty {
 
             selectedQuadrant = quadrant
@@ -178,12 +178,12 @@ struct GetMeATaskEntryView: View {
             // 2x2 Energy-Effort Matrix Grid
             VStack(spacing: 4) {
                 HStack(spacing: 4) {
-                    quadrantButton(.urgentImportant)
-                    quadrantButton(.notUrgentImportant)
+                    quadrantButton(.highEnergyBigTask)
+                    quadrantButton(.lowEnergyBigTask)
                 }
                 HStack(spacing: 4) {
-                    quadrantButton(.urgentNotImportant)
-                    quadrantButton(.notUrgentNotImportant)
+                    quadrantButton(.highEnergySmallTask)
+                    quadrantButton(.lowEnergySmallTask)
                 }
             }
         }
@@ -267,7 +267,7 @@ struct SelectQuadrantIntent: AppIntent {
     }
 
     init() {
-        self.quadrant = .urgentImportant
+        self.quadrant = .highEnergyBigTask
     }
 
     @MainActor
@@ -320,10 +320,10 @@ struct GetMeATaskWidget: Widget {
         date: .now,
         configuration: ConfigurationAppIntent(),
         quadrantAvailability: [
-            .urgentImportant: true,
-            .notUrgentImportant: true,
-            .urgentNotImportant: false,
-            .notUrgentNotImportant: true
+            .highEnergyBigTask: true,
+            .lowEnergyBigTask: true,
+            .highEnergySmallTask: false,
+            .lowEnergySmallTask: true
         ],
         selectedQuadrant: nil,
         selectedTask: nil

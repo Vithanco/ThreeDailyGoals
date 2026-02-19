@@ -18,12 +18,29 @@ import tdgCoreWidget
 /// Note: Display names and descriptions are defined in the AppEnum conformance below
 /// and accessed via instance properties
 public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
-    case urgentImportant = "urgent-important"
-    case notUrgentImportant = "not-urgent-important"
-    case urgentNotImportant = "urgent-not-important"
-    case notUrgentNotImportant = "not-urgent-not-important"
+    case highEnergyBigTask = "high-energy-big-task"
+    case lowEnergyBigTask = "low-energy-big-task"
+    case highEnergySmallTask = "high-energy-small-task"
+    case lowEnergySmallTask = "low-energy-small-task"
 
     public var id: String { rawValue }
+
+    /// Initialize from a persisted raw value string, supporting both old and new formats.
+    /// Old Eisenhower-style raw values are mapped to the new energy/effort cases.
+    /// Use this instead of init?(rawValue:) when loading from persistent storage.
+    public static func fromStoredValue(_ value: String) -> EnergyEffortQuadrant? {
+        if let result = EnergyEffortQuadrant(rawValue: value) {
+            return result
+        }
+        // Fall back to old Eisenhower-style raw values for backward compatibility
+        switch value {
+        case "urgent-important": return .highEnergyBigTask
+        case "not-urgent-important": return .lowEnergyBigTask
+        case "urgent-not-important": return .highEnergySmallTask
+        case "not-urgent-not-important": return .lowEnergySmallTask
+        default: return nil
+        }
+    }
 
     /// Display name for the quadrant (as LocalizedStringResource)
     /// Reads from AppEnum caseDisplayRepresentations (single source of truth)
@@ -50,13 +67,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
     /// Color for the quadrant
     public var color: Color {
         switch self {
-        case .urgentImportant:
+        case .highEnergyBigTask:
             return .eemDeepWork
-        case .notUrgentImportant:
+        case .lowEnergyBigTask:
             return .eemSteadyProgress
-        case .urgentNotImportant:
+        case .highEnergySmallTask:
             return .eemSprintTasks
-        case .notUrgentNotImportant:
+        case .lowEnergySmallTask:
             return .eemEasyWins
         }
     }
@@ -64,13 +81,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
     /// SF Symbol icon for the quadrant
     public var icon: String {
         switch self {
-        case .urgentImportant:
+        case .highEnergyBigTask:
             return imgEemDeepWork
-        case .notUrgentImportant:
+        case .lowEnergyBigTask:
             return imgEemSteadyProgress
-        case .urgentNotImportant:
+        case .highEnergySmallTask:
             return imgEemSprintTasks
-        case .notUrgentNotImportant:
+        case .lowEnergySmallTask:
             return imgEemEasyWins
         }
     }
@@ -83,13 +100,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
     /// Tags to apply for this quadrant
     public var tags: [String] {
         switch self {
-        case .urgentImportant:
+        case .highEnergyBigTask:
             return ["high-energy", "big-task"]
-        case .notUrgentImportant:
+        case .lowEnergyBigTask:
             return ["low-energy", "big-task"]
-        case .urgentNotImportant:
+        case .highEnergySmallTask:
             return ["high-energy", "small-task"]
-        case .notUrgentNotImportant:
+        case .lowEnergySmallTask:
             return ["low-energy", "small-task"]
         }
     }
@@ -99,13 +116,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
         let taskTags = Set(task.tags)
 
         if taskTags.contains("high-energy") && taskTags.contains("big-task") {
-            return .urgentImportant
+            return .highEnergyBigTask
         } else if taskTags.contains("low-energy") && taskTags.contains("big-task") {
-            return .notUrgentImportant
+            return .lowEnergyBigTask
         } else if taskTags.contains("high-energy") && taskTags.contains("small-task") {
-            return .urgentNotImportant
+            return .highEnergySmallTask
         } else if taskTags.contains("low-energy") && taskTags.contains("small-task") {
-            return .notUrgentNotImportant
+            return .lowEnergySmallTask
         }
 
         return nil
@@ -141,19 +158,19 @@ extension EnergyEffortQuadrant: AppEnum {
     /// This is the single source of truth for quadrant names and descriptions
     public static var caseDisplayRepresentations: [EnergyEffortQuadrant: DisplayRepresentation] {
         [
-            .urgentImportant: DisplayRepresentation(
+            .highEnergyBigTask: DisplayRepresentation(
                 title: "Deep Work",
                 subtitle: "High Energy & Big Task"
             ),
-            .notUrgentImportant: DisplayRepresentation(
+            .lowEnergyBigTask: DisplayRepresentation(
                 title: "Steady Progress",
                 subtitle: "Low Energy & Big Task"
             ),
-            .urgentNotImportant: DisplayRepresentation(
+            .highEnergySmallTask: DisplayRepresentation(
                 title: "Sprint Tasks",
                 subtitle: "High Energy & Small Task"
             ),
-            .notUrgentNotImportant: DisplayRepresentation(
+            .lowEnergySmallTask: DisplayRepresentation(
                 title: "Easy Wins",
                 subtitle: "Low Energy & Small Task"
             ),
