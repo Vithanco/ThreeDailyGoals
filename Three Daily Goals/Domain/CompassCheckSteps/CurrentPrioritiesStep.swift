@@ -10,7 +10,7 @@ import SwiftUI
 import tdgCoreMain
 
 @MainActor
-public struct CurrentPrioritiesStep: CompassCheckStep {
+public struct CurrentPrioritiesStep: @MainActor CompassCheckStep {
     public let id: String = "currentPriorities"
     public let name: String = "Review Current Priorities"
     public let description: String = "Review your current priority tasks and move them back to the open list."

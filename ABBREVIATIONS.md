@@ -15,9 +15,9 @@ The Energy-Effort Matrix (EEM) is a productivity tool that categorizes tasks alo
 - **Effort Axis**: Big-Task vs Small-Task (task size/complexity)
 
 This creates four quadrants:
-1. **Deep Work** (urgentImportant) - High-Energy, Big-Task
-2. **Steady Progress** (notUrgentImportant) - Low-Energy, Big-Task
-3. **Sprint Tasks** (urgentNotImportant) - High-Energy, Small-Task
-4. **Easy Wins** (notUrgentNotImportant) - Low-Energy, Small-Task
+1. **Deep Work** (highEnergyBigTask) - High-Energy, Big-Task
+2. **Steady Progress** (lowEnergyBigTask) - Low-Energy, Big-Task
+3. **Sprint Tasks** (highEnergySmallTask) - High-Energy, Small-Task
+4. **Easy Wins** (lowEnergySmallTask) - Low-Energy, Small-Task
 
 The Compass Check (CC) includes an EEM categorization step where users classify their tasks into these quadrants for better execution planning.

@@ -63,6 +63,9 @@ public struct StorageKeys: Sendable {
 
     // Calendar integration key
     public static let targetCalendarIdentifier = StorageKeys("targetCalendarIdentifier")
+
+    // Get me a Task widget - selected quadrant key
+    public static let selectedQuadrant = StorageKeys("selectedQuadrant")
 }
 
 public protocol KeyValueStorage {
@@ -448,6 +451,23 @@ extension CloudPreferences {
     public func clearCompassCheckProgress() {
         currentCompassCheckStepId = nil
         currentCompassCheckPeriodStart = nil
+    }
+
+    // MARK: - Get me a Task Widget Support
+
+    /// Get the selected quadrant for the Get me a Task widget
+    public func getSelectedQuadrant() -> String? {
+        return store.string(forKey: StorageKeys.selectedQuadrant)
+    }
+
+    /// Set the selected quadrant for the Get me a Task widget
+    public func setSelectedQuadrant(_ quadrant: String) {
+        store.set(quadrant, forKey: StorageKeys.selectedQuadrant)
+    }
+
+    /// Clear the selected quadrant
+    public func clearSelectedQuadrant() {
+        store.set(nil, forKey: StorageKeys.selectedQuadrant)
     }
 
 }

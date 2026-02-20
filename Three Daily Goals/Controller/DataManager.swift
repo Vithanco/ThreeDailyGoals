@@ -187,7 +187,7 @@ public final class DataManager {
         logger.debug("deleteTask START - Task: '\(task.title)', Task ID: \(task.id)")
 
         // Find the task in the context to ensure we're deleting the right object
-        guard let taskToDelete = findTask(withUuidString: task.id) else {
+        guard let _ = findTask(withUuidString: task.id) else {
             logger.error("Task not found in context: \(task.id)")
             return
         }

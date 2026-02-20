@@ -10,7 +10,7 @@ import SwiftUI
 import tdgCoreMain
 
 @MainActor
-public struct MovePrioritiesToOpenStep: CompassCheckStep {
+public struct MovePrioritiesToOpenStep: @MainActor CompassCheckStep {
     public let id: String = "movePrioritiesToOpen"
     public let name: String = "Move Priorities to Open"
     public let description: String = "Automatically moves all priority tasks back to the open list."
@@ -19,7 +19,7 @@ public struct MovePrioritiesToOpenStep: CompassCheckStep {
     public var isSilent: Bool {
         return true
     }
-
+ 
     @ViewBuilder
     public func view(compassCheckManager: CompassCheckManager) -> AnyView {
         // Silent steps don't need a view, but we provide a minimal one for protocol compliance

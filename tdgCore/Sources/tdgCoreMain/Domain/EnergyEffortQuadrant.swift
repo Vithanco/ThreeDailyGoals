@@ -5,105 +5,90 @@
 //  Created by Claude Code on 2025-12-02.
 //
 
+import AppIntents
 import Foundation
 import SwiftUI
-import tdgCoreMain
 import tdgCoreWidget
 
-// MARK: - Quadrant Wording Constants
-
-/// Display names, descriptions, colors, and icons for the Energy-Effort Matrix quadrants
+/// Represents the four quadrants of the Energy-Effort Matrix
 /// (Inspired by the EnergyEffort Matrix, adapted for execution planning)
 /// Colors chosen to be distinct from task state colors (orange/blue/green/yellow/brown)
 /// Using muted/toned down colors for a more professional appearance
-public struct EnergyEffortQuadrantWording {
-    // Q1: High Energy & Big Task
-    public static let urgentImportantName = "Deep Work"
-    public static let urgentImportantDescription = "High Energy & Big Task"
-    public static let urgentImportantColor = Color.matrixPurple  // Soft lavender
-    public static let urgentImportantIcon = imgBrainHeadProfile
-
-    // Q2: Low Energy & Big Task
-    public static let notUrgentImportantName = "Steady Progress"
-    public static let notUrgentImportantDescription = "Low Energy & Big Task"
-    public static let notUrgentImportantColor = Color.matrixTeal  // Soft teal
-    public static let notUrgentImportantIcon = imgTortoiseFill
-
-    // Q3: High Energy & Small Task
-    public static let urgentNotImportantName = "Sprint Tasks"
-    public static let urgentNotImportantDescription = "High Energy & Small Task"
-    public static let urgentNotImportantColor = Color.matrixCoral  // Soft coral/peach
-    public static let urgentNotImportantIcon = imgBoltFill
-
-    // Q4: Low Energy & Small Task
-    public static let notUrgentNotImportantName = "Easy Wins"
-    public static let notUrgentNotImportantDescription = "Low Energy & Small Task"
-    public static let notUrgentNotImportantColor = Color.matrixMint  // Soft mint
-    public static let notUrgentNotImportantIcon = imgClosed
-}
-
-/// Represents the four quadrants of the Energy-Effort Matrix
+///
+/// Note: Display names and descriptions are defined in the AppEnum conformance below
+/// and accessed via instance properties
 public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
-    case urgentImportant = "urgent-important"
-    case notUrgentImportant = "not-urgent-important"
-    case urgentNotImportant = "urgent-not-important"
-    case notUrgentNotImportant = "not-urgent-not-important"
+    case highEnergyBigTask = "high-energy-big-task"
+    case lowEnergyBigTask = "low-energy-big-task"
+    case highEnergySmallTask = "high-energy-small-task"
+    case lowEnergySmallTask = "low-energy-small-task"
 
     public var id: String { rawValue }
 
-    /// Display name for the quadrant
-    public var name: String {
-        switch self {
-        case .urgentImportant:
-            return EnergyEffortQuadrantWording.urgentImportantName
-        case .notUrgentImportant:
-            return EnergyEffortQuadrantWording.notUrgentImportantName
-        case .urgentNotImportant:
-            return EnergyEffortQuadrantWording.urgentNotImportantName
-        case .notUrgentNotImportant:
-            return EnergyEffortQuadrantWording.notUrgentNotImportantName
+    /// Initialize from a persisted raw value string, supporting both old and new formats.
+    /// Old Eisenhower-style raw values are mapped to the new energy/effort cases.
+    /// Use this instead of init?(rawValue:) when loading from persistent storage.
+    public static func fromStoredValue(_ value: String) -> EnergyEffortQuadrant? {
+        if let result = EnergyEffortQuadrant(rawValue: value) {
+            return result
+        }
+        // Fall back to old Eisenhower-style raw values for backward compatibility
+        switch value {
+        case "urgent-important": return .highEnergyBigTask
+        case "not-urgent-important": return .lowEnergyBigTask
+        case "urgent-not-important": return .highEnergySmallTask
+        case "not-urgent-not-important": return .lowEnergySmallTask
+        default: return nil
         }
     }
 
-    /// Full description of the quadrant
+    /// Display name for the quadrant (as LocalizedStringResource)
+    /// Reads from AppEnum caseDisplayRepresentations (single source of truth)
+    public var nameResource: LocalizedStringResource {
+        Self.caseDisplayRepresentations[self]?.title ?? "Unknown"
+    }
+
+    /// Display name for the quadrant (as String for backwards compatibility)
+    public var name: String {
+        String(localized: nameResource)
+    }
+
+    /// Full description of the quadrant (as LocalizedStringResource)
+    /// Reads from AppEnum caseDisplayRepresentations (single source of truth)
+    public var descriptionResource: LocalizedStringResource {
+        Self.caseDisplayRepresentations[self]?.subtitle ?? "Unknown"
+    }
+
+    /// Full description of the quadrant (as String for backwards compatibility)
     public var description: String {
-        switch self {
-        case .urgentImportant:
-            return EnergyEffortQuadrantWording.urgentImportantDescription
-        case .notUrgentImportant:
-            return EnergyEffortQuadrantWording.notUrgentImportantDescription
-        case .urgentNotImportant:
-            return EnergyEffortQuadrantWording.urgentNotImportantDescription
-        case .notUrgentNotImportant:
-            return EnergyEffortQuadrantWording.notUrgentNotImportantDescription
-        }
+        String(localized: descriptionResource)
     }
 
     /// Color for the quadrant
     public var color: Color {
         switch self {
-        case .urgentImportant:
-            return EnergyEffortQuadrantWording.urgentImportantColor
-        case .notUrgentImportant:
-            return EnergyEffortQuadrantWording.notUrgentImportantColor
-        case .urgentNotImportant:
-            return EnergyEffortQuadrantWording.urgentNotImportantColor
-        case .notUrgentNotImportant:
-            return EnergyEffortQuadrantWording.notUrgentNotImportantColor
+        case .highEnergyBigTask:
+            return .eemDeepWork
+        case .lowEnergyBigTask:
+            return .eemSteadyProgress
+        case .highEnergySmallTask:
+            return .eemSprintTasks
+        case .lowEnergySmallTask:
+            return .eemEasyWins
         }
     }
 
     /// SF Symbol icon for the quadrant
     public var icon: String {
         switch self {
-        case .urgentImportant:
-            return EnergyEffortQuadrantWording.urgentImportantIcon
-        case .notUrgentImportant:
-            return EnergyEffortQuadrantWording.notUrgentImportantIcon
-        case .urgentNotImportant:
-            return EnergyEffortQuadrantWording.urgentNotImportantIcon
-        case .notUrgentNotImportant:
-            return EnergyEffortQuadrantWording.notUrgentNotImportantIcon
+        case .highEnergyBigTask:
+            return imgEemDeepWork
+        case .lowEnergyBigTask:
+            return imgEemSteadyProgress
+        case .highEnergySmallTask:
+            return imgEemSprintTasks
+        case .lowEnergySmallTask:
+            return imgEemEasyWins
         }
     }
 
@@ -115,13 +100,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
     /// Tags to apply for this quadrant
     public var tags: [String] {
         switch self {
-        case .urgentImportant:
+        case .highEnergyBigTask:
             return ["high-energy", "big-task"]
-        case .notUrgentImportant:
+        case .lowEnergyBigTask:
             return ["low-energy", "big-task"]
-        case .urgentNotImportant:
+        case .highEnergySmallTask:
             return ["high-energy", "small-task"]
-        case .notUrgentNotImportant:
+        case .lowEnergySmallTask:
             return ["low-energy", "small-task"]
         }
     }
@@ -131,13 +116,13 @@ public enum EnergyEffortQuadrant: String, CaseIterable, Identifiable {
         let taskTags = Set(task.tags)
 
         if taskTags.contains("high-energy") && taskTags.contains("big-task") {
-            return .urgentImportant
+            return .highEnergyBigTask
         } else if taskTags.contains("low-energy") && taskTags.contains("big-task") {
-            return .notUrgentImportant
+            return .lowEnergyBigTask
         } else if taskTags.contains("high-energy") && taskTags.contains("small-task") {
-            return .urgentNotImportant
+            return .highEnergySmallTask
         } else if taskTags.contains("low-energy") && taskTags.contains("small-task") {
-            return .notUrgentNotImportant
+            return .lowEnergySmallTask
         }
 
         return nil
@@ -159,5 +144,36 @@ extension TaskItem {
         // Remove all energy and effort tags
         let matrixTags = ["high-energy", "low-energy", "big-task", "small-task"]
         self.tags.removeAll { matrixTags.contains($0) }
+    }
+}
+
+// MARK: - AppEnum Conformance
+
+extension EnergyEffortQuadrant: AppEnum {
+    public static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        TypeDisplayRepresentation(name: "Energy-Effort Quadrant")
+    }
+
+    /// Display representations for each quadrant case
+    /// This is the single source of truth for quadrant names and descriptions
+    public static var caseDisplayRepresentations: [EnergyEffortQuadrant: DisplayRepresentation] {
+        [
+            .highEnergyBigTask: DisplayRepresentation(
+                title: "Deep Work",
+                subtitle: "High Energy & Big Task"
+            ),
+            .lowEnergyBigTask: DisplayRepresentation(
+                title: "Steady Progress",
+                subtitle: "Low Energy & Big Task"
+            ),
+            .highEnergySmallTask: DisplayRepresentation(
+                title: "Sprint Tasks",
+                subtitle: "High Energy & Small Task"
+            ),
+            .lowEnergySmallTask: DisplayRepresentation(
+                title: "Easy Wins",
+                subtitle: "Low Energy & Small Task"
+            ),
+        ]
     }
 }

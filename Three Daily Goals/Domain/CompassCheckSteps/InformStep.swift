@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import tdgCoreMain
 
-public struct InformStep: CompassCheckStep {
+public struct InformStep: @MainActor CompassCheckStep {
     public let id: String = "inform"
     public let name: String = "Welcome & Information"
     public let description: String = "Welcome screen that provides information about the Compass Check process."

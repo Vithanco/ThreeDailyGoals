@@ -500,18 +500,18 @@ private struct QuadrantIndicatorView: View {
         VStack(spacing: 1) {
             // Top row: big tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
-                // Top-Left: urgentImportant (high-energy, big-task)
+                // Top-Left: highEnergyBigTask (high-energy, big-task)
                 QuadrantSquare(
-                    quadrant: .urgentImportant,
-                    isActive: activeQuadrant == .urgentImportant,
+                    quadrant: .highEnergyBigTask,
+                    isActive: activeQuadrant == .highEnergyBigTask,
                     hasCompleteTags: hasCompleteTags,
                     size: quadrantSize
                 )
 
-                // Top-Right: notUrgentImportant (low-energy, big-task)
+                // Top-Right: lowEnergyBigTask (low-energy, big-task)
                 QuadrantSquare(
-                    quadrant: .notUrgentImportant,
-                    isActive: activeQuadrant == .notUrgentImportant,
+                    quadrant: .lowEnergyBigTask,
+                    isActive: activeQuadrant == .lowEnergyBigTask,
                     hasCompleteTags: hasCompleteTags,
                     size: quadrantSize
                 )
@@ -519,18 +519,18 @@ private struct QuadrantIndicatorView: View {
 
             // Bottom row: small tasks (high-energy -> low-energy)
             HStack(spacing: 1) {
-                // Bottom-Left: urgentNotImportant (high-energy, small-task)
+                // Bottom-Left: highEnergySmallTask (high-energy, small-task)
                 QuadrantSquare(
-                    quadrant: .urgentNotImportant,
-                    isActive: activeQuadrant == .urgentNotImportant,
+                    quadrant: .highEnergySmallTask,
+                    isActive: activeQuadrant == .highEnergySmallTask,
                     hasCompleteTags: hasCompleteTags,
                     size: quadrantSize
                 )
 
-                // Bottom-Right: notUrgentNotImportant (low-energy, small-task)
+                // Bottom-Right: lowEnergySmallTask (low-energy, small-task)
                 QuadrantSquare(
-                    quadrant: .notUrgentNotImportant,
-                    isActive: activeQuadrant == .notUrgentNotImportant,
+                    quadrant: .lowEnergySmallTask,
+                    isActive: activeQuadrant == .lowEnergySmallTask,
                     hasCompleteTags: hasCompleteTags,
                     size: quadrantSize
                 )
@@ -604,16 +604,16 @@ private struct QuadrantPickerView: View {
                     VStack(spacing: 2) {
                         // Top row: big tasks (high-energy -> low-energy)
                         HStack(spacing: 2) {
-                            // Top-Left: urgentImportant (high-energy, big-task) = Deep Work
+                            // Top-Left: highEnergyBigTask (high-energy, big-task) = Deep Work
                             QuadrantButton(
-                                quadrant: .urgentImportant,
+                                quadrant: .highEnergyBigTask,
                                 size: quadrantSize,
                                 task: task,
                                 isPresented: $isPresented
                             )
-                            // Top-Right: notUrgentImportant (low-energy, big-task) = Steady Progress
+                            // Top-Right: lowEnergyBigTask (low-energy, big-task) = Steady Progress
                             QuadrantButton(
-                                quadrant: .notUrgentImportant,
+                                quadrant: .lowEnergyBigTask,
                                 size: quadrantSize,
                                 task: task,
                                 isPresented: $isPresented
@@ -621,16 +621,16 @@ private struct QuadrantPickerView: View {
                         }
                         // Bottom row: small tasks (high-energy -> low-energy)
                         HStack(spacing: 2) {
-                            // Bottom-Left: urgentNotImportant (high-energy, small-task) = Sprint Tasks
+                            // Bottom-Left: highEnergySmallTask (high-energy, small-task) = Sprint Tasks
                             QuadrantButton(
-                                quadrant: .urgentNotImportant,
+                                quadrant: .highEnergySmallTask,
                                 size: quadrantSize,
                                 task: task,
                                 isPresented: $isPresented
                             )
-                            // Bottom-Right: notUrgentNotImportant (low-energy, small-task) = Easy Wins
+                            // Bottom-Right: lowEnergySmallTask (low-energy, small-task) = Easy Wins
                             QuadrantButton(
-                                quadrant: .notUrgentNotImportant,
+                                quadrant: .lowEnergySmallTask,
                                 size: quadrantSize,
                                 task: task,
                                 isPresented: $isPresented

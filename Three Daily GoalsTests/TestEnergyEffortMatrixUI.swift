@@ -52,7 +52,7 @@ struct TestEnergyEffortMatrixUI {
         }
 
         // Apply the quadrant tags
-        task.applyEnergyEffortQuadrant(.urgentImportant)
+        task.applyEnergyEffortQuadrant(.highEnergyBigTask)
         dataManager.save()
 
         // Verify tags were applied

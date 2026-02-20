@@ -11,7 +11,7 @@ import tdgCoreMain
 import tdgCoreWidget
 
 @MainActor
-public struct EnergyEffortMatrixStep: CompassCheckStep {
+public struct EnergyEffortMatrixStep: @MainActor CompassCheckStep {
     public let id: String = "EnergyEffortMatrix"
     public let name: String = "Energy-Effort Matrix"
     public let description: String =

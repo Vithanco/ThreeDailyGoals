@@ -10,7 +10,7 @@ import SwiftUI
 import tdgCoreMain
 
 @MainActor
-public struct EnergyEffortMatrixConsistencyStep: CompassCheckStep {
+public struct EnergyEffortMatrixConsistencyStep: @MainActor CompassCheckStep {
     public let id: String = "EnergyEffortMatrixConsistency"
     public let name: String = "Energy-Effort Matrix Consistency"
     public let description: String =

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import tdgCoreMain
 
-public struct PlanStep: CompassCheckStep {
+public struct PlanStep: @MainActor CompassCheckStep {
 
     public let id: String = "plan"
     public let name: String = "Plan Day"
