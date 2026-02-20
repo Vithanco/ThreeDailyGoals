@@ -48,6 +48,7 @@
 		7FA1BFDD2EE0D7950034D82C /* QuickAddWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */; };
 		7FA581022B97AF7600803614 /* CompassCheckDueDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */; };
 		7FA581042B9838B700803614 /* SimpleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA581032B9838B700803614 /* SimpleListView.swift */; };
+		AABB00022F0200060000SRCH /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00012F0200060000SRCH /* SearchResultsView.swift */; };
 		7FAE86BE2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */; };
 		7FAE86C22E8F210A00CAF597 /* TestUndoRedo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */; };
 		7FB3574F2E5B5009004581B7 /* CompassCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB3574E2E5B5009004581B7 /* CompassCheckManager.swift */; };
@@ -132,6 +133,9 @@
 		E5FFC5C12B6A72FB00C9D60B /* CompassCheckPendingResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */; };
 		E5FFC5C32B6A73A900C9D60B /* CompassCheckInformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */; };
 		E5FFC5C52B6A7A1600C9D60B /* CompassCheckNextPriorities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */; };
+		7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000100000000000SRCH1 /* TestSearch.swift */; };
+		7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000300000000000SRCH2 /* TestSearchState.swift */; };
+		7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000500000000000SRCH3 /* TestSearchUI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -227,6 +231,7 @@
 		7FA1BFDC2EE0D7950034D82C /* QuickAddWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickAddWidget.swift; sourceTree = "<group>"; };
 		7FA581012B97AF7600803614 /* CompassCheckDueDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompassCheckDueDate.swift; sourceTree = "<group>"; };
 		7FA581032B9838B700803614 /* SimpleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleListView.swift; sourceTree = "<group>"; };
+		AABB00012F0200060000SRCH /* SearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsView.swift; sourceTree = "<group>"; };
 		7FAE86BD2E8CE01600CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
 		7FAE86BF2E8E393400CAF597 /* TestNewTaskDeletionIssue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewTaskDeletionIssue.swift; sourceTree = "<group>"; };
 		7FAE86C12E8F210A00CAF597 /* TestUndoRedo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUndoRedo.swift; sourceTree = "<group>"; };
@@ -309,6 +314,9 @@
 		E5FFC5C02B6A72FB00C9D60B /* CompassCheckPendingResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPendingResponses.swift; sourceTree = "<group>"; };
 		E5FFC5C22B6A73A900C9D60B /* CompassCheckInformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckInformView.swift; sourceTree = "<group>"; };
 		E5FFC5C42B6A7A1600C9D60B /* CompassCheckNextPriorities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckNextPriorities.swift; sourceTree = "<group>"; };
+		7FCC000100000000000SRCH1 /* TestSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearch.swift; sourceTree = "<group>"; };
+		7FCC000300000000000SRCH2 /* TestSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchState.swift; sourceTree = "<group>"; };
+		7FCC000500000000000SRCH3 /* TestSearchUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -559,6 +567,8 @@
 				7FPHOTO22EF0000000000002 /* TestPhotoAttachments.swift */,
 				E597A4862B83D7B000BCD061 /* TestImportExport.swift */,
 				7FC89D282BFB239200FBA363 /* TestReview.swift */,
+				7FCC000100000000000SRCH1 /* TestSearch.swift */,
+				7FCC000300000000000SRCH2 /* TestSearchState.swift */,
 			);
 			path = "Three Daily GoalsTests";
 			sourceTree = "<group>";
@@ -573,6 +583,7 @@
 				E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */,
 				7F2F0A952E52DF9000461679 /* AttachmentUITests.swift */,
 				E5B376B02B78984200E66FAD /* AppLauncher.swift */,
+				7FCC000500000000000SRCH3 /* TestSearchUI.swift */,
 			);
 			path = "Three Daily GoalsUITests";
 			sourceTree = "<group>";
@@ -632,6 +643,7 @@
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
 				7FA581032B9838B700803614 /* SimpleListView.swift */,
+				AABB00012F0200060000SRCH /* SearchResultsView.swift */,
 				7F0EAB772EB765DD00BBD5C2 /* StatsDialogButton.swift */,
 			);
 			path = Presentation;
@@ -972,6 +984,7 @@
 				7FC1BA552E811FAF007E1E2D /* DebugPreferencesView.swift in Sources */,
 				E5FEC7F42B4A8343007BE890 /* LeftSideView.swift in Sources */,
 				7FA581042B9838B700803614 /* SimpleListView.swift in Sources */,
+				AABB00022F0200060000SRCH /* SearchResultsView.swift in Sources */,
 				7F0EAB782EB765DD00BBD5C2 /* StatsDialogButton.swift in Sources */,
 				7F71FD262E6BFEA8001B92F4 /* EventService.swift in Sources */,
 				E5FFC5BD2B6A717B00C9D60B /* CompassCheckCurrentPriorities.swift in Sources */,
@@ -1035,6 +1048,8 @@
 				7F48FD282E8399790089827F /* TestWidgetURLHandling.swift in Sources */,
 				7F2F0A962E52DFA000461679 /* TestAttachments.swift in Sources */,
 				7FPHOTO12EF0000000000001 /* TestPhotoAttachments.swift in Sources */,
+				7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */,
+				7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,6 +1064,7 @@
 				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
+				7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

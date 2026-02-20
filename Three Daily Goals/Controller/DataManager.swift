@@ -193,14 +193,14 @@ public final class DataManager {
         }
 
         // Purge attachment data first (before deletion)
-        if let attachments = task.attachments {
+        if let attachments = taskToDelete.attachments {
             for attachment in attachments {
                 // Purge attachment data to free storage
                 try? attachment.purge(in: modelContext)
             }
         }
 
-        modelContext.delete(task)
+        modelContext.delete(taskToDelete)
 
         // Process pending changes to register the delete with the undo manager
         // This is required for SwiftData to register undo operations
@@ -409,15 +409,17 @@ public final class DataManager {
         }
     }
 
-    /// Search tasks by title
+    /// Search tasks by title, details and tags (case-insensitive)
     func searchTasks(query: String) -> [TaskItem] {
-        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
             return allTasks
         }
 
-        let lowercaseQuery = query.lowercased()
         return allTasks.filter { task in
-            task.title.lowercased().contains(lowercaseQuery)
+            task.title.localizedCaseInsensitiveContains(trimmed)
+                || task.details.localizedCaseInsensitiveContains(trimmed)
+                || task.tags.contains(where: { $0.localizedCaseInsensitiveContains(trimmed) })
         }
     }
 

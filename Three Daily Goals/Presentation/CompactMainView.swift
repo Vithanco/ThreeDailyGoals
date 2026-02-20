@@ -20,6 +20,16 @@ struct CompactMainView: View {
                         TaskItemView(item: item)
                     }
                 }
+                .navigationDestination(isPresented: $uiState.isSearching) {
+                    VStack(spacing: 0) {
+                        SearchFieldView()
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                        SearchResultsView()
+                    }
+                    .background(Color.background)
+                    .navigationTitle("Search")
+                }
                 .navigationDestination(for: TaskItem.self) { item in
                     TaskItemView(item: item)
                 }
@@ -29,7 +39,7 @@ struct CompactMainView: View {
                 }
                 .mainToolbar()
                 .standardToolbar()
-        }.frame(maxWidth: /*@START_MENU_TOKEN@*/ .infinity /*@END_MENU_TOKEN@*/)
+        }.frame(maxWidth: .infinity)
 
     }
 }

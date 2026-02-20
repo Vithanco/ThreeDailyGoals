@@ -7,6 +7,7 @@
 
 import SwiftUI
 import tdgCoreMain
+import tdgCoreWidget
 
 struct RegularMainView: View {
     @Environment(CloudPreferences.self) private var preferences
@@ -22,12 +23,22 @@ struct RegularMainView: View {
                 .mainToolbar()
         } content: {
             SingleView {
-                ListView(whichList: uiState.whichList)
-                    .id(uiState.whichList)
+                if uiState.isSearching {
+                    VStack(spacing: 0) {
+                        SearchFieldView()
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                        SearchResultsView()
+                    }
                     .background(Color.background)
+                } else {
+                    ListView(whichList: uiState.whichList)
+                        .id(uiState.whichList)
+                        .background(Color.background)
+                }
             }.background(Color.background)
                 .navigationSplitViewColumnWidth(min: 400, ideal: 500)
-                .navigationTitle("Three Daily Goals")
+                .navigationTitle(uiState.isSearching ? "Search" : "Three Daily Goals")
                 .standardToolbar()
         } detail: {
             if let detail = uiState.selectedItem {

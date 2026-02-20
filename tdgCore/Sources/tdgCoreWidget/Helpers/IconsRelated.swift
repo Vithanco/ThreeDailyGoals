@@ -22,6 +22,7 @@ public let imgClockArrowCirclepath = "clock.arrow.circlepath"
 public let imgInformation = "info.square.fill"
 public let imgCompassCheck = "safari"
 public let imgStreak = "flame"
+public let imgSearch = "magnifyingglass"
 
 // MARK: - Streak and Compass Check Icons
 public let imgStreakActive = "flame.fill"
