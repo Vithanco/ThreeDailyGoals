@@ -216,41 +216,43 @@ struct GetMeATaskEntryView: View {
 
     @ViewBuilder
     private func taskDisplayView(task: TaskInfo, quadrant: EnergyEffortQuadrant?) -> some View {
-        Link(destination: URL(string: "three-daily-goals://task/\(task.uuid)")!) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    if let quadrant = quadrant {
-                        Image(systemName: quadrant.icon)
-                            .foregroundStyle(quadrant.color)
-                        Text(quadrant.name)
-                            .font(.caption)
-                            .foregroundStyle(.white)
+        if let url = URL(string: "three-daily-goals://task/\(task.uuid)") {
+            Link(destination: url) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        if let quadrant = quadrant {
+                            Image(systemName: quadrant.icon)
+                                .foregroundStyle(quadrant.color)
+                            Text(quadrant.name)
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                        }
+
+                        // Show priority badge if it's a priority task
+                        if task.state == .priority {
+                            Image(systemName: "star.fill")
+                                .font(.caption)
+                                .foregroundStyle(.yellow)
+                        }
+
+                        Spacer()
+                        Button(intent: ClearSelectionIntent()) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.white)
+                        }
+                        .buttonStyle(.plain)
                     }
 
-                    // Show priority badge if it's a priority task
-                    if task.state == .priority {
-                        Image(systemName: "star.fill")
-                            .font(.caption)
-                            .foregroundStyle(.yellow)
-                    }
+                    Text(task.title)
+                        .font(.body)
+                        .foregroundStyle(.white)
+                        .lineLimit(4)
+                        .multilineTextAlignment(.leading)
 
                     Spacer()
-                    Button(intent: ClearSelectionIntent()) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle(.plain)
                 }
-
-                Text(task.title)
-                    .font(.body)
-                    .foregroundStyle(.white)
-                    .lineLimit(4)
-                    .multilineTextAlignment(.leading)
-
-                Spacer()
+                .padding()
             }
-            .padding()
         }
     }
 }
