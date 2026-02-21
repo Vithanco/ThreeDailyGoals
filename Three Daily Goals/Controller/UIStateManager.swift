@@ -11,6 +11,11 @@ import TipKit
 import tdgCoreMain
 import tdgCoreWidget
 
+/// Navigation destinations for compact (iOS) NavigationStack
+enum CompactDestination: Hashable {
+    case search
+}
+
 @MainActor
 @Observable
 public final class UIStateManager: ItemSelector, DataIssueReporter {
@@ -25,8 +30,8 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     /// Currently selected list type
     var whichList: TaskItemState = .open
 
-    /// Whether to show the detail view (iOS navigation)
-    var showItem: Bool = false
+    /// Navigation path for compact (iOS) NavigationStack — unused on macOS
+    var navigationPath = NavigationPath()
 
     // MARK: - Dialog States
 
@@ -147,12 +152,18 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
     func startSearch() {
         isSearching = true
         selectedItem = nil
+        #if os(iOS)
+        navigationPath.append(CompactDestination.search)
+        #endif
     }
 
     /// Stop searching and clear query
     func stopSearch() {
         isSearching = false
         searchText = ""
+        #if os(iOS)
+        navigationPath = NavigationPath()
+        #endif
     }
 
     /// Show preferences dialog
@@ -179,7 +190,9 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
         #endif
         #if os(iOS)
             selectedItem = newItem
-            showItem = true
+            isSearching = false
+            searchText = ""
+            navigationPath = NavigationPath([newItem])
         #endif
     }
 

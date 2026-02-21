@@ -13,22 +13,25 @@ struct CompactMainView: View {
 
     var body: some View {
         @Bindable var uiState = uiState
-        return NavigationStack {
+        return NavigationStack(path: $uiState.navigationPath) {
             LeftSideView().background(Color.background)
-                .navigationDestination(isPresented: $uiState.showItem) {
-                    if let item = uiState.selectedItem {
-                        TaskItemView(item: item)
+                .navigationDestination(for: CompactDestination.self) { destination in
+                    switch destination {
+                    case .search:
+                        VStack(spacing: 0) {
+                            SearchFieldView()
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                            SearchResultsView()
+                        }
+                        .background(Color.background)
+                        .navigationTitle("Search")
+                        .onDisappear {
+                            // Sync search state when user swipes back
+                            guard uiState.isSearching else { return }
+                            uiState.stopSearch()
+                        }
                     }
-                }
-                .navigationDestination(isPresented: $uiState.isSearching) {
-                    VStack(spacing: 0) {
-                        SearchFieldView()
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                        SearchResultsView()
-                    }
-                    .background(Color.background)
-                    .navigationTitle("Search")
                 }
                 .navigationDestination(for: TaskItem.self) { item in
                     TaskItemView(item: item)
