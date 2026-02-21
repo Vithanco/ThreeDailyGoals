@@ -152,11 +152,10 @@ struct GetMeATaskProvider: AppIntentTimelineProvider {
 
 struct GetMeATaskEntryView: View {
     var entry: GetMeATaskEntry
-    @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
         ZStack {
-            Color("WidgetBackground")
+            Color.orange
                 .ignoresSafeArea()
 
             if let selectedTask = entry.selectedTask {
@@ -186,7 +185,9 @@ struct GetMeATaskEntryView: View {
                     quadrantButton(.lowEnergySmallTask)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
     }
 
@@ -215,7 +216,7 @@ struct GetMeATaskEntryView: View {
 
     @ViewBuilder
     private func taskDisplayView(task: TaskInfo, quadrant: EnergyEffortQuadrant?) -> some View {
-        Link(destination: URL(string: "threeDailyGoals://task/\(task.uuid)")!) {
+        Link(destination: URL(string: "three-daily-goals://task/\(task.uuid)")!) {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     if let quadrant = quadrant {
@@ -244,7 +245,7 @@ struct GetMeATaskEntryView: View {
                 Text(task.title)
                     .font(.body)
                     .foregroundStyle(.white)
-                    .lineLimit(widgetFamily == .systemSmall ? 3 : 5)
+                    .lineLimit(4)
                     .multilineTextAlignment(.leading)
 
                 Spacer()
@@ -305,15 +306,15 @@ struct GetMeATaskWidget: Widget {
             provider: GetMeATaskProvider()
         ) { entry in
             GetMeATaskEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(Color.orange, for: .widget)
         }
         .configurationDisplayName("Get me a Task")
         .description("Select an Energy-Effort quadrant to get your next task")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     GetMeATaskWidget()
 } timeline: {
     GetMeATaskEntry(
