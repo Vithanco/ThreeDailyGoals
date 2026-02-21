@@ -152,11 +152,10 @@ struct GetMeATaskProvider: AppIntentTimelineProvider {
 
 struct GetMeATaskEntryView: View {
     var entry: GetMeATaskEntry
-    @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
         ZStack {
-            Color("WidgetBackground")
+            Color.orange
                 .ignoresSafeArea()
 
             if let selectedTask = entry.selectedTask {
@@ -186,7 +185,9 @@ struct GetMeATaskEntryView: View {
                     quadrantButton(.lowEnergySmallTask)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
     }
 
@@ -215,41 +216,43 @@ struct GetMeATaskEntryView: View {
 
     @ViewBuilder
     private func taskDisplayView(task: TaskInfo, quadrant: EnergyEffortQuadrant?) -> some View {
-        Link(destination: URL(string: "threeDailyGoals://task/\(task.uuid)")!) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    if let quadrant = quadrant {
-                        Image(systemName: quadrant.icon)
-                            .foregroundStyle(quadrant.color)
-                        Text(quadrant.name)
-                            .font(.caption)
-                            .foregroundStyle(.white)
+        if let url = URL(string: "three-daily-goals://task/\(task.uuid)") {
+            Link(destination: url) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        if let quadrant = quadrant {
+                            Image(systemName: quadrant.icon)
+                                .foregroundStyle(quadrant.color)
+                            Text(quadrant.name)
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                        }
+
+                        // Show priority badge if it's a priority task
+                        if task.state == .priority {
+                            Image(systemName: "star.fill")
+                                .font(.caption)
+                                .foregroundStyle(.yellow)
+                        }
+
+                        Spacer()
+                        Button(intent: ClearSelectionIntent()) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(.white)
+                        }
+                        .buttonStyle(.plain)
                     }
 
-                    // Show priority badge if it's a priority task
-                    if task.state == .priority {
-                        Image(systemName: "star.fill")
-                            .font(.caption)
-                            .foregroundStyle(.yellow)
-                    }
+                    Text(task.title)
+                        .font(.body)
+                        .foregroundStyle(.white)
+                        .lineLimit(4)
+                        .multilineTextAlignment(.leading)
 
                     Spacer()
-                    Button(intent: ClearSelectionIntent()) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.white)
-                    }
-                    .buttonStyle(.plain)
                 }
-
-                Text(task.title)
-                    .font(.body)
-                    .foregroundStyle(.white)
-                    .lineLimit(widgetFamily == .systemSmall ? 3 : 5)
-                    .multilineTextAlignment(.leading)
-
-                Spacer()
+                .padding()
             }
-            .padding()
         }
     }
 }
@@ -305,15 +308,15 @@ struct GetMeATaskWidget: Widget {
             provider: GetMeATaskProvider()
         ) { entry in
             GetMeATaskEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(Color.orange, for: .widget)
         }
         .configurationDisplayName("Get me a Task")
         .description("Select an Energy-Effort quadrant to get your next task")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
     }
 }
 
-#Preview(as: .systemSmall) {
+#Preview(as: .systemMedium) {
     GetMeATaskWidget()
 } timeline: {
     GetMeATaskEntry(

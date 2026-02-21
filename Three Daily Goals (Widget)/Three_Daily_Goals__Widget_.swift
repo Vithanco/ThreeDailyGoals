@@ -98,7 +98,6 @@ struct Three_Daily_Goals__Widget_: Widget {
                     ]
                 #else
                     [
-                        .systemSmall,
                         .systemMedium,
                         .systemLarge,
                         .systemExtraLarge,
@@ -137,13 +136,6 @@ extension View {
         PriorityEntry(date: .now, configuration: ConfigurationAppIntent())
     }
 #else
-
-    #Preview(as: .systemSmall) {
-        Three_Daily_Goals__Widget_()
-    } timeline: {
-        PriorityEntry(date: .now, configuration: ConfigurationAppIntent())
-        PriorityEntry(date: .now, configuration: ConfigurationAppIntent())
-    }
 
     #Preview(as: .systemMedium) {
         Three_Daily_Goals__Widget_()
