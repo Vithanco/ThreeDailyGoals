@@ -192,9 +192,7 @@ public final class UIStateManager: ItemSelector, DataIssueReporter {
             selectedItem = newItem
             isSearching = false
             searchText = ""
-            var newPath = NavigationPath()
-            newPath.append(newItem)
-            navigationPath = newPath
+            navigationPath = NavigationPath([newItem])
         #endif
     }
 

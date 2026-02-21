@@ -29,8 +29,7 @@ struct CompactMainView: View {
                         .onDisappear {
                             // Sync search state when user swipes back
                             guard uiState.isSearching else { return }
-                            uiState.isSearching = false
-                            uiState.searchText = ""
+                            uiState.stopSearch()
                         }
                     }
                 }
