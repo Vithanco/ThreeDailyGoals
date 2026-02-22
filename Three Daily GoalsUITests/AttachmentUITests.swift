@@ -8,24 +8,14 @@
 import XCTest
 
 @MainActor
-final class AttachmentUITests: XCTestCase {
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-    }
-
-    override func tearDownWithError() throws {
-        // Clean up any test files
-    }
+final class AttachmentUITests: UITestBase {
 
     // MARK: - Attachment UI Workflow Tests
 
     func testAttachmentWorkflow() async throws {
         let app = launchTestApp()
 
-        // Wait for the app to load
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        sleep(2)
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Look for task list items more specifically
         let scrollViews = app.scrollViews
@@ -51,11 +41,9 @@ final class AttachmentUITests: XCTestCase {
             return
         }
 
-        sleep(1)
-
         // Wait for the task detail view to load - skip if not found
         let attachmentSection = app.staticTexts["Attachments"]
-        guard attachmentSection.waitForExistence(timeout: 3) else {
+        guard attachmentSection.waitForExistence(timeout: shortTimeout) else {
             XCTSkip("Attachment section not found - task detail view may not have loaded")
             return
         }
@@ -64,14 +52,10 @@ final class AttachmentUITests: XCTestCase {
         // We can only verify the UI elements exist
     }
 
-    // Redundant test removed - similar to testAttachmentWorkflow
-
     func testAttachmentButtonsVisibility() async throws {
         let app = launchTestApp()
 
-        // Wait for the app to load
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        sleep(2)
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - it requires specific UI navigation that's hard to test reliably
         XCTSkip("Attachment UI test - requires manual verification")
@@ -80,24 +64,16 @@ final class AttachmentUITests: XCTestCase {
     func testAttachmentSectionInTaskView() async throws {
         let app = launchTestApp()
 
-        // Wait for the app to load
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        sleep(2)
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - it requires specific UI navigation that's hard to test reliably
         XCTSkip("Attachment UI test - requires manual verification")
     }
 
     func testAttachmentWorkflowInShareExtension() async throws {
-        // This test would verify that attachments work correctly in share extension context
-        // Note: Share extension testing requires additional setup and may not be possible
-        // in standard UI tests without special configuration
-
         let app = launchTestApp()
 
-        // Wait for the app to load
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5))
-        sleep(2)
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - share extension testing is not supported in standard UI tests
         XCTSkip("Share extension testing requires special configuration")
@@ -106,11 +82,7 @@ final class AttachmentUITests: XCTestCase {
     // MARK: - Helper Methods
 
     private func createTestTask(app: XCUIApplication, title: String) async throws {
-        let listOpenButton = findFirst(string: "Open", whereToLook: app.staticTexts)
-        listOpenButton.tap()
-
-        // Wait for UI to load
-        sleep(1)
+        navigateToList(named: "Open", in: app)
 
         // Try to find the button in toolbar first, then as standalone
         let toolbar = app.toolbars.firstMatch
@@ -120,41 +92,29 @@ final class AttachmentUITests: XCTestCase {
             if toolbarButton.exists {
                 addButton = toolbarButton
             } else {
-                addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
+                addButton = app.buttons["addTaskButton"].firstMatch
+                XCTAssertTrue(addButton.exists)
             }
         } else {
-            addButton = findFirst(string: "addTaskButton", whereToLook: app.buttons)
+            addButton = app.buttons["addTaskButton"].firstMatch
+            XCTAssertTrue(addButton.exists)
         }
         addButton.tap()
 
-        let titleField = findFirst(string: "titleField", whereToLook: app.textFields)
+        let titleField = app.textFields["titleField"].firstMatch
+        XCTAssertTrue(titleField.waitForExistence(timeout: defaultTimeout))
         titleField.doubleTap()
         titleField.clearText()
         titleField.typeText(title)
-        // Task is saved automatically when title is edited - no need for submit button
 
         #if os(iOS)
-            let back = findFirst(string: "Back", whereToLook: app.buttons)
-            back.tap()
+            let back = app.buttons["Back"].firstMatch
+            if back.waitForExistence(timeout: shortTimeout) {
+                back.tap()
+            }
         #endif
 
-        listOpenButton.tap()
-    }
-
-    private func findFirst(string: String, whereToLook: XCUIElementQuery) -> XCUIElement {
-        let list = whereToLook.matching(identifier: string)
-        if list.count == 0 {
-            // Debug: Print all available elements
-            print("DEBUG: Couldn't find '\(string)'. Available elements:")
-            for i in 0..<whereToLook.count {
-                let element = whereToLook.element(boundBy: i)
-                if !element.label.isEmpty {
-                    print("  - \(element.label)")
-                }
-            }
-        }
-        XCTAssertTrue(list.count > 0, "couldn't find \(string)")
-        return list.element(boundBy: 0)
+        navigateToList(named: "Open", in: app)
     }
 
     // MARK: - Test Data Creation

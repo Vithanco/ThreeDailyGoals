@@ -56,7 +56,7 @@ struct TestCompassCheckFlexibility {
     // MARK: - Custom Step for Testing
 
     /// A custom step that always shows "Custom" button text for testing
-    struct CustomTestStep: CompassCheckStep {
+    struct CustomTestStep: @MainActor CompassCheckStep {
         var description: String = ""
 
         let id: String = "customTest"
@@ -77,7 +77,7 @@ struct TestCompassCheckFlexibility {
     }
 
     /// A step that always skips itself for testing edge cases
-    struct AlwaysSkipStep: CompassCheckStep {
+    struct AlwaysSkipStep: @MainActor CompassCheckStep {
         var description: String = ""
 
         let id: String = "alwaysSkip"

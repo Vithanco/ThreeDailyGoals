@@ -26,15 +26,15 @@
     {
       "target" : {
         "containerPath" : "container:Three Daily Goals.xcodeproj",
-        "identifier" : "E561D6EB2B1F54A9003BE36F",
-        "name" : "Three Daily GoalsTests"
+        "identifier" : "E561D6F52B1F54A9003BE36F",
+        "name" : "Three Daily GoalsUITests"
       }
     },
     {
       "target" : {
         "containerPath" : "container:Three Daily Goals.xcodeproj",
-        "identifier" : "E561D6F52B1F54A9003BE36F",
-        "name" : "Three Daily GoalsUITests"
+        "identifier" : "E561D6EB2B1F54A9003BE36F",
+        "name" : "Three Daily GoalsTests"
       }
     }
   ],

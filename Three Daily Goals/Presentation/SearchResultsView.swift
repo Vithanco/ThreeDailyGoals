@@ -38,6 +38,7 @@ struct SearchFieldView: View {
                 }
                 .buttonStyle(.plain)
                 .help("Clear search text")
+                .accessibilityLabel("Clear search text")
             }
             Button(action: {
                 uiState.stopSearch()
