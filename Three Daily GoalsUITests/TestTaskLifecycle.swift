@@ -122,64 +122,77 @@ final class TestTaskLifecycle: UITestBase {
             "Newly created task '\(uniqueTitle)' should appear in Open list")
     }
 
-    // MARK: - Task State Transitions (Swipe Actions)
+    // MARK: - Task State Transitions
 
-    /// Swiping left on an open task and tapping Close should remove it from the Open list.
-    func testSwipeToCloseRemovesFromOpenList() throws {
-        #if os(macOS)
-        throw XCTSkip("Swipe actions are iOS-only; macOS uses context menus")
-        #endif
-        // Use a task near the top of the list to avoid scrolling issues with swipe
+    /// Closing an open task should remove it from the Open list.
+    /// Uses swipe actions on iOS, context menu on macOS.
+    func testCloseRemovesFromOpenList() throws {
         let taskTitle = "Read about Systems Thinking"
         let app = launchTestApp()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         navigateToList(named: "Open", in: app)
 
-        let taskRow = findByLabel(taskTitle, in: app)
+        let taskRow = scrollToFindByLabel(taskTitle, in: app)
         XCTAssertTrue(taskRow.waitForExistence(timeout: defaultTimeout), "'\(taskTitle)' should be in Open list")
 
-        // Swipe left to reveal trailing swipe actions (Close, Kill, etc.)
-        // Use a coordinate-based swipe for reliable gesture on the List cell.
-        let start = taskRow.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
-        let end = taskRow.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5))
-        start.press(forDuration: 0.05, thenDragTo: end)
+        #if os(macOS)
+            // Right-click to open context menu, then click Close
+            taskRow.rightClick()
+            let closeMenuItem = app.menuItems["Close"].firstMatch
+            XCTAssertTrue(
+                closeMenuItem.waitForExistence(timeout: shortTimeout), "Close menu item should appear in context menu")
+            closeMenuItem.click()
+        #else
+            // Swipe left to reveal trailing swipe actions (Close, Kill, etc.)
+            taskRow.swipeLeft()
 
-        let closeButton = app.buttons["closeButton"].firstMatch
-        XCTAssertTrue(closeButton.waitForExistence(timeout: shortTimeout), "Close button should appear after swipe-left")
-        closeButton.tap()
+            let closeButton = app.buttons["closeButton"].firstMatch
+            XCTAssertTrue(
+                closeButton.waitForExistence(timeout: shortTimeout), "Close button should appear after swipe-left")
+            closeButton.tap()
+        #endif
 
-        // Wait for the animation to complete
+        // Verify the task is no longer in the Open list
         XCTAssertFalse(
             findByLabel(taskTitle, in: app).waitForExistence(timeout: shortTimeout),
             "'\(taskTitle)' should no longer appear in Open list after closing")
     }
 
-    /// Swiping right on an open task and tapping Prioritise should move it to the priority list.
-    func testSwipeToPrioritiseMakesTaskAppearOnHomeScreen() throws {
-        #if os(macOS)
-        throw XCTSkip("Swipe actions are iOS-only; macOS uses context menus")
-        #endif
+    /// Prioritising an open task should move it to the priority list on the home screen.
+    /// Uses swipe actions on iOS, context menu on macOS.
+    func testPrioritiseMakesTaskAppearOnHomeScreen() throws {
         let taskTitle = "Read about Structured Visual Thinking"
         let app = launchTestApp()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         navigateToList(named: "Open", in: app)
 
-        let taskRow = findByLabel(taskTitle, in: app)
+        let taskRow = scrollToFindByLabel(taskTitle, in: app)
         XCTAssertTrue(taskRow.waitForExistence(timeout: defaultTimeout), "'\(taskTitle)' should be in Open list")
 
-        // Swipe right to reveal leading swipe actions (Prioritise).
-        // Use a coordinate-based swipe for reliable gesture on the List cell.
-        let start = taskRow.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5))
-        let end = taskRow.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
-        start.press(forDuration: 0.05, thenDragTo: end)
+        #if os(macOS)
+            // Right-click to open context menu, then click Priority
+            taskRow.rightClick()
+            let priorityMenuItem = app.menuItems["Priority"].firstMatch
+            XCTAssertTrue(
+                priorityMenuItem.waitForExistence(timeout: shortTimeout),
+                "Priority menu item should appear in context menu")
+            priorityMenuItem.click()
+        #else
+            // Swipe right to reveal leading swipe actions (Prioritise).
+            taskRow.swipeRight()
 
-        let prioritiseButton = app.buttons["prioritiseButton"].firstMatch
-        XCTAssertTrue(prioritiseButton.waitForExistence(timeout: shortTimeout), "Prioritise button should appear after swipe-right")
-        prioritiseButton.tap()
+            let prioritiseButton = app.buttons["prioritiseButton"].firstMatch
+            XCTAssertTrue(
+                prioritiseButton.waitForExistence(timeout: shortTimeout),
+                "Prioritise button should appear after swipe-right")
+            prioritiseButton.tap()
+        #endif
 
-        // Go back to the home screen and verify the task appears in the priority list
+        // Navigate back to the home screen to verify the task appears in the priority list.
+        // On iOS, tap Back to return to the home screen.
+        // On macOS, the sidebar (with the priority list) is always visible.
         #if os(iOS)
             let backButton = app.buttons["Back"].firstMatch
             if backButton.waitForExistence(timeout: shortTimeout) {
