@@ -73,7 +73,6 @@
 		7FC676B32E706B7900C41568 /* CompassCheckStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */; };
 		7FC676BC2E70B76200C41568 /* TestCompassCheckFlexibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */; };
 		7FC75D492E790233007A436A /* TestShareFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D452E790233007A436A /* TestShareFlow.swift */; };
-		7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */; };
 		7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC75D502E793946007A436A /* TestShareExtensionView.swift */; };
 		7FC89D272BFB1D7400FBA363 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7FC89D262BFB1D7400FBA363 /* Credits.rtf */; };
 		7FC89D292BFB239200FBA363 /* TestReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC89D282BFB239200FBA363 /* TestReview.swift */; };
@@ -119,6 +118,7 @@
 		E5ADEDD52B318C1100F0EA9C /* LinkToList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */; };
 		E5B003102B31FE4900A90F8D /* CompassCheckDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */; };
 		E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B02B78984200E66FAD /* AppLauncher.swift */; };
+		E5C0F7A52C69E48A00D8F5A1 /* UITestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C0F7A42C69E48A00D8F5A1 /* UITestBase.swift */; };
 		E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B376B52B7B551600E66FAD /* TestTaskItems.swift */; };
 		E5D4FB772B749719002BB261 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D4FB762B749719002BB261 /* StreakView.swift */; };
 		E5DE0DC72B564C440066CC85 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
@@ -136,6 +136,7 @@
 		7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000100000000000SRCH1 /* TestSearch.swift */; };
 		7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000300000000000SRCH2 /* TestSearchState.swift */; };
 		7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000500000000000SRCH3 /* TestSearchUI.swift */; };
+		7FCC000800000000000TSKL4 /* TestTaskLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCC000700000000000TSKL4 /* TestTaskLifecycle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -250,7 +251,7 @@
 		7FC676AA2E706B7900C41568 /* CompassCheckStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckStep.swift; sourceTree = "<group>"; };
 		7FC676BB2E70B76200C41568 /* TestCompassCheckFlexibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCompassCheckFlexibility.swift; sourceTree = "<group>"; };
 		7FC75D452E790233007A436A /* TestShareFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareFlow.swift; sourceTree = "<group>"; };
-		7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionIntegration.swift; sourceTree = "<group>"; };
+	7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionIntegration.swift; sourceTree = "<group>"; };
 		7FC75D502E793946007A436A /* TestShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestShareExtensionView.swift; sourceTree = "<group>"; };
 		7FC89D262BFB1D7400FBA363 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		7FC89D282BFB239200FBA363 /* TestReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestReview.swift; sourceTree = "<group>"; };
@@ -301,6 +302,7 @@
 		E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkToList.swift; sourceTree = "<group>"; };
 		E5B0030F2B31FE4900A90F8D /* CompassCheckDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckDialog.swift; sourceTree = "<group>"; };
 		E5B376B02B78984200E66FAD /* AppLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLauncher.swift; sourceTree = "<group>"; };
+		E5C0F7A42C69E48A00D8F5A1 /* UITestBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBase.swift; sourceTree = "<group>"; };
 		E5B376B52B7B551600E66FAD /* TestTaskItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskItems.swift; sourceTree = "<group>"; };
 		E5D4FB762B749719002BB261 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		E5DE105C2B69041F00381337 /* PreferencesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTests.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 		7FCC000100000000000SRCH1 /* TestSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearch.swift; sourceTree = "<group>"; };
 		7FCC000300000000000SRCH2 /* TestSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchState.swift; sourceTree = "<group>"; };
 		7FCC000500000000000SRCH3 /* TestSearchUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchUI.swift; sourceTree = "<group>"; };
+		7FCC000700000000000TSKL4 /* TestTaskLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskLifecycle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -577,13 +580,14 @@
 			isa = PBXGroup;
 			children = (
 				7F48FD2D2E84F5160089827F /* TestSwipeActions.swift */,
-				7FC75D4F2E793946007A436A /* TestShareExtensionIntegration.swift */,
 				7FC75D502E793946007A436A /* TestShareExtensionView.swift */,
 				E561D6FA2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift */,
 				E561D6FC2B1F54A9003BE36F /* Three_Daily_GoalsUITestsLaunchTests.swift */,
 				7F2F0A952E52DF9000461679 /* AttachmentUITests.swift */,
 				E5B376B02B78984200E66FAD /* AppLauncher.swift */,
+				E5C0F7A42C69E48A00D8F5A1 /* UITestBase.swift */,
 				7FCC000500000000000SRCH3 /* TestSearchUI.swift */,
+				7FCC000700000000000TSKL4 /* TestTaskLifecycle.swift */,
 			);
 			path = "Three Daily GoalsUITests";
 			sourceTree = "<group>";
@@ -1050,6 +1054,7 @@
 				7FPHOTO12EF0000000000001 /* TestPhotoAttachments.swift in Sources */,
 				7FCC000200000000000SRCH1 /* TestSearch.swift in Sources */,
 				7FCC000400000000000SRCH2 /* TestSearchState.swift in Sources */,
+				7FC75D532E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,10 +1066,11 @@
 				E561D6FB2B1F54A9003BE36F /* Three_Daily_GoalsUITests.swift in Sources */,
 				7F48FD2E2E84F5160089827F /* TestSwipeActions.swift in Sources */,
 				7F2F0A972E52DFB000461679 /* AttachmentUITests.swift in Sources */,
-				7FC75D512E793946007A436A /* TestShareExtensionIntegration.swift in Sources */,
 				7FC75D522E793946007A436A /* TestShareExtensionView.swift in Sources */,
 				E5B376B12B78984200E66FAD /* AppLauncher.swift in Sources */,
+				E5C0F7A52C69E48A00D8F5A1 /* UITestBase.swift in Sources */,
 				7FCC000600000000000SRCH3 /* TestSearchUI.swift in Sources */,
+				7FCC000800000000000TSKL4 /* TestTaskLifecycle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

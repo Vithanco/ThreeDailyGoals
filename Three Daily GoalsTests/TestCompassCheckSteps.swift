@@ -687,7 +687,7 @@ struct TestCompassCheckSteps {
     @Test
     func testIOSFlow() throws {
         // Create a custom PlanStep that simulates iOS behavior (always skips)
-        struct iOSPlanStep: CompassCheckStep {
+        struct iOSPlanStep: @MainActor CompassCheckStep {
             var description: String = ""
 
             let id: String = "plan"
@@ -1145,7 +1145,7 @@ struct TestCompassCheckSteps {
     @Test
     func testMultipleSilentSteps() throws {
         // Test multiple consecutive silent steps
-        struct SilentStep1: CompassCheckStep {
+        struct SilentStep1: @MainActor CompassCheckStep {
             var description: String = ""
 
             let id: String = "silent1"
@@ -1164,7 +1164,7 @@ struct TestCompassCheckSteps {
             }
         }
 
-        struct SilentStep2: CompassCheckStep {
+        struct SilentStep2: @MainActor CompassCheckStep {
             var description: String = ""
 
             let id: String = "silent2"

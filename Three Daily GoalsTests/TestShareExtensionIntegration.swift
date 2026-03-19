@@ -1,6 +1,6 @@
 //
 //  TestShareExtensionIntegration.swift
-//  Three Daily GoalsUITests
+//  Three Daily GoalsTests
 //
 //  Created by AI Assistant on 2025-01-15.
 //
@@ -217,14 +217,14 @@ class TestShareExtensionIntegration: XCTestCase {
     // MARK: - ShareViewController Integration Tests
 
     func testShareViewControllerInitialization() throws {
-        // Note: ShareViewController is not available in UI test target
+        // Note: ShareViewController is not available in unit test target
         // This test is kept as a placeholder for when ShareViewController becomes available
         // or when we move this test to a different target that has access to ShareViewController
         XCTAssertTrue(true, "ShareViewController test placeholder - requires target access")
     }
 
     func testShareViewControllerContainerSetup() throws {
-        // Note: ShareViewController is not available in UI test target
+        // Note: ShareViewController is not available in unit test target
         // This test is kept as a placeholder for when ShareViewController becomes available
         // or when we move this test to a different target that has access to ShareViewController
         XCTAssertTrue(true, "ShareViewController container test placeholder - requires target access")
@@ -294,7 +294,7 @@ class TestShareExtensionIntegration: XCTestCase {
     }
 }
 
-// MARK: - Mock NSItemProvider for UI Tests
+// MARK: - Mock NSItemProvider for Unit Tests
 
 class MockNSItemProvider: NSItemProvider {
     var mockText: String?
