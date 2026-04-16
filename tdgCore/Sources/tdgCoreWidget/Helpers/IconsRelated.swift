@@ -71,6 +71,7 @@ public let imgStats = "chart.bar.fill"
 public let imgListBulletClipboard = "list.bullet.clipboard"
 public let imgTagCircleFill = "tag.circle.fill"
 public let imgWrenchAndScrewdriver = "wrench.and.screwdriver"
+public let imgGearshapeFill = "gearshape.fill"
 
 // MARK: - Energy-Effort Matrix Icons
 

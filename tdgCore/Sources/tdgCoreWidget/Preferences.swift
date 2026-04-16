@@ -10,7 +10,7 @@ import SwiftUI
 import os
 
 private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
+    subsystem: Bundle.safeSubsystem,
     category: String(describing: CloudPreferences.self)
 )
 
@@ -66,6 +66,9 @@ public struct StorageKeys: Sendable {
 
     // Get me a Task widget - selected quadrant key
     public static let selectedQuadrant = StorageKeys("selectedQuadrant")
+
+    // Short ID prefix key
+    public static let shortIdPrefix = StorageKeys("shortIdPrefix")
 }
 
 public protocol KeyValueStorage {
@@ -468,6 +471,19 @@ extension CloudPreferences {
     /// Clear the selected quadrant
     public func clearSelectedQuadrant() {
         store.set(nil, forKey: StorageKeys.selectedQuadrant)
+    }
+
+    // MARK: - Short ID Prefix
+
+    public var shortIdPrefix: String {
+        get {
+            return store.string(forKey: StorageKeys.shortIdPrefix) ?? ShortIdHelper.defaultPrefix
+        }
+        set {
+            let validated = ShortIdHelper.validatePrefix(newValue)
+            store.set(validated, forKey: StorageKeys.shortIdPrefix)
+            onChange?()
+        }
     }
 
 }
