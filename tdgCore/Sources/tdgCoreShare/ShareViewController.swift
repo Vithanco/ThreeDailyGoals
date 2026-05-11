@@ -46,18 +46,17 @@ open class ShareViewController: BaseViewController {
             Task { @MainActor in self.close() }
         }
 
-        Task {
+        let providerBox = SendableProviderBox(provider)
+        Task { @MainActor in
             do {
-                guard let payload = try await ShareFlow.resolve(from: provider) else {
-                    await MainActor.run { self.close() }
+                guard let payload = try await ShareFlow.resolve(from: providerBox.value) else {
+                    self.close()
                     return
                 }
-                await MainActor.run {
-                    let shareView = self.createShareView(for: payload)
-                    self.presentRoot(shareView)
-                }
+                let shareView = self.createShareView(for: payload)
+                self.presentRoot(shareView)
             } catch {
-                await MainActor.run { self.close() }
+                self.close()
             }
         }
     }
@@ -101,4 +100,11 @@ open class ShareViewController: BaseViewController {
     func close() {
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
+}
+
+/// Wraps a non-Sendable value so it can be captured by a Sendable closure.
+/// Only safe when the wrapped value is used on a single actor.
+private struct SendableProviderBox: @unchecked Sendable {
+    let value: NSItemProvider
+    init(_ value: NSItemProvider) { self.value = value }
 }
