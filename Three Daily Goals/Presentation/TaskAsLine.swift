@@ -16,6 +16,12 @@ struct TaskAsLine: View {
     @Environment(\.colorScheme) private var colorScheme
     @Bindable var item: TaskItem
 
+    #if os(macOS)
+        @State private var showPreview = false
+        @State private var hoverTask: Task<Void, Never>?
+        private static let hoverDelay: Duration = .milliseconds(350)
+    #endif
+
     var text: some View {
         return Text(item.title.trimmingCharacters(in: .whitespacesAndNewlines))
         //  .strikethrough(item.isClosed, color: .closed)
@@ -88,7 +94,40 @@ struct TaskAsLine: View {
                 dataManager.deleteButton(item: item, uiState: uiState)
             }
         }
+        .onHover { hovering in
+            hoverTask?.cancel()
+            if hovering {
+                hoverTask = Task { @MainActor in
+                    try? await Task.sleep(for: Self.hoverDelay)
+                    if !Task.isCancelled {
+                        showPreview = true
+                    }
+                }
+            } else {
+                showPreview = false
+            }
+        }
+        .popover(
+            isPresented: $showPreview,
+            attachmentAnchor: .point(.trailing),
+            arrowEdge: .leading
+        ) {
+            TaskPreviewCard(item: item)
+                .environment(preferences)
+                .environment(dataManager)
+                .environment(uiState)
+                .environment(timeProviderWrapper)
+        }
         #else
+        .contextMenu {
+            EmptyView()
+        } preview: {
+            TaskPreviewCard(item: item)
+                .environment(preferences)
+                .environment(dataManager)
+                .environment(uiState)
+                .environment(timeProviderWrapper)
+        }
         .swipeActions(edge: .leading) {
             if item.canBeMovedToOpen {
                 dataManager.openButton(item: item).tint(TaskItemState.open.color)
