@@ -16,6 +16,7 @@ public enum SharePayload {
     case attachment(URL, UTType, suggestedFilename: String?)
 }
 
+@MainActor
 public enum ShareFlow {
     public static func resolve(from provider: NSItemProvider) async throws -> SharePayload? {
         // URL first (but file URLs should become attachments immediately)
