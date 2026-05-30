@@ -46,10 +46,18 @@ public struct MCPToolRouter {
 
     // MARK: - Task Resolution
 
+    /// Outcome of resolving a task from tool arguments: either the task, or a
+    /// ready-to-return error response. Not `Swift.Result` because `CallTool.Result`
+    /// does not conform to `Error`.
+    private enum TaskResolution {
+        case success(TaskItem)
+        case failure(CallTool.Result)
+    }
+
     private func resolveTask(
         from arguments: [String: Value]?,
         in context: ModelContext
-    ) throws -> Result<TaskItem, CallTool.Result> {
+    ) throws -> TaskResolution {
         guard let id = arguments?.stringValue("id") else {
             return .failure(
                 CallTool.Result(

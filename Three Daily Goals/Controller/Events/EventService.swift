@@ -27,7 +27,7 @@ public protocol EventServiceProtocol: Sendable {
 public final class EventService: EventServiceProtocol, @unchecked Sendable {
     private let eventStore = EKEventStore()
     private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
+        subsystem: Bundle.safeSubsystem,
         category: "EventService"
     )
 

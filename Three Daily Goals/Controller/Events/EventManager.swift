@@ -18,7 +18,7 @@ public enum CalendarAccess: Equatable {
 }
 
 private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
+    subsystem: Bundle.safeSubsystem,
     category: String(describing: Three_Daily_GoalsApp.self)
 )
 
