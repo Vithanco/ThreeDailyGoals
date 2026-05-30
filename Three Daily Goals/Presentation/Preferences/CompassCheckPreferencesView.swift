@@ -76,6 +76,33 @@ public struct CompassCheckPreferencesView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
+                // Automatic Compass Check Settings
+                GroupBox("Automatic Compass Check") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Open Compass Check automatically")
+                            Spacer()
+                            Toggle(
+                                "",
+                                isOn: Binding(
+                                    get: { preferences.autoCompassCheckEnabled },
+                                    set: { preferences.autoCompassCheckEnabled = $0 }
+                                )
+                            )
+                            .toggleStyle(.switch)
+                            .scaleEffect(0.65)
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        Text("When enabled, the Compass Check dialog opens at the scheduled time. When disabled, you can still start a Compass Check manually.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 4)
+                    }
+                    .padding(5)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 // Notification Settings
                 GroupBox("Notifications") {
                     VStack(alignment: .leading, spacing: 12) {

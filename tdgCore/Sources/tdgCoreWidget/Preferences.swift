@@ -61,6 +61,9 @@ public struct StorageKeys: Sendable {
     // Notifications key
     public static let notificationsEnabled = StorageKeys("notificationsEnabled")
 
+    // Automatic Compass Check key
+    public static let autoCompassCheckEnabled = StorageKeys("autoCompassCheckEnabled")
+
     // Calendar integration key
     public static let targetCalendarIdentifier = StorageKeys("targetCalendarIdentifier")
 
@@ -403,6 +406,18 @@ extension CloudPreferences {
         }
         set {
             store.set(newValue, forKey: StorageKeys.notificationsEnabled)
+        }
+    }
+
+    /// Whether the app automatically opens the Compass Check dialog at the scheduled time.
+    /// When false, the Compass Check can still be started manually.
+    public var autoCompassCheckEnabled: Bool {
+        get {
+            return store.bool(forKey: StorageKeys.autoCompassCheckEnabled, default: true)
+        }
+        set {
+            store.set(newValue, forKey: StorageKeys.autoCompassCheckEnabled)
+            onChange?()
         }
     }
 

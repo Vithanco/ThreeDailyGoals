@@ -9,7 +9,7 @@ import Foundation
 import os
 
 private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
+    subsystem: Bundle.safeSubsystem,
     category: String(describing: CompassCheckTimer.self)
 )
 
