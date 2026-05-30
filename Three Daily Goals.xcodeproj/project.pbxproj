@@ -101,6 +101,8 @@
 		E53C13142B6BED3B00E51553 /* CompassCheckPreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */; };
 		E559203B2B3772EE0002C709 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E559203A2B3772EE0002C709 /* CloudKit.framework */; };
 		E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E559203E2B38E8380002C709 /* TaskAsLine.swift */; };
+		AB0511A0000000000000A001 /* TaskPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0511B0000000000000B001 /* TaskPreviewCard.swift */; };
+		AB0511A0000000000000A002 /* TestTaskPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0511B0000000000000B002 /* TestTaskPreviewCard.swift */; };
 		E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */; };
 		E561D6DE2B1F54A6003BE36F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E561D6DD2B1F54A6003BE36F /* MainView.swift */; };
 		E561D6E22B1F54A8003BE36F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E561D6E12B1F54A8003BE36F /* Assets.xcassets */; };
@@ -281,6 +283,8 @@
 		E53C13132B6BED3B00E51553 /* CompassCheckPreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassCheckPreferencesView.swift; sourceTree = "<group>"; };
 		E559203A2B3772EE0002C709 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		E559203E2B38E8380002C709 /* TaskAsLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAsLine.swift; sourceTree = "<group>"; };
+		AB0511B0000000000000B001 /* TaskPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreviewCard.swift; sourceTree = "<group>"; };
+		AB0511B0000000000000B002 /* TestTaskPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTaskPreviewCard.swift; sourceTree = "<group>"; };
 		E561D6D82B1F54A6003BE36F /* Three Daily Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Three Daily Goals.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E561D6DB2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Three_Daily_GoalsApp.swift; sourceTree = "<group>"; };
 		E561D6DD2B1F54A6003BE36F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -557,6 +561,7 @@
 				7FC676A22E6F658E00C41568 /* TestDatabaseErrors.swift */,
 				7F19BFAC2E694A8B00238C81 /* TestTaskItemIsUnchanged.swift */,
 				7F19BF9C2E672BF800238C81 /* TestTags.swift */,
+				AB0511B0000000000000B002 /* TestTaskPreviewCard.swift */,
 				7FECEC1C2E6613FB00E02234 /* TestIsStreakBroken.swift */,
 				7FECEC1D2E6613FB00E02234 /* TestTimestampFix.swift */,
 				7FECEC1E2E6613FB00E02234 /* TestTouchWithDescription.swift */,
@@ -643,6 +648,7 @@
 				E5ADEDD42B318C1100F0EA9C /* LinkToList.swift */,
 				E51142B42B35ABB900AB6E05 /* LinkToTask.swift */,
 				E559203E2B38E8380002C709 /* TaskAsLine.swift */,
+				AB0511B0000000000000B001 /* TaskPreviewCard.swift */,
 				E5FEC7F32B4A8343007BE890 /* LeftSideView.swift */,
 				E5FEC7F52B4BF0D3007BE890 /* Toolbar.swift */,
 				E5D4FB762B749719002BB261 /* StreakView.swift */,
@@ -1007,6 +1013,7 @@
 				E5B003102B31FE4900A90F8D /* CompassCheckDialog.swift in Sources */,
 				E561D6DC2B1F54A6003BE36F /* Three_Daily_GoalsApp.swift in Sources */,
 				E559203F2B38E8380002C709 /* TaskAsLine.swift in Sources */,
+				AB0511A0000000000000A001 /* TaskPreviewCard.swift in Sources */,
 				7F1EC4BC2E087F12000E5FDC /* CalendarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1046,6 +1053,7 @@
 				E561D6F12B1F54A9003BE36F /* Three_Daily_GoalsTests.swift in Sources */,
 				7F88D1F82E7DFC8400D2E050 /* TestAttachmentResolver.swift in Sources */,
 				7F19BF9D2E672BF800238C81 /* TestTags.swift in Sources */,
+				AB0511A0000000000000A002 /* TestTaskPreviewCard.swift in Sources */,
 				E5FEC7F82B4EF7AF007BE890 /* TestModelLists.swift in Sources */,
 				7FE5894A2E78346900D29CC8 /* TestDynamicStorageKeys.swift in Sources */,
 				E5B376B62B7B551600E66FAD /* TestTaskItems.swift in Sources */,
