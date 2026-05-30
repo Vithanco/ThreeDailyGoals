@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; margin-bottom: 8px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  .list-header { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 4px; }
+  .badge-count { font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 10px; }
+
+  .eem-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 1.5px; width: 28px; height: 28px; }
+  .eem-q { border-radius: 1px; }
+
+  /* Sidebar links — match real app */
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    background: #fff; border: 1px solid #E8E8E8;
+    max-width: 240px;
+  }
+  .sidebar-link.active { border-width: 1.5px; box-shadow: rgba(0,0,0,0.06) 0px 1px 4px; }
+  .sidebar-stripe { width: 3px; height: 26px; border-radius: 2px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="section-title">List Section Headers</div>
+    <div class="row">
+      <div class="list-header" style="color:#E8900A;">
+        <span>★</span><span>Today's Goals</span>
+        <span class="badge-count" style="background:rgba(232,144,10,0.15);color:#9A5C00;">3</span>
+      </div>
+      <div class="list-header" style="color:#3B82C4;">
+        <span>○</span><span>Open</span>
+        <span class="badge-count" style="background:rgba(59,130,196,0.15);color:#1E5A99;">29</span>
+      </div>
+      <div class="list-header" style="color:#B59A00;">
+        <span>◷</span><span>Pending Response</span>
+        <span class="badge-count" style="background:rgba(181,154,0,0.15);color:#7A6200;">1</span>
+      </div>
+      <div class="list-header" style="color:#4A9E6A;"><span>●</span><span>Closed</span></div>
+      <div class="list-header" style="color:#8C7058;"><span>▦</span><span>Graveyard</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Energy-Effort Matrix Indicator (per-task)</div>
+    <div class="row">
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+        <div class="eem-grid">
+          <div class="eem-q" style="background:#B4A5D5;"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+        </div>
+        <div style="font-size:9px;color:#888;">Deep Work</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+        <div class="eem-grid">
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:#F4A89A;"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+        </div>
+        <div style="font-size:9px;color:#888;">Sprint</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+        <div class="eem-grid">
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:#7BB8BA;"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+        </div>
+        <div style="font-size:9px;color:#888;">Steady</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+        <div class="eem-grid">
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:rgba(0,0,0,0.08);"></div>
+          <div class="eem-q" style="background:#A8D5BA;"></div>
+        </div>
+        <div style="font-size:9px;color:#888;">Easy Win</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Sidebar List Links — with colored left stripe</div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <div class="sidebar-link active" style="border-color:#3B82C4;">
+        <div class="sidebar-stripe" style="background:#3B82C4;"></div>
+        <span style="flex:1;font-size:15px;font-weight:600;color:#3B82C4;">Open</span>
+        <span style="font-size:12px;font-weight:600;background:#3B82C4;color:#fff;padding:2px 8px;border-radius:10px;">29</span>
+      </div>
+      <div class="sidebar-link" style="border-color:#E8E8E8;">
+        <div class="sidebar-stripe" style="background:#B59A00;"></div>
+        <span style="flex:1;font-size:15px;color:#111;">Pending Response</span>
+        <span style="font-size:12px;font-weight:600;background:rgba(181,154,0,0.15);color:#7A6200;padding:2px 8px;border-radius:10px;">1</span>
+      </div>
+      <div class="sidebar-link">
+        <div class="sidebar-stripe" style="background:#4A9E6A;"></div>
+        <span style="flex:1;font-size:15px;color:#111;">Closed</span>
+      </div>
+      <div class="sidebar-link">
+        <div class="sidebar-stripe" style="background:#8C7058;"></div>
+        <span style="flex:1;font-size:15px;color:#111;">Graveyard</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

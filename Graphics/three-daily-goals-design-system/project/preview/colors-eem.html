@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 500px; }
+  .cell { border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .cell-label { font-size: 13px; font-weight: 700; color: #222; }
+  .cell-sub { font-size: 11px; color: #555; }
+  .cell-hex { font-size: 9px; color: #888; font-family: monospace; margin-top: 4px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #999; }
+  .axis-label { font-size: 10px; color: #aaa; text-align: center; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="section-title">Energy-Effort Matrix Colors</div>
+  <div style="display:flex;gap:4px;align-items:center;font-size:10px;color:#aaa;max-width:500px;justify-content:space-between;padding:0 0 2px 0;">
+    <span style="flex:1;text-align:center;">← Big Task</span>
+    <span style="flex:1;text-align:center;">Small Task →</span>
+  </div>
+  <div class="grid">
+    <div class="cell" style="background:#B4A5D5;">
+      <div class="cell-label">Deep Work</div>
+      <div class="cell-sub">High Energy · Big Task</div>
+      <div class="cell-hex">#B4A5D5 — soft lavender</div>
+    </div>
+    <div class="cell" style="background:#F4A89A;">
+      <div class="cell-label">Sprint Tasks</div>
+      <div class="cell-sub">High Energy · Small Task</div>
+      <div class="cell-hex">#F4A89A — soft coral</div>
+    </div>
+    <div class="cell" style="background:#7BB8BA;">
+      <div class="cell-label">Steady Progress</div>
+      <div class="cell-sub">Low Energy · Big Task</div>
+      <div class="cell-hex">#7BB8BA — soft teal</div>
+    </div>
+    <div class="cell" style="background:#A8D5BA;">
+      <div class="cell-label">Easy Wins</div>
+      <div class="cell-sub">Low Energy · Small Task</div>
+      <div class="cell-hex">#A8D5BA — soft mint</div>
+    </div>
+  </div>
+</body>
+</html>

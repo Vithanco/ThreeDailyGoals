@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .swatch { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+  .chip { width: 72px; height: 52px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); }
+  .label { font-size: 10px; color: #555; font-weight: 600; text-align: center; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #999; }
+  .note { font-size: 10px; color: #bbb; font-style: italic; }
+</style>
+</head>
+<body>
+  <div class="section-title">Task State Colors — Softened</div>
+  <div class="row">
+    <div class="swatch"><div class="chip" style="background:#E8900A;"></div><div class="label">Priority</div></div>
+    <div class="swatch"><div class="chip" style="background:#3B82C4;"></div><div class="label">Open</div></div>
+    <div class="swatch"><div class="chip" style="background:#B59A00;"></div><div class="label">Pending</div></div>
+    <div class="swatch"><div class="chip" style="background:#4A9E6A;"></div><div class="label">Closed</div></div>
+    <div class="swatch"><div class="chip" style="background:#8C7058;"></div><div class="label">Graveyard</div></div>
+    <div class="swatch"><div class="chip" style="background:#D94F47;"></div><div class="label">Due Soon</div></div>
+  </div>
+  <div class="section-title" style="margin-top:4px;">As Badges</div>
+  <div class="row">
+    <span class="badge" style="background:rgba(232,144,10,0.12);color:#9A5C00;">★ Priority</span>
+    <span class="badge" style="background:rgba(59,130,196,0.12);color:#1E5A99;">○ Open</span>
+    <span class="badge" style="background:rgba(181,154,0,0.15);color:#7A6200;">◷ Pending</span>
+    <span class="badge" style="background:rgba(74,158,106,0.12);color:#2A6B45;">✓ Closed</span>
+    <span class="badge" style="background:rgba(140,112,88,0.12);color:#5C3E25;">▦ Graveyard</span>
+    <span class="badge" style="background:rgba(217,79,71,0.12);color:#A02828;">⚑ Due Soon</span>
+  </div>
+  <div class="note">Softened from raw iOS system colors for reduced visual intensity</div>
+</body>
+</html>

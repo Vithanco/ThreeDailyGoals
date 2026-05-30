@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #F2F2F7; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
+  .task-row {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff; border: 1px solid #E8E8E8;
+    border-radius: 8px; padding: 9px 10px;
+    box-shadow: rgba(0,0,0,0.04) 0px 1px 3px;
+    font-size: 14px; color: #111;
+  }
+  .quad { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 1px; width: 18px; height: 18px; flex-shrink: 0; }
+  .q { border-radius: 1px; }
+  .task-title { flex: 1; }
+  .due { font-size: 11px; color: #9A9A9A; font-style: italic; }
+  .due-urgent { font-size: 11px; color: #D94F47; font-style: italic; }
+
+  /* Section sub-header — matches real app */
+  .section-sub { font-size: 12px; color: #3B82C4; font-weight: 500; padding: 4px 2px 2px; opacity: 0.75; }
+
+  /* List header row */
+  .list-header { display: flex; align-items: center; gap: 6px; padding: '2px 4px'; margin-bottom: 6px; }
+  .list-header-icon { color: #3B82C4; font-size: 16px; }
+  .list-header-label { font-size: 17px; font-weight: 700; color: #111; }
+  .list-header-count { font-size: 12px; font-weight: 600; color: #3B82C4; background: rgba(59,130,196,0.12); padding: 1px 7px; border-radius: 10px; }
+
+  /* Tag pills — muted, like real app */
+  .tag-row { display: flex; gap: 5px; flex-wrap: wrap; padding: 8px 2px 2px; border-top: 1px solid #E8E8E8; margin-top: 4px; }
+  .tag-pill { padding: 3px 9px; border-radius: 4px; background: #D8D8D8; color: #555; font-size: 11px; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <span class="list-header-icon">○</span>
+    <span class="list-header-label">Open</span>
+    <span class="list-header-count">7</span>
+  </div>
+
+  <div class="section-sub">○ Last updated: Last Quarter</div>
+  <div class="task-row">
+    <div class="quad">
+      <div class="q" style="background:#B4A5D5;"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+    </div>
+    <div class="task-title">Write the quarterly review doc</div>
+    <div class="due">in 3 days</div>
+  </div>
+  <div class="task-row">
+    <div class="quad">
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:#A8D5BA;"></div>
+    </div>
+    <div class="task-title">Reply to Simon's email</div>
+  </div>
+
+  <div class="section-sub">○ Last updated: Last Month</div>
+  <div class="task-row">
+    <div class="quad">
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:#F4A89A;"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+    </div>
+    <div class="task-title">Fix login bug in production</div>
+    <div class="due-urgent">tomorrow</div>
+  </div>
+  <div class="task-row">
+    <div class="quad">
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+      <div class="q" style="background:#7BB8BA;"></div>
+      <div class="q" style="background:rgba(0,0,0,0.07);"></div>
+    </div>
+    <div class="task-title">Refactor data layer</div>
+  </div>
+
+  <!-- Tag filter pills -->
+  <div class="tag-row">
+    <span class="tag-pill">big-task</span>
+    <span class="tag-pill">high-energy</span>
+    <span class="tag-pill" style="background:#3B82C4;color:#fff;">low-energy</span>
+    <span class="tag-pill">small-task</span>
+    <span class="tag-pill">vithanco</span>
+  </div>
+</body>
+</html>

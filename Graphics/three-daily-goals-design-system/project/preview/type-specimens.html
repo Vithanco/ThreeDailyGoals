@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .block { display: flex; flex-direction: column; gap: 6px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #bbb; }
+
+  .hero-headline { font-size: 40px; font-weight: 700; line-height: 45px; color: #000; }
+  .description   { font-size: 16px; color: #444; }
+  .content-body  { font-size: 15px; line-height: 1.6; color: #222; max-width: 480px; text-align: justify; }
+  .blockquote    { background: #f7f7f7; border: 1px solid rgba(234,88,12,0.4); border-left: 10px solid #EA580C; padding: 12px 16px; font-style: italic; text-align: center; color: #333; font-size: 14px; border-radius: 0 4px 4px 0; }
+  .nav-item      { font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #000; }
+  .accent-link   { color: #EA580C; text-decoration: underline; font-size: 15px; }
+  .tag           { display: inline-block; background: #EA580C; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+</style>
+</head>
+<body>
+  <div class="block">
+    <div class="section-title">Hero</div>
+    <div class="hero-headline">Don't drown in your own to-dos</div>
+    <div class="description">The process-driven Task Manager</div>
+  </div>
+  <div class="block">
+    <div class="section-title">Body Copy</div>
+    <p class="content-body">Three Daily Goals is built for people who've had enough of productivity pressure. It helps you focus on what truly matters, and gently lets go of what doesn't.</p>
+  </div>
+  <div class="block">
+    <div class="section-title">Blockquote</div>
+    <div class="blockquote">"Finally, a task manager that doesn't make me feel behind. I actually <em>look forward</em> to opening it." — <strong>Lena, designer</strong></div>
+  </div>
+  <div class="block">
+    <div class="section-title">UI Fragments</div>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+      <span class="nav-item">System</span>
+      <span class="nav-item">Support</span>
+      <a class="accent-link">Why Three Daily Goals works →</a>
+      <span class="tag">support</span>
+    </div>
+  </div>
+</body>
+</html>
