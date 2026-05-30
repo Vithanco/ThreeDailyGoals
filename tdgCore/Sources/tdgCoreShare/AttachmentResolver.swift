@@ -16,6 +16,7 @@ struct AttachmentResolution {
 
 private let utf8PlainText = UTType("public.utf8-plain-text")
 
+@MainActor
 enum AttachmentResolver {
 
     // URL / Text
@@ -205,7 +206,7 @@ enum AttachmentResolver {
         return nil
     }
 
-    public static func writeTemp(data: Data, ext: String) throws -> URL {
+    public nonisolated static func writeTemp(data: Data, ext: String) throws -> URL {
         let dst = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString).appendingPathExtension(ext)
         try data.write(to: dst, options: .atomic)

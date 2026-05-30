@@ -48,7 +48,7 @@ public final class CompassCheckManager {
         PlanStep(),
     ]
     private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier!,
+        subsystem: Bundle.safeSubsystem,
         category: String(describing: CompassCheckManager.self)
     )
 
@@ -231,6 +231,28 @@ public final class CompassCheckManager {
     /// Whether we can go back (not on first visible step)
     var canGoBack: Bool {
         return getPreviousVisibleStep(from: currentStep) != nil
+    }
+
+    /// Steps the user will see in the dialog — drives the progress bar.
+    /// Excludes silent steps and steps the user has disabled in preferences.
+    /// Stable across navigation (does not depend on `isApplicable`, which can change as data changes).
+    var visibleSteps: [any CompassCheckStep] {
+        steps.filter { !$0.isSilent && preferences.isCompassCheckStepEnabled(stepId: $0.id) }
+    }
+
+    /// Zero-based index of the current step within `visibleSteps`.
+    /// Returns 0 when not started, and the last index when finished.
+    var currentVisibleIndex: Int {
+        let visible = visibleSteps
+        guard !visible.isEmpty else { return 0 }
+        switch state {
+        case .notStarted:
+            return 0
+        case .finished:
+            return visible.count - 1
+        case .inProgress(let step), .paused(let step):
+            return visible.firstIndex(where: { $0.id == step.id }) ?? 0
+        }
     }
 
     var moveStateForwardText: String {
@@ -468,6 +490,12 @@ public final class CompassCheckManager {
 
         // Start sync check timer to detect external compass check completion
         startSyncCheckTimer()
+
+        // User opted out of the automatic Compass Check — cancel any pending timer.
+        guard preferences.autoCompassCheckEnabled else {
+            timer.cancelTimer()
+            return
+        }
 
         // Don't set up timer if CompassCheck already happened in current interval
         guard !preferences.didCompassCheckToday else { return }

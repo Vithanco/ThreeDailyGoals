@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; margin-bottom: 6px; }
+  .logo-row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .logo-cell { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .logo-cell span { font-size: 10px; color: #aaa; }
+  .dark-bg { background: #000; border-radius: 8px; padding: 12px 20px; }
+  .orange-bg { background: #EA580C; border-radius: 8px; padding: 12px 20px; }
+  img { max-width: 100%; object-fit: contain; }
+  .wordmark-row { display: flex; align-items: center; gap: 10px; }
+  .site-name { font-size: 24px; color: #EA580C; font-weight: 800; }
+</style>
+</head>
+<body>
+  <div class="section-title">Primary Logo</div>
+  <div class="logo-row">
+    <div class="logo-cell">
+      <img src="../assets/logo.png" style="width:64px;height:64px;" alt="Logo"/>
+      <span>logo.png</span>
+    </div>
+    <div class="logo-cell">
+      <img src="../assets/logo1024.png" style="width:64px;height:64px;" alt="Logo 1024"/>
+      <span>logo1024.png</span>
+    </div>
+    <div class="logo-cell dark-bg">
+      <img src="../assets/logo-white.png" style="width:64px;height:64px;" alt="White logo"/>
+      <span style="color:#888;">white on dark</span>
+    </div>
+    <div class="logo-cell orange-bg">
+      <img src="../assets/logo-black.png" style="width:64px;height:64px;" alt="Black logo"/>
+      <span style="color:#ffcc99;">black on accent</span>
+    </div>
+  </div>
+  <div class="section-title">Wordmark</div>
+  <div class="logo-row">
+    <div class="logo-cell">
+      <img src="../assets/Wordmark.png" style="height:40px;width:auto;" alt="Wordmark"/>
+      <span>Wordmark.png</span>
+    </div>
+    <div class="logo-cell">
+      <div class="wordmark-row">
+        <img src="../assets/logo.png" style="width:24px;height:24px;" alt=""/>
+        <span class="site-name">Three Daily Goals</span>
+      </div>
+      <span>Header lockup (web)</span>
+    </div>
+  </div>
+</body>
+</html>

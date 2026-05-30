@@ -14,6 +14,10 @@ public struct PreferencesView: View {
     public var body: some View {
         //        VStack{
         TabView {
+            GeneralPreferencesView()
+                .tabItem {
+                    Label("General", systemImage: imgGearshapeFill)
+                }
             CompassCheckPreferencesView()
                 .tabItem {
                     Label("Compass Check", systemImage: imgCompassCheck)

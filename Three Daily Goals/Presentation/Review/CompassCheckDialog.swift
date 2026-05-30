@@ -48,6 +48,22 @@ public struct CompassCheckDialog: View {
             }
             .padding(4)
 
+            // Step progress bar (one segment per visible step, lit up to current).
+            let totalSteps = compassCheckManager.visibleSteps.count
+            if totalSteps > 1 {
+                let currentIndex = compassCheckManager.currentVisibleIndex
+                HStack(spacing: 4) {
+                    ForEach(0..<totalSteps, id: \.self) { i in
+                        Capsule()
+                            .fill(i <= currentIndex ? Color.priority : Color.neutral200)
+                            .frame(height: 3)
+                    }
+                }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 6)
+                .animation(.easeInOut(duration: 0.2), value: currentIndex)
+            }
+
             Divider()
 
             // Scrollable step content

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #fff; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; margin-bottom: 8px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* Headline specimens */
+  .headline-specimen { font-size: 22px; font-weight: 400; color: #111; line-height: 1.25; }
+  .headline-specimen strong { font-weight: 800; }
+
+  /* Background palette */
+  .bg-swatch { width: 72px; height: 48px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+  .bg-label { font-size: 10px; color: #888; margin-top: 4px; font-family: monospace; }
+
+  /* Geometric composition demo */
+  .geo-demo {
+    width: 320px; height: 120px; border-radius: 10px; overflow: hidden; position: relative;
+    background: #FFF9F1;
+  }
+  .geo-orange { position: absolute; bottom: 0; left: 0; width: 55%; height: 70%; background: #EA580C; border-radius: 0 30px 0 0; }
+  .geo-black { position: absolute; bottom: 0; right: 0; width: 35%; height: 40%; background: #111; border-radius: 10px 0 0 0; }
+  .geo-label { position: absolute; top: 10px; left: 12px; font-size: 12px; font-weight: 700; color: #111; line-height: 1.3; }
+
+  /* Callout card */
+  .callout-card { background: #EA580C; border-radius: 12px; padding: 10px 14px; max-width: 240px; }
+  .callout-row { display: flex; align-items: center; gap: 6px; color: #fff; font-size: 13px; font-weight: 600; }
+  .callout-sub { color: rgba(255,255,255,0.85); font-size: 12px; margin-top: 3px; }
+
+  table { border-collapse: collapse; font-size: 12px; width: 100%; }
+  th { text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #aaa; padding: 4px 8px; border-bottom: 1px solid #eee; }
+  td { padding: 5px 8px; color: #333; border-bottom: 1px solid #f5f5f5; vertical-align: top; }
+  td:first-child { font-weight: 600; color: #111; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+  <div>
+    <div class="section-title">Headline Copy Pattern</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="headline-specimen">Find <strong>Focus</strong> Again</div>
+      <div class="headline-specimen">Plan <strong>Your Day</strong> In Advance</div>
+      <div class="headline-specimen">Daily <strong>Planning</strong> Meets Gamification</div>
+      <div class="headline-specimen">See Just The <strong>Tasks</strong> That Match Your Energy</div>
+      <div class="headline-specimen"><strong>Share</strong> &amp; <strong>Capture</strong> From Any App — Effortlessly</div>
+      <div class="headline-specimen">Review <strong>Progress</strong> &amp; <strong>Let Go</strong> What No Longer Matters</div>
+      <div class="headline-specimen">End Your <strong>Day</strong> Clear And Ready For <strong>Tomorrow</strong></div>
+    </div>
+    <div style="font-size:11px;color:#aaa;margin-top:8px;">Pattern: sentence case, 1–2 words bolded (font-weight 800), rest regular weight. Short, action-oriented. Never more than ~6 words per line.</div>
+  </div>
+
+  <div>
+    <div class="section-title">Background Palette</div>
+    <div class="row">
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:center;">
+        <div class="bg-swatch" style="background:#FFF9F1;"></div>
+        <div class="bg-label">#FFF9F1<br>warm cream</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:center;">
+        <div class="bg-swatch" style="background:#EA580C;"></div>
+        <div class="bg-label">#EA580C<br>brand orange</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:center;">
+        <div class="bg-swatch" style="background:#111111;"></div>
+        <div class="bg-label">#111111<br>near black</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:center;">
+        <div class="bg-swatch" style="background:#ffffff;border:1px solid #ddd;"></div>
+        <div class="bg-label">#FFFFFF<br>white (UI)</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Geometric Composition</div>
+    <div class="geo-demo">
+      <div class="geo-orange"></div>
+      <div class="geo-black"></div>
+      <div class="geo-label">Find <strong>Focus</strong> Again</div>
+    </div>
+    <div style="font-size:11px;color:#aaa;margin-top:6px;">Orange fills lower-left ~55% width, rounded top-right corner. Black fills lower-right. Device frame floats center. Headline top-left. Warm cream base.</div>
+  </div>
+
+  <div>
+    <div class="section-title">Floating UI Callout Card (Orange)</div>
+    <div class="callout-card">
+      <div class="callout-row">
+        <span>42 🔥</span>
+        <span>Today ✓</span>
+      </div>
+      <div class="callout-sub">★ Read 'The Goal' by Goldratt</div>
+      <div class="callout-sub">★ Store away ideas from "Human P…"</div>
+    </div>
+    <div style="font-size:11px;color:#aaa;margin-top:6px;">Orange card (#EA580C bg, white text) floats above/beside device. Shows streak + today's goals or current priority tasks. Border-radius ~12px.</div>
+  </div>
+
+  <div>
+    <div class="section-title">Brand Story Arc (iOS screenshot sequence)</div>
+    <table>
+      <thead><tr><th>#</th><th>Headline</th><th>Feature shown</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Find Focus Again</td><td>Main view — streak, Today's Goals, list nav</td></tr>
+        <tr><td>2</td><td>Plan Your Day In Advance</td><td>Task detail + Today's Goals callout</td></tr>
+        <tr><td>3</td><td>Daily Planning Meets Gamification</td><td>Compass Check — current priorities step</td></tr>
+        <tr><td>4</td><td>See Just The Tasks That Match Your Energy</td><td>Compass Check — Energy-Effort Matrix</td></tr>
+        <tr><td>5</td><td>Share &amp; Capture From Any App — Effortlessly</td><td>iOS Share Extension</td></tr>
+        <tr><td>6</td><td>Review Progress &amp; Let Go What No Longer Matters</td><td>Compass Check — Choose Next Priorities</td></tr>
+        <tr><td>7</td><td>(cross-device)</td><td>Mac + iPad + iPhone together</td></tr>
+        <tr><td>8</td><td>End Your Day Clear And Ready For Tomorrow</td><td>Task detail with tags, history, attachments</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

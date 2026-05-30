@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #f5f5f5; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; }
+
+  .streak-widget {
+    background: #FAFAFA; border: 0.5px solid #EEEEEE;
+    border-radius: 8px; padding: 12px 14px;
+    box-shadow: rgba(0,0,0,0.02) 0px 1px 2px;
+    display: flex; flex-direction: column; gap: 10px; max-width: 320px;
+  }
+  .streak-row { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+  .streak-count { font-weight: 700; font-size: 16px; }
+  .flame { font-size: 16px; }
+  .streak-label { font-weight: 500; color: #333; }
+  .check-icon { font-size: 16px; }
+  .btn-compass { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #FF9500; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; align-self: center; }
+
+  .compass-step {
+    background: #fff; border: 1px solid #EEEEEE; border-radius: 10px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+    box-shadow: rgba(0,0,0,0.05) 0px 2px 6px; max-width: 320px;
+  }
+  .step-icon { font-size: 20px; width: 28px; text-align: center; }
+  .step-text { display: flex; flex-direction: column; gap: 2px; }
+  .step-title { font-size: 13px; font-weight: 600; color: #111; }
+  .step-desc { font-size: 11px; color: #888; }
+  .step-badge { margin-left: auto; font-size: 10px; background: #EEEEEE; padding: 2px 6px; border-radius: 20px; color: #666; }
+  .step-done { background: rgba(52,199,89,0.08); border-color: rgba(52,199,89,0.3); }
+  .step-done .step-title { color: #1A7A35; }
+</style>
+</head>
+<body>
+  <div class="section-title">Streak Widget</div>
+  <div class="streak-widget">
+    <div class="streak-row">
+      <span class="streak-count">14</span>
+      <span class="flame">🔥</span>
+      <span class="streak-label">Today:</span>
+      <span class="check-icon" style="color:#007AFF;">○</span>
+    </div>
+    <button class="btn-compass">⊕ Start Compass Check Now</button>
+  </div>
+
+  <div class="section-title" style="margin-top:4px;">Compass Check Steps</div>
+  <div class="compass-step step-done">
+    <div class="step-icon">✓</div>
+    <div class="step-text">
+      <div class="step-title">Review Priorities</div>
+      <div class="step-desc">Check yesterday's goals</div>
+    </div>
+    <div class="step-badge">done</div>
+  </div>
+  <div class="compass-step" style="border-left: 3px solid #FF9500;">
+    <div class="step-icon">⚡</div>
+    <div class="step-text">
+      <div class="step-title">Categorize Tasks</div>
+      <div class="step-desc">Energy-Effort Matrix</div>
+    </div>
+    <div class="step-badge" style="background:rgba(255,149,0,0.15);color:#B05A00;">active</div>
+  </div>
+  <div class="compass-step" style="opacity:0.5;">
+    <div class="step-icon">📦</div>
+    <div class="step-text">
+      <div class="step-title">Kill Stale Tasks</div>
+      <div class="step-desc">Archive tasks untouched 30+ days</div>
+    </div>
+    <div class="step-badge">3 tasks</div>
+  </div>
+  <div class="compass-step" style="opacity:0.5;">
+    <div class="step-icon">★</div>
+    <div class="step-text">
+      <div class="step-title">Plan the Day</div>
+      <div class="step-desc">Pick your three daily goals</div>
+    </div>
+  </div>
+</body>
+</html>

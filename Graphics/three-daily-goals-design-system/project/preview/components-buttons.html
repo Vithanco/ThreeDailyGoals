@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #fff; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; margin-bottom: 8px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  /* Primary CTA */
+  .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #EA580C; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-primary:hover { background: #D04E0A; }
+
+  /* Plain button */
+  .btn-plain { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #F5F5F5; color: #333; border: 1px solid #E0E0E0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
+
+  /* Compass check button */
+  .btn-compass { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #FF9500; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; }
+
+  /* Tags */
+  .tag-accent { display: inline-block; background: #EA580C; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-filter { display: inline-block; background: #EEEEEE; color: #444; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1px solid #E0E0E0; }
+  .tag-filter-active { background: rgba(0,122,255,0.12); color: #0055CC; border-color: rgba(0,122,255,0.3); }
+
+  /* Nav item selected */
+  .nav-selected { display: inline-block; background: linear-gradient(297deg, #EA580C, #FF8000); color: #fff; padding: 6px 12px; border-radius: 2px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; box-shadow: rgba(149,157,165,0.2) 0px 8px 24px; }
+  .nav-unselected { display: inline-block; padding: 6px 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: #222; }
+
+  /* Newsletter CTA */
+  .newsletter-cta { display: block; background: #EA580C; color: #fff; padding: 8px 16px; border-radius: 5px; font-size: 14px; text-align: center; text-decoration: none; }
+</style>
+</head>
+<body>
+  <div>
+    <div class="section-title">Buttons</div>
+    <div class="row">
+      <button class="btn-primary">⊕ Start Compass Check</button>
+      <button class="btn-compass">★ Set as Priority</button>
+      <button class="btn-plain">✕ Dismiss</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Navigation</div>
+    <div class="row">
+      <span class="nav-selected">System</span>
+      <span class="nav-unselected">Support</span>
+      <span class="nav-unselected">About</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Tags &amp; Filters</div>
+    <div class="row">
+      <span class="tag-accent">support</span>
+      <span class="tag-accent">productivity</span>
+      <span class="tag-filter">high-energy</span>
+      <span class="tag-filter tag-filter-active">big-task</span>
+      <span class="tag-filter">low-energy</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-title">Newsletter CTA</div>
+    <div style="max-width:240px;">
+      <a href="#" class="newsletter-cta">Subscribe to newsletter</a>
+    </div>
+  </div>
+</body>
+</html>

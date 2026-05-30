@@ -10,7 +10,7 @@ import SwiftUI
 import os
 
 private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
+    subsystem: Bundle.safeSubsystem,
     category: String(describing: CloudPreferences.self)
 )
 
@@ -61,11 +61,17 @@ public struct StorageKeys: Sendable {
     // Notifications key
     public static let notificationsEnabled = StorageKeys("notificationsEnabled")
 
+    // Automatic Compass Check key
+    public static let autoCompassCheckEnabled = StorageKeys("autoCompassCheckEnabled")
+
     // Calendar integration key
     public static let targetCalendarIdentifier = StorageKeys("targetCalendarIdentifier")
 
     // Get me a Task widget - selected quadrant key
     public static let selectedQuadrant = StorageKeys("selectedQuadrant")
+
+    // Short ID prefix key
+    public static let shortIdPrefix = StorageKeys("shortIdPrefix")
 }
 
 public protocol KeyValueStorage {
@@ -403,6 +409,18 @@ extension CloudPreferences {
         }
     }
 
+    /// Whether the app automatically opens the Compass Check dialog at the scheduled time.
+    /// When false, the Compass Check can still be started manually.
+    public var autoCompassCheckEnabled: Bool {
+        get {
+            return store.bool(forKey: StorageKeys.autoCompassCheckEnabled, default: true)
+        }
+        set {
+            store.set(newValue, forKey: StorageKeys.autoCompassCheckEnabled)
+            onChange?()
+        }
+    }
+
     // MARK: - Calendar Integration
 
     /// The calendar identifier for scheduling tasks
@@ -468,6 +486,19 @@ extension CloudPreferences {
     /// Clear the selected quadrant
     public func clearSelectedQuadrant() {
         store.set(nil, forKey: StorageKeys.selectedQuadrant)
+    }
+
+    // MARK: - Short ID Prefix
+
+    public var shortIdPrefix: String {
+        get {
+            return store.string(forKey: StorageKeys.shortIdPrefix) ?? ShortIdHelper.defaultPrefix
+        }
+        set {
+            let validated = ShortIdHelper.validatePrefix(newValue)
+            store.set(validated, forKey: StorageKeys.shortIdPrefix)
+            onChange?()
+        }
     }
 
 }

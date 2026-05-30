@@ -55,18 +55,14 @@ struct ListView: View {
         colorScheme == .dark ? Color.neutral600 : Color.neutral200
     }
 
-    // Enhanced list background with subtle tint toward list color
+    // List background — pastel state tint in light mode, neutral in dark mode.
     private var listBackground: some View {
-        ZStack {
-            // Base neutral background
+        Group {
             if colorScheme == .dark {
                 Color.neutral800.opacity(0.3)
             } else {
-                Color.neutral200.opacity(0.9)
+                whichList.listBackgroundTint
             }
-
-            // Subtle color tint overlay
-            whichList.color.opacity(0.02)
         }
     }
 

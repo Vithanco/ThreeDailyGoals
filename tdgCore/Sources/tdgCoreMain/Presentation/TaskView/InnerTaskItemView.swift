@@ -171,7 +171,10 @@ public struct InnerTaskItemView: View {
             GroupBox {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
-                        Text("Attachments").font(.headline)
+                        Text("Attachments")
+                            .font(.caption.weight(.semibold))
+                            .textCase(.uppercase)
+                            .foregroundStyle(Color.neutral500)
                         Spacer()
                         if showAttachmentImport {
                             attachmentButton
@@ -199,7 +202,11 @@ public struct InnerTaskItemView: View {
 
             // Labels section
             GroupBox {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Tags")
+                        .font(.caption.weight(.semibold))
+                        .textCase(.uppercase)
+                        .foregroundStyle(Color.neutral500)
                     HStack {
                         Text("Add new Label:")
                         TextField("Tag Me", text: $buildTag)

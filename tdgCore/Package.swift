@@ -28,9 +28,13 @@ let package = Package(
             name: "tdgCoreTest",
             targets: ["tdgCoreTest"]
         ),
+        .library(
+            name: "tdgCoreMCP",
+            targets: ["tdgCoreMCP"]
+        ),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.12.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -55,6 +59,14 @@ let package = Package(
             name: "tdgCoreTest",
             dependencies: ["tdgCoreShare"],
             path: "Sources/tdgCoreTest"
+        ),
+        .target(
+            name: "tdgCoreMCP",
+            dependencies: [
+                "tdgCoreMain",
+                .product(name: "MCP", package: "swift-sdk"),
+            ],
+            path: "Sources/tdgCoreMCP"
         ),
         .testTarget(
             name: "tdgCoreWidgetTests",

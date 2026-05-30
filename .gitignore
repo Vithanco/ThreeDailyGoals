@@ -90,5 +90,3 @@ fastlane/test_output
 iOSInjectionProject/
 *.json
 migratingTo3.3.txt
-
-marketing/

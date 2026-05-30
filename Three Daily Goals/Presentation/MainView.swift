@@ -11,7 +11,7 @@ import os
 import tdgCoreMain
 
 private let logger = Logger(
-    subsystem: Bundle.main.bundleIdentifier!,
+    subsystem: Bundle.safeSubsystem,
     category: String(describing: MainView.self)
 )
 

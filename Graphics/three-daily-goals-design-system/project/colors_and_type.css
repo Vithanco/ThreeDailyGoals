@@ -1,0 +1,253 @@
+/**
+ * Three Daily Goals — Design Tokens
+ * Source of truth: tdgCore/Sources/tdgCoreWidget/Helpers/ColorRelated.swift
+ *                  www.threedailygoals.com/bright.css
+ *
+ * Font: System UI stack (no custom fonts used)
+ * Google Fonts substitute: none needed — system fonts are intentional
+ */
+
+/* ─── GOOGLE FONTS (closest web match for system-ui) ─────────────────────── */
+/* System UI stack is intentional. No substitution needed. */
+
+/* ─── BASE COLOR TOKENS ───────────────────────────────────────────────────── */
+:root {
+  /* Brand / Accent */
+  --color-accent:          #EA580C;   /* orange-600, primary brand color */
+  --color-accent-hover:    #D04E0A;   /* darker on hover */
+  --color-accent-subtle:   rgba(234, 88, 12, 0.1);
+  --color-accent-border:   rgba(234, 88, 12, 0.4);
+
+  /* Marketing background palette */
+  --color-marketing-cream: #FFF9F1;   /* warm cream — App Store screenshot base */
+  --color-marketing-black: #111111;   /* near black — geometric accent */
+
+  /* Base */
+  --color-fg:              #000000;
+  --color-bg:              #FFFFFF;
+
+  /* Neutral scale (Material-inspired) */
+  --color-neutral-50:      #FAFAFA;
+  --color-neutral-100:     #F5F5F5;
+  --color-neutral-200:     #EEEEEE;
+  --color-neutral-300:     #E0E0E0;
+  --color-neutral-400:     #BDBDBD;
+  --color-neutral-500:     #9E9E9E;
+  --color-neutral-600:     #757575;
+  --color-neutral-700:     #616161;
+  --color-neutral-800:     #424242;
+
+  /* Task State Colors — muted/softened from raw system defaults */
+  --color-state-priority:  #E8900A;   /* muted orange  (was system #FF9500) */
+  --color-state-open:      #3B82C4;   /* muted blue    (was system #007AFF) */
+  --color-state-pending:   #B59A00;   /* muted gold    (was system #FFCC00) */
+  --color-state-closed:    #4A9E6A;   /* muted green   (was system #34C759) */
+  --color-state-dead:      #8C7058;   /* muted brown   (was system #A2845E) */
+  --color-state-due-soon:  #D94F47;   /* muted red     (was system #FF3B30) */
+
+  /* Energy-Effort Matrix (muted pastels) */
+  --color-eem-deep-work:       #B4A5D5;  /* soft lavender — High Energy, Big Task */
+  --color-eem-steady-progress: #7BB8BA;  /* soft teal — Low Energy, Big Task */
+  --color-eem-sprint-tasks:    #F4A89A;  /* soft coral — High Energy, Small Task */
+  --color-eem-easy-wins:       #A8D5BA;  /* soft mint — Low Energy, Small Task */
+}
+
+/* ─── SEMANTIC COLOR VARS ─────────────────────────────────────────────────── */
+:root {
+  --fg1:            var(--color-fg);
+  --fg2:            var(--color-neutral-700);
+  --fg3:            var(--color-neutral-500);
+  --fg-inverse:     var(--color-bg);
+
+  --bg-primary:     var(--color-bg);
+  --bg-secondary:   var(--color-neutral-50);
+  --bg-tertiary:    var(--color-neutral-100);
+  --bg-card:        var(--color-neutral-50);
+
+  --border-subtle:  var(--color-neutral-200);
+  --border-medium:  rgba(123, 123, 123, 0.5);
+
+  --accent:         var(--color-accent);
+  --accent-fg:      var(--color-bg);
+}
+
+/* ─── TYPOGRAPHY TOKENS ───────────────────────────────────────────────────── */
+:root {
+  /* Font stack — system UI, intentional (matches app's Dynamic Type) */
+  --font-sans:    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+                  "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", monospace;
+
+  /* Type scale */
+  --text-xs:      11px;
+  --text-sm:      13px;
+  --text-base:    15px;
+  --text-md:      16px;
+  --text-lg:      18px;
+  --text-xl:      22px;
+  --text-2xl:     28px;
+  --text-3xl:     34px;
+  --text-4xl:     40px;
+
+  /* Line heights */
+  --leading-tight:   1.2;
+  --leading-snug:    1.4;
+  --leading-normal:  1.6;
+
+  /* Font weights */
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+}
+
+/* ─── SEMANTIC TYPE ROLES ─────────────────────────────────────────────────── */
+:root {
+  /* Headings */
+  --h1-size:   var(--text-4xl);
+  --h1-lh:     45px;
+  --h1-weight: var(--weight-bold);
+
+  --h2-size:   var(--text-2xl);
+  --h2-lh:     var(--leading-snug);
+  --h2-weight: var(--weight-bold);
+
+  --h3-size:   var(--text-xl);
+  --h3-lh:     var(--leading-snug);
+  --h3-weight: var(--weight-semibold);
+
+  /* Body */
+  --body-size:   var(--text-base);
+  --body-lh:     var(--leading-normal);
+  --body-weight: var(--weight-regular);
+
+  /* UI labels */
+  --label-size:      var(--text-sm);
+  --label-weight:    var(--weight-medium);
+  --caption-size:    var(--text-xs);
+  --caption-weight:  var(--weight-regular);
+
+  /* Code */
+  --code-font:   var(--font-mono);
+  --code-size:   var(--text-sm);
+  --code-bg:     var(--color-neutral-100);
+}
+
+/* ─── SPACING TOKENS ──────────────────────────────────────────────────────── */
+:root {
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+}
+
+/* ─── BORDER RADIUS TOKENS ────────────────────────────────────────────────── */
+:root {
+  --radius-sm:   2px;   /* nav pills */
+  --radius-md:   4px;   /* tags, small badges */
+  --radius-lg:   6px;   /* buttons */
+  --radius-xl:   8px;   /* streak widget, small cards */
+  --radius-2xl:  10px;  /* task cards */
+  --radius-3xl:  12px;  /* list containers, screenshots */
+  --radius-full: 9999px;
+}
+
+/* ─── SHADOW TOKENS ───────────────────────────────────────────────────────── */
+:root {
+  --shadow-card:     rgba(0,0,0,0.15) 0px 3px 6px;
+  --shadow-list:     rgba(0,0,0,0.05) 0px 2px 4px;
+  --shadow-widget:   rgba(100,100,111,0.2) 0px 7px 29px 0px;
+  --shadow-header:   rgba(149,157,165,0.2) 0px 8px 24px;
+  --shadow-screenshot: rgba(0,0,0,0.15) 0px 4px 16px;
+  --shadow-overlay:  rgba(0,0,0,0.2) 0px 8px 24px;
+}
+
+/* ─── COMPONENT STYLES ────────────────────────────────────────────────────── */
+
+/* Utility: apply system font */
+body, .tdg-body {
+  font-family: var(--font-sans);
+  font-size: var(--body-size);
+  line-height: var(--body-lh);
+  color: var(--fg1);
+  background: var(--bg-primary);
+}
+
+/* Headings */
+.tdg-h1 { font-size: var(--h1-size); line-height: var(--h1-lh); font-weight: var(--h1-weight); }
+.tdg-h2 { font-size: var(--h2-size); line-height: var(--h2-lh); font-weight: var(--h2-weight); }
+.tdg-h3 { font-size: var(--h3-size); line-height: var(--h3-lh); font-weight: var(--h3-weight); }
+
+/* Task cards */
+.tdg-task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2) var(--space-2);
+  box-shadow: var(--shadow-card);
+}
+
+/* State badges */
+.tdg-state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px 8px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+.tdg-state-priority  { background: rgba(255,149,0,0.15); color: #C05E00; }
+.tdg-state-open      { background: rgba(0,122,255,0.12); color: #0055CC; }
+.tdg-state-pending   { background: rgba(255,204,0,0.2);  color: #7A5F00; }
+.tdg-state-closed    { background: rgba(52,199,89,0.15); color: #1A7A35; }
+.tdg-state-dead      { background: rgba(162,132,94,0.15); color: #6B4C2A; }
+
+/* CTA Button */
+.tdg-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.tdg-btn-primary:hover { background: var(--color-accent-hover); }
+
+/* Tag pill */
+.tdg-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+/* Blockquote */
+.tdg-blockquote {
+  background: #f7f7f7;
+  border: 1px solid var(--color-accent-border);
+  border-left: 10px solid var(--accent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: var(--space-4);
+  font-style: italic;
+  text-align: center;
+  color: #333;
+  box-shadow: var(--shadow-header);
+}
