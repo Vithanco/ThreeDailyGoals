@@ -26,28 +26,21 @@ public struct TagView: View {
             onTap?()
         }) {
             Text(text)
-                .padding(.horizontal, 2)
-                .padding(.vertical, 3)
+                .font(.caption)
+                .fontWeight(.medium)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 2)
                 .background(
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(
-                            isSelected
-                                ? accentColor.opacity(0.2)
-                                : (colorScheme == .dark ? Color.neutral700.opacity(0.3) : Color.neutral200.opacity(0.5))
-                        )
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(isSelected ? Color.accent : Color.accent.opacity(0.18))
                 )
-                .foregroundStyle(isSelected ? accentColor : .primary)
+                .foregroundStyle(isSelected ? Color.white : Color.accent)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(
-                            isSelected
-                                ? accentColor
-                                : (colorScheme == .dark
-                                    ? Color.neutral600.opacity(0.6) : Color.neutral400.opacity(0.6)),
-                            lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.accent.opacity(isSelected ? 0 : 0.4), lineWidth: 1)
                 )
-                .lineLimit(1)  // Prevent text wrapping
-                .truncationMode(.tail)  // Truncate with ellipsis if needed
+                .lineLimit(1)
+                .truncationMode(.tail)
         }
         .buttonStyle(.plain)
     }

@@ -52,6 +52,17 @@ extension TaskItemState {
         }
     }
 
+    /// Pastel background tint used by the list container in light mode.
+    public var listBackgroundTint: Color {
+        switch self {
+        case .priority: return Color.listBgPriority
+        case .open: return Color.listBgOpen
+        case .pendingResponse: return Color.listBgPending
+        case .closed: return Color.listBgClosed
+        case .dead: return Color.listBgDead
+        }
+    }
+
     public var imageName: String {
         switch self {
         case .closed: return imgClosed

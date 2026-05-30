@@ -52,6 +52,15 @@ struct SimpleListView: View {
                             .foregroundStyle(color)
                             .font(.subheadline.weight(.semibold))
                             .accessibilityIdentifier("ListView" + id)
+
+                        if !itemList.isEmpty {
+                            Text("\(itemList.count)")
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(color)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 1)
+                                .background(color.opacity(0.13), in: Capsule())
+                        }
                     }
                 }
                 .listRowSeparator(.hidden)

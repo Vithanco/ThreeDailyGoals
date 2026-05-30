@@ -48,7 +48,11 @@ struct TaskAsLine: View {
             text
             Spacer()
             if hasDue, let dueDate = item.due {
-                Text(timeProviderWrapper.timeProvider.timeRemaining(for: dueDate)).italic().foregroundStyle(Color.gray)
+                let urgentThreshold = timeProviderWrapper.timeProvider.getDate(inDays: 3)
+                let isUrgent = item.dueUntil(date: urgentThreshold)
+                Text(timeProviderWrapper.timeProvider.timeRemaining(for: dueDate))
+                    .italic()
+                    .foregroundStyle(isUrgent ? Color.dueSoon : Color.gray)
             }
         }
         .padding(.horizontal, 8)

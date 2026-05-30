@@ -33,13 +33,28 @@ extension Color {
         public static let tertiaryBackground: Color = .clear
     #endif
 
-    public static let priority = Color.orange
-    public static let open = Color.blue
-    public static let pendingResponse = Color.yellow
-    public static let closed = Color.green.opacity(0.7)
-    public static let dead = Color.brown
+    public static let priority = Color.adaptive(light: Color(hex: "#E8900A"), dark: Color(hex: "#F5A623"))
+    public static let open = Color.adaptive(light: Color(hex: "#3B82C4"), dark: Color(hex: "#5B9FE0"))
+    public static let pendingResponse = Color.adaptive(light: Color(hex: "#B59A00"), dark: Color(hex: "#D4B800"))
+    public static let closed = Color.adaptive(light: Color(hex: "#4A9E6A"), dark: Color(hex: "#5DC389"))
+    public static let dead = Color.adaptive(light: Color(hex: "#8C7058"), dark: Color(hex: "#A8896C"))
+    public static let dueSoon = Color.adaptive(light: Color(hex: "#D94F47"), dark: Color(hex: "#F06B63"))
 
-    public static let dueSoon = Color.red
+    /// Brand accent (Tailwind orange-600) — distinct from `.priority` (system orange).
+    public static let accent = Color(hex: "#EA580C")
+
+    /// Warm cream — App Store screenshot base (#FFF9F1).
+    public static let marketingCream = Color(hex: "#FFF9F1")
+    /// Near-black — geometric accent in marketing materials (#111111).
+    public static let marketingBlack = Color(hex: "#111111")
+
+    // MARK: - List background tints (light mode)
+
+    public static let listBgPriority = Color(hex: "#FFF8EE")
+    public static let listBgOpen = Color(hex: "#EEF4FF")
+    public static let listBgPending = Color(hex: "#FFFBEE")
+    public static let listBgClosed = Color(hex: "#EEFFF3")
+    public static let listBgDead = Color(hex: "#F5F0EA")
 
     // MARK: - Energy-Effort Matrix Colors (Muted/Toned Down)
 
@@ -55,6 +70,29 @@ extension Color {
     /// Q4: Low Energy & Small Task - Easy Wins (Soft mint)
     public static let eemEasyWins = Color(hex: "#A8D5BA")
 
+    /// A `Color` that resolves to `light` in light mode and `dark` in dark mode.
+    public static func adaptive(light: Color, dark: Color) -> Color {
+        #if canImport(UIKit)
+            return Color(
+                UIColor { traits in
+                    traits.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
+                })
+        #elseif canImport(AppKit)
+            return Color(
+                NSColor(name: nil) { appearance in
+                    let isDark =
+                        appearance.bestMatch(from: [
+                            .darkAqua,
+                            .vibrantDark,
+                            .accessibilityHighContrastDarkAqua,
+                            .accessibilityHighContrastVibrantDark,
+                        ]) != nil
+                    return isDark ? NSColor(dark) : NSColor(light)
+                })
+        #else
+            return light
+        #endif
+    }
 }
 
 //from https://gist.github.com/peterfriese/bb2fc5df202f6a15cc807bd87ff15193
