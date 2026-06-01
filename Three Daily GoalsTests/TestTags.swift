@@ -151,8 +151,6 @@ struct TestTags {
         dataManager.addExistingTask(task)
         task.tags = ["old1", "old2", "old3"]
 
-        let initialCommentCount = task.comments?.count ?? 0
-
         // When: Replacing all tags
         task.tags = ["new1", "new2"]
 

@@ -20,11 +20,11 @@ struct TestTaskPreviewCard {
         let task = TaskItem(title: "Reply to Simon", state: .open)
         appComps.dataManager.addItem(item: task)
 
-        let card = TaskPreviewCard(item: task)
+        _ = TaskPreviewCard(item: task)
             .environment(appComps.dataManager)
             .environment(appComps.preferences)
 
-        #expect(card != nil)
+        #expect(TaskPreviewCard.visibleTags(for: task).isEmpty)
     }
 
     @Test
@@ -41,11 +41,10 @@ struct TestTaskPreviewCard {
         task.addComment(text: "Added energy/effort: Deep Work")
         task.addComment(text: "Set due date Fri")
 
-        let card = TaskPreviewCard(item: task)
+        _ = TaskPreviewCard(item: task)
             .environment(appComps.dataManager)
             .environment(appComps.preferences)
 
-        #expect(card != nil)
         #expect(task.tags.contains("work"))
         #expect(EnergyEffortQuadrant.from(task: task) == .highEnergyBigTask)
     }

@@ -111,8 +111,6 @@ struct TestReview {
         debugPrint("setupApp completed")
         let pref = appComponents.preferences
         debugPrint("got preferences")
-        let dataManager = appComponents.dataManager
-        let uiState = appComponents.uiState
         let compassCheckManager = appComponents.compassCheckManager
 
         debugPrint("daysOfCompassCheck: \(pref.daysOfCompassCheck)")
@@ -264,7 +262,6 @@ struct TestReview {
         let appComponents = setupApp(isTesting: true, preferences: createTestPreferencesWithPlanEnabled())
         let pref = appComponents.preferences
         let dataManager = appComponents.dataManager
-        let uiState = appComponents.uiState
         let compassCheckManager = appComponents.compassCheckManager
 
         // Set lastCompassCheck to a time outside the current compass check interval
@@ -313,14 +310,14 @@ struct TestReview {
         #expect(compassCheckManager.currentStep.id == "inform")
         #expect(uiState.showCompassCheckDialog == true)
         if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+            Issue.record("Should not be paused")
         }
 
         // Move to currentPriorities state
         compassCheckManager.moveStateForward()
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         if case .paused = compassCheckManager.state {
-            #expect(false, "Should not be paused")
+            Issue.record("Should not be paused")
         }
 
         // Cancel the compass check (closes dialog but preserves progress)
@@ -329,7 +326,7 @@ struct TestReview {
         if case .inProgress(let step) = compassCheckManager.state {
             #expect(step.id == "currentPriorities")
         } else {
-            #expect(false, "Expected inProgress state after cancel")
+            Issue.record("Expected inProgress state after cancel")
         }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == false)
@@ -339,7 +336,7 @@ struct TestReview {
         if case .inProgress = compassCheckManager.state {
             // inProgress state confirmed
         } else {
-            #expect(false, "Should be inProgress after resume")
+            Issue.record("Should be inProgress after resume")
         }
         #expect(compassCheckManager.currentStep.id == "currentPriorities")
         #expect(uiState.showCompassCheckDialog == true)
@@ -393,7 +390,7 @@ struct TestReview {
             if case .inProgress(let inProgressStep) = compassCheckManager.state {
                 #expect(inProgressStep.id == stepIdToTest)
             } else {
-                #expect(false, "Expected inProgress state after cancel")
+                Issue.record("Expected inProgress state after cancel")
             }
             #expect(uiState.showCompassCheckDialog == false)
 
@@ -402,7 +399,7 @@ struct TestReview {
             if case .inProgress = compassCheckManager.state {
                 // inProgress state confirmed
             } else {
-                #expect(false, "Should be inProgress after resume")
+                Issue.record("Should be inProgress after resume")
             }
             #expect(compassCheckManager.currentStep.id == stepIdToTest)
             #expect(uiState.showCompassCheckDialog == true)

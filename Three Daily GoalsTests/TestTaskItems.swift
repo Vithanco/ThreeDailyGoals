@@ -176,7 +176,7 @@ struct TestTaskItems {
         let unchangedLoader: TestDataLoader = { timeProvider in
             var tasks: [TaskItem] = []
             // Create some unchanged tasks (with default empty values)
-            for i in 1...3 {
+            for _ in 1...3 {
                 let task = TaskItem(title: emptyTaskTitle, details: emptyTaskDetails)
                 task.state = .open
                 tasks.append(task)
@@ -226,7 +226,7 @@ struct TestTaskItems {
         // Test the binding creation with nil value
         if selectedDate != nil {
             // This should not execute since selectedDate is nil
-            #expect(false, "This should not execute")
+            Issue.record("This should not execute")
         } else {
             // This is the safe path - no binding creation attempted
             #expect(true, "Safe path taken")

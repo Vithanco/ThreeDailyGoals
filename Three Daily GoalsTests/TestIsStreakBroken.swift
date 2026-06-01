@@ -222,8 +222,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsTodayMorning_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was this morning
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -248,8 +246,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayAfternoon_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was yesterday afternoon
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -274,8 +270,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsTwoDaysAgo_ReturnsFalse() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was two days ago
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -299,8 +293,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsJustBeforeNoonToday_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was just before noon today
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -324,8 +316,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsExactlyAtNoonToday_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was exactly at noon today
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -349,8 +339,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsJustAfterNoonToday_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was just after noon today
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -374,8 +362,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayMorning_ReturnsFalse() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was yesterday morning
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(
@@ -402,8 +388,6 @@ struct TestIsStreakBroken {
 
     @Test
     func testIsStreakActive_AfternoonTime_WhenLastCheckIsYesterdayEvening_ReturnsTrue() throws {
-        let (preferences, timeProvider) = getTestComponents()
-
         // Given: Current time is afternoon (2:00 PM), last check was yesterday evening
         let realTimeProvider = RealTimeProvider()
         let afternoonTimeProvider = MockTimeProvider(

@@ -60,7 +60,7 @@ struct TestCompassCheckSynchronization {
         if case .inProgress(let step) = compassCheckManager.state {
             #expect(step.id == "pending")
         } else {
-            #expect(false, "Should be inProgress after sync")
+            Issue.record("Should be inProgress after sync")
         }
     }
 
@@ -90,7 +90,7 @@ struct TestCompassCheckSynchronization {
         if case .paused(let step) = compassCheckManager.state {
             #expect(step.id == "pending")
         } else {
-            #expect(false, "Should be paused after detecting external progress")
+            Issue.record("Should be paused after detecting external progress")
         }
 
         // Dialog should still be closed (user hasn't opened it yet)
@@ -132,7 +132,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success - should be finished
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
     }
 
@@ -170,7 +170,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
         #expect(uiState.showCompassCheckDialog == false)
     }
@@ -208,7 +208,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
         #expect(uiState.showCompassCheckDialog == false)
     }
@@ -246,7 +246,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion detected")
+            Issue.record("Should be finished after external completion detected")
         }
     }
 
@@ -284,7 +284,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
 
         // The setupCompassCheckNotification() should have been called
@@ -322,7 +322,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
 
         // In a real test, we'd verify that push notifications were cancelled
@@ -489,7 +489,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
         #expect(preferences.didCompassCheckToday == true)
         #expect(preferences.daysOfCompassCheck == initialStreak + 1)
@@ -532,7 +532,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
 
         // The key test: verify that setupCompassCheckNotification() was called
@@ -567,7 +567,7 @@ struct TestCompassCheckSynchronization {
         if case .finished = compassCheckManager.state {
             // Success
         } else {
-            #expect(false, "Should be finished after external completion")
+            Issue.record("Should be finished after external completion")
         }
 
         // The sync timer should be stopped when endCompassCheck is called

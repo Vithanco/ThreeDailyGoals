@@ -40,7 +40,7 @@ final class TestUndoRedo: XCTestCase {
     func testRemoveAllActionsClearsUndoStackNotData() throws {
         // Set up app and data
         let initialCount = dataManager.allTasks.count
-        let task = dataManager.createTask(title: "Test Task", state: .open)
+        _ = dataManager.createTask(title: "Test Task", state: .open)
         try modelContext.save()
 
         // Confirm data exists

@@ -15,9 +15,6 @@ struct TestWebPageEnhancerTruncation {
     func testDescriptionTruncation() async {
         let enhancer = WebPageEnhancer()
 
-        // Create a very long description (more than 500 chars)
-        let longDescription = String(repeating: "This is a very long description that should be truncated. ", count: 20)
-
         // Since we can't easily test the private truncateDescription method,
         // we'll verify the behavior by checking the actual enhance() output
         // when it returns long descriptions from metadata

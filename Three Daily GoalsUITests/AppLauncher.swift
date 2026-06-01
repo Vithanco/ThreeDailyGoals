@@ -9,7 +9,7 @@ import XCTest
 
 @MainActor
 func launchTestApp() -> XCUIApplication {
-    var app = XCUIApplication()
+    let app = XCUIApplication()
     app.launchArguments = ["enable-testing"]
     app.launch()
     return app

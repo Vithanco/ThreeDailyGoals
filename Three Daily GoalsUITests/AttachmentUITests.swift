@@ -20,8 +20,7 @@ final class AttachmentUITests: UITestBase {
         // Look for task list items more specifically
         let scrollViews = app.scrollViews
         guard scrollViews.count > 0 else {
-            XCTSkip("No scroll views found - UI may not be ready")
-            return
+            throw XCTSkip("No scroll views found - UI may not be ready")
         }
 
         // Try to find any clickable task element
@@ -37,15 +36,13 @@ final class AttachmentUITests: UITestBase {
         }
 
         guard foundTask else {
-            XCTSkip("Could not find any task to tap on")
-            return
+            throw XCTSkip("Could not find any task to tap on")
         }
 
         // Wait for the task detail view to load - skip if not found
         let attachmentSection = app.staticTexts["Attachments"]
         guard attachmentSection.waitForExistence(timeout: shortTimeout) else {
-            XCTSkip("Attachment section not found - task detail view may not have loaded")
-            return
+            throw XCTSkip("Attachment section not found - task detail view may not have loaded")
         }
 
         // Note: File picker interaction is limited in UI tests
@@ -58,7 +55,7 @@ final class AttachmentUITests: UITestBase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - it requires specific UI navigation that's hard to test reliably
-        XCTSkip("Attachment UI test - requires manual verification")
+        throw XCTSkip("Attachment UI test - requires manual verification")
     }
 
     func testAttachmentSectionInTaskView() async throws {
@@ -67,7 +64,7 @@ final class AttachmentUITests: UITestBase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - it requires specific UI navigation that's hard to test reliably
-        XCTSkip("Attachment UI test - requires manual verification")
+        throw XCTSkip("Attachment UI test - requires manual verification")
     }
 
     func testAttachmentWorkflowInShareExtension() async throws {
@@ -76,7 +73,7 @@ final class AttachmentUITests: UITestBase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
         // Skip this test - share extension testing is not supported in standard UI tests
-        XCTSkip("Share extension testing requires special configuration")
+        throw XCTSkip("Share extension testing requires special configuration")
     }
 
     // MARK: - Helper Methods

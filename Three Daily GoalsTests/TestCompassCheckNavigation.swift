@@ -165,9 +165,6 @@ struct TestCompassCheckNavigation {
         let secondStep = compassCheckManager.currentStep.id
         #expect(secondStep != firstStep)  // We've moved forward
 
-        // Record the step we're at before going back
-        let stepBeforeBack = secondStep
-
         // Move forward one more time
         compassCheckManager.moveStateForward()
         let thirdStep = compassCheckManager.currentStep.id

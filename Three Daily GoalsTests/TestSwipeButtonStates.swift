@@ -30,7 +30,7 @@ struct TestSwipeButtonStates {
             dataManager.addItem(item: task)
 
             // Create the button view
-            let button = dataManager.waitForResponseButton(item: task)
+            _ = dataManager.waitForResponseButton(item: task)
 
             // Test the disabled condition
             let shouldBeDisabled = !task.canBeMovedToPendingResponse
@@ -51,7 +51,7 @@ struct TestSwipeButtonStates {
         dataManager.addItem(item: task)
 
         // Create the button view and verify accessibility identifier
-        let button = dataManager.waitForResponseButton(item: task)
+        _ = dataManager.waitForResponseButton(item: task)
 
         // The button should have the correct accessibility identifier
         // Note: We can't directly test the accessibility identifier in unit tests,
@@ -99,7 +99,7 @@ struct TestSwipeButtonStates {
             dataManager.addItem(item: task)
 
             // Create the button view
-            let button = dataManager.deleteButton(item: task, uiState: uiState)
+            _ = dataManager.deleteButton(item: task, uiState: uiState)
 
             // Test the disabled condition
             let shouldBeDisabled = !task.canBeDeleted
@@ -189,7 +189,6 @@ struct TestSwipeButtonStates {
     func testSwipeActionButtonConsistency() throws {
         let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
-        let uiState = appComponents.uiState
 
         // Test that all swipe action buttons have consistent disabled states
         let task = TaskItem(title: "Test Task", details: "Test details", state: .open)
@@ -208,7 +207,6 @@ struct TestSwipeButtonStates {
     func testPendingResponseTaskButtonStates() throws {
         let appComponents = setupApp(isTesting: true, loaderForTests: { _ in return [] })
         let dataManager = appComponents.dataManager
-        let uiState = appComponents.uiState
 
         // Test button states for a pending response task
         let task = TaskItem(title: "Pending Task", details: "Waiting for response", state: .pendingResponse)

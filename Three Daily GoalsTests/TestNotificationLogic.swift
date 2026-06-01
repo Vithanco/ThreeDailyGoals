@@ -64,7 +64,7 @@ struct TestNotificationLogic {
     func testStreakReminder_Streak1Day_Pending_ShouldNotSchedule() async throws {
         // Given: 1-day streak, CC pending, current time 10:00 AM
         let currentTime = createTime(hour: 10, minute: 0)
-        let (preferences, timeProvider, pushNotificationManager) = createTestScenario(
+        let (preferences, _, pushNotificationManager) = createTestScenario(
             currentTime: currentTime,
             streakDays: 1,
             didCompassCheckToday: false
@@ -105,7 +105,7 @@ struct TestNotificationLogic {
     func testStreakReminder_Streak2Days_DoneToday_ShouldNotSchedule() async throws {
         // Given: 2-day streak, CC done today, current time 10:00 AM
         let currentTime = createTime(hour: 10, minute: 0)
-        let (preferences, timeProvider, pushNotificationManager) = createTestScenario(
+        let (preferences, _, pushNotificationManager) = createTestScenario(
             currentTime: currentTime,
             streakDays: 2,
             didCompassCheckToday: true
@@ -311,7 +311,7 @@ struct TestNotificationLogic {
 
         for testCase in testCases {
             let currentTime = createTime(hour: testCase.currentHour, minute: 0)
-            let (preferences, timeProvider, pushNotificationManager) = createTestScenario(
+            let (preferences, timeProvider, _) = createTestScenario(
                 currentTime: currentTime,
                 streakDays: testCase.streak,
                 didCompassCheckToday: testCase.doneToday
@@ -334,7 +334,7 @@ struct TestNotificationLogic {
     func testStreakReminder_NotificationsDisabled_ShouldNotSchedule() async throws {
         // Given: 2-day streak, CC pending, but notifications disabled
         let currentTime = createTime(hour: 10, minute: 0)
-        let (preferences, timeProvider, pushNotificationManager) = createTestScenario(
+        let (preferences, _, pushNotificationManager) = createTestScenario(
             currentTime: currentTime,
             streakDays: 2,
             didCompassCheckToday: false

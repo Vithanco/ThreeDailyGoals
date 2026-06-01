@@ -92,7 +92,7 @@ struct TestDeleteButtonVisibility {
         dataManager.addItem(item: closedTask)
 
         // Create TaskAsLine view and check if delete button would be shown
-        let taskAsLine = TaskAsLine(item: closedTask)
+        _ = TaskAsLine(item: closedTask)
             .environment(uiState)
             .environment(dataManager)
             .environment(appComponents.preferences)
@@ -134,11 +134,8 @@ struct TestDeleteButtonVisibility {
         let closedTask = TaskItem(title: "Closed Task", details: "This is closed", state: .closed)
         dataManager.addItem(item: closedTask)
 
-        // Test that deleteButton method exists and can be called
-        let deleteButton = dataManager.deleteButton(item: closedTask, uiState: uiState)
-
-        // The delete button should be created without errors
-        #expect(deleteButton != nil, "Delete button should be created for closed tasks")
+        // Smoke check: building the delete button must not crash.
+        _ = dataManager.deleteButton(item: closedTask, uiState: uiState)
 
         // Test that the task can actually be deleted
         let initialCount = dataManager.allTasks.count
