@@ -94,3 +94,7 @@ iOSInjectionProject/
 # Contents.json files (e.g. the widget AppLogo imageset).
 Exported*.json
 migratingTo3.3.txt
+
+# Claude Code local state (was previously hidden by the blanket *.json rule)
+.claude/settings.local.json
+.claude/worktrees/
