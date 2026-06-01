@@ -88,5 +88,9 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-*.json
+
+# Local task-data exports from the app's JSON export feature.
+# Narrowed from a blanket `*.json` that was also swallowing asset catalog
+# Contents.json files (e.g. the widget AppLogo imageset).
+Exported*.json
 migratingTo3.3.txt
