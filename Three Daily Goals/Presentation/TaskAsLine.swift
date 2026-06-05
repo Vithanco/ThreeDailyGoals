@@ -18,8 +18,9 @@ struct TaskAsLine: View {
 
     #if os(macOS)
         @State private var showPreview = false
+        @State private var isHovered = false
         @State private var hoverTask: Task<Void, Never>?
-        private static let hoverDelay: Duration = .milliseconds(1000)
+        private static let hoverDelay: Duration = .milliseconds(350)
     #endif
 
     var text: some View {
@@ -31,20 +32,24 @@ struct TaskAsLine: View {
         return item.due != nil && item.isOpenOrPriority
     }
 
-    // Adaptive background color for light/dark mode
     private var cardBackground: Color {
-        colorScheme == .dark ? Color.neutral800 : Color.neutral50
+        #if os(macOS)
+        if isHovered && colorScheme != .dark {
+            return Color(red: 1.0, green: 251 / 255, blue: 247 / 255)
+        }
+        #endif
+        return colorScheme == .dark ? Color.neutral800 : Color.neutral50
     }
 
-    // Adaptive border color for light/dark mode
     private var cardBorder: Color {
-        colorScheme == .dark ? Color.neutral700 : Color.neutral200
+        #if os(macOS)
+        if showPreview { return Color.accent }
+        if isHovered { return Color.accent.opacity(0.45) }
+        #endif
+        return colorScheme == .dark ? Color.neutral700 : Color.neutral200
     }
 
-    // Enhanced shadow color for better visibility
-    private var cardShadow: Color {
-        colorScheme == .dark ? .black.opacity(0.15) : .black.opacity(0.15)
-    }
+    private var cardShadow: Color { .black.opacity(0.15) }
 
     var body: some View {
         HStack(spacing: 8) {
@@ -99,6 +104,7 @@ struct TaskAsLine: View {
             }
         }
         .onHover { hovering in
+            isHovered = hovering
             hoverTask?.cancel()
             if hovering {
                 hoverTask = Task { @MainActor in
@@ -219,7 +225,7 @@ struct EnergyEffortQuadrantIndicator: View {
             }
         }
         .frame(width: size, height: size)
-        .opacity(hasCompleteMatrixTags ? 0.8 : 0)
+        .opacity(hasCompleteMatrixTags ? 0.8 : 0.4)
     }
 }
 

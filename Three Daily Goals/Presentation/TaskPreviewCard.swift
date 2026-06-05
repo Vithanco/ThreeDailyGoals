@@ -144,10 +144,10 @@ struct TaskPreviewCard: View {
             ForEach(tags, id: \.self) { tag in
                 Text(tag)
                     .font(.caption)
-                    .foregroundStyle(Color.priority)
+                    .foregroundStyle(Color.accent)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.priority.opacity(0.12))
+                    .background(Color.accent.opacity(0.12))
                     .clipShape(.rect(cornerRadius: 4))
             }
         }
