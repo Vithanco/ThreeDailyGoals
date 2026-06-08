@@ -20,7 +20,7 @@ struct TaskAsLine: View {
         @State private var showPreview = false
         @State private var isHovered = false
         @State private var hoverTask: Task<Void, Never>?
-        private static let hoverDelay: Duration = .milliseconds(350)
+        private static let hoverDelay: Duration = .milliseconds(2000)
     #endif
 
     var text: some View {

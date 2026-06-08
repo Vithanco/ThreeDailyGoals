@@ -40,6 +40,7 @@ struct StreakView: View {
 struct FullStreakView: View {
     @Environment(CompassCheckManager.self) private var compassCheckManager
     @Environment(CloudPreferences.self) private var preferences
+    @Environment(UIStateManager.self) private var uiState
     @Environment(\.colorScheme) private var colorScheme
 
     // Adaptive background color for streak view
@@ -62,6 +63,7 @@ struct FullStreakView: View {
                     Label("Start Compass Check Now", systemImage: imgCompassCheck)
                         .foregroundStyle(.white)
                         .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(Color.priority)
@@ -69,7 +71,20 @@ struct FullStreakView: View {
                         .help("Start Compass Check now")
                 }
                 .buttonStyle(.plain)
-                .frame(height: 20)
+
+                Button(action: { uiState.addNewItem() }) {
+                    Label("New Task", systemImage: imgPlus)
+                        .foregroundStyle(.white)
+                        .font(.subheadline.weight(.medium))
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.open)
+                        .clipShape(.rect(cornerRadius: 6))
+                        .help("Add a new task")
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("addTaskButton")
             }
         }
         .background(streakBackground)

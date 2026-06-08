@@ -34,7 +34,6 @@ public struct MainToolbarContent: ToolbarContent {
 
 public struct StandardToolbarContent: ToolbarContent {
     @Environment(DataManager.self) private var dataManager
-    @Environment(UIStateManager.self) private var uiState
     @Environment(CompassCheckManager.self) private var compassCheckManager
 
     public var body: some ToolbarContent {
@@ -49,9 +48,6 @@ public struct StandardToolbarContent: ToolbarContent {
         }
         ToolbarItem {
             compassCheckManager.compassCheckButton
-        }
-        ToolbarItem {
-            uiState.addNewItemButton
         }
     }
 }
@@ -76,6 +72,7 @@ struct SearchToolbarButton: View {
 
 public struct ItemToolbarContent: ToolbarContent {
     @Environment(DataManager.self) private var dataManager
+    @Environment(\.dismiss) private var dismiss
     let item: TaskItem
     @State private var showTouchAlert = false
     @State private var touchDescription = ""
@@ -87,6 +84,21 @@ public struct ItemToolbarContent: ToolbarContent {
             }
             ToolbarItem {
                 dataManager.redoButton
+            }
+            if !isLargeDevice {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(Color.accent)
+                        .padding(.horizontal, 13)
+                        .padding(.vertical, 4)
+                        .background(Color.accent.opacity(0.10))
+                        .clipShape(.rect(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.accent.opacity(0.45), lineWidth: 1.5)
+                        )
+                }
             }
         #endif
         if item.canBeClosed {

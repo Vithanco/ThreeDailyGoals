@@ -86,8 +86,6 @@ func ensureExists(text: String, inApp: XCUIApplication) {
 
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
-        navigateToList(named: "Open", in: app)
-
         let addButton = app.buttons["addTaskButton"].firstMatch
         XCTAssertTrue(addButton.waitForExistence(timeout: shortTimeout))
         addButton.tap()
