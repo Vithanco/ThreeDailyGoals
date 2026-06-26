@@ -20,7 +20,7 @@ struct TaskAsLine: View {
         @State private var showPreview = false
         @State private var isHovered = false
         @State private var hoverTask: Task<Void, Never>?
-        private static let hoverDelay: Duration = .milliseconds(2000)
+        private static let hoverDelay: Duration = .seconds(2)
     #endif
 
     var text: some View {
@@ -106,12 +106,12 @@ struct TaskAsLine: View {
         .onHover { hovering in
             isHovered = hovering
             hoverTask?.cancel()
+            hoverTask = nil
             if hovering {
                 hoverTask = Task { @MainActor in
                     try? await Task.sleep(for: Self.hoverDelay)
-                    if !Task.isCancelled {
-                        showPreview = true
-                    }
+                    guard !Task.isCancelled, isHovered else { return }
+                    showPreview = true
                 }
             } else {
                 showPreview = false
@@ -265,3 +265,4 @@ private struct QuadrantSquare: View {
         .environment(appComp.dataManager)
         .environment(appComp.preferences)
 }
+
