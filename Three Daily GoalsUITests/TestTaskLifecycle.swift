@@ -24,6 +24,15 @@ import tdgCoreWidget
 @MainActor
 final class TestTaskLifecycle: UITestBase {
 
+    /// Attaches a screenshot to the test for debugging when expectations fail.
+    private func attachScreenshot(_ app: XCUIApplication, name: String) {
+        let screenshot = app.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     // MARK: - Default Test Data
 
     /// The priority task from test data should be visible on the home screen.
@@ -31,10 +40,26 @@ final class TestTaskLifecycle: UITestBase {
         let app = launchTestApp()
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: launchTimeout))
 
-        let task = findByLabel("Try out Concept Maps", in: app)
+        // Ensure we're on the home screen: if a Back button exists (iOS), tap it to return to root
+        #if os(iOS)
+        let backButton = app.buttons["Back"].firstMatch
+        if backButton.waitForExistence(timeout: shortTimeout) {
+            backButton.tap()
+        }
+        #endif
+
+        // Wait for a stable home anchor to ensure initial layout is complete
+        let homeAnchor = app.buttons["addTaskButton"].firstMatch
+        _ = homeAnchor.waitForExistence(timeout: defaultTimeout)
+
+        // Search with scroll to be robust and allow extra time for initial rendering
+        let task = scrollToFindByLabel("Try out Concept Maps", in: app)
+        if !task.waitForExistence(timeout: defaultTimeout + 3) {
+            attachScreenshot(app, name: "Home_missing_priority_task")
+        }
         XCTAssertTrue(
-            task.waitForExistence(timeout: defaultTimeout),
-            "Default priority task 'Try out Concept Maps' should be visible on home screen")
+            task.exists,
+            "Default priority task 'Try out Concept Maps' should be visible on the home screen. If this fails, ensure test data is loaded and the priority section is rendered on launch.")
     }
 
     // MARK: - List Navigation
@@ -49,11 +74,17 @@ final class TestTaskLifecycle: UITestBase {
         // These tasks may be off-screen in the long list, so scroll to find them
         // "Tax Declaration" may be off-screen in the long list
         let task = scrollToFindByLabel("Tax Declaration", in: app)
-        XCTAssertTrue(task.waitForExistence(timeout: shortTimeout))
+        if !task.waitForExistence(timeout: shortTimeout) {
+            attachScreenshot(app, name: "Open_missing_Tax_Declaration")
+        }
+        XCTAssertTrue(task.exists, "Tax Declaration should be in Open list")
 
         // "Tax Declaration" may be off-screen in the long list
         let task2 = scrollToFindByLabel("Read 'The Goal' by Goldratt", in: app)
-        XCTAssertTrue(task2.waitForExistence(timeout: shortTimeout))
+        if !task2.waitForExistence(timeout: shortTimeout) {
+            attachScreenshot(app, name: "Open_missing_The_Goal")
+        }
+        XCTAssertTrue(task2.exists, "Read 'The Goal' by Goldratt should be in Open list")
 
     }
 
@@ -68,7 +99,10 @@ final class TestTaskLifecycle: UITestBase {
 
         // "Tax Declaration" may be off-screen in the long list
         let task = scrollToFindByLabel("Tax Declaration", in: app)
-        XCTAssertTrue(task.waitForExistence(timeout: shortTimeout))
+        if !task.waitForExistence(timeout: shortTimeout) {
+            attachScreenshot(app, name: "Open_missing_Tax_Declaration_before_detail")
+        }
+        XCTAssertTrue(task.exists, "Tax Declaration should be in Open list")
         task.tap()
 
         // Title field should be visible and editable
@@ -134,7 +168,10 @@ final class TestTaskLifecycle: UITestBase {
         navigateToList(named: "Open", in: app)
 
         let taskRow = scrollToFindByLabel(taskTitle, in: app)
-        XCTAssertTrue(taskRow.waitForExistence(timeout: defaultTimeout), "'\(taskTitle)' should be in Open list")
+        if !taskRow.waitForExistence(timeout: defaultTimeout) {
+            attachScreenshot(app, name: "Open_missing_\(taskTitle)_before_close")
+        }
+        XCTAssertTrue(taskRow.exists, "'\(taskTitle)' should be in Open list")
 
         #if os(macOS)
             // Right-click to open context menu, then click Close
@@ -169,7 +206,10 @@ final class TestTaskLifecycle: UITestBase {
         navigateToList(named: "Open", in: app)
 
         let taskRow = scrollToFindByLabel(taskTitle, in: app)
-        XCTAssertTrue(taskRow.waitForExistence(timeout: defaultTimeout), "'\(taskTitle)' should be in Open list")
+        if !taskRow.waitForExistence(timeout: defaultTimeout) {
+            attachScreenshot(app, name: "Open_missing_\(taskTitle)_before_prioritise")
+        }
+        XCTAssertTrue(taskRow.exists, "'\(taskTitle)' should be in Open list")
 
         #if os(macOS)
             // Right-click to open context menu, then click Priority
@@ -205,3 +245,4 @@ final class TestTaskLifecycle: UITestBase {
             "Prioritised task should be visible on the home screen priority list")
     }
 }
+

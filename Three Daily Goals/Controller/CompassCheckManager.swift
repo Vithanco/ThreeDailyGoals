@@ -410,7 +410,7 @@ public final class CompassCheckManager {
         syncCheckTimer?.invalidate()
         syncCheckTimer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
-                self?.checkForExternalCompassCheckCompletion()
+                self?()
             }
         }
     }
@@ -668,3 +668,4 @@ public final class CompassCheckManager {
         return nil
     }
 }
+

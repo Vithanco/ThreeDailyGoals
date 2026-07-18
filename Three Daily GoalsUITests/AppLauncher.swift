@@ -10,9 +10,50 @@ import XCTest
 @MainActor
 func launchTestApp() -> XCUIApplication {
     let app = XCUIApplication()
-    app.launchArguments = ["enable-testing"]
+
+    // Ensure we run in testing mode and disable animations to speed up tests
+    var args = app.launchArguments
+    if !args.contains("-ui-testing") { args.append("-ui-testing") }
+    if !args.contains("-ApplePersistenceIgnoreState") { args.append("-ApplePersistenceIgnoreState") }
+    if !args.contains("-UITestsDisableAnimations") { args.append("-UITestsDisableAnimations") }
+    app.launchArguments = args
+
+    // Launch the app
     app.launch()
+
+    // Wait for the process to be running and accessibility to be ready
+    waitForAccessibility(in: app, timeout: 10)
+
     return app
+}
+
+/// Waits until the target app has loaded accessibility and is responsive.
+@discardableResult
+private func waitForAccessibility(in app: XCUIApplication, timeout: TimeInterval) -> Bool {
+    let start = Date()
+
+    // First, wait for the process to exist and be running
+    while app.state != .runningForeground && Date().timeIntervalSince(start) < timeout {
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+    }
+
+    guard app.state == .runningForeground else { return false }
+
+    // Next, poll for accessibility readiness by checking a stable element like the first window
+    let window = app.windows.element(boundBy: 0)
+
+    // Try both existence and hittability over a short period
+    while Date().timeIntervalSince(start) < timeout {
+        if window.exists { return true }
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.05))
+    }
+
+    // As a fallback, try a brief interaction to trigger accessibility server initialization
+    if !window.exists {
+        app.activate()
+    }
+
+    return window.waitForExistence(timeout: max(0, timeout - Date().timeIntervalSince(start)))
 }
 
 extension XCUIElement {
