@@ -129,7 +129,20 @@ Calm, grounded, anti-anxiety. Productivity without pressure. Philosophical but p
 ### Borders
 - Radius: 6px (buttons), 8px (streak widget), 10–12px (cards/lists)
 - Nav items on website: `border-radius: 2px`
-- Tags: `border-radius: 4px`
+- Tags: `border-radius: 4px` (see Tags / Labels)
+
+### Tags / Labels
+One canonical chip everywhere tags appear (task labels, the macOS label picker, and filter bars). **Always a small rounded rect (radius 4px) — never a pill.** Pills (radius ~20px) are reserved for buttons. Two states only, both in the brand-orange family — **never blue** (blue is the Open task-state color; reusing it for tags is a semantic collision):
+
+| State | Use | Background | Border | Text | Weight |
+|-------|-----|-----------|--------|------|--------|
+| **Default** | resting label / available in picker / inactive filter | `rgba(234,88,12,0.09)` | `1px rgba(234,88,12,0.28)` | `#B4500F` | 500 / medium |
+| **Selected** | applied to this task / active filter | `#EA580C` (brand, solid) | `1px #EA580C` | `#FFFFFF` | 600 / semibold |
+
+- Box is identical in both states: `padding: 4px 11px`, `border-radius: 4px`, `font-size: 12px`. Only fill, text color, and weight change.
+- Color carries meaning: in the macOS label picker, **solid = already on the task**, tint = available — so you can see a task's labels at a glance instead of a wall of identical grey chips (the current shipping default to fix).
+- SwiftUI: `Color.tdgBrand = Color(red: 234/255, green: 88/255, blue: 12/255)`; default fill `.opacity(0.09)`, border `.opacity(0.28)`; selected fill solid. See `preview/components-tags-macos.html` for a drop-in `TagChip` view.
+
 
 ### Animations
 - No custom animations in the app (SwiftUI system animations)
@@ -237,6 +250,7 @@ preview/
   components-tasks.html      ← Task row components
   components-states.html     ← State badges + indicators
   components-buttons.html    ← Button variants
+  components-tags-macos.html ← Tag treatment on macOS (label picker, filter bar) + SwiftUI TagChip
   components-streak.html     ← Streak & compass check widgets
   logo-usage.html            ← Logo usage guidelines
 

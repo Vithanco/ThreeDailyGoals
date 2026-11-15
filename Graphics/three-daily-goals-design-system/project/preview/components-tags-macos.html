@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Components — Tags on macOS" subtitle="Visible tag treatment in the label picker + filter bar" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  body { font-family: var(--font-sans); background: #E8E8EC; padding: 22px; display: flex; flex-direction: column; gap: 18px; color: #111; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #888; }
+  .caption { font-size: 12px; color: #8A8A8A; line-height: 1.5; max-width: 520px; }
+  .caption b { color: #555; font-weight: 600; }
+
+  /* macOS inspector panel */
+  .panel { background: #fff; border: 1px solid #DcDcE0; border-radius: 12px; padding: 16px 18px; box-shadow: rgba(100,100,111,0.12) 0px 4px 16px; max-width: 560px; }
+  .panel-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #A0A0A6; margin-bottom: 12px; }
+
+  .label-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .label-row span { font-size: 14px; color: #333; white-space: nowrap; }
+  .label-input { flex: 1; padding: 7px 12px; border: 1px solid #D2D2D7; border-radius: 7px; font-size: 14px; color: #111; font-family: inherit; outline: none; background: #fff; }
+  .label-input::placeholder { color: #B0B0B6; }
+
+  /* Canonical tag — identical to the rest of the system */
+  .tag-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; }
+  .tag-available { background: rgba(234,88,12,0.09); color: #B4500F; border: 1px solid rgba(234,88,12,0.28); }
+  .tag-applied   { background: #EA580C; color: #fff; border: 1px solid #EA580C; font-weight: 600; }
+
+  /* Filter bar context */
+  .filter-bar { background: #F1F1F4; border: 1px solid #E2E2E6; border-radius: 10px; padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 7px; max-width: 560px; }
+
+  /* Code block */
+  pre.code { background: #1E1E22; color: #E6E6EA; border-radius: 10px; padding: 16px 18px; max-width: 560px; overflow-x: auto; font-family: var(--font-mono); font-size: 12px; line-height: 1.6; }
+  pre.code .k { color: #C792EA; } /* keyword */
+  pre.code .t { color: #82AAFF; } /* type */
+  pre.code .s { color: #C3E88D; } /* string/number */
+  pre.code .c { color: #6A6A72; } /* comment */
+</style>
+</head>
+<body>
+
+  <div>
+    <div class="section-title">macOS — Tags in context</div>
+    <div class="caption" style="margin-top:6px;">The shipping macOS app draws tags as OS-default grey chips, which disappear against grey panels. This is the same canonical tag (radius 4, soft-orange tint default, solid-orange selected) shown in the two places tags appear on Mac: the <b>label picker</b> and the <b>filter bar</b>.</div>
+  </div>
+
+  <!-- Label picker (inspector panel) -->
+  <div>
+    <div class="section-title" style="margin-bottom:8px;">Label picker</div>
+    <div class="caption" style="margin-bottom:10px;">Solid = <b>applied to this task</b>, tint = <b>available</b>. Color now carries meaning — you can see which labels are already on the task at a glance, instead of every chip looking identical.</div>
+    <div class="panel">
+      <div class="panel-label">Tags</div>
+      <div class="label-row">
+        <span>Add new Label:</span>
+        <input class="label-input" placeholder="Tag Me"/>
+      </div>
+      <div class="tag-grid">
+        <span class="tag tag-applied">big-task</span>
+        <span class="tag tag-applied">high-energy</span>
+        <span class="tag tag-applied">obsidian</span>
+        <span class="tag tag-available">3dg</span>
+        <span class="tag tag-available">abk</span>
+        <span class="tag tag-available">ai</span>
+        <span class="tag tag-available">backup</span>
+        <span class="tag tag-available">become-danish</span>
+        <span class="tag tag-available">developing</span>
+        <span class="tag tag-available">finance</span>
+        <span class="tag tag-available">germany</span>
+        <span class="tag tag-available">health</span>
+        <span class="tag tag-available">important</span>
+        <span class="tag tag-available">ios</span>
+        <span class="tag tag-available">knowledge</span>
+        <span class="tag tag-available">low-energy</span>
+        <span class="tag tag-available">movie</span>
+        <span class="tag tag-available">non-urgent</span>
+        <span class="tag tag-available">present</span>
+        <span class="tag tag-available">private</span>
+        <span class="tag tag-available">shopping</span>
+        <span class="tag tag-available">swift</span>
+        <span class="tag tag-available">tdg</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div>
+    <div class="section-title" style="margin-bottom:8px;">Filter bar</div>
+    <div class="caption" style="margin-bottom:10px;">Same chip, used to filter a list. The <b>active</b> filter is solid; the rest rest in tint.</div>
+    <div class="filter-bar">
+      <span class="tag tag-applied">high-energy</span>
+      <span class="tag tag-available">ai</span>
+      <span class="tag tag-available">low-energy</span>
+      <span class="tag tag-available">small-task</span>
+      <span class="tag tag-available">tdg</span>
+    </div>
+  </div>
+
+  <!-- SwiftUI implementation -->
+  <div>
+    <div class="section-title" style="margin-bottom:8px;">Implementation (SwiftUI)</div>
+    <div class="caption" style="margin-bottom:10px;">Drop-in <b>TagChip</b>. <code>isApplied</code> drives both filter “active” and label “on this task”.</div>
+    <pre class="code"><span class="k">extension</span> <span class="t">Color</span> {
+    <span class="c">// brand orange — #EA580C</span>
+    <span class="k">static let</span> tdgBrand   = <span class="t">Color</span>(red: <span class="s">234</span>/<span class="s">255</span>, green: <span class="s">88</span>/<span class="s">255</span>, blue: <span class="s">12</span>/<span class="s">255</span>)
+    <span class="c">// tint-on-light text — #B4500F</span>
+    <span class="k">static let</span> tdgTagText = <span class="t">Color</span>(red: <span class="s">180</span>/<span class="s">255</span>, green: <span class="s">80</span>/<span class="s">255</span>, blue: <span class="s">15</span>/<span class="s">255</span>)
+}
+
+<span class="k">struct</span> <span class="t">TagChip</span>: <span class="t">View</span> {
+    <span class="k">let</span> label: <span class="t">String</span>
+    <span class="k">var</span> isApplied: <span class="t">Bool</span> = <span class="k">false</span>   <span class="c">// applied / active filter</span>
+
+    <span class="k">var</span> body: <span class="k">some</span> <span class="t">View</span> {
+        <span class="t">Text</span>(label)
+            .font(.system(size: <span class="s">12</span>, weight: isApplied ? .semibold : .medium))
+            .foregroundStyle(isApplied ? .white : <span class="t">Color</span>.tdgTagText)
+            .padding(.horizontal, <span class="s">11</span>)
+            .padding(.vertical, <span class="s">4</span>)
+            .background(
+                <span class="t">RoundedRectangle</span>(cornerRadius: <span class="s">4</span>)
+                    .fill(isApplied ? <span class="t">Color</span>.tdgBrand : <span class="t">Color</span>.tdgBrand.opacity(<span class="s">0.09</span>))
+            )
+            .overlay(
+                <span class="t">RoundedRectangle</span>(cornerRadius: <span class="s">4</span>)
+                    .stroke(isApplied ? <span class="t">Color</span>.tdgBrand
+                                      : <span class="t">Color</span>.tdgBrand.opacity(<span class="s">0.28</span>), lineWidth: <span class="s">1</span>)
+            )
+    }
+}</pre>
+  </div>
+
+</body>
+</html>

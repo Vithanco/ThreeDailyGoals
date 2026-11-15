@@ -1,0 +1,61 @@
+{
+  "manifestVersion": 3,
+  "name": "Three Daily Goals Design System",
+  "namespace": "ThreeDailyGoalsDesignSystem_019ded",
+  "files": [
+    "assets/notes/MIGRATION-REPORT.md",
+    "assets/notes/SKILL.from-standalone.md",
+    "colors_and_type.css",
+    "designs/Add & Done Proposals.html",
+    "designs/hover-preview.html",
+    "designs/hover-preview.jsx",
+    "designs/tweaks-panel.jsx",
+    "images/socialmedia-icons/bluesky.svg",
+    "images/socialmedia-icons/linkedin.svg",
+    "images/socialmedia-icons/rss.svg",
+    "logo/logo.svg",
+    "preview/brand-marketing.html",
+    "preview/colors-brand.html",
+    "preview/colors-dark-mode.html",
+    "preview/colors-eem.html",
+    "preview/colors-neutral.html",
+    "preview/colors-state.html",
+    "preview/components-buttons.html",
+    "preview/components-states.html",
+    "preview/components-streak.html",
+    "preview/components-tags-macos.html",
+    "preview/components-tasks.html",
+    "preview/logo-usage.html",
+    "preview/screenshots-ios.html",
+    "preview/screenshots-macos.html",
+    "preview/spacing-tokens.html",
+    "preview/type-scale.html",
+    "preview/type-specimens.html",
+    "ui_kits/ios_app/README.md",
+    "ui_kits/ios_app/components.jsx",
+    "ui_kits/ios_app/index.html"
+  ],
+  "libraries": [],
+  "components": [],
+  "lastChange": {
+    "by": "Move to Claude",
+    "via": "Claude Design",
+    "at": "2026-11-15T08:12:38.031Z",
+    "source": "claude-design",
+    "authoredIn": "spa"
+  },
+  "assetGroups": [
+    {
+      "name": "Other"
+    },
+    {
+      "name": "icons"
+    },
+    {
+      "name": "notes"
+    },
+    {
+      "name": "screenshots"
+    }
+  ]
+}

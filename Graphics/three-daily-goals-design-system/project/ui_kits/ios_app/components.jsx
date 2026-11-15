@@ -1,9 +1,11 @@
 // Three Daily Goals — iOS App UI Components
 // Shared components exported to window for use in index.html
 
+const { useState } = React;
+
 const TDG_COLORS = {
   accent:   '#EA580C',           // brand orange — keep full strength, it's intentional
-  priority: '#E8900A',           // softer orange (was #FF9500)
+  priority: '#E6A012',           // amber/gold — distinct from brand (was #E8900A)
   open:     '#3B82C4',           // muted blue (was #007AFF)
   pending:  '#B59A00',           // muted gold (was #CCAA00)
   closed:   '#4A9E6A',           // muted green (was #34C759)
@@ -140,14 +142,14 @@ function ListContainer({ state, children, count }) {
 }
 
 // ── Streak Widget ───────────────────────────────────────────────────────────
-function StreakWidget({ streak = 42, done = true, onCompassCheck }) {
+function StreakWidget({ streak = 42, done = true, onCompassCheck, onAddTask }) {
   return (
     <div style={{
       background: '#fff',
       border: `1px solid ${TDG_COLORS.neutral200}`,
       borderRadius: 10, padding: '10px 14px',
       boxShadow: 'rgba(0,0,0,0.04) 0px 1px 3px',
-      display: 'flex', flexDirection: 'column', gap: 8,
+      display: 'flex', flexDirection: 'column', gap: 10,
     }}>
       {/* "42 🔥 Today: ✓" row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 14 }}>
@@ -158,16 +160,201 @@ function StreakWidget({ streak = 42, done = true, onCompassCheck }) {
           {done ? '✓' : '○'}
         </span>
       </div>
-      <button onClick={onCompassCheck} style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        gap: 6, padding: '8px 14px',
-        background: TDG_COLORS.accent, color: '#fff',
-        border: 'none', borderRadius: 20,
-        fontSize: 13, fontWeight: 600, cursor: 'pointer',
-        width: '100%',
+      {/* Two primary actions, stacked — Compass Check leads, New Task directly below */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <button onClick={onCompassCheck} style={{
+          width: '100%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 7, padding: '11px 10px',
+          background: TDG_COLORS.accent, color: '#fff',
+          border: 'none', borderRadius: 12,
+          fontSize: 14, fontWeight: 600, cursor: 'pointer',
+        }}>
+          <span style={{ fontSize: 15, lineHeight: 1 }}>◎</span> Start Compass Check
+        </button>
+        <button onClick={onAddTask} style={{
+          width: '100%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 7, padding: '11px 10px',
+          background: TDG_COLORS.open, color: '#fff',
+          border: 'none', borderRadius: 12,
+          fontSize: 14, fontWeight: 600, cursor: 'pointer',
+        }}>
+          <span style={{ fontSize: 17, lineHeight: 1, marginTop: -1 }}>＋</span> New Task
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── New Task Sheet ──────────────────────────────────────────────────────────
+// iOS-style modal sheet for creating a task. Clear top-right "Add" button is
+// the explicit confirm/done — no need to navigate back.
+function NewTaskSheet({ onCancel, onAdd }) {
+  const [title, setTitle] = useState('');
+  const [quadrant, setQuadrant] = useState(null);
+  const [due, setDue] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [notes, setNotes] = useState('');
+  const [priority, setPriority] = useState(false);
+  const canAdd = title.trim().length > 0;
+
+  const toggleTag = (t) => setTags(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]);
+
+  // 2×2 Energy-Effort grid: rows = energy (high/low), cols = effort (big/small)
+  const quads = [
+    { key: 'deepWork', label: 'Deep Work',       color: TDG_COLORS.eemDeepWork },
+    { key: 'sprint',   label: 'Sprint Tasks',    color: TDG_COLORS.eemSprintTasks },
+    { key: 'steady',   label: 'Steady Progress', color: TDG_COLORS.eemSteadyProgress },
+    { key: 'easyWin',  label: 'Easy Wins',       color: TDG_COLORS.eemEasyWins },
+  ];
+  const dueOptions = [
+    { key: null, label: 'None' },
+    { key: 'today', label: 'Today' },
+    { key: 'tomorrow', label: 'Tomorrow' },
+    { key: 'in 7 days', label: 'This week' },
+  ];
+  const tagOptions = ['big-task', 'small-task', 'high-energy', 'low-energy'];
+
+  const handleAdd = () => {
+    if (!canAdd) return;
+    onAdd({
+      title: title.trim(),
+      quadrant,
+      due,
+      dueUrgent: due === 'today' || due === 'tomorrow',
+      state: priority ? 'priority' : 'open',
+      tags,
+      notes: notes.trim(),
+    });
+  };
+
+  const fieldLabel = { fontSize: 11, fontWeight: 600, color: TDG_COLORS.neutral500, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 };
+  const card = { background: TDG_COLORS.neutral50, border: `1px solid ${TDG_COLORS.neutral200}`, borderRadius: 10, padding: '10px 14px' };
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 150, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+      {/* Dimmed backdrop */}
+      <div onClick={onCancel} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.32)' }}></div>
+      {/* Sheet panel */}
+      <div style={{
+        position: 'relative', background: '#fff',
+        borderRadius: '14px 14px 0 0', height: '93%',
+        display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        boxShadow: '0 -8px 40px rgba(0,0,0,0.25)',
       }}>
-        ◎ Start Compass Check Now
-      </button>
+        {/* Grabber */}
+        <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 8 }}>
+          <div style={{ width: 38, height: 5, borderRadius: 3, background: TDG_COLORS.neutral300 }}></div>
+        </div>
+        {/* Header: Cancel · New Task · Add (the clear Done button) */}
+        <div style={{ display: 'flex', alignItems: 'center', padding: '10px 14px 12px', borderBottom: `1px solid ${TDG_COLORS.neutral200}` }}>
+          <button onClick={onCancel} style={{ background: 'none', border: 'none', color: TDG_COLORS.open, fontSize: 16, cursor: 'pointer', padding: 0, minWidth: 56, textAlign: 'left' }}>Cancel</button>
+          <span style={{ flex: 1, textAlign: 'center', fontSize: 17, fontWeight: 700, color: '#111' }}>New Task</span>
+          <button onClick={handleAdd} disabled={!canAdd} style={{
+            background: 'none', border: 'none', fontSize: 16, fontWeight: 700,
+            color: canAdd ? TDG_COLORS.accent : TDG_COLORS.neutral300,
+            cursor: canAdd ? 'pointer' : 'default', padding: 0, minWidth: 56, textAlign: 'right',
+          }}>Add</button>
+        </div>
+        {/* Body */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '14px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Title */}
+          <input
+            autoFocus
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="What needs doing?"
+            style={{
+              ...card, fontSize: 16, color: '#111', fontWeight: 500,
+              outline: 'none', width: '100%',
+            }}
+          />
+          {/* Make it a priority */}
+          <div style={{ ...card, display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => setPriority(p => !p)}>
+            <span style={{ color: TDG_COLORS.priority, fontSize: 16 }}>{priority ? '★' : '☆'}</span>
+            <span style={{ flex: 1, fontSize: 14, color: '#111' }}>Make one of today's goals</span>
+            {/* iOS switch */}
+            <div style={{ width: 44, height: 26, borderRadius: 13, background: priority ? TDG_COLORS.closed : TDG_COLORS.neutral300, position: 'relative', transition: 'background 0.15s', flexShrink: 0 }}>
+              <div style={{ position: 'absolute', top: 2, left: priority ? 20 : 2, width: 22, height: 22, borderRadius: 11, background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.3)', transition: 'left 0.15s' }}></div>
+            </div>
+          </div>
+          {/* Energy-Effort Matrix */}
+          <div style={card}>
+            <div style={fieldLabel}>Energy · Effort</div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+              {/* Energy axis label */}
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: 9, color: TDG_COLORS.neutral500, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', padding: '4px 0' }}>
+                <span>High</span><span>Low</span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                  {quads.map(q => {
+                    const active = quadrant === q.key;
+                    return (
+                      <button key={q.key} onClick={() => setQuadrant(active ? null : q.key)} style={{
+                        padding: '12px 8px', borderRadius: 8,
+                        border: `1.5px solid ${active ? q.color : TDG_COLORS.neutral200}`,
+                        background: active ? q.color + '33' : '#fff',
+                        cursor: 'pointer', textAlign: 'center',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
+                      }}>
+                        <span style={{ width: 12, height: 12, borderRadius: 3, background: q.color }}></span>
+                        <span style={{ fontSize: 12, fontWeight: active ? 700 : 500, color: '#333' }}>{q.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: TDG_COLORS.neutral500, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 5 }}>
+                  <span>Big task</span><span>Small task</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Due date */}
+          <div style={card}>
+            <div style={fieldLabel}>Due</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {dueOptions.map(o => {
+                const active = due === o.key;
+                return (
+                  <button key={o.label} onClick={() => setDue(o.key)} style={{
+                    padding: '5px 12px', borderRadius: 20,
+                    border: `1px solid ${active ? TDG_COLORS.open : TDG_COLORS.neutral300}`,
+                    background: active ? TDG_COLORS.open + '18' : '#fff',
+                    color: active ? TDG_COLORS.open : '#555',
+                    fontSize: 13, fontWeight: active ? 600 : 400, cursor: 'pointer',
+                  }}>{o.label}</button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Tags */}
+          <div style={card}>
+            <div style={fieldLabel}>Tags</div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {tagOptions.map(t => (
+                <TagChip key={t} label={t} active={tags.includes(t)} onToggle={() => toggleTag(t)} />
+              ))}
+            </div>
+          </div>
+          {/* Notes */}
+          <div style={card}>
+            <div style={fieldLabel}>Notes</div>
+            <textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder="Add a note…"
+              rows={3}
+              style={{
+                width: '100%', border: 'none', outline: 'none', resize: 'none',
+                background: 'transparent', fontSize: 14, color: '#333', lineHeight: 1.5,
+                fontFamily: 'inherit',
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -212,14 +399,14 @@ function SidebarLinks({ active, onSelect }) {
 }
 
 // ── Tag Chips ───────────────────────────────────────────────────────────────
-function TagChip({ label, active, color = TDG_COLORS.open, onToggle }) {
+function TagChip({ label, active, color = TDG_COLORS.accent, onToggle }) {
   return (
     <button onClick={onToggle} style={{
-      padding: '3px 10px', borderRadius: 20,
-      border: `1px solid ${active ? color : TDG_COLORS.neutral300}`,
-      background: active ? `${color}18` : TDG_COLORS.neutral100,
-      color: active ? color : '#555',
-      fontSize: 12, fontWeight: active ? 600 : 400,
+      padding: '4px 11px', borderRadius: 4,
+      border: `1px solid ${active ? color : 'rgba(234,88,12,0.28)'}`,
+      background: active ? color : 'rgba(234,88,12,0.09)',
+      color: active ? '#fff' : '#B4500F',
+      fontSize: 12, fontWeight: active ? 600 : 500,
       cursor: 'pointer',
     }}>{label}</button>
   );
@@ -348,4 +535,5 @@ Object.assign(window, {
   TagChip,
   CompassCheckDialog,
   TaskDetailView,
+  NewTaskSheet,
 });

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Task Hover Preview" subtitle="Hover preview design for Compass Check tasks" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Task Hover Preview — Three Daily Goals</title>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #EFEEEA;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: #111;
+    min-height: 100vh;
+    padding: 40px 32px 80px;
+  }
+  .page-header {
+    max-width: 1100px; margin: 0 auto 32px;
+  }
+  .page-header h1 { font-size: 24px; font-weight: 700; color: #111; }
+  .page-header p { font-size: 14px; color: #555; margin-top: 6px; max-width: 680px; line-height: 1.5; }
+  .reasoning {
+    max-width: 1100px; margin: 0 auto 28px;
+    background: #fff; border: 1px solid #E8E8E8; border-radius: 12px;
+    padding: 18px 22px; font-size: 13px; color: #444; line-height: 1.55;
+  }
+  .reasoning h3 { font-size: 12px; font-weight: 700; color: #EA580C; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .reasoning ul { padding-left: 18px; margin-top: 6px; }
+  .reasoning li { margin-bottom: 3px; }
+
+  .stage {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: center;
+  }
+  /* macOS window shell */
+  .mac-window {
+    width: 900px; min-height: 620px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .mac-titlebar {
+    height: 38px; background: #F6F6F6;
+    border-bottom: 1px solid #E5E5E5;
+    display: flex; align-items: center; padding: 0 14px; gap: 8px;
+    flex-shrink: 0;
+  }
+  .traffic { width: 12px; height: 12px; border-radius: 50%; }
+  .traffic.r { background: #FF5F57; }
+  .traffic.y { background: #FEBC2E; }
+  .traffic.g { background: #28C840; }
+  .titlebar-title {
+    flex: 1; text-align: center; font-size: 13px; font-weight: 600; color: #333;
+  }
+
+  .compass-body { flex: 1; display: flex; flex-direction: column; padding: 24px 28px; gap: 18px; position: relative; }
+
+  .cc-header {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 14px; border-bottom: 1px solid #EEE;
+  }
+  .cc-header .compass-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(234,88,12,0.1); color: #EA580C;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .cc-header h2 { font-size: 18px; font-weight: 700; color: #111; }
+  .cc-header .subtitle { font-size: 13px; color: #777; margin-top: 2px; }
+  .cc-progress {
+    display: flex; gap: 4px; margin-left: auto; width: 200px;
+  }
+  .cc-progress div { flex: 1; height: 4px; border-radius: 2px; background: #E8E8E8; }
+  .cc-progress div.done { background: #EA580C; }
+  .cc-progress div.current { background: #EA580C; }
+
+  .step-title {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .step-title h3 { font-size: 20px; font-weight: 700; color: #111; }
+  .step-title .step-num { font-size: 12px; font-weight: 600; color: #EA580C; letter-spacing: 0.06em; text-transform: uppercase; }
+  .step-instructions { font-size: 14px; color: #555; line-height: 1.5; }
+
+  .task-list {
+    display: flex; flex-direction: column; gap: 6px;
+    margin-top: 4px;
+  }
+
+  /* Task row */
+  .task-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #E8E8E8;
+    border-radius: 8px;
+    cursor: default;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .task-row:hover {
+    border-color: rgba(234,88,12,0.45);
+    background: #FFFBF7;
+    box-shadow: 0 1px 3px rgba(234,88,12,0.08);
+  }
+  .task-row.hovered {
+    border-color: #EA580C;
+    background: #FFFBF7;
+    box-shadow: 0 2px 8px rgba(234,88,12,0.15);
+  }
+  .task-row .title { flex: 1; font-size: 14px; color: #111; }
+  .task-row .star-btn {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid #E8E8E8; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    color: #E6A012; font-size: 13px; cursor: pointer;
+  }
+  .task-row .star-btn.active {
+    background: rgba(230,160,18,0.16); border-color: #E6A012;
+  }
+
+  /* EEM mini quadrant */
+  .eem {
+    width: 16px; height: 16px;
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 1px; flex-shrink: 0;
+  }
+  .eem > div { background: rgba(0,0,0,0.08); border-radius: 1px; }
+
+  /* Due tag */
+  .due {
+    font-size: 11px; color: #888; font-style: italic;
+  }
+  .due.urgent { color: #D94F47; font-style: normal; font-weight: 500; }
+
+  /* ─────────────────── HOVER PREVIEW CARD ─────────────────── */
+  .preview {
+    position: absolute;
+    width: 340px;
+    background: #fff;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.03);
+    padding: 14px 16px;
+    z-index: 50;
+    pointer-events: none;
+    animation: previewIn 0.14s ease-out;
+  }
+  @keyframes previewIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Arrow */
+  .preview::before {
+    content: '';
+    position: absolute;
+    left: -7px; top: 22px;
+    width: 12px; height: 12px;
+    background: #fff;
+    border-left: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    transform: rotate(45deg);
+  }
+  .preview .pv-title {
+    font-size: 15px; font-weight: 600; color: #111; line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .preview .pv-meta {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 11px; color: #666;
+    margin-bottom: 10px;
+  }
+  .pv-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 7px; border-radius: 10px;
+    background: #F4F2EE; color: #555;
+    font-size: 11px; font-weight: 500;
+  }
+  .pv-chip.state-priority { background: rgba(230,160,18,0.16); color: #8C6000; }
+  .pv-chip.state-open     { background: rgba(59,130,196,0.13); color: #2962A0; }
+  .pv-chip.state-pending  { background: rgba(181,154,0,0.18); color: #6E5C00; }
+  .pv-chip.state-closed   { background: rgba(74,158,106,0.16); color: #2C6840; }
+  .pv-chip.state-dead     { background: rgba(140,112,88,0.15); color: #5C4632; }
+  .pv-chip.due-urgent     { background: rgba(217,79,71,0.13); color: #B23029; }
+  .pv-chip.eem-deepWork   { background: rgba(180,165,213,0.3); color: #4B3F75; }
+  .pv-chip.eem-sprint     { background: rgba(244,168,154,0.3); color: #8B3E2D; }
+  .pv-chip.eem-steady     { background: rgba(123,184,186,0.3); color: #2E6A6C; }
+  .pv-chip.eem-easyWin    { background: rgba(168,213,186,0.3); color: #2E6A45; }
+
+  .pv-section { margin-top: 10px; }
+  .pv-section-label {
+    font-size: 10px; font-weight: 700; color: #999;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pv-notes {
+    font-size: 13px; color: #333; line-height: 1.5;
+  }
+  .pv-notes.empty { color: #BBB; font-style: italic; }
+  .pv-history {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .pv-history-item {
+    display: flex; gap: 8px; font-size: 12px;
+  }
+  .pv-history-item .date { color: #999; min-width: 56px; flex-shrink: 0; }
+  .pv-history-item .note { color: #444; }
+  .pv-empty {
+    font-size: 12px; color: #BBB; font-style: italic;
+  }
+
+  .pv-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .pv-tag {
+    padding: 2px 8px; border-radius: 4px;
+    background: rgba(234,88,12,0.1); color: #B84509;
+    font-size: 11px; font-weight: 500;
+  }
+
+  .pv-footer {
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px solid #F0F0F0;
+    display: flex; gap: 6px;
+  }
+  .pv-hint {
+    font-size: 11px; color: #999;
+    display: flex; align-items: center; gap: 6px;
+  }
+  kbd {
+    display: inline-block;
+    padding: 1px 5px; border-radius: 3px;
+    background: #F0EEE9; border: 1px solid #DDD8CF;
+    font-family: ui-monospace, monospace;
+    font-size: 10px; color: #555;
+  }
+
+  /* Floating note */
+  .note-card {
+    max-width: 1100px; margin: 28px auto 0;
+    font-size: 13px; color: #666; line-height: 1.55;
+    background: #FFFBF7; border: 1px solid rgba(234,88,12,0.25); border-left: 4px solid #EA580C;
+    border-radius: 6px; padding: 12px 16px;
+  }
+  .note-card strong { color: #B84509; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Task Hover Preview · Compass Check</h1>
+  <p>When a task title isn't enough — hover (or long-press on iOS) to see why it's there. The preview surfaces just enough context to make a confident decision without leaving the step.</p>
+</div>
+
+<div class="reasoning">
+  <h3>Design Reasoning</h3>
+  <p>The Compass Check is a quick noon-to-noon ritual. Pulling up a full task detail breaks that flow. A hover preview is the right pattern: it appears while your eye is on the row, disappears the moment you move on. The preview's job is to answer one question — <em>"do I remember what this is, and is it still worth my attention?"</em></p>
+  <ul>
+    <li><strong>What to show</strong> (in priority order): full title (in case truncated), notes, last activity, quadrant + state + due date, tags, created date</li>
+    <li><strong>How to show it</strong>: a small popover anchored to the row, arrow on the side, fixed width (~340 px), no scroll inside</li>
+    <li><strong>What it must not do</strong>: cover the row it describes, block keyboard nav, or require a click to dismiss</li>
+  </ul>
+  <p style="margin-top:8px;">Tweak the controls (top-right) to compare content density and visual styles.</p>
+</div>
+
+<div class="stage">
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <span class="traffic r"></span><span class="traffic y"></span><span class="traffic g"></span>
+      <span class="titlebar-title">Compass Check · Three Daily Goals</span>
+      <div style="width: 54px;"></div>
+    </div>
+    <div id="cc-root" class="compass-body"></div>
+  </div>
+</div>
+
+<div class="note-card">
+  <strong>Implementation note for the app:</strong> on macOS use NSHoverGesture / SwiftUI <code>.onHover</code> with a 350ms delay before showing; on iOS, this becomes a long-press → context menu preview (same content, native chrome). Dismiss on mouse-out, scroll, or any key press other than ↑/↓.
+</div>
+
+<script type="text/babel" src="hover-preview.jsx"></script>
+</body>
+</html>

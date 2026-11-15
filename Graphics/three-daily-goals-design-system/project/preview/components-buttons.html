@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- @dsCard group="Components" name="Components — Buttons & Tags" subtitle="Primary, plain, compass buttons; nav; tags" viewport="700x280" -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -8,20 +9,24 @@
   .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #aaa; margin-bottom: 8px; }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-  /* Primary CTA */
+  /* Primary CTA — brand accent owns the only solid-orange button */
   .btn-primary { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #EA580C; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
   .btn-primary:hover { background: #D04E0A; }
 
   /* Plain button */
   .btn-plain { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #F5F5F5; color: #333; border: 1px solid #E0E0E0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
 
-  /* Compass check button */
-  .btn-compass { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #FF9500; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; }
+  /* Priority button — secondary, tinted in the priority token (#E6A012 amber),
+     so it reads as the star action without competing with the brand CTA */
+  .btn-compass { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: rgba(230,160,18,0.13); color: #8C6000; border: 1px solid rgba(230,160,18,0.5); border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .btn-compass:hover { background: rgba(230,160,18,0.2); }
 
-  /* Tags */
-  .tag-accent { display: inline-block; background: #EA580C; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
-  .tag-filter { display: inline-block; background: #EEEEEE; color: #444; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; border: 1px solid #E0E0E0; }
-  .tag-filter-active { background: rgba(0,122,255,0.12); color: #0055CC; border-color: rgba(0,122,255,0.3); }
+  /* Tags — ONE shape (rounded rect, radius 5), ONE color family, TWO states.
+     Pills (radius 20) are reserved for buttons; tags never use them. */
+  .tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; }
+  .tag-default  { background: rgba(234,88,12,0.09); color: #B4500F; border: 1px solid rgba(234,88,12,0.28); }
+  .tag-selected { background: #EA580C; color: #fff; border: 1px solid #EA580C; font-weight: 600; }
+  .caption { font-size: 11px; color: #999; margin: 2px 0 6px; }
 
   /* Nav item selected */
   .nav-selected { display: inline-block; background: linear-gradient(297deg, #EA580C, #FF8000); color: #fff; padding: 6px 12px; border-radius: 2px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; box-shadow: rgba(149,157,165,0.2) 0px 8px 24px; }
@@ -52,12 +57,19 @@
 
   <div>
     <div class="section-title">Tags &amp; Filters</div>
+    <div class="caption">Default &mdash; resting state for any label or filter chip</div>
     <div class="row">
-      <span class="tag-accent">support</span>
-      <span class="tag-accent">productivity</span>
-      <span class="tag-filter">high-energy</span>
-      <span class="tag-filter tag-filter-active">big-task</span>
-      <span class="tag-filter">low-energy</span>
+      <span class="tag tag-default">support</span>
+      <span class="tag tag-default">productivity</span>
+      <span class="tag tag-default">high-energy</span>
+      <span class="tag tag-default">low-energy</span>
+      <span class="tag tag-default">small-task</span>
+    </div>
+    <div class="caption" style="margin-top:14px;">Selected &mdash; the active filter, or a label being applied. Solid brand orange (never blue)</div>
+    <div class="row">
+      <span class="tag tag-selected">big-task</span>
+      <span class="tag tag-selected">high-energy</span>
+      <span class="tag tag-selected">low-energy</span>
     </div>
   </div>
 

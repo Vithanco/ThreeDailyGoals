@@ -38,7 +38,7 @@
   --color-neutral-800:     #424242;
 
   /* Task State Colors — muted/softened from raw system defaults */
-  --color-state-priority:  #E8900A;   /* muted orange  (was system #FF9500) */
+  --color-state-priority:  #E6A012;   /* amber/gold — distinct from brand #EA580C (was #E8900A) */
   --color-state-open:      #3B82C4;   /* muted blue    (was system #007AFF) */
   --color-state-pending:   #B59A00;   /* muted gold    (was system #FFCC00) */
   --color-state-closed:    #4A9E6A;   /* muted green   (was system #34C759) */
@@ -69,6 +69,57 @@
 
   --accent:         var(--color-accent);
   --accent-fg:      var(--color-bg);
+}
+
+/* ─── DARK MODE OVERRIDES ─────────────────────────────────────────────────── */
+/*
+ * Sources:
+ *   - App: ColorRelated.swift (neutral800 cards, neutral700 borders in dark)
+ *   - App: TaskAsLine.swift, ListView.swift (cardBackground, cardBorder, listBackground)
+ *   - State colors: lifted to be lighter/more saturated for dark bg contrast
+ *   - EEM pastels: slightly brightened so they don't muddy against dark surfaces
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Base */
+    --color-fg:   #FFFFFF;
+    --color-bg:   #111111;   /* near-black, not pure black */
+
+    /* Task state colors — lighter/more saturated for dark bg */
+    --color-state-priority:  #F5BB2E;   /* brighter amber for dark bg */
+    --color-state-open:      #5B9FE0;   /* lighter blue */
+    --color-state-pending:   #D4B800;   /* brighter gold */
+    --color-state-closed:    #5DC389;   /* lighter green */
+    --color-state-dead:      #A8896C;   /* lighter brown */
+    --color-state-due-soon:  #F06B63;   /* lighter red */
+
+    /* EEM pastels — slightly brighter on dark */
+    --color-eem-deep-work:       #C4B5E5;  /* lavender +10% L */
+    --color-eem-steady-progress: #8DCACB;  /* teal +10% L */
+    --color-eem-sprint-tasks:    #F8BBB0;  /* coral +10% L */
+    --color-eem-easy-wins:       #BCE3CA;  /* mint +10% L */
+  }
+
+  /* Flip semantic surface vars — matches app's dark mode card/border choices */
+  :root {
+    --fg1:           #FFFFFF;
+    --fg2:           #AEAEB2;   /* iOS secondary label dark */
+    --fg3:           #6C6C70;   /* iOS tertiary label dark */
+    --fg-inverse:    #000000;
+
+    --bg-primary:    #111111;   /* window background */
+    --bg-secondary:  #1C1C1E;   /* grouped bg (iOS dark) */
+    --bg-tertiary:   #2C2C2E;   /* elevated surface */
+    --bg-card:       #424242;   /* neutral800 — matches app's cardBackground dark */
+
+    --border-subtle: #616161;   /* neutral700 — matches app's cardBorder dark */
+    --border-medium: rgba(255, 255, 255, 0.12);
+
+    --accent:        var(--color-accent);   /* orange stays the same */
+    --accent-fg:     #FFFFFF;
+
+    --code-bg:       #2C2C2E;
+  }
 }
 
 /* ─── TYPOGRAPHY TOKENS ───────────────────────────────────────────────────── */
@@ -204,11 +255,11 @@ body, .tdg-body {
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
 }
-.tdg-state-priority  { background: rgba(255,149,0,0.15); color: #C05E00; }
-.tdg-state-open      { background: rgba(0,122,255,0.12); color: #0055CC; }
-.tdg-state-pending   { background: rgba(255,204,0,0.2);  color: #7A5F00; }
-.tdg-state-closed    { background: rgba(52,199,89,0.15); color: #1A7A35; }
-.tdg-state-dead      { background: rgba(162,132,94,0.15); color: #6B4C2A; }
+.tdg-state-priority  { background: rgba(230,160,18,0.16); color: #8C6000; }
+.tdg-state-open      { background: rgba(59,130,196,0.15); color: #1E5A99; }
+.tdg-state-pending   { background: rgba(181,154,0,0.15);  color: #7A6200; }
+.tdg-state-closed    { background: rgba(74,158,106,0.15); color: #2A6B45; }
+.tdg-state-dead      { background: rgba(140,112,88,0.15); color: #5E4427; }
 
 /* CTA Button */
 .tdg-btn-primary {

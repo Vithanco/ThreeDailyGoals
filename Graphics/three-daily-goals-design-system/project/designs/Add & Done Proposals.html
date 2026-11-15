@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Add & Done Proposals" subtitle="Add button + iOS Done — before/after, iOS & macOS" -->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Three Daily Goals — Add & Done Placement Proposals</title>
+<style>
+  :root {
+    --accent: #EA580C;
+    --accent-soft: rgba(234,88,12,0.10);
+    --priority: #E6A012;
+    --open: #3B82C4;
+    --pending: #B59A00;
+    --closed: #4A9E6A;
+    --dead: #8C7058;
+    --ink: #1a1a1a;
+    --n50: #FAFAFA; --n100: #F5F5F5; --n200: #E8E8E8; --n300: #D8D8D8;
+    --n500: #9A9A9A; --n700: #5E5E5E;
+    --ios-bg: #F2F2F7;
+    --page: #FAF6EF;
+    --font: ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--page);
+    font-family: var(--font);
+    color: var(--ink);
+    padding: 56px 40px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; }
+
+  /* ── Document header ─────────────────────────────────────── */
+  .doc-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 14px; }
+  .doc-head .mark {
+    width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0;
+    background: var(--accent); display: grid; place-items: center;
+    box-shadow: 0 4px 14px rgba(234,88,12,0.3);
+  }
+  .doc-head .mark svg { width: 26px; height: 26px; }
+  .doc-head h1 { font-size: 27px; font-weight: 760; letter-spacing: -0.02em; line-height: 1.1; }
+  .doc-head .sub { font-size: 14.5px; color: var(--n700); margin-top: 5px; max-width: 720px; line-height: 1.5; }
+  .doc-head .tag { color: var(--accent); font-weight: 650; }
+
+  .rule { height: 1px; background: linear-gradient(90deg, var(--n300), transparent); margin: 30px 0 44px; }
+
+  /* ── Section ─────────────────────────────────────────────── */
+  section { margin-bottom: 84px; }
+  .sec-head { display: flex; align-items: baseline; gap: 13px; margin-bottom: 6px; }
+  .sec-num {
+    font-size: 13px; font-weight: 700; color: #fff; background: var(--ink);
+    width: 25px; height: 25px; border-radius: 7px; display: grid; place-items: center;
+    flex-shrink: 0; letter-spacing: 0; align-self: center;
+  }
+  .sec-head h2 { font-size: 21px; font-weight: 720; letter-spacing: -0.015em; }
+  .sec-desc { font-size: 14.5px; color: var(--n700); line-height: 1.55; max-width: 760px; margin: 8px 0 0 38px; }
+  .sec-desc b { color: var(--ink); font-weight: 650; }
+
+  .platform-label {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--n500); margin: 40px 0 18px 38px; display: flex; align-items: center; gap: 9px;
+  }
+  .platform-label::after { content: ""; flex: 1; height: 1px; background: var(--n200); }
+
+  /* ── Before / After comparison ───────────────────────────── */
+  .compare { display: flex; align-items: flex-start; gap: 30px; margin-left: 38px; flex-wrap: wrap; }
+  .frame-col { display: flex; flex-direction: column; gap: 14px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+    font-size: 12px; font-weight: 650; padding: 4px 11px 4px 9px; border-radius: 20px;
+  }
+  .badge.before { background: #fff; border: 1px solid var(--n300); color: var(--n700); }
+  .badge.after { background: var(--accent-soft); border: 1px solid rgba(234,88,12,0.32); color: #B4500F; }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .badge.before .dot { background: var(--n300); }
+  .badge.after .dot { background: var(--accent); }
+  .arrow {
+    align-self: center; color: var(--n300); font-size: 30px; font-weight: 300;
+    margin-top: 120px; user-select: none;
+  }
+  .note { font-size: 12.5px; color: var(--n700); line-height: 1.5; max-width: 280px; }
+  .note b { color: var(--ink); font-weight: 650; }
+  .note.hl b { color: #B4500F; }
+
+  /* ── iPhone frame ────────────────────────────────────────── */
+  .iphone {
+    width: 290px; border-radius: 40px; background: #0b0b0c; padding: 9px;
+    box-shadow: 0 22px 50px rgba(0,0,0,0.20), 0 0 0 1px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .iphone .screen {
+    border-radius: 32px; overflow: hidden; background: #fff; position: relative;
+    height: 540px; display: flex; flex-direction: column;
+  }
+  .iphone .notch {
+    position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 86px; height: 24px; background: #0b0b0c; border-radius: 13px; z-index: 30;
+  }
+  .ios-status {
+    height: 42px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 0 20px 6px; font-size: 13px; font-weight: 600;
+  }
+  .ios-status .sig { display: flex; align-items: center; gap: 5px; }
+  .ios-status svg { display: block; }
+
+  /* iOS top toolbar pill */
+  .ios-toolbar {
+    margin: 4px 14px 0; background: #fff; border: 1px solid var(--n200);
+    border-radius: 16px; height: 40px; display: flex; align-items: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05); padding: 0 6px; gap: 2px;
+  }
+  .tb-icon {
+    flex: 1; height: 30px; display: grid; place-items: center; border-radius: 9px;
+    color: #333;
+  }
+  .tb-icon svg { width: 18px; height: 18px; }
+  .tb-icon.add { color: var(--open); }
+  .tb-icon.add-hi {
+    flex: 0 0 auto; padding: 0 11px; gap: 5px; background: var(--open); color: #fff;
+    font-size: 13px; font-weight: 650; display: flex; align-items: center;
+    box-shadow: 0 1px 4px rgba(59,130,196,0.4);
+  }
+  .tb-icon.add-hi svg { width: 15px; height: 15px; }
+  .tb-spacer { flex: 1; }
+
+  .ios-body { flex: 1; background: var(--ios-bg); padding: 11px 13px; overflow: hidden; display: flex; flex-direction: column; gap: 9px; }
+
+  /* Streak widget */
+  .streak {
+    background: #fff; border: 1px solid var(--n200); border-radius: 11px; padding: 10px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04); display: flex; flex-direction: column; gap: 9px;
+  }
+  .streak-top { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .streak-top .num { font-weight: 750; font-size: 14px; }
+  .streak-top .lbl { color: #444; font-weight: 500; }
+  .streak-top .chk { margin-left: 0; width: 17px; height: 17px; border-radius: 50%; background: var(--closed); color: #fff; display: grid; place-items: center; font-size: 11px; }
+  .btn-cc {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px;
+    background: var(--accent); color: #fff; border: none; border-radius: 9px;
+    padding: 9px; font-size: 13px; font-weight: 650; font-family: var(--font);
+    box-shadow: 0 1px 5px rgba(234,88,12,0.32);
+  }
+  .btn-cc svg { width: 15px; height: 15px; }
+  .cc-row { display: flex; flex-direction: column; gap: 7px; }
+  .btn-new {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--open); color: #fff; border: none; border-radius: 9px;
+    padding: 9px; font-size: 13px; font-weight: 650; font-family: var(--font); white-space: nowrap;
+    box-shadow: 0 1px 5px rgba(59,130,196,0.34);
+  }
+  .btn-new svg { width: 15px; height: 15px; }
+  .cc-row .btn-cc { width: 100%; }
+
+  .goals-head { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .goals-head .star { color: var(--priority); font-size: 16px; }
+  .goals-head .t { font-size: 16px; font-weight: 750; }
+  .goals-head .cnt { font-size: 11px; font-weight: 650; color: var(--priority); background: rgba(230,160,18,0.16); padding: 1px 7px; border-radius: 9px; }
+  .task-row {
+    background: #fff; border: 1px solid var(--n200); border-radius: 8px; padding: 9px 11px;
+    font-size: 13.5px; color: #111; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  /* highlight ring for the spotlighted element */
+  .spot { position: relative; }
+  .spot::after {
+    content: ""; position: absolute; inset: -5px; border: 2px solid var(--accent);
+    border-radius: 13px; pointer-events: none;
+    box-shadow: 0 0 0 4px rgba(234,88,12,0.12);
+  }
+  .spot.round::after { border-radius: 50%; }
+  .buried { position: relative; }
+  .buried::after {
+    content: ""; position: absolute; inset: -3px; border: 1.5px dashed var(--n500);
+    border-radius: 11px; pointer-events: none;
+  }
+
+  /* ── Mac window ──────────────────────────────────────────── */
+  .macwin {
+    width: 470px; border-radius: 13px; overflow: hidden; background: #fff;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.20), 0 0 0 1px rgba(0,0,0,0.07);
+  }
+  .mac-titlebar {
+    height: 40px; background: #EDECEA; border-bottom: 1px solid #DBD9D6;
+    display: flex; align-items: center; padding: 0 14px; gap: 8px; position: relative;
+  }
+  .mac-lights { display: flex; gap: 8px; z-index: 2; }
+  .mac-lights span { width: 12px; height: 12px; border-radius: 50%; }
+  .l-r { background: #FF5F57; } .l-y { background: #FEBC2E; } .l-g { background: #28C840; }
+  .mac-title { position: absolute; left: 0; right: 0; text-align: center; font-size: 12.5px; font-weight: 600; color: #6a6864; }
+  .mac-toolbar {
+    height: 46px; display: flex; align-items: center; gap: 5px; padding: 0 12px;
+    border-bottom: 1px solid #EDECEA; background: #FBFAF9;
+  }
+  .mtb-icon { width: 33px; height: 30px; border-radius: 7px; display: grid; place-items: center; color: #4a4a4a; }
+  .mtb-icon svg { width: 17px; height: 17px; }
+  .mtb-icon.add { color: var(--open); }
+  .mtb-icon.add-hi {
+    width: auto; padding: 0 13px; gap: 6px; background: var(--open); color: #fff;
+    font-size: 13px; font-weight: 650; display: flex; align-items: center;
+    box-shadow: 0 1px 4px rgba(59,130,196,0.36);
+  }
+  .mtb-icon.add-hi svg { width: 15px; height: 15px; }
+  .mtb-sep { width: 1px; height: 20px; background: var(--n200); margin: 0 4px; }
+  .mtb-spacer { flex: 1; }
+  .mac-body { padding: 14px; background: #fff; display: flex; flex-direction: column; gap: 11px; height: 340px; }
+  .mac-lists { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .mac-list-row {
+    display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 9px;
+    background: #fff; border: 1px solid var(--n200); font-size: 13.5px;
+  }
+  .mac-list-row.sel { border: 1.6px solid var(--open); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .mac-list-row .stripe { width: 3px; height: 22px; border-radius: 2px; flex-shrink: 0; }
+  .mac-list-row .lname { flex: 1; }
+  .mac-list-row .ct { font-size: 11px; font-weight: 650; color: #fff; padding: 1px 8px; border-radius: 9px; }
+  .lists-cap { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: var(--n500); margin-top: 2px; }
+
+  /* ── iOS detail nav + form (section 2) ───────────────────── */
+  .ios-nav {
+    height: 44px; flex-shrink: 0; display: flex; align-items: center; padding: 0 10px;
+    background: #fff; border-bottom: 1px solid var(--n200);
+  }
+  .ios-nav .back { display: flex; align-items: center; gap: 1px; color: var(--open); font-size: 15px; font-weight: 500; min-width: 74px; }
+  .ios-nav .back svg { width: 17px; height: 17px; }
+  .ios-nav .title { flex: 1; text-align: center; font-size: 16px; font-weight: 650; color: #111; }
+  .ios-nav .right { min-width: 74px; display: flex; justify-content: flex-end; align-items: center; }
+  .ios-nav .done { color: var(--accent); font-weight: 750; font-size: 16px; position: relative; }
+  .ios-nav .right.empty::after { content: "—"; color: var(--n300); font-size: 15px; }
+
+  .form-body { flex: 1; background: var(--ios-bg); padding: 14px 13px; display: flex; flex-direction: column; gap: 11px; overflow: hidden; }
+  .field { background: #fff; border: 1px solid var(--n200); border-radius: 10px; padding: 10px 12px; }
+  .field.focus { border: 1.6px solid var(--open); box-shadow: 0 0 0 3px rgba(59,130,196,0.14); }
+  .field .fl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--n500); margin-bottom: 5px; }
+  .field .fv { font-size: 14.5px; color: #111; font-weight: 500; display: flex; align-items: center; }
+  .field .caret { display: inline-block; width: 2px; height: 17px; background: var(--open); margin-left: 1px; border-radius: 1px; }
+  .field .fv.ph { color: #B7B7B7; font-weight: 400; }
+  .field-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .chip { font-size: 11.5px; padding: 3px 10px; border-radius: 4px; border: 1px solid rgba(234,88,12,0.28); background: var(--accent-soft); color: #B4500F; font-weight: 500; }
+  .chip.on { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+  /* compact iOS keyboard */
+  .ios-kb { background: #D2D4D9; padding: 7px 4px 9px; display: flex; flex-direction: column; gap: 7px; flex-shrink: 0; }
+  .kb-row { display: flex; gap: 5px; justify-content: center; padding: 0 3px; }
+  .key { background: #fff; border-radius: 5px; height: 31px; flex: 1; display: grid; place-items: center; font-size: 14px; color: #111; box-shadow: 0 1px 0 rgba(0,0,0,0.28); }
+  .key.wide { flex: 1.5; background: #ADB2BC; color: #111; }
+  .key.space { flex: 5; }
+  .key.act { background: var(--open); color: #fff; font-size: 12px; font-weight: 650; flex: 1.6; }
+
+  @media (max-width: 760px) { .arrow { display: none; } .compare { gap: 22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <h1>Add &amp; Done — placement proposals</h1>
+      <p class="sub">Two small changes that make the most common action — <span class="tag">creating a task</span> — obvious, and let you finish one without hunting for the back button. Shown before &rarr; after for iOS and macOS.</p>
+    </div>
+  </div>
+  <div class="rule"></div>
+
+  <!-- ════════ SECTION 1 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">1</span>
+      <h2>Surface the add button next to Compass Check</h2>
+    </div>
+    <p class="sec-desc">Today the <b>+</b> sits as one of five equal-weight glyphs in the top toolbar pill — visually it reads as a utility, not the primary thing you came to do. We promote it to a labelled <b>New Task</b> button stacked directly below <b>Start Compass Check</b>, so the two daily actions live together. The toolbar keeps share / import / stats only.</p>
+
+    <div class="platform-label">iOS — iPhone</div>
+    <div class="compare">
+      <!-- BEFORE -->
+      <div class="frame-col">
+        <span class="badge before"><span class="dot"></span>Today</span>
+        <div class="iphone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="ios-status">
+              <span>20:51</span>
+              <span class="sig">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l-1.4 1.4A6.6 6.6 0 0 0 8 5.2c-1.8 0-3.4.7-4.6 1.8L2 5.6A8.6 8.6 0 0 1 8 2.2zM8 6.4c1.2 0 2.3.5 3.1 1.2L8 10.8 4.9 7.6A4.6 4.6 0 0 1 8 6.4z"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.6" fill="currentColor"/><rect x="22.5" y="3.5" width="1.8" height="5" rx="0.9" fill="currentColor" opacity="0.5"/></svg>
+              </span>
+            </div>
+            <div class="ios-toolbar">
+              <div class="tb-icon add buried"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.6v2.5M12 18.9v2.5M21.4 12h-2.5M5.1 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4M12 4 8.6 7.4M12 4l3.4 3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M12 15l-3.4-3.4M12 15l3.4-3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="ios-body">
+              <div class="streak">
+                <div class="streak-top"><span class="num">42</span><span>&#128293;</span><span class="lbl">Today:</span><span class="chk">&#10003;</span></div>
+                <button class="btn-cc"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor"/></svg>Start Compass Check Now</button>
+              </div>
+              <div class="goals-head"><span class="star">&#9733;</span><span class="t">Today's Goals</span><span class="cnt">3</span></div>
+              <div class="task-row">Try out Concept Maps</div>
+              <div class="task-row">Add widget to home screen</div>
+            </div>
+          </div>
+        </div>
+        <p class="note"><b>+ is one of five</b> equal icons — users scan past it.</p>
+      </div>
+
+      <div class="arrow">&rarr;</div>
+
+      <!-- AFTER -->
+      <div class="frame-col">
+        <span class="badge after"><span class="dot"></span>Today — proposed</span>
+        <div class="iphone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="ios-status">
+              <span>20:51</span>
+              <span class="sig">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l-1.4 1.4A6.6 6.6 0 0 0 8 5.2c-1.8 0-3.4.7-4.6 1.8L2 5.6A8.6 8.6 0 0 1 8 2.2zM8 6.4c1.2 0 2.3.5 3.1 1.2L8 10.8 4.9 7.6A4.6 4.6 0 0 1 8 6.4z"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.6" fill="currentColor"/><rect x="22.5" y="3.5" width="1.8" height="5" rx="0.9" fill="currentColor" opacity="0.5"/></svg>
+              </span>
+            </div>
+            <div class="ios-toolbar">
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.6v2.5M12 18.9v2.5M21.4 12h-2.5M5.1 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="tb-spacer"></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4M12 4 8.6 7.4M12 4l3.4 3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M12 15l-3.4-3.4M12 15l3.4-3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+              <div class="tb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="ios-body">
+              <div class="streak">
+                <div class="streak-top"><span class="num">42</span><span>&#128293;</span><span class="lbl">Today:</span><span class="chk">&#10003;</span></div>
+                <div class="cc-row">
+                  <button class="btn-cc"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor"/></svg>Start Compass Check Now</button>
+                  <button class="btn-new spot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>New Task</button>
+                </div>
+              </div>
+              <div class="goals-head"><span class="star">&#9733;</span><span class="t">Today's Goals</span><span class="cnt">3</span></div>
+              <div class="task-row">Try out Concept Maps</div>
+              <div class="task-row">Add widget to home screen</div>
+            </div>
+          </div>
+        </div>
+        <p class="note hl"><b>New Task</b> sits directly below Compass Check — both full-width, a clear primary&rarr;secondary stack of the two daily actions.</p>
+      </div>
+    </div>
+
+    <div class="platform-label">macOS — desktop</div>
+    <div class="compare">
+      <!-- BEFORE -->
+      <div class="frame-col">
+        <span class="badge before"><span class="dot"></span>Home pane</span>
+        <div class="macwin">
+          <div class="mac-titlebar">
+            <div class="mac-lights"><span class="l-r"></span><span class="l-y"></span><span class="l-g"></span></div>
+            <div class="mac-title">Three Daily Goals</div>
+          </div>
+          <div class="mac-toolbar">
+            <div class="mtb-icon add buried"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.6v2.5M12 18.9v2.5M21.4 12h-2.5M5.1 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4M12 4 8.6 7.4M12 4l3.4 3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M12 15l-3.4-3.4M12 15l3.4-3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="mac-body">
+            <div class="streak">
+              <div class="streak-top"><span class="num">42</span><span>&#128293;</span><span class="lbl">Today:</span><span class="chk">&#10003;</span></div>
+              <button class="btn-cc"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor"/></svg>Start Compass Check Now</button>
+            </div>
+            <div class="goals-head"><span class="star">&#9733;</span><span class="t">Today's Goals</span><span class="cnt">3</span></div>
+            <div class="task-row">Try out Concept Maps</div>
+            <div class="lists-cap">LISTS</div>
+            <div class="mac-lists">
+              <div class="mac-list-row sel"><span class="stripe" style="background:var(--open)"></span><span class="lname" style="color:var(--open);font-weight:600">Open</span><span class="ct" style="background:var(--open)">10</span></div>
+              <div class="mac-list-row"><span class="stripe" style="background:var(--pending)"></span><span class="lname">Pending Response</span><span class="ct" style="background:var(--pending)">3</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="note"><b>+ hides in the toolbar</b> beside four utilities — and the detail pane has its own +, so it is unclear which adds a task.</p>
+      </div>
+
+      <div class="arrow">&rarr;</div>
+
+      <!-- AFTER -->
+      <div class="frame-col">
+        <span class="badge after"><span class="dot"></span>Home pane — proposed</span>
+        <div class="macwin">
+          <div class="mac-titlebar">
+            <div class="mac-lights"><span class="l-r"></span><span class="l-y"></span><span class="l-g"></span></div>
+            <div class="mac-title">Three Daily Goals</div>
+          </div>
+          <div class="mac-toolbar">
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.6v2.5M12 18.9v2.5M21.4 12h-2.5M5.1 12H2.6M18.6 5.4l-1.8 1.8M7.2 16.8l-1.8 1.8M18.6 18.6l-1.8-1.8M7.2 7.2 5.4 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <div class="mtb-spacer"></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4M12 4 8.6 7.4M12 4l3.4 3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M12 15l-3.4-3.4M12 15l3.4-3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11H5.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1H17" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></div>
+            <div class="mtb-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="mac-body">
+            <div class="streak">
+              <div class="streak-top"><span class="num">42</span><span>&#128293;</span><span class="lbl">Today:</span><span class="chk">&#10003;</span></div>
+              <div class="cc-row">
+                <button class="btn-cc"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z" fill="currentColor"/></svg>Start Compass Check Now</button>
+                <button class="btn-new spot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>New Task</button>
+              </div>
+            </div>
+            <div class="goals-head"><span class="star">&#9733;</span><span class="t">Today's Goals</span><span class="cnt">3</span></div>
+            <div class="task-row">Try out Concept Maps</div>
+            <div class="lists-cap">LISTS</div>
+            <div class="mac-lists">
+              <div class="mac-list-row sel"><span class="stripe" style="background:var(--open)"></span><span class="lname" style="color:var(--open);font-weight:600">Open</span><span class="ct" style="background:var(--open)">10</span></div>
+              <div class="mac-list-row"><span class="stripe" style="background:var(--pending)"></span><span class="lname">Pending Response</span><span class="ct" style="background:var(--pending)">3</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="note hl">Same stack as iOS, so the gesture carries across devices. The lone toolbar <b>+</b> retires; gear leads, utilities trail.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SECTION 2 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">2</span>
+      <h2>A clear &ldquo;Done&rdquo; on the new-task screen <span style="font-weight:600;color:var(--n500);font-size:15px;">· iOS</span></h2>
+    </div>
+    <p class="sec-desc">When you create a task, the editor pushes onto the navigation stack. Right now the only way out is the <b>&lsaquo; back chevron</b> — so finishing feels like abandoning. We add a bold <b>Done</b> at the top-right: it commits the task and pops the screen in one tap, the standard iOS pattern. The back chevron stays for anyone who reaches for it.</p>
+
+    <div class="platform-label">iOS — creating a task</div>
+    <div class="compare">
+      <!-- BEFORE -->
+      <div class="frame-col">
+        <span class="badge before"><span class="dot"></span>New task</span>
+        <div class="iphone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="ios-status">
+              <span>20:51</span>
+              <span class="sig">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l-1.4 1.4A6.6 6.6 0 0 0 8 5.2c-1.8 0-3.4.7-4.6 1.8L2 5.6A8.6 8.6 0 0 1 8 2.2zM8 6.4c1.2 0 2.3.5 3.1 1.2L8 10.8 4.9 7.6A4.6 4.6 0 0 1 8 6.4z"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.6" fill="currentColor"/><rect x="22.5" y="3.5" width="1.8" height="5" rx="0.9" fill="currentColor" opacity="0.5"/></svg>
+              </span>
+            </div>
+            <div class="ios-nav">
+              <span class="back"><svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Open</span>
+              <span class="title">New Task</span>
+              <span class="right empty"></span>
+            </div>
+            <div class="form-body">
+              <div class="field focus">
+                <div class="fl">Title</div>
+                <div class="fv">Read 'The Goal' by Goldratt<span class="caret"></span></div>
+              </div>
+              <div class="field">
+                <div class="fl">Due date</div>
+                <div class="fv ph">Add a due date</div>
+              </div>
+              <div class="field">
+                <div class="fl">Labels</div>
+                <div class="field-chips">
+                  <span class="chip on">toread</span>
+                  <span class="chip">productivity</span>
+                  <span class="chip">private</span>
+                </div>
+              </div>
+              <div style="flex:1"></div>
+              <div class="ios-kb">
+                <div class="kb-row"><span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span></div>
+                <div class="kb-row"><span class="key">a</span><span class="key">s</span><span class="key">d</span><span class="key">f</span><span class="key">g</span><span class="key">h</span><span class="key">j</span><span class="key">k</span><span class="key">l</span></div>
+                <div class="kb-row"><span class="key wide">&#8679;</span><span class="key">z</span><span class="key">x</span><span class="key">c</span><span class="key">v</span><span class="key">b</span><span class="key">n</span><span class="key">m</span><span class="key wide">&#9003;</span></div>
+                <div class="kb-row"><span class="key wide">123</span><span class="key space">space</span><span class="key act">return</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="note">Title is typed, keyboard is up — but the <b>top-right is empty</b>. To save, you back out. It reads as &ldquo;leave,&rdquo; not &ldquo;finish.&rdquo;</p>
+      </div>
+
+      <div class="arrow">&rarr;</div>
+
+      <!-- AFTER -->
+      <div class="frame-col">
+        <span class="badge after"><span class="dot"></span>New task — proposed</span>
+        <div class="iphone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="ios-status">
+              <span>20:51</span>
+              <span class="sig">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l-1.4 1.4A6.6 6.6 0 0 0 8 5.2c-1.8 0-3.4.7-4.6 1.8L2 5.6A8.6 8.6 0 0 1 8 2.2zM8 6.4c1.2 0 2.3.5 3.1 1.2L8 10.8 4.9 7.6A4.6 4.6 0 0 1 8 6.4z"/></svg>
+                <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4"/><rect x="2" y="2" width="18" height="8" rx="1.6" fill="currentColor"/><rect x="22.5" y="3.5" width="1.8" height="5" rx="0.9" fill="currentColor" opacity="0.5"/></svg>
+              </span>
+            </div>
+            <div class="ios-nav">
+              <span class="back"><svg viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Open</span>
+              <span class="title">New Task</span>
+              <span class="right"><span class="done" style="background:var(--accent-soft);padding:4px 13px;border-radius:8px;box-shadow:0 0 0 1.5px rgba(234,88,12,0.45)">Done</span></span>
+            </div>
+            <div class="form-body">
+              <div class="field focus">
+                <div class="fl">Title</div>
+                <div class="fv">Read 'The Goal' by Goldratt<span class="caret"></span></div>
+              </div>
+              <div class="field">
+                <div class="fl">Due date</div>
+                <div class="fv ph">Add a due date</div>
+              </div>
+              <div class="field">
+                <div class="fl">Labels</div>
+                <div class="field-chips">
+                  <span class="chip on">toread</span>
+                  <span class="chip">productivity</span>
+                  <span class="chip">private</span>
+                </div>
+              </div>
+              <div style="flex:1"></div>
+              <div class="ios-kb">
+                <div class="kb-row"><span class="key">q</span><span class="key">w</span><span class="key">e</span><span class="key">r</span><span class="key">t</span><span class="key">y</span><span class="key">u</span><span class="key">i</span><span class="key">o</span><span class="key">p</span></div>
+                <div class="kb-row"><span class="key">a</span><span class="key">s</span><span class="key">d</span><span class="key">f</span><span class="key">g</span><span class="key">h</span><span class="key">j</span><span class="key">k</span><span class="key">l</span></div>
+                <div class="kb-row"><span class="key wide">&#8679;</span><span class="key">z</span><span class="key">x</span><span class="key">c</span><span class="key">v</span><span class="key">b</span><span class="key">n</span><span class="key">m</span><span class="key wide">&#9003;</span></div>
+                <div class="kb-row"><span class="key wide">123</span><span class="key space">space</span><span class="key act">return</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="note hl"><b>Done</b> sits top-right where the thumb expects it. One tap saves and returns — back chevron still works for the cautious.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTIONS INJECTED BELOW -->
+
+
+</div>
+</body>
+</html>
